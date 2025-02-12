@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import SidebarAdmin from "./components/Dashboard/Admin/SidebarAdmin/SidebarAdmin";
-import Login from "./components/Dashboard/Dashboard/Auth/Login/Login";
+import Login from "./components/Dashboard/Auth/Login/Login";
 import Register from "./components/Dashboard/Auth/Register/Register";
 import ResetPassword from "./components/Dashboard/Auth/ResetPassword/ResetPassword";
 import DashboardAdmin from "./components/Dashboard/Admin/Dashboard/DashboardAdmin";
