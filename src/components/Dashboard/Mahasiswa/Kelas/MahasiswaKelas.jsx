@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import icon_class from "../../../Assets/image/class_icon.png";
+// import icon_class from "../../../assets/images/class_icon.png";
+import icon_class from "../../../../assets/images/class_icon.png";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { useCookies } from "react-cookie";
 import { LuClock } from "react-icons/lu";

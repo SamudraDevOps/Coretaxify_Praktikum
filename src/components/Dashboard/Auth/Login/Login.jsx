@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { FaRegEye, FaEyeSlash } from "react-icons/fa";
-import CTaxifyLogo from "../../../Assets/image/4.png";
+import CTaxifyLogo from "../../../../assets/images/4.png";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { RoutesApi } from "@/Routes";
