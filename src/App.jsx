@@ -34,6 +34,7 @@ import EditPengajar from "./components/Dashboard/AdminPsc/Pengguna/Pengajar/Edit
 import EditKelasPsc from "./components/Dashboard/AdminPsc/Pengguna/Kelas/EditKelasPsc";
 import UjianPsc from "./components/Dashboard/AdminPsc/Pengguna/Praktikum/UjianPsc";
 import EditMahasiswaPsc from "./components/Dashboard/AdminPsc/Pengguna/Mahasiswa/EditMahasiswaPsc";
+import Header from "./components/Header/Header"
 
 const Main = () => {
   const [loading, setLoading] = useState(true);
@@ -360,6 +361,14 @@ const Main = () => {
               <div className="admin-content">
                 <EditMahasiswaPsc></EditMahasiswaPsc>
               </div>
+            </div>
+          }
+        />
+        <Route
+          path="/admin/praktikum/prak1"
+          element={
+            <div className="">
+              <Header />
             </div>
           }
         />
