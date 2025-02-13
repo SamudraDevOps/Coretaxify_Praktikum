@@ -9,8 +9,8 @@ import {
   FaUserCircle,
 } from "react-icons/fa";
 import { GiPieChart } from "react-icons/gi";
-import Logo from "../../../Assets/image/7.png"; // Pastikan ini menunjuk ke file logo Anda.
-import ProfileIcon from "../../../Assets/image/wulan.png"; // Gambar untuk profile.
+import Logo from "../../../../assets/images/7.png"; // Pastikan ini menunjuk ke file logo Anda.
+import ProfileIcon from "../../../../assets/images/wulan.png"; // Gambar untuk profile.
 import { FaPencil } from "react-icons/fa6";
 import { LuDatabaseBackup } from "react-icons/lu";
 import {
@@ -18,7 +18,7 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/Components/ui/accordion";
+} from "@/components/ui/accordion";
 import { MdOutlineDriveFolderUpload } from "react-icons/md";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";

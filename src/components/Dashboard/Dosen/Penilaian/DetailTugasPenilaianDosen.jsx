@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import Wulan from "../../../Assets/image/wulan.png";
+import Wulan from "../../../../assets/images/wulan.png";
 import { BsThreeDotsVertical } from "react-icons/bs";
 
 const kelasList = [

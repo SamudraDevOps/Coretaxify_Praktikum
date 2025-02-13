@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FaRegEye, FaEyeSlash } from "react-icons/fa";
-import CTaxifyLogo from "../../../Assets/image/4.png";
+import CTaxifyLogo from "../../../../assets/images/4.png";
 import { Link } from "react-router-dom";
 
 const Register = () => {
