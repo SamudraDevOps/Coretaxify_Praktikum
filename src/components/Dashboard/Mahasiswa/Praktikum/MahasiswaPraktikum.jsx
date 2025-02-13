@@ -14,7 +14,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/Components/ui/alert-dialog";
+} from "@/components/ui/alert-dialog";
 import { CookiesProvider, useCookies } from "react-cookie";
 
 export default function MahasiswaPraktikum() {
