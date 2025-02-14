@@ -21,7 +21,7 @@ const Header = () => {
           return (
                     <div className="">
                               <header className="bg-slate-100 text-blue-900 flex justify-between items-center px-4 md:px-8 lg:px-12 xl:px-16 py-3 shadow-md w-full">
-                                        <div className="flex items-center space-x-4">
+                                        <div className="flex items-center space-x-4 -mx-14">
                                                   <img src={Logo} alt="DJP Logo" className="h-10" />
                                                   <h1 className="text-lg font-bold">CORETAXIFY</h1>
                                         </div>
@@ -79,7 +79,7 @@ const Header = () => {
                                                                                                                                                       {sub.label} <ChevronRight className="w-4 h-4 ml-2" />
                                                                                                                                             </button>
                                                                                                                                             {sub.submenu && subDropdownOpen === sub.label && (
-                                                                                                                                                      <ul className="absolute left-full mx-1 top-0 mt-0 w-[350px] bg-blue-900 text-white shadow-md rounded-md">
+                                                                                                                                                      <ul className="absolute left-full mx-1 top-0 mt-0 w-[450px] bg-blue-900 text-white shadow-md rounded-md text-left">
                                                                                                                                                                 {sub.submenu.map((nestedSub, nestedIndex) => (
                                                                                                                                                                           <li key={nestedIndex} className="px-4 py-2 hover:bg-yellow-500 cursor-pointer">
                                                                                                                                                                                     <button onClick={() => navigateTo(nestedSub)}>{nestedSub}</button>
