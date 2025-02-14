@@ -47,9 +47,9 @@ const Header = () => {
                                                                                           {item.label} <ChevronDown className="w-4 h-4 ml-2" />
                                                                                 </button>
                                                                                 {item.submenu && dropdownOpen === item.label && (
-                                                                                          <ul className="absolute left-0 mt-2 w-48 bg-white text-black shadow-md rounded-md">
+                                                                                          <ul className="absolute left-0 mt-2 w-48 bg-blue-900 text-white shadow-md rounded-md">
                                                                                                     {item.submenu.map((sub, subIndex) => (
-                                                                                                              <li key={subIndex} className="px-4 py-2 hover:bg-gray-200 cursor-pointer">
+                                                                                                              <li key={subIndex} className="px-4 py-4 hover:bg-yellow-500 cursor-pointer">
                                                                                                                         {sub}
                                                                                                               </li>
                                                                                                     ))}
