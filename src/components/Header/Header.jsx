@@ -4,9 +4,18 @@ import Logo from "../../assets/images/5.png";
 
 const Header = () => {
           const [dropdownOpen, setDropdownOpen] = useState(null);
+          const [subDropdownOpen, setSubDropdownOpen] = useState(null);
 
           const toggleDropdown = (menu) => {
                     setDropdownOpen(dropdownOpen === menu ? null : menu);
+          };
+
+          const toggleSubDropdown = (submenu) => {
+                    setSubDropdownOpen(subDropdownOpen === submenu ? null : submenu);
+          };
+
+          const navigateTo = (path) => {
+                    window.location.href = `/${path.replace(/\s+/g, "-").toLowerCase()}`;
           };
 
           return (
@@ -32,25 +41,54 @@ const Header = () => {
                                         <nav className="w-full bg-blue-900 pb-2 px-4">
                                                   <ul className="flex space-x-6 text-white">
                                                             {[
-                                                                      { label: "Portal Saya", submenu: ["Dokumen Saya", "Notifikasi Saya", "Kasus Saya", "Kasus Berjalan Saya", "Profil Saya"] },
-                                                                      { label: "E-Faktur" },
+                                                                      { label: "Portal Saya", submenu: ["Dokumen Saya", "Notifikasi Saya", "Kasus Saya", "Kasus Berjalan Saya", "Profil Saya", "Pengukuhan PKP", "Pendaftaran Objek Pajak PBB P5L", { label: "Perubahan Data", submenu: ["Perubahan Data", "Pengukuhan PKP", "Pendaftaran Objek Pajak PBB P5L"] }, { label: "Perubahan Status", submenu: ["Penetapan Wajib Pajak Nonaktif", "Pengaktifan Kembali Wajib Pajak Nonaktif", "Penunjuk Pemungut PMSE Dalam Negeri", "Penetapan Pemungut Bea Materai", "Pencabutan Pemungut Bea Materai", "Penunjukan Pemotong atau Pemungut PPh/PPN", "Pencabutan Pemotong atau Pemungut PPh/PPN", "Pencabutan Pemungut PPN PMSE", "Lembaga Keuangan Pelapor - Penetapan", "Lembaga Keuangan Pelapor - Pencabutan", "Lembaga Keuangan Pelapor - Perubahan Data"] }, "Pengahpusan & Pencabutan", "Profil Institusi Finansial"] },
+                                                                      { label: "E-Faktur", submenu: [] },
                                                                       { label: "e-Bupot", submenu: ["Lihat Bupot", "Buat Bupot"] },
                                                                       { label: "Surat Pemberitahuan(SPT)", submenu: ["SPT Tahunan", "SPT Masa"] },
                                                                       { label: "Pembayaran", submenu: ["Cek Pembayaran", "Riwayat"] },
-                                                                      { label: "Buku Besar" },
+                                                                      { label: "Buku Besar", submenu: [] },
                                                             ].map((item, index) => (
                                                                       <li key={index} className="relative">
-                                                                                <button
-                                                                                          className="px-4 py-2 flex items-center hover:bg-white hover:text-blue-900 rounded-md"
-                                                                                          onClick={() => toggleDropdown(item.label)}
-                                                                                >
-                                                                                          {item.label} <ChevronDown className="w-4 h-4 ml-2" />
-                                                                                </button>
-                                                                                {item.submenu && dropdownOpen === item.label && (
-                                                                                          <ul className="absolute left-0 mt-2 w-48 bg-blue-900 text-white shadow-md rounded-md">
+                                                                                {item.submenu.length > 0 ? (
+                                                                                          <button
+                                                                                                    className="px-4 py-2 flex items-center hover:bg-yellow-500 hover:text-white rounded-md"
+                                                                                                    onClick={() => toggleDropdown(item.label)}
+                                                                                          >
+                                                                                                    {item.label} <ChevronDown className="w-4 h-4 ml-2" />
+                                                                                          </button>
+                                                                                ) : (
+                                                                                          <button
+                                                                                                    className="px-4 py-2 flex items-center hover:bg-yellow-500 hover:text-white rounded-md"
+                                                                                                    onClick={() => navigateTo(item.label)}
+                                                                                          >
+                                                                                                    {item.label}
+                                                                                          </button>
+                                                                                )}
+                                                                                {item.submenu.length > 0 && dropdownOpen === item.label && (
+                                                                                          <ul className="absolute left-0 mt-2 w-[300px] bg-blue-900 text-white shadow-md rounded-md">
                                                                                                     {item.submenu.map((sub, subIndex) => (
-                                                                                                              <li key={subIndex} className="px-4 py-4 hover:bg-yellow-500 cursor-pointer">
-                                                                                                                        {sub}
+                                                                                                              <li key={subIndex} className="relative px-4 py-4 hover:bg-yellow-500 cursor-pointer">
+                                                                                                                        {typeof sub === "string" ? (
+                                                                                                                                  <button onClick={() => navigateTo(sub)}>{sub}</button>
+                                                                                                                        ) : (
+                                                                                                                                  <>
+                                                                                                                                            <button
+                                                                                                                                                      className="flex items-center w-full"
+                                                                                                                                                      onClick={() => toggleSubDropdown(sub.label)}
+                                                                                                                                            >
+                                                                                                                                                      {sub.label} <ChevronDown className="w-4 h-4 ml-2" />
+                                                                                                                                            </button>
+                                                                                                                                            {sub.submenu && subDropdownOpen === sub.label && (
+                                                                                                                                                      <ul className="absolute left-full top-0 mt-0 w-[350px] bg-blue-900 text-white shadow-md rounded-md">
+                                                                                                                                                                {sub.submenu.map((nestedSub, nestedIndex) => (
+                                                                                                                                                                          <li key={nestedIndex} className="px-4 py-2 hover:bg-yellow-500 cursor-pointer">
+                                                                                                                                                                                    <button onClick={() => navigateTo(nestedSub)}>{nestedSub}</button>
+                                                                                                                                                                          </li>
+                                                                                                                                                                ))}
+                                                                                                                                                      </ul>
+                                                                                                                                            )}
+                                                                                                                                  </>
+                                                                                                                        )}
                                                                                                               </li>
                                                                                                     ))}
                                                                                           </ul>
