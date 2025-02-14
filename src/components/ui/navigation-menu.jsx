@@ -27,7 +27,7 @@ const NavigationMenuItem = NavigationMenuPrimitive.Item;
 
 // Navigation Menu Trigger
 const NavigationMenuTrigger = React.forwardRef(({ className, children, ...props }, ref) => (
-          <NavigationMenuPrimitive.Trigger ref={ref} className={cn("group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground", className)} {...props}>
+          <NavigationMenuPrimitive.Trigger ref={ref} className={cn("group inline-flex h-9 w-max items-center justify-center rounded-md bg-blue-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground", className)} {...props}>
                     {children}
                     <ChevronDown className="ml-1 h-3 w-3 transition-transform group-data-[state=open]:rotate-180" aria-hidden="true" />
           </NavigationMenuPrimitive.Trigger>
@@ -36,7 +36,7 @@ NavigationMenuTrigger.displayName = "NavigationMenuTrigger";
 
 // Navigation Menu Content
 const NavigationMenuContent = React.forwardRef(({ className, ...props }, ref) => (
-          <NavigationMenuPrimitive.Content ref={ref} className={cn("left-0 top-0 w-full md:absolute md:w-auto", className)} {...props} />
+          <NavigationMenuPrimitive.Content ref={ref} className={cn("absolute left-0 mt-2 w-full md:w-auto bg-white border border-gray-200 rounded-md shadow-lg", className)} {...props} />
 ));
 NavigationMenuContent.displayName = "NavigationMenuContent";
 
@@ -46,7 +46,7 @@ const NavigationMenuLink = NavigationMenuPrimitive.Link;
 // Navigation Menu Viewport (dropdown container)
 const NavigationMenuViewport = React.forwardRef(({ className, ...props }, ref) => (
           <div className="absolute left-0 top-full flex justify-center">
-                    <NavigationMenuPrimitive.Viewport ref={ref} className={cn("relative mt-1.5 w-full rounded-md border bg-popover text-popover-foreground shadow md:w-[var(--radix-navigation-menu-viewport-width)]", className)} {...props} />
+                    <NavigationMenuPrimitive.Viewport ref={ref} className={cn("relative mt-2 w-full rounded-md border bg-popover text-popover-foreground shadow md:w-[var(--radix-navigation-menu-viewport-width)]", className)} {...props} />
           </div>
 ));
 NavigationMenuViewport.displayName = "NavigationMenuViewport";
