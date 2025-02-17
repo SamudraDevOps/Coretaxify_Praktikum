@@ -18,7 +18,7 @@ import axios from "axios";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { ClipLoader } from "react-spinners";
 import { RoutesApi } from "@/Routes";
-import Wulan from "../../../../Assets/images/wulan.png";
+import Wulan from "../../../../assets/images/wulan.png";
 
 export default function MahasiswaKelas() {
   const [isOpen, setIsOpen] = useState(false);
