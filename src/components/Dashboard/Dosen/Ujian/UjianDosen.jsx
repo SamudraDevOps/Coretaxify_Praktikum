@@ -28,42 +28,43 @@ export default function UjianDosen() {
                               id: "1",
                               namaUjian: "Ujian 1",
                               kodeUjian: "xAE12",
-                              tipeUjian: "BNSP",
-                              supportingFile: "file.pdf",
-                              deadline: "2021-12-12",
+                              supportingFile: "file.xlsx",
+                              tanggalMulai: "2021-12-12 22:00",
+                              tanggalSelesai: "2021-12-12 23:00",
                     },
                     {
                               id: "2",
                               namaUjian: "Ujian 2",
                               kodeUjian: "xAE12",
-                              tipeUjian: "Reguler",
-                              supportingFile: "file.pdf",
+                              supportingFile: "file.xlsx",
                               deadline: "2021-12-12",
+                              tanggalMulai: "2021-12-12 22:00",
+                              tanggalSelesai: "2021-12-12 23:00",
                     },
                     {
                               id: "3",
                               namaUjian: "Ujian 2",
                               kodeUjian: "xAE12",
-                              tipeUjian: "Reguler",
-                              supportingFile: "file.pdf",
-                              deadline: "2021-12-12",
+                              supportingFile: "file.xlsx",
+                              tanggalMulai: "2021-12-12 22:00",
+                              tanggalSelesai: "2021-12-12 23:00",
                     },
                     {
                               id: "4",
                               namaUjian: "Ujian 3",
                               kodeUjian: "xAE12",
-                              tipeUjian: "Reguler",
-                              supportingFile: "file.pdf",
-                              deadline: "2021-12-12",
+                              supportingFile: "file.xls",
+                              tanggalMulai: "2021-12-12 22:00",
+                              tanggalSelesai: "2021-12-12 23:00",
                     },
           ]);
 
           const [formData, setFormData] = useState({
                     namaUjian: "",
                     kodeUjian: "",
-                    tipeUjian: "",
                     supportingFile: null,
-                    deadline: "",
+                    tanggalMulai: "",
+                    tanggalSelesai: "",
           });
 
           const generateRandomCode = () => {
@@ -95,14 +96,14 @@ export default function UjianDosen() {
                               id: String(data.length + 1),
                               namaUjian: formData.namaUjian,
                               kodeUjian: formData.kodeUjian,
-                              tipeUjian: formData.tipeUjian,
                               supportingFile: formData.supportingFile ? formData.supportingFile.name : "No file",
-                              deadline: formData.deadline,
+                              tanggalMulai: formData.tanggalMulai,
+                              tanggalSelesai: formData.tanggalSelesai,
                     };
 
                     setData([...data, newTugas]);
                     setIsAddOpen(false);
-                    setFormData({ namaUjian: "", kodeUjian: "", tipeUjian: "", supportingFile: null, deadline: "" });
+                    setFormData({ namaUjian: "", kodeUjian: "", supportingFile: null, tanggalMulai: "", tanggalSelesai: "" });
 
                     Swal.fire("Berhasil!", "Ujian berhasil ditambahkan!", "success");
           };
@@ -193,9 +194,9 @@ export default function UjianDosen() {
                                                                                                     : "↑"}
                                                                       </th>
                                                                       <th>Kode Ujian</th>
-                                                                      <th>Tipe Ujian</th>
                                                                       <th>File Support</th>
-                                                                      <th>Deadline</th>
+                                                                      <th>Tanggal Mulai</th>
+                                                                      <th>Tanggal Selesai</th>
                                                                       <th>Action</th>
                                                             </tr>
                                                   </thead>
@@ -205,9 +206,9 @@ export default function UjianDosen() {
                                                                                 <td>{indexOfFirstItem + index + 1}</td>
                                                                                 <td>{item.namaUjian}</td>
                                                                                 <td>{item.kodeUjian}</td>
-                                                                                <td>{item.tipeUjian}</td>
                                                                                 <td>{item.supportingFile}</td>
-                                                                                <td>{item.deadline}</td>
+                                                                                <td>{item.tanggalMulai}</td>
+                                                                                <td>{item.tanggalSelesai}</td>
                                                                                 <td>
                                                                                           <AlertDialog>
                                                                                                     <AlertDialogTrigger className="action-button edit">
@@ -217,7 +218,7 @@ export default function UjianDosen() {
                                                                                                               <AlertDialogHeader>
                                                                                                                         <AlertDialogTitle>Edit Kelas</AlertDialogTitle>
                                                                                                                         <AlertDialogDescription className="w-full">
-                                                                                                                                  <div className="overflow-y-auto max-h-100">
+                                                                                                                                  <div className="max-h-[70vh] overflow-y-auto">
                                                                                                                                             <form>
                                                                                                                                                       <div className="edit-form-group-mahasiswa ">
                                                                                                                                                                 <label>Nama Ujian:</label>
@@ -239,33 +240,37 @@ export default function UjianDosen() {
                                                                                                                                                                 />
                                                                                                                                                       </div>
                                                                                                                                                       <div className="edit-form-group-mahasiswa">
-                                                                                                                                                                <label>Tipe Ujian:</label>
-                                                                                                                                                                <select
-                                                                                                                                                                          className="text-black"
-                                                                                                                                                                          name="tipeUjian"
-                                                                                                                                                                          value={formData.tipeUjian}
-                                                                                                                                                                          onChange={handleChange}
-                                                                                                                                                                >
-                                                                                                                                                                          <option value="BNSP">BNSP</option>
-                                                                                                                                                                          <option value="Reguler">Reguler</option>
-                                                                                                                                                                </select>
+                                                                                                                                                                <label>File Support:</label>
+                                                                                                                                                                <div className="flex items-center justify-center w-full ">
+                                                                                                                                                                          <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+                                                                                                                                                                                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                                                                                                                                                                                              <svg className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                                                                                                                                                                                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
+                                                                                                                                                                                              </svg>
+                                                                                                                                                                                              <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">Click to upload</span> or drag and drop</p>
+                                                                                                                                                                                              <p className="text-xs text-gray-500 dark:text-gray-400">xlsx, xls (MAX. 10mb)</p>
+                                                                                                                                                                                    </div>
+                                                                                                                                                                                    <input id="dropzone-file" type="file" className="hidden" accept=".xlsx, .xls" onChange={handleFileChange} />
+                                                                                                                                                                          </label>
+                                                                                                                                                                </div>
                                                                                                                                                       </div>
                                                                                                                                                       <div className="edit-form-group-mahasiswa">
-                                                                                                                                                                <label>File Support:</label>
+                                                                                                                                                                <label>Tanggal Mulai:</label>
                                                                                                                                                                 <input
                                                                                                                                                                           className="text-black"
-                                                                                                                                                                          type="file"
-                                                                                                                                                                          name="supportingFile"
-                                                                                                                                                                          onChange={handleFileChange}
+                                                                                                                                                                          type="datetime-local"
+                                                                                                                                                                          name="tanggalMulai"
+                                                                                                                                                                          value={formData.tanggalMulai}
+                                                                                                                                                                          onChange={handleChange}
                                                                                                                                                                 />
                                                                                                                                                       </div>
                                                                                                                                                       <div className="edit-form-group-mahasiswa">
-                                                                                                                                                                <label>Deadline:</label>
+                                                                                                                                                                <label>Tanggal Selesai:</label>
                                                                                                                                                                 <input
                                                                                                                                                                           className="text-black"
-                                                                                                                                                                          type="date"
-                                                                                                                                                                          name="deadline"
-                                                                                                                                                                          value={formData.deadline}
+                                                                                                                                                                          type="datetime-local"
+                                                                                                                                                                          name="tanggalSelesai"
+                                                                                                                                                                          value={formData.tanggalSelesai}
                                                                                                                                                                           onChange={handleChange}
                                                                                                                                                                 />
                                                                                                                                                       </div>
@@ -398,19 +403,6 @@ export default function UjianDosen() {
                                                                                                     </div>
                                                                                           </div>
                                                                                           <div className="edit-form-group-mahasiswa">
-                                                                                                    <label>Tipe Ujian:</label>
-                                                                                                    <select
-                                                                                                              className="text-black"
-                                                                                                              name="tipeUjian"
-                                                                                                              value={formData.tipeUjian}
-                                                                                                              onChange={handleChange}
-                                                                                                              required
-                                                                                                    >
-                                                                                                              <option value="BNSP">BNSP</option>
-                                                                                                              <option value="UTS">Reguler</option>
-                                                                                                    </select>
-                                                                                          </div>
-                                                                                          <div className="edit-form-group-mahasiswa">
                                                                                                     <label>File Support:</label>
                                                                                                     <div className="flex items-center justify-center w-full ">
                                                                                                               <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
@@ -419,18 +411,28 @@ export default function UjianDosen() {
                                                                                                                                             <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
                                                                                                                                   </svg>
                                                                                                                                   <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">Click to upload</span> or drag and drop</p>
-                                                                                                                                  <p className="text-xs text-gray-500 dark:text-gray-400">ZIP, RAR atau PDF (MAX. 10mb)</p>
+                                                                                                                                  <p className="text-xs text-gray-500 dark:text-gray-400">xlsx, xls (MAX. 10mb)</p>
                                                                                                                         </div>
-                                                                                                                        <input id="dropzone-file" type="file" className="hidden" accept=".zip, .rar, .pdf" onChange={handleFileChange} />
+                                                                                                                        <input id="dropzone-file" type="file" className="hidden" accept=".xlsx, .xls" onChange={handleFileChange} />
                                                                                                               </label>
                                                                                                     </div>
                                                                                           </div>
                                                                                           <div className="edit-form-group-mahasiswa ">
-                                                                                                    <label>Deadline:</label>
+                                                                                                    <label>Tanggal Mulai:</label>
                                                                                                     <input
-                                                                                                              type="date"
-                                                                                                              name="deadline"
-                                                                                                              value={formData.deadline}
+                                                                                                              type="datetime-local"
+                                                                                                              name="tanggalMulai"
+                                                                                                              value={formData.tanggalMulai}
+                                                                                                              onChange={handleChange}
+                                                                                                              required
+                                                                                                    />
+                                                                                          </div>
+                                                                                          <div className="edit-form-group-mahasiswa">
+                                                                                                    <label>Tanggal Selesai:</label>
+                                                                                                    <input
+                                                                                                              type="datetime-local"
+                                                                                                              name="tanggalSelesai"
+                                                                                                              value={formData.tanggalSelesai}
                                                                                                               onChange={handleChange}
                                                                                                               required
                                                                                                     />
