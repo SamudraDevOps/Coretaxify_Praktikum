@@ -19,7 +19,7 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/Components/ui/accordion";
+} from "@/components/ui/accordion";
 import { MdOutlineDriveFolderUpload } from "react-icons/md";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
