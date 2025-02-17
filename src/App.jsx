@@ -8,7 +8,8 @@ import DashboardAdmin from "./components/Dashboard/Admin/Dashboard/DashboardAdmi
 import Kontrak from "./components/Dashboard/Admin/Kontrak/Kontrak";
 import DashboardDosen from "./components/Dashboard/Dosen/Dashboard/DashboardDosen";
 import DosenTugas from "./components/Dashboard/Dosen/Kelas/DosenKelas";
-import DosenCardKelas from "./components/Dashboard/Dosen/Kelas/DosenCardKelas";
+import DosenKelas from "./components/Dashboard/Dosen/Kelas/DosenKelas";
+// import DosenCardKelas from "./components/Dashboard/Dosen/Kelas/DosenCardKelas";
 import UjianDosen from "./components/Dashboard/Dosen/Ujian/UjianDosen";
 import EditDosen from "./components/Dashboard/Admin/Pengguna/Dosen/EditDosen";
 import PenilaianDosen from "./components/Dashboard/Dosen/Penilaian/PenilaianDosen";
@@ -17,7 +18,12 @@ import DetailTugasPenilaianDosen from "./components/Dashboard/Dosen/Penilaian/De
 import EditMahasiswa from "./components/Dashboard/Admin/Pengguna/Mahasiswa/EditMahasiswa";
 import EditAdmin from "./components/Dashboard/Admin/Pengguna/Admin/EditAdmin";
 import EditKelas from "./components/Dashboard/Admin/Pengguna/Kelas/EditKelas";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 // import { BrowserRouter, Routes, Route, Router } from "react-router";
 import ClipLoader from "react-spinners/ClipLoader";
 import EditArtikel from "./components/Dashboard/Admin/LandingPage/EditArtikel";
@@ -27,14 +33,15 @@ import Ujian from "./components/Dashboard/Admin/Praktikum/Ujian";
 import UploadSoal from "./components/Dashboard/Admin/Praktikum/UploadSoal";
 import KontrakBackup from "./components/Dashboard/Admin/Kontrak/KontrakBackup";
 import PraktikumBackup from "./components/Dashboard/Admin/Praktikum/PraktikumBackup";
-import MahsiswaKelas from "./components/Dashboard/Mahasiswa/Kelas/MahasiswaKelas";
+import MahasiswaKelas from "./components/Dashboard/Mahasiswa/Kelas/MahasiswaKelas";
 import MahasiswaPraktikum from "./components/Dashboard/Mahasiswa/Praktikum/MahasiswaPraktikum";
 import MahasiswaUjian from "./components/Dashboard/Mahasiswa/Praktikum/MahasiswaUjian";
 import EditPengajar from "./components/Dashboard/AdminPsc/Pengguna/Pengajar/EditPengajar";
 import EditKelasPsc from "./components/Dashboard/AdminPsc/Pengguna/Kelas/EditKelasPsc";
 import UjianPsc from "./components/Dashboard/AdminPsc/Pengguna/Praktikum/UjianPsc";
 import EditMahasiswaPsc from "./components/Dashboard/AdminPsc/Pengguna/Mahasiswa/EditMahasiswaPsc";
-import Header from "./components/Header/Header"
+import Header from "./components/Header/Header";
+import ProtectedRoutes from "./components/Dashboard/Auth/ProtectedRoutes";
 
 const Main = () => {
   const [loading, setLoading] = useState(true);
@@ -59,34 +66,40 @@ const Main = () => {
         <Route
           path="/admin"
           element={
-            <div className="admin-layout">
-              <SidebarAdmin />
-              <div className="admin-content">
-                <DashboardAdmin />
+            <ProtectedRoutes>
+              <div className="admin-layout">
+                <SidebarAdmin />
+                <div className="admin-content">
+                  <DashboardAdmin />
+                </div>
               </div>
-            </div>
+            </ProtectedRoutes>
           }
         />
         <Route
           path="/admin/kontrak"
           element={
-            <div className="admin-layout">
-              <SidebarAdmin />
-              <div className="admin-content">
-                <Kontrak />
+            <ProtectedRoutes>
+              <div className="admin-layout">
+                <SidebarAdmin />
+                <div className="admin-content">
+                  <Kontrak />
+                </div>
               </div>
-            </div>
+            </ProtectedRoutes>
           }
         />
         <Route
           path="/admin/edit-dosen"
           element={
-            <div className="admin-layout">
-              <SidebarAdmin />
-              <div className="admin-content">
-                <EditDosen />
+            <ProtectedRoutes>
+              <div className="admin-layout">
+                <SidebarAdmin />
+                <div className="admin-content">
+                  <EditDosen />
+                </div>
               </div>
-            </div>
+            </ProtectedRoutes>
           }
         />
         <Route
@@ -227,7 +240,8 @@ const Main = () => {
             <div className="admin-layout">
               <SidebarAdmin />
               <div className="admin-content">
-                <DosenCardKelas></DosenCardKelas>
+                <DosenKelas></DosenKelas>
+                {/* <DosenCardKelas></DosenCardKelas> */}
               </div>
             </div>
           }
@@ -293,10 +307,14 @@ const Main = () => {
             <div className="admin-layout">
               <SidebarAdmin />
               <div className="admin-content">
-                <MahsiswaKelas></MahsiswaKelas>
+                <MahasiswaKelas></MahasiswaKelas>
               </div>
             </div>
           }
+        />
+        <Route
+          path="/mahasiswa"
+          element={<Navigate to="/mahasiswa/kelas" replace />}
         />
         <Route
           path="/mahasiswa/praktikum"
@@ -361,14 +379,6 @@ const Main = () => {
               <div className="admin-content">
                 <EditMahasiswaPsc></EditMahasiswaPsc>
               </div>
-            </div>
-          }
-        />
-        <Route
-          path="/admin/praktikum/prak1"
-          element={
-            <div className="">
-              <Header />
             </div>
           }
         />
