@@ -104,7 +104,7 @@ const Register = () => {
 
                                                   {!showRegistrationCode ? (
                                                             <div className="flex gap-4">
-                                                                      <button type="button" className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600">
+                                                                      <button type="button" className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600" onClick={() => window.location.href = "/confirm-otp"}>
                                                                                 Coba Gratis 14 Hari
                                                                       </button>
                                                                       <button type="button" className="w-full bg-purple-900 text-white py-2 rounded-md hover:bg-purple-950" onClick={() => setShowRegistrationCode(true)}>
@@ -118,7 +118,7 @@ const Register = () => {
                                                                       </label>
                                                                       <input type="text" id="registration-code" value={registrationCode} onChange={handleRegistrationCodeChange} className="mt-1 block w-full p-2 border rounded-md" placeholder="Masukkan Kode Registrasi" required />
                                                                       {registrationCodeError && <p className="text-red-500 text-sm">{registrationCodeError}</p>}
-                                                                      <button type="submit" className="mt-4 w-full bg-purple-900 text-white py-2 rounded-md hover:bg-purple-950">
+                                                                                <button type="submit" className="mt-4 w-full bg-purple-900 text-white py-2 rounded-md hover:bg-purple-950" onClick={() => window.location.href = "/confirm-otp"}>
                                                                                 Daftar Sekarang
                                                                       </button>
                                                             </div>

@@ -3,6 +3,7 @@ import "./App.css";
 import SidebarAdmin from "./components/Dashboard/Admin/SidebarAdmin/SidebarAdmin";
 import Login from "./components/Dashboard/Auth/Login/Login";
 import Register from "./components/Dashboard/Auth/Register/Register";
+import ConfirmOTP from "./components/Dashboard/Auth/ConfirmEmail/ConfirmOTP";
 import ResetPassword from "./components/Dashboard/Auth/ResetPassword/ResetPassword";
 import DashboardAdmin from "./components/Dashboard/Admin/Dashboard/DashboardAdmin";
 import Kontrak from "./components/Dashboard/Admin/Kontrak/Kontrak";
@@ -63,6 +64,7 @@ const Main = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/confirm-otp" element={<ConfirmOTP />} />
         <Route
           path="/admin"
           element={
