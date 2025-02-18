@@ -234,6 +234,7 @@ const Kontrak = () => {
                 <td>{item.bupot}</td>
                 <td>{item.faktur}</td>
                 <td>{item.contract_code}</td>
+                <td>{item.is_buy_task == 0 ? "Tidak" : "Ya"}</td>
                 <td>{item.status}</td>
                 <td>
                   <button

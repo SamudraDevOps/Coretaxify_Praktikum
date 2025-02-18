@@ -42,4 +42,5 @@ export const RoutesApi = {
     url: url + `api/${role.student}/assignments`,
     intent: "api.user.assign.task",
   },
+  register: url + "api/register",
 };
