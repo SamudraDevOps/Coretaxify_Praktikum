@@ -16,6 +16,10 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { CookiesProvider, useCookies } from "react-cookie";
+import axios from "axios";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { RoutesApi } from "@/Routes";
+import { ClipLoader } from "react-spinners";
 
 export default function MahasiswaPraktikum() {
   const [isOpen, setIsOpen] = useState(false);
@@ -24,33 +28,21 @@ export default function MahasiswaPraktikum() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const [cookies, setCookie] = useCookies(["user"]);
+  const [url, setUrl] = useState(RoutesApi.assignment.url);
 
-  const [data, setData] = useState([
-    {
-      namaPraktikum: "Praktikum Pajak Bumi Bangunan",
-      kodePraktikum: "xAE12",
-      file: "98",
-      tanggal: "25-Januari-2024",
+  const { isLoading, isError, data, error } = useQuery({
+    queryKey: ["kelas_dosen", url],
+    queryFn: async () => {
+      const { data } = await axios.get(url, {
+        headers: {
+          Authorization: `Bearer ${cookies.token}`,
+          Accept: "application/json",
+        },
+      });
+      console.log(data);
+      return data;
     },
-    {
-      namaPraktikum: "Praktikum Pajak Bumi Makanan",
-      kodePraktikum: "xAE12",
-      file: "98",
-      tanggal: "25-Januari-2024",
-    },
-    {
-      namaPraktikum: "Praktikum Pajak Bumi Bangunan",
-      kodePraktikum: "xAE12",
-      file: "98",
-      tanggal: "25-Januari-2024",
-    },
-    {
-      namaPraktikum: "Praktikum Pajak Bumi Bangunan",
-      kodePraktikum: "xAE12",
-      file: "98",
-      tanggal: "25-Januari-2024",
-    },
-  ]);
+  });
 
   const handleSort = (key) => {
     let direction = "ascending";
@@ -78,15 +70,12 @@ export default function MahasiswaPraktikum() {
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
+  // const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const [formData, setFormData] = useState({
-    namaPraktikum: "",
-    kodePraktikum: "",
-    nilai: "",
-    tanggal: "",
+    assignment_code: "",
   });
 
   const handleChange = (e) => {
@@ -105,14 +94,64 @@ export default function MahasiswaPraktikum() {
   }
   const [search, setSearch] = useState("");
 
-  const processedData = data.map((item) => ({
-    ...item,
-    highlight:
-      search &&
-      Object.values(item).some((value) =>
-        String(value).toLowerCase().includes(search.toLowerCase())
-      ),
-  }));
+  // const processedData = data.map((item) => ({
+  //   ...item,
+  //   highlight:
+  //     search &&
+  //     Object.values(item).some((value) =>
+  //       String(value).toLowerCase().includes(search.toLowerCase())
+  //     ),
+  // }));
+  const mutation = useMutation({
+    mutationFn: async (id) => {
+      console.log("button clicked");
+      // const { response } = await axios.post(RoutesApi.login, {
+      const response = await axios.get(`${RoutesApi.url}api/csrf-token`, {
+        // withCredentials: true,
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+          Accept: "application/json",
+        },
+      });
+      console.log(response.data.token);
+      axios.defaults.headers.common["X-CSRF-TOKEN"] = response.data.token;
+      console.log(cookies.token);
+      const data = await axios.post(
+        RoutesApi.assignmentStudent.url,
+        {
+          assignment_code: formData.assignment_code,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": response.data.token,
+            Authorization: `Bearer ${cookies.token}`,
+          },
+          params: {
+            intent: RoutesApi.assignmentStudent.intent,
+          },
+        }
+      );
+      return data;
+    },
+    onSuccess: (data) => {
+      console.log(data);
+      // window.location.reload();
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
+  if (isLoading) {
+    return (
+      <div className="loading">
+        <ClipLoader color="#7502B5" size={50} />
+      </div>
+      // <div className="h-full w-full text-2xl italic font-bold text-center flex items-center justify-center">Loading...</div>
+    );
+  }
 
   return (
     <div className="kontrak-container">
@@ -125,7 +164,7 @@ export default function MahasiswaPraktikum() {
           </li>
         ))} */}
       </div>
-      <div className="search-add-container">
+      <div className="search-add-container flex justify-between">
         <div className="search-input-container">
           <input
             type="text"
@@ -135,12 +174,43 @@ export default function MahasiswaPraktikum() {
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
+        <AlertDialog>
+          <AlertDialogTrigger className="bg-blue-800 p-2 rounded-md text-white hover:bg-blue-900">
+            Ikuti Praktikum
+          </AlertDialogTrigger>
+          <AlertDialogContent className="w-full ">
+            <AlertDialogHeader>
+              <AlertDialogTitle>Ikuti Kelas</AlertDialogTitle>
+              {/* <AlertDialogDescription>
+                This action cannot be undone. This will permanently delete your
+                account and remove your data from our servers.
+              </AlertDialogDescription> */}
+            </AlertDialogHeader>
+            <form>
+              <div className="edit-form-group-mahasiswa ">
+                <label>Kode Praktikum:</label>
+                <input
+                  type="text"
+                  name="assignment_code"
+                  value={formData.assignment_code}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            </form>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Kembali</AlertDialogCancel>
+              <AlertDialogAction onClick={() => mutation.mutate()}>
+                Ikuti Kelas
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
       <div className="table-container">
         <table>
           <thead>
             <tr>
-              <th className="">No Praktikum</th>
               <th onClick={() => handleSort("namaPraktikum")}>
                 Judul Praktikum{" "}
                 {sortConfig.key === "namaPraktikum"
@@ -152,29 +222,102 @@ export default function MahasiswaPraktikum() {
                   : "↑"}
               </th>
               <th className="">Kode Praktikum</th>
-              <th className="">File Praktikum</th>
-              <th className="">Deadline Praktikum</th>
-              <th>Aksi</th>
+              <th className="">Tanggal Praktikum</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
-            {data.map((item, index) => (
+            {data.data.map((item, index) => (
               <tr key={index}>
-                <td>{index + 1}</td>
-                <td>{item.namaPraktikum}</td>
+                <td>{item.name}</td>
                 <td className="max-w-5">
-                  <p className="truncate">{item.kodePraktikum}</p>
+                  <p className="truncate">{item.assignment_code}</p>
                 </td>
                 <td className="max-w-5">
-                  Download
-                  {/* <p className="">{item.tanggal}</p> */}
-                </td>
-                <td className="max-w-5">
-                  <p className="">{item.tanggal}</p>
+                  <p className="">{item.start_period}</p>
                 </td>
                 <td>
-                  <button className="bg-green-500 text-white p-2 rounded-md">
-                    Mulai
+                  <AlertDialog>
+                    <AlertDialogTrigger className="action-button edit">
+                      Edit
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Edit Praktikum</AlertDialogTitle>
+                        <AlertDialogDescription className="w-full">
+                          <div className="">
+                            <form>
+                              <div className="edit-form-group-mahasiswa ">
+                                <label>Judul Praktikum:</label>
+                                <input
+                                  type="text"
+                                  name="namaPraktikum"
+                                  value={formData.namaPraktikum}
+                                  onChange={handleChange}
+                                  required
+                                />
+                              </div>
+                              <div className="edit-form-group-mahasiswa">
+                                <label>Kode Praktikum:</label>
+                                <input
+                                  className="text-black"
+                                  name="kodePraktikum"
+                                  value={formData.kodePraktikum}
+                                  onChange={handleChange}
+                                />
+                              </div>
+                              <div className="edit-form-group-mahasiswa">
+                                <label>Tanggal Praktikum:</label>
+                                <input type="date" onChange={handleChange} />
+                              </div>
+                            </form>
+                          </div>
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel className="bg-red-600 text-white">
+                          Kembali
+                        </AlertDialogCancel>
+                        <AlertDialogAction className="bg-green-600 ">
+                          Simpan
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+
+                  {/* <button
+                    className="action-button edit"
+                    onClick={() => handleEditClick(index)}
+                  >
+                    Edit
+                  </button> */}
+                  <button
+                    className="action-button delete"
+                    onClick={() => {
+                      Swal.fire({
+                        title: "Hapus Praktikum?",
+                        text: "Praktikum akan dihapus secara permanen!",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonText: "Ya, hapus!",
+                        cancelButtonText: "Batal",
+                        dangerMode: true,
+                      }).then((result) => {
+                        if (result.isConfirmed) {
+                          const newData = data.filter(
+                            (itemData) => itemData.id !== item.id
+                          );
+                          setData(newData);
+                          Swal.fire(
+                            "Berhasil!",
+                            "Praktikum berhasil dihapus!",
+                            "success"
+                          );
+                        }
+                      });
+                    }}
+                  >
+                    Delete
                   </button>
                 </td>
               </tr>
