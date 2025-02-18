@@ -7,7 +7,7 @@ import ResetPassword from "./components/Dashboard/Auth/ResetPassword/ResetPasswo
 import DashboardAdmin from "./components/Dashboard/Admin/Dashboard/DashboardAdmin";
 import Kontrak from "./components/Dashboard/Admin/Kontrak/Kontrak";
 import DashboardDosen from "./components/Dashboard/Dosen/Dashboard/DashboardDosen";
-import DosenTugas from "./components/Dashboard/Dosen/Kelas/DosenKelas";
+// import DosenTugas from "./components/Dashboard/Dosen/Kelas/DosenKelas";
 import DosenKelas from "./components/Dashboard/Dosen/Kelas/DosenKelas";
 // import DosenCardKelas from "./components/Dashboard/Dosen/Kelas/DosenCardKelas";
 import UjianDosen from "./components/Dashboard/Dosen/Ujian/UjianDosen";
@@ -28,7 +28,7 @@ import {
 import ClipLoader from "react-spinners/ClipLoader";
 import EditArtikel from "./components/Dashboard/Admin/LandingPage/EditArtikel";
 import EditUlasan from "./components/Dashboard/Admin/LandingPage/EditUlasan";
-import Praktikum from "./components/Dashboard/Admin/Praktikum/Praktikum";
+import Praktikum from "./components/Dashboard/Dosen/Praktikum/Praktikum";
 import Ujian from "./components/Dashboard/Admin/Praktikum/Ujian";
 import UploadSoal from "./components/Dashboard/Admin/Praktikum/UploadSoal";
 import KontrakBackup from "./components/Dashboard/Admin/Kontrak/KontrakBackup";
@@ -247,12 +247,12 @@ const Main = () => {
           }
         />
         <Route
-          path="/dosen/kelas/tugas"
+          path="/dosen/praktikum"
           element={
             <div className="admin-layout">
               <SidebarAdmin />
               <div className="admin-content">
-                <DosenTugas />
+                <Praktikum></Praktikum>
               </div>
             </div>
           }

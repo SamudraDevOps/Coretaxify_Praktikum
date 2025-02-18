@@ -34,4 +34,8 @@ export const RoutesApi = {
     url: url + `api/${role.student}/groups`,
     intent: "api.user.join.group",
   },
+  assignment: {
+    url: url + `api/${role.lecturer}/assignments`,
+    intent: "api.user.create.assignment",
+  },
 };

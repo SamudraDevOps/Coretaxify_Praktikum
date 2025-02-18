@@ -5,8 +5,8 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { RoutesApi } from "@/Routes";
 import { CookiesProvider, useCookies } from "react-cookie";
-import { Label } from "@/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 import { useToast } from "@/hooks/use-toast";
 
@@ -58,7 +58,7 @@ const TambahKontrak = ({ isOpen, onClose, onSave, UniData, setOpen }) => {
     mutationFn: async () => {
       console.log("button clicked");
       // const { response } = await axios.post(RoutesApi.login, {
-      const response = await axios.get(`http://192.168.1.86/api/csrf-token`, {
+      const response = await axios.get(`${RoutesApi.url}api/csrf-token`, {
         // withCredentials: true,
         headers: {
           "X-Requested-With": "XMLHttpRequest",
@@ -185,7 +185,11 @@ const TambahKontrak = ({ isOpen, onClose, onSave, UniData, setOpen }) => {
             <label>Soal</label>
             <RadioGroup defaultValue="option-one">
               <div className="flex items-center space-x-2">
-                <RadioGroupItem className="" value="option-one" id="option-one" />
+                <RadioGroupItem
+                  className=""
+                  value="option-one"
+                  id="option-one"
+                />
                 <Label htmlFor="option-one">Ya</Label>
               </div>
               <div className="flex items-center space-x-2">

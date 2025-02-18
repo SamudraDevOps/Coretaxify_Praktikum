@@ -1,9 +1,8 @@
 // import React from "react";
 import React, { useState } from "react";
 // import "../Pengguna/Mahasiswa/editMahasiswa.css";
-import EditPopupMahasiswa from "../Pengguna/Mahasiswa/EditPopupMahasiswa";
+// import EditPopupMahasiswa from "../Pengguna/Mahasiswa/EditPopupMahasiswa";
 import Swal from "sweetalert2";
-import { Textarea } from "@/components/ui/textarea";
 
 import {
   AlertDialog,
@@ -17,41 +16,97 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { CookiesProvider, useCookies } from "react-cookie";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import { RoutesApi } from "@/Routes";
+import { ClipLoader } from "react-spinners";
 
 export default function Praktikum() {
   const [isOpen, setIsOpen] = useState(false);
+  const [url, setUrl] = useState(RoutesApi.assignment.url);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
   const [selectedData, setSelectedData] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const [cookies, setCookie] = useCookies(["user"]);
 
-  const [data, setData] = useState([
-    {
-      namaPraktikum: "Praktikum Pajak Bumi Bangunan",
-      kodePraktikum: "xAE12",
-      nilai: "98",
-      tanggal: "25-Januari-2024",
+  const { isLoading, isError, data, error } = useQuery({
+    queryKey: ["praktikum", url],
+    queryFn: async () => {
+      const { data } = await axios.get(url, {
+        headers: {
+          Authorization: `Bearer ${cookies.token}`,
+        },
+      });
+      console.log(data.data);
+      return data;
     },
-    {
-      namaPraktikum: "Praktikum Pajak Bumi Makanan",
-      kodePraktikum: "xAE12",
-      nilai: "98",
-      tanggal: "25-Januari-2024",
+  });
+
+  const {
+    isLoading: isLoadingClass,
+    isError: isErrorClass,
+    data: dataClass,
+  } = useQuery({
+    queryKey: ["classes"],
+    queryFn: async () => {
+      const { data } = await axios.get(RoutesApi.classAdmin, {
+        headers: {
+          Authorization: `Bearer ${cookies.token}`,
+        },
+      });
+      console.log(data);
+      return data;
     },
-    {
-      namaPraktikum: "Praktikum Pajak Bumi Bangunan",
-      kodePraktikum: "xAE12",
-      nilai: "98",
-      tanggal: "25-Januari-2024",
+  });
+
+  const mutation = useMutation({
+    mutationFn: async () => {
+      console.log("button clicked");
+      // const { response } = await axios.post(RoutesApi.login, {
+      const response = await axios.get(`${RoutesApi.url}api/csrf-token`, {
+        // withCredentials: true,
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+          Accept: "application/json",
+        },
+      });
+      console.log(response.data.token);
+      axios.defaults.headers.common["X-CSRF-TOKEN"] = response.data.token;
+      console.log(cookies.token);
+      const data = await axios.post(
+        RoutesApi.assignment.url,
+        {
+          name: formData.name,
+          assignment_code: formData.assignment_code,
+          group_id: formData.group_id,
+          start_period: formData.start_period,
+          end_period: formData.end_period,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": response.data.token,
+            Authorization: `Bearer ${cookies.token}`,
+          },
+          params: {
+            intent: RoutesApi.assignment.intent,
+          },
+        }
+      );
+      return data;
     },
-    {
-      namaPraktikum: "Praktikum Pajak Bumi Bangunan",
-      kodePraktikum: "xAE12",
-      nilai: "98",
-      tanggal: "25-Januari-2024",
+    onSuccess: (data) => {
+      console.log(data);
+      window.location.reload();
+
+      // queryClient.invalidateQueries({ queryKey: ["praktikum"] });
     },
-  ]);
+    onError: (error) => {
+      console.log(error);
+    },
+  });
 
   const handleSort = (key) => {
     let direction = "ascending";
@@ -79,15 +134,16 @@ export default function Praktikum() {
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
+  // const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const [formData, setFormData] = useState({
-    namaPraktikum: "",
-    kodePraktikum: "",
-    nilai: "",
-    tanggal: "",
+    name: "",
+    assignment_code: "",
+    group_id: "",
+    start_period: "",
+    end_period: "",
   });
 
   const handleChange = (e) => {
@@ -106,14 +162,29 @@ export default function Praktikum() {
   }
   const [search, setSearch] = useState("");
 
-  const processedData = data.map((item) => ({
-    ...item,
-    highlight:
-      search &&
-      Object.values(item).some((value) =>
-        String(value).toLowerCase().includes(search.toLowerCase())
-      ),
-  }));
+  // const processedData = data.map((item) => ({
+  //   ...item,
+  //   highlight:
+  //     search &&
+  //     Object.values(item).some((value) =>
+  //       String(value).toLowerCase().includes(search.toLowerCase())
+  //     ),
+  // }));
+
+  if (isLoading || isLoadingClass) {
+    return (
+      <div className="loading">
+        <ClipLoader color="#7502B5" size={50} />
+      </div>
+    );
+  }
+  // if (isLoadingClass) {
+  //   return (
+  //     <div className="loading">
+  //       <ClipLoader color="#7502B5" size={50} />
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="kontrak-container">
@@ -152,8 +223,8 @@ export default function Praktikum() {
                       <label>Judul Praktikum:</label>
                       <input
                         type="text"
-                        name="namaPraktikum"
-                        value={formData.namaPraktikum}
+                        name="name"
+                        value={formData.name}
                         onChange={handleChange}
                         required
                       />
@@ -162,14 +233,37 @@ export default function Praktikum() {
                       <label>Kode Praktikum:</label>
                       <input
                         className="text-black"
-                        name="kodePraktikum"
-                        value={formData.kodePraktikum}
+                        name="assignment_code"
+                        value={formData.assignment_code}
                         onChange={handleChange}
                       />
                     </div>
                     <div className="edit-form-group-mahasiswa">
-                      <label>Tanggal Praktikum:</label>
-                      <input type="date" onChange={handleChangeFile} />
+                      <label>Kelas Praktikum:</label>
+                      <select name="group_id" onChange={handleChange} id="">
+                        <option value="">Pilih Kelas</option>
+                        {dataClass.map((item) => (
+                          <option key={item.id} value={item.id}>
+                            {item.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="edit-form-group-mahasiswa">
+                      <label>Tanggal Mulai:</label>
+                      <input
+                        type="date"
+                        name="start_period"
+                        onChange={handleChange}
+                      />
+                    </div>
+                    <div className="edit-form-group-mahasiswa">
+                      <label>Tanggal Selesai:</label>
+                      <input
+                        type="date"
+                        name="end_period"
+                        onChange={handleChange}
+                      />
                     </div>
                   </form>
                 </div>
@@ -179,7 +273,10 @@ export default function Praktikum() {
               <AlertDialogCancel className="bg-red-600 text-white">
                 Kembali
               </AlertDialogCancel>
-              <AlertDialogAction className="bg-green-600">
+              <AlertDialogAction
+                onClick={() => mutation.mutate()}
+                className="bg-green-600"
+              >
                 Simpan
               </AlertDialogAction>
             </AlertDialogFooter>
@@ -206,14 +303,14 @@ export default function Praktikum() {
             </tr>
           </thead>
           <tbody>
-            {data.map((item, index) => (
+            {data.data.map((item, index) => (
               <tr key={index}>
-                <td>{item.namaPraktikum}</td>
+                <td>{item.name}</td>
                 <td className="max-w-5">
-                  <p className="truncate">{item.kodePraktikum}</p>
+                  <p className="truncate">{item.assignment_code}</p>
                 </td>
                 <td className="max-w-5">
-                  <p className="">{item.tanggal}</p>
+                  <p className="">{item.start_period}</p>
                 </td>
                 <td>
                   <AlertDialog>
@@ -247,10 +344,7 @@ export default function Praktikum() {
                               </div>
                               <div className="edit-form-group-mahasiswa">
                                 <label>Tanggal Praktikum:</label>
-                                <input
-                                  type="date"
-                                  onChange={handleChangeFile}
-                                />
+                                <input type="date" onChange={handleChange} />
                               </div>
                             </form>
                           </div>
