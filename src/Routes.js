@@ -43,4 +43,5 @@ export const RoutesApi = {
     intent: "api.user.assign.task",
   },
   register: url + "api/register",
+  verify_otp: url + "api/verify-otp",
 };

@@ -9,7 +9,6 @@ import { useCookies } from "react-cookie";
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [cookies, setCookie] = useCookies(["user"]);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
@@ -18,6 +17,7 @@ const Register = () => {
   const [showRegistrationCode, setShowRegistrationCode] = useState(false);
   const [registrationCode, setRegistrationCode] = useState("");
   const [registrationCodeError, setRegistrationCodeError] = useState("");
+  const [cookies, setCookie] = useCookies(["user"]);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -67,6 +67,9 @@ const Register = () => {
     },
     onSuccess: (data) => {
       console.log(data);
+    if(data.status === 200) {
+        window.location.href = "/confirm-otp";
+    }
     //   window.location.reload();
 
       // window.location.href = "/" + role;
