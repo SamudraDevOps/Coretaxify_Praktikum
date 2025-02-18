@@ -11,14 +11,14 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/Components/ui/alert-dialog";
+} from "@/components/ui/alert-dialog";
 import { CookiesProvider, useCookies } from "react-cookie";
 import { FaFile } from "react-icons/fa";
 import axios from "axios";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { ClipLoader } from "react-spinners";
 import { RoutesApi } from "@/Routes";
-import Wulan from "../../../../Assets/images/wulan.png";
+import Wulan from "../../../../assets/images/wulan.png";
 
 export default function MahasiswaKelas() {
   const [isOpen, setIsOpen] = useState(false);
