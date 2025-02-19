@@ -43,6 +43,7 @@ import UjianPsc from "./components/Dashboard/AdminPsc/Pengguna/Praktikum/UjianPs
 import EditMahasiswaPsc from "./components/Dashboard/AdminPsc/Pengguna/Mahasiswa/EditMahasiswaPsc";
 import Header from "./components/Header/Header";
 import ProtectedRoutes from "./components/Dashboard/Auth/ProtectedRoutes";
+import MahasiswaPraktikumKelas from "./components/Dashboard/Mahasiswa/Kelas/MahasiswaPraktikumKelas";
 
 const Main = () => {
   const [loading, setLoading] = useState(true);
@@ -310,6 +311,17 @@ const Main = () => {
               <SidebarAdmin />
               <div className="admin-content">
                 <MahasiswaKelas></MahasiswaKelas>
+              </div>
+            </div>
+          }
+        />
+        <Route
+          path="/mahasiswa/kelas/:id"
+          element={
+            <div className="admin-layout">
+              <SidebarAdmin />
+              <div className="admin-content">
+                <MahasiswaPraktikumKelas></MahasiswaPraktikumKelas>
               </div>
             </div>
           }

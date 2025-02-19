@@ -8,7 +8,7 @@ import {
   FaChevronDown,
   FaUserCircle,
 } from "react-icons/fa";
-import { GiPieChart } from "react-icons/gi";
+import { GiPieChart, GiWhiteBook } from "react-icons/gi";
 // import Logo from "../../../Assets/image/7.png"; // Pastikan ini menunjuk ke file logo Anda.
 import Logo from "../../../../assets/images/7.png"; // Pastikan ini menunjuk ke file logo Anda.
 import ProfileIcon from "../../../../assets/images/wulan.png"; // Gambar untuk profile.
@@ -37,7 +37,7 @@ const SidebarAdmin = () => {
   //     queryClient.invalidateQueries({ queryKey: ["login"] });
   //   },
   // });
-  const [cookies, setCookie, removeCookie] = useCookies(["token"]);
+  const [cookies, setCookie, removeCookie] = useCookies();
 
   const mutation = useMutation({
     mutationFn: async () => {
@@ -112,6 +112,8 @@ const SidebarAdmin = () => {
     window.location.href = "/login";
   };
 
+  console.log(cookies.role);
+
   return (
     <div className={`sidebar ${isOpen ? "open" : "closed"}`}>
       {mutation.isPending ? (
@@ -183,7 +185,11 @@ const SidebarAdmin = () => {
         >
           <FaLaptopCode className="menu-icon" />
           {isOpen && (
-            <span>{cookies.role == "admin" ? "Coretaxify" : "Praktikum"}</span>
+            <span>
+              {cookies.role == "admin"
+                ? "Coretaxify"
+                : (cookies.role = "dosen" ? "Coretaxify" : "Praktikum")}
+            </span>
           )}
         </li>
         <li
@@ -194,6 +200,16 @@ const SidebarAdmin = () => {
         >
           <FaPencil className="menu-icon" />
           {isOpen && <span>Ujian</span>}
+        </li>
+        <li
+          className={`menu-item ${cookies.role == "dosen" ? "" : "!hidden"}`}
+          // className={`menu-item`}
+          onClick={() => {
+            window.location.href = `/${cookies.role}/penilaian`;
+          }}
+        >
+          <GiWhiteBook className="menu-icon" />
+          {isOpen && <span>Penilaian</span>}
         </li>
         <li
           className={`menu-item ${
@@ -416,6 +432,16 @@ const SidebarAdmin = () => {
                     }}
                   >
                     Ujian
+                  </li>
+                  <li
+                    className={`dropdown-item ${
+                      cookies.role == "dosen" ? "" : "!hidden"
+                    }`}
+                    onClick={() => {
+                      window.location.href = "/admin-psc/edit-ujian";
+                    }}
+                  >
+                    Penilaian
                   </li>
                   <li
                     className="dropdown-item"

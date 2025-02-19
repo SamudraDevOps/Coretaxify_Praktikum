@@ -39,12 +39,11 @@ const Register = () => {
       console.log(response.data.token);
       axios.defaults.headers.common["X-CSRF-TOKEN"] = response.data.token;
       console.log(cookies.token);
-      if (setShowRegistrationCode == false) {
-        return null;
-      }
+      // if (setShowRegistrationCode == false) {
+      //   return null;
+      // }
       const data = await axios.post(
         RoutesApi.register,
-
         {
           name: formData.name,
           email: formData.email,
@@ -67,10 +66,10 @@ const Register = () => {
     },
     onSuccess: (data) => {
       console.log(data);
-    if(data.status === 200) {
+      if (data.status === 200) {
         window.location.href = "/confirm-otp";
-    }
-    //   window.location.reload();
+      }
+      //   window.location.reload();
 
       // window.location.href = "/" + role;
       // alert("Login successful!");
@@ -241,6 +240,7 @@ const Register = () => {
           {!showRegistrationCode ? (
             <div className="flex gap-4">
               <button
+                onClick={() => mutation.mutate()}
                 type="button"
                 className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600"
               >
