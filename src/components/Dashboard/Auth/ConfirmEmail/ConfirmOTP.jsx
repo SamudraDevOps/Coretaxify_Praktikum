@@ -27,6 +27,10 @@ const ConfirmOTP = () => {
     }
   }, [timer]);
 
+  useEffect(() => {
+    setFormData({ ...formData, otp: otp.join("") });
+  }, [otp]);
+
   const handleChange = (index, value) => {
     if (!/^[0-9]?$/.test(value)) return;
     const newOtp = [...otp];
@@ -40,7 +44,6 @@ const ConfirmOTP = () => {
 
   const mutation = useMutation({
     mutationFn: async () => {
-      setFormData({ ...formData, otp: otp.join("") });
       console.log("button clicked");
       // const { response } = await axios.post(RoutesApi.login, {
       const response = await axios.get(`${RoutesApi.url}api/csrf-token`, {
@@ -80,7 +83,7 @@ const ConfirmOTP = () => {
     onSuccess: (data) => {
       console.log(data);
       if (data.status === 200) {
-        window.location.href = "/confirm-otp";
+        window.location.href = "/login";
       }
       //   window.location.reload();
 
