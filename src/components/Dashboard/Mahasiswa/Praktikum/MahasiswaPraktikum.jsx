@@ -28,7 +28,7 @@ export default function MahasiswaPraktikum() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const [cookies, setCookie] = useCookies(["user"]);
-  const [url, setUrl] = useState(RoutesApi.classGroup.url);
+  const [url, setUrl] = useState(RoutesApi.assignmentStudent.url);
 
   const { isLoading, isError, data, error } = useQuery({
     queryKey: ["praktikum", url],
@@ -211,7 +211,7 @@ export default function MahasiswaPraktikum() {
         <table>
           <thead>
             <tr>
-              <th onClick={() => handleSort("namaPraktikum")}>
+              {/* <th onClick={() => handleSort("namaPraktikum")}>
                 Judul Praktikum{" "}
                 {sortConfig.key === "namaPraktikum"
                   ? sortConfig.direction === "ascending"
@@ -220,19 +220,23 @@ export default function MahasiswaPraktikum() {
                   : sortConfig.direction === "descending"
                   ? "↓"
                   : "↑"}
-              </th>
-              <th className="">Kode Praktikum</th>
+              </th> */}
+              <th className="">Nama Kelas</th>
+              <th className="">Nama Dosen</th>
+              <th className="">Judul Praktikum</th>
               <th className="">Tanggal Praktikum</th>
-              <th></th>
+              <th>Aksi</th>
             </tr>
           </thead>
           <tbody>
             {data.data.map((item, index) => (
               <tr key={index}>
+                <td>{item.group.name}</td>
+                <td>{item.dosen.name}</td>
                 <td>{item.name}</td>
-                <td className="max-w-5">
+                {/* <td className="max-w-5">
                   <p className="truncate">{item.assignment_code}</p>
-                </td>
+                </td> */}
                 <td className="max-w-5">
                   <p className="">{item.start_period}</p>
                 </td>
