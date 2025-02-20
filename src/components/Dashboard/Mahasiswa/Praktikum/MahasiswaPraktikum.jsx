@@ -28,7 +28,7 @@ export default function MahasiswaPraktikum() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const [cookies, setCookie] = useCookies(["user"]);
-  const [url, setUrl] = useState(RoutesApi.assignment.url);
+  const [url, setUrl] = useState(RoutesApi.classGroup.url);
 
   const { isLoading, isError, data, error } = useQuery({
     queryKey: ["praktikum", url],

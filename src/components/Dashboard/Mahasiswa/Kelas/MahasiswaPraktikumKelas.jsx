@@ -39,9 +39,9 @@ export default function MahasiswaPraktikumKelas() {
           Authorization: `Bearer ${cookies.token}`,
           Accept: "application/json",
         },
-        params: {
-          intent: RoutesApi.classGroup.intent,
-        },
+        // params: {
+        //   intent: RoutesApi.classGroup.intent,
+        // },
       });
       console.log(data);
       return data;
@@ -141,7 +141,7 @@ export default function MahasiswaPraktikumKelas() {
     },
     onSuccess: (data) => {
       console.log(data);
-      window.location.reload();
+      // window.location.reload();
     },
     onError: (error) => {
       console.log(error);
@@ -193,7 +193,7 @@ export default function MahasiswaPraktikumKelas() {
                 account and remove your data from our servers.
               </AlertDialogDescription> */}
             </AlertDialogHeader>
-            <form>
+            <div>
               <div className="edit-form-group-mahasiswa ">
                 <label>Kode Praktikum:</label>
                 <input
@@ -204,11 +204,11 @@ export default function MahasiswaPraktikumKelas() {
                   required
                 />
               </div>
-            </form>
+            </div>
             <AlertDialogFooter>
               <AlertDialogCancel>Kembali</AlertDialogCancel>
               <AlertDialogAction onClick={() => mutation.mutate()}>
-                Ikuti Kelas
+                Ikuti Praktikum
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
@@ -218,7 +218,10 @@ export default function MahasiswaPraktikumKelas() {
         <table>
           <thead>
             <tr>
-              <th className="max-w-5" onClick={() => handleSort("namaPraktikum")}>
+              <th
+                className="max-w-5"
+                onClick={() => handleSort("namaPraktikum")}
+              >
                 Nomor{" "}
                 {sortConfig.key === "namaPraktikum"
                   ? sortConfig.direction === "ascending"
