@@ -15,7 +15,7 @@ const Header = () => {
           };
 
           const navigateTo = (path) => {
-                    window.location.href = `/${path.replace(/\s+/g, "-").toLowerCase()}`;
+                    window.location.href = `/admin/praktikum/${path.replace(/\s+/g, "-").toLowerCase()}`;
           };
 
           return (
@@ -37,8 +37,8 @@ const Header = () => {
                                         </div>
                               </header>
 
-                              <div className="w-full bg-blue-900 pt-1">
-                                        <nav className="w-full bg-blue-900 pb-2 px-4">
+                              <div className="w-full bg-fuchsia-500 pt-1">
+                                        <nav className="w-full bg-fuchsia-500 pb-2 px-4">
                                                   <ul className="flex space-x-6 text-white">
                                                             {[
                                                                       { label: "Portal Saya", submenu: ["Dokumen Saya", "Notifikasi Saya", "Kasus Saya", "Kasus Berjalan Saya", "Profil Saya", "Pengukuhan PKP", "Pendaftaran Objek Pajak PBB P5L", { label: "Perubahan Data", submenu: ["Perubahan Data", "Pengukuhan PKP", "Pendaftaran Objek Pajak PBB P5L"] }, { label: "Perubahan Status", submenu: ["Penetapan Wajib Pajak Nonaktif", "Pengaktifan Kembali Wajib Pajak Nonaktif", "Penunjuk Pemungut PMSE Dalam Negeri", "Penetapan Pemungut Bea Materai", "Pencabutan Pemungut Bea Materai", "Penunjukan Pemotong atau Pemungut PPh/PPN", "Pencabutan Pemotong atau Pemungut PPh/PPN", "Pencabutan Pemungut PPN PMSE", "Lembaga Keuangan Pelapor - Penetapan", "Lembaga Keuangan Pelapor - Pencabutan", "Lembaga Keuangan Pelapor - Perubahan Data"] }, "Pengahpusan & Pencabutan", "Profil Institusi Finansial"] },

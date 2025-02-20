@@ -75,7 +75,7 @@ const Kontrak = () => {
     mutationFn: async (id) => {
       console.log("button clicked");
       // const { response } = await axios.post(RoutesApi.login, {
-      const response = await axios.get(`http://192.168.1.86/api/csrf-token`, {
+      const response = await axios.get(`${RoutesApi.url}api/csrf-token`, {
         // withCredentials: true,
         headers: {
           "X-Requested-With": "XMLHttpRequest",
@@ -234,7 +234,7 @@ const Kontrak = () => {
                 <td>{item.bupot}</td>
                 <td>{item.faktur}</td>
                 <td>{item.contract_code}</td>
-                <td>{item.is_buy_task == 0 ? "Tidak" : "Ya"}</td>
+                <td>{item.is_buy_task === 1 ? "Ya" : "Tidak"}</td>
                 <td>{item.status}</td>
                 <td>
                   <button

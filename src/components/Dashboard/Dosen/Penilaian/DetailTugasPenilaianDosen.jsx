@@ -1,57 +1,182 @@
-import React from "react";
+import React, { useState } from "react";
+import Swal from "sweetalert2";
+import { IoReload } from "react-icons/io5";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { CookiesProvider, useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
-import Wulan from "../../../../assets/images/wulan.png";
-import { BsThreeDotsVertical } from "react-icons/bs";
 
-const kelasList = [
-    { id: 1, nama: "KELAS ABC", mentor: "Dika", perusahaan: "PT NARA JAYA", deadline: "March 1, 2025", join: "February 7, 2025" },
-    { id: 2, nama: "KELAS ABC", mentor: "Dika", perusahaan: "PT NARA JAYA", deadline: "March 1, 2025", join: "February 7, 2025" },
-];
-
-const DetailTugasPenilaianDosen = ({ sidebarOpen }) => {
+export default function DetaiTugaslPenilaianDosen() {
+    const [isOpen, setIsOpen] = useState(false);
+    const [isAddOpen, setIsAddOpen] = useState(false);
+    const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
+    const [selectedData, setSelectedData] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
+    const [cookies, setCookie] = useCookies(["user"]);
     const navigate = useNavigate();
 
-    return (
-        <div
-            className={`transition-all duration-300 px-4 py-6 ${sidebarOpen ? "ml-64" : "ml-16"
-                }`}
-        >
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-6 place-items-start">
-                {kelasList.map((kelas) => (
+    const [data, setData] = useState([
+        {
+            id: "1",
+            namaPraktikum: "PT.NARA JAYA",
+        },
+        {
+            id: "2",
+            namaPraktikum: "PT NARA JAYA",
+        },
+    ]);
 
-                    <div
-                        key={kelas.id}
-                        className="relative  shadow-lg rounded-lg w-100 md:w-96 p-4 cursor-pointer"
-                        onClick={() => navigate("/dosen/penilaian/detail-tugas/detail-penilaian")}
-                    >
-                        <div className="bg-purple-700 text-white p-4 rounded-t-lg w-150">
-                            <h3 className="font-bold text-lg">{kelas.nama}</h3>
-                            <p className="text-sm">{kelas.mentor}</p>
-                        </div>
-                        <div className="p-4">
-                            <ul className="text-gray-700 text-sm space-y-2">
-                                <li>
-                                    <strong className="text-indigo-700">{kelas.perusahaan}</strong>
-                                    <p className="text-gray-500 p-4">Deadline {kelas.deadline}</p>
-                                </li>
-                            </ul>
-                        </div>
-                        <div className="border-t px-4 py-2 flex items-center text-gray-700 text-sm">
-                            <span className="mr-2">⏳</span>
-                            <span>
-                                <strong>Join Kelas :</strong> {kelas.join}
-                            </span>
-                        </div>
-                        <img
-                            src={Wulan}
-                            alt="Icon"
-                            className="absolute bottom-[200px] right-4 w-12 h-12 rounded-full border-2 border-white shadow-md"
-                        />
-                    </div>
-                ))}
+    const [formData, setFormData] = useState({
+        namaPraktikum: "",
+    });
+
+
+    const handleSort = (key) => {
+        let direction = "ascending";
+        if (sortConfig.key === key && sortConfig.direction === "ascending") {
+            direction = "descending";
+        }
+        setSortConfig({ key, direction });
+
+        const sortedData = [...data].sort((a, b) => {
+            if (a[key] < b[key]) {
+                return direction === "ascending" ? -1 : 1;
+            }
+            if (a[key] > b[key]) {
+                return direction === "ascending" ? 1 : -1;
+            }
+            return 0;
+        });
+        setData(sortedData);
+    };
+
+    const handleEditClick = (index) => {
+        setSelectedData(data[index]);
+        setIsOpen(true);
+    };
+
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
+
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+    const [search, setSearch] = useState("");
+
+    const processedData = data.map((item) => ({
+        ...item,
+        highlight:
+            search &&
+            Object.values(item).some((value) =>
+                String(value).toLowerCase().includes(search.toLowerCase())
+            ),
+    }));
+
+    return (
+        <div className="kontrak-container">
+            <div className="header">
+                <h2>Detail Praktikum - Penilaian</h2>
             </div>
+            <div className="search-add-container">
+                <div className="search-input-container">
+                    <input
+                        type="text"
+                        id="search"
+                        className="search-input"
+                        placeholder="Cari Ujian                       🔎"
+                        onChange={(e) => setSearch(e.target.value)}
+                    />
+                </div>
+            </div>
+            <div className="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th onClick={() => handleSort("namaPraktikum ")}>
+                                Nama Praktikum{" "}
+                                {sortConfig.key === "namaPraktikum"
+                                    ? sortConfig.direction === "ascending"
+                                        ? "↑"
+                                        : "↓"
+                                    : sortConfig.direction === "descending"
+                                        ? "↓"
+                                        : "↑"}
+                            </th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {currentItems.map((item, index) => (
+                            <tr key={item.id}>
+                                <td>{indexOfFirstItem + index + 1}</td>
+                                <td>{item.namaPraktikum}</td>
+                                <td>
+                                    <button
+                                        className="action-button"
+                                        onClick={() => navigate('/dosen/penilaian/detail-tugas/detail-penilaian')}
+                                    >
+                                        Detail
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+                <div className="pagination-container sticky">
+                    <div className="pagination-info">
+                        {`Showing ${indexOfFirstItem + 1} to ${Math.min(
+                            indexOfLastItem,
+                            data.length
+                        )} of ${data.length} entries`}
+                    </div>
+
+                    <div className="pagination ">
+                        <button
+                            className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
+                            onClick={() => paginate(currentPage - 1)}
+                            disabled={currentPage === 1}
+                        >
+                            &lt;
+                        </button>
+                        {Array.from(
+                            { length: Math.ceil(data.length / itemsPerPage) },
+                            (_, index) => (
+                                <button
+                                    key={index + 1}
+                                    className={`page-item ${currentPage === index + 1 ? "active" : ""}`}
+                                    onClick={() => paginate(index + 1)}
+                                >
+                                    {index + 1}
+                                </button>
+                            )
+                        )}
+                        <button
+                            className={`page-item ${currentPage === Math.ceil(data.length / itemsPerPage) ? "disabled" : ""}`}
+                            onClick={() => paginate(currentPage + 1)}
+                            disabled={currentPage === Math.ceil(data.length / itemsPerPage)}
+                        >
+                            &gt;
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {isOpen && (
+                <EditPopupMahasiswa
+                    onClose={() => setIsOpen(false)}
+                    data={selectedData}
+                />
+            )}
         </div>
     );
-};
-
-export default DetailTugasPenilaianDosen;
+}
