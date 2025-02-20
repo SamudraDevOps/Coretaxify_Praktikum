@@ -72,6 +72,20 @@ li {
   /* Sesuaikan jarak dengan lebar sidebar yang tertutup */
 }
 
+.header-layout { 
+  display: flex;
+  flex-direction: column; /* Mengubah arah flex menjadi vertikal */
+  align-items: center;
+  width: 100%;
+}
+
+.header-content {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  gap: 20px;
+}
+
 
 
 .loading {

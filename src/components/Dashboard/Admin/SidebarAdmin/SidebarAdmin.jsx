@@ -7,6 +7,7 @@ import {
   FaLaptopCode,
   FaChevronDown,
   FaUserCircle,
+  FaFileAlt,
 } from "react-icons/fa";
 import { GiPieChart, GiWhiteBook } from "react-icons/gi";
 // import Logo from "../../../Assets/image/7.png"; // Pastikan ini menunjuk ke file logo Anda.
@@ -208,7 +209,7 @@ const SidebarAdmin = () => {
             window.location.href = `/${cookies.role}/penilaian`;
           }}
         >
-          <GiWhiteBook className="menu-icon" />
+          <FaFileAlt className="menu-icon" />
           {isOpen && <span>Penilaian</span>}
         </li>
         <li
