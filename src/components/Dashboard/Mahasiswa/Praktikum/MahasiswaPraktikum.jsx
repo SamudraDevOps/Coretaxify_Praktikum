@@ -255,7 +255,7 @@ export default function MahasiswaPraktikum() {
             )} of ${data.length} entries`}
           </div>
 
-          <div className="pagination">
+          <div className="pagination ">
             <button
               className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
               onClick={() => paginate(currentPage - 1)}
