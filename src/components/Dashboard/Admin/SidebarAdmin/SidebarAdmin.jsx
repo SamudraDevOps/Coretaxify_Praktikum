@@ -197,7 +197,9 @@ const SidebarAdmin = () => {
           {isOpen && <span>Ujian</span>}
         </li>
         <li
-          className="menu-item"
+          className={`menu-item ${
+            cookies.role == "admin" || cookies.role === "dosen" ? "" : "!hidden"
+          }`}
           onClick={() => {
             window.location.href = `/${cookies.role}/penilaian`;
           }}
