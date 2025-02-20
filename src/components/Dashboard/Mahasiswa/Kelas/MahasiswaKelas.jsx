@@ -317,7 +317,9 @@ export default function MahasiswaKelas() {
             <div
               key={item.id}
               className="relative  shadow-lg rounded-lg w-100 md:min-w-96 p-4 cursor-pointer"
-              // onClick={() => navigate("/dosen/item/tugas")}
+              onClick={() => {
+                window.location.href = `/mahasiswa/kelas/${item.id}`;
+              }}
             >
               <div className="bg-purple-700 text-white p-4 rounded-t-lg w-150">
                 <h3 className="font-bold text-lg">{item.name}</h3>

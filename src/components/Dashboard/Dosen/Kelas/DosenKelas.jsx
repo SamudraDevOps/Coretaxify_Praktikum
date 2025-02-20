@@ -382,7 +382,7 @@ export default function DosenKelas() {
             ) : (
               data.map((item, index) => (
                 <tr key={item.id}>
-                  <td>{item.id + index + 1}</td>
+                  <td>{index + 1}</td>
                   <td>{item.name}</td>
                   <td>{item.class_code}</td>
                   <td>{item.status}</td>

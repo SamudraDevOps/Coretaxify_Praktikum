@@ -14,6 +14,11 @@ export const RoutesApi = {
   contractAdmin: url + `api/${role.admin}/contract`,
   uniAdmin: url + `api/${role.admin}/universities`,
   classAdmin: url + `api/${role.lecturer}/groups`,
+  classGroup: {
+    url: url + `api/${role.lecturer}/groups`,
+    intent: "api.get.group.with.assignments",
+  },
+  // classStudent:
   getAdmin: {
     url: url + `api/${role.admin}/users`,
     intent: "api.user.get.admin",

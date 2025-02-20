@@ -20,8 +20,9 @@ import axios from "axios";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { RoutesApi } from "@/Routes";
 import { ClipLoader } from "react-spinners";
+import { useParams } from "react-router";
 
-export default function MahasiswaPraktikum() {
+export default function MahasiswaPraktikumKelas() {
   const [isOpen, setIsOpen] = useState(false);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
   const [selectedData, setSelectedData] = useState(null);
@@ -33,11 +34,14 @@ export default function MahasiswaPraktikum() {
   const { isLoading, isError, data, error } = useQuery({
     queryKey: ["praktikum", url],
     queryFn: async () => {
-      const { data } = await axios.get(url, {
+      const { data } = await axios.get(url + `/${id}`, {
         headers: {
           Authorization: `Bearer ${cookies.token}`,
           Accept: "application/json",
         },
+        // params: {
+        //   intent: RoutesApi.classGroup.intent,
+        // },
       });
       console.log(data);
       return data;
@@ -137,12 +141,14 @@ export default function MahasiswaPraktikum() {
     },
     onSuccess: (data) => {
       console.log(data);
-      window.location.reload();
+      // window.location.reload();
     },
     onError: (error) => {
       console.log(error);
     },
   });
+
+  let { id } = useParams();
 
   if (isLoading) {
     return (
@@ -155,6 +161,7 @@ export default function MahasiswaPraktikum() {
 
   return (
     <div className="kontrak-container">
+      {/* {id} */}
       <div className="header">
         <h2>Data Praktikum</h2>
         {/* <p>{cookies.user ? cookies.user : "no user"}</p>
@@ -186,7 +193,7 @@ export default function MahasiswaPraktikum() {
                 account and remove your data from our servers.
               </AlertDialogDescription> */}
             </AlertDialogHeader>
-            <form>
+            <div>
               <div className="edit-form-group-mahasiswa ">
                 <label>Kode Praktikum:</label>
                 <input
@@ -197,11 +204,11 @@ export default function MahasiswaPraktikum() {
                   required
                 />
               </div>
-            </form>
+            </div>
             <AlertDialogFooter>
               <AlertDialogCancel>Kembali</AlertDialogCancel>
               <AlertDialogAction onClick={() => mutation.mutate()}>
-                Ikuti Kelas
+                Ikuti Praktikum
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
@@ -211,8 +218,11 @@ export default function MahasiswaPraktikum() {
         <table>
           <thead>
             <tr>
-              <th onClick={() => handleSort("namaPraktikum")}>
-                Judul Praktikum{" "}
+              <th
+                className="max-w-5"
+                onClick={() => handleSort("namaPraktikum")}
+              >
+                Nomor{" "}
                 {sortConfig.key === "namaPraktikum"
                   ? sortConfig.direction === "ascending"
                     ? "↑"
@@ -221,26 +231,25 @@ export default function MahasiswaPraktikum() {
                   ? "↓"
                   : "↑"}
               </th>
-              <th className="">Kode Praktikum</th>
-              <th className="">Tanggal Praktikum</th>
+              <th className="">Nama Praktikum </th>
+              <th className="">Supporting File</th>
               <th></th>
             </tr>
           </thead>
           <tbody>
-            {data.data.map((item, index) => (
+            {data.data.assignments.map((item, index) => (
               <tr key={index}>
+                <td className="max-w-5">{index + 1}</td>
                 <td>{item.name}</td>
                 <td className="max-w-5">
-                  <p className="truncate">{item.assignment_code}</p>
+                  <p className="truncate">{item.supporting_file}</p>
                 </td>
-                <td className="max-w-5">
-                  <p className="">{item.start_period}</p>
-                </td>
-                <td>
+                {/* <td>
                   <button className="action-button">Mulai</button>
-                </td>
+                </td> */}
               </tr>
             ))}
+            {/* {id} */}
           </tbody>
         </table>
         <div className="">

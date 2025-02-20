@@ -46,6 +46,7 @@ import Home from "./components/Header/Home";
 import DokumenSaya from "./components/PraktikumPage/PortalSaya/DokumenSaya";
 import NotifikasiSaya from "./components/PraktikumPage/PortalSaya/NotifikasiSaya";
 import ProtectedRoutes from "./components/Dashboard/Auth/ProtectedRoutes";
+import MahasiswaPraktikumKelas from "./components/Dashboard/Mahasiswa/Kelas/MahasiswaPraktikumKelas";
 
 const Main = () => {
   const [loading, setLoading] = useState(true);
@@ -313,6 +314,17 @@ const Main = () => {
               <SidebarAdmin />
               <div className="admin-content">
                 <MahasiswaKelas></MahasiswaKelas>
+              </div>
+            </div>
+          }
+        />
+        <Route
+          path="/mahasiswa/kelas/:id"
+          element={
+            <div className="admin-layout">
+              <SidebarAdmin />
+              <div className="admin-content">
+                <MahasiswaPraktikumKelas></MahasiswaPraktikumKelas>
               </div>
             </div>
           }
