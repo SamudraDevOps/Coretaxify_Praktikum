@@ -43,8 +43,11 @@ import UjianPsc from "./components/Dashboard/AdminPsc/Pengguna/Praktikum/UjianPs
 import EditMahasiswaPsc from "./components/Dashboard/AdminPsc/Pengguna/Mahasiswa/EditMahasiswaPsc";
 import Header from "./components/Header/Header";
 import Home from "./components/Header/Home";
+//Route Praktikum
 import DokumenSaya from "./components/PraktikumPage/PortalSaya/DokumenSaya";
 import NotifikasiSaya from "./components/PraktikumPage/PortalSaya/NotifikasiSaya";
+import KasusSaya from "./components/PraktikumPage/PortalSaya/KasusSaya";
+//Route Praktikum
 import ProtectedRoutes from "./components/Dashboard/Auth/ProtectedRoutes";
 
 const Main = () => {
@@ -387,6 +390,8 @@ const Main = () => {
             </div>
           }
         />
+
+        {/* Praktikum */}
         <Route
           path="/admin/praktikum/prak1"
           element={
@@ -405,6 +410,13 @@ const Main = () => {
               <><Header /><NotifikasiSaya /></>
             }
           />
+           <Route
+            path="/admin/praktikum/kasus-saya"
+            element={
+              <><Header /><KasusSaya /></>
+            }
+          />
+          {/* Praktikum */}
       </Routes>
     </Router>
     // </BrowserRouter>
