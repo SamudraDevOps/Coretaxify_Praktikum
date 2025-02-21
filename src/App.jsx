@@ -47,6 +47,7 @@ import DokumenSaya from "./components/PraktikumPage/PortalSaya/DokumenSaya";
 import NotifikasiSaya from "./components/PraktikumPage/PortalSaya/NotifikasiSaya";
 import ProtectedRoutes from "./components/Dashboard/Auth/ProtectedRoutes";
 import MahasiswaPraktikumKelas from "./components/Dashboard/Mahasiswa/Kelas/MahasiswaPraktikumKelas";
+import DashboardPsc from "./components/Dashboard/AdminPsc/Dashboard/DashboardPsc";
 
 const Main = () => {
   const [loading, setLoading] = useState(true);
@@ -356,6 +357,17 @@ const Main = () => {
           }
         />
         <Route
+          path="/psc/"
+          element={
+            <div className="admin-layout">
+              <SidebarAdmin />
+              <div className="admin-content">
+                <DashboardPsc></DashboardPsc>
+              </div>
+            </div>
+          }
+        />
+        <Route
           path="/admin-psc/edit-pengajar"
           element={
             <div className="admin-layout">
@@ -402,21 +414,30 @@ const Main = () => {
         <Route
           path="/admin/praktikum/prak1"
           element={
-              <><Header /><Home /></>
+            <>
+              <Header />
+              <Home />
+            </>
           }
         />
-          <Route
-            path="/admin/praktikum/dokumen-saya"
-            element={
-              <><Header /><DokumenSaya /></>
-            }
-          />
-           <Route
-            path="/admin/praktikum/notifikasi-saya"
-            element={
-              <><Header /><NotifikasiSaya /></>
-            }
-          />
+        <Route
+          path="/admin/praktikum/dokumen-saya"
+          element={
+            <>
+              <Header />
+              <DokumenSaya />
+            </>
+          }
+        />
+        <Route
+          path="/admin/praktikum/notifikasi-saya"
+          element={
+            <>
+              <Header />
+              <NotifikasiSaya />
+            </>
+          }
+        />
       </Routes>
     </Router>
     // </BrowserRouter>

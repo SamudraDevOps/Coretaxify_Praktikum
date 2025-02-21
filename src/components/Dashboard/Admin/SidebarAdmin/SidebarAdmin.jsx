@@ -141,7 +141,11 @@ const SidebarAdmin = () => {
         </button> */}
         <li
           className={`menu-item ${
-            cookies.role == "admin" || cookies.role === "dosen" ? "" : "!hidden"
+            cookies.role == "admin" ||
+            cookies.role === "dosen" ||
+            cookies.role === "psc"
+              ? ""
+              : "!hidden"
           }`}
           onClick={() => {
             window.location.href = "/admin";
@@ -173,7 +177,8 @@ const SidebarAdmin = () => {
           {isOpen && <span>Kelas</span>}
         </li>
         <li
-          className={`menu-item`}
+          className={cookies.role == "psc" ? "!hidden " : `menu-item`}
+          // className={`menu-item`}
           onClick={() => {
             if (cookies.role == "admin") {
               window.location.href = "/admin/coretaxify";
@@ -224,8 +229,21 @@ const SidebarAdmin = () => {
           <MdOutlineDriveFolderUpload className="menu-icon" />
           {isOpen && <span>Upload Soal</span>}
         </li>
-        <div className={cookies.role == "admin" ? "" : "!hidden"}>
-          <Accordion type="single" collapsible className="pl-4">
+        <li
+          className={`menu-item ${cookies.role == "psc" ? "" : "!hidden"}`}
+          onClick={() => {
+            window.location.href = "/psc/master-soal";
+          }}
+        >
+          <MdOutlineDriveFolderUpload className="menu-icon" />
+          {isOpen && <span>Master Soal</span>}
+        </li>
+        <div
+          className={
+            cookies.role == "admin" || cookies.role == "psc" ? "" : "!hidden"
+          }
+        >
+          <Accordion type="single" className="pl-4" collapsible>
             <AccordionItem
               value="item-1"
               className="border-none hover:no-underline"
@@ -243,6 +261,14 @@ const SidebarAdmin = () => {
                   <li
                     className="dropdown-item"
                     onClick={() => {
+                      window.location.href = "/psc/edit-kelas";
+                    }}
+                  >
+                    Kelas
+                  </li>
+                  <li
+                    className="dropdown-item"
+                    onClick={() => {
                       window.location.href = "/admin/edit-mahasiswa";
                     }}
                   >
@@ -251,29 +277,23 @@ const SidebarAdmin = () => {
                   <li
                     className="dropdown-item"
                     onClick={() => {
-                      window.location.href = "/admin/edit-dosen";
+                      window.location.href = "/admin/edit-pengajar";
                     }}
                   >
-                    Dosen
+                    Pengajar
                   </li>
                   <li
                     className="dropdown-item"
                     onClick={() => {
-                      window.location.href = "/admin/edit-admin";
+                      window.location.href = "/admin/edit-praktikum";
                     }}
                   >
-                    Admin
+                    Praktikum
                   </li>
                   <li
-                    className="dropdown-item"
-                    onClick={() => {
-                      window.location.href = "/admin/edit-kelas";
-                    }}
-                  >
-                    Kelas
-                  </li>
-                  <li
-                    className={`dropdown-item`}
+                    className={
+                      cookies.role == "psc" ? "!hidden " : `dropdown-item`
+                    }
                     onClick={() => {
                       window.location.href = `/${cookies.role}/praktikum`;
                     }}
@@ -284,6 +304,40 @@ const SidebarAdmin = () => {
               </AccordionContent>
             </AccordionItem>
           </Accordion>
+          <li
+            className={cookies.role != "psc" ? "!hidden " : `menu-item`}
+            // className={`menu-item`}
+            onClick={() => {
+              window.location.href = `/psc/praktikum`;
+            }}
+          >
+            <FaLaptopCode className="menu-icon" />
+            {isOpen && <span>Coretaxify</span>}
+          </li>
+          <li
+            className={`menu-item ${cookies.role == "psc" ? "" : "!hidden"}`}
+            // className={`menu-item ${cookies.role === "dosen" ? "" : "!hidden"}`}
+            onClick={() => {
+              window.location.href = `/${cookies.role}/ujian`;
+            }}
+          >
+            <FaPencil className="menu-icon" />
+            {isOpen && <span>Ujian</span>}
+          </li>
+          <li
+            // className={`menu-item ${
+            //   cookies.role == "admin" || cookies.role === "dosen" ? "" : "!hidden"
+            // }`}
+            className={`menu-item ${cookies.role === "psc" ? "" : "!hidden"}`}
+            onClick={() => {
+              window.location.href = `/${cookies.role}/penilaian`;
+            }}
+          >
+            <FaFileAlt className="menu-icon" />
+            {isOpen && <span>Penilaian</span>}
+          </li>
+        </div>
+        <div className={cookies.role == "admin" ? "" : "!hidden"}>
           <Accordion type="single" collapsible className="pl-4">
             <AccordionItem
               value="item-1"
