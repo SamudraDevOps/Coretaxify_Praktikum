@@ -368,6 +368,15 @@ const Main = () => {
           }
         />
         <Route
+          path="/psc/master-soal"
+          element={
+            <div className="admin-layout">
+              <SidebarAdmin />
+              <div className="admin-content">Master Soal</div>
+            </div>
+          }
+        />
+        <Route
           path="/admin-psc/edit-pengajar"
           element={
             <div className="admin-layout">

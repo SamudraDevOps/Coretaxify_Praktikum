@@ -14,6 +14,7 @@ export const RoutesApi = {
   contractAdmin: url + `api/${role.admin}/contract`,
   uniAdmin: url + `api/${role.admin}/universities`,
   classAdmin: url + `api/${role.lecturer}/groups`,
+  // taskAdmin: url + `api/${role.admin}/tasks`,
   classGroup: {
     url: url + `api/${role.lecturer}/groups`,
     intent: "api.get.group.with.assignments",

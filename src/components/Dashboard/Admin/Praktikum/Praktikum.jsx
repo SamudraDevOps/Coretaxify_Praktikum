@@ -16,7 +16,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { CookiesProvider, useCookies } from "react-cookie";
-import { useQuery } from '@tanstack/react-query'
+import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { RoutesApi } from "@/Routes";
 import ClipLoader from "react-spinners/ClipLoader";
@@ -29,19 +29,18 @@ export default function Praktikum() {
   const itemsPerPage = 10;
   const [cookies, setCookie] = useCookies(["user"]);
 
-
   const { isLoading, isError, data, error } = useQuery({
-    queryKey: ['tasks'],
+    queryKey: ["tasks_question"],
     queryFn: async () => {
       const { data } = await axios.get(RoutesApi.tasksAdmin, {
         headers: {
-          Authorization: `Bearer ${cookies.token}`
-        }
-      })
-      console.log(data.data)
-      return data.data
+          Authorization: `Bearer ${cookies.token}`,
+        },
+      });
+      console.log(data.data);
+      return data.data;
     },
-  })
+  });
 
   // const [data, setData] = useState([
   //   {
@@ -71,8 +70,8 @@ export default function Praktikum() {
   // ]);
 
   useEffect(() => {
-    console.log(data)
-  }, [])
+    console.log(data);
+  }, []);
 
   const handleSort = (key) => {
     let direction = "ascending";
@@ -138,18 +137,15 @@ export default function Praktikum() {
 
   if (isLoading) {
     return (
-
       <div className="loading">
         <ClipLoader color="#7502B5" size={50} />
       </div>
       // <div className="h-full w-full text-2xl italic font-bold text-center flex items-center justify-center">Loading...</div>
-    )
+    );
   }
 
   return (
-
     <div className="kontrak-container">
-
       <div className="header">
         <h2>Data Praktikum</h2>
         {/* <p>{cookies.user ? cookies.user : "no user"}</p>
@@ -230,8 +226,8 @@ export default function Praktikum() {
                     ? "↑"
                     : "↓"
                   : sortConfig.direction === "descending"
-                    ? "↓"
-                    : "↑"}
+                  ? "↓"
+                  : "↑"}
               </th>
               <th className="">Kode Praktikum</th>
               <th className="">Tanggal Praktikum</th>
@@ -240,14 +236,16 @@ export default function Praktikum() {
           </thead>
           <tbody>
             {data.map((item, index) => (
-              <tr >
+              <tr>
                 <td>{item.name}</td>
                 <td className="max-w-5">
                   {/* <p className="truncate">{item.kodePraktikum}</p> */}
                   <p className="truncate">Xae12</p>
                 </td>
                 <td className="max-w-5">
-                  <p className="">{item.updated_at = item.updated_at.split(" ")[0]}</p>
+                  <p className="">
+                    {(item.updated_at = item.updated_at.split(" ")[0])}
+                  </p>
                 </td>
                 <td>
                   <AlertDialog>

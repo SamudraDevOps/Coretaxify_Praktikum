@@ -16,6 +16,10 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { CookiesProvider, useCookies } from "react-cookie";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import { RoutesApi } from "@/Routes";
+import { ClipLoader } from "react-spinners";
 
 export default function UploadSoal() {
   const [isOpen, setIsOpen] = useState(false);
@@ -24,29 +28,126 @@ export default function UploadSoal() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const [cookies, setCookie] = useCookies(["user"]);
+  const [url, setUrl] = useState(RoutesApi.tasksAdmin);
 
-  const [data, setData] = useState([
-    {
-      id: 1,
-      namaSoal: "Soal Pajak Bumi Bangunan",
-      file: "file.pdf",
+  const { isLoading, isError, data, error } = useQuery({
+    queryKey: ["kelas_dosen", url],
+    queryFn: async () => {
+      const { data } = await axios.get(url, {
+        headers: {
+          Authorization: `Bearer ${cookies.token}`,
+          Accept: "application/json",
+        },
+      });
+      console.log(data);
+      return data;
     },
-    {
-      id: 2,
-      namaSoal: "Soal Pajak Bumi Makanan",
-      file: "file.pdf",
+  });
+
+  const mutation = useMutation({
+    mutationFn: async (id) => {
+      console.log("button clicked");
+      const response = await axios.get(`${RoutesApi.url}api/csrf-token`, {
+        // withCredentials: true,
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+          Accept: "application/json",
+        },
+      });
+      console.log(response.data.token);
+      axios.defaults.headers.common["X-CSRF-TOKEN"] = response.data.token;
+      console.log(cookies.token);
+      const data = await axios.post(
+        RoutesApi.tasksAdmin,
+        {
+          name: formData.name,
+          import_file: formData.file,
+        },
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": response.data.token,
+            Authorization: `Bearer ${cookies.token}`,
+          },
+        }
+      );
+      return data;
     },
-    {
-      id: 3,
-      namaSoal: "Soal Pajak Bumi Bangunan",
-      file: "file.pdf",
+    onSuccess: (data) => {
+      console.log(data);
     },
-    {
-      id: 4,
-      namaSoal: "Soal Pajak Bumi Bangunan",
-      file: "file.pdf",
+    onError: (error) => {
+      console.log(error);
     },
-  ]);
+  });
+  const mutationEdit = useMutation({
+    mutationFn: async (id) => {
+      console.log("button clicked");
+      const response = await axios.get(`${RoutesApi.url}api/csrf-token`, {
+        // withCredentials: true,
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+          Accept: "application/json",
+        },
+      });
+      console.log(response.data.token);
+      axios.defaults.headers.common["X-CSRF-TOKEN"] = response.data.token;
+      console.log(cookies.token);
+      const data = await axios.post(
+        RoutesApi.tasksAdmin + "/" + id,
+        {
+          name: formData.name,
+          import_file: formData.file,
+        },
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": response.data.token,
+            Authorization: `Bearer ${cookies.token}`,
+          },
+        }
+      );
+      return data;
+    },
+    onSuccess: (data) => {
+      console.log(data);
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+  const mutationDelete = useMutation({
+    mutationFn: async (id) => {
+      console.log("button clicked");
+      const response = await axios.get(`${RoutesApi.url}api/csrf-token`, {
+        // withCredentials: true,
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+          Accept: "application/json",
+        },
+      });
+      console.log(response.data.token);
+      axios.defaults.headers.common["X-CSRF-TOKEN"] = response.data.token;
+      console.log(cookies.token);
+      const data = await axios.delete(RoutesApi.tasksAdmin + `/${id}`, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Accept: "application/json",
+          "X-CSRF-TOKEN": response.data.token,
+          Authorization: `Bearer ${cookies.token}`,
+        },
+      });
+      return data;
+    },
+    onSuccess: (data) => {
+      console.log(data);
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
 
   const handleSort = (key) => {
     let direction = "ascending";
@@ -74,12 +175,12 @@ export default function UploadSoal() {
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
+  // const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const [formData, setFormData] = useState({
-    namaSoal: "",
+    name: "",
     file: "",
   });
 
@@ -92,7 +193,7 @@ export default function UploadSoal() {
     // Logic to save the data
     onClose();
   };
-  
+
   const [file, setFile] = useState();
   function handleChangeFile(e) {
     console.log(e.target.files);
@@ -100,14 +201,22 @@ export default function UploadSoal() {
   }
   const [search, setSearch] = useState("");
 
-  const processedData = data.map((item) => ({
-    ...item,
-    highlight:
-      search &&
-      Object.values(item).some((value) =>
-        String(value).toLowerCase().includes(search.toLowerCase())
-      ),
-  }));
+  // const processedData = data.map((item) => ({
+  //   ...item,
+  //   highlight:
+  //     search &&
+  //     Object.values(item).some((value) =>
+  //       String(value).toLowerCase().includes(search.toLowerCase())
+  //     ),
+  // }));
+  if (isLoading) {
+    return (
+      <div className="loading">
+        <ClipLoader color="#7502B5" size={50} />
+      </div>
+      // <div className="h-full w-full text-2xl italic font-bold text-center flex items-center justify-center">Loading...</div>
+    );
+  }
 
   return (
     <div className="kontrak-container">
@@ -146,8 +255,8 @@ export default function UploadSoal() {
                       <label>Judul Soal:</label>
                       <input
                         type="text"
-                        name="namaSoal"
-                        value={formData.namaSoal}
+                        name="name"
+                        value={formData.name}
                         onChange={handleChange}
                         required
                       />
@@ -156,8 +265,13 @@ export default function UploadSoal() {
                       <label>File Soal:</label>
                       <input
                         type="file"
-                        onChange={handleChangeFile}
-                        accept="application/pdf,application/vnd.ms-excel"
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            file: e.target.files[0],
+                          })
+                        }
+                        accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
                       />
                     </div>
                   </form>
@@ -168,7 +282,15 @@ export default function UploadSoal() {
               <AlertDialogCancel className="bg-red-600 text-white">
                 Kembali
               </AlertDialogCancel>
-              <AlertDialogAction className="bg-green-600">
+              {/* <AlertDialogAction
+                onClick={() => mutation.mutate()}
+                className="bg-green-600"
+              > */}
+              <AlertDialogAction
+                onClick={() => mutation.mutate()}
+                // onClick={() => console.log(formData)}
+                className="bg-green-600"
+              >
                 Simpan
               </AlertDialogAction>
             </AlertDialogFooter>
@@ -180,14 +302,14 @@ export default function UploadSoal() {
           <thead>
             <tr>
               <th onClick={() => handleSort("id")}>
-                  No {" "}
-                  {sortConfig.key === "id"
-                    ? sortConfig.direction === "ascending"
-                      ? "↑"
-                      : "↓"
-                    : sortConfig.direction === "descending"
-                    ? "↓"
-                    : "↑"}
+                No{" "}
+                {sortConfig.key === "id"
+                  ? sortConfig.direction === "ascending"
+                    ? "↑"
+                    : "↓"
+                  : sortConfig.direction === "descending"
+                  ? "↓"
+                  : "↑"}
               </th>
               <th onClick={() => handleSort("namaSoal")}>
                 Judul Soal{" "}
@@ -199,19 +321,15 @@ export default function UploadSoal() {
                   ? "↓"
                   : "↑"}
               </th>
-              <th>
-                File
-              </th>
-              <th>
-                Action
-              </th>
+              <th>File</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
-            {data.map((item, index) => (
+            {data.data.map((item, index) => (
               <tr key={index}>
                 <td>{indexOfFirstItem + index + 1}</td>
-                <td>{item.namaSoal}</td>
+                <td>{item.name}</td>
                 <td>
                   <a
                     href={item.file}
@@ -236,7 +354,7 @@ export default function UploadSoal() {
                                 <label>Judul Soal:</label>
                                 <input
                                   type="text"
-                                  name="namaSoal"
+                                  name="name"
                                   value={formData.namaSoal}
                                   onChange={handleChange}
                                   required
@@ -246,8 +364,14 @@ export default function UploadSoal() {
                                 <label>File Soal:</label>
                                 <input
                                   type="file"
-                                  onChange={handleChangeFile}
-                                  accept="application/pdf,application/vnd.ms-excel"
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      file: e.target.files[0],
+                                    })
+                                  }
+                                  // onChange={handleChangeFile}
+                                  accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
                                 />
                               </div>
                             </form>
@@ -258,7 +382,10 @@ export default function UploadSoal() {
                         <AlertDialogCancel className="bg-red-600 text-white">
                           Kembali
                         </AlertDialogCancel>
-                        <AlertDialogAction className="bg-green-600 ">
+                        <AlertDialogAction
+                          onClick={() => mutation.mutate(item.id)}
+                          className="bg-green-600 "
+                        >
                           Simpan
                         </AlertDialogAction>
                       </AlertDialogFooter>
@@ -284,10 +411,11 @@ export default function UploadSoal() {
                         dangerMode: true,
                       }).then((result) => {
                         if (result.isConfirmed) {
-                          const newData = data.filter(
-                            (itemData) => itemData.id !== item.id
-                          );
-                          setData(newData);
+                          mutationDelete.mutate(item.id);
+                          // const newData = data.filter(
+                          //   (itemData) => itemData.id !== item.id
+                          // );
+                          // setData(newData);
                           Swal.fire(
                             "Berhasil!",
                             "Soal berhasil dihapus!",
@@ -314,34 +442,31 @@ export default function UploadSoal() {
 
           <div className="pagination">
             <button
-              className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
-              onClick={() => paginate(currentPage - 1)}
-              disabled={currentPage === 1}
+              className={`page-item`}
+              onClick={() => {
+                setUrl(data.links.prev);
+              }}
+              disabled={data.meta.current_page === 1}
             >
               &lt;
             </button>
-            {Array.from(
-              { length: Math.ceil(data.length / itemsPerPage) },
-              (_, index) => (
-                <button
-                  key={index + 1}
-                  className={`page-item ${
-                    currentPage === index + 1 ? "active" : ""
-                  }`}
-                  onClick={() => paginate(index + 1)}
-                >
-                  {index + 1}
-                </button>
-              )
-            )}
+            <button className="page-item">{data.meta.current_page}</button>
+            {/* {Array.from({ length: Math.ceil(data.length / itemsPerPage) }, (_, index) => (
+                            <button key={index + 1} className={`page-item ${currentPage === index + 1 ? "active" : ""}`} onClick={() => paginate(index + 1)}>
+                                {index + 1}
+                            </button>
+                        ))} */}
             <button
               className={`page-item ${
                 currentPage === Math.ceil(data.length / itemsPerPage)
                   ? "disabled"
                   : ""
               }`}
-              onClick={() => paginate(currentPage + 1)}
-              disabled={currentPage === Math.ceil(data.length / itemsPerPage)}
+              onClick={() => {
+                console.log(data.links.next);
+                setUrl(data.links.next);
+              }}
+              disabled={data.links.next == null}
             >
               &gt;
             </button>
