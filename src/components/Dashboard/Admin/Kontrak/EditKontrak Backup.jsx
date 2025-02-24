@@ -5,14 +5,8 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { RoutesApi } from "@/Routes";
 import { CookiesProvider, useCookies } from "react-cookie";
-import { IoClose } from "react-icons/io5";
-import { Label } from "@/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 
-import { useToast } from "@/hooks/use-toast";
-
-const EditKontrak = ({ isOpen, onClose, onSave, UniData, setOpen }) => {
-  const { toast } = useToast();
+const EditKontrak = ({ isOpen, onClose, onSave, UniData, id }) => {
   const [formData, setFormData] = useState({
     jenisKontrak: "",
     instansi: "",
@@ -23,8 +17,6 @@ const EditKontrak = ({ isOpen, onClose, onSave, UniData, setOpen }) => {
     bupot: "",
     faktur: "",
     kodePembelian: "",
-    is_buy_task: 0,
-    opsiTambahan: [""],
     status: "",
   });
   const [cookies, setCookie] = useCookies(["user"]);
@@ -61,7 +53,7 @@ const EditKontrak = ({ isOpen, onClose, onSave, UniData, setOpen }) => {
     mutationFn: async () => {
       console.log("button clicked");
       // const { response } = await axios.post(RoutesApi.login, {
-      const response = await axios.get(`${RoutesApi.url}api/csrf-token`, {
+      const response = await axios.get(`http://192.168.1.86/api/csrf-token`, {
         // withCredentials: true,
         headers: {
           "X-Requested-With": "XMLHttpRequest",
@@ -71,8 +63,8 @@ const EditKontrak = ({ isOpen, onClose, onSave, UniData, setOpen }) => {
       console.log(response.data.token);
       axios.defaults.headers.common["X-CSRF-TOKEN"] = response.data.token;
       console.log(cookies.token);
-      const data = await axios.post(
-        RoutesApi.contractAdmin,
+      const data = await axios.put(
+        RoutesApi.contractAdmin + `/${id}`,
         {
           //   university_id: 1,
           //   contract_type: "LICENSE",
@@ -93,7 +85,6 @@ const EditKontrak = ({ isOpen, onClose, onSave, UniData, setOpen }) => {
           bupot: parseInt(formData.bupot),
           faktur: parseInt(formData.faktur),
           contract_code: formData.kodePembelian,
-          is_buy_task: Number(formData.is_buy_task),
         },
         {
           headers: {
@@ -108,9 +99,11 @@ const EditKontrak = ({ isOpen, onClose, onSave, UniData, setOpen }) => {
     },
     onSuccess: (data) => {
       console.log(data);
-      window.location.reload();
+      const role = data.data.user.roles[0].name;
+      setCookie("token", data.data.token, { path: "/" });
+      setCookie("role", role, { path: "/" });
 
-      // window.location.href = "/" + role;
+      window.location.href = "/" + role;
       // alert("Login successful!");
       // queryClient.invalidateQueries({ queryKey: ["todos"] });
     },
@@ -118,21 +111,6 @@ const EditKontrak = ({ isOpen, onClose, onSave, UniData, setOpen }) => {
       console.log(error);
     },
   });
-
-  const handleTambahOpsi = () => {
-    setFormData({ ...formData, opsiTambahan: [...formData.opsiTambahan, ""] });
-  };
-
-  const handleChangeOpsi = (index, value) => {
-    const newOpsi = [...formData.opsiTambahan];
-    newOpsi[index] = value;
-    setFormData({ ...formData, opsiTambahan: newOpsi });
-  };
-
-  const handleHapusOpsi = (index) => {
-    const newOpsi = formData.opsiTambahan.filter((_, i) => i !== index);
-    setFormData({ ...formData, opsiTambahan: newOpsi });
-  };
 
   const generateKodePembelian = () => {
     const jenis = formData.jenisKontrak;
@@ -143,10 +121,10 @@ const EditKontrak = ({ isOpen, onClose, onSave, UniData, setOpen }) => {
 
     let prefix = "";
     switch (jenis) {
-      case "Lisensi":
+      case "LICENSE":
         prefix = "L";
         break;
-      case "Unit":
+      case "UNIT":
         prefix = "U";
         break;
       case "BNSP":
@@ -191,7 +169,7 @@ const EditKontrak = ({ isOpen, onClose, onSave, UniData, setOpen }) => {
               onChange={handleChange}
               required
             >
-              <option value="">Pilih Instansi</option>
+              <option value="">Pilih Status</option>
               {UniData.map((item, index) => (
                 <option key={index} value={item.id}>
                   {item.name}
@@ -200,59 +178,6 @@ const EditKontrak = ({ isOpen, onClose, onSave, UniData, setOpen }) => {
             </select>
             {/* <input type="text" name="instansi" value={formData.instansi} onChange={handleChange} required /> */}
           </div>
-          <div className="kontrak-form-group">
-            <label>Soal</label>
-            <RadioGroup
-              name="is_buy_task"
-              value={formData.is_buy_task.toString()}
-              onValueChange={(value) =>
-                setFormData({ ...formData, is_buy_task: Number(value) })
-              }
-            >
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="1" id="option-one" />
-                <Label htmlFor="option-one">Ya</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="0" id="option-two" />
-                <Label htmlFor="option-two">Tidak</Label>
-              </div>
-            </RadioGroup>
-            {formData.is_buy_task === 1 && (
-              <div className="kontrak-form-group mt-4">
-                <label>Pilih Opsi</label>
-                {formData.opsiTambahan.map((opsi, index) => (
-                  <div key={index} className="flex items-center space-x-2 mt-2">
-                    <select
-                      className="border p-2 rounded"
-                      value={opsi}
-                      onChange={(e) => handleChangeOpsi(index, e.target.value)}
-                    >
-                      <option value="">Pilih Opsi</option>
-                      <option value="opsi1">Opsi 1</option>
-                      <option value="opsi2">Opsi 2</option>
-                      <option value="opsi3">Opsi 3</option>
-                    </select>
-                    <button
-                      type="button"
-                      className="bg-red-500 text-white p-2 rounded hover:bg-red-600"
-                      onClick={() => handleHapusOpsi(index)}
-                    >
-                      <IoClose />
-                    </button>
-                  </div>
-                ))}
-                <button
-                  type="button"
-                  className="bg-purple-900 text-white p-2 mt-2 rounded hover:bg-purple-950"
-                  onClick={handleTambahOpsi}
-                >
-                  + Tambah Soal
-                </button>
-              </div>
-            )}
-          </div>
-
           <div className="kontrak-form-group">
             <label>Jumlah Mahasiswa</label>
             <input
