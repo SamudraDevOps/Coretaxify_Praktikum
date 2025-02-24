@@ -55,42 +55,13 @@ export default function DosenKelas() {
     },
   });
 
-  //   const [data, setData] = useState([
-  //     {
-  //       id: "1",
-  //       namaPraktikum: "Praktikum 1",
-  //       kodePraktikum: "xAE12",
-  //       supportingFile: "file.pdf",
-  //       deadline: "2021-12-12",
-  //     },
-  //     {
-  //       id: "2",
-  //       namaPraktikum: "Praktikum 2",
-  //       kodePraktikum: "xAE12",
-  //       supportingFile: "file.pdf",
-  //       deadline: "2021-12-12",
-  //     },
-  //     {
-  //       id: "3",
-  //       namaPraktikum: "Praktikum 2",
-  //       kodePraktikum: "xAE12",
-  //       supportingFile: "file.pdf",
-  //       deadline: "2021-12-12",
-  //     },
-  //     {
-  //       id: "4",
-  //       namaPraktikum: "Praktikum 3",
-  //       kodePraktikum: "xAE12",
-  //       supportingFile: "file.pdf",
-  //       deadline: "2021-12-12",
-  //     },
-  //   ]);
-
   const [formData, setFormData] = useState({
+    namaKelas: "",
     kodeKelas: "",
-    // kodePraktikum: "",
-    // supportingFile: null,
-    // deadline: "",
+    status: "",
+    file_name: "",
+    start_period: "",
+    end_period: "",
   });
 
   const generateRandomCode = () => {
@@ -199,59 +170,82 @@ export default function DosenKelas() {
   //         String(value).toLowerCase().includes(search.toLowerCase())
   //       ),
   //   }));
+
   const mutation = useMutation({
-    mutationFn: async (id) => {
+    mutationFn: async ({ id, action }) => {
       console.log("button clicked");
-      // const { response } = await axios.post(RoutesApi.login, {
+
       const response = await axios.get(`${RoutesApi.url}api/csrf-token`, {
-        // withCredentials: true,
         headers: {
           "X-Requested-With": "XMLHttpRequest",
           Accept: "application/json",
         },
       });
+
       console.log(response.data.token);
       axios.defaults.headers.common["X-CSRF-TOKEN"] = response.data.token;
       console.log(cookies.token);
-      const data = await axios.post(
-        RoutesApi.joinClass.url,
-        {
-          class_code: formData.kodeKelas,
-        },
 
-        //   university_id: 1,
-        //   contract_type: "LICENSE",
-        //   qty_student: 1,
-        //   start_period: "2025-02-10",
-        //   end_period: "2026-02-10",
-        //   spt: 5,
-        //   bupot: 5,
-        //   faktur: 5,
-        //   contract_code: "L-0001"
-        {
+      let urlLocal = RoutesApi.classLecturer.url;
+
+      if (action === "update" && id) {
+        urlLocal = `${RoutesApi.classLecturer.url}/${id}`;
+        return await axios.put(
+          urlLocal,
+          {
+            name: formData.namaKelas,
+            start_period: formData.start_period,
+            end_period: formData.end_period,
+            class_code: formData.kodeKelas,
+            status: formData.status,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+              "X-CSRF-TOKEN": response.data.token,
+              Authorization: `Bearer ${cookies.token}`,
+            },
+            params: {
+              intent: RoutesApi.classLecturer.intent,
+            },
+          }
+        );
+      } else if (action === "delete" && id) {
+        urlLocal = `${RoutesApi.classLecturer.url}/${id}`;
+        return await axios.delete(urlLocal, {
           headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
             "X-CSRF-TOKEN": response.data.token,
             Authorization: `Bearer ${cookies.token}`,
           },
-          params: {
-            intent: RoutesApi.joinClass.intent,
+        });
+      } else {
+        return await axios.post(
+          urlLocal,
+          {
+            name: formData.namaKelas,
+            start_period: formData.start_period,
+            end_period: formData.end_period,
+            class_code: formData.kodeKelas,
+            status: formData.status,
           },
-        }
-      );
-      return data;
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+              "X-CSRF-TOKEN": response.data.token,
+              Authorization: `Bearer ${cookies.token}`,
+            },
+            params: {
+              intent: RoutesApi.classLecturer.intent,
+            },
+          }
+        );
+      }
     },
     onSuccess: (data) => {
       console.log(data);
-      Swal.fire("Berhasil!", "Praktikum berhasil ditambahkan!", "success");
-      window.location.reload();
-      // const role = data.data.user.roles[0].name;
-      // setCookie("token", data.data.token, { path: "/" });
-      // setCookie("role", role, { path: "/" });
-
-      // alert("Login successful!");
-      // queryClient.invalidateQueries({ queryKey: ["todos"] });
+      Swal.fire("Berhasil!", "Operasi berhasil dilakukan!", "success");
     },
     onError: (error) => {
       console.log(error);
@@ -286,7 +280,7 @@ export default function DosenKelas() {
           className="bg-blue-800 p-2 rounded-md text-white hover:bg-blue-900"
           onClick={() => {
             setIsAddOpen(true);
-            // setFormData({ ...formData, kodePraktikum: generateRandomCode() });
+            setFormData({ ...formData, kodeKelas: generateRandomCode() });
           }}
         >
           Tambah Kelas
@@ -324,55 +318,120 @@ export default function DosenKelas() {
           </div>
         ) : (
           data.map((item, index) => (
-            <div
+            <a
               key={item.id}
               className="relative  shadow-lg rounded-lg w-100 md:min-w-96 p-4 cursor-pointer"
               // onClick={() =>
-              //   window.location.href = `/mahasiswa/kelas/${item.id}`;
-              // }}
+              //   (window.location.href = `/dosen/kelas/praktikum/${item.id}`)
+              // }
+              href={`/dosen/kelas/praktikum/${item.id}`}
             >
               <div className="bg-purple-700 flex justify-between text-white p-4 rounded-t-lg w-150 relative">
                 <div className="">
                   <h3 className="font-bold text-lg">{item.name}</h3>
                   <p className="text-sm">Pengajar : {item.user.name}</p>
                 </div>
-                <Menubar className="bg-transparent">
-                  <MenubarMenu className="">
-                    <MenubarTrigger className="">
-                      <HiDotsVertical />
-                    </MenubarTrigger>
-                    <MenubarContent>
-                      <MenubarItem>
-                        <AlertDialog>
-                          <AlertDialogTrigger className="action-button edit">
+
+                <AlertDialog
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                  }}
+                >
+                  <Menubar
+                    className="bg-transparent"
+                    onClick={(e) => {
+                      e.stopPropagation();
+
+                      e.preventDefault();
+                    }}
+                  >
+                    <MenubarMenu className="">
+                      <MenubarTrigger
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          e.preventDefault();
+                        }}
+                        className=""
+                      >
+                        <HiDotsVertical />
+                      </MenubarTrigger>
+                      <MenubarContent>
+                        <MenubarItem>
+                          <AlertDialogTrigger
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              // e.preventDefault();
+                            }}
+                            className="text-start w-full"
+                          >
                             Edit
                           </AlertDialogTrigger>
-                          <AlertDialogContent>
-                            <AlertDialogHeader>
-                              <AlertDialogTitle>Edit Kelas</AlertDialogTitle>
-                              <AlertDialogDescription className="w-full">
-                                <div className="">
-                                  <form>
-                                    <div className="edit-form-group-mahasiswa ">
-                                      <label>Nama Kelas:</label>
-                                      <input
-                                        type="text"
-                                        name="namaKelas"
-                                        value={formData.namaKelas}
-                                        onChange={handleChange}
-                                        required
-                                      />
-                                    </div>
-                                    <div className="edit-form-group-mahasiswa">
-                                      <label>Kode Kelas:</label>
-                                      <input
-                                        className="text-black"
-                                        name="kodeKelas"
-                                        value={formData.kodeKelas}
-                                        onChange={handleChange}
-                                      />
-                                    </div>
-                                    <div className="edit-form-group-mahasiswa">
+                          {/* Edit Kelas */}
+                          {/* New Tab <MenubarShortcut>⌘T</MenubarShortcut> */}
+                        </MenubarItem>
+                        <MenubarSeparator />
+                        <MenubarItem
+                          onClick={() => {
+                            Swal.fire({
+                              title: "Hapus Kelas?",
+                              text: "Kelas akan dihapus secara permanen!",
+                              icon: "warning",
+                              showCancelButton: true,
+                              confirmButtonText: "Ya, hapus!",
+                              cancelButtonText: "Batal",
+                              dangerMode: true,
+                            }).then((result) => {
+                              if (result.isConfirmed) {
+                                mutation.mutate(item.id, "delete");
+                                Swal.fire(
+                                  "Berhasil!",
+                                  "Kelas berhasil dihapus!",
+                                  "success"
+                                );
+                              }
+                            });
+                          }}
+                        >
+                          Hapus Kelas
+                        </MenubarItem>
+                        {/* <MenubarItem>Share</MenubarItem> */}
+                        {/* <MenubarSeparator /> */}
+                        {/* <MenubarItem>Print</MenubarItem> */}
+                      </MenubarContent>
+                    </MenubarMenu>
+                  </Menubar>
+                  <AlertDialogContent
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      e.preventDefault();
+                    }}
+                  >
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Edit Kelas</AlertDialogTitle>
+                      <AlertDialogDescription className="w-full">
+                        <div className="">
+                          <form>
+                            <div className="edit-form-group-mahasiswa ">
+                              <label>Nama Kelas:</label>
+                              <input
+                                type="text"
+                                name="namaKelas"
+                                value={formData.namaKelas}
+                                onChange={handleChange}
+                                required
+                              />
+                            </div>
+                            <div className="edit-form-group-mahasiswa">
+                              <label>Kode Kelas:</label>
+                              <input
+                                className="text-black"
+                                name="kodeKelas"
+                                value={formData.kodeKelas}
+                                onChange={handleChange}
+                              />
+                            </div>
+                            {/* <div className="edit-form-group-mahasiswa">
                                       <label>File Support:</label>
                                       <input
                                         className="text-black"
@@ -380,69 +439,57 @@ export default function DosenKelas() {
                                         name="file_name"
                                         onChange={handleFileChange}
                                       />
-                                    </div>
-                                    <div className="edit-form-group-mahasiswa">
-                                      <label>Tanggal Mulai:</label>
-                                      <input
-                                        className="text-black"
-                                        type="date"
-                                        name="start_period"
-                                        value={formData.start_period}
-                                        onChange={handleChange}
-                                      />
-                                    </div>
-                                    <div className="edit-form-group-mahasiswa">
-                                      <label>Deadline:</label>
-                                      <input
-                                        className="text-black"
-                                        type="date"
-                                        name="end_period"
-                                        value={formData.end_period}
-                                        onChange={handleChange}
-                                      />
-                                    </div>
-                                    <div className="edit-form-group-mahasiswa">
-                                      <select
-                                        name="status"
-                                        value={formData.status}
-                                        onChange={handleChange}
-                                        required
-                                      >
-                                        <option value="">Pilih Status</option>
-                                        <option value="ACTIVE">Active</option>
-                                        <option value="INACTIVE">
-                                          Expired
-                                        </option>
-                                      </select>
-                                    </div>
-                                  </form>
-                                </div>
-                              </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                              <AlertDialogCancel className="bg-red-600 text-white">
-                                Kembali
-                              </AlertDialogCancel>
-                              <AlertDialogAction
-                                onClick={() => mutation.mutate(item.id)}
-                                className="bg-green-600 "
+                                    </div> */}
+                            <div className="edit-form-group-mahasiswa bg-red-300">
+                              <label>Tanggal Mulai:</label>
+                              <input
+                              
+                                className="text-black"
+                                type="date"
+                                name="start_period"
+                                value={formData.start_period}
+                                onChange={handleChange}
+                              />
+                            </div>
+                            <div className="edit-form-group-mahasiswa">
+                              <label>Deadline:</label>
+                              <input
+                                className="text-black"
+                                type="date"
+                                name="end_period"
+                                value={formData.end_period}
+                                onChange={handleChange}
+                              />
+                            </div>
+                            <div className="edit-form-group-mahasiswa">
+                              <select
+                                name="status"
+                                value={formData.status}
+                                onChange={handleChange}
+                                required
                               >
-                                Simpan
-                              </AlertDialogAction>
-                            </AlertDialogFooter>
-                          </AlertDialogContent>
-                        </AlertDialog>
-                        {/* Edit Kelas */}
-                        {/* New Tab <MenubarShortcut>⌘T</MenubarShortcut> */}
-                      </MenubarItem>
-                      <MenubarSeparator />
-                      <MenubarItem>Hapus Kelas</MenubarItem>
-                      {/* <MenubarItem>Share</MenubarItem> */}
-                      {/* <MenubarSeparator /> */}
-                      {/* <MenubarItem>Print</MenubarItem> */}
-                    </MenubarContent>
-                  </MenubarMenu>
-                </Menubar>
+                                <option value="">Pilih Status</option>
+                                <option value="ACTIVE">Active</option>
+                                <option value="INACTIVE">Expired</option>
+                              </select>
+                            </div>
+                          </form>
+                        </div>
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel className="bg-red-600 text-white">
+                        Kembali
+                      </AlertDialogCancel>
+                      <AlertDialogAction
+                        onClick={() => mutation.mutate(item.id, "update")}
+                        className="bg-green-600 "
+                      >
+                        Simpan
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
               </div>
               <div className="p-4">
                 <ul className="text-gray-700 text-sm space-y-2 h-10">
@@ -473,7 +520,7 @@ export default function DosenKelas() {
                 alt="Icon"
                 className="absolute bottom-[120px] right-4 w-14 h-14 rounded-full border-2 border-white shadow-md"
               />
-            </div>
+            </a>
             // <tr key={item.id}>
             //   <td>{item.id + index + 1}</td>
             //   <td>{item.name}</td>
@@ -643,14 +690,14 @@ export default function DosenKelas() {
               <div className="max-h-[70vh] overflow-y-auto">
                 <form>
                   <div className="edit-form-group-mahasiswa ">
-                    {/* <label>Nama Kelas:</label> */}
-                    {/* <input
+                    <label>Nama Kelas:</label>
+                    <input
                       type="text"
-                      name="namaPraktikum"
-                      value={formData.namaPraktikum}
+                      name="namaKelas"
+                      value={formData.namaKelas}
                       onChange={handleChange}
                       required
-                    /> */}
+                    />
                   </div>
                   <div className="edit-form-group-mahasiswa">
                     <label>Kode Kelas:</label>
@@ -660,15 +707,15 @@ export default function DosenKelas() {
                         name="kodeKelas"
                         value={formData.kodeKelas}
                         onChange={handleChange}
-                        // readOnly
+                        readOnly
                       />
-                      {/* <button
+                      <button
                         type="button"
                         className="p-3 bg-purple-800 rounded-md hover:bg-purple-900"
                         onClick={handleReloadCode}
                       >
                         <IoReload className="text-lg text-white " />
-                      </button> */}
+                      </button>
                     </div>
                   </div>
                   {/* <div className="edit-form-group-mahasiswa">
@@ -728,16 +775,39 @@ export default function DosenKelas() {
                       </label>
                     </div>
                   </div> */}
-                  {/* <div className="edit-form-group-mahasiswa ">
+                  <div className="edit-form-group-mahasiswa">
+                    <label>Tanggal Mulai:</label>
+                    <input
+                      className="text-black"
+                      type="date"
+                      name="start_period"
+                      value={formData.start_period}
+                      onChange={handleChange}
+                      
+                    />
+                  </div>
+                  <div className="edit-form-group-mahasiswa">
                     <label>Deadline:</label>
                     <input
+                      className="text-black"
                       type="date"
-                      name="deadline"
-                      value={formData.deadline}
+                      name="end_period"
+                      value={formData.end_period}
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div className="edit-form-group-mahasiswa">
+                    <select
+                      name="status"
+                      value={formData.status}
                       onChange={handleChange}
                       required
-                    />
-                  </div> */}
+                    >
+                      <option value="">Pilih Status</option>
+                      <option value="ACTIVE">Active</option>
+                      <option value="INACTIVE">Expired</option>
+                    </select>
+                  </div>
                 </form>
               </div>
             </AlertDialogDescription>
@@ -746,8 +816,11 @@ export default function DosenKelas() {
             <AlertDialogCancel className="bg-red-600 text-white hover:bg-red-800 hover:text-white">
               Batal
             </AlertDialogCancel>
-            <AlertDialogAction className="bg-green-600" onClick={handleSave}>
-              Gabung Kelas
+            <AlertDialogAction
+              className="bg-green-600"
+              onClick={() => mutation.mutate()}
+            >
+              Simpan
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

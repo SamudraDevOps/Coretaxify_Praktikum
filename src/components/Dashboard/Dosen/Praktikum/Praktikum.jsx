@@ -20,6 +20,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { RoutesApi } from "@/Routes";
 import { ClipLoader } from "react-spinners";
+import { FaFile } from "react-icons/fa";
 
 export default function Praktikum() {
   const [isOpen, setIsOpen] = useState(false);
@@ -29,6 +30,17 @@ export default function Praktikum() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const [cookies, setCookie] = useCookies(["user"]);
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFilePreview({ name: file.name, url: reader.result });
+      };
+      reader.readAsDataURL(file);
+    }
+    setFormData({ ...formData, supportingFile: file });
+  };
 
   const { isLoading, isError, data, error } = useQuery({
     queryKey: ["praktikum", url],
@@ -79,9 +91,10 @@ export default function Praktikum() {
         {
           name: formData.name,
           assignment_code: formData.assignment_code,
-          group_id: formData.group_id,
+          groups: [formData.group_id],
           start_period: formData.start_period,
           end_period: formData.end_period,
+          supporting_files: formData.supporting_files,
         },
         {
           headers: {
@@ -248,6 +261,63 @@ export default function Praktikum() {
                           </option>
                         ))}
                       </select>
+                    </div>
+                    <div className="edit-form-group-mahasiswa">
+                      <label>File Support:</label>
+                      <div className="flex items-center justify-center w-full ">
+                        <label
+                          htmlFor="dropzone-file"
+                          className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+                        >
+                          <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                            {filePreview ? (
+                              <>
+                                <div className="grid justify-center items-center p-20">
+                                  <FaFile className="w-8 h-8 text-gray-500 dark:text-gray-400 mb-2" />
+                                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                                    {filePreview.name}
+                                  </p>
+                                </div>
+                              </>
+                            ) : (
+                              <>
+                                <svg
+                                  className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
+                                  aria-hidden="true"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 20 16"
+                                >
+                                  <path
+                                    stroke="currentColor"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth="2"
+                                    d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+                                  />
+                                </svg>
+                                <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                                  <span className="font-semibold">
+                                    Click to upload
+                                  </span>{" "}
+                                  or drag and drop
+                                </p>
+                                <p className="text-xs text-gray-500 dark:text-gray-400">
+                                  ZIP, RAR atau PDF (MAX. 10mb)
+                                </p>
+                              </>
+                            )}
+                          </div>
+
+                          <input
+                            id="dropzone-file"
+                            type="file"
+                            className="hidden"
+                            accept=".zip, .rar, .pdf"
+                            onChange={handleFileChange}
+                          />
+                        </label>
+                      </div>
                     </div>
                     <div className="edit-form-group-mahasiswa">
                       <label>Tanggal Mulai:</label>

@@ -55,6 +55,7 @@ import MahasiswaPraktikumKelas from "./components/Dashboard/Mahasiswa/Kelas/Maha
 import DashboardPsc from "./components/Dashboard/AdminPsc/Dashboard/DashboardPsc";
 import UploadSoalPsc from "./components/Dashboard/AdminPsc/Upload Soal/UploadSoal";
 import EditMahasiswaPscKelas from "./components/Dashboard/AdminPsc/Pengguna/Kelas/Mahasiswa/EditMahasiswaPscKelas";
+import DosenPraktikumKelas from "./components/Dashboard/Dosen/Kelas/DosenPraktikumKelas";
 
 const Main = () => {
   const [loading, setLoading] = useState(true);
@@ -255,6 +256,18 @@ const Main = () => {
               <SidebarAdmin />
               <div className="admin-content">
                 <DosenKelas></DosenKelas>
+                {/* <DosenCardKelas></DosenCardKelas> */}
+              </div>
+            </div>
+          }
+        />
+        <Route
+          path="/dosen/kelas/praktikum/:id"
+          element={
+            <div className="admin-layout">
+              <SidebarAdmin />
+              <div className="admin-content">
+                <DosenPraktikumKelas></DosenPraktikumKelas>
                 {/* <DosenCardKelas></DosenCardKelas> */}
               </div>
             </div>
@@ -469,37 +482,52 @@ const Main = () => {
             </>
           }
         />
-          <Route
-            path="/admin/praktikum/dokumen-saya"
-            element={
-              <><Header /><DokumenSaya /></>
-            }
-          />
-           <Route
-            path="/admin/praktikum/notifikasi-saya"
-            element={
-              <><Header /><NotifikasiSaya /></>
-            }
-          />
-           <Route
-            path="/admin/praktikum/kasus-saya"
-            element={
-              <><Header /><KasusSaya /></>
-            }
-          />
-            <Route
-            path="/admin/praktikum/profil-saya"
-            element={
-              <><Header /><ProfilSaya /></>
-            }
-          />
-            <Route
-            path="/admin/praktikum/informasi-umum"
-            element={
-              <><Header /><InformasiSaya /></>
-            }
-          />
-          {/* Praktikum */}
+        <Route
+          path="/admin/praktikum/dokumen-saya"
+          element={
+            <>
+              <Header />
+              <DokumenSaya />
+            </>
+          }
+        />
+        <Route
+          path="/admin/praktikum/notifikasi-saya"
+          element={
+            <>
+              <Header />
+              <NotifikasiSaya />
+            </>
+          }
+        />
+        <Route
+          path="/admin/praktikum/kasus-saya"
+          element={
+            <>
+              <Header />
+              <KasusSaya />
+            </>
+          }
+        />
+        <Route
+          path="/admin/praktikum/profil-saya"
+          element={
+            <>
+              <Header />
+              <ProfilSaya />
+            </>
+          }
+        />
+        <Route
+          path="/admin/praktikum/informasi-umum"
+          element={
+            <>
+              <Header />
+              <InformasiSaya />
+            </>
+          }
+        />
+        {/* Praktikum */}
       </Routes>
     </Router>
     // </BrowserRouter>
