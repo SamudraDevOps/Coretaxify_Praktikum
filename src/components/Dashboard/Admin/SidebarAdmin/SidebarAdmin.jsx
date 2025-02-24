@@ -259,7 +259,9 @@ const SidebarAdmin = () => {
               <AccordionContent className={`${isOpen ? "" : "hidden"}`}>
                 <ul className="">
                   <li
-                    className="dropdown-item"
+                    className={`dropdown-item  ${
+                      cookies.role == "psc" ? "" : "!hidden"
+                    }`}
                     onClick={() => {
                       window.location.href = "/psc/edit-kelas";
                     }}
@@ -275,7 +277,9 @@ const SidebarAdmin = () => {
                     Mahasiswa
                   </li>
                   <li
-                    className="dropdown-item"
+                    className={`dropdown-item  ${
+                      cookies.role == "psc" ? "" : "!hidden"
+                    }`}
                     onClick={() => {
                       window.location.href = "/psc/edit-pengajar";
                     }}
@@ -291,9 +295,12 @@ const SidebarAdmin = () => {
                     Praktikum
                   </li>
                   <li
-                    className={
-                      cookies.role == "psc" ? "!hidden " : `dropdown-item`
-                    }
+                    className={`dropdown-item  ${
+                      cookies.role == "psc" ? "" : "!hidden"
+                    }`}
+                    // className={
+                    //   cookies.role == "psc" ? "!hidden " : `dropdown-item`
+                    // }
                     onClick={() => {
                       window.location.href = `/${cookies.role}/praktikum`;
                     }}
