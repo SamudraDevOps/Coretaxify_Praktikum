@@ -6,12 +6,20 @@ import axios from "axios";
 import { RoutesApi } from "@/Routes";
 import { CookiesProvider, useCookies } from "react-cookie";
 import { IoClose } from "react-icons/io5";
-import { Label } from "@/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 import { useToast } from "@/hooks/use-toast";
 
-const EditKontrak = ({ isOpen, onClose, onSave, UniData, setOpen }) => {
+const EditKontrak = ({
+  isOpen,
+  onClose,
+  onSave,
+  UniData,
+  taskData,
+  setOpen,
+  id,
+}) => {
   const { toast } = useToast();
   const [formData, setFormData] = useState({
     jenisKontrak: "",
@@ -54,6 +62,7 @@ const EditKontrak = ({ isOpen, onClose, onSave, UniData, setOpen }) => {
     //   kodePembelian: "",
     //   status: "",
     // });
+    console.log(formData);
     mutation.mutate();
     // onClose();
   };
@@ -71,19 +80,9 @@ const EditKontrak = ({ isOpen, onClose, onSave, UniData, setOpen }) => {
       console.log(response.data.token);
       axios.defaults.headers.common["X-CSRF-TOKEN"] = response.data.token;
       console.log(cookies.token);
-      const data = await axios.post(
-        RoutesApi.contractAdmin,
+      const data = await axios.put(
+        RoutesApi.contractAdmin + `/${id}`,
         {
-          //   university_id: 1,
-          //   contract_type: "LICENSE",
-          //   qty_student: 1,
-          //   start_period: "2025-02-10",
-          //   end_period: "2026-02-10",
-          //   spt: 5,
-          //   bupot: 5,
-          //   faktur: 5,
-          //   contract_code: "L-0001",
-
           university_id: parseInt(formData.instansi),
           contract_type: formData.jenisKontrak,
           qty_student: parseInt(formData.mahasiswa),
@@ -94,6 +93,8 @@ const EditKontrak = ({ isOpen, onClose, onSave, UniData, setOpen }) => {
           faktur: parseInt(formData.faktur),
           contract_code: formData.kodePembelian,
           is_buy_task: Number(formData.is_buy_task),
+          status: formData.status,
+          tasks: formData.opsiTambahan,
         },
         {
           headers: {
@@ -167,7 +168,7 @@ const EditKontrak = ({ isOpen, onClose, onSave, UniData, setOpen }) => {
   return (
     <div className="kontrak-popup-overlay">
       <div className="kontrak-popup-container">
-        <h2>Tambah Data Kontrak</h2>
+        <h2>Edit Data Kontrak</h2>
         <form>
           <div className="kontrak-form-group">
             <label>Jenis Kontrak</label>
@@ -229,9 +230,11 @@ const EditKontrak = ({ isOpen, onClose, onSave, UniData, setOpen }) => {
                       onChange={(e) => handleChangeOpsi(index, e.target.value)}
                     >
                       <option value="">Pilih Opsi</option>
-                      <option value="opsi1">Opsi 1</option>
-                      <option value="opsi2">Opsi 2</option>
-                      <option value="opsi3">Opsi 3</option>
+                      {taskData.data.map((item, index) => (
+                        <option value={item.id} key={index}>
+                          {item.name}
+                        </option>
+                      ))}
                     </select>
                     <button
                       type="button"
@@ -315,7 +318,7 @@ const EditKontrak = ({ isOpen, onClose, onSave, UniData, setOpen }) => {
           </div>
 
           {/* Kode Pembelian dengan Auto Generate */}
-          <div className="kontrak-form-group">
+          {/* <div className="kontrak-form-group">
             <label>Kode Pembelian</label>
             <div style={{ display: "flex", gap: "10px" }}>
               <input
@@ -334,7 +337,7 @@ const EditKontrak = ({ isOpen, onClose, onSave, UniData, setOpen }) => {
                 <IoReload />
               </button>
             </div>
-          </div>
+          </div> */}
 
           <div className="kontrak-form-group">
             <label>Status</label>
@@ -345,8 +348,8 @@ const EditKontrak = ({ isOpen, onClose, onSave, UniData, setOpen }) => {
               required
             >
               <option value="">Pilih Status</option>
-              <option value="Active">Active</option>
-              <option value="Expired">Expired</option>
+              <option value="ACTIVE">Active</option>
+              <option value="INACTIVE">Expired</option>
             </select>
           </div>
         </form>

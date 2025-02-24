@@ -108,7 +108,7 @@ const TambahKontrak = ({
     },
     onSuccess: (data) => {
       console.log(data);
-      // window.location.reload();
+      window.location.reload();
 
       // window.location.href = "/" + role;
       // alert("Login successful!");

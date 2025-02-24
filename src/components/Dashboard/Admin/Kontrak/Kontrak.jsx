@@ -35,7 +35,12 @@ const Kontrak = () => {
       return data;
     },
   });
-  const { isLoading:isLoadingTask, isError:isErrorTask, data:taskData, error:errorTask } = useQuery({
+  const {
+    isLoading: isLoadingTask,
+    isError: isErrorTask,
+    data: taskData,
+    error: errorTask,
+  } = useQuery({
     queryKey: ["task"],
     queryFn: async () => {
       const { data } = await axios.get(RoutesApi.tasksAdmin, {
@@ -79,17 +84,14 @@ const Kontrak = () => {
       console.log(response.data.token);
       axios.defaults.headers.common["X-CSRF-TOKEN"] = response.data.token;
       console.log(cookies.token);
-      const data = await axios.delete(
-        RoutesApi.contractAdmin + `/${id}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            "X-CSRF-TOKEN": response.data.token,
-            Authorization: `Bearer ${cookies.token}`,
-          },
-        }
-      );
+      const data = await axios.delete(RoutesApi.contractAdmin + `/${id}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          "X-CSRF-TOKEN": response.data.token,
+          Authorization: `Bearer ${cookies.token}`,
+        },
+      });
       return data;
     },
     onSuccess: (data) => {
@@ -184,6 +186,7 @@ const Kontrak = () => {
       <EditKontrak
         UniData={dataUni}
         isOpen={isOpenEdit}
+        taskData={taskData}
         id={idEdit}
         onClose={() => setIsOpenEdit(false)}
         onSave={handleData}
