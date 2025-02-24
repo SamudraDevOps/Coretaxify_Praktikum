@@ -18,6 +18,17 @@ import axios from "axios";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { ClipLoader } from "react-spinners";
 import { RoutesApi } from "@/Routes";
+import Wulan from "../../../../assets/images/wulan.png";
+import {
+  Menubar,
+  MenubarContent,
+  MenubarItem,
+  MenubarMenu,
+  MenubarSeparator,
+  MenubarShortcut,
+  MenubarTrigger,
+} from "@/components/ui/menubar";
+import { HiDotsVertical } from "react-icons/hi";
 
 export default function DosenKelas() {
   const [isOpen, setIsOpen] = useState(false);
@@ -76,12 +87,10 @@ export default function DosenKelas() {
   //   ]);
 
   const [formData, setFormData] = useState({
-    namaKelas: "",
     kodeKelas: "",
-    status: "",
-    file_name: "",
-    start_period: "",
-    end_period: "",
+    // kodePraktikum: "",
+    // supportingFile: null,
+    // deadline: "",
   });
 
   const generateRandomCode = () => {
@@ -109,11 +118,15 @@ export default function DosenKelas() {
       };
       reader.readAsDataURL(file);
     }
-    setFormData({ ...formData, file_name: file });
+    setFormData({ ...formData, supportingFile: file });
   };
 
   const handleSave = () => {
-    if (!namaKelas || !kodeKelas || !status) {
+    if (
+      !formData.kodeKelas
+      // !formData.kodePraktikum ||
+      // !formData.deadline
+    ) {
       Swal.fire("Error", "Harap isi semua field yang diperlukan!", "error");
       return;
     }
@@ -128,17 +141,18 @@ export default function DosenKelas() {
       deadline: formData.deadline,
     };
 
-    setData([...data, newTugas]);
+    // setData([...data, newTugas]);
     setIsAddOpen(false);
-    setFormData({
-      namaPraktikum: "",
-      kodePraktikum: "",
-      supportingFile: null,
-      deadline: "",
-    });
-    setFilePreview(null);
+    // setFormData({
+    //   namaPraktikum: "",
+    //   kodePraktikum: "",
+    //   supportingFile: null,
+    //   deadline: "",
+    // });
+    // setFilePreview(null);
+    mutation.mutate();
 
-    Swal.fire("Berhasil!", "Praktikum berhasil ditambahkan!", "success");
+    // window.location.reload();
   };
 
   const handleReloadCode = () => {
@@ -185,54 +199,6 @@ export default function DosenKelas() {
   //         String(value).toLowerCase().includes(search.toLowerCase())
   //       ),
   //   }));
-  const mutationClass = useMutation({
-    mutationFn: async (id) => {
-      console.log("button clicked");
-      // const { response } = await axios.post(RoutesApi.login, {
-      const response = await axios.get(`${RoutesApi.url}api/csrf-token`, {
-        // withCredentials: true,
-        headers: {
-          "X-Requested-With": "XMLHttpRequest",
-          Accept: "application/json",
-        },
-      });
-      console.log(response.data.token);
-      axios.defaults.headers.common["X-CSRF-TOKEN"] = response.data.token;
-      console.log(cookies.token);
-      const data = await axios.post(
-        RoutesApi.classAdmin,
-        {
-          // id: 1,
-          name: formData.namaKelas,
-          // user_id: 2,
-          // qty_student: 1,
-          start_period: formData.start_period,
-          end_period: formData.end_period,
-          class_code: formData.kodeKelas,
-          status: formData.status,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            "X-CSRF-TOKEN": response.data.token,
-            Authorization: `Bearer ${cookies.token}`,
-          },
-          params: {
-            intent: "api.user.create.group",
-          },
-        }
-      );
-      return data;
-    },
-    onSuccess: (data) => {
-      console.log(data);
-      window.location.reload();
-    },
-    onError: (error) => {
-      console.log(error);
-    },
-  });
   const mutation = useMutation({
     mutationFn: async (id) => {
       console.log("button clicked");
@@ -247,18 +213,21 @@ export default function DosenKelas() {
       console.log(response.data.token);
       axios.defaults.headers.common["X-CSRF-TOKEN"] = response.data.token;
       console.log(cookies.token);
-      const data = await axios.put(
-        RoutesApi.classAdmin + `/${id}`,
+      const data = await axios.post(
+        RoutesApi.joinClass.url,
         {
-          id: 1,
-          name: formData.namaKelas,
-          // user_id: 2,
-          // qty_student: 1,
-          start_period: formData.start_period,
-          end_period: formData.end_period,
           class_code: formData.kodeKelas,
-          status: formData.status,
         },
+
+        //   university_id: 1,
+        //   contract_type: "LICENSE",
+        //   qty_student: 1,
+        //   start_period: "2025-02-10",
+        //   end_period: "2026-02-10",
+        //   spt: 5,
+        //   bupot: 5,
+        //   faktur: 5,
+        //   contract_code: "L-0001"
         {
           headers: {
             "Content-Type": "application/json",
@@ -266,48 +235,21 @@ export default function DosenKelas() {
             "X-CSRF-TOKEN": response.data.token,
             Authorization: `Bearer ${cookies.token}`,
           },
+          params: {
+            intent: RoutesApi.joinClass.intent,
+          },
         }
       );
       return data;
     },
     onSuccess: (data) => {
       console.log(data);
+      Swal.fire("Berhasil!", "Praktikum berhasil ditambahkan!", "success");
       window.location.reload();
-    },
-    onError: (error) => {
-      console.log(error);
-    },
-  });
-  const mutationDelete = useMutation({
-    mutationFn: async (id) => {
-      console.log("button clicked");
-      // const { response } = await axios.post(RoutesApi.login, {
-      const response = await axios.get(`${RoutesApi.url}api/csrf-token`, {
-        // withCredentials: true,
-        headers: {
-          "X-Requested-With": "XMLHttpRequest",
-          Accept: "application/json",
-        },
-      });
-      console.log(response.data.token);
-      axios.defaults.headers.common["X-CSRF-TOKEN"] = response.data.token;
-      console.log(cookies.token);
-      const data = await axios.delete(RoutesApi.classAdmin + `/${id}`, {
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          "X-CSRF-TOKEN": response.data.token,
-          Authorization: `Bearer ${cookies.token}`,
-        },
-      });
-      return data;
-    },
-    onSuccess: (data) => {
-      console.log(data);
-      Swal.fire("Berhasil!", "Kelas berhasil dihapus!", "success");
-      window.location.reload();
+      // const role = data.data.user.roles[0].name;
+      // setCookie("token", data.data.token, { path: "/" });
+      // setCookie("role", role, { path: "/" });
 
-      // window.location.href = "/" + role;
       // alert("Login successful!");
       // queryClient.invalidateQueries({ queryKey: ["todos"] });
     },
@@ -344,14 +286,14 @@ export default function DosenKelas() {
           className="bg-blue-800 p-2 rounded-md text-white hover:bg-blue-900"
           onClick={() => {
             setIsAddOpen(true);
-            setFormData({ ...formData, kodeKelas: generateRandomCode() });
+            // setFormData({ ...formData, kodePraktikum: generateRandomCode() });
           }}
         >
           Tambah Kelas
         </button>
       </div>
-      <div className="table-container">
-        <table>
+      {/* <div className="table-container"> */}
+      {/* <table>
           <thead>
             <tr>
               <th>No</th>
@@ -373,142 +315,272 @@ export default function DosenKelas() {
               <th>Action</th>
             </tr>
           </thead>
-          <tbody>
-            {data == undefined ? (
-              <div className="loading">
-                <h1>Data Empty !</h1>
-                {/* <ClipLoader color="#7502B5" size={50} /> */}
+          <tbody> */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-6 place-items-start">
+        {data == undefined ? (
+          <div className="loading">
+            <h1>Data Empty !</h1>
+            {/* <ClipLoader color="#7502B5" size={50} /> */}
+          </div>
+        ) : (
+          data.map((item, index) => (
+            <div
+              key={item.id}
+              className="relative  shadow-lg rounded-lg w-100 md:min-w-96 p-4 cursor-pointer"
+              // onClick={() =>
+              //   window.location.href = `/mahasiswa/kelas/${item.id}`;
+              // }}
+            >
+              <div className="bg-purple-700 flex justify-between text-white p-4 rounded-t-lg w-150 relative">
+                <div className="">
+                  <h3 className="font-bold text-lg">{item.name}</h3>
+                  <p className="text-sm">Pengajar : {item.user.name}</p>
+                </div>
+                <Menubar className="bg-transparent">
+                  <MenubarMenu className="">
+                    <MenubarTrigger className="">
+                      <HiDotsVertical />
+                    </MenubarTrigger>
+                    <MenubarContent>
+                      <MenubarItem>
+                        <AlertDialog>
+                          <AlertDialogTrigger className="action-button edit">
+                            Edit
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>Edit Kelas</AlertDialogTitle>
+                              <AlertDialogDescription className="w-full">
+                                <div className="">
+                                  <form>
+                                    <div className="edit-form-group-mahasiswa ">
+                                      <label>Nama Kelas:</label>
+                                      <input
+                                        type="text"
+                                        name="namaKelas"
+                                        value={formData.namaKelas}
+                                        onChange={handleChange}
+                                        required
+                                      />
+                                    </div>
+                                    <div className="edit-form-group-mahasiswa">
+                                      <label>Kode Kelas:</label>
+                                      <input
+                                        className="text-black"
+                                        name="kodeKelas"
+                                        value={formData.kodeKelas}
+                                        onChange={handleChange}
+                                      />
+                                    </div>
+                                    <div className="edit-form-group-mahasiswa">
+                                      <label>File Support:</label>
+                                      <input
+                                        className="text-black"
+                                        type="file"
+                                        name="file_name"
+                                        onChange={handleFileChange}
+                                      />
+                                    </div>
+                                    <div className="edit-form-group-mahasiswa">
+                                      <label>Tanggal Mulai:</label>
+                                      <input
+                                        className="text-black"
+                                        type="date"
+                                        name="start_period"
+                                        value={formData.start_period}
+                                        onChange={handleChange}
+                                      />
+                                    </div>
+                                    <div className="edit-form-group-mahasiswa">
+                                      <label>Deadline:</label>
+                                      <input
+                                        className="text-black"
+                                        type="date"
+                                        name="end_period"
+                                        value={formData.end_period}
+                                        onChange={handleChange}
+                                      />
+                                    </div>
+                                    <div className="edit-form-group-mahasiswa">
+                                      <select
+                                        name="status"
+                                        value={formData.status}
+                                        onChange={handleChange}
+                                        required
+                                      >
+                                        <option value="">Pilih Status</option>
+                                        <option value="ACTIVE">Active</option>
+                                        <option value="INACTIVE">
+                                          Expired
+                                        </option>
+                                      </select>
+                                    </div>
+                                  </form>
+                                </div>
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel className="bg-red-600 text-white">
+                                Kembali
+                              </AlertDialogCancel>
+                              <AlertDialogAction
+                                onClick={() => mutation.mutate(item.id)}
+                                className="bg-green-600 "
+                              >
+                                Simpan
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
+                        {/* Edit Kelas */}
+                        {/* New Tab <MenubarShortcut>⌘T</MenubarShortcut> */}
+                      </MenubarItem>
+                      <MenubarSeparator />
+                      <MenubarItem>Hapus Kelas</MenubarItem>
+                      {/* <MenubarItem>Share</MenubarItem> */}
+                      {/* <MenubarSeparator /> */}
+                      {/* <MenubarItem>Print</MenubarItem> */}
+                    </MenubarContent>
+                  </MenubarMenu>
+                </Menubar>
               </div>
-            ) : (
-              data.map((item, index) => (
-                <tr key={item.id}>
-                  <td>{index + 1}</td>
-                  <td>{item.name}</td>
-                  <td>{item.class_code}</td>
-                  <td>{item.status}</td>
-                  <td>{item.filename}</td>
-                  <td>{item.start_period}</td>
-                  <td>{item.end_period}</td>
-                  <td>
-                    <AlertDialog>
-                      <AlertDialogTrigger className="action-button edit">
-                        Edit
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>Edit Kelas</AlertDialogTitle>
-                          <AlertDialogDescription className="w-full">
-                            <div className="">
-                              <form>
-                                <div className="edit-form-group-mahasiswa ">
-                                  <label>Nama Kelas:</label>
-                                  <input
-                                    type="text"
-                                    name="namaKelas"
-                                    value={formData.namaKelas}
-                                    onChange={handleChange}
-                                    required
-                                  />
-                                </div>
-                                <div className="edit-form-group-mahasiswa">
-                                  <label>Kode Kelas:</label>
-                                  <input
-                                    className="text-black"
-                                    name="kodeKelas"
-                                    value={formData.kodeKelas}
-                                    onChange={handleChange}
-                                  />
-                                </div>
-                                <div className="edit-form-group-mahasiswa">
-                                  <label>File Support:</label>
-                                  <input
-                                    className="text-black"
-                                    type="file"
-                                    name="file_name"
-                                    onChange={handleFileChange}
-                                  />
-                                </div>
-                                <div className="edit-form-group-mahasiswa">
-                                  <label>Tanggal Mulai:</label>
-                                  <input
-                                    className="text-black"
-                                    type="date"
-                                    name="start_period"
-                                    value={formData.start_period}
-                                    onChange={handleChange}
-                                  />
-                                </div>
-                                <div className="edit-form-group-mahasiswa">
-                                  <label>Deadline:</label>
-                                  <input
-                                    className="text-black"
-                                    type="date"
-                                    name="end_period"
-                                    value={formData.end_period}
-                                    onChange={handleChange}
-                                  />
-                                </div>
-                                <div className="edit-form-group-mahasiswa">
-                                  <select
-                                    name="status"
-                                    value={formData.status}
-                                    onChange={handleChange}
-                                    required
-                                  >
-                                    <option value="">Pilih Status</option>
-                                    <option value="ACTIVE">Active</option>
-                                    <option value="INACTIVE">Expired</option>
-                                  </select>
-                                </div>
-                              </form>
-                            </div>
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel className="bg-red-600 text-white">
-                            Kembali
-                          </AlertDialogCancel>
-                          <AlertDialogAction
-                            onClick={() => mutation.mutate(item.id)}
-                            className="bg-green-600 "
-                          >
-                            Simpan
-                          </AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
+              <div className="p-4">
+                <ul className="text-gray-700 text-sm space-y-2 h-10">
+                  <li>
+                    <strong className="text-indigo-700">
+                      Kode Kelas : {item.class_code}
+                    </strong>
+                    {/* <p className="text-gray-500 p-4">
+                      Tanggal Mulai {item.start_period}
+                    </p>
+                    <strong className="text-indigo-700">
+                      {item.perusahaan}
+                    </strong>
+                    <p className="text-gray-500 p-4">
+                      Deadline {item.end_period}
+                    </p> */}
+                  </li>
+                </ul>
+              </div>
+              <div className="border-t px-4 py-2 flex items-center text-gray-700 text-sm">
+                {/* <span className="mr-2">⏳</span> */}
+                <p>Waktu pengerjaan :</p>
+                <p className="text-gray-500 p-4">{item.start_period}</p>-
+                <p className="text-gray-500 p-4"> {item.end_period}</p>
+              </div>
+              <img
+                src={Wulan}
+                alt="Icon"
+                className="absolute bottom-[120px] right-4 w-14 h-14 rounded-full border-2 border-white shadow-md"
+              />
+            </div>
+            // <tr key={item.id}>
+            //   <td>{item.id + index + 1}</td>
+            //   <td>{item.name}</td>
+            //   <td>{item.class_code}</td>
+            //   <td>{item.status}</td>
+            //   <td>{item.filename}</td>
+            //   <td>{item.start_period}</td>
+            //   <td>{item.end_period}</td>
+            //   <td>
+            //     <AlertDialog>
+            //       <AlertDialogTrigger className="action-button edit">
+            //         Edit
+            //       </AlertDialogTrigger>
+            //       <AlertDialogContent>
+            //         <AlertDialogHeader>
+            //           <AlertDialogTitle>Edit Kelas</AlertDialogTitle>
+            //           <AlertDialogDescription className="w-full">
+            //             <div className="">
+            //               <form>
+            //                 <div className="edit-form-group-mahasiswa ">
+            //                   <label>Nama Praktikum:</label>
+            //                   <input
+            //                     type="text"
+            //                     name="namaPraktikum"
+            //                     value={formData.namaPraktikum}
+            //                     onChange={handleChange}
+            //                     required
+            //                   />
+            //                 </div>
+            //                 <div className="edit-form-group-mahasiswa">
+            //                   <label>Kode Praktikum:</label>
+            //                   <input
+            //                     className="text-black"
+            //                     name="kodePraktikum"
+            //                     value={formData.kodePraktikum}
+            //                     onChange={handleChange}
+            //                   />
+            //                 </div>
+            //                 <div className="edit-form-group-mahasiswa">
+            //                   <label>File Support:</label>
+            //                   <input
+            //                     className="text-black"
+            //                     type="file"
+            //                     name="supportingFile"
+            //                     onChange={handleFileChange}
+            //                   />
+            //                 </div>
+            //                 <div className="edit-form-group-mahasiswa">
+            //                   <label>Deadline:</label>
+            //                   <input
+            //                     className="text-black"
+            //                     type="date"
+            //                     name="deadline"
+            //                     value={formData.deadline}
+            //                     onChange={handleChange}
+            //                   />
+            //                 </div>
+            //               </form>
+            //             </div>
+            //           </AlertDialogDescription>
+            //         </AlertDialogHeader>
+            //         <AlertDialogFooter>
+            //           <AlertDialogCancel className="bg-red-600 text-white">
+            //             Kembali
+            //           </AlertDialogCancel>
+            //           <AlertDialogAction className="bg-green-600 ">
+            //             Simpan
+            //           </AlertDialogAction>
+            //         </AlertDialogFooter>
+            //       </AlertDialogContent>
+            //     </AlertDialog>
 
-                    <button
-                      className="action-button delete"
-                      onClick={() => {
-                        Swal.fire({
-                          title: "Hapus Kelas?",
-                          text: "Kelas akan dihapus secara permanen!",
-                          icon: "warning",
-                          showCancelButton: true,
-                          confirmButtonText: "Ya, hapus!",
-                          cancelButtonText: "Batal",
-                          dangerMode: true,
-                        }).then((result) => {
-                          if (result.isConfirmed) {
-                            // const newData = data.filter(
-                            //   (itemData) => itemData.id !== item.id
-                            // );
-                            // setData(newData);
-                            mutationDelete.mutate(item.id);
-                          }
-                        });
-                      }}
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-        <div className="pagination-container sticky">
+            //     <button
+            //       className="action-button delete"
+            //       onClick={() => {
+            //         Swal.fire({
+            //           title: "Hapus Kelas?",
+            //           text: "Kelas akan dihapus secara permanen!",
+            //           icon: "warning",
+            //           showCancelButton: true,
+            //           confirmButtonText: "Ya, hapus!",
+            //           cancelButtonText: "Batal",
+            //           dangerMode: true,
+            //         }).then((result) => {
+            //           if (result.isConfirmed) {
+            //             const newData = data.filter(
+            //               (itemData) => itemData.id !== item.id
+            //             );
+            //             setData(newData);
+            //             Swal.fire(
+            //               "Berhasil!",
+            //               "Kelas berhasil dihapus!",
+            //               "success"
+            //             );
+            //           }
+            //         });
+            //       }}
+            //     >
+            //       Delete
+            //     </button>
+            //   </td>
+            // </tr>
+          ))
+        )}
+        {/* </tbody>
+        </table> */}
+        {/* <div className="pagination-container sticky">
           <div className="pagination-info">
             {`Showing ${indexOfFirstItem + 1} to ${Math.min(
               indexOfLastItem,
@@ -551,6 +623,7 @@ export default function DosenKelas() {
             </button>
           </div>
         </div>
+      </div> */}
       </div>
       {isOpen && (
         <EditPopupMahasiswa
@@ -565,19 +638,19 @@ export default function DosenKelas() {
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Tambah Praktikum</AlertDialogTitle>
+            <AlertDialogTitle>Tambah Kelas</AlertDialogTitle>
             <AlertDialogDescription className="w-full">
               <div className="max-h-[70vh] overflow-y-auto">
                 <form>
                   <div className="edit-form-group-mahasiswa ">
-                    <label>Nama Kelas:</label>
-                    <input
+                    {/* <label>Nama Kelas:</label> */}
+                    {/* <input
                       type="text"
-                      name="namaKelas"
-                      value={formData.namaKelas}
+                      name="namaPraktikum"
+                      value={formData.namaPraktikum}
                       onChange={handleChange}
                       required
-                    />
+                    /> */}
                   </div>
                   <div className="edit-form-group-mahasiswa">
                     <label>Kode Kelas:</label>
@@ -587,18 +660,18 @@ export default function DosenKelas() {
                         name="kodeKelas"
                         value={formData.kodeKelas}
                         onChange={handleChange}
-                        readOnly
+                        // readOnly
                       />
-                      <button
+                      {/* <button
                         type="button"
                         className="p-3 bg-purple-800 rounded-md hover:bg-purple-900"
                         onClick={handleReloadCode}
                       >
                         <IoReload className="text-lg text-white " />
-                      </button>
+                      </button> */}
                     </div>
                   </div>
-                  <div className="edit-form-group-mahasiswa">
+                  {/* <div className="edit-form-group-mahasiswa">
                     <label>File Support:</label>
                     <div className="flex items-center justify-center w-full ">
                       <label
@@ -654,39 +727,17 @@ export default function DosenKelas() {
                         />
                       </label>
                     </div>
-                  </div>
-                  <div className="edit-form-group-mahasiswa">
-                    <label>Tanggal Mulai:</label>
-                    <input
-                      className="text-black"
-                      type="date"
-                      name="start_period"
-                      value={formData.start_period}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div className="edit-form-group-mahasiswa">
+                  </div> */}
+                  {/* <div className="edit-form-group-mahasiswa ">
                     <label>Deadline:</label>
                     <input
-                      className="text-black"
                       type="date"
-                      name="end_period"
-                      value={formData.end_period}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div className="edit-form-group-mahasiswa">
-                    <select
-                      name="status"
-                      value={formData.status}
+                      name="deadline"
+                      value={formData.deadline}
                       onChange={handleChange}
                       required
-                    >
-                      <option value="">Pilih Status</option>
-                      <option value="ACTIVE">Active</option>
-                      <option value="INACTIVE">Expired</option>
-                    </select>
-                  </div>
+                    />
+                  </div> */}
                 </form>
               </div>
             </AlertDialogDescription>
@@ -695,11 +746,8 @@ export default function DosenKelas() {
             <AlertDialogCancel className="bg-red-600 text-white hover:bg-red-800 hover:text-white">
               Batal
             </AlertDialogCancel>
-            <AlertDialogAction
-              className="bg-green-600"
-              onClick={() => mutationClass.mutate()}
-            >
-              Simpan
+            <AlertDialogAction className="bg-green-600" onClick={handleSave}>
+              Gabung Kelas
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

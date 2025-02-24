@@ -286,18 +286,19 @@ const SidebarAdmin = () => {
                   >
                     Pengajar
                   </li>
-                  <li
+                  {/* <li
                     className="dropdown-item"
                     onClick={() => {
                       window.location.href = "/admin/edit-praktikum";
                     }}
                   >
                     Praktikum
-                  </li>
+                  </li> */}
                   <li
-                    className={`dropdown-item  ${
-                      cookies.role == "psc" ? "" : "!hidden"
-                    }`}
+                    className="dropdown-item"
+                    // className={`dropdown-item  ${
+                    //   cookies.role == "psc" ? "" : "!hidden"
+                    // }`}
                     // className={
                     //   cookies.role == "psc" ? "!hidden " : `dropdown-item`
                     // }
