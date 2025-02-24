@@ -142,6 +142,12 @@ const EditKelasPsc = () => {
                   >
                     Delete
                   </button>
+                  <button
+                    className="action-button edit"
+                    onClick={() => (window.location.href = "/psc/edit-kelas/1")}
+                  >
+                    Detail
+                  </button>
                 </td>
               </tr>
             ))}

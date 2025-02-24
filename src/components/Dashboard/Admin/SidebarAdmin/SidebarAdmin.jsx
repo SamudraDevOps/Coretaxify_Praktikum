@@ -277,7 +277,7 @@ const SidebarAdmin = () => {
                   <li
                     className="dropdown-item"
                     onClick={() => {
-                      window.location.href = "/admin/edit-pengajar";
+                      window.location.href = "/psc/edit-pengajar";
                     }}
                   >
                     Pengajar

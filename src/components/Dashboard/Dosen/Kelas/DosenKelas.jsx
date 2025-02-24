@@ -550,37 +550,6 @@ export default function DosenKelas() {
               &gt;
             </button>
           </div>
-          <div className="pagination">
-            <button
-              className={`page-item`}
-              onClick={() => {
-                setUrl(data.links.prev);
-              }}
-              disabled={data.meta.current_page === 1}
-            >
-              &lt;
-            </button>
-            <button className="page-item">{data.meta.current_page}</button>
-            {/* {Array.from({ length: Math.ceil(data.length / itemsPerPage) }, (_, index) => (
-                            <button key={index + 1} className={`page-item ${currentPage === index + 1 ? "active" : ""}`} onClick={() => paginate(index + 1)}>
-                                {index + 1}
-                            </button>
-                        ))} */}
-            <button
-              className={`page-item ${
-                currentPage === Math.ceil(data.length / itemsPerPage)
-                  ? "disabled"
-                  : ""
-              }`}
-              onClick={() => {
-                console.log(data.links.next);
-                setUrl(data.links.next);
-              }}
-              disabled={data.links.next == null}
-            >
-              &gt;
-            </button>
-          </div>
         </div>
       </div>
       {isOpen && (

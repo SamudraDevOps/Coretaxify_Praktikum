@@ -48,6 +48,8 @@ import NotifikasiSaya from "./components/PraktikumPage/PortalSaya/NotifikasiSaya
 import ProtectedRoutes from "./components/Dashboard/Auth/ProtectedRoutes";
 import MahasiswaPraktikumKelas from "./components/Dashboard/Mahasiswa/Kelas/MahasiswaPraktikumKelas";
 import DashboardPsc from "./components/Dashboard/AdminPsc/Dashboard/DashboardPsc";
+import UploadSoalPsc from "./components/Dashboard/AdminPsc/Upload Soal/UploadSoal";
+import EditMahasiswaPscKelas from "./components/Dashboard/AdminPsc/Pengguna/Kelas/Mahasiswa/EditMahasiswaPscKelas";
 
 const Main = () => {
   const [loading, setLoading] = useState(true);
@@ -372,12 +374,14 @@ const Main = () => {
           element={
             <div className="admin-layout">
               <SidebarAdmin />
-              <div className="admin-content">Master Soal</div>
+              <div className="admin-content">
+                <UploadSoalPsc></UploadSoalPsc>
+              </div>
             </div>
           }
         />
         <Route
-          path="/admin-psc/edit-pengajar"
+          path="/psc/edit-pengajar"
           element={
             <div className="admin-layout">
               <SidebarAdmin />
@@ -388,12 +392,23 @@ const Main = () => {
           }
         />
         <Route
-          path="/admin-psc/edit-kelas"
+          path="/psc/edit-kelas"
           element={
             <div className="admin-layout">
               <SidebarAdmin />
               <div className="admin-content">
                 <EditKelasPsc></EditKelasPsc>
+              </div>
+            </div>
+          }
+        />
+        <Route
+          path="/psc/edit-kelas/1"
+          element={
+            <div className="admin-layout">
+              <SidebarAdmin />
+              <div className="admin-content">
+                <EditMahasiswaPscKelas></EditMahasiswaPscKelas>
               </div>
             </div>
           }
