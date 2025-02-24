@@ -35,6 +35,18 @@ const Kontrak = () => {
       return data;
     },
   });
+  const { isLoading:isLoadingTask, isError:isErrorTask, data:taskData, error:errorTask } = useQuery({
+    queryKey: ["task"],
+    queryFn: async () => {
+      const { data } = await axios.get(RoutesApi.tasksAdmin, {
+        headers: {
+          Authorization: `Bearer ${cookies.token}`,
+        },
+      });
+      console.log(data.data);
+      return data;
+    },
+  });
   const {
     isLoading: isLoadingUni,
     isError: isErrorUni,
@@ -163,6 +175,7 @@ const Kontrak = () => {
       </div>
       <TambahKontrak
         UniData={dataUni}
+        taskData={taskData}
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
         onSave={handleData}
