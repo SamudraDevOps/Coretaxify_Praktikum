@@ -323,7 +323,9 @@ const SidebarAdmin = () => {
             {isOpen && <span>Coretaxify</span>}
           </li>
           <li
-            className={`menu-item ${cookies.role == "psc" ? "" : "!hidden"}`}
+            className={`menu-item ${
+              cookies.role == "psc" || cookies.role == "admin" ? "" : "!hidden"
+            }`}
             // className={`menu-item ${cookies.role === "dosen" ? "" : "!hidden"}`}
             onClick={() => {
               window.location.href = `/${cookies.role}/ujian`;
