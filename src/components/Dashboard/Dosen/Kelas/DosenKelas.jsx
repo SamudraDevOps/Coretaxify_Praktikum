@@ -188,6 +188,8 @@ export default function DosenKelas() {
 
       let urlLocal = RoutesApi.classLecturer.url;
 
+      console.log(id, action);
+
       if (action === "update" && id) {
         urlLocal = `${RoutesApi.classLecturer.url}/${id}`;
         return await axios.put(
@@ -251,6 +253,8 @@ export default function DosenKelas() {
       console.log(error);
     },
   });
+
+  const [isChecked, setIsChecked] = useState(false);
 
   if (isLoading) {
     return (
@@ -383,7 +387,10 @@ export default function DosenKelas() {
                               dangerMode: true,
                             }).then((result) => {
                               if (result.isConfirmed) {
-                                mutation.mutate(item.id, "delete");
+                                mutation.mutate({
+                                  id: item.id,
+                                  action: "delete",
+                                });
                                 Swal.fire(
                                   "Berhasil!",
                                   "Kelas berhasil dihapus!",
@@ -403,8 +410,8 @@ export default function DosenKelas() {
                   </Menubar>
                   <AlertDialogContent
                     onClick={(e) => {
-                      e.stopPropagation();
-                      e.preventDefault();
+                      // e.stopPropagation();
+                      // e.preventDefault();
                     }}
                   >
                     <AlertDialogHeader>
@@ -440,16 +447,24 @@ export default function DosenKelas() {
                                         onChange={handleFileChange}
                                       />
                                     </div> */}
-                            <div className="edit-form-group-mahasiswa bg-red-300">
+                            <div className="edit-form-group-mahasiswa ">
                               <label>Tanggal Mulai:</label>
+                              {/* <input
+                                type="checkbox"
+                                checked={isChecked}
+                                onChange={(e) => setIsChecked(e.target.checked)}
+                                name=""
+                                id=""
+                              /> */}
+                              {/* <input type="date" name="" id="" /> */}
                               <input
-                              
                                 className="text-black"
                                 type="date"
                                 name="start_period"
                                 value={formData.start_period}
                                 onChange={handleChange}
                               />
+                              {/* <input type="text" /> */}
                             </div>
                             <div className="edit-form-group-mahasiswa">
                               <label>Deadline:</label>
@@ -482,7 +497,9 @@ export default function DosenKelas() {
                         Kembali
                       </AlertDialogCancel>
                       <AlertDialogAction
-                        onClick={() => mutation.mutate(item.id, "update")}
+                        onClick={() =>
+                          mutation.mutate({ id: item.id, action: "update" })
+                        }
                         className="bg-green-600 "
                       >
                         Simpan
@@ -783,8 +800,8 @@ export default function DosenKelas() {
                       name="start_period"
                       value={formData.start_period}
                       onChange={handleChange}
-                      
                     />
+                    {/* <input type="text" /> */}
                   </div>
                   <div className="edit-form-group-mahasiswa">
                     <label>Deadline:</label>
@@ -818,7 +835,7 @@ export default function DosenKelas() {
             </AlertDialogCancel>
             <AlertDialogAction
               className="bg-green-600"
-              onClick={() => mutation.mutate()}
+              onClick={() => mutation.mutate(0, "")}
             >
               Simpan
             </AlertDialogAction>
