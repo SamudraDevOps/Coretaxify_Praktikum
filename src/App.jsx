@@ -56,9 +56,11 @@ import DashboardPsc from "./components/Dashboard/AdminPsc/Dashboard/DashboardPsc
 import UploadSoalPsc from "./components/Dashboard/AdminPsc/Upload Soal/UploadSoal";
 import EditMahasiswaPscKelas from "./components/Dashboard/AdminPsc/Pengguna/Kelas/Mahasiswa/EditMahasiswaPscKelas";
 import DosenPraktikumKelas from "./components/Dashboard/Dosen/Kelas/DosenPraktikumKelas";
+import { CookiesProvider, useCookies } from "react-cookie";
 
 const Main = () => {
   const [loading, setLoading] = useState(true);
+  const [cookies, setCookie] = useCookies([""]);
 
   useEffect(() => {
     setLoading(true);
@@ -74,6 +76,14 @@ const Main = () => {
     // <BrowserRouter>
     <Router>
       <Routes>
+        <Route
+          path="/"
+          element={
+            <ProtectedRoutes>
+              <Navigate to={`/${cookies.role}`} replace />
+            </ProtectedRoutes>
+          }
+        />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/reset-password" element={<ResetPassword />} />

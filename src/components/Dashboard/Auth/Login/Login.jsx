@@ -63,6 +63,7 @@ const Login = () => {
   const handleLogin = (e) => {
     e.preventDefault();
     mutation.mutate();
+
     // console.log("Username:", username);
     // console.log("Password:", password);
     // alert("Login berhasil!");
@@ -141,6 +142,9 @@ const Login = () => {
             {mutation.status == "pending" ? <p>Loading...</p> : <>Login</>}
           </button>
         </form>
+        <div className="text-xs  mt-2 text-red-700">
+          {mutation.isError && mutation.error.response.data.message}
+        </div>
 
         <p className="text-center text-sm text-black-600 mt-4">
           Belum punya akun?{" "}

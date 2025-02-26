@@ -19,7 +19,7 @@ const KasusSaya = () => {
                                         </button>
                               </div>
                               <div className="overflow-x-auto bg-white shadow-md rounded-lg">
-                                        <table className="min-w-full border border-gray-300 pb-4">
+                                        <table className="min-w-full border border-gray-300 pb-4 ">
                                                   <thead>
                                                             <tr>
                                                                       <th className="px-4 py-2 border">Nomor Kasus</th>

@@ -32,7 +32,7 @@ const EditKontrak = ({
     faktur: "",
     kodePembelian: "",
     is_buy_task: 0,
-    opsiTambahan: [""],
+    opsiTambahan: [],
     status: "",
   });
   const [cookies, setCookie] = useCookies(["user"]);
