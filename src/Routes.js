@@ -14,7 +14,22 @@ export const RoutesApi = {
   contractAdmin: url + `api/${role.admin}/contract`,
   uniAdmin: url + `api/${role.admin}/universities`,
   classAdmin: url + `api/${role.lecturer}/groups`,
+  getUserAdmin: {
+    url: url + `api/${role.admin}/users`,
+    intent: {
+      psc: "api.user.get.psc",
+      admin: "api.user.get.admin",
+      dosen: "api.user.get.dosen",
+      mahasiswa: "api.user.get.mahasiswa",
+      mahasiswapsc: "api.user.get.mahasiswa-psc",
+      instruktur: "api.user.get.instruktur",
+    },
+  },
   // taskAdmin: url + `api/${role.admin}/tasks`,
+  classLecturer: {
+    url: url + `api/${role.lecturer}/groups`,
+    intent: "api.user.create.group",
+  },
   classGroup: {
     url: url + `api/${role.lecturer}/groups`,
     intent: "api.get.group.with.assignments",

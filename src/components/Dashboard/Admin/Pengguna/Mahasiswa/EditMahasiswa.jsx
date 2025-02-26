@@ -2,43 +2,66 @@ import React, { useState } from "react";
 import "./editPopupMahasiswa.css";
 import EditPopupMahasiswa from "./EditPopupMahasiswa";
 import Swal from "sweetalert2";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import { RoutesApi } from "@/Routes";
+import { ClipLoader } from "react-spinners";
+import { useCookies } from "react-cookie";
 
 const EditMahasiswa = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
   const [selectedData, setSelectedData] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [cookies, setCookie] = useCookies(["user"]);
   const itemsPerPage = 10;
 
-  const [data, setData] = useState([
-    {
-      namaMahasiswa: "Hendra",
-      instansi: "Poltek Jos",
-      email: "hendra@coretaxify.com",
-      kelas: "Abangkuh",
-      tanggalRegistrasi: "22-5-2023",
-      kodeRegistrasi: "L001",
-      status: "Active",
+  const { isLoading, isError, data, error } = useQuery({
+    queryKey: ["mahasiswa"],
+    queryFn: async () => {
+      const { data } = await axios.get(RoutesApi.getUserAdmin.url, {
+        params: {
+          intent: RoutesApi.getUserAdmin.intent.mahasiswa,
+        },
+        headers: {
+          Authorization: `Bearer ${cookies.token}`,
+        },
+      });
+      console.log("hi");
+      console.log(data.data);
+      return data;
     },
-    {
-      namaMahasiswa: "Udin",
-      instansi: "UB Jos",
-      email: "hendra@coretaxify.com",
-      kelas: "Abangkuh",
-      tanggalRegistrasi: "22-5-2023",
-      kodeRegistrasi: "U002",
-      status: "Expired",
-    },
-    {
-      namaMahasiswa: "Galeh",
-      instansi: "UM Jos",
-      email: "hendra@coretaxify.com",
-      kelas: "Abangkuh",
-      tanggalRegistrasi: "22-5-2023",
-      kodeRegistrasi: "U003",
-      status: "Active",
-    },
-  ]);
+  });
+
+  // const [data, setData] = useState([
+  //   {
+  //     namaMahasiswa: "Hendra",
+  //     instansi: "Poltek Jos",
+  //     email: "hendra@coretaxify.com",
+  //     kelas: "Abangkuh",
+  //     tanggalRegistrasi: "22-5-2023",
+  //     kodeRegistrasi: "L001",
+  //     status: "Active",
+  //   },
+  //   {
+  //     namaMahasiswa: "Udin",
+  //     instansi: "UB Jos",
+  //     email: "hendra@coretaxify.com",
+  //     kelas: "Abangkuh",
+  //     tanggalRegistrasi: "22-5-2023",
+  //     kodeRegistrasi: "U002",
+  //     status: "Expired",
+  //   },
+  //   {
+  //     namaMahasiswa: "Galeh",
+  //     instansi: "UM Jos",
+  //     email: "hendra@coretaxify.com",
+  //     kelas: "Abangkuh",
+  //     tanggalRegistrasi: "22-5-2023",
+  //     kodeRegistrasi: "U003",
+  //     status: "Active",
+  //   },
+  // ]);
 
   const handleSort = (key) => {
     let direction = "ascending";
@@ -71,12 +94,27 @@ const EditMahasiswa = () => {
     );
     setIsOpen(false);
   };
+  // console.log(RoutesApi.getUserAdmin.intent.mahasiswa);
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
+  // const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
+  // console.log(RoutesApi.getUserAdmin.url);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  if (isLoading) {
+    return (
+      <div className="loading">
+        <ClipLoader color="#7502B5" size={50} />
+      </div>
+      // <div className="h-full w-full text-2xl italic font-bold text-center flex items-center justify-center">Loading...</div>
+    );
+  }
+
+  if (isError) {
+    console.log(error);
+    return "error";
+  }
 
   return (
     <div className="">
@@ -108,24 +146,25 @@ const EditMahasiswa = () => {
                       : ""}
                   </th>
                   <th>Email</th>
-                  <th>Instansi</th>
-                  <th>Kelas</th>
+                  {/* <th>Instansi</th>
+                  <th>Kelas</th> */}
                   <th>Tanggal Registrasi</th>
-                  <th>Kode Registrasi</th>
-                  <th>Status</th>
+                  {/* <th>Kode Registrasi</th>
+                  <th>Status</th> */}
                   <th>Action</th>
                 </tr>
               </thead>
               <tbody>
-                {currentItems.map((item) => (
+                {/* {data} */}
+                {data.data.map((item) => (
                   <tr key={item.id}>
-                    <td>{item.namaMahasiswa}</td>
+                    <td>{item.name}</td>
                     <td>{item.email}</td>
-                    <td>{item.instansi}</td>
-                    <td>{item.kelas}</td>
-                    <td>{item.tanggalRegistrasi}</td>
-                    <td>{item.kodeRegistrasi}</td>
-                    <td>{item.status}</td>
+                    {/* <td>{item.instansi}</td>
+                    <td>{item.kelas}</td> */}
+                    <td>{item.email_verified_at.slice(0, 10)}</td>
+                    {/* <td>{item.kodeRegistrasi}</td>
+                    <td>{item.status}</td> */}
                     <td>
                       <button
                         className="action-button edit"
@@ -167,12 +206,12 @@ const EditMahasiswa = () => {
               </tbody>
             </table>
             <div className="pagination-container">
-              <div className="pagination-info">
+              {/* <div className="pagination-info">
                 {`Showing ${indexOfFirstItem + 1} to ${Math.min(
                   indexOfLastItem,
                   data.length
                 )} of ${data.length} entries`}
-              </div>
+              </div> */}
 
               <div className="pagination">
                 <button
@@ -182,7 +221,7 @@ const EditMahasiswa = () => {
                 >
                   &lt;
                 </button>
-                {Array.from(
+                {/* {Array.from(
                   { length: Math.ceil(data.length / itemsPerPage) },
                   (_, index) => (
                     <button
@@ -195,17 +234,17 @@ const EditMahasiswa = () => {
                       {index + 1}
                     </button>
                   )
-                )}
+                )} */}
                 <button
-                  className={`page-item ${
-                    currentPage === Math.ceil(data.length / itemsPerPage)
-                      ? "disabled"
-                      : ""
-                  }`}
-                  onClick={() => paginate(currentPage + 1)}
-                  disabled={
-                    currentPage === Math.ceil(data.length / itemsPerPage)
-                  }
+                // className={`page-item ${
+                //   currentPage === Math.ceil(data.length / itemsPerPage)
+                //     ? "disabled"
+                //     : ""
+                // }`}
+                // onClick={() => paginate(currentPage + 1)}
+                // disabled={
+                //   currentPage === Math.ceil(data.length / itemsPerPage)
+                // }
                 >
                   &gt;
                 </button>
