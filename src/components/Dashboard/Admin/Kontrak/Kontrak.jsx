@@ -12,6 +12,8 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 
 import EditKontrak from "./EditKontrak";
+import { useContracts } from "@/hooks/dashboard";
+import { getCookieToken } from "@/service";
 
 const Kontrak = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,23 +22,26 @@ const Kontrak = () => {
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
-  const [cookies, setCookie] = useCookies(["user"]);
+  const [cookies, setCookie] = useCookies([]);
   const [url, setUrl] = useState(RoutesApi.contractAdmin);
   const { toast } = useToast();
 
-  //   const { isLoading, isError, data, error } = useQuery({
-  const { isLoading, isError, data, error, refetch } = useQuery({
-    queryKey: ["contracts", url],
-    queryFn: async () => {
-      const { data } = await axios.get(url, {
-        headers: {
-          Authorization: `Bearer ${cookies.token}`,
-        },
-      });
-      console.log(data.data);
-      return data;
-    },
-  });
+  const { isLoading, isError, data, error, refetch } = useContracts(
+    url,
+    getCookieToken()
+  );
+  // const { isLoading, isError, data, error, refetch } = useQuery({
+  //   queryKey: ["contracts", url],
+  //   queryFn: async () => {
+  //     const { data } = await axios.get(url, {
+  //       headers: {
+  //         Authorization: `Bearer ${cookies.token}`,
+  //       },
+  //     });
+  //     console.log(data.data);
+  //     return data;
+  //   },
+  // });
   const {
     isLoading: isLoadingTask,
     isError: isErrorTask,
