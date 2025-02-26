@@ -112,7 +112,7 @@ const InformasiSaya = () => {
                                                                       </div>
 
                                                                       <div className="w-full overflow-x-auto">
-                                                                                <div className="w-[1058px] overflow-x-auto"> {/* Gunakan min-width agar tabel tidak mengecil */}
+                                                                                <div className="w-[1058px] overflow-x-auto">
                                                                                           <table className="table-auto border border-gray-300 w-full">
                                                                                                     <thead className="bg-purple-700 text-white">
                                                                                                               <tr>
