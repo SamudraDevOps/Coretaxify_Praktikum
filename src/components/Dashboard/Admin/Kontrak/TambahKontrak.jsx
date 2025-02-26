@@ -355,11 +355,14 @@ const TambahKontrak = ({
 
         <div className="kontrak-popup-actions">
           <button className="kontrak-save-button" onClick={handleSave}>
-            Simpan
+            {mutation.status == "pending" ? <p>Loading...</p> : <>Simpan</>}
           </button>
           <button className="kontrak-cancel-button" onClick={onClose}>
             Batal
           </button>
+        </div>
+        <div className="text-xs  mt-2 text-red-700">
+          {mutation.isError && mutation.error.response.data.message}
         </div>
       </div>
     </div>

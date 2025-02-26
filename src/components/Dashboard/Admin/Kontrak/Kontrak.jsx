@@ -8,6 +8,8 @@ import { RoutesApi } from "@/Routes";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import ClipLoader from "react-spinners/ClipLoader";
 import { useToast } from "@/hooks/use-toast";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
 
 import EditKontrak from "./EditKontrak";
 
@@ -23,7 +25,7 @@ const Kontrak = () => {
   const { toast } = useToast();
 
   //   const { isLoading, isError, data, error } = useQuery({
-  const { isLoading, isError, data, error } = useQuery({
+  const { isLoading, isError, data, error, refetch } = useQuery({
     queryKey: ["contracts", url],
     queryFn: async () => {
       const { data } = await axios.get(url, {
@@ -96,16 +98,20 @@ const Kontrak = () => {
     },
     onSuccess: (data) => {
       console.log(data);
-      const role = data.data.user.roles[0].name;
-      setCookie("token", data.data.token, { path: "/" });
-      setCookie("role", role, { path: "/" });
+      // const role = data.data.user.roles[0].name;
+      // setCookie("token", data.data.token, { path: "/" });
+      // setCookie("role", role, { path: "/" });
+      Swal.fire("Berhasil!", "Kelas berhasil dihapus!", "success");
 
       window.location.href = "/" + role;
       // alert("Login successful!");
       // queryClient.invalidateQueries({ queryKey: ["todos"] });
     },
+
     onError: (error) => {
+      console.log("hello!");
       console.log(error);
+      Swal.fire("Gagal !", error.message, "error");
     },
   });
 
@@ -150,9 +156,63 @@ const Kontrak = () => {
     );
   }
 
+  if (isError || isErrorTask || isErrorUni) {
+    {
+      console.log(error);
+    }
+    return (
+      <div className="h-screen w-full justify-center items-center flex ">
+        <Alert variant="destructive" className="w-1/2 bg-white ">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>Error !</AlertTitle>
+          <div className="">
+            <p>{error?.message ?? "error !"}</p>
+            {/* <p>{!error.message ? error.message : "Error ! "}</p> */}
+            <div className="w-full flex justify-end">
+              <button
+                className="bg-green-500 p-2 rounded-md text-white"
+                onClick={() => refetch()}
+              >
+                Ulangi
+              </button>
+            </div>
+          </div>
+          {/* <AlertDescription>
+            {error.message}</AlertDescription> */}
+        </Alert>
+      </div>
+    );
+  }
+  // if (data == null || data == undefined) {
+  //   {
+  //     console.log(error);
+  //   }
+  //   return (
+  //     <div className="h-screen w-full justify-center items-center flex ">
+  //       <Alert variant="destructive" className="w-1/2 bg-white ">
+  //         <AlertCircle className="h-4 w-4" />
+  //         <AlertTitle>Error !</AlertTitle>
+  //         <div className="">
+  //           <p>{error.message}</p>
+  //           <div className="w-full flex justify-end">
+  //             <button
+  //               className="bg-green-500 p-2 rounded-md text-white"
+  //               onClick={() => refetch()}
+  //             >
+  //               Ulangi
+  //             </button>
+  //           </div>
+  //         </div>
+  //         {/* <AlertDescription>
+  //           {error.message}</AlertDescription> */}
+  //       </Alert>
+  //     </div>
+  //   );
+  // }
+
   return (
     <div className="kontrak-container">
-      <div className="header-kontrak">
+      <div className="header-kontrak ">
         <h2>Data Kontrak Instansi</h2>
         {/* <button
           onClick={() => {
@@ -253,16 +313,15 @@ const Kontrak = () => {
                           //       itemData.kodePembelian !== item.kodePembelian
                           //   );
                           //   setData(newData);
-                          Swal.fire(
-                            "Berhasil!",
-                            "Kelas berhasil dihapus!",
-                            "success"
-                          );
                         }
                       });
                     }}
                   >
-                    Delete
+                    {mutation.status == "pending" ? (
+                      <p>Loading...</p>
+                    ) : (
+                      <>Delete</>
+                    )}
                   </button>
                 </td>
               </tr>
