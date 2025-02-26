@@ -12,8 +12,8 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 
 import EditKontrak from "./EditKontrak";
-import { useContracts } from "@/hooks/dashboard";
-import { getCookieToken } from "@/service";
+import { deleteContract, getContracts, testAlert } from "@/hooks/dashboard";
+import { getCookie, getCookieToken } from "@/service";
 
 const Kontrak = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -26,7 +26,7 @@ const Kontrak = () => {
   const [url, setUrl] = useState(RoutesApi.contractAdmin);
   const { toast } = useToast();
 
-  const { isLoading, isError, data, error, refetch } = useContracts(
+  const { isLoading, isError, data, error, refetch } = getContracts(
     url,
     getCookieToken()
   );
@@ -77,48 +77,50 @@ const Kontrak = () => {
     },
   });
 
-  const mutation = useMutation({
-    mutationFn: async (id) => {
-      console.log("button clicked");
-      // const { response } = await axios.post(RoutesApi.login, {
-      const response = await axios.get(`${RoutesApi.url}api/csrf-token`, {
-        // withCredentials: true,
-        headers: {
-          "X-Requested-With": "XMLHttpRequest",
-          Accept: "application/json",
-        },
-      });
-      console.log(response.data.token);
-      axios.defaults.headers.common["X-CSRF-TOKEN"] = response.data.token;
-      console.log(cookies.token);
-      const data = await axios.delete(RoutesApi.contractAdmin + `/${id}`, {
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          "X-CSRF-TOKEN": response.data.token,
-          Authorization: `Bearer ${cookies.token}`,
-        },
-      });
-      return data;
-    },
-    onSuccess: (data) => {
-      console.log(data);
-      // const role = data.data.user.roles[0].name;
-      // setCookie("token", data.data.token, { path: "/" });
-      // setCookie("role", role, { path: "/" });
-      Swal.fire("Berhasil!", "Kelas berhasil dihapus!", "success");
+  // const mutation = useMutation({
+  //   mutationFn: async (id) => {
+  //     console.log("button clicked");
+  //     // const { response } = await axios.post(RoutesApi.login, {
+  //     const response = await axios.get(`${RoutesApi.url}api/csrf-token`, {
+  //       // withCredentials: true,
+  //       headers: {
+  //         "X-Requested-With": "XMLHttpRequest",
+  //         Accept: "application/json",
+  //       },
+  //     });
+  //     console.log(response.data.token);
+  //     axios.defaults.headers.common["X-CSRF-TOKEN"] = response.data.token;
+  //     console.log(cookies.token);
+  //     const data = await axios.delete(RoutesApi.contractAdmin + `/${id}`, {
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Accept: "application/json",
+  //         "X-CSRF-TOKEN": response.data.token,
+  //         Authorization: `Bearer ${cookies.token}`,
+  //       },
+  //     });
+  //     return data;
+  //   },
+  //   onSuccess: (data) => {
+  //     console.log(data);
+  //     // const role = data.data.user.roles[0].name;
+  //     // setCookie("token", data.data.token, { path: "/" });
+  //     // setCookie("role", role, { path: "/" });
+  //     Swal.fire("Berhasil!", "Kelas berhasil dihapus!", "success");
 
-      window.location.href = "/" + role;
-      // alert("Login successful!");
-      // queryClient.invalidateQueries({ queryKey: ["todos"] });
-    },
+  //     window.location.href = "/" + role;
+  //     // alert("Login successful!");
+  //     // queryClient.invalidateQueries({ queryKey: ["todos"] });
+  //   },
 
-    onError: (error) => {
-      console.log("hello!");
-      console.log(error);
-      Swal.fire("Gagal !", error.message, "error");
-    },
-  });
+  //   onError: (error) => {
+  //     console.log("hello!");
+  //     console.log(error);
+  //     Swal.fire("Gagal !", error.message, "error");
+  //   },
+  // });
+
+  const mutation = deleteContract(getCookie());
 
   const handleData = (newData) => {
     setData([...data, newData]);
@@ -219,6 +221,7 @@ const Kontrak = () => {
     <div className="kontrak-container">
       <div className="header-kontrak ">
         <h2>Data Kontrak Instansi</h2>
+        {/* <button onClick={() => testAlert()}>Test</button> */}
         {/* <button
           onClick={() => {
             toast({
