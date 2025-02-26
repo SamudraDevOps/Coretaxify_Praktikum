@@ -29,6 +29,8 @@ import {
   MenubarTrigger,
 } from "@/components/ui/menubar";
 import { HiDotsVertical } from "react-icons/hi";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
 
 export default function DosenKelas() {
   const [isOpen, setIsOpen] = useState(false);
@@ -41,7 +43,7 @@ export default function DosenKelas() {
   const [cookies, setCookie] = useCookies(["user"]);
   const [filePreview, setFilePreview] = useState(null);
 
-  const { isLoading, isError, data, error } = useQuery({
+  const { isLoading, isError, data, error, refetch } = useQuery({
     queryKey: ["kelas_dosen", url],
     queryFn: async () => {
       const { data } = await axios.get(url, {
@@ -249,8 +251,17 @@ export default function DosenKelas() {
       console.log(data);
       Swal.fire("Berhasil!", "Operasi berhasil dilakukan!", "success");
     },
-    onError: (error) => {
-      console.log(error);
+    onError: (error, action) => {
+      console.log(action);
+      console.log(error.response);
+      if (error.response == undefined) {
+        Swal.fire("Gagal !", error.message, "error");
+        return;
+      }
+
+      Swal.fire("Gagal !", error.response.data.message, "error");
+
+      // if(ac)
     },
   });
 
@@ -262,6 +273,34 @@ export default function DosenKelas() {
         <ClipLoader color="#7502B5" size={50} />
       </div>
       // <div className="h-full w-full text-2xl italic font-bold text-center flex items-center justify-center">Loading...</div>
+    );
+  }
+
+  if (isError) {
+    {
+      console.log(error);
+    }
+    return (
+      <div className="h-screen w-full justify-center items-center flex ">
+        <Alert variant="destructive" className="w-1/2 bg-white ">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>Error !</AlertTitle>
+          <div className="">
+            <p>{error?.message ?? "error !"}</p>
+            {/* <p>{!error.message ? error.message : "Error ! "}</p> */}
+            <div className="w-full flex justify-end">
+              <button
+                className="bg-green-500 p-2 rounded-md text-white"
+                onClick={() => refetch()}
+              >
+                Ulangi
+              </button>
+            </div>
+          </div>
+          {/* <AlertDescription>
+            {error.message}</AlertDescription> */}
+        </Alert>
+      </div>
     );
   }
 
@@ -391,11 +430,6 @@ export default function DosenKelas() {
                                   id: item.id,
                                   action: "delete",
                                 });
-                                Swal.fire(
-                                  "Berhasil!",
-                                  "Kelas berhasil dihapus!",
-                                  "success"
-                                );
                               }
                             });
                           }}
@@ -837,9 +871,12 @@ export default function DosenKelas() {
               className="bg-green-600"
               onClick={() => mutation.mutate(0, "")}
             >
-              Simpan
+              {mutation.status == "pending" ? <p>Loading...</p> : <>Simpan</>}
             </AlertDialogAction>
           </AlertDialogFooter>
+          <div className="text-xs  mt-2 text-red-700">
+            {mutation.isError && mutation.error.response?.data.message}
+          </div>
         </AlertDialogContent>
       </AlertDialog>
     </div>
