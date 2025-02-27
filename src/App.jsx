@@ -43,6 +43,8 @@ import UjianPsc from "./components/Dashboard/AdminPsc/Pengguna/Praktikum/UjianPs
 import EditMahasiswaPsc from "./components/Dashboard/AdminPsc/Pengguna/Mahasiswa/EditMahasiswaPsc";
 import Header from "./components/Header/Header";
 import Home from "./components/Header/Home";
+import CoretaxifyList from "./components/Dashboard/Admin/Coretaxify/CoretaxifyList";
+import CoretaxifySendDetail from "./components/Dashboard/Admin/Coretaxify/CoretaxifySendDetail";
 //Route Praktikum
 import DokumenSaya from "./components/PraktikumPage/PortalSaya/DokumenSaya";
 import NotifikasiSaya from "./components/PraktikumPage/PortalSaya/NotifikasiSaya";
@@ -115,6 +117,19 @@ const Main = () => {
           }
         />
         <Route
+          path="/admin/coretaxify"
+          element={
+            <ProtectedRoutes>
+              <div className="admin-layout">
+                <SidebarAdmin />
+                <div className="admin-content">
+                  <CoretaxifyList />
+                </div>
+              </div>
+            </ProtectedRoutes>
+          }
+        />
+        <Route
           path="/admin/edit-dosen"
           element={
             <ProtectedRoutes>
@@ -141,12 +156,27 @@ const Main = () => {
         <Route
           path="/admin/praktikum"
           element={
+            <ProtectedRoutes>
             <div className="admin-layout">
               <SidebarAdmin />
               <div className="admin-content">
                 <Praktikum></Praktikum>
               </div>
             </div>
+            </ProtectedRoutes>
+          }
+        />
+        <Route
+          path="/admin/coretaxify/coretaxify-send"
+          element={
+            <ProtectedRoutes>
+            <div className="admin-layout">
+              <SidebarAdmin />
+              <div className="admin-content">
+                <CoretaxifySendDetail></CoretaxifySendDetail>
+              </div>
+            </div>
+            </ProtectedRoutes>
           }
         />
         <Route
