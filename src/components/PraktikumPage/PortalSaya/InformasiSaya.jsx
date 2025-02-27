@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import SidebarProfilSaya from './SidebarProfilSaya';
 import { BsFiletypeXls } from "react-icons/bs";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Link } from "react-router-dom";
 
 const InformasiSaya = () => {
           const [activeTab, setActiveTab] = useState("general");
@@ -11,7 +12,7 @@ const InformasiSaya = () => {
                               <main className="flex-auto p-3 bg-white rounded-md h-full">
                                         <div className="flex justify-between items-center mb-6">
                                                   <h2 className="text-2xl font-semibold">Informasi Umum Wajib Pajak</h2>
-                                                  <button className="px-4 py-2 bg-yellow-300 text-blue-900 rounded-md">
+                                                  <button className="px-4 py-2 bg-yellow-300 text-blue-900 rounded-md" onClick={() => window.location.href = "/admin/praktikum/informasi-umum/edit-data-profil"}>
                                                             Edit
                                                   </button>
                                         </div>
@@ -112,7 +113,7 @@ const InformasiSaya = () => {
                                                                       </div>
 
                                                                       <div className="w-full overflow-x-auto">
-                                                                                <div className="w-[1058px] overflow-x-auto">
+                                                                                <div className="min-w-full overflow-x-auto">
                                                                                           <table className="table-auto border border-gray-300 w-full">
                                                                                                     <thead className="bg-purple-700 text-white">
                                                                                                               <tr>
