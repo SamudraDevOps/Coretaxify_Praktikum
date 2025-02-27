@@ -7,6 +7,8 @@ import axios from "axios";
 import { RoutesApi } from "@/Routes";
 import { ClipLoader } from "react-spinners";
 import { useCookies } from "react-cookie";
+import { deleteMahasiswa, getMahasiswa } from "@/hooks/dashboard/useMahasiswa";
+import { getCookie } from "@/service";
 
 const EditMahasiswa = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -15,24 +17,10 @@ const EditMahasiswa = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [cookies, setCookie] = useCookies(["user"]);
   const itemsPerPage = 10;
+  const [url, setUrl] = useState(RoutesApi.getUserAdmin.url);
 
-  const { isLoading, isError, data, error } = useQuery({
-    queryKey: ["mahasiswa"],
-    queryFn: async () => {
-      const { data } = await axios.get(RoutesApi.getUserAdmin.url, {
-        params: {
-          intent: RoutesApi.getUserAdmin.intent.mahasiswa,
-        },
-        headers: {
-          Authorization: `Bearer ${cookies.token}`,
-        },
-      });
-      console.log("hi");
-      console.log(data.data);
-      return data;
-    },
-  });
-
+  const { isLoading, isError, data, error } = getMahasiswa(url, getCookie());
+  const mutation = deleteMahasiswa(getCookie());
   // const [data, setData] = useState([
   //   {
   //     namaMahasiswa: "Hendra",
@@ -184,16 +172,17 @@ const EditMahasiswa = () => {
                             cancelButtonText: "Batal",
                           }).then((result) => {
                             if (result.isConfirmed) {
-                              setData(
-                                data.filter(
-                                  (itemData) => itemData.id !== item.id
-                                )
-                              );
-                              Swal.fire(
-                                "Berhasil!",
-                                "Data mahasiswa berhasil dihapus!",
-                                "success"
-                              );
+                              mutation.mutate(item.id);
+                              // setData(
+                              //   data.filter(
+                              //     (itemData) => itemData.id !== item.id
+                              //   )
+                              // );
+                              // Swal.fire(
+                              //   "Berhasil!",
+                              //   "Data mahasiswa berhasil dihapus!",
+                              //   "success"
+                              // );
                             }
                           });
                         }}
@@ -206,45 +195,40 @@ const EditMahasiswa = () => {
               </tbody>
             </table>
             <div className="pagination-container">
-              {/* <div className="pagination-info">
+              <div className="pagination-info">
                 {`Showing ${indexOfFirstItem + 1} to ${Math.min(
                   indexOfLastItem,
                   data.length
                 )} of ${data.length} entries`}
-              </div> */}
+              </div>
 
               <div className="pagination">
                 <button
-                  className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
-                  onClick={() => paginate(currentPage - 1)}
-                  disabled={currentPage === 1}
+                  className={`page-item`}
+                  onClick={() => {
+                    setUrl(data.links.prev);
+                  }}
+                  disabled={data.meta.current_page === 1}
                 >
                   &lt;
                 </button>
-                {/* {Array.from(
-                  { length: Math.ceil(data.length / itemsPerPage) },
-                  (_, index) => (
-                    <button
-                      key={index + 1}
-                      className={`page-item ${
-                        currentPage === index + 1 ? "active" : ""
-                      }`}
-                      onClick={() => paginate(index + 1)}
-                    >
-                      {index + 1}
-                    </button>
-                  )
-                )} */}
+                <button className="page-item">{data.meta.current_page}</button>
+                {/* {Array.from({ length: Math.ceil(data.length / itemsPerPage) }, (_, index) => (
+                            <button key={index + 1} className={`page-item ${currentPage === index + 1 ? "active" : ""}`} onClick={() => paginate(index + 1)}>
+                                {index + 1}
+                            </button>
+                        ))} */}
                 <button
-                // className={`page-item ${
-                //   currentPage === Math.ceil(data.length / itemsPerPage)
-                //     ? "disabled"
-                //     : ""
-                // }`}
-                // onClick={() => paginate(currentPage + 1)}
-                // disabled={
-                //   currentPage === Math.ceil(data.length / itemsPerPage)
-                // }
+                  className={`page-item ${
+                    currentPage === Math.ceil(data.length / itemsPerPage)
+                      ? "disabled"
+                      : ""
+                  }`}
+                  onClick={() => {
+                    console.log(data.links.next);
+                    setUrl(data.links.next);
+                  }}
+                  disabled={data.links.next == null}
                 >
                   &gt;
                 </button>
