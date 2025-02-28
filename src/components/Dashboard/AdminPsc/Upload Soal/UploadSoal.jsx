@@ -107,6 +107,9 @@ export default function UploadSoalPsc() {
             "X-CSRF-TOKEN": response.data.token,
             Authorization: `Bearer ${cookies.token}`,
           },
+          params: {
+            _method: "PUT",
+          },
         }
       );
       return data;
@@ -341,7 +344,10 @@ export default function UploadSoalPsc() {
                 </td>
                 <td>
                   <AlertDialog>
-                    <AlertDialogTrigger className="action-button edit">
+                    <AlertDialogTrigger
+                      // onClick={() => mutationEdit(item.id)}
+                      className="action-button edit"
+                    >
                       Edit
                     </AlertDialogTrigger>
                     <AlertDialogContent>
@@ -383,7 +389,8 @@ export default function UploadSoalPsc() {
                           Kembali
                         </AlertDialogCancel>
                         <AlertDialogAction
-                          onClick={() => mutation.mutate(item.id)}
+                          // onClick={() => console.log("Hi !")}
+                          onClick={() => mutationEdit.mutate(item.id)}
                           className="bg-green-600 "
                         >
                           Simpan
