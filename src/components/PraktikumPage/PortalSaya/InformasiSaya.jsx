@@ -112,8 +112,8 @@ const InformasiSaya = () => {
                                                                                 </button>
                                                                       </div>
 
-                                                                      <div className="w-full overflow-x-auto">
-                                                                                <div className="min-w-full overflow-x-auto">
+                                                                      <div className="w-[1050px]">
+                                                                                <div className="w-[100%] overflow-x-auto">
                                                                                           <table className="table-auto border border-gray-300 w-full">
                                                                                                     <thead className="bg-purple-700 text-white">
                                                                                                               <tr>
