@@ -22,7 +22,7 @@ import { RoutesApi } from "@/Routes";
 import { ClipLoader } from "react-spinners";
 import { useParams } from "react-router";
 
-export default function DosenPraktikumKelas() {
+export default function DosenPraktikumKelasMember() {
   const [isOpen, setIsOpen] = useState(false);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
   const [selectedData, setSelectedData] = useState(null);
@@ -35,15 +35,18 @@ export default function DosenPraktikumKelas() {
   const { isLoading, isError, data, error } = useQuery({
     queryKey: ["praktikum", url],
     queryFn: async () => {
-      const { data } = await axios.get(url + `/${id}`, {
-        headers: {
-          Authorization: `Bearer ${cookies.token}`,
-          Accept: "application/json",
-        },
-        // params: {
-        //   intent: RoutesApi.classGroup.intent,
-        // },
-      });
+      const { data } = await axios.get(
+        url + `/${id}/assignments/${idpraktikum}/members`,
+        {
+          headers: {
+            Authorization: `Bearer ${cookies.token}`,
+            Accept: "application/json",
+          },
+          // params: {
+          //   intent: RoutesApi.classGroup.intent,
+          // },
+        }
+      );
       console.log(data);
       return data;
     },
@@ -149,7 +152,8 @@ export default function DosenPraktikumKelas() {
     },
   });
 
-  let { id } = useParams();
+  let { id, idpraktikum } = useParams();
+  console.log("id", id, idpraktikum);
 
   if (isLoading) {
     return (
@@ -220,7 +224,7 @@ export default function DosenPraktikumKelas() {
           <thead>
             <tr>
               <th
-                className="max-w-5"
+                className="w-[2rem]"
                 onClick={() => handleSort("namaPraktikum")}
               >
                 Nomor{" "}
@@ -232,38 +236,20 @@ export default function DosenPraktikumKelas() {
                   ? "↓"
                   : "↑"}
               </th>
-              <th className="">Nama Praktikum </th>
-              <th className="">Kode Praktikum </th>
-              <th className="">Deadline </th>
-              <th className="">Supporting File</th>
-              <th className="">Aksi</th>
-              <th></th>
+              <th className="w-[2rem] !px-0">Nama Mahasiswa </th>
+              <th className="w-[2rem]">NIM </th>
+              <th className="w-[2rem]">Email </th>
+              <th className="w-[2rem]">Aksi</th>
             </tr>
           </thead>
           <tbody>
-            {data.data.assignments.map((item, index) => (
+            {data.data.users.map((item, index) => (
               <tr key={index}>
                 <td className="max-w-5">{index + 1}</td>
                 <td>{item.name}</td>
-                <td>{item.assignment_code}</td>
-                <td>{item.end_period}</td>
+                <td></td>
+                <td>{item.email}</td>
                 <td>
-                  {/* <a href="/google">tes</a> */}
-                  <a href={item.supporting_file}>Download File</a>
-                </td>
-                <td className="max-w-5">
-                  <p className="truncate">{item.supporting_file}</p>
-                </td>
-                <td>
-                  <button
-                    className="action-button"
-                    onClick={() => {
-                      // setIdEdit(item.id);
-                      // setIsOpenEdit(true);
-                    }}
-                  >
-                    Edit
-                  </button>
                   <button
                     className="action-button delete"
                     onClick={() => {
@@ -277,12 +263,6 @@ export default function DosenPraktikumKelas() {
                       }).then((result) => {
                         if (result.isConfirmed) {
                           mutation.mutate(item.id);
-                          //   window.location.reload();
-                          //   const newData = data.filter(
-                          //     (itemData) =>
-                          //       itemData.kodePembelian !== item.kodePembelian
-                          //   );
-                          //   setData(newData);
                         }
                       });
                     }}
@@ -293,21 +273,9 @@ export default function DosenPraktikumKelas() {
                       <>Delete</>
                     )}
                   </button>
-                  <button
-                    className="action-button"
-                    onClick={() => {
-                      window.location.href = `/dosen/kelas/${data.data.id}/praktikum/${item.id}`;
-                    }}
-                  >
-                    Detail
-                  </button>
                 </td>
-                {/* <td>
-                  <button className="action-button">Mulai</button>
-                </td> */}
               </tr>
             ))}
-            {/* {id} */}
           </tbody>
         </table>
         <div className="pagination-container">

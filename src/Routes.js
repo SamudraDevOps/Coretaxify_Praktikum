@@ -34,6 +34,9 @@ export const RoutesApi = {
     url: url + `api/${role.lecturer}/groups`,
     intent: "api.get.group.with.assignments",
   },
+  // classGroupPraktikumMember:{
+  //   url: url + `api/${role.lecturer}/groups`,
+  // },
   // classStudent:
   getAdmin: {
     url: url + `api/${role.admin}/users`,

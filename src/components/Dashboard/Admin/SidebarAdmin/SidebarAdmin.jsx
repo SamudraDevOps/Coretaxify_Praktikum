@@ -180,8 +180,8 @@ const SidebarAdmin = () => {
           className={cookies.role == "psc" ? "!hidden " : `menu-item`}
           // className={`menu-item`}
           onClick={() => {
-            if (cookies.role == "admin") {
-              window.location.href = "/admin/coretaxify";
+            if (cookies.role == "admin" || cookies.role == "dosen") {
+              window.location.href = `/${cookies.role}/coretaxify`;
             } else {
               window.location.href = `/${cookies.role}/praktikum`;
             }
@@ -189,7 +189,11 @@ const SidebarAdmin = () => {
         >
           <FaLaptopCode className="menu-icon" />
           {isOpen && (
-            <span>{cookies.role == "admin" ? "Coretaxify" : "Praktikum"}</span>
+            <span>
+              {cookies.role == "admin" || cookies.role == "dosen"
+                ? "Coretaxify"
+                : "Praktikum"}
+            </span>
           )}
         </li>
         <li

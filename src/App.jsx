@@ -60,6 +60,7 @@ import UploadSoalPsc from "./components/Dashboard/AdminPsc/Upload Soal/UploadSoa
 import EditMahasiswaPscKelas from "./components/Dashboard/AdminPsc/Pengguna/Kelas/Mahasiswa/EditMahasiswaPscKelas";
 import DosenPraktikumKelas from "./components/Dashboard/Dosen/Kelas/DosenPraktikumKelas";
 import { CookiesProvider, useCookies } from "react-cookie";
+import DosenPraktikumKelasMember from "./components/Dashboard/Dosen/Kelas/DosenPraktikumKelasMember";
 
 const Main = () => {
   const [loading, setLoading] = useState(true);
@@ -158,12 +159,12 @@ const Main = () => {
           path="/admin/praktikum"
           element={
             <ProtectedRoutes>
-            <div className="admin-layout">
-              <SidebarAdmin />
-              <div className="admin-content">
-                <Praktikum></Praktikum>
+              <div className="admin-layout">
+                <SidebarAdmin />
+                <div className="admin-content">
+                  <Praktikum></Praktikum>
+                </div>
               </div>
-            </div>
             </ProtectedRoutes>
           }
         />
@@ -171,12 +172,12 @@ const Main = () => {
           path="/admin/coretaxify/coretaxify-send"
           element={
             <ProtectedRoutes>
-            <div className="admin-layout">
-              <SidebarAdmin />
-              <div className="admin-content">
-                <CoretaxifySendDetail></CoretaxifySendDetail>
+              <div className="admin-layout">
+                <SidebarAdmin />
+                <div className="admin-content">
+                  <CoretaxifySendDetail></CoretaxifySendDetail>
+                </div>
               </div>
-            </div>
             </ProtectedRoutes>
           }
         />
@@ -309,6 +310,18 @@ const Main = () => {
               <SidebarAdmin />
               <div className="admin-content">
                 <DosenPraktikumKelas></DosenPraktikumKelas>
+                {/* <DosenCardKelas></DosenCardKelas> */}
+              </div>
+            </div>
+          }
+        />
+        <Route
+          path="/dosen/kelas/:id/praktikum/:idpraktikum"
+          element={
+            <div className="admin-layout">
+              <SidebarAdmin />
+              <div className="admin-content">
+                <DosenPraktikumKelasMember></DosenPraktikumKelasMember>
                 {/* <DosenCardKelas></DosenCardKelas> */}
               </div>
             </div>
