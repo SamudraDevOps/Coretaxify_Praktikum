@@ -47,6 +47,7 @@ export default function DosenPraktikumKelasMember() {
           // },
         }
       );
+      console.log(url + `/${id}/assignments/${idpraktikum}/members`);
       console.log(data);
       return data;
     },
@@ -243,7 +244,7 @@ export default function DosenPraktikumKelasMember() {
             </tr>
           </thead>
           <tbody>
-            {data.data.users.map((item, index) => (
+            {data.data.map((item, index) => (
               <tr key={index}>
                 <td className="max-w-5">{index + 1}</td>
                 <td>{item.name}</td>

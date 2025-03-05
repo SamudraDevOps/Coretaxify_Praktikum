@@ -21,6 +21,13 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { RoutesApi } from "@/Routes";
 import { ClipLoader } from "react-spinners";
 import { useParams } from "react-router";
+import { FaFile } from "react-icons/fa";
+import {
+  createPraktikumDosen,
+  getDosenPraktikumKelas,
+  getTaskContract,
+} from "@/hooks/dashboard";
+import { getCookie } from "@/service";
 
 export default function DosenPraktikumKelas() {
   const [isOpen, setIsOpen] = useState(false);
@@ -31,24 +38,20 @@ export default function DosenPraktikumKelas() {
   const [cookies, setCookie] = useCookies(["user"]);
   const [url, setUrl] = useState(RoutesApi.classGroup.url);
   const [filePreview, setFilePreview] = useState(null);
-
-  const { isLoading, isError, data, error } = useQuery({
-    queryKey: ["praktikum", url],
-    queryFn: async () => {
-      const { data } = await axios.get(url + `/${id}`, {
-        headers: {
-          Authorization: `Bearer ${cookies.token}`,
-          Accept: "application/json",
-        },
-        // params: {
-        //   intent: RoutesApi.classGroup.intent,
-        // },
-      });
-      console.log(data);
-      return data;
-    },
+  const [formData, setFormData] = useState({
+    name: "",
+    // assignment_code: "",
+    task_id: "",
+    start_period: "",
+    end_period: "",
   });
+  let { id } = useParams();
 
+  const { isLoading, isError, data, error } = getDosenPraktikumKelas(
+    url,
+    id,
+    getCookie()
+  );
   const handleSort = (key) => {
     let direction = "ascending";
     if (sortConfig.key === key && sortConfig.direction === "ascending") {
@@ -79,9 +82,9 @@ export default function DosenPraktikumKelas() {
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  const [formData, setFormData] = useState({
-    assignment_code: "",
-  });
+  // const [formData, setFormData] = useState({
+  //   assignment_code: "",
+  // });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -95,6 +98,8 @@ export default function DosenPraktikumKelas() {
   const [file, setFile] = useState();
   function handleChangeFile(e) {
     console.log(e.target.files);
+
+    setFilePreview(URL.createObjectURL(e.target.files[0]));
     setFile(URL.createObjectURL(e.target.files[0]));
   }
   const [search, setSearch] = useState("");
@@ -107,51 +112,13 @@ export default function DosenPraktikumKelas() {
   //       String(value).toLowerCase().includes(search.toLowerCase())
   //     ),
   // }));
-  const mutation = useMutation({
-    mutationFn: async (id) => {
-      console.log("button clicked");
-      // const { response } = await axios.post(RoutesApi.login, {
-      const response = await axios.get(`${RoutesApi.url}api/csrf-token`, {
-        // withCredentials: true,
-        headers: {
-          "X-Requested-With": "XMLHttpRequest",
-          Accept: "application/json",
-        },
-      });
-      console.log(response.data.token);
-      axios.defaults.headers.common["X-CSRF-TOKEN"] = response.data.token;
-      console.log(cookies.token);
-      const data = await axios.post(
-        RoutesApi.assignmentStudent.url,
-        {
-          assignment_code: formData.assignment_code,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            "X-CSRF-TOKEN": response.data.token,
-            Authorization: `Bearer ${cookies.token}`,
-          },
-          params: {
-            intent: RoutesApi.assignmentStudent.intent,
-          },
-        }
-      );
-      return data;
-    },
-    onSuccess: (data) => {
-      console.log(data);
-      // window.location.reload();
-    },
-    onError: (error) => {
-      console.log(error);
-    },
-  });
+  const taskData = getTaskContract(RoutesApi.tasksContract, getCookie());
+  const mutation = createPraktikumDosen(getCookie(), id, formData, file);
+  if (isError) {
+    return <div>Error: {error.message}</div>;
+  }
 
-  let { id } = useParams();
-
-  if (isLoading) {
+  if (isLoading || taskData.isLoading) {
     return (
       <div className="loading">
         <ClipLoader color="#7502B5" size={50} />
@@ -160,6 +127,7 @@ export default function DosenPraktikumKelas() {
     );
   }
 
+  console.log(taskData.data);
   return (
     <div className="kontrak-container">
       {/* {id} */}
@@ -183,33 +151,133 @@ export default function DosenPraktikumKelas() {
           />
         </div>
         <AlertDialog>
-          <AlertDialogTrigger className="bg-blue-800 p-2 rounded-md text-white hover:bg-blue-900">
-            Ikuti Praktikum
-          </AlertDialogTrigger>
-          <AlertDialogContent className="w-full ">
-            <AlertDialogHeader>
-              <AlertDialogTitle>Ikuti Praktikum</AlertDialogTitle>
-              {/* <AlertDialogDescription>
-                This action cannot be undone. This will permanently delete your
-                account and remove your data from our servers.
-              </AlertDialogDescription> */}
-            </AlertDialogHeader>
-            <div>
-              <div className="edit-form-group-mahasiswa ">
-                <label>Kode Praktikum:</label>
-                <input
-                  type="text"
-                  name="assignment_code"
-                  value={formData.assignment_code}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
+          <AlertDialogTrigger>
+            <div className="bg-blue-800 p-2 rounded-lg text-white">
+              + Tambah Praktikum
             </div>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Tambah Praktikum</AlertDialogTitle>
+              <AlertDialogDescription className="w-full">
+                <div className=" h-96 overflow-scroll">
+                  <form>
+                    <div className="edit-form-group-mahasiswa ">
+                      <label>Judul Praktikum:</label>
+                      <input
+                        type="text"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleChange}
+                        required
+                      />
+                    </div>
+                    {/* <div className="edit-form-group-mahasiswa">
+                      <label>Kode Praktikum:</label>
+                      <input
+                        className="text-black"
+                        name="assignment_code"
+                        value={formData.assignment_code}
+                        onChange={handleChange}
+                      />
+                    </div> */}
+                    <div className="edit-form-group-mahasiswa">
+                      <label>Soal :</label>
+                      <select name="task_id" onChange={handleChange} id="">
+                        <option value="">Pilih Soal</option>
+                        {taskData.data.map((item) => (
+                          <option key={item.id} value={item.id}>
+                            {item.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="edit-form-group-mahasiswa">
+                      <label>File Support:</label>
+                      <div className="flex items-center justify-center w-full ">
+                        <label
+                          htmlFor="dropzone-file"
+                          className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+                        >
+                          <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                            {filePreview ? (
+                              <>
+                                <div className="grid justify-center items-center p-20">
+                                  <FaFile className="w-8 h-8 text-gray-500 dark:text-gray-400 mb-2" />
+                                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                                    {filePreview.name}
+                                  </p>
+                                </div>
+                              </>
+                            ) : (
+                              <>
+                                <svg
+                                  className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
+                                  aria-hidden="true"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 20 16"
+                                >
+                                  <path
+                                    stroke="currentColor"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth="2"
+                                    d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+                                  />
+                                </svg>
+                                <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                                  <span className="font-semibold">
+                                    Click to upload
+                                  </span>{" "}
+                                  or drag and drop
+                                </p>
+                                <p className="text-xs text-gray-500 dark:text-gray-400">
+                                  ZIP, RAR atau PDF (MAX. 10mb)
+                                </p>
+                              </>
+                            )}
+                          </div>
+
+                          <input
+                            id="dropzone-file"
+                            type="file"
+                            className="hidden"
+                            accept=".zip, .rar, .pdf"
+                            onChange={handleChangeFile}
+                          />
+                        </label>
+                      </div>
+                    </div>
+                    <div className="edit-form-group-mahasiswa">
+                      <label>Tanggal Mulai:</label>
+                      <input
+                        type="date"
+                        name="start_period"
+                        onChange={handleChange}
+                      />
+                    </div>
+                    <div className="edit-form-group-mahasiswa">
+                      <label>Tanggal Selesai:</label>
+                      <input
+                        type="date"
+                        name="end_period"
+                        onChange={handleChange}
+                      />
+                    </div>
+                  </form>
+                </div>
+              </AlertDialogDescription>
+            </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel>Kembali</AlertDialogCancel>
-              <AlertDialogAction onClick={() => mutation.mutate()}>
-                Ikuti Praktikum
+              <AlertDialogCancel className="bg-red-600 text-white">
+                Kembali
+              </AlertDialogCancel>
+              <AlertDialogAction
+                onClick={() => mutation.mutate()}
+                className="bg-green-600"
+              >
+                Simpan
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
@@ -276,7 +344,7 @@ export default function DosenPraktikumKelas() {
                         cancelButtonText: "Batal",
                       }).then((result) => {
                         if (result.isConfirmed) {
-                          mutation.mutate(item.id);
+                          // mutation.mutate(item.id);
                           //   window.location.reload();
                           //   const newData = data.filter(
                           //     (itemData) =>
@@ -287,11 +355,11 @@ export default function DosenPraktikumKelas() {
                       });
                     }}
                   >
-                    {mutation.status == "pending" ? (
+                    {/* {mutation.status == "pending" ? (
                       <p>Loading...</p>
                     ) : (
                       <>Delete</>
-                    )}
+                    )} */}
                   </button>
                   <button
                     className="action-button"

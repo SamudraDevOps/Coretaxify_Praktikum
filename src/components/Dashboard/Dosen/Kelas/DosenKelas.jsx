@@ -129,7 +129,9 @@ export default function DosenKelas() {
   };
 
   const handleReloadCode = () => {
-    setFormData({ ...formData, kodePraktikum: generateRandomCode() });
+    console.log("Reload");
+    setFormData({ ...formData, kodeKelas: generateRandomCode() });
+    // console.log
   };
 
   const handleSort = (key) => {
