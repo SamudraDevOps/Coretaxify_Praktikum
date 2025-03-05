@@ -85,7 +85,7 @@ const EditDataProfil = () => {
                                                             </div>
                                                   </div>
                                         </div>
-                                        <div className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center" onClick={() => setShowInformasiUmum(!showInformasiUmum)}>
+                                        <div className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100" onClick={() => setShowInformasiUmum(!showInformasiUmum)}>
                                                   <h3 className="text-lg font-semibold">Informasi Umum</h3>
                                                   {showInformasiUmum ? <FaChevronUp /> : <FaChevronDown />}
                                         </div>
@@ -193,7 +193,7 @@ const EditDataProfil = () => {
                                                             </div>
                                                   </div>
                                         )}
-                                        <div className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center" onClick={() => setShowDataEkonomi(!showDataEkonomi)}>
+                                        <div className="border rounded-md p-4 bg-gray-100 mb-2 cursor-pointer flex justify-between items-center" onClick={() => setShowDataEkonomi(!showDataEkonomi)}>
                                                   <h3 className="text-lg font-semibold">Data Ekonomi</h3>
                                                   {showDataEkonomi ? <FaChevronUp /> : <FaChevronDown />}
                                         </div>
@@ -242,7 +242,7 @@ const EditDataProfil = () => {
                                                   </div>
                                         )}
                                         <div
-                                                  className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center"
+                                                  className="border bg-gray-100 rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center"
                                                   onClick={() => setShowDetailKontak(!showDetailKontak)}
                                         >
                                                   <h3 className="text-lg font-semibold">Detail Kontak</h3>
@@ -254,7 +254,7 @@ const EditDataProfil = () => {
                                                             <div className="flex justify-between items-center mb-4">
                                                                       <AlertDialog>
                                                                                 <AlertDialogTrigger className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md">+ Tambah Kontak</AlertDialogTrigger>
-                                                                                <AlertDialogContent className="bg-white w-[80%] rounded-lg shadow-lg ">
+                                                                                <AlertDialogContent className="bg-white !min-w-[1000px] rounded-lg shadow-lg ">
                                                                                           <AlertDialogHeader>
                                                                                                     <AlertDialogTitle className="text-xl font-bold">Tambahkan Kontak Wajib Pajak</AlertDialogTitle>
                                                                                           </AlertDialogHeader>
@@ -355,7 +355,7 @@ const EditDataProfil = () => {
 
 
                                         )}
-                                        <div className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center" onClick={() => setShowPihakTerkait(!showPihakTerkait)}>
+                                        <div className="border rounded-md p-4 bg-gray-100 mb-2 cursor-pointer flex justify-between items-center" onClick={() => setShowPihakTerkait(!showPihakTerkait)}>
                                                   <h3 className="text-lg font-semibold">Pihak Terkait</h3>
                                                   {showPihakTerkait ? <FaChevronUp /> : <FaChevronDown />}
                                         </div>
@@ -410,7 +410,7 @@ const EditDataProfil = () => {
                                                                       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                                                                                 <div className="bg-white w-[80%] rounded-lg shadow-lg">
                                                                                           <div className="flex justify-between items-center border-b p-4">
-                                                                                                    <h2 className="text-lg font-bold">Tambahkan Kontak Wajib Pajak</h2>
+                                                                                                    <h2 className="text-lg font-bold">Pilih jenis Pihak Terkait yang akan ditambahkan.</h2>
                                                                                                     <button onClick={closeModal} className="text-gray-500 hover:text-red-500">
                                                                                                               <FaTimes size={20} />
                                                                                                     </button>
@@ -589,7 +589,7 @@ const EditDataProfil = () => {
 
                                                   </div>
                                         )}
-                                        <div className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center" onClick={() => setShowAlamatWajibPajak(!showAlamatWajibPajak)}>
+                                        <div className="border rounded-md p-4 mb-2 bg-gray-100 cursor-pointer flex justify-between items-center" onClick={() => setShowAlamatWajibPajak(!showAlamatWajibPajak)}>
                                                   <h3 className="text-lg font-semibold">Alamat Wajib Pajak</h3>
                                                   {showAlamatWajibPajak ? <FaChevronUp /> : <FaChevronDown />}
                                         </div>
@@ -601,7 +601,7 @@ const EditDataProfil = () => {
                                                             </div>
                                                   </div>
                                         )}
-                                        <div className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center" onClick={() => setShowTempatKegiatanUsaha(!showTempatKegiatanUsaha)}>
+                                        <div className="border rounded-md p-4 mb-2 bg-gray-100 cursor-pointer flex justify-between items-center" onClick={() => setShowTempatKegiatanUsaha(!showTempatKegiatanUsaha)}>
                                                   <h3 className="text-lg font-semibold">Tempat Kegiatan Usaha/Sub Unit</h3>
                                                   {showTempatKegiatanUsaha ? <FaChevronUp /> : <FaChevronDown />}
                                         </div>
@@ -610,7 +610,7 @@ const EditDataProfil = () => {
                                                             <div className="flex justify-between items-center mb-4">
                                                                       <AlertDialog>
                                                                                 <AlertDialogTrigger className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md">+ Tambah</AlertDialogTrigger>
-                                                                                <AlertDialogContent className="bg-white w-[80%] rounded-lg shadow-lg ">
+                                                                                <AlertDialogContent className="bg-white !min-w-[1000px] rounded-lg shadow-lg ">
                                                                                           <AlertDialogHeader>
                                                                                                     <AlertDialogTitle className="text-xl font-bold">Tambahkan Tempat Kegiatan Baru</AlertDialogTitle>
                                                                                           </AlertDialogHeader>
@@ -668,83 +668,85 @@ const EditDataProfil = () => {
 
                                                   </div>
                                         )}
-                                        <div className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center" onClick={() => setShowDetailBank(!showDetailBank)}>
+                                        <div className="border rounded-md p-4 mb-2 cursor-pointer bg-gray-100 flex justify-between items-center" onClick={() => setShowDetailBank(!showDetailBank)}>
                                                   <h3 className="text-lg font-semibold">Detail Bank</h3>
                                                   {showDetailBank ? <FaChevronUp /> : <FaChevronDown />}
                                         </div>
                                         {showDetailBank && (
                                                   <div className="border rounded-md p-4 mb-4">
-                                                            <AlertDialog>
-                                                                      <AlertDialogTrigger className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md">+ Tambah</AlertDialogTrigger>
-                                                                      <AlertDialogContent className="bg-white w-[80%] rounded-lg shadow-lg ">
-                                                                                <AlertDialogHeader>
-                                                                                          <AlertDialogTitle className="text-xl font-bold">Tambahkan Tempat Kegiatan Baru</AlertDialogTitle>
-                                                                                </AlertDialogHeader>
-                                                                                <div className="grid gap-4 overflow-auto h-96">
-                                                                                          <div>
-                                                                                                    <label className="block text-sm font-medium text-gray-700">Bank *</label>
-                                                                                                    <select className="w-full p-2 border rounded">
-                                                                                                              <option value="">Pilih Bank</option>
-                                                                                                              <option value="mandiri">PT BANK MANDIRI (PERSERO) Tbk
-                                                                                                              </option><option value="bca">PT BANK CENTRAL ASIA Tbk</option>
-                                                                                                              <option value="bri">PT BANK RAKYAT INDONESIA (PERSERO) Tbk</option>
-                                                                                                              <option value="bni">PT BANK NEGARA INDONESIA (PERSERO) Tbk</option>
-                                                                                                              <option value="bukopin">PT BANK BUKOPIN Tbk</option>
-                                                                                                              <option value="btpn">PT BANK BTPN Tbk</option>
-                                                                                                              <option value="cimb">PT BANK CIMB NIAGA Tbk</option>
-                                                                                                              <option value="danamon">PT BANK DANAMON Tbk</option>
-                                                                                                              <option value="maybank">PT BANK MAYBANK Tbk</option>
-                                                                                                              <option value="mega">PT BANK MEGA Tbk</option>
-                                                                                                              <option value="permata">PT BANK PERMATA Tbk</option>
-                                                                                                              <option value="panin">PT BANK PANIN Tbk</option>
-                                                                                                              <option value="panin_syariah">PT BANK PANIN SYARIAH Tbk</option>
-                                                                                                              <option value="maybank_syariah">PT BANK MAYBANK SYARIAH Tbk</option>
-                                                                                                              <option value="bsi">PT BANK SYARIAH INDONESIA Tbk</option>
-                                                                                                              <option value="bsi_syariah">PT BANK SYARIAH INDONESIA SYARIAH Tbk</option>
-                                                                                                              <option value="bca_syariah">PT BANK CENTRAL ASIA SYARIAH Tbk</option>
-                                                                                                              <option value="bri_syariah">PT BANK RAKYAT INDONESIA SYARIAH Tbk</option>
-                                                                                                              <option value="bni_syariah">PT BANK NEGARA INDONESIA SYARIAH Tbk</option>
-                                                                                                              <option value="bukopin_syariah">PT BANK BUKOPIN SYARIAH Tbk</option>
-                                                                                                              <option value="btpn_syariah">PT BANK BTPN SYARIAH Tbk</option>
-                                                                                                              <option value="cimb_syariah">PT BANK CIMB NIAGA SYARIAH Tbk</option>
-                                                                                                              <option value="danamon_syariah">PT BANK DANAMON SYARIAH Tbk</option>
-                                                                                                              <option value="maybank_syariah">PT BANK MAYBANK SYARIAH Tbk</option>
+                                                            <div className="flex justify-between items-center mb-4">
+                                                                      <AlertDialog>
+                                                                                <AlertDialogTrigger className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md">+ Tambah</AlertDialogTrigger>
+                                                                                <AlertDialogContent className="bg-white !min-w-[1000px] rounded-lg shadow-lg ">
+                                                                                          <AlertDialogHeader>
+                                                                                                    <AlertDialogTitle className="text-xl font-bold">Tambahkan Tempat Kegiatan Baru</AlertDialogTitle>
+                                                                                          </AlertDialogHeader>
+                                                                                          <div className="grid gap-4 overflow-auto h-96">
+                                                                                                    <div>
+                                                                                                              <label className="block text-sm font-medium text-gray-700">Bank *</label>
+                                                                                                              <select className="w-full p-2 border rounded">
+                                                                                                                        <option value="">Pilih Bank</option>
+                                                                                                                        <option value="mandiri">PT BANK MANDIRI (PERSERO) Tbk
+                                                                                                                        </option><option value="bca">PT BANK CENTRAL ASIA Tbk</option>
+                                                                                                                        <option value="bri">PT BANK RAKYAT INDONESIA (PERSERO) Tbk</option>
+                                                                                                                        <option value="bni">PT BANK NEGARA INDONESIA (PERSERO) Tbk</option>
+                                                                                                                        <option value="bukopin">PT BANK BUKOPIN Tbk</option>
+                                                                                                                        <option value="btpn">PT BANK BTPN Tbk</option>
+                                                                                                                        <option value="cimb">PT BANK CIMB NIAGA Tbk</option>
+                                                                                                                        <option value="danamon">PT BANK DANAMON Tbk</option>
+                                                                                                                        <option value="maybank">PT BANK MAYBANK Tbk</option>
+                                                                                                                        <option value="mega">PT BANK MEGA Tbk</option>
+                                                                                                                        <option value="permata">PT BANK PERMATA Tbk</option>
+                                                                                                                        <option value="panin">PT BANK PANIN Tbk</option>
+                                                                                                                        <option value="panin_syariah">PT BANK PANIN SYARIAH Tbk</option>
+                                                                                                                        <option value="maybank_syariah">PT BANK MAYBANK SYARIAH Tbk</option>
+                                                                                                                        <option value="bsi">PT BANK SYARIAH INDONESIA Tbk</option>
+                                                                                                                        <option value="bsi_syariah">PT BANK SYARIAH INDONESIA SYARIAH Tbk</option>
+                                                                                                                        <option value="bca_syariah">PT BANK CENTRAL ASIA SYARIAH Tbk</option>
+                                                                                                                        <option value="bri_syariah">PT BANK RAKYAT INDONESIA SYARIAH Tbk</option>
+                                                                                                                        <option value="bni_syariah">PT BANK NEGARA INDONESIA SYARIAH Tbk</option>
+                                                                                                                        <option value="bukopin_syariah">PT BANK BUKOPIN SYARIAH Tbk</option>
+                                                                                                                        <option value="btpn_syariah">PT BANK BTPN SYARIAH Tbk</option>
+                                                                                                                        <option value="cimb_syariah">PT BANK CIMB NIAGA SYARIAH Tbk</option>
+                                                                                                                        <option value="danamon_syariah">PT BANK DANAMON SYARIAH Tbk</option>
+                                                                                                                        <option value="maybank_syariah">PT BANK MAYBANK SYARIAH Tbk</option>
 
 
 
 
-                                                                                                    </select>
+                                                                                                              </select>
+                                                                                                    </div>
+                                                                                                    <div>
+                                                                                                              <label className="block text-sm font-medium text-gray-700">Nomor Rekening</label>
+                                                                                                              <input type="text" className="w-full p-2 border rounded" />
+                                                                                                    </div>
+                                                                                                    <div>
+                                                                                                              <label className="block text-sm font-medium text-gray-700">Jenis Rekening Bank</label>
+                                                                                                              <select className="w-full p-2 border rounded">
+                                                                                                                        <option value="akun-bisnis">Akun Bisnis</option>
+                                                                                                                        <option value="akun-pribadi">Akun Pribadi</option>
+                                                                                                              </select>
+                                                                                                    </div>
+                                                                                                    <div>
+                                                                                                              <label className="block text-sm font-medium text-gray-700">Nama Pemilik Bank</label>
+                                                                                                              <textarea className="w-full p-2 border rounded" ></textarea>
+                                                                                                    </div>
+                                                                                                    <div>
+                                                                                                              <label className="block text-sm font-medium text-gray-700">Tanggal Mulai</label>
+                                                                                                              <input type="date" className="w-full p-2 border rounded" />
+                                                                                                    </div>
+                                                                                                    <div>
+                                                                                                              <label className="block text-sm font-medium text-gray-700">Tanggal Berakhir</label>
+                                                                                                              <input type="date" className="w-full p-2 border rounded" />
+                                                                                                    </div>
                                                                                           </div>
-                                                                                          <div>
-                                                                                                    <label className="block text-sm font-medium text-gray-700">Nomor Rekening</label>
-                                                                                                    <input type="text" className="w-full p-2 border rounded" />
-                                                                                          </div>
-                                                                                          <div>
-                                                                                                    <label className="block text-sm font-medium text-gray-700">Jenis Rekening Bank</label>
-                                                                                                    <select className="w-full p-2 border rounded">
-                                                                                                              <option value="akun-bisnis">Akun Bisnis</option>
-                                                                                                              <option value="akun-pribadi">Akun Pribadi</option>
-                                                                                                    </select>
-                                                                                          </div>
-                                                                                          <div>
-                                                                                                    <label className="block text-sm font-medium text-gray-700">Nama Pemilik Bank</label>
-                                                                                                    <textarea className="w-full p-2 border rounded" ></textarea>
-                                                                                          </div>
-                                                                                          <div>
-                                                                                                    <label className="block text-sm font-medium text-gray-700">Tanggal Mulai</label>
-                                                                                                    <input type="date" className="w-full p-2 border rounded" />
-                                                                                          </div>
-                                                                                          <div>
-                                                                                                    <label className="block text-sm font-medium text-gray-700">Tanggal Berakhir</label>
-                                                                                                    <input type="date" className="w-full p-2 border rounded" />
-                                                                                          </div>
-                                                                                </div>
-                                                                                <AlertDialogFooter className="flex justify-end mt-6 space-x-2">
-                                                                                          <AlertDialogCancel className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600">Batal</AlertDialogCancel>
-                                                                                          <AlertDialogAction className="bg-blue-900 text-white px-4 py-2 rounded-md hover:bg-blue-950">Simpan</AlertDialogAction>
-                                                                                </AlertDialogFooter>
-                                                                      </AlertDialogContent>
-                                                            </AlertDialog>
+                                                                                          <AlertDialogFooter className="flex justify-end mt-6 space-x-2">
+                                                                                                    <AlertDialogCancel className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600">Batal</AlertDialogCancel>
+                                                                                                    <AlertDialogAction className="bg-blue-900 text-white px-4 py-2 rounded-md hover:bg-blue-950">Simpan</AlertDialogAction>
+                                                                                          </AlertDialogFooter>
+                                                                                </AlertDialogContent>
+                                                                      </AlertDialog>
+                                                            </div>
                                                             <div className=" w-[1050px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden ">
                                                                       <table className="table-auto border border-gray-300 overflow-hidden">
                                                                                 <thead>
@@ -777,7 +779,7 @@ const EditDataProfil = () => {
 
                                                   </div>
                                         )}
-                                        <div className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center" onClick={() => setShowNomorIdentifikasiEksternal(!showNomorIdentifikasiEksternal)}>
+                                        <div className="border rounded-md p-4 mb-2 bg-gray-100 cursor-pointer flex justify-between items-center" onClick={() => setShowNomorIdentifikasiEksternal(!showNomorIdentifikasiEksternal)}>
                                                   <h3 className="text-lg font-semibold">Nomor Identifikasi Eksternal</h3>
                                                   {showNomorIdentifikasiEksternal ? <FaChevronUp /> : <FaChevronDown />}
                                         </div>
@@ -786,14 +788,14 @@ const EditDataProfil = () => {
                                                             <div className="flex justify-between items-center mb-4">
                                                                       <AlertDialog>
                                                                                 <AlertDialogTrigger className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md">+ Tambah</AlertDialogTrigger>
-                                                                                <AlertDialogContent className="bg-white w-[80%] rounded-lg shadow-lg ">
+                                                                                <AlertDialogContent className="bg-white !min-w-[1000px] rounded-lg shadow-lg ">
                                                                                           <AlertDialogHeader>
                                                                                                     <AlertDialogTitle className="text-xl font-bold">Tambah nomor identifikasi eksternal</AlertDialogTitle>
                                                                                           </AlertDialogHeader>
                                                                                           <div className="grid gap-4 overflow-auto h-96">
                                                                                                     <div>
                                                                                                               <label className="block text-sm font-medium text-gray-700">Jenis Nomor Identifikasi</label>
-                                                                                                              <input type="text" className="w-full p-2 border rounded-md bg-gray-100 mt-1 cursor-not-allowed" disabled placeholder="Auto NPWP"/>
+                                                                                                              <input type="text" className="w-full p-2 border rounded-md bg-gray-100 mt-1 cursor-not-allowed" disabled placeholder="Auto NPWP" />
                                                                                                               {/*  */}
                                                                                                     </div>
                                                                                                     <div>
