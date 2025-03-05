@@ -24,6 +24,7 @@ import { useParams } from "react-router";
 import { FaFile } from "react-icons/fa";
 import {
   createPraktikumDosen,
+  deletePraktikumDosen,
   getDosenPraktikumKelas,
   getTaskContract,
 } from "@/hooks/dashboard";
@@ -100,7 +101,7 @@ export default function DosenPraktikumKelas() {
     console.log(e.target.files);
 
     setFilePreview(URL.createObjectURL(e.target.files[0]));
-    setFile(URL.createObjectURL(e.target.files[0]));
+    setFile(e.target.files[0]);
   }
   const [search, setSearch] = useState("");
 
@@ -114,6 +115,8 @@ export default function DosenPraktikumKelas() {
   // }));
   const taskData = getTaskContract(RoutesApi.tasksContract, getCookie());
   const mutation = createPraktikumDosen(getCookie(), id, formData, file);
+  const mutationDelete = deletePraktikumDosen(getCookie(), id);
+  // const mutationDelete
   if (isError) {
     return <div>Error: {error.message}</div>;
   }
@@ -317,7 +320,7 @@ export default function DosenPraktikumKelas() {
                 <td>{item.end_period}</td>
                 <td>
                   {/* <a href="/google">tes</a> */}
-                  <a href={item.supporting_file}>Download File</a>
+                  <a href={item.supporting_file_url}>Download File</a>
                 </td>
                 <td className="max-w-5">
                   <p className="truncate">{item.supporting_file}</p>
@@ -327,7 +330,7 @@ export default function DosenPraktikumKelas() {
                     className="action-button"
                     onClick={() => {
                       // setIdEdit(item.id);
-                      // setIsOpenEdit(true);
+                      setIsOpen(true);
                     }}
                   >
                     Edit
@@ -344,6 +347,7 @@ export default function DosenPraktikumKelas() {
                         cancelButtonText: "Batal",
                       }).then((result) => {
                         if (result.isConfirmed) {
+                          mutationDelete.mutate(item.id);
                           // mutation.mutate(item.id);
                           //   window.location.reload();
                           //   const newData = data.filter(
@@ -355,11 +359,11 @@ export default function DosenPraktikumKelas() {
                       });
                     }}
                   >
-                    {/* {mutation.status == "pending" ? (
+                    {mutationDelete.status == "pending" ? (
                       <p>Loading...</p>
                     ) : (
                       <>Delete</>
-                    )} */}
+                    )}
                   </button>
                   <button
                     className="action-button"

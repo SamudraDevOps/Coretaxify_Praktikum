@@ -21,6 +21,50 @@ export const getDosenPraktikumKelas = (url, id, cookie) =>
       return data;
     },
   });
+export const updatePraktikumDosen = (
+  cookies,
+  class_id,
+  formData,
+  supporting_files
+) =>
+  useMutation({
+    mutationFn: async (id) => {
+      const csrf = await getCsrf();
+      console.log(supporting_files);
+      axios.defaults.headers.common["X-CSRF-TOKEN"] = csrf;
+      const data = await axios.post(
+        `${RoutesApi.url}api/lecturer/groups/${class_id}/assignments/${id}`,
+        {
+          name: formData.name,
+          task_id: formData.task_id,
+          start_period: formData.start_period,
+          end_period: formData.end_period,
+          supporting_file: supporting_files,
+        },
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": csrf,
+            Authorization: `Bearer ${cookies.token}`,
+          },
+          params: {
+            method: "PUT",
+          },
+        }
+      );
+      return data;
+    },
+    onSuccess: (data) => {
+      console.log(data);
+      Swal.fire("Berhasil!", "Kelas berhasil dihapus!", "success");
+      // window.location.reload();
+    },
+    onError: (error) => {
+      console.log(error);
+      Swal.fire("Gagal !", error.message, "error");
+    },
+  });
 
 export const getTaskContract = (url, cookie) =>
   useQuery({
@@ -46,7 +90,7 @@ export const createPraktikumDosen = (
   useMutation({
     mutationFn: async () => {
       const csrf = await getCsrf();
-      console.log(class_id);
+      console.log(supporting_files);
       axios.defaults.headers.common["X-CSRF-TOKEN"] = csrf;
       const data = await axios.post(
         `${RoutesApi.url}api/lecturer/groups/${class_id}/assignments`,
@@ -59,7 +103,7 @@ export const createPraktikumDosen = (
         },
         {
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "multipart/form-data",
             Accept: "application/json",
             "X-CSRF-TOKEN": csrf,
             Authorization: `Bearer ${cookies.token}`,
