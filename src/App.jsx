@@ -52,6 +52,7 @@ import KasusSaya from "./components/PraktikumPage/PortalSaya/KasusSaya";
 import ProfilSaya from "./components/PraktikumPage/PortalSaya/ProfilSaya";
 import InformasiSaya from "./components/PraktikumPage/PortalSaya/InformasiSaya";
 import EditDataProfil from "./components/PraktikumPage/PortalSaya/EditDataProfil";
+import AlamatSaya from "./components/PraktikumPage/PortalSaya/AlamatSaya";
 //Route Praktikum
 import ProtectedRoutes from "./components/Dashboard/Auth/ProtectedRoutes";
 import MahasiswaPraktikumKelas from "./components/Dashboard/Mahasiswa/Kelas/MahasiswaPraktikumKelas";
@@ -560,7 +561,7 @@ const Main = () => {
           }
         />
         <Route
-          path="/admin/praktikum/informasi-umum"
+          path="/admin/praktikum/profil-saya/informasi-umum"
           element={
             <>
               <Header />
@@ -569,11 +570,20 @@ const Main = () => {
           }
         />
         <Route
-          path="/admin/praktikum/informasi-umum/edit-data-profil"
+          path="/admin/praktikum/profil-saya/informasi-umum/edit-data-profil"
           element={
             <>
               <Header />
               <EditDataProfil />
+            </>
+          }
+        />
+        <Route
+          path="/admin/praktikum/profil-saya/alamat"
+          element={
+            <>
+              <Header />
+              <AlamatSaya />
             </>
           }
         />

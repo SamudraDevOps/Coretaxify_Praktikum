@@ -12,7 +12,7 @@ const InformasiSaya = () => {
                               <main className="flex-auto p-3 bg-white rounded-md h-full">
                                         <div className="flex justify-between items-center mb-6">
                                                   <h2 className="text-2xl font-semibold">Informasi Umum Wajib Pajak</h2>
-                                                  <button className="px-4 py-2 bg-yellow-300 hover:bg-yellow-400 text-blue-900 rounded-md" onClick={() => window.location.href = "/admin/praktikum/informasi-umum/edit-data-profil"}>
+                                                  <button className="px-4 py-2 bg-yellow-300 hover:bg-yellow-400 text-blue-900 rounded-md" onClick={() => window.location.href = "/admin/praktikum/profil-saya/informasi-umum/edit-data-profil"}>
                                                             Edit
                                                   </button>
                                         </div>
