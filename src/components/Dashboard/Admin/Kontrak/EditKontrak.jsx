@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./tambahKontrak.css";
 import { IoReload } from "react-icons/io5";
 import { useQuery, useMutation } from "@tanstack/react-query";
@@ -10,6 +10,9 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 import { useToast } from "@/hooks/use-toast";
+import { getOneContract } from "@/hooks/dashboard";
+import { ClipLoader } from "react-spinners";
+import { getCookieToken } from "@/service";
 
 const EditKontrak = ({
   isOpen,
@@ -21,6 +24,10 @@ const EditKontrak = ({
   id,
 }) => {
   const { toast } = useToast();
+  const { isLoading, isError, data, error } = getOneContract(
+    RoutesApi.contractAdmin + `/${id}`,
+    getCookieToken()
+  );
   const [formData, setFormData] = useState({
     jenisKontrak: "",
     instansi: "",
@@ -35,6 +42,27 @@ const EditKontrak = ({
     opsiTambahan: [],
     status: "",
   });
+  useEffect(() => {
+    if (data) {
+      setFormData({
+        jenisKontrak: data.data.contract_type,
+        instansi: data.data.university.id,
+        mahasiswa: data.data.qty_student,
+        periodeAwal: data.data.start_period,
+        periodeAkhir: data.data.end_period,
+        spt: data.data.spt,
+        bupot: data.data.bupot,
+        faktur: data.data.faktur,
+        kodePembelian: data.data.contract_code,
+        is_buy_task: data.data.is_buy_task,
+        opsiTambahan: data.data.tasks,
+        status: data.data.status,
+      });
+    }
+  }, [data]);
+  console.log("makan");
+  console.log(formData);
+
   const [cookies, setCookie] = useCookies(["user"]);
 
   const [lastNumbers, setLastNumbers] = useState({
@@ -164,6 +192,16 @@ const EditKontrak = ({
   };
 
   if (!isOpen) return null;
+  if (isLoading) {
+    return (
+      <div className="kontrak-popup-overlay">
+        <ClipLoader color="#7502B5" size={50} />
+      </div>
+      // <div className="h-full w-full text-2xl italic font-bold text-center flex items-center justify-center">Loading...</div>
+    );
+  }
+  console.log("this");
+  console.log(data);
 
   return (
     <div className="kontrak-popup-overlay">
@@ -226,7 +264,7 @@ const EditKontrak = ({
                   <div key={index} className="flex items-center space-x-2 mt-2">
                     <select
                       className="border p-2 rounded"
-                      value={opsi}
+                      value={opsi.id}
                       onChange={(e) => handleChangeOpsi(index, e.target.value)}
                     >
                       <option value="">Pilih Opsi</option>

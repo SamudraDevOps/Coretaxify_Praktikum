@@ -20,6 +20,11 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { RoutesApi } from "@/Routes";
 import { ClipLoader } from "react-spinners";
+import {
+  createMasterSoal,
+  getMasterSoal,
+  mutationSoal,
+} from "@/hooks/dashboard/useMasterSoal";
 
 export default function UploadSoalPsc() {
   const [isOpen, setIsOpen] = useState(false);
@@ -29,95 +34,55 @@ export default function UploadSoalPsc() {
   const itemsPerPage = 10;
   const [cookies, setCookie] = useCookies(["user"]);
   const [url, setUrl] = useState(RoutesApi.tasksAdmin);
-
-  const { isLoading, isError, data, error } = useQuery({
-    queryKey: ["task_psc", url],
-    queryFn: async () => {
-      const { data } = await axios.get(url, {
-        headers: {
-          Authorization: `Bearer ${cookies.token}`,
-          Accept: "application/json",
-        },
-      });
-      console.log(data);
-      return data;
-    },
+  const [formData, setFormData] = useState({
+    name: "",
+    file: "",
   });
 
-  const mutation = useMutation({
-    mutationFn: async (id) => {
-      console.log("button clicked");
-      const response = await axios.get(`${RoutesApi.url}api/csrf-token`, {
-        // withCredentials: true,
-        headers: {
-          "X-Requested-With": "XMLHttpRequest",
-          Accept: "application/json",
-        },
-      });
-      console.log(response.data.token);
-      axios.defaults.headers.common["X-CSRF-TOKEN"] = response.data.token;
-      console.log(cookies.token);
-      const data = await axios.post(
-        RoutesApi.tasksAdmin,
-        {
-          name: formData.name,
-          import_file: formData.file,
-        },
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Accept: "application/json",
-            "X-CSRF-TOKEN": response.data.token,
-            Authorization: `Bearer ${cookies.token}`,
-          },
-        }
-      );
-      return data;
-    },
-    onSuccess: (data) => {
-      console.log(data);
-    },
-    onError: (error) => {
-      console.log(error);
-    },
-  });
-  const mutationEdit = useMutation({
-    mutationFn: async (id) => {
-      console.log("button clicked");
-      const response = await axios.get(`${RoutesApi.url}api/csrf-token`, {
-        // withCredentials: true,
-        headers: {
-          "X-Requested-With": "XMLHttpRequest",
-          Accept: "application/json",
-        },
-      });
-      console.log(response.data.token);
-      axios.defaults.headers.common["X-CSRF-TOKEN"] = response.data.token;
-      console.log(cookies.token);
-      const data = await axios.post(
-        RoutesApi.tasksAdmin + "/" + id,
-        {
-          name: formData.name,
-          import_file: formData.file,
-        },
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Accept: "application/json",
-            "X-CSRF-TOKEN": response.data.token,
-            Authorization: `Bearer ${cookies.token}`,
-          },
-        }
-      );
-      return data;
-    },
-    onSuccess: (data) => {
-      console.log(data);
-    },
-    onError: (error) => {
-      console.log(error);
-    },
-  });
+  const { isLoading, isError, data, error } = getMasterSoal(url, cookies);
+
+  // const mutation = createMasterSoal(cookies, formData);
+  // const   mutation = mutat
+  // const mutationEdit = useMutation({
+  //   mutationFn: async (id) => {
+  //     console.log("button clicked");
+  //     const response = await axios.get(`${RoutesApi.url}api/csrf-token`, {
+  //       // withCredentials: true,
+  //       headers: {
+  //         "X-Requested-With": "XMLHttpRequest",
+  //         Accept: "application/json",
+  //       },
+  //     });
+  //     console.log(response.data.token);
+  //     axios.defaults.headers.common["X-CSRF-TOKEN"] = response.data.token;
+  //     console.log(cookies.token);
+  //     const data = await axios.post(
+  //       RoutesApi.tasksAdmin + "/" + id,
+  //       {
+  //         name: formData.name,
+  //         import_file: formData.file,
+  //       },
+  //       {
+  //         headers: {
+  //           "Content-Type": "multipart/form-data",
+  //           Accept: "application/json",
+  //           "X-CSRF-TOKEN": response.data.token,
+  //           Authorization: `Bearer ${cookies.token}`,
+  //         },
+  //         params: {
+  //           _method: "PUT",
+  //         },
+  //       }
+  //     );
+  //     return data;
+  //   },
+  //   onSuccess: (data) => {
+  //     console.log(data);
+  //   },
+  //   onError: (error) => {
+  //     console.log(error);
+  //   },
+  // });
   const mutationDelete = useMutation({
     mutationFn: async (id) => {
       console.log("button clicked");
@@ -178,11 +143,6 @@ export default function UploadSoalPsc() {
   // const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
-  const [formData, setFormData] = useState({
-    name: "",
-    file: "",
-  });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -287,7 +247,7 @@ export default function UploadSoalPsc() {
                 className="bg-green-600"
               > */}
               <AlertDialogAction
-                onClick={() => mutation.mutate()}
+                onClick={() => mutationSoal(cookies, formData)}
                 // onClick={() => console.log(formData)}
                 className="bg-green-600"
               >
@@ -341,7 +301,10 @@ export default function UploadSoalPsc() {
                 </td>
                 <td>
                   <AlertDialog>
-                    <AlertDialogTrigger className="action-button edit">
+                    <AlertDialogTrigger
+                      // onClick={() => mutationEdit(item.id)}
+                      className="action-button edit"
+                    >
                       Edit
                     </AlertDialogTrigger>
                     <AlertDialogContent>
@@ -383,7 +346,11 @@ export default function UploadSoalPsc() {
                           Kembali
                         </AlertDialogCancel>
                         <AlertDialogAction
-                          onClick={() => mutation.mutate(item.id)}
+                          // onClick={() => console.log("Hi !")}
+                          onClick={() =>
+                            mutationSoal(cookies, formData, "edit")
+                          }
+                          // onClick={() => mutationEdit.mutate(item.id)}
                           className="bg-green-600 "
                         >
                           Simpan

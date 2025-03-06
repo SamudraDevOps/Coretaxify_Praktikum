@@ -52,7 +52,7 @@ export default function DosenKelas() {
           Accept: "application/json",
         },
       });
-      console.log(data);
+      // console.log(data);
       return data;
     },
   });
@@ -129,7 +129,9 @@ export default function DosenKelas() {
   };
 
   const handleReloadCode = () => {
-    setFormData({ ...formData, kodePraktikum: generateRandomCode() });
+    console.log("Reload");
+    setFormData({ ...formData, kodeKelas: generateRandomCode() });
+    // console.log
   };
 
   const handleSort = (key) => {
@@ -304,6 +306,12 @@ export default function DosenKelas() {
     );
   }
 
+  // if (!data) {
+  //   return <h1>No Data</h1>;
+  // }
+  console.log("fetch");
+  console.log(data.data[0]);
+
   return (
     <div className="kontrak-container">
       <div className="header">
@@ -360,7 +368,7 @@ export default function DosenKelas() {
             {/* <ClipLoader color="#7502B5" size={50} /> */}
           </div>
         ) : (
-          data.map((item, index) => (
+          data.data.map((item, index) => (
             <a
               key={item.id}
               className="relative  shadow-lg rounded-lg w-100 md:min-w-96 p-4 cursor-pointer"
@@ -372,7 +380,7 @@ export default function DosenKelas() {
               <div className="bg-purple-700 flex justify-between text-white p-4 rounded-t-lg w-150 relative">
                 <div className="">
                   <h3 className="font-bold text-lg">{item.name}</h3>
-                  <p className="text-sm">Pengajar : {item.user.name}</p>
+                  <p className="text-sm">Pengajar : {}</p>
                 </div>
 
                 <AlertDialog
@@ -722,6 +730,46 @@ export default function DosenKelas() {
           </div>
         </div>
       </div> */}
+      </div>
+      <div className="pagination-container !static !bg-transparent mt-10 !shadow-none ">
+        {/* <div className="pagination-info">
+          {`Showing ${indexOfFirstItem + 1} to ${Math.min(
+            indexOfLastItem,
+            data.length
+          )} of ${data.length} entries`}
+        </div> */}
+
+        <div className="pagination">
+          <button
+            className={`page-item`}
+            onClick={() => {
+              setUrl(data.links.prev);
+            }}
+            disabled={data.meta.current_page === 1}
+          >
+            &lt;
+          </button>
+          <button className="page-item">{data.meta.current_page}</button>
+          {/* {Array.from({ length: Math.ceil(data.length / itemsPerPage) }, (_, index) => (
+                            <button key={index + 1} className={`page-item ${currentPage === index + 1 ? "active" : ""}`} onClick={() => paginate(index + 1)}>
+                                {index + 1}
+                            </button>
+                        ))} */}
+          <button
+            className={`page-item ${
+              currentPage === Math.ceil(data.length / itemsPerPage)
+                ? "disabled"
+                : ""
+            }`}
+            onClick={() => {
+              console.log(data.links.next);
+              setUrl(data.links.next);
+            }}
+            disabled={data.links.next == null}
+          >
+            &gt;
+          </button>
+        </div>
       </div>
       {isOpen && (
         <EditPopupMahasiswa
