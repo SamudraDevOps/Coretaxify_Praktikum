@@ -260,10 +260,12 @@ const SidebarAdmin = () => {
                 <ul className="">
                   <li
                     className={`dropdown-item  ${
-                      cookies.role == "psc" ? "" : "!hidden"
+                      cookies.role == "psc" || cookies.role == "admin"
+                        ? ""
+                        : "!hidden"
                     }`}
                     onClick={() => {
-                      window.location.href = "/psc/edit-kelas";
+                      window.location.href = `/${cookies.role}/edit-kelas`;
                     }}
                   >
                     Kelas
