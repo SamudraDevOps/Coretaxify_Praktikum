@@ -221,11 +221,11 @@ input {
   }
 }
 
-@media screen and (min-width: 1560px) {
+/* @media screen and (min-width: 1560px) {
   body {
     zoom: 1.7;
   }
-}
+} */
 
 ::selection {
   background: var(--PrimaryColor);

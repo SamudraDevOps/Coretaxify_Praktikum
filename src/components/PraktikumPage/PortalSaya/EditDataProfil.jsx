@@ -91,6 +91,7 @@ const EditDataProfil = () => {
                                         </div>
                                         {showInformasiUmum && (
                                                   <div className="border rounded-md p-4 mb-4">
+
                                                             <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
                                                                       <div>
                                                                                 <label className="block font-medium text-gray-700">NPWP</label>
@@ -191,7 +192,11 @@ const EditDataProfil = () => {
                                                                                 <input type="text" className="w-full p-2 border rounded-md bg-gray-100 cursor-not-allowed text-gray-600" value="Bahasa Indonesia" readOnly />
                                                                       </div>
                                                             </div>
+                                                            <div className="flex justify-end mt-4">
+                                                                      <button className="px-4 py-2 bg-blue-500 text-white rounded-md">Simpan</button>
+                                                            </div>
                                                   </div>
+
                                         )}
                                         <div className="border rounded-md p-4 bg-gray-100 mb-2 cursor-pointer flex justify-between items-center" onClick={() => setShowDataEkonomi(!showDataEkonomi)}>
                                                   <h3 className="text-lg font-semibold">Data Ekonomi</h3>
@@ -238,6 +243,9 @@ const EditDataProfil = () => {
                                                                                 <label className="block font-medium text-gray-700">Jumlah Peredaran Bruto</label>
                                                                                 <input type="text" className="w-full p-2 border rounded-md bg-white text-gray-600" />
                                                                       </div>
+                                                            </div>
+                                                            <div className="flex justify-end mt-4">
+                                                                      <button className="px-4 py-2 bg-blue-500 text-white rounded-md">Simpan</button>
                                                             </div>
                                                   </div>
                                         )}
@@ -363,7 +371,7 @@ const EditDataProfil = () => {
                                                   <div className="border rounded-md p-4 mb-4 ">
 
                                                             <div className="flex justify-between items-center mb-4">
-                                                                      <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-2 rounded" onClick={openModal}>+ Tambah Kontak</button>
+                                                                      <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-2 rounded" onClick={openModal}>+ Tambah</button>
                                                             </div>
                                                             <div className=" w-[1050px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden ">
                                                                       <table className="table-auto border border-gray-300 overflow-hidden">
@@ -384,24 +392,7 @@ const EditDataProfil = () => {
                                                                                 </thead>
                                                                                 <tbody className="text-gray-600">
                                                                                           <tr className="bg-gray-100">
-                                                                                                    <td className="px-4 py-4 border"><button></button></td>
-                                                                                                    <td className="px-2 py-4 border">
-                                                                                                              <select className="w-full p-2 border rounded-md bg-white">
-                                                                                                                        <option value="kontak-alternatif-wajib-pajak">Kontak Alterntif Wajib Pajak</option>
-                                                                                                                        <option value="kontak-utama-wajib-pajak">Kontak Utama Wajib Pajak</option>
-                                                                                                                        <option value="kontak-orang-alternatif">Kontak Orang Alternatif</option>
-                                                                                                                        <option value="kontak-orang-utama">Kontak Orang Utama</option>
-                                                                                                                        <option value="kontak-teknis-wajib-pajak">Kontak Teknis Wajib Pajak</option>
-                                                                                                              </select>
-                                                                                                    </td>
-                                                                                                    <td className="px-4 py-4 border"><input type="text" className="w-full p-2 border rounded-md bg-white" /></td>
-                                                                                                    <td className="px-4 py-4 border"><input type="text" className="w-full p-2 border rounded-md bg-white" /></td>
-                                                                                                    <td className="px-4 py-4 border"><input type="text" className="w-full p-2 border rounded-md bg-white" /></td>
-                                                                                                    <td className="px-4 py-4 border"><input type="text" className="w-full p-2 border rounded-md bg-white" /></td>
-                                                                                                    <td className="px-4 py-4 border"><input type="text" className="w-full p-2 border rounded-md bg-white" /></td>
-                                                                                                    <td className="px-4 py-4 border"><input type="text" className="w-full p-2 border rounded-md bg-white" /></td>
-                                                                                                    <td className="px-4 py-4 border"><input type="date" className="w-full p-2 border rounded-md bg-white" /></td>
-                                                                                                    <td className="px-4 py-4 border"><input type="date" className="w-full p-2 border rounded-md bg-white" /></td>
+                                                                                                    <td colSpan="10" className="text-center p-4 border">Belum ada data</td>
                                                                                           </tr>
                                                                                 </tbody>
                                                                       </table>
@@ -426,7 +417,7 @@ const EditDataProfil = () => {
                                                                                                                         >
                                                                                                                                   <option value="">-- Pilih Jenis Pihak --</option>
                                                                                                                                   <option value="related-person">Related Person</option>
-                                                                                                                                  {/* <option value="related-taxpayer">Related Taxpayer</option> */}
+                                                                                                                                  <option value="related-taxpayer">Related Taxpayer</option>
                                                                                                                         </select>
                                                                                                               </div>
                                                                                                               <div className="h-full mt-0">
@@ -542,46 +533,51 @@ const EditDataProfil = () => {
                                                                                                                                                                 <input type="date" className="w-full p-2 border rounded" />
                                                                                                                                                       </div>
                                                                                                                                             </div>
+                                                                                                                                            <div className="flex justify-end p-4 border-t">
+                                                                                                                                                      <button onClick={closeModal} className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 mr-2">
+                                                                                                                                                                Batal
+                                                                                                                                                      </button>
+                                                                                                                                                      <button className="bg-blue-900 text-white px-4 py-2 rounded hover:bg-blue-950">
+                                                                                                                                                                Simpan
+                                                                                                                                                      </button>
+                                                                                                                                            </div>
                                                                                                                                   </>
                                                                                                                         )}
 
-                                                                                                                        {/* {selectedType === "related-taxpayer" && (
+                                                                                                                        {selectedType === "related-taxpayer" && (
                                                                                                                                   <>
-                                                                                                                                            <div>
-                                                                                                                                                      <label className="block text-sm font-medium">Jenis Kontak</label>
-                                                                                                                                                      <select className="w-full p-2 border rounded-md bg-white">
-                                                                                                                                                                <option value="kontak-alternatif-wajib-pajak">Kontak Alternatif Wajib Pajak</option>
-                                                                                                                                                                <option value="kontak-utama-wajib-pajak">Kontak Utama Wajib Pajak</option>
-                                                                                                                                                                <option value="kontak-orang-alternatif">Kontak Orang Alternatif</option>
-                                                                                                                                                                <option value="kontak-orang-utama">Kontak Orang Utama</option>
-                                                                                                                                                                <option value="kontak-teknis-wajib-pajak">Kontak Teknis Wajib Pajak</option>
-                                                                                                                                                      </select>
-                                                                                                                                            </div>
-                                                                                                                                            <div>
-                                                                                                                                                      <label className="block text-sm font-medium">Nomor Telepon</label>
-                                                                                                                                                      <input type="text" className="w-full p-2 border rounded" />
-                                                                                                                                            </div>
-                                                                                                                                            <div>
-                                                                                                                                                      <label className="block text-sm font-medium">Nomor Faksimile</label>
-                                                                                                                                                      <input type="text" className="w-full p-2 border rounded" />
-                                                                                                                                            </div>
-                                                                                                                                            <div>
-                                                                                                                                                      <label className="block text-sm font-medium">Alamat Email Baru</label>
-                                                                                                                                                      <input type="text" className="w-full p-2 border rounded" />
+                                                                                                                                            <div className="grid grid-cols-3 gap-4 ">
+                                                                                                                                                      <div>
+                                                                                                                                                                <label className="block text-sm font-medium">NIK/NPWP</label>
+                                                                                                                                                                <input type="text" className="w-full p-2 border rounded cursor-not-allowed bg-gray-100" disabled placeholder="hanya view gan" />
+                                                                                                                                                      </div>
+                                                                                                                                                      <div>
+                                                                                                                                                                <label className="block text-sm font-medium">Nama</label>
+                                                                                                                                                                <input type="text" className="w-full p-2 border rounded bg-gray-100 cursor-not-allowed" disabled />
+                                                                                                                                                      </div>
+                                                                                                                                                      <div>
+                                                                                                                                                                <label className="block text-sm font-medium">Pilih Jenis Wajib Pajak</label>
+                                                                                                                                                                <select className="w-full p-2 border rounded" onlyRead>
+                                                                                                                                                                          <option value="grup-perusahaan">Grup Perusahaan</option>
+                                                                                                                                                                          <option value="lainnnya">Lainnya</option>
+                                                                                                                                                                          <option value="pemilik-manfaat">Pemilik Manfaat</option>
+                                                                                                                                                                          <option value="penanggung-pajak">Penanggung Pajak</option>
+                                                                                                                                                                </select>
+                                                                                                                                                      </div>
                                                                                                                                             </div>
                                                                                                                                   </>
-                                                                                                                        )} */}
+                                                                                                                        )}
                                                                                                               </div>
                                                                                                     </div>
                                                                                           </div>
-                                                                                          <div className="flex justify-end p-4 border-t">
+                                                                                          {/* <div className="flex justify-end p-4 border-t">
                                                                                                     <button onClick={closeModal} className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 mr-2">
                                                                                                               Batal
                                                                                                     </button>
                                                                                                     <button className="bg-blue-900 text-white px-4 py-2 rounded hover:bg-blue-950">
                                                                                                               Simpan
                                                                                                     </button>
-                                                                                          </div>
+                                                                                          </div> */}
 
                                                                                 </div>
                                                                       </div>
