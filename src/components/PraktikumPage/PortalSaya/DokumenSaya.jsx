@@ -24,7 +24,64 @@ const DokumenSaya = () => {
 
           return (
                     <div className="p-4">
-                              className="flex-grow p-6 bg-white  h-full"
+                              <div className="flex justify-between items-center mb-4 pb-3 border-b">
+                                        <div className="flex items-center">
+                                                  <IoDocumentTextOutline className="text-4xl text-blue-900" />
+                                                  <h1 className="text-lg font-bold text-blue-900 ml-2">Dokumen Saya</h1>
+                                        </div>
+                                        <button onClick={openModal} className="bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-4 rounded">
+                                                  Upload Dokumen
+                                        </button>
+                              </div>
+                              <div className="flex justify-between mb-4 border-b pb-3 ">
+                                        <button className="flex items-center bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded">
+                                                  <BsFiletypeXls className="text-2xl text-white" />
+                                        </button>
+                              </div>
+                              <div className="overflow-x-auto bg-white shadow-md rounded-lg">
+                                        <table className="min-w-full border border-gray-300">
+                                                  <thead className="!bg-yellow-500 text-white">
+                                                            <tr>
+                                                                      <th className="px-4 py-2 border">Nomor Dokumen</th>
+                                                                      <th className="px-4 py-2 border">Tanggal Dokumen</th>
+                                                                      <th className="px-4 py-2 border">Judul Dokumen</th>
+                                                                      <th className="px-4 py-2 border">Jenis Dokumen</th>
+                                                                      <th className="px-4 py-2 border">Nomor Kasus</th>
+                                                                      <th className="px-4 py-2 border">Tanggal Pembuatan</th>
+                                                                      <th className="px-4 py-2 border">Pengguna Pembuatan</th>
+                                                                      <th className="px-4 py-2 border">Aksi</th>
+                                                            </tr>
+                                                  </thead>
+                                                  <tbody>
+                                                            {data.map((item, index) => (
+                                                                      <tr key={index} className="hover:bg-gray-100">
+                                                                                <td className="px-4 py-2 border">{item.nomor}</td>
+                                                                                <td className="px-4 py-2 border">{item.tanggal}</td>
+                                                                                <td className="px-4 py-2 border">{item.judul}</td>
+                                                                                <td className="px-4 py-2 border">{item.jenis}</td>
+                                                                                <td className="px-4 py-2 border">{item.kasus}</td>
+                                                                                <td className="px-4 py-2 border">{item.pembuatan}</td>
+                                                                                <td className="px-4 py-2 border">{item.penggunaPembuatan}</td>
+                                                                                <td>
+                                                                                          <button className="bg-purple-900 hover:bg-purple-950 text-white font-bold py-2 px-4 rounded">
+                                                                                                    Unduh
+                                                                                          </button>
+                                                                                </td>
+                                                                      </tr>
+                                                            ))}
+                                                  </tbody>
+                                        </table>
+                              </div>
+
+                              <div className="pagination">
+                                        <button className="bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-4 rounded mr-2">
+                                                  Previous
+                                        </button>
+                                        <button className="bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-4 rounded">
+                                                  Next
+                                        </button>
+
+                              </div>
                               {isModalOpen && (
                                         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                                                   <div className="bg-white w-[80%] rounded-lg shadow-lg ">
