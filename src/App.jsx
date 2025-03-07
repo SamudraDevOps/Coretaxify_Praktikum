@@ -55,6 +55,10 @@ import EditDataProfil from "./components/PraktikumPage/PortalSaya/EditDataProfil
 import AlamatSaya from "./components/PraktikumPage/PortalSaya/AlamatSaya";
 import DetailKontak from "./components/PraktikumPage/PortalSaya/DetailKontak";
 import PihakTerkait from "./components/PraktikumPage/PortalSaya/PihakTerkait";
+import DetailBank from "./components/PraktikumPage/PortalSaya/DetailBank";
+import ObjekPBB from "./components/PraktikumPage/PortalSaya/ObjekPBB";
+import KlasifikasiLapanganUsaha from "./components/PraktikumPage/PortalSaya/KlasifikasiLapanganUsaha";
+import DataUnitKeluarga from "./components/PraktikumPage/PortalSaya/DataUnitKeluarga";
 //Route Praktikum
 import ProtectedRoutes from "./components/Dashboard/Auth/ProtectedRoutes";
 import MahasiswaPraktikumKelas from "./components/Dashboard/Mahasiswa/Kelas/MahasiswaPraktikumKelas";
@@ -604,6 +608,42 @@ const Main = () => {
             <>
               <Header />
               <PihakTerkait />
+            </>
+          }
+        />
+        <Route
+          path="/admin/praktikum/profil-saya/detail-bank"
+          element={
+            <>
+              <Header />
+              <DetailBank />
+            </>
+          }
+        />
+        <Route
+            path="/admin/praktikum/profil-saya/objek-pajak-bumi-dan-bangunan-(pbb)"
+          element={
+            <>
+              <Header />
+              <ObjekPBB />
+            </>
+          }
+        />
+        <Route
+            path="/admin/praktikum/profil-saya/klasifikasi-lapangan-usaha-(klu)"
+          element={
+            <>
+              <Header />
+              <KlasifikasiLapanganUsaha />
+            </>
+          }
+        />
+        <Route
+            path="/admin/praktikum/profil-saya/data-unit-keluarga"
+          element={
+            <>
+              <Header />
+              <DataUnitKeluarga />
             </>
           }
         />
