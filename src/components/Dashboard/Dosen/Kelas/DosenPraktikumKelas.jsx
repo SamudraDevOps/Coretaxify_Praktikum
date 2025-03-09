@@ -1,5 +1,5 @@
 // import React from "react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 // import "../Pengguna/Mahasiswa/editMahasiswa.css";
 // import EditPopupMahasiswa from "../Pengguna/Mahasiswa/EditPopupMahasiswa";
 import Swal from "sweetalert2";
@@ -26,6 +26,7 @@ import {
   createPraktikumDosen,
   deletePraktikumDosen,
   getDosenPraktikumKelas,
+  getOneDosenPraktikumKelas,
   getTaskContract,
 } from "@/hooks/dashboard";
 import { getCookie } from "@/service";
@@ -38,6 +39,7 @@ export default function DosenPraktikumKelas() {
   const itemsPerPage = 10;
   const [cookies, setCookie] = useCookies(["user"]);
   const [url, setUrl] = useState(RoutesApi.classGroup.url);
+  const [updateUrl, setUpdateUrl] = useState("");
   const [filePreview, setFilePreview] = useState(null);
   const [formData, setFormData] = useState({
     name: "",
@@ -53,6 +55,14 @@ export default function DosenPraktikumKelas() {
     id,
     getCookie()
   );
+
+  const {
+    isLoading: isLoadingOne,
+    isError: isErrorOne,
+    data: dataOne,
+    error: errorOne,
+  } = getOneDosenPraktikumKelas(url, id, updateUrl, getCookie());
+
   const handleSort = (key) => {
     let direction = "ascending";
     if (sortConfig.key === key && sortConfig.direction === "ascending") {
@@ -116,6 +126,16 @@ export default function DosenPraktikumKelas() {
   const taskData = getTaskContract(RoutesApi.tasksContract, getCookie());
   const mutation = createPraktikumDosen(getCookie(), id, formData, file);
   const mutationDelete = deletePraktikumDosen(getCookie(), id);
+  useEffect(() => {
+    if (dataOne) {
+      setFormData({
+        name: dataOne.data.name,
+        task_id: dataOne.data.task_id,
+        start_period: dataOne.data.start_period,
+        end_period: dataOne.data.end_period,
+      });
+    }
+  }, [dataOne]);
   // const mutationDelete
   if (isError) {
     return <div>Error: {error.message}</div>;
@@ -130,7 +150,9 @@ export default function DosenPraktikumKelas() {
     );
   }
 
-  console.log(taskData.data);
+  // console.log(taskData.data);
+  console.log("hi");
+  console.log(formData);
   return (
     <div className="kontrak-container">
       {/* {id} */}
@@ -322,19 +344,167 @@ export default function DosenPraktikumKelas() {
                   {/* <a href="/google">tes</a> */}
                   <a href={item.supporting_file_url}>Download File</a>
                 </td>
-                <td className="max-w-5">
+                {/* <td className="max-w-5">
                   <p className="truncate">{item.supporting_file}</p>
-                </td>
+                </td> */}
                 <td>
-                  <button
-                    className="action-button"
-                    onClick={() => {
-                      // setIdEdit(item.id);
-                      setIsOpen(true);
-                    }}
-                  >
-                    Edit
-                  </button>
+                  <AlertDialog>
+                    <AlertDialogTrigger>
+                      <div
+                        className="action-button"
+                        onClick={() => setUpdateUrl(item.id)}
+                      >
+                        Edit
+                      </div>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Edit Praktikum</AlertDialogTitle>
+                        <AlertDialogDescription className="w-full">
+                          <div className=" h-96 overflow-scroll">
+                            <form>
+                              {isLoadingOne ? (
+                                <div className="loading">
+                                  <ClipLoader color="#7502B5" size={50} />
+                                </div>
+                              ) : dataOne?.data ? (
+                                <>
+                                  <div className="edit-form-group-mahasiswa ">
+                                    <label>Judul Praktikum:</label>
+                                    <input
+                                      type="text"
+                                      name="name"
+                                      value={formData.name}
+                                      onChange={handleChange}
+                                      required
+                                    />
+                                  </div>
+                                  <div className="edit-form-group-mahasiswa">
+                                    <label>Soal :</label>
+                                    <select
+                                      name="task_id"
+                                      onChange={handleChange}
+                                      id=""
+                                      value={formData.task_id}
+                                    >
+                                      <option>Pilih Soal</option>
+                                      {taskData.data.map((item) => (
+                                        <option key={item.id} value={item.id}>
+                                          {item.name}
+                                        </option>
+                                      ))}
+                                    </select>
+                                  </div>
+                                  <div className="edit-form-group-mahasiswa">
+                                    <label>File Support:</label>
+                                    <div className="flex items-center justify-center w-full ">
+                                      <label
+                                        htmlFor="dropzone-file"
+                                        className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+                                      >
+                                        <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                                          {filePreview ? (
+                                            <>
+                                              <div className="grid justify-center items-center p-20">
+                                                <FaFile className="w-8 h-8 text-gray-500 dark:text-gray-400 mb-2" />
+                                                <p className="text-sm text-gray-500 dark:text-gray-400">
+                                                  {filePreview.name}
+                                                </p>
+                                              </div>
+                                            </>
+                                          ) : (
+                                            <>
+                                              <svg
+                                                className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
+                                                aria-hidden="true"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                fill="none"
+                                                viewBox="0 0 20 16"
+                                              >
+                                                <path
+                                                  stroke="currentColor"
+                                                  strokeLinecap="round"
+                                                  strokeLinejoin="round"
+                                                  strokeWidth="2"
+                                                  d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+                                                />
+                                              </svg>
+                                              <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                                                <span className="font-semibold">
+                                                  Click to upload
+                                                </span>{" "}
+                                                or drag and drop
+                                              </p>
+                                              <p className="text-xs text-gray-500 dark:text-gray-400">
+                                                ZIP, RAR atau PDF (MAX. 10mb)
+                                              </p>
+                                            </>
+                                          )}
+                                        </div>
+
+                                        <input
+                                          id="dropzone-file"
+                                          type="file"
+                                          className="hidden"
+                                          accept=".zip, .rar, .pdf"
+                                          onChange={handleChangeFile}
+                                        />
+                                      </label>
+                                    </div>
+                                  </div>
+                                  <div className="edit-form-group-mahasiswa">
+                                    <label>Tanggal Mulai:</label>
+                                    {/* <input
+                                  type="text"
+                                  value={formData.start_period}
+                                /> */}
+                                    <input
+                                      type="date"
+                                      name="start_period"
+                                      onChange={handleChange}
+                                      value={
+                                        formData.start_period
+                                          ? new Date(formData.start_period)
+                                              .toISOString()
+                                              .split("T")[0]
+                                          : ""
+                                      }
+                                    />
+                                  </div>
+                                  <div className="edit-form-group-mahasiswa">
+                                    <label>Tanggal Selesai:</label>
+                                    <input
+                                      type="date"
+                                      name="end_period"
+                                      onChange={handleChange}
+                                      value={
+                                        formData.end_period
+                                          ? new Date(formData.end_period)
+                                              .toISOString()
+                                              .split("T")[0]
+                                          : ""
+                                      }
+                                    />
+                                  </div>
+                                </>
+                              ) : null}
+                            </form>
+                          </div>
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel className="bg-red-600 text-white">
+                          Kembali
+                        </AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={() => mutation.mutate()}
+                          className="bg-green-600"
+                        >
+                          Simpan
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                   <button
                     className="action-button delete"
                     onClick={() => {

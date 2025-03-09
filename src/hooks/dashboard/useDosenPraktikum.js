@@ -21,6 +21,28 @@ export const getDosenPraktikumKelas = (url, id, cookie) =>
       return data;
     },
   });
+export const getOneDosenPraktikumKelas = (url, id, idPraktikum, cookie) =>
+  useQuery({
+    queryKey: ["praktikum", idPraktikum],
+    queryFn: async () => {
+      if (idPraktikum == "") {
+        return null;
+      }
+      const { data } = await axios.get(
+        url + `/${id}` + `/assignments/${idPraktikum}`,
+        {
+          headers: {
+            Authorization: `Bearer ${cookie.token}`,
+            Accept: "application/json",
+          }, // params: {
+          //   intent: RoutesApi.classGroup.intent,
+          // },
+        }
+      );
+      console.log(data);
+      return data;
+    },
+  });
 export const updatePraktikumDosen = (
   cookies,
   class_id,
@@ -117,7 +139,7 @@ export const createPraktikumDosen = (
     },
     onSuccess: (data) => {
       console.log(data);
-      Swal.fire("Berhasil!", "Kelas berhasil dihapus!", "success");
+      Swal.fire("Berhasil!", "Praktikum berhasil dibuat!", "success");
       // window.location.reload();
     },
     onError: (error) => {
@@ -147,7 +169,7 @@ export const deletePraktikumDosen = (cookies, class_id) =>
     },
     onSuccess: (data) => {
       console.log(data);
-      Swal.fire("Berhasil!", "Kelas berhasil dihapus!", "success");
+      Swal.fire("Berhasil!", "Praktikum berhasil dihapus!", "success");
       // window.location.reload();
     },
     onError: (error) => {
