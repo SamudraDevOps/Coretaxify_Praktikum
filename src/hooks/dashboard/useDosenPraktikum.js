@@ -52,7 +52,8 @@ export const updatePraktikumDosen = (
   useMutation({
     mutationFn: async (id) => {
       const csrf = await getCsrf();
-      console.log(supporting_files);
+      console.log("hello");
+      console.log(formData.start_period.split("-").reverse().join("-"));
       axios.defaults.headers.common["X-CSRF-TOKEN"] = csrf;
       const data = await axios.post(
         `${RoutesApi.url}api/lecturer/groups/${class_id}/assignments/${id}`,
@@ -61,6 +62,14 @@ export const updatePraktikumDosen = (
           task_id: formData.task_id,
           start_period: formData.start_period,
           end_period: formData.end_period,
+          // start_period: new Date(formData.start_period)
+          //   .toISOString()
+          //   .split(".")[0]
+          //   .replace("T", " "),
+          // end_period: new Date(formData.end_period)
+          //   .toISOString()
+          //   .split(".")[0]
+          //   .replace("T", " "),
           supporting_file: supporting_files,
         },
         {
@@ -71,7 +80,7 @@ export const updatePraktikumDosen = (
             Authorization: `Bearer ${cookies.token}`,
           },
           params: {
-            method: "PUT",
+            _method: "PUT",
           },
         }
       );
@@ -79,7 +88,7 @@ export const updatePraktikumDosen = (
     },
     onSuccess: (data) => {
       console.log(data);
-      Swal.fire("Berhasil!", "Kelas berhasil dihapus!", "success");
+      Swal.fire("Berhasil!", "Praktikum berhasil diubah!", "success");
       // window.location.reload();
     },
     onError: (error) => {

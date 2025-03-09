@@ -28,6 +28,7 @@ import {
   getDosenPraktikumKelas,
   getOneDosenPraktikumKelas,
   getTaskContract,
+  updatePraktikumDosen,
 } from "@/hooks/dashboard";
 import { getCookie } from "@/service";
 
@@ -125,14 +126,16 @@ export default function DosenPraktikumKelas() {
   // }));
   const taskData = getTaskContract(RoutesApi.tasksContract, getCookie());
   const mutation = createPraktikumDosen(getCookie(), id, formData, file);
+  const mutationUpdate = updatePraktikumDosen(getCookie(), id, formData, file);
+
   const mutationDelete = deletePraktikumDosen(getCookie(), id);
   useEffect(() => {
     if (dataOne) {
       setFormData({
         name: dataOne.data.name,
         task_id: dataOne.data.task_id,
-        start_period: dataOne.data.start_period,
-        end_period: dataOne.data.end_period,
+        start_period: dataOne.data.start_period.split("-").reverse().join("-"),
+        end_period: dataOne.data.end_period.split("-").reverse().join("-"),
       });
     }
   }, [dataOne]);
@@ -462,13 +465,19 @@ export default function DosenPraktikumKelas() {
                                       type="date"
                                       name="start_period"
                                       onChange={handleChange}
-                                      value={
-                                        formData.start_period
-                                          ? new Date(formData.start_period)
-                                              .toISOString()
-                                              .split("T")[0]
-                                          : ""
-                                      }
+                                      // className="bg-red-400"
+                                      value={formData.start_period}
+                                      // value={formData.start_period
+                                      //   .split("-")
+                                      //   .reverse()
+                                      //   .join("-")}
+                                      // value={
+                                      //   formData.start_period
+                                      //     ? new Date(formData.start_period)
+                                      //         .toISOString()
+                                      //         .split("T")[0]
+                                      //     : ""
+                                      // }
                                     />
                                   </div>
                                   <div className="edit-form-group-mahasiswa">
@@ -477,13 +486,18 @@ export default function DosenPraktikumKelas() {
                                       type="date"
                                       name="end_period"
                                       onChange={handleChange}
-                                      value={
-                                        formData.end_period
-                                          ? new Date(formData.end_period)
-                                              .toISOString()
-                                              .split("T")[0]
-                                          : ""
-                                      }
+                                      value={formData.end_period} 
+                                      // value={formData.end_period
+                                      //   .split("-")
+                                      //   .reverse()
+                                      //   .join("-")}
+                                      // value={
+                                      //   formData.end_period
+                                      //     ? new Date(formData.end_period)
+                                      //         .toISOString()
+                                      //         .split("T")[0]
+                                      //     : ""
+                                      // }
                                     />
                                   </div>
                                 </>
@@ -497,7 +511,7 @@ export default function DosenPraktikumKelas() {
                           Kembali
                         </AlertDialogCancel>
                         <AlertDialogAction
-                          onClick={() => mutation.mutate()}
+                          onClick={() => mutationUpdate.mutate(item.id)}
                           className="bg-green-600"
                         >
                           Simpan
@@ -509,8 +523,8 @@ export default function DosenPraktikumKelas() {
                     className="action-button delete"
                     onClick={() => {
                       Swal.fire({
-                        title: "Hapus Kelas?",
-                        text: "Kelas akan dihapus secara permanen!",
+                        title: "Hapus Praktikum?",
+                        text: " akan dihapus secara permanen!",
                         icon: "warning",
                         showCancelButton: true,
                         confirmButtonText: "Ya, hapus!",
