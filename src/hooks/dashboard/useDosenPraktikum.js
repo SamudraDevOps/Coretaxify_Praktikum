@@ -186,3 +186,32 @@ export const deletePraktikumDosen = (cookies, class_id) =>
       Swal.fire("Gagal !", error.message, "error");
     },
   });
+export const deleteMemberPraktikum = (cookies, class_id, assignment_id) =>
+  useMutation({
+    mutationFn: async (member_id) => {
+      const csrf = await getCsrf();
+      console.log(class_id);
+      axios.defaults.headers.common["X-CSRF-TOKEN"] = csrf;
+      const data = await axios.delete(
+        `${RoutesApi.url}api/lecturer/groups/${class_id}/assignments/${assignment_id}/members/${member_id}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": csrf,
+            Authorization: `Bearer ${cookies.token}`,
+          },
+        }
+      );
+      return data;
+    },
+    onSuccess: (data) => {
+      console.log(data);
+      Swal.fire("Berhasil!", "Mahasiswa berhasil dikeluarkan!", "success");
+      // window.location.reload();
+    },
+    onError: (error) => {
+      console.log(error);
+      Swal.fire("Gagal !", error.message, "error");
+    },
+  });

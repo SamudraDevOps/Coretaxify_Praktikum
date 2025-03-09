@@ -21,6 +21,8 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { RoutesApi } from "@/Routes";
 import { ClipLoader } from "react-spinners";
 import { useParams } from "react-router";
+import { deleteMemberPraktikum } from "@/hooks/dashboard";
+import { getCookie } from "@/service";
 
 export default function DosenPraktikumKelasMember() {
   const [isOpen, setIsOpen] = useState(false);
@@ -111,49 +113,8 @@ export default function DosenPraktikumKelasMember() {
   //       String(value).toLowerCase().includes(search.toLowerCase())
   //     ),
   // }));
-  const mutation = useMutation({
-    mutationFn: async (id) => {
-      console.log("button clicked");
-      // const { response } = await axios.post(RoutesApi.login, {
-      const response = await axios.get(`${RoutesApi.url}api/csrf-token`, {
-        // withCredentials: true,
-        headers: {
-          "X-Requested-With": "XMLHttpRequest",
-          Accept: "application/json",
-        },
-      });
-      console.log(response.data.token);
-      axios.defaults.headers.common["X-CSRF-TOKEN"] = response.data.token;
-      console.log(cookies.token);
-      const data = await axios.post(
-        RoutesApi.assignmentStudent.url,
-        {
-          assignment_code: formData.assignment_code,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            "X-CSRF-TOKEN": response.data.token,
-            Authorization: `Bearer ${cookies.token}`,
-          },
-          params: {
-            intent: RoutesApi.assignmentStudent.intent,
-          },
-        }
-      );
-      return data;
-    },
-    onSuccess: (data) => {
-      console.log(data);
-      // window.location.reload();
-    },
-    onError: (error) => {
-      console.log(error);
-    },
-  });
-
   let { id, idpraktikum } = useParams();
+  const mutation = deleteMemberPraktikum(getCookie(), id, idpraktikum);
   console.log("id", id, idpraktikum);
 
   if (isLoading) {
