@@ -10,11 +10,26 @@ export const getContracts = (url, cookie) =>
   useQuery({
     queryKey: [dashboard_const.contracts, url],
     queryFn: async () => {
+      const data = await axios.get(url, {
+        headers: {
+          Authorization: `Bearer ${cookie}`,
+        },
+      });
+      // console.log(data.data);
+      return data;
+    },
+  });
+export const getOneContract = (url, cookie) =>
+  useQuery({
+    queryKey: [dashboard_const.contracts, url],
+    queryFn: async () => {
+      console.log(url);
       const { data } = await axios.get(url, {
         headers: {
           Authorization: `Bearer ${cookie}`,
         },
       });
+      console.log("one contract");
       console.log(data.data);
       return data;
     },

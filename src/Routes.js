@@ -11,6 +11,7 @@ export const RoutesApi = {
   url: url,
   login: url + "api/login",
   tasksAdmin: url + `api/${role.admin}/tasks`,
+  tasksContract: url + `api/${role.lecturer}/contract-tasks`,
   contractAdmin: url + `api/${role.admin}/contract`,
   uniAdmin: url + `api/${role.admin}/universities`,
   classAdmin: url + `api/${role.lecturer}/groups`,
@@ -34,6 +35,9 @@ export const RoutesApi = {
     url: url + `api/${role.lecturer}/groups`,
     intent: "api.get.group.with.assignments",
   },
+  // classGroupPraktikumMember:{
+  //   url: url + `api/${role.lecturer}/groups`,
+  // },
   // classStudent:
   getAdmin: {
     url: url + `api/${role.admin}/users`,

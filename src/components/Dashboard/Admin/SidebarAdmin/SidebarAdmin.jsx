@@ -180,8 +180,8 @@ const SidebarAdmin = () => {
           className={cookies.role == "psc" ? "!hidden " : `menu-item`}
           // className={`menu-item`}
           onClick={() => {
-            if (cookies.role == "admin") {
-              window.location.href = "/admin/coretaxify";
+            if (cookies.role == "admin" || cookies.role == "dosen") {
+              window.location.href = `/${cookies.role}/coretaxify`;
             } else {
               window.location.href = `/${cookies.role}/praktikum`;
             }
@@ -189,7 +189,11 @@ const SidebarAdmin = () => {
         >
           <FaLaptopCode className="menu-icon" />
           {isOpen && (
-            <span>{cookies.role == "admin" ? "Coretaxify" : "Praktikum"}</span>
+            <span>
+              {cookies.role == "admin" || cookies.role == "dosen"
+                ? "Coretaxify"
+                : "Praktikum"}
+            </span>
           )}
         </li>
         <li
@@ -260,10 +264,12 @@ const SidebarAdmin = () => {
                 <ul className="">
                   <li
                     className={`dropdown-item  ${
-                      cookies.role == "psc" ? "" : "!hidden"
+                      cookies.role == "psc" || cookies.role == "admin"
+                        ? ""
+                        : "!hidden"
                     }`}
                     onClick={() => {
-                      window.location.href = "/psc/edit-kelas";
+                      window.location.href = `/${cookies.role}/edit-kelas`;
                     }}
                   >
                     Kelas

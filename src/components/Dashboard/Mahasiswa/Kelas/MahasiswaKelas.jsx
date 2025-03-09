@@ -22,7 +22,7 @@ import Wulan from "../../../../assets/images/wulan.png";
 
 export default function MahasiswaKelas() {
   const [isOpen, setIsOpen] = useState(false);
-  const [url, setUrl] = useState(RoutesApi.classAdmin);
+  const [url, setUrl] = useState(`${RoutesApi.url}api/student/groups`);
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
   const [selectedData, setSelectedData] = useState(null);
@@ -44,37 +44,6 @@ export default function MahasiswaKelas() {
       return data;
     },
   });
-
-  //   const [data, setData] = useState([
-  //     {
-  //       id: "1",
-  //       namaPraktikum: "Praktikum 1",
-  //       kodePraktikum: "xAE12",
-  //       supportingFile: "file.pdf",
-  //       deadline: "2021-12-12",
-  //     },
-  //     {
-  //       id: "2",
-  //       namaPraktikum: "Praktikum 2",
-  //       kodePraktikum: "xAE12",
-  //       supportingFile: "file.pdf",
-  //       deadline: "2021-12-12",
-  //     },
-  //     {
-  //       id: "3",
-  //       namaPraktikum: "Praktikum 2",
-  //       kodePraktikum: "xAE12",
-  //       supportingFile: "file.pdf",
-  //       deadline: "2021-12-12",
-  //     },
-  //     {
-  //       id: "4",
-  //       namaPraktikum: "Praktikum 3",
-  //       kodePraktikum: "xAE12",
-  //       supportingFile: "file.pdf",
-  //       deadline: "2021-12-12",
-  //     },
-  //   ]);
 
   const [formData, setFormData] = useState({
     kodeKelas: "",
@@ -248,6 +217,8 @@ export default function MahasiswaKelas() {
     },
   });
 
+  console.log(cookies.token);
+
   if (isLoading) {
     return (
       <div className="loading">
@@ -307,13 +278,13 @@ export default function MahasiswaKelas() {
           </thead>
           <tbody> */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-6 place-items-start">
-        {data == undefined ? (
-          <div className="loading">
-            <h1>Data Empty !</h1>
+        {data == undefined || data.data.length == 0 ? (
+          <div className="">
+            <h1>Anda Belum tergabung dengan kelas manapun.</h1>
             {/* <ClipLoader color="#7502B5" size={50} /> */}
           </div>
         ) : (
-          data.map((item, index) => (
+          data.data.map((item, index) => (
             <div
               key={item.id}
               className="relative  shadow-lg rounded-lg w-100 md:min-w-96 p-4 cursor-pointer"
@@ -323,7 +294,7 @@ export default function MahasiswaKelas() {
             >
               <div className="bg-purple-700 text-white p-4 rounded-t-lg w-150">
                 <h3 className="font-bold text-lg">{item.name}</h3>
-                <p className="text-sm">Pengajar : {item.user.name}</p>
+                {/* <p className="text-sm">Pengajar : {item.user.name}</p> */}
               </div>
               <div className="p-4">
                 <ul className="text-gray-700 text-sm space-y-2 h-10">
@@ -519,7 +490,7 @@ export default function MahasiswaKelas() {
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Tambah Kelas</AlertDialogTitle>
+            <AlertDialogTitle>Ikuti Kelas</AlertDialogTitle>
             <AlertDialogDescription className="w-full">
               <div className="max-h-[70vh] overflow-y-auto">
                 <form>

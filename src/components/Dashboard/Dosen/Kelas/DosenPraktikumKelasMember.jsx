@@ -21,28 +21,35 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { RoutesApi } from "@/Routes";
 import { ClipLoader } from "react-spinners";
 import { useParams } from "react-router";
+import { deleteMemberPraktikum } from "@/hooks/dashboard";
+import { getCookie } from "@/service";
 
-export default function MahasiswaPraktikumKelas() {
+export default function DosenPraktikumKelasMember() {
   const [isOpen, setIsOpen] = useState(false);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
   const [selectedData, setSelectedData] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const [cookies, setCookie] = useCookies(["user"]);
-  const [url, setUrl] = useState(`${RoutesApi.url}api/student/groups`);
+  const [url, setUrl] = useState(RoutesApi.classGroup.url);
+  const [filePreview, setFilePreview] = useState(null);
 
   const { isLoading, isError, data, error } = useQuery({
     queryKey: ["praktikum", url],
     queryFn: async () => {
-      const { data } = await axios.get(url + `/${id}`, {
-        headers: {
-          Authorization: `Bearer ${cookies.token}`,
-          Accept: "application/json",
-        },
-        // params: {
-        //   intent: RoutesApi.classGroup.intent,
-        // },
-      });
+      const { data } = await axios.get(
+        url + `/${id}/assignments/${idpraktikum}/members`,
+        {
+          headers: {
+            Authorization: `Bearer ${cookies.token}`,
+            Accept: "application/json",
+          },
+          // params: {
+          //   intent: RoutesApi.classGroup.intent,
+          // },
+        }
+      );
+      console.log(url + `/${id}/assignments/${idpraktikum}/members`);
       console.log(data);
       return data;
     },
@@ -106,49 +113,9 @@ export default function MahasiswaPraktikumKelas() {
   //       String(value).toLowerCase().includes(search.toLowerCase())
   //     ),
   // }));
-  const mutation = useMutation({
-    mutationFn: async (id) => {
-      console.log("button clicked");
-      // const { response } = await axios.post(RoutesApi.login, {
-      const response = await axios.get(`${RoutesApi.url}api/csrf-token`, {
-        // withCredentials: true,
-        headers: {
-          "X-Requested-With": "XMLHttpRequest",
-          Accept: "application/json",
-        },
-      });
-      console.log(response.data.token);
-      axios.defaults.headers.common["X-CSRF-TOKEN"] = response.data.token;
-      console.log(cookies.token);
-      const data = await axios.post(
-        RoutesApi.assignmentStudent.url,
-        {
-          assignment_code: formData.assignment_code,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            "X-CSRF-TOKEN": response.data.token,
-            Authorization: `Bearer ${cookies.token}`,
-          },
-          params: {
-            intent: RoutesApi.assignmentStudent.intent,
-          },
-        }
-      );
-      return data;
-    },
-    onSuccess: (data) => {
-      console.log(data);
-      // window.location.reload();
-    },
-    onError: (error) => {
-      console.log(error);
-    },
-  });
-
-  let { id } = useParams();
+  let { id, idpraktikum } = useParams();
+  const mutation = deleteMemberPraktikum(getCookie(), id, idpraktikum);
+  console.log("id", id, idpraktikum);
 
   if (isLoading) {
     return (
@@ -187,7 +154,7 @@ export default function MahasiswaPraktikumKelas() {
           <thead>
             <tr>
               <th
-                className="max-w-5"
+                className="w-[2rem]"
                 onClick={() => handleSort("namaPraktikum")}
               >
                 Nomor{" "}
@@ -199,34 +166,55 @@ export default function MahasiswaPraktikumKelas() {
                   ? "↓"
                   : "↑"}
               </th>
-              <th className="">Nama Praktikum </th>
-              <th className="">Supporting File</th>
-              <th></th>
+              <th className="w-[2rem] !px-0">Nama Mahasiswa </th>
+              <th className="w-[2rem]">NIM </th>
+              <th className="w-[2rem]">Email </th>
+              <th className="w-[2rem]">Aksi</th>
             </tr>
           </thead>
           <tbody>
-            {data.data.assignments.map((item, index) => (
+            {data.data.map((item, index) => (
               <tr key={index}>
                 <td className="max-w-5">{index + 1}</td>
                 <td>{item.name}</td>
-                <td className="max-w-5">
-                  <a href={item.supporting_file_url}>Download</a>
-                  {/* <p className="truncate">{item.supporting_file_url}</p> */}
+                <td></td>
+                <td>{item.email}</td>
+                <td>
+                  <button
+                    className="action-button delete"
+                    onClick={() => {
+                      Swal.fire({
+                        title: "Hapus Kelas?",
+                        text: "Kelas akan dihapus secara permanen!",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonText: "Ya, hapus!",
+                        cancelButtonText: "Batal",
+                      }).then((result) => {
+                        if (result.isConfirmed) {
+                          mutation.mutate(item.id);
+                        }
+                      });
+                    }}
+                  >
+                    {mutation.status == "pending" ? (
+                      <p>Loading...</p>
+                    ) : (
+                      <>Delete</>
+                    )}
+                  </button>
                 </td>
-                {/* <td>
-                  <button className="action-button">Mulai</button>
-                </td> */}
               </tr>
             ))}
-            {/* {id} */}
           </tbody>
         </table>
-        <div className="">
-          {/* <div className="pagination-info">
-            {`Showing ${indexOfFirstItem + 1} to ${Math.min(
+        <div className="pagination-container">
+          <div className="pagination-info">
+            {/* Total Entries: {data.data.assignment.length} */}
+            {/* {`Showing ${indexOfFirstItem + 1} to ${Math.min(
               indexOfLastItem,
-              data.length
-            )} of ${data.length} entries`}
+              data.data.length
+            )} of ${data.data.length} entries`} */}
           </div>
 
           <div className="pagination">
@@ -240,6 +228,11 @@ export default function MahasiswaPraktikumKelas() {
               &lt;
             </button>
             <button className="page-item">{data.meta.current_page}</button>
+            {/* {Array.from({ length: Math.ceil(data.length / itemsPerPage) }, (_, index) => (
+                            <button key={index + 1} className={`page-item ${currentPage === index + 1 ? "active" : ""}`} onClick={() => paginate(index + 1)}>
+                                {index + 1}
+                            </button>
+                        ))} */}
             <button
               className={`page-item ${
                 currentPage === Math.ceil(data.length / itemsPerPage)
@@ -254,7 +247,7 @@ export default function MahasiswaPraktikumKelas() {
             >
               &gt;
             </button>
-          </div> */}
+          </div>
         </div>
       </div>
       {isOpen && (
