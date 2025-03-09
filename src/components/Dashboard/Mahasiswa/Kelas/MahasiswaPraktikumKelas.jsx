@@ -29,7 +29,7 @@ export default function MahasiswaPraktikumKelas() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const [cookies, setCookie] = useCookies(["user"]);
-  const [url, setUrl] = useState(RoutesApi.classGroup.url);
+  const [url, setUrl] = useState(`${RoutesApi.url}api/student/groups`);
 
   const { isLoading, isError, data, error } = useQuery({
     queryKey: ["praktikum", url],
@@ -181,38 +181,6 @@ export default function MahasiswaPraktikumKelas() {
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
-        <AlertDialog>
-          <AlertDialogTrigger className="bg-blue-800 p-2 rounded-md text-white hover:bg-blue-900">
-            Ikuti Praktikum
-          </AlertDialogTrigger>
-          <AlertDialogContent className="w-full ">
-            <AlertDialogHeader>
-              <AlertDialogTitle>Ikuti Praktikum</AlertDialogTitle>
-              {/* <AlertDialogDescription>
-                This action cannot be undone. This will permanently delete your
-                account and remove your data from our servers.
-              </AlertDialogDescription> */}
-            </AlertDialogHeader>
-            <div>
-              <div className="edit-form-group-mahasiswa ">
-                <label>Kode Praktikum:</label>
-                <input
-                  type="text"
-                  name="assignment_code"
-                  value={formData.assignment_code}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-            </div>
-            <AlertDialogFooter>
-              <AlertDialogCancel>Kembali</AlertDialogCancel>
-              <AlertDialogAction onClick={() => mutation.mutate()}>
-                Ikuti Praktikum
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
       </div>
       <div className="table-container">
         <table>
@@ -242,7 +210,8 @@ export default function MahasiswaPraktikumKelas() {
                 <td className="max-w-5">{index + 1}</td>
                 <td>{item.name}</td>
                 <td className="max-w-5">
-                  <p className="truncate">{item.supporting_file}</p>
+                  <a href={item.supporting_file_url}>Download</a>
+                  {/* <p className="truncate">{item.supporting_file_url}</p> */}
                 </td>
                 {/* <td>
                   <button className="action-button">Mulai</button>
@@ -253,7 +222,7 @@ export default function MahasiswaPraktikumKelas() {
           </tbody>
         </table>
         <div className="">
-          <div className="pagination-info">
+          {/* <div className="pagination-info">
             {`Showing ${indexOfFirstItem + 1} to ${Math.min(
               indexOfLastItem,
               data.length
@@ -262,38 +231,30 @@ export default function MahasiswaPraktikumKelas() {
 
           <div className="pagination">
             <button
-              className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
-              onClick={() => paginate(currentPage - 1)}
-              disabled={currentPage === 1}
+              className={`page-item`}
+              onClick={() => {
+                setUrl(data.links.prev);
+              }}
+              disabled={data.meta.current_page === 1}
             >
               &lt;
             </button>
-            {Array.from(
-              { length: Math.ceil(data.length / itemsPerPage) },
-              (_, index) => (
-                <button
-                  key={index + 1}
-                  className={`page-item ${
-                    currentPage === index + 1 ? "active" : ""
-                  }`}
-                  onClick={() => paginate(index + 1)}
-                >
-                  {index + 1}
-                </button>
-              )
-            )}
+            <button className="page-item">{data.meta.current_page}</button>
             <button
               className={`page-item ${
                 currentPage === Math.ceil(data.length / itemsPerPage)
                   ? "disabled"
                   : ""
               }`}
-              onClick={() => paginate(currentPage + 1)}
-              disabled={currentPage === Math.ceil(data.length / itemsPerPage)}
+              onClick={() => {
+                console.log(data.links.next);
+                setUrl(data.links.next);
+              }}
+              disabled={data.links.next == null}
             >
               &gt;
             </button>
-          </div>
+          </div> */}
         </div>
       </div>
       {isOpen && (

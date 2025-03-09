@@ -28,7 +28,7 @@ export default function MahasiswaPraktikum() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const [cookies, setCookie] = useCookies(["user"]);
-  const [url, setUrl] = useState(RoutesApi.assignmentStudent.url);
+  const [url, setUrl] = useState(`${RoutesApi.url}api/student/assignments`);
 
   const { isLoading, isError, data, error } = useQuery({
     queryKey: ["praktikum", url],
@@ -174,38 +174,6 @@ export default function MahasiswaPraktikum() {
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
-        <AlertDialog>
-          <AlertDialogTrigger className="bg-blue-800 p-2 rounded-md text-white hover:bg-blue-900">
-            Ikuti Praktikum
-          </AlertDialogTrigger>
-          <AlertDialogContent className="w-full ">
-            <AlertDialogHeader>
-              <AlertDialogTitle>Ikuti Praktikum</AlertDialogTitle>
-              {/* <AlertDialogDescription>
-                This action cannot be undone. This will permanently delete your
-                account and remove your data from our servers.
-              </AlertDialogDescription> */}
-            </AlertDialogHeader>
-            <form>
-              <div className="edit-form-group-mahasiswa ">
-                <label>Kode Praktikum:</label>
-                <input
-                  type="text"
-                  name="assignment_code"
-                  value={formData.assignment_code}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-            </form>
-            <AlertDialogFooter>
-              <AlertDialogCancel>Kembali</AlertDialogCancel>
-              <AlertDialogAction onClick={() => mutation.mutate()}>
-                Ikuti Kelas
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
       </div>
       <div className="table-container">
         <table>
@@ -224,7 +192,7 @@ export default function MahasiswaPraktikum() {
               <th className="">Nama Kelas</th>
               <th className="">Nama Dosen</th>
               <th className="">Judul Praktikum</th>
-              <th className="">Tanggal Praktikum</th>
+              <th className="">Deadline Praktikum</th>
               <th>Aksi</th>
             </tr>
           </thead>
@@ -232,13 +200,14 @@ export default function MahasiswaPraktikum() {
             {data.data.map((item, index) => (
               <tr key={index}>
                 <td>{item.group.name}</td>
-                <td>{item.dosen.name}</td>
+                <td></td>
+                {/* <td>{item.dosen.name}</td> */}
                 <td>{item.name}</td>
                 {/* <td className="max-w-5">
                   <p className="truncate">{item.assignment_code}</p>
                 </td> */}
                 <td className="max-w-5">
-                  <p className="">{item.start_period}</p>
+                  <p className="">{item.end_period}</p>
                 </td>
                 <td>
                   <button className="action-button">Mulai</button>
@@ -251,40 +220,37 @@ export default function MahasiswaPraktikum() {
           <div className="pagination-info">
             {`Showing ${indexOfFirstItem + 1} to ${Math.min(
               indexOfLastItem,
-              data.length
-            )} of ${data.length} entries`}
+              data.data.length
+            )} of ${data.data.length} entries`}
           </div>
 
-          <div className="pagination ">
+          <div className="pagination">
             <button
-              className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
-              onClick={() => paginate(currentPage - 1)}
-              disabled={currentPage === 1}
+              className={`page-item`}
+              onClick={() => {
+                setUrl(data.links.prev);
+              }}
+              disabled={data.meta.current_page === 1}
             >
               &lt;
             </button>
-            {Array.from(
-              { length: Math.ceil(data.length / itemsPerPage) },
-              (_, index) => (
-                <button
-                  key={index + 1}
-                  className={`page-item ${
-                    currentPage === index + 1 ? "active" : ""
-                  }`}
-                  onClick={() => paginate(index + 1)}
-                >
-                  {index + 1}
-                </button>
-              )
-            )}
+            <button className="page-item">{data.meta.current_page}</button>
+            {/* {Array.from({ length: Math.ceil(data.length / itemsPerPage) }, (_, index) => (
+                            <button key={index + 1} className={`page-item ${currentPage === index + 1 ? "active" : ""}`} onClick={() => paginate(index + 1)}>
+                                {index + 1}
+                            </button>
+                        ))} */}
             <button
               className={`page-item ${
                 currentPage === Math.ceil(data.length / itemsPerPage)
                   ? "disabled"
                   : ""
               }`}
-              onClick={() => paginate(currentPage + 1)}
-              disabled={currentPage === Math.ceil(data.length / itemsPerPage)}
+              onClick={() => {
+                console.log(data.links.next);
+                setUrl(data.links.next);
+              }}
+              disabled={data.links.next == null}
             >
               &gt;
             </button>

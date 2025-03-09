@@ -148,38 +148,6 @@ export default function DosenPraktikumKelasMember() {
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
-        <AlertDialog>
-          <AlertDialogTrigger className="bg-blue-800 p-2 rounded-md text-white hover:bg-blue-900">
-            Ikuti Praktikum
-          </AlertDialogTrigger>
-          <AlertDialogContent className="w-full ">
-            <AlertDialogHeader>
-              <AlertDialogTitle>Ikuti Praktikum</AlertDialogTitle>
-              {/* <AlertDialogDescription>
-                This action cannot be undone. This will permanently delete your
-                account and remove your data from our servers.
-              </AlertDialogDescription> */}
-            </AlertDialogHeader>
-            <div>
-              <div className="edit-form-group-mahasiswa ">
-                <label>Kode Praktikum:</label>
-                <input
-                  type="text"
-                  name="assignment_code"
-                  value={formData.assignment_code}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-            </div>
-            <AlertDialogFooter>
-              <AlertDialogCancel>Kembali</AlertDialogCancel>
-              <AlertDialogAction onClick={() => mutation.mutate()}>
-                Ikuti Praktikum
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
       </div>
       <div className="table-container">
         <table>
@@ -249,7 +217,7 @@ export default function DosenPraktikumKelasMember() {
             )} of ${data.data.length} entries`} */}
           </div>
 
-          {/* <div className="pagination">
+          <div className="pagination">
             <button
               className={`page-item`}
               onClick={() => {
@@ -260,11 +228,11 @@ export default function DosenPraktikumKelasMember() {
               &lt;
             </button>
             <button className="page-item">{data.meta.current_page}</button>
-            {Array.from({ length: Math.ceil(data.length / itemsPerPage) }, (_, index) => (
+            {/* {Array.from({ length: Math.ceil(data.length / itemsPerPage) }, (_, index) => (
                             <button key={index + 1} className={`page-item ${currentPage === index + 1 ? "active" : ""}`} onClick={() => paginate(index + 1)}>
                                 {index + 1}
                             </button>
-                        ))}
+                        ))} */}
             <button
               className={`page-item ${
                 currentPage === Math.ceil(data.length / itemsPerPage)
@@ -279,7 +247,7 @@ export default function DosenPraktikumKelasMember() {
             >
               &gt;
             </button>
-          </div> */}
+          </div>
         </div>
       </div>
       {isOpen && (

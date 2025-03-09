@@ -10,7 +10,7 @@ export const getContracts = (url, cookie) =>
   useQuery({
     queryKey: [dashboard_const.contracts, url],
     queryFn: async () => {
-      const { data } = await axios.get(url, {
+      const data = await axios.get(url, {
         headers: {
           Authorization: `Bearer ${cookie}`,
         },
