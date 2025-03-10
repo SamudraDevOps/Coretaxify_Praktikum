@@ -59,6 +59,8 @@ import DetailBank from "./components/PraktikumPage/PortalSaya/DetailBank";
 import ObjekPBB from "./components/PraktikumPage/PortalSaya/ObjekPBB";
 import KlasifikasiLapanganUsaha from "./components/PraktikumPage/PortalSaya/KlasifikasiLapanganUsaha";
 import DataUnitKeluarga from "./components/PraktikumPage/PortalSaya/DataUnitKeluarga";
+import TempatKegiatanUsaha from "./components/PraktikumPage/PortalSaya/TempatKegiatanUsaha";
+import NomorIdentifikasiEksternal from "./components/PraktikumPage/PortalSaya/NomorIdentifikasiEksternal";
 //Route Praktikum
 import ProtectedRoutes from "./components/Dashboard/Auth/ProtectedRoutes";
 import MahasiswaPraktikumKelas from "./components/Dashboard/Mahasiswa/Kelas/MahasiswaPraktikumKelas";
@@ -644,6 +646,24 @@ const Main = () => {
             <>
               <Header />
               <DataUnitKeluarga />
+            </>
+          }
+        />
+        <Route
+            path="/admin/praktikum/profil-saya/tempat-kegiatan-usaha/sub-unit"
+          element={
+            <>
+              <Header />
+              <TempatKegiatanUsaha />
+            </>
+          }
+        />
+        <Route
+            path="/admin/praktikum/profil-saya/nomor-identifikasi-eksternal"
+          element={
+            <>
+              <Header />
+              <NomorIdentifikasiEksternal />
             </>
           }
         />
