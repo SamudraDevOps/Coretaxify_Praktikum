@@ -8,6 +8,9 @@ const role = {
   admin: "admin",
   student: "student",
   lecturer: "lecturer",
+  psc: "psc",
+  student_psc: "student-psc",
+  instructor: "instructor",  
 };
 
 const apiResource = (baseUrl, resourceName) => {
