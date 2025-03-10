@@ -21,35 +21,6 @@ const EditMahasiswa = () => {
 
   const { isLoading, isError, data, error } = getMahasiswa(url, getCookie());
   const mutation = deleteMahasiswa(getCookie());
-  // const [data, setData] = useState([
-  //   {
-  //     namaMahasiswa: "Hendra",
-  //     instansi: "Poltek Jos",
-  //     email: "hendra@coretaxify.com",
-  //     kelas: "Abangkuh",
-  //     tanggalRegistrasi: "22-5-2023",
-  //     kodeRegistrasi: "L001",
-  //     status: "Active",
-  //   },
-  //   {
-  //     namaMahasiswa: "Udin",
-  //     instansi: "UB Jos",
-  //     email: "hendra@coretaxify.com",
-  //     kelas: "Abangkuh",
-  //     tanggalRegistrasi: "22-5-2023",
-  //     kodeRegistrasi: "U002",
-  //     status: "Expired",
-  //   },
-  //   {
-  //     namaMahasiswa: "Galeh",
-  //     instansi: "UM Jos",
-  //     email: "hendra@coretaxify.com",
-  //     kelas: "Abangkuh",
-  //     tanggalRegistrasi: "22-5-2023",
-  //     kodeRegistrasi: "U003",
-  //     status: "Active",
-  //   },
-  // ]);
 
   const handleSort = (key) => {
     let direction = "ascending";
@@ -70,8 +41,9 @@ const EditMahasiswa = () => {
     setData(sortedData);
   };
 
-  const handleEditClick = (index) => {
-    setSelectedData(data[index]);
+  const handleEditClick = (data) => {
+    setSelectedData(data);
+    console.log(data);
     setIsOpen(true);
   };
   const handleUpdateMahasiswa = (updatedMahasiswa) => {
@@ -144,7 +116,7 @@ const EditMahasiswa = () => {
               </thead>
               <tbody>
                 {/* {data} */}
-                {data.data.map((item) => (
+                {data.data.map((item, index) => (
                   <tr key={item.id}>
                     <td>{item.name}</td>
                     <td>{item.email}</td>
@@ -156,7 +128,7 @@ const EditMahasiswa = () => {
                     <td>
                       <button
                         className="action-button edit"
-                        onClick={() => handleEditClick(item)}
+                        onClick={() => handleEditClick(data.data[index])}
                       >
                         Edit
                       </button>
@@ -237,6 +209,7 @@ const EditMahasiswa = () => {
           </div>
           {isOpen && (
             <EditPopupMahasiswa
+              isOpen={isOpen}
               onClose={() => setIsOpen(false)}
               data={selectedData}
               onSave={handleUpdateMahasiswa}

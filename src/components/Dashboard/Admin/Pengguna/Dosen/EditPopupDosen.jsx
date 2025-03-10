@@ -132,7 +132,7 @@ const EditPopupDosen = ({ isOpen, onClose, dosen, onSave }) => {
             />
           </div>
           <div className="edit-form-group-dosen">
-            <label>Instansi:</label>
+            <label>Email:</label>
             <input
               type="email"
               name="email"
