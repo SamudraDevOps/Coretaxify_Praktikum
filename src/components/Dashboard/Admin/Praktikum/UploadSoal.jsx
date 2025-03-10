@@ -76,6 +76,13 @@ export default function UploadSoal() {
     },
     onSuccess: (data) => {
       console.log(data);
+      Swal.fire("Berhasil!", "Data Soal berhasil dibuat !", "success").then(
+        (result) => {
+          if (result.isConfirmed) {
+            window.location.reload();
+          }
+        }
+      );
     },
     onError: (error) => {
       console.log(error);
@@ -95,7 +102,7 @@ export default function UploadSoal() {
       axios.defaults.headers.common["X-CSRF-TOKEN"] = response.data.token;
       console.log(cookies.token);
       const data = await axios.post(
-        RoutesApi.tasksAdmin + "/" + id,
+        RoutesApi.url + "api/admin/tasks/" + id,
         {
           name: formData.name,
           import_file: formData.file,
@@ -107,12 +114,22 @@ export default function UploadSoal() {
             "X-CSRF-TOKEN": response.data.token,
             Authorization: `Bearer ${cookies.token}`,
           },
+          params: {
+            _method: "PUT",
+          },
         }
       );
       return data;
     },
     onSuccess: (data) => {
       console.log(data);
+      Swal.fire("Berhasil!", "Data Soal berhasil diubah!", "success").then(
+        (result) => {
+          if (result.isConfirmed) {
+            window.location.reload();
+          }
+        }
+      );
     },
     onError: (error) => {
       console.log(error);
@@ -143,6 +160,13 @@ export default function UploadSoal() {
     },
     onSuccess: (data) => {
       console.log(data);
+      Swal.fire("Berhasil!", "Data Soal berhasil dihapus!", "success").then(
+        (result) => {
+          if (result.isConfirmed) {
+            window.location.reload();
+          }
+        }
+      );
     },
     onError: (error) => {
       console.log(error);
@@ -341,7 +365,12 @@ export default function UploadSoal() {
                 </td>
                 <td>
                   <AlertDialog>
-                    <AlertDialogTrigger className="action-button edit">
+                    <AlertDialogTrigger
+                      className="action-button edit"
+                      onClick={() =>
+                        setFormData({ ...formData, name: item.name })
+                      }
+                    >
                       Edit
                     </AlertDialogTrigger>
                     <AlertDialogContent>
@@ -355,7 +384,7 @@ export default function UploadSoal() {
                                 <input
                                   type="text"
                                   name="name"
-                                  value={formData.namaSoal}
+                                  value={formData.name}
                                   onChange={handleChange}
                                   required
                                 />
@@ -383,7 +412,7 @@ export default function UploadSoal() {
                           Kembali
                         </AlertDialogCancel>
                         <AlertDialogAction
-                          onClick={() => mutation.mutate(item.id)}
+                          onClick={() => mutationEdit.mutate(item.id)}
                           className="bg-green-600 "
                         >
                           Simpan
@@ -416,11 +445,6 @@ export default function UploadSoal() {
                           //   (itemData) => itemData.id !== item.id
                           // );
                           // setData(newData);
-                          Swal.fire(
-                            "Berhasil!",
-                            "Soal berhasil dihapus!",
-                            "success"
-                          );
                         }
                       });
                     }}
@@ -433,12 +457,12 @@ export default function UploadSoal() {
           </tbody>
         </table>
         <div className="pagination-container">
-          <div className="pagination-info">
+          {/* <div className="pagination-info">
             {`Showing ${indexOfFirstItem + 1} to ${Math.min(
               indexOfLastItem,
               data.length
             )} of ${data.length} entries`}
-          </div>
+          </div> */}
 
           <div className="pagination">
             <button
