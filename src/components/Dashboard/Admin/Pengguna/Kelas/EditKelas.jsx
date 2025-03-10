@@ -52,38 +52,13 @@ const EditKelas = () => {
       axios.defaults.headers.common["X-CSRF-TOKEN"] = response.data.token;
       console.log(cookies.token);
       const data = await axios.put(
-        RoutesApi.classAdmin + `/${id}`,
+        RoutesApi.url + `api/admin/groups/${id}`,
         {
-          id: 1,
           name: formData.namaKelas,
-          user_id: 2,
-          qty_student: 1,
-          start_period: "2025-02-12",
-          end_period: "2026-02-12",
-          spt: null,
-          bupot: null,
-          faktur: null,
+          start_period: formData.start_period,
+          end_period: formData.end_period,
           class_code: formData.kodeKelas,
           status: formData.status,
-          // university_id: 1,
-          //   contract_type: "LICENSE",
-          //   qty_student: 1,
-          //   start_period: "2025-02-10",
-          //   end_period: "2026-02-10",
-          //   spt: 5,
-          //   bupot: 5,
-          //   faktur: 5,
-          //   contract_code: "L-0001",
-
-          // university_id: parseInt(formData.instansi),
-          // contract_type: formData.jenisKontrak,
-          // qty_student: parseInt(formData.mahasiswa),
-          // start_period: formData.periodeAwal,
-          // end_period: formData.periodeAkhir,
-          // spt: parseInt(formData.spt),
-          // bupot: parseInt(formData.bupot),
-          // faktur: parseInt(formData.faktur),
-          // contract_code: formData.kodePembelian,
         },
         {
           headers: {
@@ -98,58 +73,87 @@ const EditKelas = () => {
     },
     onSuccess: (data) => {
       console.log(data);
-      window.location.reload();
-
-      // window.location.href = "/" + role;
-      // alert("Login successful!");
-      // queryClient.invalidateQueries({ queryKey: ["todos"] });
+      Swal.fire("Berhasil!", "Data Kelas berhasil diubah!", "success").then(
+        (result) => {
+          if (result.isConfirmed) {
+            window.location.reload();
+          }
+        }
+      );
     },
     onError: (error) => {
       console.log(error);
+    },
+  });
+  const mutationDelete = useMutation({
+    mutationFn: async (id) => {
+      console.log("button clicked");
+      // const { response } = await axios.post(RoutesApi.login, {
+      const response = await axios.get(`${RoutesApi.url}api/csrf-token`, {
+        // withCredentials: true,
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+          Accept: "application/json",
+        },
+      });
+      console.log(response.data.token);
+      axios.defaults.headers.common["X-CSRF-TOKEN"] = response.data.token;
+      console.log(cookies.token);
+      const data = await axios.delete(
+        RoutesApi.url + `api/admin/groups/${id}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": response.data.token,
+            Authorization: `Bearer ${cookies.token}`,
+          },
+        }
+      );
+      return data;
+    },
+    onSuccess: (data) => {
+      console.log(data);
+      Swal.fire("Berhasil!", "Data Kelas berhasil dihapus!", "success").then(
+        (result) => {
+          if (result.isConfirmed) {
+            window.location.reload();
+          }
+        }
+      );
+    },
+    onError: (error) => {
+      Swal.fire("Gagal !", error, "success");
     },
   });
   const [isOpen, setIsOpen] = useState(false);
   const [selectedKelas, setSelectedKelas] = useState(null);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
   const [currentPage, setCurrentPage] = useState(1);
+  const [updateId, setUpdateId] = useState(0);
   const itemsPerPage = 10;
   const [formData, setFormData] = useState({
     namaKelas: "",
     kodeKelas: "",
     status: "",
+    start_period: "",
+    end_period: "",
   });
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  //   const [data, setData] = useState([
-  //     {
-  //       id: 1,
-  //       kelas: "Abangkuh",
-  //       instansi: "Poltek Jos",
-  //       kodeRegistrasi: "L001",
-  //       status: "Active",
-  //     },
-  //     {
-  //       id: 2,
-  //       kelas: "Abangkuh",
-  //       instansi: "UB Jos",
-  //       kodeRegistrasi: "U002",
-  //       status: "Expired",
-  //     },
-  //     {
-  //       id: 3,
-  //       kelas: "Abangkuh",
-  //       instansi: "UM Jos",
-  //       kodeRegistrasi: "U003",
-  //       status: "Active",
-  //     },
-  //   ]);
-
   const handleEdit = (kelas) => {
-    setSelectedKelas(kelas);
-    setIsOpen(true);
+    setFormData({
+      namaKelas: kelas.name,
+      kodeKelas: kelas.class_code,
+      status: kelas.status,
+      start_period: kelas.start_period.split("-").reverse().join("-"),
+      end_period: kelas.end_period.split("-").reverse().join("-"),
+    });
+    // setSelectedKelas(kelas);
+    // setIsOpen(true);
   };
 
   const handleUpdateKelas = (updatedKelas) => {
@@ -235,7 +239,7 @@ const EditKelas = () => {
                 <td>{item.status}</td>
                 <td>
                   <AlertDialog>
-                    <AlertDialogTrigger>
+                    <AlertDialogTrigger onClick={() => handleEdit(item)}>
                       <div className="bg-green-500 p-[0.5rem] px-5  mr-2 rounded-md text-white">
                         Edit
                       </div>
@@ -243,8 +247,8 @@ const EditKelas = () => {
                     <AlertDialogContent>
                       <AlertDialogHeader>
                         <AlertDialogTitle>Edit Kelas</AlertDialogTitle>
-                        <AlertDialogDescription>
-                          <div className="">
+                        <AlertDialogDescription className="w-full">
+                          <div className="w-full">
                             <form>
                               <div className="edit-form-group-mahasiswa ">
                                 <label>Nama Kelas:</label>
@@ -262,6 +266,26 @@ const EditKelas = () => {
                                   type="text"
                                   name="kodeKelas"
                                   value={formData.kodeKelas}
+                                  onChange={handleChange}
+                                  required
+                                />
+                              </div>
+                              <div className="edit-form-group-mahasiswa">
+                                <label>Tanggal Mulai:</label>
+                                <input
+                                  type="date"
+                                  name="start_period"
+                                  value={formData.start_period}
+                                  onChange={handleChange}
+                                  required
+                                />
+                              </div>
+                              <div className="edit-form-group-mahasiswa">
+                                <label>Tanggal Selesai:</label>
+                                <input
+                                  type="date"
+                                  name="end_period"
+                                  value={formData.end_period}
                                   onChange={handleChange}
                                   required
                                 />
@@ -316,14 +340,10 @@ const EditKelas = () => {
                         dangerMode: true,
                       }).then((result) => {
                         if (result.isConfirmed) {
-                          setData(
-                            data.filter((itemData) => itemData.id !== item.id)
-                          );
-                          Swal.fire(
-                            "Berhasil!",
-                            "Kelas berhasil dihapus!",
-                            "success"
-                          );
+                          // setData(
+                          //   data.filter((itemData) => itemData.id !== item.id)
+                          // );
+                          mutationDelete.mutate(item.id);
                         }
                       });
                     }}

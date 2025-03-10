@@ -23,6 +23,8 @@ const EditPopupMahasiswa = ({ onClose, data = {}, onSave }) => {
         {
           namaKelas: formData.namaKelas,
           kodeKelas: formData.kodeKelas,
+          start_period: formData.start_period,
+          end_period: formData.end_period,
           status: formData.status,
         },
         {
@@ -57,9 +59,6 @@ const EditPopupMahasiswa = ({ onClose, data = {}, onSave }) => {
     qty_student: 0,
     start_period: "2025-02-12",
     end_period: "2026-02-12",
-    spt: null,
-    bupot: null,
-    faktur: null,
     class_code: "",
     status: "",
   });
@@ -175,7 +174,10 @@ const EditPopupMahasiswa = ({ onClose, data = {}, onSave }) => {
             </select>
           </div>
           <div className="edit-popup-actions-mahasiswa">
-            <button className="edit-save-button" type="submit">
+            <button
+              className="edit-save-button"
+              onClick={() => mutation.mutate()}
+            >
               Simpan
             </button>
             <button
