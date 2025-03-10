@@ -275,6 +275,16 @@ const SidebarAdmin = () => {
                     Kelas
                   </li>
                   <li
+                    className={`dropdown-item  ${
+                      cookies.role == "admin" ? "" : "!hidden"
+                    }`}
+                    onClick={() => {
+                      window.location.href = `/${cookies.role}/edit-dosen`;
+                    }}
+                  >
+                    Dosen
+                  </li>
+                  <li
                     className="dropdown-item"
                     onClick={() => {
                       window.location.href = "/admin/edit-mahasiswa";

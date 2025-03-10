@@ -195,12 +195,12 @@ const EditMahasiswa = () => {
               </tbody>
             </table>
             <div className="pagination-container">
-              <div className="pagination-info">
+              {/* <div className="pagination-info">
                 {`Showing ${indexOfFirstItem + 1} to ${Math.min(
                   indexOfLastItem,
                   data.length
                 )} of ${data.length} entries`}
-              </div>
+              </div> */}
 
               <div className="pagination">
                 <button
