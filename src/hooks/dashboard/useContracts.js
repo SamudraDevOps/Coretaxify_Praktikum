@@ -15,8 +15,8 @@ export const getContracts = (url, cookie) =>
           Authorization: `Bearer ${cookie}`,
         },
       });
-      // console.log(data.data);
-      return data;
+      console.log(data.data);
+      return data.data;
     },
   });
 export const getOneContract = (url, cookie) =>
@@ -64,6 +64,7 @@ export const deleteContract = (cookie) =>
           Authorization: `Bearer ${cookie.token}`,
         },
       });
+      console.log(data);
       return data;
     },
     onSuccess: (data) => {
