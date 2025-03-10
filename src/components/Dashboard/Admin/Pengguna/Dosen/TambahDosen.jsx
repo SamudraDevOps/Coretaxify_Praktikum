@@ -4,6 +4,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import { useCookies } from "react-cookie";
 import { IoMdDownload } from "react-icons/io";
+import Swal from "sweetalert2";
 
 const TambahDosen = ({ isOpen, onClose, onSave }) => {
   const [cookies, setCookie] = useCookies(["user"]);
@@ -55,7 +56,15 @@ const TambahDosen = ({ isOpen, onClose, onSave }) => {
     },
     onSuccess: (data) => {
       console.log(data);
-      window.location.reload();
+      Swal.fire(
+        "Berhasil!",
+        "Data dosen berhasil ditambahkan!",
+        "success"
+      ).then((result) => {
+        if (result.isConfirmed) {
+          window.location.reload();
+        }
+      });
 
       // window.location.href = "/" + role;
       // alert("Login successful!");
@@ -113,7 +122,7 @@ const TambahDosen = ({ isOpen, onClose, onSave }) => {
           </select> */}
         </div>
         <div className="overflow-x-auto">
-          <label htmlFor="contractId">ID Kontak :</label>
+          <label htmlFor="contractId">ID Kontrak :</label>
           <input
             type="text"
             name="contractId"
@@ -127,6 +136,7 @@ const TambahDosen = ({ isOpen, onClose, onSave }) => {
             <input
               type="file"
               name="fileDosen"
+              accept=".xls,.xlsx"
               onChange={(e) =>
                 setFormData({ ...formData, fileDosen: e.target.files[0] })
               }

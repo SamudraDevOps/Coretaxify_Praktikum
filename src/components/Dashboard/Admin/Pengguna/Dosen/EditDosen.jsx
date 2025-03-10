@@ -36,12 +36,6 @@ const EditDosen = () => {
     },
   });
 
-  //   const [data, setData] = useState([
-  //             { id: 1, namaDosen: "Hendra", instansi: "Poltek Jos", kuotaKelas: 50, kodeRegistrasi: "L001", jumlahSiswa: 50, kodePembelian: "L001", status: "Active" },
-  //             { id: 2, namaDosen: "Udin", instansi: "UB Jos", kuotaKelas: 30, kodeRegistrasi: "U002", jumlahSiswa: 30, kodePembelian: "U002", status: "Expired" },
-  //             { id: 3, namaDosen: "Galeh", instansi: "UM Jos", kuotaKelas: 70, kodeRegistrasi: "U003", jumlahSiswa: 70, kodePembelian: "U003", status: "Active" },
-  //   ]);
-
   const handleData = (newData) => {
     setData([...data, { id: data.length + 1, ...newData }]);
   };
@@ -125,8 +119,13 @@ const EditDosen = () => {
     },
     onSuccess: (data) => {
       console.log(data);
-      Swal.fire("Berhasil!", "Data dosen berhasil dihapus!", "success");
-      window.location.reload();
+      Swal.fire("Berhasil!", "Data dosen berhasil dihapus!", "success").then(
+        (result) => {
+          if (result.isConfirmed) {
+            window.location.reload();
+          }
+        }
+      );
       // const role = data.data.user.roles[0].name;
       // setCookie("token", data.data.token, { path: "/" });
       // setCookie("role", role, { path: "/" });

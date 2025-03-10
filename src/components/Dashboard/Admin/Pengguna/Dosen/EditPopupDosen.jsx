@@ -4,6 +4,8 @@ import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { RoutesApi } from "@/Routes";
 import { useCookies } from "react-cookie";
+import IntentEnum from "@/constant/intent";
+import Swal from "sweetalert2";
 
 const EditPopupDosen = ({ isOpen, onClose, dosen, onSave }) => {
   const [cookies, setCookie] = useCookies(["user"]);
@@ -71,23 +73,21 @@ const EditPopupDosen = ({ isOpen, onClose, dosen, onSave }) => {
       axios.defaults.headers.common["X-CSRF-TOKEN"] = response.data.token;
       console.log(cookies.token);
       const data = await axios.put(
-        RoutesApi.postAdmin.url + `/${dosen.id}`,
-        // "http://127.0.0.1:8000/api/admin/users?intent=api.user.import.dosen",
+        RoutesApi.url + `api/admin/users/${dosen.id}`,
         {
-          contract_id: formData.contractId,
           name: formData.name,
           email: formData.email,
         },
         {
           headers: {
-            "Content-Type": "multipart/form-data",
+            "Content-Type": "application/json",
             Accept: "application/json",
             "X-CSRF-TOKEN": response.data.token,
             Authorization: `Bearer ${cookies.token}`,
           },
-          // params: {
-          //   intent: RoutesApi.importDosenAdmin.intent,
-          // },
+          params: {
+            intent: IntentEnum.API_USER_CREATE_ADMIN,
+          },
         }
       );
       return data;
@@ -95,6 +95,13 @@ const EditPopupDosen = ({ isOpen, onClose, dosen, onSave }) => {
     onSuccess: (data) => {
       console.log(data);
       // window.location.reload();
+      Swal.fire("Berhasil!", "Data dosen berhasil diubah!", "success").then(
+        (result) => {
+          if (result.isConfirmed) {
+            window.location.reload();
+          }
+        }
+      );
 
       // window.location.href = "/" + role;
       // alert("Login successful!");
