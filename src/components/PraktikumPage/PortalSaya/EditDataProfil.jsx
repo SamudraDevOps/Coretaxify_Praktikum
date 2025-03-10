@@ -290,8 +290,9 @@ const EditDataProfil = () => {
                                             <input type="text" className="w-full p-2 border rounded" />
                                         </div>
                                         <div>
-                                            <label className="block text-sm font-medium">Alamat Email Baru</label>
-                                            <input type="text" className="w-full p-2 border rounded" />
+                                            <label className="block text-sm font-medium">Alamat Email</label>
+                                            <input type="text" className="w-full p-2 border rounded bg-gray-100 cursor-not-allowed" disabled/>
+                                            {/* Ngelink dari upload awal akun */}
                                         </div>
                                         <div>
                                             <label className="block text-sm font-medium">Website</label>

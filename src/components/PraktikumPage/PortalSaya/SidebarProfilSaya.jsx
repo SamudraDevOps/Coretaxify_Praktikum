@@ -15,7 +15,7 @@ const SidebarProfilSaya = () => {
         "Tempat Kegiatan Usaha/Sub Unit",
         "Nomor Identifikasi Eksternal",
         "Jenis Pajak",
-        "Wakil/Kuasa Saya",
+        "Wakil Kuasa Saya",
         "Wajib Pajak yang Diwakili",
         "Verifikasi Dua Langkah",
         "Permohonan Tertunda",
