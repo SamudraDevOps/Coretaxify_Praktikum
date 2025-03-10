@@ -29,6 +29,9 @@ const EditKelas = () => {
         headers: {
           Authorization: `Bearer ${cookies.token}`,
         },
+        params: {
+          intent: "api.get.group.all",
+        },
       });
       console.log(data.data);
       return data;

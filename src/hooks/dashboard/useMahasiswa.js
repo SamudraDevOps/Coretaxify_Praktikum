@@ -40,7 +40,7 @@ export const deleteMahasiswa = (cookie) =>
     },
     onSuccess: (data) => {
       console.log(data);
-      Swal.fire("Berhasil!", "Kelas berhasil dihapus!", "success");
+      Swal.fire("Berhasil!", "Mahasiswa berhasil dihapus!", "success");
 
       window.location.reload();
       //   window.location.href = "/" + cookie.role;
