@@ -1,132 +1,84 @@
-import React, { useState } from "react";
+import React from "react";
 import "./tambahDosen.css";
-import { IoMdDownload } from "react-icons/io";
+import { IoMdClose } from "react-icons/io";
 
-const TambahDosen = ({ isOpen, onClose, onSave }) => {
-  const [formData, setFormData] = useState({
-    namaDosen: "",
-    instansi: "",
-    kuotaKelas: "",
-    kodeRegistrasi: "",
-    jumlahSiswa: "",
-    kodePembelian: "",
-    status: "",
-  });
+const TambahDosen = ({ 
+  isOpen, 
+  onClose, 
+  onSave,
+  formData,
+  setFormData,
+  isLoading = false
+}) => {
+  if (!isOpen) return null;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSave = () => {
-    onSave(formData);
-    setFormData({
-      namaDosen: "",
-      instansi: "",
-      kuotaKelas: "",
-      kodeRegistrasi: "",
-      jumlahSiswa: "",
-      kodePembelian: "",
-      status: "",
-    });
-    onClose();
-  };
-
-  if (!isOpen) return null;
-
   return (
-    <div className="kontrak-popup-overlay-dosen">
-      <div className="kontrak-popup-container-dosen">
-        <div className="kontrak-popup-header-dosen">
-          <h2>Tambah Data Pengajar</h2>
-          <div className="kontrak-popup-import-actions-dosen">
-            <button className="kontrak-import-button-dosen">
-              <IoMdDownload className="kontrak-import-icon-dosen" />
-              Import
-            </button>
-          </div>
+    <div className="tambah-dosen-overlay">
+      <div className="tambah-dosen-container">
+        <div className="tambah-dosen-header">
+          <h2>Tambah Pengajar</h2>
+          <button className="close-button" onClick={onClose}>
+            <IoMdClose />
+          </button>
         </div>
-        <form>
-          <div className="kontrak-form-group-dosen">
-            <label>Nama Pengajar</label>
+        <div className="tambah-dosen-form">
+          <div className="form-group">
+            <label>Nama Pengajar:</label>
             <input
               type="text"
-              name="namaDosen"
-              value={formData.namaDosen}
+              name="name"
+              value={formData.name || ""}
               onChange={handleChange}
               required
+              placeholder="Masukkan nama pengajar"
             />
           </div>
-          {/* <div className="kontrak-form-group-dosen">
-            <label>Instansi</label>
+          <div className="form-group">
+            <label>Email:</label>
             <input
-              type="text"
-              name="instansi"
-              value={formData.instansi}
+              type="email"
+              name="email"
+              value={formData.email || ""}
               onChange={handleChange}
               required
-            />
-          </div> */}
-          <div className="kontrak-form-group-dosen">
-            <label>Kuota Kelas</label>
-            <input
-              type="number"
-              name="kuotaKelas"
-              value={formData.kuotaKelas}
-              onChange={handleChange}
-              required
+              placeholder="Masukkan email pengajar"
             />
           </div>
-          {/* <div className="kontrak-form-group-dosen">
-            <label>Kode Registrasi</label>
-            <input
-              type="text"
-              name="kodeRegistrasi"
-              value={formData.kodeRegistrasi}
-              onChange={handleChange}
-              required
-            />
-          </div> */}
-          <div className="kontrak-form-group-dosen">
-            <label>Jumlah Siswa</label>
-            <input
-              type="number"
-              name="jumlahSiswa"
-              value={formData.jumlahSiswa}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          {/* <div className="kontrak-form-group-dosen">
-            <label>Kode Pembelian</label>
-            <input
-              type="text"
-              name="kodePembelian"
-              value={formData.kodePembelian}
-              onChange={handleChange}
-              required
-            />
-          </div> */}
-          <div className="kontrak-form-group-dosen">
-            <label>Status</label>
+          <div className="form-group">
+            <label>Status:</label>
             <select
               name="status"
-              value={formData.status}
+              value={formData.status || ""}
               onChange={handleChange}
               required
             >
               <option value="">Pilih Status</option>
-              <option value="Active">Active</option>
-              <option value="Expired">Expired</option>
+              <option value="ACTIVE">Active</option>
+              <option value="INACTIVE">Inactive</option>
             </select>
           </div>
-        </form>
-        <div className="kontrak-popup-actions-dosen">
-          <button className="kontrak-save-button-dosen" onClick={handleSave}>
-            Simpan
-          </button>
-          <button className="kontrak-cancel-button-dosen" onClick={onClose}>
+          <div className="password-info">
+            <p>Password akan digenerate secara otomatis dan akan dikirimkan ke email pengajar.</p>
+          </div>
+        </div>
+        <div className="tambah-dosen-actions">
+          <button 
+            className="cancel-button" 
+            onClick={onClose}
+          >
             Batal
+          </button>
+          <button 
+            className="save-button" 
+            onClick={onSave}
+            disabled={isLoading}
+          >
+            {isLoading ? "Loading..." : "Simpan"}
           </button>
         </div>
       </div>
