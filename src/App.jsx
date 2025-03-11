@@ -63,6 +63,9 @@ import TempatKegiatanUsaha from "./components/PraktikumPage/PortalSaya/TempatKeg
 import NomorIdentifikasiEksternal from "./components/PraktikumPage/PortalSaya/NomorIdentifikasiEksternal";
 import JenisPajak from "./components/PraktikumPage/PortalSaya/JenisPajak";
 import WakilKuasaSaya from "./components/PraktikumPage/PortalSaya/WakilKuasaSaya";
+import WajibPajakYangDiwakili from "./components/PraktikumPage/PortalSaya/WajibPajakYangDiwakili";
+import TwoAuthentication from "./components/PraktikumPage/PortalSaya/TwoAuthentication";
+import PermohonanTertunda from "./components/PraktikumPage/PortalSaya/PermohonanTertunda";
 //Route Praktikum
 import ProtectedRoutes from "./components/Dashboard/Auth/ProtectedRoutes";
 import MahasiswaPraktikumKelas from "./components/Dashboard/Mahasiswa/Kelas/MahasiswaPraktikumKelas";
@@ -697,6 +700,33 @@ const Main = () => {
             <>
               <Header />
               <WakilKuasaSaya />
+            </>
+          }
+        />
+        <Route
+            path="/admin/praktikum/profil-saya/wajib-pajak-yang-diwakili"
+          element={
+            <>
+              <Header />
+              <WajibPajakYangDiwakili />
+            </>
+          }
+        />
+        <Route
+            path="/admin/praktikum/profil-saya/verifikasi-dua-langkah"
+          element={
+            <>
+              <Header />
+              <TwoAuthentication />
+            </>
+          }
+        />
+        <Route
+            path="/admin/praktikum/profil-saya/permohonan-tertunda"
+          element={
+            <>
+              <Header />
+              <PermohonanTertunda />
             </>
           }
         />
