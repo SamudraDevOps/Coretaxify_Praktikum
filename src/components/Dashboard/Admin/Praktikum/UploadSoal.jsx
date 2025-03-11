@@ -92,21 +92,29 @@ export default function UploadSoal() {
     mutationFn: async (id) => {
       console.log("button clicked");
       const response = await axios.get(`${RoutesApi.url}api/csrf-token`, {
-        // withCredentials: true,
         headers: {
           "X-Requested-With": "XMLHttpRequest",
           Accept: "application/json",
         },
       });
-      console.log(response.data.token);
       axios.defaults.headers.common["X-CSRF-TOKEN"] = response.data.token;
-      console.log(cookies.token);
+      
+      // Create a dynamic payload object
+      const payload = {};
+      
+      // Only add properties that have values
+      if (formData.name && formData.name.trim() !== '') {
+        payload.name = formData.name;
+      }
+      
+      if (formData.file) {
+        payload.import_file = formData.file;
+      }
+      
+      // Send the request with only non-empty fields
       const data = await axios.post(
-        RoutesApi.url + "api/admin/tasks/" + id,
-        {
-          name: formData.name,
-          import_file: formData.file,
-        },
+        RoutesApi.tasksAdmin + "/" + id,
+        payload,
         {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -123,7 +131,7 @@ export default function UploadSoal() {
     },
     onSuccess: (data) => {
       console.log(data);
-      Swal.fire("Berhasil!", "Data Soal berhasil diubah!", "success").then(
+      Swal.fire("Berhasil!", "Soal berhasil diperbarui!", "success").then(
         (result) => {
           if (result.isConfirmed) {
             window.location.reload();
@@ -133,8 +141,10 @@ export default function UploadSoal() {
     },
     onError: (error) => {
       console.log(error);
+      Swal.fire("Gagal!", "Gagal memperbarui soal.", "error");
     },
-  });
+  });  
+  
   const mutationDelete = useMutation({
     mutationFn: async (id) => {
       console.log("button clicked");
@@ -335,9 +345,9 @@ export default function UploadSoal() {
                   ? "↓"
                   : "↑"}
               </th>
-              <th onClick={() => handleSort("namaSoal")}>
+              <th onClick={() => handleSort("name")}>
                 Judul Soal{" "}
-                {sortConfig.key === "namaSoal"
+                {sortConfig.key === "name"
                   ? sortConfig.direction === "ascending"
                     ? "↑"
                     : "↓"
@@ -368,7 +378,7 @@ export default function UploadSoal() {
                     <AlertDialogTrigger
                       className="action-button edit"
                       onClick={() =>
-                        setFormData({ ...formData, name: item.name })
+                        setFormData({ ...formData, name: item.name, file: null })
                       }
                     >
                       Edit
@@ -377,6 +387,8 @@ export default function UploadSoal() {
                       <AlertDialogHeader>
                         <AlertDialogTitle>Edit Soal</AlertDialogTitle>
                         <AlertDialogDescription className="w-full">
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
                           <div className="">
                             <form>
                               <div className="edit-form-group-mahasiswa ">
@@ -405,8 +417,6 @@ export default function UploadSoal() {
                               </div>
                             </form>
                           </div>
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
                       <AlertDialogFooter>
                         <AlertDialogCancel className="bg-red-600 text-white">
                           Kembali
