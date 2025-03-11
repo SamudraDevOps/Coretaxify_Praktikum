@@ -1,109 +1,60 @@
-import React, { useState, useEffect } from "react";
-import "./editPopupKelas.css";
+import React from "react";
+import "./editPopupKelas.css"; // Make sure to import the CSS
 
-const EditPopupMahasiswa = ({ onClose, data = {}, onSave }) => {
-  const [formData, setFormData] = useState({
-    namaMahasiswa: "",
-    email: "",
-    instansi: "",
-    kelas: "",
-    kodeRegistrasi: "",
-    status: "",
-  });
-
-  useEffect(() => {
-    if (data) {
-      setFormData({
-        namaMahasiswa: data.namaMahasiswa || "",
-        email: data.email || "",
-        instansi: data.instansi || "",
-        kelas: data.kelas || "",
-        kodeRegistrasi: data.kodeRegistrasi || "",
-        status: data.status || "",
-      });
-    }
-  }, [data]);
-
+const EditPopupKelas = ({ onClose, data, onSave, formData, setFormData, isLoading }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (
-      !formData.namaMahasiswa ||
-      !formData.email ||
-      !formData.instansi ||
-      !formData.kelas ||
-      !formData.kodeRegistrasi ||
-      !formData.status
-    ) {
-      window.alert("Harap isi semua bidang!");
-      return;
-    }
-    onSave({ ...data, ...formData });
-    onClose();
-  };
-
   return (
-    <div className="edit-popup-container-mahasiswa">
-      <div className="edit-popup-content-mahasiswa">
-        <div className="edit-popup-header-mahasiswa">
-          <h2>Edit Mahasiswa</h2>
+    <div className="edit-popup-container-kelas">
+      <div className="edit-popup-content-kelas">
+        <div className="edit-popup-header-kelas">
+          <h2>Edit Kelas</h2>
         </div>
-        <form onSubmit={handleSubmit}>
-          <div className="edit-form-group-mahasiswa">
-            <label>Nama Mahasiswa:</label>
+        <form>
+          <div className="edit-form-group-kelas">
+            <label>Nama Kelas:</label>
             <input
               type="text"
-              name="namaMahasiswa"
-              value={formData.namaMahasiswa}
+              name="name"
+              value={formData.name}
               onChange={handleChange}
               required
             />
           </div>
-          <div className="edit-form-group-mahasiswa">
-            <label>Email:</label>
+          <div className="edit-form-group-kelas">
+            <label>Periode Mulai:</label>
             <input
-              type="email"
-              name="email"
-              value={formData.email}
+              type="date"
+              name="start_period"
+              value={formData.start_period}
               onChange={handleChange}
               required
             />
           </div>
-          <div className="edit-form-group-mahasiswa">
-            <label>Instansi:</label>
+          <div className="edit-form-group-kelas">
+            <label>Periode Selesai:</label>
             <input
-              type="text"
-              name="instansi"
-              value={formData.instansi}
+              type="date"
+              name="end_period"
+              value={formData.end_period}
               onChange={handleChange}
               required
             />
           </div>
-          <div className="edit-form-group-mahasiswa">
-            <label>Kelas:</label>
-            <input
-              type="text"
-              name="kelas"
-              value={formData.kelas}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="edit-form-group-mahasiswa">
-            <label>Kode Registrasi:</label>
+          <div className="edit-form-group-kelas">
+            <label>Kode Kelas:</label>
             <input
               type="text"
-              name="kodeRegistrasi"
-              value={formData.kodeRegistrasi}
+              name="class_code"
+              value={formData.class_code}
               onChange={handleChange}
               required
             />
           </div>
-          <div className="edit-form-group-mahasiswa">
+          <div className="edit-form-group-kelas">
             <label>Status:</label>
             <select
               name="status"
@@ -112,20 +63,21 @@ const EditPopupMahasiswa = ({ onClose, data = {}, onSave }) => {
               required
             >
               <option value="">Pilih Status</option>
-              <option value="Active">Active</option>
-              <option value="Expired">Expired</option>
+              <option value="ACTIVE">Active</option>
+              <option value="INACTIVE">Expired</option>
             </select>
           </div>
-          <div className="edit-popup-actions-mahasiswa">
-            <button className="edit-save-button" type="submit">
-              Simpan
+          <div className="edit-popup-actions-kelas">
+            <button type="button" onClick={onClose} className="edit-cancel-button">
+              Batal
             </button>
             <button
-              className="edit-cancel-button"
               type="button"
-              onClick={onClose}
+              onClick={onSave}
+              className="edit-save-button"
+              disabled={isLoading}
             >
-              Batal
+              {isLoading ? "Loading..." : "Simpan"}
             </button>
           </div>
         </form>
@@ -134,4 +86,4 @@ const EditPopupMahasiswa = ({ onClose, data = {}, onSave }) => {
   );
 };
 
-export default EditPopupMahasiswa;
+export default EditPopupKelas;
