@@ -485,7 +485,7 @@ const Main = () => {
             </div>
           }
         />
-        <Route
+        {/* <Route
           path="/psc/edit-kelas/1"
           element={
             <div className="admin-layout">
@@ -495,7 +495,27 @@ const Main = () => {
               </div>
             </div>
           }
-        />
+        /> */}
+        <Route 
+          path="/psc/kelas/:groupId/mahasiswa" 
+          element={
+            <div className="admin-layout">
+            <SidebarAdmin />
+            <div className="admin-content">
+              <EditMahasiswaPscKelas></EditMahasiswaPscKelas>
+            </div>
+          </div>
+        } />
+        {/* <Route 
+          path="/psc/kelas/:groupId/mahasiswa/:memberId" 
+          element={
+            <div className="admin-layout">
+            <SidebarAdmin />
+            <div className="admin-content">
+              <MemberDetailPage></MemberDetailPage>
+            </div>
+          </div>
+        } /> */}
         <Route
           path="/admin-psc/edit-ujian"
           element={
