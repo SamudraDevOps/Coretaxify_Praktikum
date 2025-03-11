@@ -1,4 +1,6 @@
+import { getContracts } from "@/hooks/dashboard";
 import { RoutesApi } from "@/Routes";
+import { getCookieToken } from "@/service";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import React, { useState } from "react";
@@ -18,6 +20,13 @@ const TambahDosen = ({ isOpen, onClose, onSave }) => {
     // jumlahSiswa: "",
     // status: "",
   });
+
+  const {
+    isLoading: isLoadingContract,
+    isError: isErrorContract,
+    data: dataContract,
+    error: errorContract,
+  } = getContracts(RoutesApi.url + "api/admin/contract", getCookieToken());
 
   const mutation = useMutation({
     mutationFn: async () => {
@@ -107,31 +116,31 @@ const TambahDosen = ({ isOpen, onClose, onSave }) => {
             Import
           </button> */}
         </div>
-        <div className="pt-4">
-          {/* <select
-            name="instansi"
+        <div className="overflow-x-auto py-4">
+          <label htmlFor="contractId" className="mr-10 ">Pilih Kontrak :</label>
+          <select
+            name="contractId"
             value={formData.instansi}
             onChange={handleChange}
-            className="w-60 border px-2 py-1 rounded"
+            className="w-fit border px-2 py-1 rounded"
             required
           >
-            <option value="">Pilih Instansi</option>
-            <option value="Instansi 1">Instansi 1</option>
-            <option value="Instansi 2">Instansi 2</option>
-            <option value="Instansi 3">Instansi 3</option>
-          </select> */}
-        </div>
-        <div className="overflow-x-auto">
-          <label htmlFor="contractId">ID Kontrak :</label>
-          <input
+            <option value="">Pilih Kontrak</option>
+            {dataContract.data.map((item) => (
+              <option key={item.id} value={item.id}>
+                {item.contract_code + " - " + item.university.name}
+              </option>
+            ))}
+          </select>
+          {/* <input
             type="text"
             name="contractId"
             value={formData.contractId}
             onChange={handleChange}
             className="w-full border px-2 py-1 rounded my-2"
             required
-          />
-          <div className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded flex items-center">
+          /> */}
+          <div className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded flex items-center mt-4">
             <IoMdDownload className="mr-2" />
             <input
               type="file"

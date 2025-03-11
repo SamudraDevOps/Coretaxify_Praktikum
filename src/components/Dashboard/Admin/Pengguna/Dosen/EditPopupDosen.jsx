@@ -6,6 +6,8 @@ import { RoutesApi } from "@/Routes";
 import { useCookies } from "react-cookie";
 import IntentEnum from "@/constant/intent";
 import Swal from "sweetalert2";
+import { getContracts } from "@/hooks/dashboard";
+import { getCookieToken } from "@/service";
 
 const EditPopupDosen = ({ isOpen, onClose, dosen, onSave }) => {
   const [cookies, setCookie] = useCookies(["user"]);
@@ -22,6 +24,12 @@ const EditPopupDosen = ({ isOpen, onClose, dosen, onSave }) => {
     // kodePembelian: "",
     // status: "",
   });
+  const {
+    isLoading: isLoadingContract,
+    isError: isErrorContract,
+    data: dataContract,
+    error: errorContract,
+  } = getContracts(RoutesApi.url + "api/admin/contract", getCookieToken());
 
   useEffect(() => {
     if (dosen) {
@@ -113,6 +121,14 @@ const EditPopupDosen = ({ isOpen, onClose, dosen, onSave }) => {
   });
 
   if (!isOpen) return null;
+  if (isLoadingContract) {
+    return (
+      <div className="loading">
+        <ClipLoader color="#7502B5" size={50} />
+      </div>
+      // <div className="h-full w-full text-2xl italic font-bold text-center flex items-center justify-center">Loading...</div>
+    );
+  }
 
   return (
     <div className="edit-popup-container-dosen">
@@ -122,7 +138,7 @@ const EditPopupDosen = ({ isOpen, onClose, dosen, onSave }) => {
         </div>
         <form>
           <div className="edit-form-group-dosen">
-            <label>Nama Dosen:</label>
+            <label>Nama Dosen  awdk:</label>
             <input
               type="text"
               name="name"

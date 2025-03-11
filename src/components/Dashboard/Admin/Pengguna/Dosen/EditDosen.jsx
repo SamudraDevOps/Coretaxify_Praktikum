@@ -8,6 +8,8 @@ import axios from "axios";
 import { RoutesApi } from "@/Routes";
 import { ClipLoader } from "react-spinners";
 import { useCookies } from "react-cookie";
+import { getCookie, getCookieToken } from "@/service";
+import { getContracts } from "@/hooks/dashboard";
 
 const EditDosen = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -35,6 +37,13 @@ const EditDosen = () => {
       return data;
     },
   });
+  const {
+    isLoading: isLoadingContract,
+    isError: isErrorContract,
+    data: dataContract,
+    error: errorContract,
+  } = getContracts(RoutesApi.url + "api/admin/contract", getCookieToken());
+
 
   const handleData = (newData) => {
     setData([...data, { id: data.length + 1, ...newData }]);
