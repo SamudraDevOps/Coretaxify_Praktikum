@@ -5,6 +5,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { RoutesApi } from "@/Routes";
+import { IntentEnum } from "@/enums/IntentEnum";
 
 export const getMahasiswa = (url, cookie) =>
   useQuery({
@@ -20,6 +21,53 @@ export const getMahasiswa = (url, cookie) =>
       });
       console.log(data.data);
       return data;
+    },
+  });
+
+export const joinAssignmentMahasiswa = (cookie, formData, refetch) =>
+  useMutation({
+    mutationFn: async () => {
+      console.log("button clicked");
+      const csrf = getCsrf();
+      const data = await axios.post(
+        `${RoutesApi.url}api/student/assignments`,
+        {
+          assignment_code: formData.assignment_code,
+        },
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": csrf,
+            Authorization: `Bearer ${cookie.token}`,
+          },
+          params: {
+            intent: IntentEnum.API_USER_JOIN_ASSIGNMENT,
+          },
+        }
+      );
+      return data;
+    },
+    onSuccess: (data) => {
+      console.log(data);
+      Swal.fire(
+        "Berhasil!",
+        "Data Mahasiswa berhasil dihapus!",
+        "success"
+      ).then((result) => {
+        if (result.isConfirmed) {
+          refetch();
+          // window.location.reload();
+        }
+      });
+
+      //   window.location.href = "/" + cookie.role;
+    },
+
+    onError: (error) => {
+      console.log("hello!");
+      console.log(error);
+      Swal.fire("Gagal !", error.message, "error");
     },
   });
 
