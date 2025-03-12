@@ -31,6 +31,7 @@ import {
   updatePraktikumDosen,
 } from "@/hooks/dashboard";
 import { getCookie } from "@/service";
+import { RxCross1 } from "react-icons/rx";
 
 export default function DosenPraktikumKelas() {
   const [isOpen, setIsOpen] = useState(false);
@@ -51,7 +52,7 @@ export default function DosenPraktikumKelas() {
   });
   let { id } = useParams();
 
-  const { isLoading, isError, data, error } = getDosenPraktikumKelas(
+  const { isLoading, isError, data, error, refetch } = getDosenPraktikumKelas(
     url,
     id,
     getCookie()
@@ -125,10 +126,22 @@ export default function DosenPraktikumKelas() {
   //     ),
   // }));
   const taskData = getTaskContract(RoutesApi.tasksContract, getCookie());
-  const mutation = createPraktikumDosen(getCookie(), id, formData, file);
-  const mutationUpdate = updatePraktikumDosen(getCookie(), id, formData, file);
+  const mutation = createPraktikumDosen(
+    getCookie(),
+    id,
+    formData,
+    file,
+    refetch
+  );
+  const mutationUpdate = updatePraktikumDosen(
+    getCookie(),
+    id,
+    formData,
+    file,
+    refetch
+  );
 
-  const mutationDelete = deletePraktikumDosen(getCookie(), id);
+  const mutationDelete = deletePraktikumDosen(getCookie(), id, refetch);
   useEffect(() => {
     if (dataOne) {
       setFormData({
@@ -179,13 +192,30 @@ export default function DosenPraktikumKelas() {
           />
         </div>
         <AlertDialog>
-          <AlertDialogTrigger>
+          <AlertDialogTrigger
+            onClick={() =>
+              setFormData({
+                name: "",
+                task_id: "",
+                start_period: "",
+                end_period: "",
+              })
+            }
+          >
             <div className="bg-blue-800 p-2 rounded-lg text-white">
               + Tambah Praktikum
             </div>
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>
+              <div className="w-full flex justify-end">
+                <AlertDialogCancel className="border-none shadow-none">
+                  <RxCross1
+                    className="text-2xl text-black hover:cursor-pointer"
+                    // onClick={onClose}
+                  />
+                </AlertDialogCancel>
+              </div>
               <AlertDialogTitle>Tambah Praktikum</AlertDialogTitle>
               <AlertDialogDescription className="w-full">
                 <div className=" h-96 overflow-scroll">
@@ -362,6 +392,14 @@ export default function DosenPraktikumKelas() {
                     </AlertDialogTrigger>
                     <AlertDialogContent>
                       <AlertDialogHeader>
+                        <div className="w-full flex justify-end">
+                          <AlertDialogCancel className="border-none shadow-none">
+                            <RxCross1
+                              className="text-2xl text-black hover:cursor-pointer"
+                              // onClick={onClose}
+                            />
+                          </AlertDialogCancel>
+                        </div>
                         <AlertDialogTitle>Edit Praktikum</AlertDialogTitle>
                         <AlertDialogDescription className="w-full">
                           <div className=" h-96 overflow-scroll">
@@ -486,7 +524,7 @@ export default function DosenPraktikumKelas() {
                                       type="date"
                                       name="end_period"
                                       onChange={handleChange}
-                                      value={formData.end_period} 
+                                      value={formData.end_period}
                                       // value={formData.end_period
                                       //   .split("-")
                                       //   .reverse()

@@ -10,12 +10,11 @@ import { RxCross1 } from "react-icons/rx";
 import Swal from "sweetalert2";
 import { ClipLoader } from "react-spinners";
 
-const TambahDosen = ({ isOpen, onClose, onSave }) => {
+const ImportDosen = ({ isOpen, onClose, onSave }) => {
   const [cookies, setCookie] = useCookies(["user"]);
   const [formData, setFormData] = useState({
     contractId: "",
-    name: "",
-    email: "",
+    fileDosen: "",
     // namaDosen: "",
     // instansi: "",
     // kuotaKelas: "",
@@ -50,8 +49,7 @@ const TambahDosen = ({ isOpen, onClose, onSave }) => {
         // "http://127.0.0.1:8000/api/admin/users?intent=api.user.import.dosen",
         {
           contract_id: formData.contractId,
-          name: formData.name,
-          email: formData.email,
+          import_file: formData.fileDosen,
         },
         {
           headers: {
@@ -59,6 +57,9 @@ const TambahDosen = ({ isOpen, onClose, onSave }) => {
             Accept: "application/json",
             "X-CSRF-TOKEN": response.data.token,
             Authorization: `Bearer ${cookies.token}`,
+          },
+          params: {
+            intent: RoutesApi.importDosenAdmin.intent,
           },
         }
       );
@@ -125,37 +126,15 @@ const TambahDosen = ({ isOpen, onClose, onSave }) => {
           />
         </div>
         <div className="flex justify-between items-center border-b pb-3">
-          <h2 className="text-xl font-bold text-gray-800">Tambah Data Dosen</h2>
+          <h2 className="text-xl font-bold text-gray-800">Import Data Dosen</h2>
           {/* <button className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded flex items-center">
             <IoMdDownload className="mr-2" />
             Import
           </button> */}
         </div>
         <div className="overflow-x-auto py-4">
-          <label htmlFor="name" className="mr-10 ">
-            Nama Dosen :
-          </label>
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            className="w-full border px-2 py-1 rounded my-2"
-            required
-          />
-          <label htmlFor="email" className="mr-10 ">
-            Email Dosen :
-          </label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            className="w-full border px-2 py-1 rounded my-2"
-            required
-          />
           <label htmlFor="contractId" className="mr-10 ">
-            Kontrak :
+            Pilih Kontrak :
           </label>
           <select
             name="contractId"
@@ -171,15 +150,7 @@ const TambahDosen = ({ isOpen, onClose, onSave }) => {
               </option>
             ))}
           </select>
-          {/* <input
-            type="text"
-            name="contractId"
-            value={formData.contractId}
-            onChange={handleChange}
-            className="w-full border px-2 py-1 rounded my-2"
-            required
-          /> */}
-          {/* <div className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded flex items-center mt-4">
+          <div className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded flex items-center mt-4">
             <IoMdDownload className="mr-2" />
             <input
               type="file"
@@ -189,7 +160,7 @@ const TambahDosen = ({ isOpen, onClose, onSave }) => {
                 setFormData({ ...formData, fileDosen: e.target.files[0] })
               }
             />
-          </div> */}
+          </div>
         </div>
         <div className="flex justify-end mt-4 gap-2">
           <button
@@ -210,4 +181,4 @@ const TambahDosen = ({ isOpen, onClose, onSave }) => {
   );
 };
 
-export default TambahDosen;
+export default ImportDosen;

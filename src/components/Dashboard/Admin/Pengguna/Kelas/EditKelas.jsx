@@ -18,6 +18,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { RxCross1 } from "react-icons/rx";
 
 const EditKelas = () => {
   const [url, setUrl] = useState(RoutesApi.classAdmin);
@@ -249,6 +250,14 @@ const EditKelas = () => {
                         <AlertDialogTitle>Edit Kelas</AlertDialogTitle>
                         <AlertDialogDescription className="w-full">
                           <div className="w-full">
+                            <div className="w-full flex justify-end">
+                              <AlertDialogCancel className="border-none shadow-none">
+                                <RxCross1
+                                  className="text-2xl text-black hover:cursor-pointer"
+                                  // onClick={onClose}
+                                />
+                              </AlertDialogCancel>
+                            </div>
                             <form>
                               <div className="edit-form-group-mahasiswa ">
                                 <label>Nama Kelas:</label>

@@ -21,10 +21,12 @@ import axios from "axios";
 import { RoutesApi } from "@/Routes";
 import { ClipLoader } from "react-spinners";
 import { FaFile } from "react-icons/fa";
+import IntentEnum from "@/constant/intent";
+import { RxCross1 } from "react-icons/rx";
 
 export default function Praktikum() {
   const [isOpen, setIsOpen] = useState(false);
-  const [url, setUrl] = useState(RoutesApi.assignment.url);
+  const [url, setUrl] = useState(`${RoutesApi.url}api/admin/assignments`);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
   const [selectedData, setSelectedData] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -48,6 +50,9 @@ export default function Praktikum() {
       const { data } = await axios.get(url, {
         headers: {
           Authorization: `Bearer ${cookies.token}`,
+        },
+        params: {
+          intent: IntentEnum.API_GET_ASSIGNMENT_ALL,
         },
       });
       console.log(data.data);
@@ -220,138 +225,6 @@ export default function Praktikum() {
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
-        <AlertDialog>
-          <AlertDialogTrigger>
-            <div className="bg-blue-800 p-2 rounded-lg text-white">
-              + Tambah Praktikum
-            </div>
-          </AlertDialogTrigger>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Tambah Praktikum</AlertDialogTitle>
-              <AlertDialogDescription className="w-full">
-                <div className="">
-                  <form>
-                    <div className="edit-form-group-mahasiswa ">
-                      <label>Judul Praktikum:</label>
-                      <input
-                        type="text"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        required
-                      />
-                    </div>
-                    <div className="edit-form-group-mahasiswa">
-                      <label>Kode Praktikum:</label>
-                      <input
-                        className="text-black"
-                        name="assignment_code"
-                        value={formData.assignment_code}
-                        onChange={handleChange}
-                      />
-                    </div>
-                    <div className="edit-form-group-mahasiswa">
-                      <label>Kelas Praktikum:</label>
-                      <select name="group_id" onChange={handleChange} id="">
-                        <option value="">Pilih Kelas</option>
-                        {dataClass.map((item) => (
-                          <option key={item.id} value={item.id}>
-                            {item.name}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    <div className="edit-form-group-mahasiswa">
-                      <label>File Support:</label>
-                      <div className="flex items-center justify-center w-full ">
-                        <label
-                          htmlFor="dropzone-file"
-                          className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
-                        >
-                          <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                            {filePreview ? (
-                              <>
-                                <div className="grid justify-center items-center p-20">
-                                  <FaFile className="w-8 h-8 text-gray-500 dark:text-gray-400 mb-2" />
-                                  <p className="text-sm text-gray-500 dark:text-gray-400">
-                                    {filePreview.name}
-                                  </p>
-                                </div>
-                              </>
-                            ) : (
-                              <>
-                                <svg
-                                  className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
-                                  aria-hidden="true"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  fill="none"
-                                  viewBox="0 0 20 16"
-                                >
-                                  <path
-                                    stroke="currentColor"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth="2"
-                                    d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
-                                  />
-                                </svg>
-                                <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                                  <span className="font-semibold">
-                                    Click to upload
-                                  </span>{" "}
-                                  or drag and drop
-                                </p>
-                                <p className="text-xs text-gray-500 dark:text-gray-400">
-                                  ZIP, RAR atau PDF (MAX. 10mb)
-                                </p>
-                              </>
-                            )}
-                          </div>
-
-                          <input
-                            id="dropzone-file"
-                            type="file"
-                            className="hidden"
-                            accept=".zip, .rar, .pdf"
-                            onChange={handleFileChange}
-                          />
-                        </label>
-                      </div>
-                    </div>
-                    <div className="edit-form-group-mahasiswa">
-                      <label>Tanggal Mulai:</label>
-                      <input
-                        type="date"
-                        name="start_period"
-                        onChange={handleChange}
-                      />
-                    </div>
-                    <div className="edit-form-group-mahasiswa">
-                      <label>Tanggal Selesai:</label>
-                      <input
-                        type="date"
-                        name="end_period"
-                        onChange={handleChange}
-                      />
-                    </div>
-                  </form>
-                </div>
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel className="bg-red-600 text-white">
-                Kembali
-              </AlertDialogCancel>
-              <AlertDialogAction
-                onClick={() => mutation.mutate()}
-                className="bg-green-600"
-              >
-                Simpan
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
       </div>
       <div className="table-container">
         <table>
@@ -389,6 +262,14 @@ export default function Praktikum() {
                     </AlertDialogTrigger>
                     <AlertDialogContent>
                       <AlertDialogHeader>
+                        <div className="w-full flex justify-end">
+                          <AlertDialogCancel className="border-none shadow-none">
+                            <RxCross1
+                              className="text-2xl text-black hover:cursor-pointer"
+                              // onClick={onClose}
+                            />
+                          </AlertDialogCancel>
+                        </div>
                         <AlertDialogTitle>Edit Praktikum</AlertDialogTitle>
                         <AlertDialogDescription className="w-full">
                           <div className="">
@@ -471,12 +352,12 @@ export default function Praktikum() {
           </tbody>
         </table>
         <div className="">
-          <div className="pagination-info">
+          {/* <div className="pagination-info">
             {`Showing ${indexOfFirstItem + 1} to ${Math.min(
               indexOfLastItem,
               data.length
             )} of ${data.length} entries`}
-          </div>
+          </div> */}
 
           <div className="pagination">
             <button

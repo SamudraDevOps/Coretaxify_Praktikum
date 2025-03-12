@@ -20,6 +20,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { RoutesApi } from "@/Routes";
 import { ClipLoader } from "react-spinners";
+import { RxCross1 } from "react-icons/rx";
 
 export default function UploadSoal() {
   const [isOpen, setIsOpen] = useState(false);
@@ -281,6 +282,14 @@ export default function UploadSoal() {
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>
+              <div className="w-full flex justify-end">
+                <AlertDialogCancel className="border-none shadow-none">
+                  <RxCross1
+                    className="text-2xl text-black hover:cursor-pointer"
+                    // onClick={onClose}
+                  />
+                </AlertDialogCancel>
+              </div>
               <AlertDialogTitle>Tambah Soal</AlertDialogTitle>
               <AlertDialogDescription className="w-full">
                 <div className="">
@@ -385,6 +394,14 @@ export default function UploadSoal() {
                     </AlertDialogTrigger>
                     <AlertDialogContent>
                       <AlertDialogHeader>
+                        <div className="w-full flex justify-end">
+                          <AlertDialogCancel className="border-none shadow-none">
+                            <RxCross1
+                              className="text-2xl text-black hover:cursor-pointer"
+                              // onClick={onClose}
+                            />
+                          </AlertDialogCancel>
+                        </div>
                         <AlertDialogTitle>Edit Soal</AlertDialogTitle>
                         <AlertDialogDescription className="w-full">
                         </AlertDialogDescription>

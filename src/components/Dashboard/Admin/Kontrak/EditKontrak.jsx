@@ -6,6 +6,7 @@ import axios from "axios";
 import { RoutesApi } from "@/Routes";
 import { CookiesProvider, useCookies } from "react-cookie";
 import { IoClose } from "react-icons/io5";
+import { RxCross1 } from "react-icons/rx";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
@@ -206,6 +207,12 @@ const EditKontrak = ({
   return (
     <div className="kontrak-popup-overlay">
       <div className="kontrak-popup-container">
+        <div className="w-full flex justify-end">
+          <RxCross1
+            className="text-2xl hover:cursor-pointer"
+            onClick={onClose}
+          />
+        </div>
         <h2>Edit Data Kontrak</h2>
         <form>
           <div className="kontrak-form-group">
