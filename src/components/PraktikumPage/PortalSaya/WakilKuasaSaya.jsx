@@ -4,6 +4,8 @@ import { BsFiletypeXls } from "react-icons/bs";
 import { IoDocumentTextOutline } from "react-icons/io5";
 
 const WakilKuasaSaya = () => {
+    const [isOpen, setIsOpen] = useState(false);
+
     return (
         <div className='flex h-screen bg-gray-100'>
             <SidebarProfilSaya />
@@ -28,17 +30,66 @@ const WakilKuasaSaya = () => {
                                 <th className='border border-gray-300 px-4 py-2'>NPWP</th>
                                 <th className='border border-gray-300 px-4 py-2'>Nama</th>
                                 <th className='border border-gray-300 px-4 py-2'>Jenis Perwakilan</th>
-                                <th className='border border-gray-300 px-4 py-2'>Alamat</th>
+                                <th className='border border-gray-300 px-4 py-2'>ID Penunjuk Perwakilan</th>
+                                <th className='border border-gray-300 px-4 py-2'>Nomor Dokumen Penunjuk Perwakilan</th>
+                                <th className='border border-gray-300 px-4 py-2'>Izin Perwakilan</th>
+                                <th className='border border-gray-300 px-4 py-2'>Status Penunjukkan</th>
+                                <th className="border border-gray-300 px-4 py-2">Tanggal Disetujui</th>
+                                <th className="border border-gray-300 px-4 py-2">Tanggal Ditolak</th>
+                                <th className="border border-gray-300 px-4 py-2">Tanggal Dibatalkan</th>
+                                <th className="border border-gray-300 px-4 py-2">Tanggal Tertunda</th>
+                                <th className="border border-gray-300 px-4 py-2">Alasan</th>
+                                <th className="border border-gray-300 px-4 py-2">Tanggal Mulai</th>
+                                <th className="border border-gray-300 px-4 py-2">Tanggal Berakhir</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td className='border border-gray-300 px-1 py-2'>1</td>
-                                <td className='border border-gray-300 px-4 py-2'>Wakil Kuasa 1</td>
+                                <td className='border border-gray-300 px-1 py-2'></td>
+                                <td className='border border-gray-300 px-4 py-2'>
+                                    <button className='p-3 text-blue-700'>
+                                        Assign Roles
+                                    </button>
+                                </td>
+                                <td className='border border-gray-300 px-4 py-2'>126671352712</td>
+                                <td className='border border-gray-300 px-4 py-2'>Sabela Samudera Balakosa</td>
+                                <td className='border border-gray-300 px-4 py-2'></td>
+                                <td className='border border-gray-300 px-4 py-2'>D4892991</td>
+                                <td className='border border-gray-300 px-4 py-2'></td>
+                                <td className='border border-gray-300 px-4 py-2'>License</td>
+                                <td className='border border-gray-300 px-4 py-2'>Disetujui</td>
+                                <td className='border border-gray-300 px-4 py-2'></td>
+                                <td className='border border-gray-300 px-4 py-2'></td>
+                                <td className='border border-gray-300 px-4 py-2'></td>
+                                <td className='border border-gray-300 px-4 py-2'></td>
+                                <td className='border border-gray-300 px-4 py-2'></td>
+                                <td className='border border-gray-300 px-4 py-2'></td>
+                                <td className='border border-gray-300 px-4 py-2'></td>
+                                <td className='border border-gray-300 px-4 py-2'></td>
+                                
                             </tr>
                             <tr>
-                                <td className='border border-gray-300 px-1 py-2'>2</td>
-                                <td className='border border-gray-300 px-4 py-2'>Wakil Kuasa 2</td>
+                                <td className='border border-gray-300 px-1 py-2'></td>
+                                <td className='border border-gray-300 px-4 py-2'>
+                                    <button className='p-3 text-blue-700'>
+                                        Assign Roles
+                                    </button>
+                                </td>
+                                <td className='border border-gray-300 px-4 py-2'>126671352712</td>
+                                <td className='border border-gray-300 px-4 py-2'>Sabela Samudera Balakosa</td>
+                                <td className='border border-gray-300 px-4 py-2'></td>
+                                <td className='border border-gray-300 px-4 py-2'>D4892991</td>
+                                <td className='border border-gray-300 px-4 py-2'></td>
+                                <td className='border border-gray-300 px-4 py-2'>License</td>
+                                <td className='border border-gray-300 px-4 py-2'>Disetujui</td>
+                                <td className='border border-gray-300 px-4 py-2'></td>
+                                <td className='border border-gray-300 px-4 py-2'></td>
+                                <td className='border border-gray-300 px-4 py-2'></td>
+                                <td className='border border-gray-300 px-4 py-2'></td>
+                                <td className='border border-gray-300 px-4 py-2'></td>
+                                <td className='border border-gray-300 px-4 py-2'></td>
+                                <td className='border border-gray-300 px-4 py-2'></td>
+                                <td className='border border-gray-300 px-4 py-2'></td>
                             </tr>
                         </tbody>
                     </table>

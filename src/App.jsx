@@ -63,6 +63,9 @@ import TempatKegiatanUsaha from "./components/PraktikumPage/PortalSaya/TempatKeg
 import NomorIdentifikasiEksternal from "./components/PraktikumPage/PortalSaya/NomorIdentifikasiEksternal";
 import JenisPajak from "./components/PraktikumPage/PortalSaya/JenisPajak";
 import WakilKuasaSaya from "./components/PraktikumPage/PortalSaya/WakilKuasaSaya";
+import WajibPajakYangDiwakili from "./components/PraktikumPage/PortalSaya/WajibPajakYangDiwakili";
+import TwoAuthentication from "./components/PraktikumPage/PortalSaya/TwoAuthentication";
+import PermohonanTertunda from "./components/PraktikumPage/PortalSaya/PermohonanTertunda";
 //Route Praktikum
 import ProtectedRoutes from "./components/Dashboard/Auth/ProtectedRoutes";
 import MahasiswaPraktikumKelas from "./components/Dashboard/Mahasiswa/Kelas/MahasiswaPraktikumKelas";
@@ -485,7 +488,7 @@ const Main = () => {
             </div>
           }
         />
-        <Route
+        {/* <Route
           path="/psc/edit-kelas/1"
           element={
             <div className="admin-layout">
@@ -495,7 +498,27 @@ const Main = () => {
               </div>
             </div>
           }
-        />
+        /> */}
+        <Route 
+          path="/psc/kelas/:groupId/mahasiswa" 
+          element={
+            <div className="admin-layout">
+            <SidebarAdmin />
+            <div className="admin-content">
+              <EditMahasiswaPscKelas></EditMahasiswaPscKelas>
+            </div>
+          </div>
+        } />
+        {/* <Route 
+          path="/psc/kelas/:groupId/mahasiswa/:memberId" 
+          element={
+            <div className="admin-layout">
+            <SidebarAdmin />
+            <div className="admin-content">
+              <MemberDetailPage></MemberDetailPage>
+            </div>
+          </div>
+        } /> */}
         <Route
           path="/admin-psc/edit-ujian"
           element={
@@ -697,6 +720,33 @@ const Main = () => {
             <>
               <Header />
               <WakilKuasaSaya />
+            </>
+          }
+        />
+        <Route
+            path="/admin/praktikum/profil-saya/wajib-pajak-yang-diwakili"
+          element={
+            <>
+              <Header />
+              <WajibPajakYangDiwakili />
+            </>
+          }
+        />
+        <Route
+            path="/admin/praktikum/profil-saya/verifikasi-dua-langkah"
+          element={
+            <>
+              <Header />
+              <TwoAuthentication />
+            </>
+          }
+        />
+        <Route
+            path="/admin/praktikum/profil-saya/permohonan-tertunda"
+          element={
+            <>
+              <Header />
+              <PermohonanTertunda />
             </>
           }
         />

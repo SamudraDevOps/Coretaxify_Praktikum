@@ -119,3 +119,10 @@
         text-align: center;
     }
 }
+
+.read-only-field {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+    border: 1px solid #ddd;
+  }
+  
