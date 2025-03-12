@@ -1,118 +1,215 @@
-// import React from "react";
 import React, { useState } from "react";
-// import "../Pengguna/Mahasiswa/editMahasiswa.css";
-import EditPopupMahasiswa from "../Pengguna/Mahasiswa/EditPopupMahasiswa";
+import "./uploadSoal.css";
+import CreateSoalPopup from "./CreateSoalPopup";
+import UpdateSoalPopup from "./UpdateSoalPopup";
 import Swal from "sweetalert2";
-
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
 import { CookiesProvider, useCookies } from "react-cookie";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { RoutesApi } from "@/Routes";
 import { ClipLoader } from "react-spinners";
-import {
-  createMasterSoal,
-  getMasterSoal,
-  mutationSoal,
-} from "@/hooks/dashboard/useMasterSoal";
+import { Alert, AlertTitle } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
+import { IntentEnum } from "@/enums/IntentEnum";
+import { FaDownload, FaEdit, FaTrash } from "react-icons/fa";
 
-export default function UploadSoalPsc() {
-  const [isOpen, setIsOpen] = useState(false);
+export default function UploadSoal() {
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [isUpdateOpen, setIsUpdateOpen] = useState(false);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
-  const [selectedData, setSelectedData] = useState(null);
+  const [selectedSoal, setSelectedSoal] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
-  const [cookies, setCookie] = useCookies(["user"]);
-  const [url, setUrl] = useState(RoutesApi.tasksAdmin);
+  const [cookies] = useCookies(["user"]);
+  const [url, setUrl] = useState(RoutesApi.psc.tasks.url);
+  const [search, setSearch] = useState("");
+
+  // Form data state for creating/editing soal
   const [formData, setFormData] = useState({
     name: "",
-    file: "",
+    import_file: null
   });
 
-  const { isLoading, isError, data, error } = getMasterSoal(url, cookies);
+  // Fetch tasks data
+  const { isLoading, isError, data, error, refetch } = useQuery({
+    queryKey: ["soal_data", url],
+    queryFn: async () => {
+      const { data } = await axios.get(url, {
+        headers: {
+          Authorization: `Bearer ${cookies.token}`,
+          Accept: "application/json",
+        }
+      });
+      return data;
+    },
+  });
 
-  // const mutation = createMasterSoal(cookies, formData);
-  // const   mutation = mutat
-  // const mutationEdit = useMutation({
-  //   mutationFn: async (id) => {
-  //     console.log("button clicked");
-  //     const response = await axios.get(`${RoutesApi.url}api/csrf-token`, {
-  //       // withCredentials: true,
-  //       headers: {
-  //         "X-Requested-With": "XMLHttpRequest",
-  //         Accept: "application/json",
-  //       },
-  //     });
-  //     console.log(response.data.token);
-  //     axios.defaults.headers.common["X-CSRF-TOKEN"] = response.data.token;
-  //     console.log(cookies.token);
-  //     const data = await axios.post(
-  //       RoutesApi.tasksAdmin + "/" + id,
-  //       {
-  //         name: formData.name,
-  //         import_file: formData.file,
-  //       },
-  //       {
-  //         headers: {
-  //           "Content-Type": "multipart/form-data",
-  //           Accept: "application/json",
-  //           "X-CSRF-TOKEN": response.data.token,
-  //           Authorization: `Bearer ${cookies.token}`,
-  //         },
-  //         params: {
-  //           _method: "PUT",
-  //         },
-  //       }
-  //     );
-  //     return data;
-  //   },
-  //   onSuccess: (data) => {
-  //     console.log(data);
-  //   },
-  //   onError: (error) => {
-  //     console.log(error);
-  //   },
-  // });
-  const mutationDelete = useMutation({
-    mutationFn: async (id) => {
-      console.log("button clicked");
+  // Mutation for task operations (create, update, delete)
+  const mutation = useMutation({
+    mutationFn: async ({ id, action }) => {
+      // Get CSRF token
       const response = await axios.get(`${RoutesApi.url}api/csrf-token`, {
-        // withCredentials: true,
         headers: {
           "X-Requested-With": "XMLHttpRequest",
           Accept: "application/json",
         },
       });
-      console.log(response.data.token);
+
       axios.defaults.headers.common["X-CSRF-TOKEN"] = response.data.token;
-      console.log(cookies.token);
-      const data = await axios.delete(RoutesApi.tasksAdmin + `/${id}`, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Accept: "application/json",
-          "X-CSRF-TOKEN": response.data.token,
-          Authorization: `Bearer ${cookies.token}`,
-        },
-      });
-      return data;
+      
+      if (action === "create") {
+        // Create new task
+        const formDataObj = new FormData();
+        formDataObj.append("name", formData.name);
+        formDataObj.append("import_file", formData.import_file);
+
+        return await axios.post(
+          RoutesApi.psc.tasks.url,
+          formDataObj,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Accept: "application/json",
+              "X-CSRF-TOKEN": response.data.token,
+              Authorization: `Bearer ${cookies.token}`,
+            }
+          }
+        );
+      } else if (action === "update" && id) {
+        // Update existing task
+        const formDataObj = new FormData();
+        
+        // Only append fields that have values
+        if (formData.name) {
+          formDataObj.append("name", formData.name);
+        }
+        
+        if (formData.import_file) {
+          formDataObj.append("import_file", formData.import_file);
+        }
+        
+        // Append method to handle Laravel's form method spoofing
+        formDataObj.append("_method", "PUT");
+
+        return await axios.post(
+          `${RoutesApi.psc.tasks.url}/${id}`,
+          formDataObj,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Accept: "application/json",
+              "X-CSRF-TOKEN": response.data.token,
+              Authorization: `Bearer ${cookies.token}`,
+            }
+          }
+        );
+      } else if (action === "delete" && id) {
+        // Delete task
+        return await axios.delete(
+          `${RoutesApi.psc.tasks.url}/${id}`,
+          {
+            headers: {
+              "X-CSRF-TOKEN": response.data.token,
+              Authorization: `Bearer ${cookies.token}`,
+            }
+          }
+        );
+      }
     },
-    onSuccess: (data) => {
-      console.log(data);
+    onSuccess: () => {
+      Swal.fire("Berhasil!", "Operasi berhasil dilakukan!", "success");
+      refetch();
+      setIsCreateOpen(false);
+      setIsUpdateOpen(false);
+      setFormData({
+        name: "",
+        import_file: null
+      });
     },
     onError: (error) => {
-      console.log(error);
+      console.log(error.response);
+      if (error.response === undefined) {
+        Swal.fire("Gagal!", error.message, "error");
+        return;
+      }
+      Swal.fire("Gagal!", error.response.data.message, "error");
     },
   });
+
+  // Download file mutation
+  // Updated download mutation with proper filename extraction
+// Updated download mutation with proper filename extraction
+const downloadMutation = useMutation({
+  mutationFn: async (id) => {
+    try {
+      const response = await axios.get(
+        `${RoutesApi.psc.tasks.url}/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${cookies.token}`,
+            Accept: "application/octet-stream",
+          },
+          params: {
+            intent: IntentEnum.API_USER_DOWNLOAD_SOAL
+          },
+          responseType: 'blob'
+        }
+      );
+      
+      // Create a blob URL
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      
+      // Extract filename from Content-Disposition header
+      const contentDisposition = response.headers['content-disposition'];
+      console.log(response.headers);
+      let filename = 'soal.xlsx'; // Default fallback
+      
+      if (contentDisposition) {
+        // Extract filename from the header
+        const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+        const matches = filenameRegex.exec(contentDisposition);
+        if (matches != null && matches[1]) {
+          // Remove quotes if present
+          filename = matches[1].replace(/['"]/g, '');
+        }
+      }
+      
+      link.setAttribute('download', filename);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      return response;
+    } catch (error) {
+      console.error("Download error:", error);
+      Swal.fire("Gagal!", "Gagal mengunduh file", "error");
+      throw error;
+    }
+  }
+});
+
+
+  const handleEdit = (soal) => {
+    setSelectedSoal(soal);
+    setFormData({
+      name: soal.name,
+      import_file: null // File can't be pre-filled
+    });
+    setIsUpdateOpen(true);
+  };
+
+  const handleCreate = () => {
+    setFormData({
+      name: "",
+      import_file: null
+    });
+    setIsCreateOpen(true);
+  };
+
+  const handleDownload = (id) => {
+    downloadMutation.mutate(id);
+  };
 
   const handleSort = (key) => {
     let direction = "ascending";
@@ -120,74 +217,53 @@ export default function UploadSoalPsc() {
       direction = "descending";
     }
     setSortConfig({ key, direction });
-
-    const sortedData = [...data].sort((a, b) => {
-      if (a[key] < b[key]) {
-        return direction === "ascending" ? -1 - mahasiswa : 1;
-      }
-      if (a[key] > b[key]) {
-        return direction === "ascending" ? 1 : -1;
-      }
-      return 0;
-    });
-    setData(sortedData);
   };
 
-  const handleEditClick = (index) => {
-    setSelectedData(data[index]);
-    setIsOpen(true);
+  const handleSearchChange = (e) => {
+    setSearch(e.target.value);
   };
 
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  // const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
-
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
-
-  const handleSave = () => {
-    // Logic to save the data
-    onClose();
-  };
-
-  const [file, setFile] = useState();
-  function handleChangeFile(e) {
-    console.log(e.target.files);
-    setFile(URL.createObjectURL(e.target.files[0]));
-  }
-  const [search, setSearch] = useState("");
-
-  // const processedData = data.map((item) => ({
-  //   ...item,
-  //   highlight:
-  //     search &&
-  //     Object.values(item).some((value) =>
-  //       String(value).toLowerCase().includes(search.toLowerCase())
-  //     ),
-  // }));
+  // Loading state
   if (isLoading) {
     return (
       <div className="loading">
         <ClipLoader color="#7502B5" size={50} />
       </div>
-      // <div className="h-full w-full text-2xl italic font-bold text-center flex items-center justify-center">Loading...</div>
     );
   }
 
+  // Error state
+  if (isError) {
+    return (
+      <div className="h-screen w-full justify-center items-center flex">
+        <Alert variant="destructive" className="w-1/2 bg-white">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>Error!</AlertTitle>
+          <div className="">
+            <p>{error?.message ?? "Error!"}</p>
+            <div className="w-full flex justify-end">
+              <button
+                className="bg-green-500 p-2 rounded-md text-white"
+                onClick={() => refetch()}
+              >
+                Ulangi
+              </button>
+            </div>
+          </div>
+        </Alert>
+      </div>
+    );
+  }
+
+  // Filter data based on search
+  const filteredData = data?.data?.filter(item => 
+    item.name?.toLowerCase().includes(search.toLowerCase())
+  ) || [];
+
   return (
-    <div className="kontrak-container">
+    <div className="soal-container">
       <div className="header">
         <h2>Data Soal</h2>
-        {/* <p>{cookies.user ? cookies.user : "no user"}</p>
-        {processedData.map((item) => (
-          <li key={item.id} style={{ color: item.highlight ? "red" : "black" }}>
-            {item.namaSoal}
-          </li>
-        ))} */}
       </div>
       <div className="search-add-container">
         <div className="search-input-container">
@@ -195,176 +271,57 @@ export default function UploadSoalPsc() {
             type="text"
             id="search"
             className="search-input"
-            placeholder="Cari Soal   🔎"
-            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Cari Soal 🔎"
+            value={search}
+            onChange={handleSearchChange}
           />
         </div>
-        <AlertDialog>
-          <AlertDialogTrigger>
-            <div className="bg-blue-800 p-2 rounded-lg text-white">
-              + Tambah Soal
-            </div>
-          </AlertDialogTrigger>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Tambah Soal</AlertDialogTitle>
-              <AlertDialogDescription className="w-full">
-                <div className="">
-                  <form>
-                    <div className="edit-form-group-mahasiswa ">
-                      <label>Judul Soal:</label>
-                      <input
-                        type="text"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        required
-                      />
-                    </div>
-                    <div className="edit-form-group-mahasiswa">
-                      <label>File Soal:</label>
-                      <input
-                        type="file"
-                        onChange={(e) =>
-                          setFormData({
-                            ...formData,
-                            file: e.target.files[0],
-                          })
-                        }
-                        accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-                      />
-                    </div>
-                  </form>
-                </div>
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel className="bg-red-600 text-white">
-                Kembali
-              </AlertDialogCancel>
-              {/* <AlertDialogAction
-                onClick={() => mutation.mutate()}
-                className="bg-green-600"
-              > */}
-              <AlertDialogAction
-                onClick={() => mutationSoal(cookies, formData)}
-                // onClick={() => console.log(formData)}
-                className="bg-green-600"
-              >
-                Simpan
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
+        <button
+          className="add-button"
+          onClick={handleCreate}
+        >
+          Tambah Soal
+        </button>
       </div>
       <div className="table-container">
         <table>
           <thead>
             <tr>
-              <th onClick={() => handleSort("id")}>
-                No{" "}
-                {sortConfig.key === "id"
-                  ? sortConfig.direction === "ascending"
-                    ? "↑"
-                    : "↓"
-                  : sortConfig.direction === "descending"
-                  ? "↓"
-                  : "↑"}
-              </th>
-              <th onClick={() => handleSort("namaSoal")}>
+              <th>No</th>
+              <th onClick={() => handleSort("name")}>
                 Judul Soal{" "}
-                {sortConfig.key === "namaSoal"
+                {sortConfig.key === "name"
                   ? sortConfig.direction === "ascending"
                     ? "↑"
                     : "↓"
-                  : sortConfig.direction === "descending"
-                  ? "↓"
-                  : "↑"}
+                  : ""}
               </th>
               <th>File</th>
               <th>Action</th>
             </tr>
           </thead>
           <tbody>
-            {data.data.map((item, index) => (
-              <tr key={index}>
-                <td>{indexOfFirstItem + index + 1}</td>
+            {filteredData.map((item, index) => (
+              <tr key={item.id}>
+                <td>{index + 1}</td>
                 <td>{item.name}</td>
                 <td>
-                  <a
-                    href={item.file}
-                    download
-                    className="text-blue-500 hover:text-blue-700 hover:underline"
+                  <button
+                    onClick={() => handleDownload(item.id)}
+                    className="download-button"
+                    disabled={downloadMutation.isPending}
                   >
-                    File
-                  </a>
+                    <FaDownload className="download-icon" />
+                    {downloadMutation.isPending ? "Loading..." : "Download"}
+                  </button>
                 </td>
                 <td>
-                  <AlertDialog>
-                    <AlertDialogTrigger
-                      // onClick={() => mutationEdit(item.id)}
-                      className="action-button edit"
-                    >
-                      Edit
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>Edit Soal</AlertDialogTitle>
-                        <AlertDialogDescription className="w-full">
-                          <div className="">
-                            <form>
-                              <div className="edit-form-group-mahasiswa ">
-                                <label>Judul Soal:</label>
-                                <input
-                                  type="text"
-                                  name="name"
-                                  value={formData.namaSoal}
-                                  onChange={handleChange}
-                                  required
-                                />
-                              </div>
-                              <div className="edit-form-group-mahasiswa">
-                                <label>File Soal:</label>
-                                <input
-                                  type="file"
-                                  onChange={(e) =>
-                                    setFormData({
-                                      ...formData,
-                                      file: e.target.files[0],
-                                    })
-                                  }
-                                  // onChange={handleChangeFile}
-                                  accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-                                />
-                              </div>
-                            </form>
-                          </div>
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel className="bg-red-600 text-white">
-                          Kembali
-                        </AlertDialogCancel>
-                        <AlertDialogAction
-                          // onClick={() => console.log("Hi !")}
-                          onClick={() =>
-                            mutationSoal(cookies, formData, "edit")
-                          }
-                          // onClick={() => mutationEdit.mutate(item.id)}
-                          className="bg-green-600 "
-                        >
-                          Simpan
-                        </AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
-
-                  {/* <button
+                  <button
                     className="action-button edit"
-                    onClick={() => handleEditClick(index)}
+                    onClick={() => handleEdit(item)}
                   >
                     Edit
-                  </button> */}
+                  </button>
                   <button
                     className="action-button delete"
                     onClick={() => {
@@ -375,19 +332,12 @@ export default function UploadSoalPsc() {
                         showCancelButton: true,
                         confirmButtonText: "Ya, hapus!",
                         cancelButtonText: "Batal",
-                        dangerMode: true,
                       }).then((result) => {
                         if (result.isConfirmed) {
-                          mutationDelete.mutate(item.id);
-                          // const newData = data.filter(
-                          //   (itemData) => itemData.id !== item.id
-                          // );
-                          // setData(newData);
-                          Swal.fire(
-                            "Berhasil!",
-                            "Soal berhasil dihapus!",
-                            "success"
-                          );
+                          mutation.mutate({
+                            id: item.id,
+                            action: "delete",
+                          });
                         }
                       });
                     }}
@@ -400,52 +350,52 @@ export default function UploadSoalPsc() {
           </tbody>
         </table>
         <div className="pagination-container">
-          {/* <div className="pagination-info">
-            {`Showing ${indexOfFirstItem + 1} to ${Math.min(
-              indexOfLastItem,
-              data.length
-            )} of ${data.length} entries`}
-          </div> */}
-
+          <div className="pagination-info">
+            {data?.meta ? `Showing ${data.meta.from} to ${data.meta.to} of ${data.meta.total} entries` : "No data available"}
+          </div>
           <div className="pagination">
             <button
-              className={`page-item`}
+              className="page-item"
               onClick={() => {
-                setUrl(data.links.prev);
+                if (data?.links?.prev) setUrl(data.links.prev);
               }}
-              disabled={data.meta.current_page === 1}
+              disabled={!data?.links?.prev}
             >
               &lt;
             </button>
-            <button className="page-item">{data.meta.current_page}</button>
-            {/* {Array.from({ length: Math.ceil(data.length / itemsPerPage) }, (_, index) => (
-                            <button key={index + 1} className={`page-item ${currentPage === index + 1 ? "active" : ""}`} onClick={() => paginate(index + 1)}>
-                                {index + 1}
-                            </button>
-                        ))} */}
+            <button className="page-item active">{data?.meta?.current_page || 1}</button>
             <button
-              className={`page-item ${
-                currentPage === Math.ceil(data.length / itemsPerPage)
-                  ? "disabled"
-                  : ""
-              }`}
+              className="page-item"
               onClick={() => {
-                console.log(data.links.next);
-                setUrl(data.links.next);
+                if (data?.links?.next) setUrl(data.links.next);
               }}
-              disabled={data.links.next == null}
+              disabled={!data?.links?.next}
             >
               &gt;
             </button>
           </div>
         </div>
       </div>
-      {isOpen && (
-        <EditPopupMahasiswa
-          onClose={() => setIsOpen(false)}
-          data={selectedData}
-        />
-      )}
+
+      {/* Create Soal Popup */}
+      <CreateSoalPopup
+        isOpen={isCreateOpen}
+        onClose={() => setIsCreateOpen(false)}
+        onSave={() => mutation.mutate({ action: "create" })}
+        formData={formData}
+        setFormData={setFormData}
+        isLoading={mutation.isPending}
+      />
+
+      {/* Update Soal Popup */}
+      <UpdateSoalPopup
+        isOpen={isUpdateOpen}
+        onClose={() => setIsUpdateOpen(false)}
+        onSave={() => mutation.mutate({ id: selectedSoal.id, action: "update" })}
+        formData={formData}
+        setFormData={setFormData}
+        isLoading={mutation.isPending}
+      />
     </div>
   );
 }
