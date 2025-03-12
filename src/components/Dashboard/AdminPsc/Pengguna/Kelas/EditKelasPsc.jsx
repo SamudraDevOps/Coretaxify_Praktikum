@@ -222,6 +222,22 @@ const EditKelasPsc = () => {
                     : "↓"
                   : ""}
               </th>
+              <th onClick={() => handleSort("class_code")}>
+                Kode Kelas{" "}
+                {sortConfig.key === "class_code"
+                  ? sortConfig.direction === "ascending"
+                    ? "↑"
+                    : "↓"
+                  : ""}
+              </th>
+              <th onClick={() => handleSort("users_count")}>
+                Jumlah Pengguna{" "}
+                {sortConfig.key === "users_count"
+                  ? sortConfig.direction === "ascending"
+                    ? "↑"
+                    : "↓"
+                  : ""}
+              </th>
               <th onClick={() => handleSort("name")}>
                 Periode Mulai{" "}
                 {sortConfig.key === "start_period"
@@ -233,14 +249,6 @@ const EditKelasPsc = () => {
               <th onClick={() => handleSort("name")}>
                 Periode Selesai{" "}
                 {sortConfig.key === "end_period"
-                  ? sortConfig.direction === "ascending"
-                    ? "↑"
-                    : "↓"
-                  : ""}
-              </th>
-              <th onClick={() => handleSort("class_code")}>
-                Kode Kelas{" "}
-                {sortConfig.key === "class_code"
                   ? sortConfig.direction === "ascending"
                     ? "↑"
                     : "↓"
@@ -261,9 +269,10 @@ const EditKelasPsc = () => {
             {filteredData.map((item) => (
               <tr key={item.id}>
                 <td>{item.name}</td>
+                <td>{item.class_code}</td>
+                <td>{item.users_count}</td>
                 <td>{item.start_period}</td>
                 <td>{item.end_period}</td>
-                <td>{item.class_code}</td>
                 <td>{item.status}</td>
                 <td>
                   <button
