@@ -31,6 +31,7 @@ import {
   updatePraktikumDosen,
 } from "@/hooks/dashboard";
 import { getCookie } from "@/service";
+import { RxCross1 } from "react-icons/rx";
 
 export default function DosenPraktikumKelas() {
   const [isOpen, setIsOpen] = useState(false);
@@ -207,6 +208,14 @@ export default function DosenPraktikumKelas() {
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>
+              <div className="w-full flex justify-end">
+                <AlertDialogCancel className="border-none shadow-none">
+                  <RxCross1
+                    className="text-2xl text-black hover:cursor-pointer"
+                    // onClick={onClose}
+                  />
+                </AlertDialogCancel>
+              </div>
               <AlertDialogTitle>Tambah Praktikum</AlertDialogTitle>
               <AlertDialogDescription className="w-full">
                 <div className=" h-96 overflow-scroll">
@@ -383,6 +392,14 @@ export default function DosenPraktikumKelas() {
                     </AlertDialogTrigger>
                     <AlertDialogContent>
                       <AlertDialogHeader>
+                        <div className="w-full flex justify-end">
+                          <AlertDialogCancel className="border-none shadow-none">
+                            <RxCross1
+                              className="text-2xl text-black hover:cursor-pointer"
+                              // onClick={onClose}
+                            />
+                          </AlertDialogCancel>
+                        </div>
                         <AlertDialogTitle>Edit Praktikum</AlertDialogTitle>
                         <AlertDialogDescription className="w-full">
                           <div className=" h-96 overflow-scroll">

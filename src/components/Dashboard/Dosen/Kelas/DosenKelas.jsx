@@ -31,6 +31,7 @@ import {
 import { HiDotsVertical } from "react-icons/hi";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
+import { RxCross1 } from "react-icons/rx";
 
 export default function DosenKelas() {
   const [isOpen, setIsOpen] = useState(false);
@@ -457,6 +458,14 @@ export default function DosenKelas() {
                     }}
                   >
                     <AlertDialogHeader>
+                      <div className="w-full flex justify-end">
+                        <AlertDialogCancel className="border-none shadow-none">
+                          <RxCross1
+                            className="text-2xl text-black hover:cursor-pointer"
+                            // onClick={onClose}
+                          />
+                        </AlertDialogCancel>
+                      </div>
                       <AlertDialogTitle>Edit Kelas</AlertDialogTitle>
                       <AlertDialogDescription className="w-full">
                         <div className="">
@@ -784,6 +793,14 @@ export default function DosenKelas() {
       >
         <AlertDialogContent>
           <AlertDialogHeader>
+            <div className="w-full flex justify-end">
+              <AlertDialogCancel className="border-none shadow-none">
+                <RxCross1
+                  className="text-2xl text-black hover:cursor-pointer"
+                  // onClick={onClose}
+                />
+              </AlertDialogCancel>
+            </div>
             <AlertDialogTitle>Tambah Kelas</AlertDialogTitle>
             <AlertDialogDescription className="w-full">
               <div className="max-h-[70vh] overflow-y-auto">

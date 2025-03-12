@@ -234,9 +234,7 @@ const SidebarAdmin = () => {
           {isOpen && <span>Penilaian</span>}
         </li>
         <li
-          className={`menu-item ${
-            cookies.role == "admin" || cookies.role === "dosen" ? "" : "!hidden"
-          }`}
+          className={`menu-item ${cookies.role == "admin" ? "" : "!hidden"}`}
           onClick={() => {
             window.location.href = "/admin/upload-soal";
           }}
