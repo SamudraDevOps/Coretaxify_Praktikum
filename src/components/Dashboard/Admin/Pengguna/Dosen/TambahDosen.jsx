@@ -6,6 +6,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import { useCookies } from "react-cookie";
 import { IoMdDownload } from "react-icons/io";
+import { RxCross1 } from "react-icons/rx";
 import Swal from "sweetalert2";
 import { ClipLoader } from "react-spinners";
 
@@ -117,6 +118,12 @@ const TambahDosen = ({ isOpen, onClose, onSave }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 p-4">
       <div className="bg-white w-full max-w-3xl rounded-lg shadow-lg p-6">
+        <div className="w-full flex justify-end">
+          <RxCross1
+            className="text-2xl hover:cursor-pointer"
+            onClick={onClose}
+          />
+        </div>
         <div className="flex justify-between items-center border-b pb-3">
           <h2 className="text-xl font-bold text-gray-800">Tambah Data Dosen</h2>
           {/* <button className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded flex items-center">

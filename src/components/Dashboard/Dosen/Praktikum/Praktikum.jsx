@@ -22,6 +22,7 @@ import { RoutesApi } from "@/Routes";
 import { ClipLoader } from "react-spinners";
 import { FaFile } from "react-icons/fa";
 import IntentEnum from "@/constant/intent";
+import { RxCross1 } from "react-icons/rx";
 
 export default function Praktikum() {
   const [isOpen, setIsOpen] = useState(false);
@@ -261,6 +262,14 @@ export default function Praktikum() {
                     </AlertDialogTrigger>
                     <AlertDialogContent>
                       <AlertDialogHeader>
+                        <div className="w-full flex justify-end">
+                          <AlertDialogCancel className="border-none shadow-none">
+                            <RxCross1
+                              className="text-2xl text-black hover:cursor-pointer"
+                              // onClick={onClose}
+                            />
+                          </AlertDialogCancel>
+                        </div>
                         <AlertDialogTitle>Edit Praktikum</AlertDialogTitle>
                         <AlertDialogDescription className="w-full">
                           <div className="">

@@ -8,6 +8,7 @@ import IntentEnum from "@/constant/intent";
 import Swal from "sweetalert2";
 import { getContracts } from "@/hooks/dashboard";
 import { getCookieToken } from "@/service";
+import { RxCross1 } from "react-icons/rx";
 
 const EditPopupDosen = ({ isOpen, onClose, dosen, onSave }) => {
   const [cookies, setCookie] = useCookies(["user"]);
@@ -133,12 +134,18 @@ const EditPopupDosen = ({ isOpen, onClose, dosen, onSave }) => {
   return (
     <div className="edit-popup-container-dosen">
       <div className="edit-popup-content-dosen">
+        <div className="w-full flex justify-end">
+          <RxCross1
+            className="text-2xl hover:cursor-pointer"
+            onClick={onClose}
+          />
+        </div>
         <div className="edit-popup-header-dosen">
           <h2>Edit Dosen</h2>
         </div>
         <form>
           <div className="edit-form-group-dosen">
-            <label>Nama Dosen  awdk:</label>
+            <label>Nama Dosen awdk:</label>
             <input
               type="text"
               name="name"
