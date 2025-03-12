@@ -531,7 +531,7 @@ const Main = () => {
           }
         />
         <Route
-          path="/admin-psc/edit-mahasiswa"
+          path="/psc/edit-mahasiswa"
           element={
             <div className="admin-layout">
               <SidebarAdmin />

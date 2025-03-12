@@ -287,7 +287,7 @@ const SidebarAdmin = () => {
                   <li
                     className="dropdown-item"
                     onClick={() => {
-                      window.location.href = "/admin/edit-mahasiswa";
+                      window.location.href = `/${cookies.role}/edit-mahasiswa`;
                     }}
                   >
                     Mahasiswa
