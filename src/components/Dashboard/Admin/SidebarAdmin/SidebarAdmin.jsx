@@ -176,6 +176,17 @@ const SidebarAdmin = () => {
           <FaUsers className="menu-icon" />
           {isOpen && <span>Kelas</span>}
         </li>
+        <div className={cookies.role === "mahasiswa" ? "" : "!hidden"}>
+          <li
+            className="menu-item"
+            onClick={() => {
+              window.location.href = "/mahasiswa/kelas";
+            }}
+          >
+            <FaUsers className="menu-icon" />
+            <span className={`text-[16px]`}>Kelas</span>
+          </li>
+        </div>
         <li
           className={cookies.role == "psc" ? "!hidden " : `menu-item`}
           // className={`menu-item`}
@@ -459,17 +470,6 @@ const SidebarAdmin = () => {
               </AccordionContent>
             </AccordionItem>
           </Accordion>
-        </div>
-        <div className={cookies.role === "mahasiswa" ? "" : "!hidden"}>
-          <li
-            className="menu-item"
-            onClick={() => {
-              window.location.href = "/mahasiswa/kelas";
-            }}
-          >
-            <FaUsers className="menu-icon" />
-            <span className={`text-[16px]`}>Kelas</span>
-          </li>
         </div>
         {/* <Accordion
           type="single"
