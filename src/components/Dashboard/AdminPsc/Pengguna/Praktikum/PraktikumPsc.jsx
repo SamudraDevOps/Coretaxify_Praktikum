@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import "./uploadSoal.css";
-import CreateSoalPopup from "./CreateSoalPopup";
-import UpdateSoalPopup from "./UpdateSoalPopup";
+import "./praktikumPsc.css";
+import CreateAssignmentPopup from "./CreateAssignmentPopup";
+import UpdateAssignmentPopup from "./UpdateAssignmentPopup";
 import Swal from "sweetalert2";
-import { CookiesProvider, useCookies } from "react-cookie";
+import { useCookies } from "react-cookie";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { RoutesApi } from "@/Routes";
@@ -11,27 +11,45 @@ import { ClipLoader } from "react-spinners";
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 import { IntentEnum } from "@/enums/IntentEnum";
-import { FaDownload, FaEdit, FaTrash } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
-export default function UploadSoal() {
+const PraktikumPsc = () => {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isUpdateOpen, setIsUpdateOpen] = useState(false);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
-  const [selectedSoal, setSelectedSoal] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [selectedAssignment, setSelectedAssignment] = useState(null);
   const [cookies] = useCookies(["user"]);
-  const [url, setUrl] = useState(RoutesApi.psc.tasks.url);
+  const [url, setUrl] = useState(RoutesApi.psc.assignments.url);
   const [search, setSearch] = useState("");
+  const navigate = useNavigate();
 
-  // Form data state for creating/editing soal
-  const [formData, setFormData] = useState({
-    name: "",
-    import_file: null
+  // Load tasks for the dropdown
+  const { data: tasksData } = useQuery({
+    queryKey: ["soal_data"],
+    queryFn: async () => {
+      const { data } = await axios.get(RoutesApi.psc.tasks.url, {
+        headers: {
+          Authorization: `Bearer ${cookies.token}`,
+          Accept: "application/json",
+        }
+      });
+      return data;
+    },
   });
 
-  // Fetch tasks data
+  // Form data state for creating/editing assignments
+  const [formData, setFormData] = useState({
+    name: "",
+    task_id: "",
+    start_period: "",
+    end_period: "",
+    supporting_file: null,
+    groups: []
+  });
+
+  // Fetch assignments data
   const { isLoading, isError, data, error, refetch } = useQuery({
-    queryKey: ["soal_data", url],
+    queryKey: ["assignments_data", url],
     queryFn: async () => {
       const { data } = await axios.get(url, {
         headers: {
@@ -43,7 +61,7 @@ export default function UploadSoal() {
     },
   });
 
-  // Mutation for task operations (create, update, delete)
+  // Mutation for assignment operations (create, update, delete)
   const mutation = useMutation({
     mutationFn: async ({ id, action }) => {
       // Get CSRF token
@@ -56,14 +74,36 @@ export default function UploadSoal() {
 
       axios.defaults.headers.common["X-CSRF-TOKEN"] = response.data.token;
       
+      // Format date to backend format (Y-m-d H:i:s)
+      const formatDateForBackend = (dateString) => {
+          if (!dateString) return "";
+          // Convert from "YYYY-MM-DDThh:mm" to "YYYY-MM-DD hh:mm:00"
+          return dateString.replace('T', ' ') + ':00';
+      };
+
       if (action === "create") {
-        // Create new task
+        // Create new assignment
         const formDataObj = new FormData();
+        
+        // Add required fields
         formDataObj.append("name", formData.name);
-        formDataObj.append("import_file", formData.import_file);
+        formDataObj.append("task_id", formData.task_id);
+        formDataObj.append("start_period", formatDateForBackend(formData.start_period));
+        formDataObj.append("end_period", formatDateForBackend(formData.end_period));
+        
+        // Add optional fields
+        if (formData.supporting_file) {
+          formDataObj.append("supporting_file", formData.supporting_file);
+        }
+        
+        if (formData.groups && formData.groups.length > 0) {
+          formData.groups.forEach((groupId, index) => {
+            formDataObj.append(`groups[${index}]`, groupId);
+          });
+        }
 
         return await axios.post(
-          RoutesApi.psc.tasks.url,
+          RoutesApi.psc.assignments.url,
           formDataObj,
           {
             headers: {
@@ -71,11 +111,14 @@ export default function UploadSoal() {
               Accept: "application/json",
               "X-CSRF-TOKEN": response.data.token,
               Authorization: `Bearer ${cookies.token}`,
+            },
+            params: {
+              intent: IntentEnum.API_USER_CREATE_ASSIGNMENT
             }
           }
         );
       } else if (action === "update" && id) {
-        // Update existing task
+        // Update existing assignment
         const formDataObj = new FormData();
         
         // Only append fields that have values
@@ -83,15 +126,31 @@ export default function UploadSoal() {
           formDataObj.append("name", formData.name);
         }
         
-        if (formData.import_file) {
-          formDataObj.append("import_file", formData.import_file);
+        if (formData.task_id) {
+          formDataObj.append("task_id", formData.task_id);
+        }
+        
+        if (formData.start_period) {
+          formDataObj.append("start_period", formatDateForBackend(formData.start_period));
+        }
+        
+        if (formData.end_period) {
+          formDataObj.append("end_period", formatDateForBackend(formData.end_period));
+        }
+        
+        if (formData.supporting_file) {
+          formDataObj.append("supporting_file", formData.supporting_file);
+        }
+        
+        if (formData.assignment_code) {
+          formDataObj.append("assignment_code", formData.assignment_code);
         }
         
         // Append method to handle Laravel's form method spoofing
         formDataObj.append("_method", "PUT");
 
         return await axios.post(
-          `${RoutesApi.psc.tasks.url}/${id}`,
+          `${RoutesApi.psc.assignments.url}/${id}`,
           formDataObj,
           {
             headers: {
@@ -103,9 +162,9 @@ export default function UploadSoal() {
           }
         );
       } else if (action === "delete" && id) {
-        // Delete task
+        // Delete assignment
         return await axios.delete(
-          `${RoutesApi.psc.tasks.url}/${id}`,
+          `${RoutesApi.psc.assignments.url}/${id}`,
           {
             headers: {
               "X-CSRF-TOKEN": response.data.token,
@@ -122,7 +181,11 @@ export default function UploadSoal() {
       setIsUpdateOpen(false);
       setFormData({
         name: "",
-        import_file: null
+        task_id: "",
+        start_period: "",
+        end_period: "",
+        supporting_file: null,
+        groups: []
       });
     },
     onError: (error) => {
@@ -136,65 +199,71 @@ export default function UploadSoal() {
   });
 
   // Download file mutation
-  // Updated download mutation with proper filename extraction
-// Updated download mutation with proper filename extraction
-const downloadMutation = useMutation({
-  mutationFn: async (id) => {
-    try {
-      const response = await axios.get(
-        `${RoutesApi.psc.tasks.url}/${id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${cookies.token}`,
-            Accept: "application/octet-stream",
-          },
-          params: {
-            intent: IntentEnum.API_USER_DOWNLOAD_SOAL
-          },
-          responseType: 'blob'
+  const downloadMutation = useMutation({
+    mutationFn: async (id) => {
+      try {
+        const response = await axios.get(
+          `${RoutesApi.psc.assignments.url}/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${cookies.token}`,
+              Accept: "*/*",
+            },
+            params: {
+              intent: IntentEnum.API_USER_DOWNLOAD_FILE
+            },
+            responseType: 'blob'
+          }
+        );
+        
+        // Extract filename from Content-Disposition header if present
+        let filename = 'file.pdf'; // Default fallback name
+        const contentDisposition = response.headers['content-disposition'];
+        
+        if (contentDisposition) {
+          // Extract filename from the header
+          const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+          const matches = filenameRegex.exec(contentDisposition);
+          if (matches !== null && matches[1]) {
+            // Clean up the filename
+            filename = matches[1].replace(/['"]/g, '');
+          }
         }
-      );
-      
-      // Create a blob URL
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement('a');
-      link.href = url;
-      
-      // Extract filename from Content-Disposition header
-      const contentDisposition = response.headers['content-disposition'];
-      console.log(response.headers);
-      let filename = 'soal.xlsx'; // Default fallback
-      
-      if (contentDisposition) {
-        // Extract filename from the header
-        const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
-        const matches = filenameRegex.exec(contentDisposition);
-        if (matches != null && matches[1]) {
-          // Remove quotes if present
-          filename = matches[1].replace(/['"]/g, '');
-        }
+        
+        // Create a blob URL and trigger download
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', filename);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        return response;
+      } catch (error) {
+        console.error("Download error:", error);
+        Swal.fire("Gagal!", "Gagal mengunduh file", "error");
+        throw error;
       }
-      
-      link.setAttribute('download', filename);
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      
-      return response;
-    } catch (error) {
-      console.error("Download error:", error);
-      Swal.fire("Gagal!", "Gagal mengunduh file", "error");
-      throw error;
     }
-  }
-});
+  });
 
+  const handleEdit = (assignment) => {
+    setSelectedAssignment(assignment);
 
-  const handleEdit = (soal) => {
-    setSelectedSoal(soal);
+    // Format the datetime strings for the datetime-local input
+    const formatDatetimeForInput = (datetimeStr) => {
+      if (!datetimeStr) return "";
+      // Convert from "YYYY-MM-DD HH:MM:SS" to "YYYY-MM-DDThh:mm" format
+      return datetimeStr.substring(0, 16).replace(' ', 'T');
+    };
     setFormData({
-      name: soal.name,
-      import_file: null // File can't be pre-filled
+      name: assignment.name,
+      task_id: assignment.task_id,
+      start_period: formatDatetimeForInput(assignment.start_period),
+      end_period: formatDatetimeForInput(assignment.end_period),
+      assignment_code: assignment.assignment_code,
+      supporting_file: null // File can't be pre-filled
     });
     setIsUpdateOpen(true);
   };
@@ -202,9 +271,17 @@ const downloadMutation = useMutation({
   const handleCreate = () => {
     setFormData({
       name: "",
-      import_file: null
+      task_id: "",
+      start_period: "",
+      end_period: "",
+      supporting_file: null,
+      groups: []
     });
     setIsCreateOpen(true);
+  };
+
+  const handleViewMembers = (assignmentId) => {
+    navigate(`/psc/praktikum/${assignmentId}/members`);
   };
 
   const handleDownload = (id) => {
@@ -257,13 +334,14 @@ const downloadMutation = useMutation({
 
   // Filter data based on search
   const filteredData = data?.data?.filter(item => 
-    item.name?.toLowerCase().includes(search.toLowerCase())
+    item.name?.toLowerCase().includes(search.toLowerCase()) ||
+    item.assignment_code?.toLowerCase().includes(search.toLowerCase())
   ) || [];
 
   return (
-    <div className="soal-container">
+    <div className="praktikum-container">
       <div className="header">
-        <h2>Data Soal</h2>
+        <h2>Data Praktikum</h2>
       </div>
       <div className="search-add-container">
         <div className="search-input-container">
@@ -271,7 +349,7 @@ const downloadMutation = useMutation({
             type="text"
             id="search"
             className="search-input"
-            placeholder="Cari Soal 🔎"
+            placeholder="Cari Praktikum 🔎"
             value={search}
             onChange={handleSearchChange}
           />
@@ -280,7 +358,7 @@ const downloadMutation = useMutation({
           className="add-button"
           onClick={handleCreate}
         >
-          Tambah Soal
+          Tambah Praktikum
         </button>
       </div>
       <div className="table-container">
@@ -289,14 +367,27 @@ const downloadMutation = useMutation({
             <tr>
               <th>No</th>
               <th onClick={() => handleSort("name")}>
-                Judul Soal{" "}
+                Judul Praktikum{" "}
                 {sortConfig.key === "name"
                   ? sortConfig.direction === "ascending"
                     ? "↑"
                     : "↓"
                   : ""}
               </th>
-              <th>File</th>
+              <th onClick={() => handleSort("assignment_code")}>
+                Kode Praktikum{" "}
+                {sortConfig.key === "assignment_code"
+                  ? sortConfig.direction === "ascending"
+                    ? "↑"
+                    : "↓"
+                  : ""}
+              </th>
+              <th>Kelas</th>
+              <th>Soal</th>
+              <th>Jumlah Mahasiswa</th>
+              <th>Periode Mulai</th>
+              <th>Periode Selesai</th>
+              <th>File Pendukung</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -305,15 +396,25 @@ const downloadMutation = useMutation({
               <tr key={item.id}>
                 <td>{index + 1}</td>
                 <td>{item.name}</td>
+                <td>{item.assignment_code}</td>
+                <td>{item.group ? item.group.name : '-'}</td>
+                <td>{item.task ? item.task.name : '-'}</td>
+                <td>{item.users_count}</td>
+                {/* <td>{item.task_id}</td> */}
+                <td>{item.start_period}</td>
+                <td>{item.end_period}</td>
                 <td>
-                  <button
-                    onClick={() => handleDownload(item.id)}
-                    className="download-button"
-                    disabled={downloadMutation.isPending}
-                  >
-                    <FaDownload className="download-icon" />
-                    {downloadMutation.isPending ? "Loading..." : "Download"}
-                  </button>
+                  {item.supporting_file ? (
+                    <button
+                      onClick={() => handleDownload(item.id)}
+                      className="download-button"
+                      disabled={downloadMutation.isPending}
+                    >
+                                          {downloadMutation.isPending ? "Loading..." : "Download"}
+                    </button>
+                  ) : (
+                    <span>-</span>
+                  )}
                 </td>
                 <td>
                   <button
@@ -326,8 +427,8 @@ const downloadMutation = useMutation({
                     className="action-button delete"
                     onClick={() => {
                       Swal.fire({
-                        title: "Hapus Soal?",
-                        text: "Soal akan dihapus secara permanen!",
+                        title: "Hapus Praktikum?",
+                        text: "Praktikum akan dihapus secara permanen!",
                         icon: "warning",
                         showCancelButton: true,
                         confirmButtonText: "Ya, hapus!",
@@ -343,6 +444,12 @@ const downloadMutation = useMutation({
                     }}
                   >
                     Delete
+                  </button>
+                  <button
+                    className="action-button view"
+                    onClick={() => handleViewMembers(item.id)}
+                  >
+                    Detail
                   </button>
                 </td>
               </tr>
@@ -377,25 +484,29 @@ const downloadMutation = useMutation({
         </div>
       </div>
 
-      {/* Create Soal Popup */}
-      <CreateSoalPopup
+      {/* Create Assignment Popup */}
+      <CreateAssignmentPopup
         isOpen={isCreateOpen}
         onClose={() => setIsCreateOpen(false)}
         onSave={() => mutation.mutate({ action: "create" })}
         formData={formData}
         setFormData={setFormData}
         isLoading={mutation.isPending}
+        tasks={tasksData?.data || []}
       />
 
-      {/* Update Soal Popup */}
-      <UpdateSoalPopup
+      {/* Update Assignment Popup */}
+      <UpdateAssignmentPopup
         isOpen={isUpdateOpen}
         onClose={() => setIsUpdateOpen(false)}
-        onSave={() => mutation.mutate({ id: selectedSoal.id, action: "update" })}
+        onSave={() => mutation.mutate({ id: selectedAssignment.id, action: "update" })}
         formData={formData}
         setFormData={setFormData}
         isLoading={mutation.isPending}
+        tasks={tasksData?.data || []}
       />
     </div>
   );
-}
+};
+
+export default PraktikumPsc;

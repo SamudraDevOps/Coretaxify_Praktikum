@@ -227,6 +227,14 @@ const EditPengajar = () => {
                     : "↓"
                   : ""}
               </th>
+              <th onClick={() => handleSort("created_at")}>
+                Tanggal Daftar{" "}
+                {sortConfig.key === "created_at"
+                  ? sortConfig.direction === "ascending"
+                    ? "↑"
+                    : "↓"
+                  : ""}
+              </th>
               <th onClick={() => handleSort("email")}>
                 Email{" "}
                 {sortConfig.key === "email"
@@ -250,6 +258,13 @@ const EditPengajar = () => {
             {filteredData.map((item) => (
               <tr key={item.id}>
                 <td>{item.name}</td>
+                <td>
+                  {item.created_at ? new Date(item.created_at).toLocaleDateString('en-GB', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric'
+                  }).replace(/\//g, '-') : ''}
+                </td>
                 <td>{item.email}</td>
                 <td>{item.status}</td>
                 <td>

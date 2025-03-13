@@ -1,0 +1,179 @@
+.assignment-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .assignment-popup-container {
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 1.5rem;
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .assignment-popup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .assignment-popup-header h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+    margin: 0;
+  }
+  
+  .close-button {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #666;
+  }
+  
+  .close-button:hover {
+    color: #000;
+  }
+  
+  .assignment-popup-form {
+    margin-bottom: 1.5rem;
+  }
+  
+  .form-group {
+    margin-bottom: 1.2rem;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #444;
+  }
+  
+  .form-group input,
+  .form-group select {
+    width: 100%;
+    padding: 0.8rem;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    font-size: 0.9rem;
+  }
+  
+  .form-group input:focus,
+  .form-group select:focus {
+    outline: none;
+    border-color: #673ab7;
+    box-shadow: 0 0 0 2px rgba(103, 58, 183, 0.2);
+  }
+  
+  .file-upload-container {
+    margin-top: 0.5rem;
+  }
+  
+  .file-upload-box {
+    position: relative;
+    border: 2px dashed #ccc;
+    border-radius: 5px;
+    padding: 2rem 1rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .file-upload-box:hover {
+    border-color: #673ab7;
+  }
+  
+  .file-upload-placeholder {
+    color: #666;
+  }
+  
+  .file-upload-placeholder p {
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+  }
+  
+  .file-upload-placeholder small {
+    font-size: 0.8rem;
+  }
+  
+  .file-selected {
+    color: #333;
+  }
+  
+  .file-selected p {
+    margin: 0;
+    font-weight: 500;
+    word-break: break-all;
+  }
+  
+  .file-input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+  }
+  
+  .assignment-popup-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+  }
+  
+  .cancel-button,
+  .save-button {
+    padding: 0.8rem 1.5rem;
+    border-radius: 5px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+  }
+  
+  .cancel-button {
+    background-color: #e53935;
+    color: #fff;
+  }
+  
+  .cancel-button:hover {
+    background-color: #c62828;
+  }
+  
+  .save-button {
+    background-color: #05f811;
+    color: #fff;
+  }
+  
+  .save-button:hover {
+    background-color: #47208b;
+  }
+  
+  .save-button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+  
+  small {
+    font-size: 0.75rem;
+    color: #666;
+    display: block;
+    margin-top: 0.25rem;
+  }
+  

@@ -241,9 +241,25 @@ const EditMahasiswaPsc = () => {
                     : "↓"
                   : ""}
               </th>
+              <th onClick={() => handleSort("created_at")}>
+                Tanggal Daftar{" "}
+                {sortConfig.key === "created_at"
+                  ? sortConfig.direction === "ascending"
+                    ? "↑"
+                    : "↓"
+                  : ""}
+              </th>
               <th onClick={() => handleSort("email")}>
                 Email{" "}
                 {sortConfig.key === "email"
+                  ? sortConfig.direction === "ascending"
+                    ? "↑"
+                    : "↓"
+                  : ""}
+              </th>
+              <th onClick={() => handleSort("groups")}>
+                Nama Kelas{" "}
+                {sortConfig.key === "groups"
                   ? sortConfig.direction === "ascending"
                     ? "↑"
                     : "↓"
@@ -264,7 +280,25 @@ const EditMahasiswaPsc = () => {
             {filteredData.map((item) => (
               <tr key={item.id}>
                 <td>{item.name}</td>
+                <td>
+                  {item.created_at ? new Date(item.created_at).toLocaleDateString('en-GB', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric'
+                  }).replace(/\//g, '-') : ''}
+                </td>
                 <td>{item.email}</td>
+                <td>
+                  {item.groups && item.groups.length > 0 ? (
+                    <ul className="list-disc pl-4">
+                      {item.groups.map(group => (
+                        <li key={group.id}>{group.name}</li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <span className="text-gray-400 italic">No groups</span>
+                  )}
+                </td>
                 <td>{item.status}</td>
                 <td>
                   <button
