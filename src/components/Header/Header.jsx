@@ -1,10 +1,16 @@
 import React, { useState } from "react";
 import { Bell, UserCircle, ChevronDown, FileText, LogOut, ChevronRight } from "lucide-react";
 import Logo from "../../assets/images/5.png";
+import { useUserType } from "../context/userTypeContext";
 
 const Header = () => {
     const [dropdownOpen, setDropdownOpen] = useState(null);
     const [subDropdownOpen, setSubDropdownOpen] = useState(null);
+    const { userType, setUserType } = useUserType();
+
+    console.log("User Type Context (Saat Render):", userType);
+
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
     const toggleDropdown = (menu) => {
         setDropdownOpen(dropdownOpen === menu ? null : menu);
@@ -29,9 +35,41 @@ const Header = () => {
                     <FileText className="w-6 h-6 cursor-pointer" />
                     <Bell className="w-6 h-6 cursor-pointer" />
                     <div className="flex items-center space-x-2 cursor-pointer">
-                        <UserCircle className="w-8 h-8" />
-                        <span className="hidden md:inline">3510145XXXXXXX</span>
-                        <ChevronDown className="w-5 h-5" />
+                        <button
+                            className="flex items-center space-x-2 cursor-pointer bg-white px-3 py-2 rounded-md shadow-md"
+                            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                        >
+                            <UserCircle className="w-8 h-8" />
+                            <span className="hidden md:inline">{userType}</span>
+                            <ChevronDown className="w-5 h-5" />
+                        </button>
+
+                        {/* Dropdown menu */}
+                        {isDropdownOpen && (
+                            <ul className="absolute right-0 mt-2 w-48 bg-white border rounded-md shadow-lg">
+                                <li
+                                    className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
+                                    onClick={() => {
+                                        setUserType("Orang Pribadi");
+
+                                        console.log("User Type Berubah ke:", "Orang Pribadi");
+                                        setIsDropdownOpen(false);
+                                    }}
+                                >
+                                    Orang Pribadi
+                                </li>
+                                <li
+                                    className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
+                                    onClick={() => {
+                                        setUserType("Badan");
+                                        console.log("User Type Berubah ke:", "Badan");
+                                        setIsDropdownOpen(false);
+                                    }}
+                                >
+                                    Badan
+                                </li>
+                            </ul>
+                        )}
                     </div>
                     <LogOut className="w-6 h-6 cursor-pointer text-red-600 font-bold" />
                 </div>
