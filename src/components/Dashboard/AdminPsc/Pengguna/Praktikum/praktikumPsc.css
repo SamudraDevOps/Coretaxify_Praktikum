@@ -1,0 +1,196 @@
+.praktikum-container {
+    padding: 2rem;
+    background-color: #f5f5f5;
+    min-height: 100vh;
+  }
+  
+  .header {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-left: 0rem;
+    margin-top: -1rem;
+    margin-bottom: 1rem;
+    color: #7c7c7c;
+  }
+  
+  .header h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  
+  .search-add-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
+  .search-input-container {
+    flex-grow: 1;
+    margin-right: 1rem;
+  }
+  
+  .search-input {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  .add-button {
+    padding: 0.5rem 1rem;
+    background-color: #060C65;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  
+  .add-button:hover {
+    background-color: #155cb0;
+  }
+  
+  .table-container {
+    background-color: #ffffff;
+    border-radius: 10px;
+    overflow-x: auto;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+    font-weight: normal;
+    font-size: 0.9rem;
+  }
+  
+  thead tr {
+    background-color: #673ab7;
+  }
+  
+  th {
+    white-space: nowrap;
+    padding: 1rem;
+    cursor: pointer;
+    font-weight: normal;
+    font-size: 0.9rem;
+    color: #ffffff;
+  }
+  
+  th:hover {
+    background-color: #2a1f91;
+  }
+  
+  td {
+    white-space: nowrap;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  tr:hover td {
+    background-color: #f9f9f9;
+  }
+  
+  .action-button {
+    padding: 0.3rem 0.7rem;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 0.1rem 0;
+    margin-right: 0.5rem;
+  }
+  
+  .action-button.edit {
+    background-color: #2196f3;
+  }
+  
+  .action-button.delete {
+    background-color: #e53935;
+  }
+  
+  .action-button.view {
+    background-color: #673ab7;
+  }
+  
+  .action-button:hover {
+    opacity: 0.8;
+  }
+  
+  .download-button {
+    padding: 0.3rem 0.7rem;
+    background-color: #ff9800;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .download-button:hover {
+    background-color: #f57c00;
+  }
+  
+  .download-button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+  
+  .pagination-container {
+    padding: 1rem;
+  }
+  
+  .pagination-info {
+    text-align: left;
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 10px;
+  }
+  
+  .pagination {
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .page-item {
+    padding: 0.5rem 1rem;
+    margin: 0 0.2rem;
+    background-color: #ddd;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .page-item:hover {
+    background-color: #aaa;
+  }
+  
+  .page-item.active {
+    background-color: #060C65;
+    color: white;
+    font-weight: bold;
+  }
+  
+  .page-item.disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+  
+  .loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 300px;
+  }
+  
+  .read-only-field {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+    border: 1px solid #ddd;
+  }
+  
