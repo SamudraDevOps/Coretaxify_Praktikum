@@ -31,7 +31,7 @@ export default function UploadSoal() {
   const [cookies, setCookie] = useCookies(["user"]);
   const [url, setUrl] = useState(RoutesApi.tasksAdmin);
 
-  const { isLoading, isError, data, error } = useQuery({
+  const { isLoading, isError, data, error, refetch } = useQuery({
     queryKey: ["kelas_dosen", url],
     queryFn: async () => {
       const { data } = await axios.get(url, {
@@ -80,7 +80,8 @@ export default function UploadSoal() {
       Swal.fire("Berhasil!", "Data Soal berhasil dibuat !", "success").then(
         (result) => {
           if (result.isConfirmed) {
-            window.location.reload();
+            refetch();
+            // window.location.reload();
           }
         }
       );
@@ -99,35 +100,31 @@ export default function UploadSoal() {
         },
       });
       axios.defaults.headers.common["X-CSRF-TOKEN"] = response.data.token;
-      
+
       // Create a dynamic payload object
       const payload = {};
-      
+
       // Only add properties that have values
-      if (formData.name && formData.name.trim() !== '') {
+      if (formData.name && formData.name.trim() !== "") {
         payload.name = formData.name;
       }
-      
+
       if (formData.file) {
         payload.import_file = formData.file;
       }
-      
+
       // Send the request with only non-empty fields
-      const data = await axios.post(
-        RoutesApi.tasksAdmin + "/" + id,
-        payload,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Accept: "application/json",
-            "X-CSRF-TOKEN": response.data.token,
-            Authorization: `Bearer ${cookies.token}`,
-          },
-          params: {
-            _method: "PUT",
-          },
-        }
-      );
+      const data = await axios.post(RoutesApi.tasksAdmin + "/" + id, payload, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Accept: "application/json",
+          "X-CSRF-TOKEN": response.data.token,
+          Authorization: `Bearer ${cookies.token}`,
+        },
+        params: {
+          _method: "PUT",
+        },
+      });
       return data;
     },
     onSuccess: (data) => {
@@ -135,7 +132,7 @@ export default function UploadSoal() {
       Swal.fire("Berhasil!", "Soal berhasil diperbarui!", "success").then(
         (result) => {
           if (result.isConfirmed) {
-            window.location.reload();
+            refetch();
           }
         }
       );
@@ -144,8 +141,8 @@ export default function UploadSoal() {
       console.log(error);
       Swal.fire("Gagal!", "Gagal memperbarui soal.", "error");
     },
-  });  
-  
+  });
+
   const mutationDelete = useMutation({
     mutationFn: async (id) => {
       console.log("button clicked");
@@ -387,7 +384,11 @@ export default function UploadSoal() {
                     <AlertDialogTrigger
                       className="action-button edit"
                       onClick={() =>
-                        setFormData({ ...formData, name: item.name, file: null })
+                        setFormData({
+                          ...formData,
+                          name: item.name,
+                          file: null,
+                        })
                       }
                     >
                       Edit
@@ -403,37 +404,36 @@ export default function UploadSoal() {
                           </AlertDialogCancel>
                         </div>
                         <AlertDialogTitle>Edit Soal</AlertDialogTitle>
-                        <AlertDialogDescription className="w-full">
-                        </AlertDialogDescription>
+                        <AlertDialogDescription className="w-full"></AlertDialogDescription>
                       </AlertDialogHeader>
-                          <div className="">
-                            <form>
-                              <div className="edit-form-group-mahasiswa ">
-                                <label>Judul Soal:</label>
-                                <input
-                                  type="text"
-                                  name="name"
-                                  value={formData.name}
-                                  onChange={handleChange}
-                                  required
-                                />
-                              </div>
-                              <div className="edit-form-group-mahasiswa">
-                                <label>File Soal:</label>
-                                <input
-                                  type="file"
-                                  onChange={(e) =>
-                                    setFormData({
-                                      ...formData,
-                                      file: e.target.files[0],
-                                    })
-                                  }
-                                  // onChange={handleChangeFile}
-                                  accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-                                />
-                              </div>
-                            </form>
+                      <div className="">
+                        <form>
+                          <div className="edit-form-group-mahasiswa ">
+                            <label>Judul Soal:</label>
+                            <input
+                              type="text"
+                              name="name"
+                              value={formData.name}
+                              onChange={handleChange}
+                              required
+                            />
                           </div>
+                          <div className="edit-form-group-mahasiswa">
+                            <label>File Soal:</label>
+                            <input
+                              type="file"
+                              onChange={(e) =>
+                                setFormData({
+                                  ...formData,
+                                  file: e.target.files[0],
+                                })
+                              }
+                              // onChange={handleChangeFile}
+                              accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                            />
+                          </div>
+                        </form>
+                      </div>
                       <AlertDialogFooter>
                         <AlertDialogCancel className="bg-red-600 text-white">
                           Kembali
