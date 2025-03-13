@@ -9,12 +9,12 @@ import { ClipLoader } from "react-spinners";
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 import { useParams, useNavigate } from "react-router-dom";
-import AssignmentPscMemberDetailPopup from "./AssignmentPscMemberDetailPopup";
+// import AssignmentPscMemberDetailPopup from "./AssignmentPscMemberDetailPopup";
 
 const AssignmentPscMember = () => {
   const { assignmentId } = useParams();
   const navigate = useNavigate();
-  const [isDetailOpen, setIsDetailOpen] = useState(false);
+//   const [isDetailOpen, setIsDetailOpen] = useState(false);
   const [selectedMember, setSelectedMember] = useState(null);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
   const [cookies] = useCookies(["user"]);
@@ -89,31 +89,31 @@ const AssignmentPscMember = () => {
   });
 
   // Member detail fetch mutation
-  const memberDetailMutation = useMutation({
-    mutationFn: async (memberId) => {
-      return await axios.get(
-        `${RoutesApi.psc.assignments.url}/${assignmentId}/members/${memberId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${cookies.token}`,
-            Accept: "application/json",
-          }
-        }
-      );
-    },
-    onSuccess: (response) => {
-      setSelectedMember(response.data);
-      setIsDetailOpen(true);
-    },
-    onError: (error) => {
-      console.log(error.response);
-      Swal.fire("Gagal!", "Gagal mengambil detail member", "error");
-    },
-  });
+//   const memberDetailMutation = useMutation({
+//     mutationFn: async (memberId) => {
+//       return await axios.get(
+//         `${RoutesApi.psc.assignments.url}/${assignmentId}/members/${memberId}`,
+//         {
+//           headers: {
+//             Authorization: `Bearer ${cookies.token}`,
+//             Accept: "application/json",
+//           }
+//         }
+//       );
+//     },
+//     onSuccess: (response) => {
+//       setSelectedMember(response.data);
+//       setIsDetailOpen(true);
+//     },
+//     onError: (error) => {
+//       console.log(error.response);
+//       Swal.fire("Gagal!", "Gagal mengambil detail member", "error");
+//     },
+//   });
 
-  const handleViewDetail = (memberId) => {
-    memberDetailMutation.mutate(memberId);
-  };
+//   const handleViewDetail = (memberId) => {
+//     memberDetailMutation.mutate(memberId);
+//   };
 
   const handleRemoveMember = (memberId) => {
     Swal.fire({
@@ -243,12 +243,12 @@ const AssignmentPscMember = () => {
                   <td>{item.email}</td>
                   <td>{item.status}</td>
                   <td>
-                    <button
+                    {/* <button
                       className="action-button view"
                       onClick={() => handleViewDetail(item.id)}
                     >
                       Detail
-                    </button>
+                    </button> */}
                     <button
                       className="action-button delete"
                       onClick={() => handleRemoveMember(item.id)}
@@ -296,12 +296,12 @@ const AssignmentPscMember = () => {
       </div>
 
       {/* Member Detail Popup */}
-      {isDetailOpen && (
+      {/* {isDetailOpen && (
         <AssignmentPscMemberDetailPopup
           onClose={() => setIsDetailOpen(false)}
           member={selectedMember}
         />
-      )}
+      )} */}
     </div>
   );
 };
