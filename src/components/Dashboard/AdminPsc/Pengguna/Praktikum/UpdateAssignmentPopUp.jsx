@@ -30,6 +30,14 @@ const UpdateAssignmentPopup = ({
     }
   };
 
+  // Find the current task
+  const currentTask = tasks.find(task => task.id === parseInt(formData.task_id));
+
+  // Add debug info
+  if (formData.task_id && !currentTask) {
+    console.warn(`Selected task (ID: ${formData.task_id}) not found in available tasks:`, tasks);
+  }
+
   return (
     <div className="assignment-popup-overlay">
       <div className="assignment-popup-container">
@@ -65,7 +73,7 @@ const UpdateAssignmentPopup = ({
           </div>
           
           <div className="form-group">
-            <label>Soal:</label>
+            <label>Soal: {currentTask ? `(Sekarang: ${currentTask.name})` : ''}</label>
             <select
               name="task_id"
               value={formData.task_id || ""}
@@ -75,9 +83,12 @@ const UpdateAssignmentPopup = ({
               {tasks.map(task => (
                 <option key={task.id} value={task.id}>
                   {task.name}
-                </option>
-              ))}
+                  </option>
+                ))}
             </select>
+            {formData.task_id && !currentTask && (
+              <small className="error-text">Task dengan ID {formData.task_id} tidak ditemukan</small>
+            )}
           </div>
           
           <div className="form-group">
@@ -87,9 +98,9 @@ const UpdateAssignmentPopup = ({
                 name="start_period"
                 value={formData.start_period || ""}
                 onChange={handleChange}
-                required
             />
-            </div>
+            <small>Format: YYYY-MM-DD HH:MM</small>
+          </div>
 
           <div className="form-group">
             <label>Periode Selesai:</label>
@@ -98,8 +109,8 @@ const UpdateAssignmentPopup = ({
                 name="end_period"
                 value={formData.end_period || ""}
                 onChange={handleChange}
-                required
             />
+            <small>Format: YYYY-MM-DD HH:MM</small>
           </div>
           
           <div className="form-group">
@@ -108,7 +119,9 @@ const UpdateAssignmentPopup = ({
               <div className="file-upload-box">
                 {formData.supporting_file ? (
                   <div className="file-selected">
-                    <p>{formData.supporting_file.name}</p>
+                    <p>{typeof formData.supporting_file === 'object' 
+                      ? formData.supporting_file.name 
+                      : 'File tersedia: ' + formData.supporting_file}</p>
                   </div>
                 ) : (
                   <div className="file-upload-placeholder">

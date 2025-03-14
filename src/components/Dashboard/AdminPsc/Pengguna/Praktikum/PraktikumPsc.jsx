@@ -88,10 +88,16 @@ const PraktikumPsc = () => {
         // Add required fields
         formDataObj.append("name", formData.name);
         formDataObj.append("task_id", formData.task_id);
-        formDataObj.append("start_period", formatDateForBackend(formData.start_period));
-        formDataObj.append("end_period", formatDateForBackend(formData.end_period));
         
         // Add optional fields
+        if (formData.supporting_file) {
+          formDataObj.append("start_period", formatDateForBackend(formData.start_period));
+        }
+
+        if (formData.supporting_file) {
+          formDataObj.append("end_period", formatDateForBackend(formData.end_period));
+        }
+
         if (formData.supporting_file) {
           formDataObj.append("supporting_file", formData.supporting_file);
         }
@@ -250,21 +256,51 @@ const PraktikumPsc = () => {
 
   const handleEdit = (assignment) => {
     setSelectedAssignment(assignment);
-
+    
     // Format the datetime strings for the datetime-local input
     const formatDatetimeForInput = (datetimeStr) => {
       if (!datetimeStr) return "";
-      // Convert from "YYYY-MM-DD HH:MM:SS" to "YYYY-MM-DDThh:mm" format
-      return datetimeStr.substring(0, 16).replace(' ', 'T');
+      try {
+        // Convert from "YYYY-MM-DD HH:MM:SS" to "YYYY-MM-DDThh:mm" format
+        return datetimeStr.substring(0, 16).replace(' ', 'T');
+      } catch (error) {
+        console.error("Error formatting date:", error);
+        return "";
+      }
     };
-    setFormData({
+    
+    // Ensure task data is loaded before setting form data
+    if (!tasksData?.data) {
+      Swal.fire("Error", "Task data is not loaded yet. Please try again.", "error");
+      return;
+    }
+    
+    // Check if task_id exists in loaded tasks
+    const taskExists = tasksData.data.some(task => 
+      parseInt(task.id) === parseInt(assignment.task_id)
+    );
+    
+    // If task doesn't exist, log an error but still show the form
+    if (!taskExists && assignment.task_id) {
+      console.warn(`Task ID ${assignment.task_id} not found in available tasks`);
+    }
+    
+    console.log("Setting form data:", {
       name: assignment.name,
       task_id: assignment.task_id,
       start_period: formatDatetimeForInput(assignment.start_period),
+      end_period: formatDatetimeForInput(assignment.end_period)
+    });
+    
+    setFormData({
+      name: assignment.name,
+      task_id: assignment.task_id, // Keep original task_id even if not found
+      start_period: formatDatetimeForInput(assignment.start_period),
       end_period: formatDatetimeForInput(assignment.end_period),
       assignment_code: assignment.assignment_code,
-      supporting_file: null // File can't be pre-filled
+      supporting_file: null
     });
+    
     setIsUpdateOpen(true);
   };
 
