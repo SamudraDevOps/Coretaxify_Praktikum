@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import SidebarProfilSaya from './SidebarProfilSaya';
+import SidebarProfilSayaBadan from './SidebarProfilSaya';
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { BsFiletypeXls } from "react-icons/bs";
 
-const DetailKontak = () => {
+const DetailKontakBadan = () => {
     const [contacts, setContacts] = useState([]);
 
     return (
         <div className='flex h-screen bg-gray-100'>
-            <SidebarProfilSaya />
+            <SidebarProfilSayaBadan />
 
             <div className='flex-auto p-3 bg-white rounded-md h-full'>
                 <div className='flex justify-between items-center mb-4 pb-3 border-b'>
@@ -67,4 +67,4 @@ const DetailKontak = () => {
     );
 };
 
-export default DetailKontak;
+export default DetailKontakBadan;

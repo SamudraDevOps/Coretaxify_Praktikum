@@ -414,7 +414,7 @@ export default function CoretaxifyList() {
                 </td>
                 <td>
                   <button className="action-button edit"
-                    onClick={() => window.location.href = `/admin/praktikum/prak1`}>
+                    onClick={() => window.location.href = `/admin/praktikum/1/prak1`}>
                     Mulai
                   </button>
                 </td>

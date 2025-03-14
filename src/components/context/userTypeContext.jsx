@@ -1,12 +1,17 @@
-import { createContext, useState, useContext } from "react";
+import { createContext, useState, useEffect, useContext } from "react";
 
-// Membuat Context
 const UserTypeContext = createContext();
-
-// Provider untuk membungkus aplikasi
 export const UserTypeProvider = ({ children }) => {
-    const [userType, setUserType] = useState("Orang Pribadi"); // Default "Orang Pribadi"
+    const savedUserType = localStorage.getItem("userType") || "Orang Pribadi";
+
+    const [userType, setUserType] = useState(savedUserType);
+
+    useEffect(() => {
+        localStorage.setItem("userType", userType); 
+    }, [userType]);
+
     console.log("UserTypeContext Provider:", userType);
+
     return (
         <UserTypeContext.Provider value={{ userType, setUserType }}>
             {children}
@@ -14,5 +19,4 @@ export const UserTypeProvider = ({ children }) => {
     );
 };
 
-// Custom hook untuk menggunakan context
 export const useUserType = () => useContext(UserTypeContext);

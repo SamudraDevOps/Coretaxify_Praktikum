@@ -21,9 +21,9 @@ const Header = () => {
     };
 
     const navigateTo = (path) => {
-        window.location.href = `/admin/praktikum/${path.replace(/\s+/g, "-").toLowerCase()}`;
+        const userTypeId = userType === "Orang Pribadi" ? 1 : 2;
+        window.location.href = `/admin/praktikum/${userTypeId}/${path.replace(/\s+/g, "-").toLowerCase()}`;
     };
-
     return (
         <div className="w-full">
             <header className="bg-slate-100 text-blue-900 flex justify-between items-center px-4 md:px-8 lg:px-12 xl:px-16 py-3 shadow-md w-full overflow-x-auto">
@@ -36,7 +36,7 @@ const Header = () => {
                     <Bell className="w-6 h-6 cursor-pointer" />
                     <div className="flex items-center space-x-2 cursor-pointer">
                         <button
-                            className="flex items-center space-x-2 cursor-pointer bg-white px-3 py-2 rounded-md shadow-md"
+                            className="flex items-center space-x-2 cursor-pointer bg-white px-3 py-2 rounded-md shadow-md relative"
                             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                         >
                             <UserCircle className="w-8 h-8" />
@@ -46,7 +46,7 @@ const Header = () => {
 
                         {/* Dropdown menu */}
                         {isDropdownOpen && (
-                            <ul className="absolute right-0 mt-2 w-48 bg-white border rounded-md shadow-lg">
+                            <ul className="absolute right-14 top-14 mt-2 w-64 bg-white border rounded-md shadow-lg py-1 px-2">
                                 <li
                                     className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
                                     onClick={() => {
@@ -54,6 +54,7 @@ const Header = () => {
 
                                         console.log("User Type Berubah ke:", "Orang Pribadi");
                                         setIsDropdownOpen(false);
+                                        window.location.href = "/admin/praktikum/1/prak1";
                                     }}
                                 >
                                     Orang Pribadi
@@ -64,6 +65,7 @@ const Header = () => {
                                         setUserType("Badan");
                                         console.log("User Type Berubah ke:", "Badan");
                                         setIsDropdownOpen(false);
+                                        window.location.href = "/admin/praktikum/2/prak1";
                                     }}
                                 >
                                     Badan

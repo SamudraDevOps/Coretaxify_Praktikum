@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import SidebarProfilSaya from './SidebarProfilSaya';
+import SidebarProfilSayaBadan from './SidebarProfilSaya';
 import { BsFiletypeXls } from "react-icons/bs";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-const NomorIdentifikasiEksternal = () => {
+const NomorIdentifikasiEksternalBadan = () => {
     const [activeTab, setActiveTab] = useState("external-identification-numbers");
     return (
         <div className='flex h-screen bg-gray-100'>
-            <SidebarProfilSaya />
+            <SidebarProfilSayaBadan />
             <div className='flex-auto p-3 bg-white rounded-md h-full'>
                 <div className='flex justify-between items-center mb-4 pb-3 border-b'>
                     <div className='flex items-center'>
@@ -108,6 +108,6 @@ const NomorIdentifikasiEksternal = () => {
     )
 }
 
-export default NomorIdentifikasiEksternal;
+export default NomorIdentifikasiEksternalBadan;
 
 

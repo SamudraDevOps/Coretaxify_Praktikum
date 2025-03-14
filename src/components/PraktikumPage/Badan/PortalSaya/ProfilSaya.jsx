@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import SidebarProfilSaya from "./SidebarProfilSaya";
+import SidebarProfilSayaBadan from "./SidebarProfilSaya";
 
-const ProfilSaya = () => {
+const ProfilSayaBadan = () => {
     const [activeTab, setActiveTab] = useState("profil");
 
     return (
         <div className="flex h-screen bg-gray-100">
-            <SidebarProfilSaya />
+            <SidebarProfilSayaBadan />
             <main className="flex-auto p-3 bg-white rounded-md h-full">
                 <div className="flex justify-between items-center mb-6">
                     <h2 className="text-2xl font-semibold">Ikhtisar Profil Wajib Pajak</h2>
@@ -97,4 +97,4 @@ const ProfilSaya = () => {
     );
 };
 
-export default ProfilSaya;
+export default ProfilSayaBadan;

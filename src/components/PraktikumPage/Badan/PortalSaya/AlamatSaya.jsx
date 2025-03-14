@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import SidebarProfilSaya from './SidebarProfilSaya';
+import SidebarProfilSayaBadan from './SidebarProfilSaya';
 import { BsFiletypeXls } from "react-icons/bs";
 
-const AlamatSaya = () => {
+const AlamatSayaBadan = () => {
     const [alamat, setAlamat] = useState({
         alamat: "Jl. Raya Ciputat Parung No. 1",
         kelurahan: "Ciputat Timur",
@@ -14,7 +14,7 @@ const AlamatSaya = () => {
 
     return (
         <div className='flex h-screen bg-gray-100'>
-            <SidebarProfilSaya />
+            <SidebarProfilSayaBadan />
 
             <div className='flex-auto p-3 bg-white rounded-md h-full'>
                 <h2 className='text-2xl font-semibold'>Alamat</h2>
@@ -26,4 +26,4 @@ const AlamatSaya = () => {
         </div>
     );
 }
-export default AlamatSaya;
+export default AlamatSayaBadan;

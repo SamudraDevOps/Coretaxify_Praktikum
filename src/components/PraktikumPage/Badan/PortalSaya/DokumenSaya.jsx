@@ -4,7 +4,7 @@ import { BsFiletypeXls } from "react-icons/bs";
 import { FaTimes } from "react-icons/fa";
 import { Radio } from "lucide-react";
 
-const DokumenSaya = () => {
+const DokumenSayaBadan = () => {
     const data = [
         { nomor: "-", tanggal: "18-02-2025", judul: "SPT Masa PPh Pasal 21/26", jenis: "SPT Masa PPh Pasal 21/26", kasus: "", pembuatan: "18-02-2025" },
         { nomor: "BPE-01438/CT/KPP.1214/2025", tanggal: "18-02-2025", judul: "Bukti Penerimaan Elektronik (BPE)", jenis: "Bukti Penerimaan Elektronik (BPE)", kasus: "", pembuatan: "18-02-2025", penggunaPembuatan: "", },
@@ -231,4 +231,4 @@ const DokumenSaya = () => {
     );
 };
 
-export default DokumenSaya;
+export default DokumenSayaBadan;

@@ -4,7 +4,7 @@ import { BsFiletypeXls } from "react-icons/bs";
 import { FaTimes } from "react-icons/fa";
 
 
-const KasusSaya = () => {
+const KasusSayaBadan = () => {
     return (
         <div className="p-4">
             <div className="flex justify-between items-center mb-4 pb-3 border-b">
@@ -110,4 +110,4 @@ const KasusSaya = () => {
     );
 };
 
-export default KasusSaya;
+export default KasusSayaBadan;

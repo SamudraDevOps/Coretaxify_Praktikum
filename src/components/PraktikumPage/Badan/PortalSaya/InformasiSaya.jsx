@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import SidebarProfilSaya from './SidebarProfilSaya';
+import SidebarProfilSayaBadan from './SidebarProfilSaya';
 import { BsFiletypeXls } from "react-icons/bs";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Link } from "react-router-dom";
 
-const InformasiSaya = () => {
+const InformasiSayaBadan = () => {
     const [activeTab, setActiveTab] = useState("general");
     return (
         <div className='flex h-screen bg-gray-100'>
-            <SidebarProfilSaya />
+            <SidebarProfilSayaBadan />
             <main className="flex-auto p-3 bg-white rounded-md h-full">
                 <div className="flex justify-between items-center mb-6">
                     <h2 className="text-2xl font-semibold">Informasi Umum Wajib Pajak</h2>
@@ -153,4 +153,4 @@ const InformasiSaya = () => {
     )
 }
 
-export default InformasiSaya;
+export default InformasiSayaBadan;

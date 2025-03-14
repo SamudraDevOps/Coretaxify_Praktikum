@@ -1,13 +1,13 @@
 import { useState } from 'react';
-import SidebarProfilSaya from './SidebarProfilSaya';
+import SidebarProfilSayaBadan from './SidebarProfilSaya';
 import { BsFiletypeXls } from "react-icons/bs";
 import { IoDocumentTextOutline } from "react-icons/io5";
 
 
-const PermohonanTertunda = () => {
+const PermohonanTertundaBadan = () => {
     return (
         <div className='flex h-screen bg-gray-100'>
-            <SidebarProfilSaya />
+            <SidebarProfilSayaBadan />
             <div className='flex-auto p-3 bg-white rounded-md h-full'>
                 <div className='flex justify-between items-center mb-4 pb-3 border-b'>
                     <div className='flex items-center'>
@@ -46,4 +46,4 @@ const PermohonanTertunda = () => {
     )
 }
 
-export default PermohonanTertunda;
+export default PermohonanTertundaBadan;

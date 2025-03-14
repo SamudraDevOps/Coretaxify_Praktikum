@@ -3,7 +3,7 @@ import { IoDocumentTextOutline } from "react-icons/io5";
 import { BsFiletypeXls } from "react-icons/bs";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-const NotifikasiSaya = () => {
+const NotifikasiSayaBadan = () => {
     const data = [
         { pengirim: "eTax Indonesia", subjek: "Pemberitahuan Pajak", tanggal: "12/12/2021", prioritas: "High", status: "Unread" },
         { pengirim: "eTax Indonesia", subjek: "Undangan Pajak", tanggal: "12/12/2021", prioritas: "Low", status: "Read" },
@@ -92,4 +92,4 @@ const NotifikasiSaya = () => {
     );
 };
 
-export default NotifikasiSaya;
+export default NotifikasiSayaBadan;
