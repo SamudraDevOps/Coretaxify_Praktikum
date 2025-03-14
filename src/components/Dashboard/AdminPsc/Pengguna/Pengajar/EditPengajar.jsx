@@ -142,7 +142,13 @@ const EditPengajar = () => {
   };
 
   const handleCreateDosen = () => {
-    mutation.mutate({ action: "create" });
+    setFormData({
+      name: "",
+      email: "",
+      status: "ACTIVE"
+    });
+    setIsOpen(true);
+    // mutation.mutate({ action: "create" });
   };
 
   const handleSort = (key) => {
@@ -211,7 +217,10 @@ const EditPengajar = () => {
             onChange={handleSearchChange}
           />
         </div>
-        <button className="add-button" onClick={() => setIsOpen(true)}>
+        <button 
+          className="add-button" 
+          onClick={handleCreateDosen}
+        >
           + Tambah Pengajar
         </button>
       </div>
