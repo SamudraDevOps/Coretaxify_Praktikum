@@ -279,8 +279,14 @@ const PraktikumPsc = () => {
     const formatDatetimeForInput = (datetimeStr) => {
       if (!datetimeStr) return "";
       try {
+        // Parse the DD-MM-YYYY HH:MM:SS format
+        const [datePart, timePart] = datetimeStr.split(' ');
+        const [day, month, year] = datePart.split('-');
+        
+        return `${year}-${month}-${day}T${timePart.substring(0, 5)}`;
+        
         // Convert from "YYYY-MM-DD HH:MM:SS" to "YYYY-MM-DDThh:mm" format
-        return datetimeStr.substring(0, 16).replace(' ', 'T');
+        // return datetimeStr.substring(0, 16).replace(' ', 'T');
       } catch (error) {
         console.error("Error formatting date:", error);
         return "";
