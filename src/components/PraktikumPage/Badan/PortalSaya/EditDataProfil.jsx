@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FaCalendarAlt, FaFilter, FaSearch, FaTimes, FaChevronDown, FaChevronUp } from "react-icons/fa";
-import SidebarProfilSaya from "./SidebarProfilSaya"; 
+import SidebarProfilSayaBadan from "./SidebarProfilSaya"; 
 import {
     AlertDialog,
     AlertDialogTrigger,
@@ -12,7 +12,7 @@ import {
     AlertDialogAction,
     AlertDialogCancel,
 } from "@/components/ui/alert-dialog";
-const EditDataProfil = () => {
+const EditDataProfilBadan = () => {
     const [isPerwakilan, setIsPerwakilan] = useState(false);
     const [showInformasiUmum, setShowInformasiUmum] = useState(false);
     const [showDataEkonomi, setShowDataEkonomi] = useState(false);
@@ -37,7 +37,7 @@ const EditDataProfil = () => {
 
     return (
         <div className="flex h-screen bg-gray-100">
-            <SidebarProfilSaya />
+            <SidebarProfilSayaBadan />
             <div className="flex-grow p-6 bg-white  h-full">
                 <h2 className="text-2xl font-semibold text-gray-800 mb-4">Pembaruan Data Wajib Pajak</h2>
                 <div className="border rounded-md p-4 mb-4">
@@ -851,4 +851,4 @@ const EditDataProfil = () => {
     );
 };
 
-export default EditDataProfil;
+export default EditDataProfilBadan;

@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useUserType } from '../context/UserTypeContext'; 
+import { useUserType } from '../../../context/userTypeContext';
 
-const SidebarProfilSaya = () => {
-    const { userType } = useUserType(); 
-    const userTypeId = userType === "Orang Pribadi" ? 1 : 2; 
+const SidebarProfilSayaBadan = () => {
+    const { userType } = useUserType();
+    const userTypeId = userType === "Orang Pribadi" ? 1 : 2;
 
     const menuItems = [
         "Ikhtisar Profil Wajib Pajak",
@@ -55,4 +55,4 @@ const SidebarProfilSaya = () => {
     );
 };
 
-export default SidebarProfilSaya;
+export default SidebarProfilSayaBadan;
