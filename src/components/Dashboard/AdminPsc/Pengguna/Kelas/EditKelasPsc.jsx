@@ -365,7 +365,7 @@ const EditKelasPsc = () => {
                   </button>
                   <button
                     className="action-button edit"
-                    onClick={() => (window.location.href = `/psc/edit-kelas/${item.id}`)}
+                    onClick={() => (window.location.href = `/psc/kelas/${item.id}/mahasiswa`)}
                   >
                     Detail
                   </button>
