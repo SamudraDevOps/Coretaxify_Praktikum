@@ -23,6 +23,24 @@ const PraktikumPsc = () => {
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
 
+  // Add a new query to fetch groups by role
+  const { data: groupsData, isLoading: groupsLoading } = useQuery({
+    queryKey: ["groups_by_role"],
+    queryFn: async () => {
+      const { data } = await axios.get(RoutesApi.psc.groups.url, {
+        headers: {
+          Authorization: `Bearer ${cookies.token}`,
+          Accept: "application/json",
+        },
+        params: {
+          intent: IntentEnum.API_GET_GROUP_BY_ROLES
+        }
+      });
+      return data;
+    },
+  });
+
+
   // Load tasks for the dropdown
   const { data: tasksData } = useQuery({
     queryKey: ["soal_data"],
@@ -90,11 +108,11 @@ const PraktikumPsc = () => {
         formDataObj.append("task_id", formData.task_id);
         
         // Add optional fields
-        if (formData.supporting_file) {
+        if (formData.start_period) {
           formDataObj.append("start_period", formatDateForBackend(formData.start_period));
         }
 
-        if (formData.supporting_file) {
+        if (formData.end_period) {
           formDataObj.append("end_period", formatDateForBackend(formData.end_period));
         }
 
@@ -529,6 +547,7 @@ const PraktikumPsc = () => {
         setFormData={setFormData}
         isLoading={mutation.isPending}
         tasks={tasksData?.data || []}
+        groups={groupsData?.data || []}
       />
 
       {/* Update Assignment Popup */}
