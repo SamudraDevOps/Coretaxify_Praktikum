@@ -262,6 +262,12 @@ const TambahKontrak = ({
               name="mahasiswa"
               value={formData.mahasiswa}
               onChange={handleChange}
+              onWheel={(e) => e.target.blur()}
+              onKeyDown={(e) => {
+                if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+                  e.preventDefault();
+                }
+              }}
               required
             />
           </div>
@@ -292,6 +298,12 @@ const TambahKontrak = ({
               name="spt"
               value={formData.spt}
               onChange={handleChange}
+              onWheel={(e) => e.target.blur()}
+              onKeyDown={(e) => {
+                if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+                  e.preventDefault();
+                }
+              }}
               required
             />
           </div>
@@ -302,6 +314,12 @@ const TambahKontrak = ({
               name="bupot"
               value={formData.bupot}
               onChange={handleChange}
+              onWheel={(e) => e.target.blur()}
+              onKeyDown={(e) => {
+                if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+                  e.preventDefault();
+                }
+              }}
               required
             />
           </div>
@@ -312,6 +330,12 @@ const TambahKontrak = ({
               name="faktur"
               value={formData.faktur}
               onChange={handleChange}
+              onWheel={(e) => e.target.blur()}
+              onKeyDown={(e) => {
+                if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+                  e.preventDefault(); 
+                }
+              }}
               required
             />
           </div>

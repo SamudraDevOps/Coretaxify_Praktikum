@@ -1,18 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import SidebarProfilSaya from './SidebarProfilSaya';
 import { BsFiletypeXls } from "react-icons/bs";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Link } from "react-router-dom";
+import { useUserType } from '@/components/context/userTypeContext';
 
 const InformasiSaya = () => {
     const [activeTab, setActiveTab] = useState("general");
+    const { userType } = useUserType(); // Ambil userType dari context
+    const [userTypeFromStorage, setUserTypeFromStorage] = useState("");
+
+    useEffect(() => {
+        const storedUserType = localStorage.getItem("userType");
+        if (storedUserType) {
+            setUserTypeFromStorage(storedUserType);
+        }
+    }, []);
+    const getUserTypePath = () => {
+        const type = userType || userTypeFromStorage; 
+        return type === "Orang Pribadi" ? 1 : 2;
+    };
     return (
         <div className='flex h-screen bg-gray-100'>
             <SidebarProfilSaya />
             <main className="flex-auto p-3 bg-white rounded-md h-full">
                 <div className="flex justify-between items-center mb-6">
                     <h2 className="text-2xl font-semibold">Informasi Umum Wajib Pajak</h2>
-                    <button className="px-4 py-2 bg-yellow-300 hover:bg-yellow-400 text-blue-900 rounded-md" onClick={() => window.location.href = "/admin/praktikum/profil-saya/informasi-umum/edit-data-profil"}>
+                    <button className="px-4 py-2 bg-yellow-300 hover:bg-yellow-400 text-blue-900 rounded-md" onClick={() => window.location.href = `/admin/praktikum/${getUserTypePath()}/profil-saya/informasi-umum/edit-data-profil`}>
                         Edit
                     </button>
                 </div>
