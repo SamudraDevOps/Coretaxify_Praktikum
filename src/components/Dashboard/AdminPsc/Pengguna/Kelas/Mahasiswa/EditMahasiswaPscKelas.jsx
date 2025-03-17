@@ -23,11 +23,11 @@ const EditMahasiswaPscKelas = () => {
   const [klassInfo, setKlassInfo] = useState(null);
 
   // Form data state for member details (view-only)
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    // status: "",
-  });
+  // const [formData, setFormData] = useState({
+  //   name: "",
+  //   email: "",
+  //   // status: "",
+  // });
 
   // Fetch class info
   const { data: classData } = useQuery({
@@ -105,15 +105,15 @@ const EditMahasiswaPscKelas = () => {
   });
 
   // View details handler (no editing functionality)
-  const handleViewDetails = (member) => {
-    setSelectedData(member);
-    setFormData({
-      name: member.name,
-      email: member.email,
-      // status: member.status
-    });
-    setIsViewOpen(true);
-  };
+  // const handleViewDetails = (member) => {
+  //   setSelectedData(member);
+  //   setFormData({
+  //     name: member.name,
+  //     email: member.email,
+  //     // status: member.status
+  //   });
+  //   setIsViewOpen(true);
+  // };
 
   const handleSort = (key) => {
     let direction = "ascending";
@@ -243,12 +243,12 @@ const EditMahasiswaPscKelas = () => {
                   >
                     Delete
                   </button>
-                  <button
+                  {/* <button
                     className="action-button edit"
                     onClick={() => handleViewDetails(item)}
                   >
                     Detail
-                  </button>
+                  </button> */}
                 </td>
               </tr>
             ))}
@@ -283,7 +283,7 @@ const EditMahasiswaPscKelas = () => {
       </div>
       
       {/* View-only Member Popup */}
-      {isViewOpen && (
+      {/* {isViewOpen && (
         <EditPopupMahasiswa
           onClose={() => setIsViewOpen(false)}
           data={selectedData}
@@ -292,7 +292,7 @@ const EditMahasiswaPscKelas = () => {
           isReadOnly={true}
           title="Detail Mahasiswa"
         />
-      )}
+      )} */}
     </div>
   );
 };

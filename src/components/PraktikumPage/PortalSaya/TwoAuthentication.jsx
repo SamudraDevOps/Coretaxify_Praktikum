@@ -2,7 +2,7 @@ import { useState } from 'react';
 import SidebarProfilSaya from './SidebarProfilSaya';
 import { BsFiletypeXls } from "react-icons/bs";
 import { IoDocumentTextOutline } from "react-icons/io5";
-import Maintan from '../../../assets/images/sincan.jpg';
+import Maintan from '../../../assets/images/maintain.jpg';
 
 
 const TwoAuthentication = () => {

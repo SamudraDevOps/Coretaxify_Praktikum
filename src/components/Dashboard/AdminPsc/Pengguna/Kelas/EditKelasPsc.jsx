@@ -1,28 +1,26 @@
 import React, { useState, useEffect } from "react";
 import "./editKelas.css";
 import EditPopupKelas from "./EditPopupKelas";
+import CreateGroupPopup from "./CreateGroupPopup"; // Import the new component
 import Swal from "sweetalert2";
-import { CookiesProvider, useCookies } from "react-cookie";
+import { useCookies } from "react-cookie";
 import axios from "axios";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { ClipLoader } from "react-spinners";
 import { RoutesApi } from "@/Routes";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Alert, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
+import { IntentEnum } from "@/enums/IntentEnum"; // Import IntentEnum
 
 const EditKelasPsc = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isCreateOpen, setIsCreateOpen] = useState(false); // New state for create popup
   const [selectedKelas, setSelectedKelas] = useState(null);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
-  const [cookies, setCookie] = useCookies(["user"]);
+  const [cookies] = useCookies(["user"]);
   const [url, setUrl] = useState(RoutesApi.psc.groups.url);
   const [search, setSearch] = useState("");
-
-  useEffect(() => {
-    console.log("isOpen state changed to:", isOpen);
-  }, [isOpen]);
 
   // Form data state for creating/editing
   const [formData, setFormData] = useState({
@@ -31,7 +29,27 @@ const EditKelasPsc = () => {
     class_code: "",
     start_period: "",
     end_period: "",
+    import_file: null
   });
+
+  const [createFormData, setCreateFormData] = useState({
+    name: "",
+    status: "ACTIVE",
+    class_code: "",
+    start_period: "",
+    end_period: "",
+    import_file: null
+  });
+
+  // Generate random code for new groups
+  const generateRandomCode = () => {
+    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    let result = "";
+    for (let i = 0; i < 6; i++) {
+      result += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+    return result;
+  };
 
   // Fetch classes data
   const { isLoading, isError, data, error, refetch } = useQuery({
@@ -59,9 +77,40 @@ const EditKelasPsc = () => {
       });
 
       axios.defaults.headers.common["X-CSRF-TOKEN"] = response.data.token;
-      let apiUrl = RoutesApi.classAdmin.url;
+      
+      if (action === "create") {
+        // Create new group
+        const formDataObj = new FormData();
+        
+        // Add required fields
+        formDataObj.append("name", createFormData.name);
+        formDataObj.append("status", createFormData.status);
+        formDataObj.append("class_code", createFormData.class_code);
+        formDataObj.append("start_period", createFormData.start_period);
+        formDataObj.append("end_period", createFormData.end_period);
+        
+        // Add optional import file if present
+        if (createFormData.import_file) {
+          formDataObj.append("import_file", createFormData.import_file);
+        }
 
-      if (action === "update" && id) {
+        return await axios.post(
+          RoutesApi.psc.groups.url,
+          formDataObj,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Accept: "application/json",
+              "X-CSRF-TOKEN": response.data.token,
+              Authorization: `Bearer ${cookies.token}`,
+            },
+            params: {
+              intent: IntentEnum.API_USER_CREATE_GROUP
+            }
+          }
+        );
+      } else if (action === "update" && id) {
+        // Update existing group
         apiUrl = `${RoutesApi.psc.groups.url}/${id}`;
         return await axios.put(
           apiUrl,
@@ -69,8 +118,8 @@ const EditKelasPsc = () => {
             name: formData.name,
             status: formData.status,
             class_code: formData.class_code,
-            start_period: formData.start_period, // Don't format this
-            end_period: formData.end_period,     // Don't format this
+            start_period: formData.start_period,
+            end_period: formData.end_period,
           },
           {
             headers: {
@@ -82,6 +131,7 @@ const EditKelasPsc = () => {
           }
         );
       } else if (action === "delete" && id) {
+        // Delete group
         apiUrl = `${RoutesApi.psc.groups.url}/${id}`;
         return await axios.delete(apiUrl, {
           headers: {
@@ -95,36 +145,29 @@ const EditKelasPsc = () => {
       Swal.fire("Berhasil!", "Operasi berhasil dilakukan!", "success");
       refetch();
       setIsOpen(false);
+      setIsCreateOpen(false);
+      
+      // Reset form data
+      setCreateFormData({
+        name: "",
+        status: "ACTIVE",
+        class_code: "",
+        start_period: "",
+        end_period: "",
+        import_file: null
+      });
     },
     onError: (error) => {
       console.log(error.response);
       if (error.response === undefined) {
-        Swal.fire("Gagal !", error.message, "error");
+        Swal.fire("Gagal!", error.message, "error");
         return;
       }
-      Swal.fire("Gagal !", error.response.data.message, "error");
+      Swal.fire("Gagal!", error.response.data.message, "error");
     },
   });
 
-  // Add these helper functions to your component
-  const formatDateForInput = (apiDate) => {
-    if (!apiDate) return '';
-    
-    // Convert from DD-MM-YYYY to YYYY-MM-DD
-    const [day, month, year] = apiDate.split('-');
-    return `${year}-${month}-${day}`;
-  };
-  
-  const formatDateForApi = (inputDate) => {
-    if (!inputDate) return '';
-    
-    // Convert from YYYY-MM-DD to DD-MM-YYYY
-    const [year, month, day] = inputDate.split('-');
-    return `${day}-${month}-${year}`;
-  };
-
   const handleEdit = (kelas) => {
-    console.log("Edit button clicked", kelas);
     setSelectedKelas(kelas);
     setFormData({
       name: kelas.name,
@@ -134,12 +177,30 @@ const EditKelasPsc = () => {
       end_period: formatDateForInput(kelas.end_period)
     });
     setIsOpen(true);
-    console.log("isOpen set to:", true); // Check if this is executed
   };
-  
+
+  const handleCreate = () => {
+    setCreateFormData({
+      ...createFormData,
+      class_code: generateRandomCode()
+    });
+    setIsCreateOpen(true);
+  };
 
   const handleUpdateKelas = () => {
     mutation.mutate({ id: selectedKelas.id, action: "update" });
+  };
+
+  const handleCreateKelas = () => {
+    mutation.mutate({ action: "create" });
+  };
+
+  const formatDateForInput = (apiDate) => {
+    if (!apiDate) return '';
+    
+    // Convert from DD-MM-YYYY to YYYY-MM-DD
+    const [day, month, year] = apiDate.split('-');
+    return `${year}-${month}-${day}`;
   };
 
   const handleSort = (key) => {
@@ -166,12 +227,12 @@ const EditKelasPsc = () => {
   // Error state
   if (isError) {
     return (
-      <div className="h-screen w-full justify-center items-center flex ">
-        <Alert variant="destructive" className="w-1/2 bg-white ">
+      <div className="h-screen w-full justify-center items-center flex">
+        <Alert variant="destructive" className="w-1/2 bg-white">
           <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Error !</AlertTitle>
+          <AlertTitle>Error!</AlertTitle>
           <div className="">
-            <p>{error?.message ?? "error !"}</p>
+            <p>{error?.message ?? "error!"}</p>
             <div className="w-full flex justify-end">
               <button
                 className="bg-green-500 p-2 rounded-md text-white"
@@ -187,11 +248,11 @@ const EditKelasPsc = () => {
   }
 
   // Filter data based on search
-  const filteredData = data.data.filter(item => 
-    item.name.toLowerCase().includes(search.toLowerCase()) ||
-    item.class_code.toLowerCase().includes(search.toLowerCase()) ||
-    item.status.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredData = data?.data?.filter(item => 
+    item.name?.toLowerCase().includes(search.toLowerCase()) ||
+    item.class_code?.toLowerCase().includes(search.toLowerCase()) ||
+    item.status?.toLowerCase().includes(search.toLowerCase())
+  ) || [];
 
   return (
     <div className="kontrak-container">
@@ -209,6 +270,13 @@ const EditKelasPsc = () => {
             onChange={handleSearchChange}
           />
         </div>
+        {/* Add Create button */}
+        <button
+          className="add-button"
+          onClick={handleCreate}
+        >
+          Tambah Kelas
+        </button>
       </div>
       <div className="table-container">
         <table>
@@ -222,7 +290,7 @@ const EditKelasPsc = () => {
                     : "↓"
                   : ""}
               </th>
-              <th onClick={() => handleSort("name")}>
+              <th onClick={() => handleSort("start_period")}>
                 Periode Mulai{" "}
                 {sortConfig.key === "start_period"
                   ? sortConfig.direction === "ascending"
@@ -230,7 +298,7 @@ const EditKelasPsc = () => {
                     : "↓"
                   : ""}
               </th>
-              <th onClick={() => handleSort("name")}>
+              <th onClick={() => handleSort("end_period")}>
                 Periode Selesai{" "}
                 {sortConfig.key === "end_period"
                   ? sortConfig.direction === "ascending"
@@ -308,31 +376,33 @@ const EditKelasPsc = () => {
         </table>
         <div className="pagination-container">
           <div className="pagination-info">
-            {`Showing ${data.meta.from} to ${data.meta.to} of ${data.meta.total} entries`}
+            {data?.meta ? `Showing ${data.meta.from} to ${data.meta.to} of ${data.meta.total} entries` : "No data available"}
           </div>
           <div className="pagination">
             <button
               className={`page-item`}
               onClick={() => {
-                setUrl(data.links.prev);
+                if (data?.links?.prev) setUrl(data.links.prev);
               }}
-              disabled={!data.links.prev}
+              disabled={!data?.links?.prev}
             >
               &lt;
             </button>
-            <button className="page-item active">{data.meta.current_page}</button>
+            <button className="page-item active">{data?.meta?.current_page || 1}</button>
             <button
               className={`page-item`}
               onClick={() => {
-                setUrl(data.links.next);
+                if (data?.links?.next) setUrl(data.links.next);
               }}
-              disabled={!data.links.next}
+              disabled={!data?.links?.next}
             >
               &gt;
             </button>
           </div>
         </div>
       </div>
+      
+      {/* Edit Popup */}
       {isOpen && (
         <EditPopupKelas
           onClose={() => setIsOpen(false)}
@@ -343,8 +413,18 @@ const EditKelasPsc = () => {
           isLoading={mutation.isPending}
         />
       )}
+      
+      {/* Create Popup */}
+      <CreateGroupPopup
+        isOpen={isCreateOpen}
+        onClose={() => setIsCreateOpen(false)}
+        onSave={handleCreateKelas}
+        formData={createFormData}
+        setFormData={setCreateFormData}
+        isLoading={mutation.isPending}
+      />
     </div>
   );
 };
-
-export default EditKelasPsc;
+  
+export default EditKelasPsc;  
