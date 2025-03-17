@@ -254,7 +254,11 @@ export default function DosenKelas() {
     },
     onSuccess: (data) => {
       console.log(data);
-      Swal.fire("Berhasil!", "Operasi berhasil dilakukan!", "success");
+      Swal.fire("Berhasil!", "Operasi berhasil dilakukan!", "success").then(
+        () => {
+          refetch();
+        }
+      );
     },
     onError: (error, action) => {
       console.log(action);
