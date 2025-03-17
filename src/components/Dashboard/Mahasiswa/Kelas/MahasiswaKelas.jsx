@@ -31,7 +31,7 @@ export default function MahasiswaKelas() {
   const [cookies, setCookie] = useCookies(["user"]);
   const [filePreview, setFilePreview] = useState(null);
 
-  const { isLoading, isError, data, error } = useQuery({
+  const { isLoading, isError, data, error, refetch } = useQuery({
     queryKey: ["kelas_dosen", url],
     queryFn: async () => {
       const { data } = await axios.get(url, {
@@ -203,8 +203,12 @@ export default function MahasiswaKelas() {
     },
     onSuccess: (data) => {
       console.log(data);
-      Swal.fire("Berhasil!", "Praktikum berhasil ditambahkan!", "success");
-      window.location.reload();
+      Swal.fire("Berhasil!", "Praktikum berhasil ditambahkan!", "success").then(
+        () => {
+          refetch();
+        }
+      );
+      // window.location.reload();
       // const role = data.data.user.roles[0].name;
       // setCookie("token", data.data.token, { path: "/" });
       // setCookie("role", role, { path: "/" });

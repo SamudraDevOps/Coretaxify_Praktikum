@@ -175,7 +175,7 @@ const EditDosen = () => {
           />
         </div>
         <button
-          className="add-button"
+          className="add-button mr-3"
           onClick={() => {
             setIsOpen(true);
             setTambahPopupOpen(false);
