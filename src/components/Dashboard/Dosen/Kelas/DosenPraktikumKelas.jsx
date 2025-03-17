@@ -504,7 +504,9 @@ export default function DosenPraktikumKelas() {
                                       name="start_period"
                                       onChange={handleChange}
                                       // className="bg-red-400"
-                                      value={formData.start_period}
+                                      value={
+                                        formData.start_period.split(" ")[0]
+                                      }
                                       // value={formData.start_period
                                       //   .split("-")
                                       //   .reverse()
