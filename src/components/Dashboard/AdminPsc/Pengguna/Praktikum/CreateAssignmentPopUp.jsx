@@ -9,7 +9,8 @@ const CreateAssignmentPopup = ({
   formData,
   setFormData,
   isLoading,
-  tasks = []
+  tasks = [],
+  groups = []
 }) => {
   if (!isOpen) return null;
 
@@ -28,6 +29,32 @@ const CreateAssignmentPopup = ({
         supporting_file: e.target.files[0]
       });
     }
+  };
+
+  // const handleGroupsChange = (e) => {
+  //   // Convert HTMLCollection to Array and get selected options
+  //   const selectedOptions = Array.from(e.target.selectedOptions);
+  //   const selectedGroups = selectedOptions.map(option => option.value);
+    
+  //   setFormData({ ...formData, groups: selectedGroups });
+  // };
+
+  // Updated function to handle checkbox selection
+  const handleGroupCheckbox = (groupId) => {
+    // Create a copy of the current groups array
+    let updatedGroups = [...(formData.groups || [])];
+    
+    // Check if the group is already selected
+    if (updatedGroups.includes(groupId)) {
+      // If selected, remove it
+      updatedGroups = updatedGroups.filter(id => id !== groupId);
+    } else {
+      // If not selected, add it
+      updatedGroups.push(groupId);
+    }
+    
+    // Update the form data with the new groups array
+    setFormData({ ...formData, groups: updatedGroups });
   };
 
   return (
@@ -50,6 +77,50 @@ const CreateAssignmentPopup = ({
               required
               placeholder="Masukkan judul praktikum"
             />
+          </div>
+
+          {/* Multi-select for groups */}
+          {/* <div className="form-group">
+            <label>Pilih Kelas (bisa pilih lebih dari satu):</label>
+            <select
+              multiple
+              name="groups"
+              value={formData.groups || []}
+              onChange={handleGroupsChange}
+              className="multi-select"
+              required
+            >
+              {groups.map(group => (
+                <option key={group.id} value={group.id}>
+                  {group.name}
+                </option>
+              ))}
+            </select>
+            <small>Tahan tombol Ctrl (Windows) atau Command (Mac) untuk memilih beberapa kelas</small>
+          </div> */}
+
+          {/* Replace multi-select with checkbox list */}
+          <div className="form-group">
+            <label>Pilih Kelas:</label>
+            <div className="checkbox-group-container">
+              {groups.length > 0 ? (
+                groups.map(group => (
+                  <div key={group.id} className="checkbox-item">
+                    <input
+                      type="checkbox"
+                      id={`group-${group.id}`}
+                      checked={formData.groups?.includes(group.id)}
+                      onChange={() => handleGroupCheckbox(group.id)}
+                    />
+                    <label htmlFor={`group-${group.id}`}>
+                      {group.name} ({group.class_code})
+                    </label>
+                  </div>
+                ))
+              ) : (
+                <p className="no-data-message">Tidak ada kelas tersedia</p>
+              )}
+            </div>
           </div>
           
           <div className="form-group">

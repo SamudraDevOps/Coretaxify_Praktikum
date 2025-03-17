@@ -60,6 +60,9 @@ const EditKelasPsc = () => {
           Authorization: `Bearer ${cookies.token}`,
           Accept: "application/json",
         },
+        params: {
+          intent: IntentEnum.API_GET_GROUP_BY_ROLES
+        }
       });
       return data;
     },
