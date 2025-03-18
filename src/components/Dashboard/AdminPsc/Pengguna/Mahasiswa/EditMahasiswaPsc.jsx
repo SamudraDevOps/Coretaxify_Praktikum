@@ -85,7 +85,7 @@ const EditMahasiswaPsc = () => {
               }
             );
           });
-
+          // execute all request and return the combined
           return Promise.all(createPromises);
         } else {
           return await axios.post(

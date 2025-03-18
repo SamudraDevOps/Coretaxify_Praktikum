@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import "./editPopupMahasiswa.css";
-import { FaPlus, FaTrash } from "react-icons/fa";
+import { FaPlus, FaTrash, FaFileImport } from "react-icons/fa";
+import * as XLSX from 'xlsx';
 
 const EditPopupMahasiswa = ({ 
   onClose, 
@@ -16,6 +17,10 @@ const EditPopupMahasiswa = ({
 }) => {
   // For multiple students mode
   const [students, setStudents] = useState(isMultipleMode ? [{ name: "", email: "", status: "ACTIVE" }] : []);
+  const [importError, setImportError] = useState("");
+  const [isImporting, setIsImporting] = useState(false);
+  const [importSuccess, setImportSuccess] = useState("");
+  const fileInputRef = useRef(null);
 
   const handleChange = (e) => {
     if (isReadOnly) return;
@@ -63,7 +68,107 @@ const EditPopupMahasiswa = ({
     onSave(validStudents);
   };
 
-  
+  // file input
+  const handleImportClick = () => {
+    fileInputRef.current.click();
+  };
+
+  // handle file import
+  const handleFileImport = (e) => {
+    setImportError("");
+    setImportSuccess("");
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setIsImporting(true);
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const data = new Uint8Array(event.target.result);
+        const workbook = XLSX.read(data, { type: 'array' });
+
+        // get first sheet
+        const firstSheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[firstSheetName];
+
+        // convert to json
+        const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+
+        // check the data in file
+        if (jsonData.length < 2) {
+          setImportError("File tidak memiliki data yang cukup. Pastikan file berisi header dan minimal satu baris data.");
+          return;
+        }
+
+        // get headers (first row)
+        const headers = jsonData[0].map(header => header.toLowerCase().trim());
+
+        // check if required column exist
+        const nameIndex = headers.indexOf('name');
+        const emailIndex = headers.indexOf('email');
+        const statusIndex = headers.indexOf('status');
+
+        if (nameIndex === -1 || emailIndex === -1) {
+          setImportError("Format file tidak valid. Pastikan memiliki kolom 'name' dan 'email'.");
+          return;
+        }
+
+        // process data rows
+        const importedStudents = jsonData.slice(1). map(row => {
+          const status = statusIndex !== -1 ? row[statusIndex] : 'ACTIVE';
+          return {
+            name: row[nameIndex] || '',
+            email: row[emailIndex] || '',
+            status: ['ACTIVE', 'INACTIVE'].includes(status) ? status : 'ACTIVE'
+          };
+        }).filter(student => student.name && student.email);
+
+        if (importedStudents.length === 0) {
+          setImportError("Tidak ada data valid yang dapat diimport dari file.");
+          return;
+        }
+
+        // set imported students
+        setStudents(importedStudents);
+
+        // show success message
+        setImportSuccess(`${importedStudents.length} mahasiswa berhasil diimport.`);
+
+        // reset file input
+        e.target.value = null;
+      } catch (error) {
+        console.error("Error parsing file:", error);
+        setImportError("Terjadi kesalahan saat memproses file. Pastikan file memiliki format yang benar.");
+      } finally {
+        setIsImporting(false);
+      }
+    };
+
+    reader.onerror = () => {
+      setImportError("Terjadi kesalahan saat membaca file.");
+      setIsImporting(false);
+    };
+
+    reader.readAsArrayBuffer(file);
+  };
+
+  // download template
+  const downloadTemplate = () => {
+    // create worksheet
+    const ws = XLSX.utils.aoa_to_sheet([
+      ['name', 'email', 'status'],
+      ['John Doe', 'john.doe@example.com', 'ACTIVE'],
+      ['Jane Smith', 'jane.smith@example.com', 'INACTIVE'],
+    ]);
+
+    // create workbook
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Students');
+
+    // generate and download
+    XLSX.writeFile(wb, 'student_import_template.xlsx');
+  };
 
   return (
     <div className="edit-popup-container-mahasiswa">
@@ -75,6 +180,52 @@ const EditPopupMahasiswa = ({
         {/* Handle Multiple Students Mode */}
         {isMultipleMode ? (
           <div>
+            {importSuccess && (
+              <div className="import-success">
+                {importSuccess}
+              </div>
+            )}
+            <div className="import-section">
+              <div className="import-buttons">
+                <button
+                  type="button"
+                  className="import-button"
+                  onClick={handleImportClick}
+                  disabled={isImporting}
+                >
+                  {isImporting ? (
+                    <>
+                      <span className="loading-spinner"></span>
+                      Importing...
+                    </>
+                  ) : (
+                    <>
+                    <FaFileImport /> Import dari Excel/CSV
+                    </>
+                  )}
+                </button>
+                <button
+                  type="button"
+                  className="template-button"
+                  onClick={downloadTemplate}
+                >
+                  Download Template
+                </button>
+              </div>
+              <input 
+                type="file"
+                ref={fileInputRef}
+                style={{ display: 'none' }}
+                accept=".xlsx,.xls,.csv"
+                onChange={handleFileImport}
+              />
+              {importError && (
+                <div className="import-erro">
+                  {importError}
+                </div>
+              )}
+            </div>
+
             <div className="students-counter">
               <strong>{students.length}</strong> mahasiswa akan ditambahkan
             </div>
@@ -166,7 +317,7 @@ const EditPopupMahasiswa = ({
 
           </div>
         ) : (
-
+          // single student
         <form>
           <div className="edit-form-group-mahasiswa">
             <label>Nama Mahasiswa:</label>

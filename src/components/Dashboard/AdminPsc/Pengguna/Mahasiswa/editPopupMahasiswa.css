@@ -240,6 +240,78 @@
     display: inline-block;
   }
 
+  /* Import section styles */
+.import-section {
+  background-color: #f0f8ff;
+  border: 1px dashed #4a90e2;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+.import-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 10px;
+}
+
+.import-button, 
+.template-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 15px;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+
+.import-button {
+  background-color: #4a90e2;
+  color: white;
+}
+
+.import-button:hover {
+  background-color: #3a7bc8;
+}
+
+.import-success {
+  color: #2e7d32;
+  background-color: #e8f5e9;
+  padding: 10px;
+  border-radius: 4px;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.template-button {
+  background-color: #f5f5f5;
+  color: #333;
+  border: 1px solid #ddd;
+}
+
+.template-button:hover {
+  background-color: #e8e8e8;
+}
+
+.import-error {
+  color: #d32f2f;
+  background-color: #ffebee;
+  padding: 10px;
+  border-radius: 4px;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.text-info {
+  color: #666;
+  font-style: italic;
+}
+
   @keyframes spin {
     to { transform: rotate(360deg); }
   }
