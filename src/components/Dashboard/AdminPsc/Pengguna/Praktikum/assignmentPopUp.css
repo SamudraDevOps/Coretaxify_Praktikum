@@ -177,3 +177,66 @@
     margin-top: 0.25rem;
   }
   
+  .multi-select {
+    height: 120px; /* Taller to show multiple options */
+    overflow-y: auto;
+  }
+  
+  .multi-select option {
+    padding: 8px;
+  }
+  
+  .multi-select option:checked {
+    background-color: #673ab7;
+    color: white;
+  }
+
+  .checkbox-group-container {
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    margin-top: 5px;
+    background-color: #f9f9f9;
+  }
+  
+  .checkbox-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    padding: 5px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+  }
+  
+  .checkbox-item:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .checkbox-item input[type="checkbox"] {
+    margin-right: 10px;
+    cursor: pointer;
+    width: 18px;
+    height: 18px;
+  }
+  
+  .checkbox-item label {
+    cursor: pointer;
+    font-weight: normal;
+    margin-bottom: 0;
+    flex: 1;
+  }
+  
+  .no-data-message {
+    color: #888;
+    font-style: italic;
+    text-align: center;
+    padding: 10px;
+  }
+  
+  /* Style for selected items */
+  .checkbox-item.selected {
+    background-color: #e8e4f3;
+  }
+  
