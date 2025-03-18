@@ -21,10 +21,12 @@ import axios from "axios";
 import { RoutesApi } from "@/Routes";
 import { ClipLoader } from "react-spinners";
 import { FaFile } from "react-icons/fa";
+import IntentEnum from "@/constant/intent";
+import { RxCross1 } from "react-icons/rx";
 
 export default function Praktikum() {
   const [isOpen, setIsOpen] = useState(false);
-  const [url, setUrl] = useState(RoutesApi.assignment.url);
+  const [url, setUrl] = useState(`${RoutesApi.url}api/admin/assignments`);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
   const [selectedData, setSelectedData] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -48,6 +50,9 @@ export default function Praktikum() {
       const { data } = await axios.get(url, {
         headers: {
           Authorization: `Bearer ${cookies.token}`,
+        },
+        params: {
+          intent: IntentEnum.API_GET_ASSIGNMENT_ALL,
         },
       });
       console.log(data.data);
@@ -391,6 +396,14 @@ export default function Praktikum() {
                     </AlertDialogTrigger>
                     <AlertDialogContent>
                       <AlertDialogHeader>
+                        <div className="w-full flex justify-end">
+                          <AlertDialogCancel className="border-none shadow-none">
+                            <RxCross1
+                              className="text-2xl text-black hover:cursor-pointer"
+                              // onClick={onClose}
+                            />
+                          </AlertDialogCancel>
+                        </div>
                         <AlertDialogTitle>Edit Praktikum</AlertDialogTitle>
                         <AlertDialogDescription className="w-full">
                           <div className="">
@@ -473,12 +486,12 @@ export default function Praktikum() {
           </tbody>
         </table>
         <div className="">
-          <div className="pagination-info">
+          {/* <div className="pagination-info">
             {`Showing ${indexOfFirstItem + 1} to ${Math.min(
               indexOfLastItem,
               data.length
             )} of ${data.length} entries`}
-          </div>
+          </div> */}
 
           <div className="pagination">
             <button

@@ -1,6 +1,7 @@
-.kontrak-container {
+.soal-container {
     padding: 2rem;
     background-color: #f5f5f5;
+    min-height: 100vh;
   }
   
   .header {
@@ -11,6 +12,11 @@
     margin-top: -1rem;
     margin-bottom: 1rem;
     color: #7c7c7c;
+  }
+  
+  .header h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
   }
   
   .search-add-container {
@@ -31,11 +37,6 @@
     border-radius: 5px;
     width: 100%;
     max-width: 300px;
-  }
-  
-  .header h2 {
-    font-size: 1.5rem;
-    font-weight: bold;
   }
   
   .add-button {
@@ -102,9 +103,15 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
     margin: 0.1rem 0;
     margin-right: 0.5rem;
+  }
+  
+  .action-button.edit {
+    background-color: #2196f3;
   }
   
   .action-button.delete {
@@ -113,6 +120,35 @@
   
   .action-button:hover {
     opacity: 0.8;
+  }
+  
+  .action-icon {
+    font-size: 0.8rem;
+  }
+  
+  .download-button {
+    padding: 0.3rem 0.7rem;
+    background-color: #ff9800;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+  
+  .download-button:hover {
+    background-color: #f57c00;
+  }
+  
+  .download-button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+  
+  .download-icon {
+    font-size: 0.8rem;
   }
   
   .pagination-container {

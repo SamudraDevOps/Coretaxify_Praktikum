@@ -39,7 +39,9 @@ import MahasiswaPraktikum from "./components/Dashboard/Mahasiswa/Praktikum/Mahas
 import MahasiswaUjian from "./components/Dashboard/Mahasiswa/Praktikum/MahasiswaUjian";
 import EditPengajar from "./components/Dashboard/AdminPsc/Pengguna/Pengajar/EditPengajar";
 import EditKelasPsc from "./components/Dashboard/AdminPsc/Pengguna/Kelas/EditKelasPsc";
-import UjianPsc from "./components/Dashboard/AdminPsc/Pengguna/Praktikum/UjianPsc";
+import PraktikumPsc from "./components/Dashboard/AdminPsc/Pengguna/Praktikum/PraktikumPsc";
+import AssignmentPscMember from "./components/Dashboard/AdminPsc/Pengguna/Praktikum/Members/AssignmentPscMember";
+// import UjianPsc from "./components/Dashboard/AdminPsc/Ujian/UjianPsc";
 import EditMahasiswaPsc from "./components/Dashboard/AdminPsc/Pengguna/Mahasiswa/EditMahasiswaPsc";
 import Header from "./components/Header/Header";
 import Home from "./components/Header/Home";
@@ -515,7 +517,7 @@ const Main = () => {
             </div>
           }
         />
-        <Route
+        {/* <Route
           path="/psc/edit-kelas/1"
           element={
             <div className="admin-layout">
@@ -525,20 +527,61 @@ const Main = () => {
               </div>
             </div>
           }
-        />
+        /> */}
+        <Route 
+          path="/psc/kelas/:groupId/mahasiswa" 
+          element={
+            <div className="admin-layout">
+            <SidebarAdmin />
+            <div className="admin-content">
+              <EditMahasiswaPscKelas></EditMahasiswaPscKelas>
+            </div>
+          </div>
+        } />
+        {/* <Route 
+          path="/psc/kelas/:groupId/mahasiswa/:memberId" 
+          element={
+            <div className="admin-layout">
+            <SidebarAdmin />
+            <div className="admin-content">
+              <MemberDetailPage></MemberDetailPage>
+            </div>
+          </div>
+        } /> */}
         <Route
-          path="/admin-psc/edit-ujian"
+          path="/psc/praktikum"
           element={
             <div className="admin-layout">
               <SidebarAdmin />
               <div className="admin-content">
-                <UjianPsc></UjianPsc>
+                <PraktikumPsc></PraktikumPsc>
+              </div>
+            </div>
+          }
+        />
+        <Route 
+          path="/psc/praktikum/:assignmentId/members" 
+          element={
+            <div className="admin-layout">
+            <SidebarAdmin />
+            <div className="admin-content">
+            <AssignmentPscMember></AssignmentPscMember>
+            </div>
+          </div>
+        } />
+        <Route
+          path="/psc/ujian"
+          element={
+            <div className="admin-layout">
+              <SidebarAdmin />
+              <div className="admin-content">
+                {/* <UjianPsc></UjianPsc> */}
               </div>
             </div>
           }
         />
         <Route
-          path="/admin-psc/edit-mahasiswa"
+          path="/psc/edit-mahasiswa"
           element={
             <div className="admin-layout">
               <SidebarAdmin />

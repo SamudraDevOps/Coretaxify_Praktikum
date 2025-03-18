@@ -121,3 +121,40 @@
                     text-align: center;
           }
 }
+/* Add these styles to the existing editPopupKelas.css file */
+
+.flex-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .code-input {
+    flex: 1;
+  }
+  
+  .generate-code-button {
+    background-color: #673ab7;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    width: 40px;
+  }
+  
+  .generate-code-button:hover {
+    background-color: #5e35b1;
+  }
+  
+  small {
+    display: block;
+    margin-top: 4px;
+    font-size: 0.8rem;
+    color: #666;
+  }
+  

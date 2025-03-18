@@ -8,6 +8,7 @@ import { CookiesProvider, useCookies } from "react-cookie";
 import { IoClose } from "react-icons/io5";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { RxCross1 } from "react-icons/rx";
 
 import { useToast } from "@/hooks/use-toast";
 
@@ -167,6 +168,12 @@ const TambahKontrak = ({
   return (
     <div className="kontrak-popup-overlay">
       <div className="kontrak-popup-container">
+        <div className="w-full flex justify-end">
+          <RxCross1
+            className="text-2xl hover:cursor-pointer"
+            onClick={onClose}
+          />
+        </div>
         <h2>Tambah Data Kontrak</h2>
         <form>
           <div className="kontrak-form-group">

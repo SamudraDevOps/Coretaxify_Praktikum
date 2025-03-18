@@ -31,6 +31,7 @@ import {
 import { HiDotsVertical } from "react-icons/hi";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
+import { RxCross1 } from "react-icons/rx";
 
 export default function DosenKelas() {
   const [isOpen, setIsOpen] = useState(false);
@@ -160,20 +161,22 @@ export default function DosenKelas() {
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  //   const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const [search, setSearch] = useState("");
-
-  //   const processedData = data.map((item) => ({
-  //     ...item,
-  //     highlight:
-  //       search &&
-  //       Object.values(item).some((value) =>
-  //         String(value).toLowerCase().includes(search.toLowerCase())
-  //       ),
-  //   }));
+  const handleEdit = (kelas) => {
+    // alert("lapar");
+    setFormData({
+      namaKelas: kelas.name,
+      kodeKelas: kelas.class_code,
+      status: kelas.status,
+      start_period: kelas.start_period.split("-").reverse().join("-"),
+      end_period: kelas.end_period.split("-").reverse().join("-"),
+    });
+    // setSelectedKelas(kelas);
+    // setIsOpen(true);
+  };
 
   const mutation = useMutation({
     mutationFn: async ({ id, action }) => {
@@ -262,8 +265,6 @@ export default function DosenKelas() {
       }
 
       Swal.fire("Gagal !", error.response.data.message, "error");
-
-      // if(ac)
     },
   });
 
@@ -274,7 +275,6 @@ export default function DosenKelas() {
       <div className="loading">
         <ClipLoader color="#7502B5" size={50} />
       </div>
-      // <div className="h-full w-full text-2xl italic font-bold text-center flex items-center justify-center">Loading...</div>
     );
   }
 
@@ -289,7 +289,6 @@ export default function DosenKelas() {
           <AlertTitle>Error !</AlertTitle>
           <div className="">
             <p>{error?.message ?? "error !"}</p>
-            {/* <p>{!error.message ? error.message : "Error ! "}</p> */}
             <div className="w-full flex justify-end">
               <button
                 className="bg-green-500 p-2 rounded-md text-white"
@@ -299,8 +298,6 @@ export default function DosenKelas() {
               </button>
             </div>
           </div>
-          {/* <AlertDescription>
-            {error.message}</AlertDescription> */}
         </Alert>
       </div>
     );
@@ -332,35 +329,18 @@ export default function DosenKelas() {
           onClick={() => {
             setIsAddOpen(true);
             setFormData({ ...formData, kodeKelas: generateRandomCode() });
+            setFormData({
+              end_period: "",
+              start_period: "",
+              namaKelas: "",
+              kodeKelas: "",
+              status: "",
+            });
           }}
         >
           Tambah Kelas
         </button>
       </div>
-      {/* <div className="table-container"> */}
-      {/* <table>
-          <thead>
-            <tr>
-              <th>No</th>
-              <th onClick={() => handleSort("namaPraktikum ")}>
-                Nama Kelas{" "}
-                {sortConfig.key === "namaPraktikum"
-                  ? sortConfig.direction === "ascending"
-                    ? "↑"
-                    : "↓"
-                  : sortConfig.direction === "descending"
-                  ? "↓"
-                  : "↑"}
-              </th>
-              <th>Kode Kelas</th>
-              <th>Status</th>
-              <th>Nama File</th>
-              <th>Tanggal Mulai</th>
-              <th>Tanggal Selesai</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody> */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-6 place-items-start">
         {data == undefined ? (
           <div className="loading">
@@ -372,9 +352,6 @@ export default function DosenKelas() {
             <a
               key={item.id}
               className="relative  shadow-lg rounded-lg w-100 md:min-w-96 p-4 cursor-pointer"
-              // onClick={() =>
-              //   (window.location.href = `/dosen/kelas/praktikum/${item.id}`)
-              // }
               href={`/dosen/kelas/praktikum/${item.id}`}
             >
               <div className="bg-purple-700 flex justify-between text-white p-4 rounded-t-lg w-150 relative">
@@ -411,15 +388,14 @@ export default function DosenKelas() {
                         <MenubarItem>
                           <AlertDialogTrigger
                             onClick={(e) => {
+                              handleEdit(item);
                               e.stopPropagation();
-                              // e.preventDefault();
                             }}
                             className="text-start w-full"
                           >
                             Edit
                           </AlertDialogTrigger>
                           {/* Edit Kelas */}
-                          {/* New Tab <MenubarShortcut>⌘T</MenubarShortcut> */}
                         </MenubarItem>
                         <MenubarSeparator />
                         <MenubarItem
@@ -444,19 +420,19 @@ export default function DosenKelas() {
                         >
                           Hapus Kelas
                         </MenubarItem>
-                        {/* <MenubarItem>Share</MenubarItem> */}
-                        {/* <MenubarSeparator /> */}
-                        {/* <MenubarItem>Print</MenubarItem> */}
                       </MenubarContent>
                     </MenubarMenu>
                   </Menubar>
-                  <AlertDialogContent
-                    onClick={(e) => {
-                      // e.stopPropagation();
-                      // e.preventDefault();
-                    }}
-                  >
+                  <AlertDialogContent>
                     <AlertDialogHeader>
+                      <div className="w-full flex justify-end">
+                        <AlertDialogCancel className="border-none shadow-none">
+                          <RxCross1
+                            className="text-2xl text-black hover:cursor-pointer"
+                            // onClick={onClose}
+                          />
+                        </AlertDialogCancel>
+                      </div>
                       <AlertDialogTitle>Edit Kelas</AlertDialogTitle>
                       <AlertDialogDescription className="w-full">
                         <div className="">
@@ -480,25 +456,8 @@ export default function DosenKelas() {
                                 onChange={handleChange}
                               />
                             </div>
-                            {/* <div className="edit-form-group-mahasiswa">
-                                      <label>File Support:</label>
-                                      <input
-                                        className="text-black"
-                                        type="file"
-                                        name="file_name"
-                                        onChange={handleFileChange}
-                                      />
-                                    </div> */}
                             <div className="edit-form-group-mahasiswa ">
                               <label>Tanggal Mulai:</label>
-                              {/* <input
-                                type="checkbox"
-                                checked={isChecked}
-                                onChange={(e) => setIsChecked(e.target.checked)}
-                                name=""
-                                id=""
-                              /> */}
-                              {/* <input type="date" name="" id="" /> */}
                               <input
                                 className="text-black"
                                 type="date"
@@ -506,7 +465,6 @@ export default function DosenKelas() {
                                 value={formData.start_period}
                                 onChange={handleChange}
                               />
-                              {/* <input type="text" /> */}
                             </div>
                             <div className="edit-form-group-mahasiswa">
                               <label>Deadline:</label>
@@ -556,15 +514,6 @@ export default function DosenKelas() {
                     <strong className="text-indigo-700">
                       Kode Kelas : {item.class_code}
                     </strong>
-                    {/* <p className="text-gray-500 p-4">
-                      Tanggal Mulai {item.start_period}
-                    </p>
-                    <strong className="text-indigo-700">
-                      {item.perusahaan}
-                    </strong>
-                    <p className="text-gray-500 p-4">
-                      Deadline {item.end_period}
-                    </p> */}
                   </li>
                 </ul>
               </div>
@@ -580,156 +529,8 @@ export default function DosenKelas() {
                 className="absolute bottom-[120px] right-4 w-14 h-14 rounded-full border-2 border-white shadow-md"
               />
             </a>
-            // <tr key={item.id}>
-            //   <td>{item.id + index + 1}</td>
-            //   <td>{item.name}</td>
-            //   <td>{item.class_code}</td>
-            //   <td>{item.status}</td>
-            //   <td>{item.filename}</td>
-            //   <td>{item.start_period}</td>
-            //   <td>{item.end_period}</td>
-            //   <td>
-            //     <AlertDialog>
-            //       <AlertDialogTrigger className="action-button edit">
-            //         Edit
-            //       </AlertDialogTrigger>
-            //       <AlertDialogContent>
-            //         <AlertDialogHeader>
-            //           <AlertDialogTitle>Edit Kelas</AlertDialogTitle>
-            //           <AlertDialogDescription className="w-full">
-            //             <div className="">
-            //               <form>
-            //                 <div className="edit-form-group-mahasiswa ">
-            //                   <label>Nama Praktikum:</label>
-            //                   <input
-            //                     type="text"
-            //                     name="namaPraktikum"
-            //                     value={formData.namaPraktikum}
-            //                     onChange={handleChange}
-            //                     required
-            //                   />
-            //                 </div>
-            //                 <div className="edit-form-group-mahasiswa">
-            //                   <label>Kode Praktikum:</label>
-            //                   <input
-            //                     className="text-black"
-            //                     name="kodePraktikum"
-            //                     value={formData.kodePraktikum}
-            //                     onChange={handleChange}
-            //                   />
-            //                 </div>
-            //                 <div className="edit-form-group-mahasiswa">
-            //                   <label>File Support:</label>
-            //                   <input
-            //                     className="text-black"
-            //                     type="file"
-            //                     name="supportingFile"
-            //                     onChange={handleFileChange}
-            //                   />
-            //                 </div>
-            //                 <div className="edit-form-group-mahasiswa">
-            //                   <label>Deadline:</label>
-            //                   <input
-            //                     className="text-black"
-            //                     type="date"
-            //                     name="deadline"
-            //                     value={formData.deadline}
-            //                     onChange={handleChange}
-            //                   />
-            //                 </div>
-            //               </form>
-            //             </div>
-            //           </AlertDialogDescription>
-            //         </AlertDialogHeader>
-            //         <AlertDialogFooter>
-            //           <AlertDialogCancel className="bg-red-600 text-white">
-            //             Kembali
-            //           </AlertDialogCancel>
-            //           <AlertDialogAction className="bg-green-600 ">
-            //             Simpan
-            //           </AlertDialogAction>
-            //         </AlertDialogFooter>
-            //       </AlertDialogContent>
-            //     </AlertDialog>
-
-            //     <button
-            //       className="action-button delete"
-            //       onClick={() => {
-            //         Swal.fire({
-            //           title: "Hapus Kelas?",
-            //           text: "Kelas akan dihapus secara permanen!",
-            //           icon: "warning",
-            //           showCancelButton: true,
-            //           confirmButtonText: "Ya, hapus!",
-            //           cancelButtonText: "Batal",
-            //           dangerMode: true,
-            //         }).then((result) => {
-            //           if (result.isConfirmed) {
-            //             const newData = data.filter(
-            //               (itemData) => itemData.id !== item.id
-            //             );
-            //             setData(newData);
-            //             Swal.fire(
-            //               "Berhasil!",
-            //               "Kelas berhasil dihapus!",
-            //               "success"
-            //             );
-            //           }
-            //         });
-            //       }}
-            //     >
-            //       Delete
-            //     </button>
-            //   </td>
-            // </tr>
           ))
         )}
-        {/* </tbody>
-        </table> */}
-        {/* <div className="pagination-container sticky">
-          <div className="pagination-info">
-            {`Showing ${indexOfFirstItem + 1} to ${Math.min(
-              indexOfLastItem,
-              data.length
-            )} of ${data.length} entries`}
-          </div>
-
-          <div className="pagination ">
-            <button
-              className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
-              onClick={() => paginate(currentPage - 1)}
-              disabled={currentPage === 1}
-            >
-              &lt;
-            </button>
-            {Array.from(
-              { length: Math.ceil(data.length / itemsPerPage) },
-              (_, index) => (
-                <button
-                  key={index + 1}
-                  className={`page-item ${
-                    currentPage === index + 1 ? "active" : ""
-                  }`}
-                  onClick={() => paginate(index + 1)}
-                >
-                  {index + 1}
-                </button>
-              )
-            )}
-            <button
-              className={`page-item ${
-                currentPage === Math.ceil(data.length / itemsPerPage)
-                  ? "disabled"
-                  : ""
-              }`}
-              onClick={() => paginate(currentPage + 1)}
-              disabled={currentPage === Math.ceil(data.length / itemsPerPage)}
-            >
-              &gt;
-            </button>
-          </div>
-        </div>
-      </div> */}
       </div>
       <div className="pagination-container !static !bg-transparent mt-10 !shadow-none ">
         {/* <div className="pagination-info">
@@ -783,6 +584,14 @@ export default function DosenKelas() {
       >
         <AlertDialogContent>
           <AlertDialogHeader>
+            <div className="w-full flex justify-end">
+              <AlertDialogCancel className="border-none shadow-none">
+                <RxCross1
+                  className="text-2xl text-black hover:cursor-pointer"
+                  // onClick={onClose}
+                />
+              </AlertDialogCancel>
+            </div>
             <AlertDialogTitle>Tambah Kelas</AlertDialogTitle>
             <AlertDialogDescription className="w-full">
               <div className="max-h-[70vh] overflow-y-auto">
@@ -816,63 +625,6 @@ export default function DosenKelas() {
                       </button>
                     </div>
                   </div>
-                  {/* <div className="edit-form-group-mahasiswa">
-                    <label>File Support:</label>
-                    <div className="flex items-center justify-center w-full ">
-                      <label
-                        htmlFor="dropzone-file"
-                        className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
-                      >
-                        <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                          {filePreview ? (
-                            <>
-                              <div className="grid justify-center items-center p-20">
-                                <FaFile className="w-8 h-8 text-gray-500 dark:text-gray-400 mb-2" />
-                                <p className="text-sm text-gray-500 dark:text-gray-400">
-                                  {filePreview.name}
-                                </p>
-                              </div>
-                            </>
-                          ) : (
-                            <>
-                              <svg
-                                className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
-                                aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 20 16"
-                              >
-                                <path
-                                  stroke="currentColor"
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth="2"
-                                  d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
-                                />
-                              </svg>
-                              <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                                <span className="font-semibold">
-                                  Click to upload
-                                </span>{" "}
-                                or drag and drop
-                              </p>
-                              <p className="text-xs text-gray-500 dark:text-gray-400">
-                                ZIP, RAR atau PDF (MAX. 10mb)
-                              </p>
-                            </>
-                          )}
-                        </div>
-
-                        <input
-                          id="dropzone-file"
-                          type="file"
-                          className="hidden"
-                          accept=".zip, .rar, .pdf"
-                          onChange={handleFileChange}
-                        />
-                      </label>
-                    </div>
-                  </div> */}
                   <div className="edit-form-group-mahasiswa">
                     <label>Tanggal Mulai:</label>
                     <input
@@ -883,7 +635,6 @@ export default function DosenKelas() {
                       onChange={handleChange}
                       min={new Date().toISOString().split("T")[0]}
                     />
-                    {/* <input type="text" /> */}
                   </div>
                   <div className="edit-form-group-mahasiswa">
                     <label>Deadline:</label>

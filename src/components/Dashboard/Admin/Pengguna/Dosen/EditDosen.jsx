@@ -8,12 +8,16 @@ import axios from "axios";
 import { RoutesApi } from "@/Routes";
 import { ClipLoader } from "react-spinners";
 import { useCookies } from "react-cookie";
+import { getCookie, getCookieToken } from "@/service";
+import { getContracts } from "@/hooks/dashboard";
+import ImportDosen from "./ImportDosen";
 
 const EditDosen = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [id, setId] = useState(0);
   const [url, setUrl] = useState(RoutesApi.getDosenAdmin.url);
   const [editPopupOpen, setEditPopupOpen] = useState(false);
+  const [tambahPopupOpen, setTambahPopupOpen] = useState(false);
   const [selectedDosen, setSelectedDosen] = useState(null);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
   const [currentPage, setCurrentPage] = useState(1);
@@ -35,6 +39,12 @@ const EditDosen = () => {
       return data;
     },
   });
+  const {
+    isLoading: isLoadingContract,
+    isError: isErrorContract,
+    data: dataContract,
+    error: errorContract,
+  } = getContracts(RoutesApi.url + "api/admin/contract", getCookieToken());
 
   const handleData = (newData) => {
     setData([...data, { id: data.length + 1, ...newData }]);
@@ -164,13 +174,33 @@ const EditDosen = () => {
             placeholder="Cari Data Dosen 🔎"
           />
         </div>
-        <button className="add-button" onClick={() => setIsOpen(true)}>
+        <button
+          className="add-button"
+          onClick={() => {
+            setIsOpen(true);
+            setTambahPopupOpen(false);
+          }}
+        >
+          + Import Dosen
+        </button>
+        <button
+          className="add-button"
+          onClick={() => {
+            setTambahPopupOpen(true);
+            setIsOpen(false);
+          }}
+        >
           + Tambah Dosen
         </button>
       </div>
-      <TambahDosen
+      <ImportDosen
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
+        onSave={handleData}
+      />
+      <TambahDosen
+        isOpen={tambahPopupOpen}
+        onClose={() => setTambahPopupOpen(false)}
         onSave={handleData}
       />
       <EditPopupDosen

@@ -6,6 +6,7 @@ import { RoutesApi } from "@/Routes";
 import { useCookies } from "react-cookie";
 import IntentEnum from "@/constant/intent";
 import Swal from "sweetalert2";
+import { RxCross1 } from "react-icons/rx";
 
 const EditPopupMahasiswa = ({ isOpen, onClose, data, onSave }) => {
   const [cookies, setCookie] = useCookies(["user"]);
@@ -105,6 +106,12 @@ const EditPopupMahasiswa = ({ isOpen, onClose, data, onSave }) => {
   return (
     <div className="edit-popup-container-dosen">
       <div className="edit-popup-content-dosen">
+        <div className="w-full flex justify-end">
+          <RxCross1
+            className="text-2xl hover:cursor-pointer"
+            onClick={onClose}
+          />
+        </div>
         <div className="edit-popup-header-dosen">
           <h2>Edit Mahasiswa</h2>
         </div>
