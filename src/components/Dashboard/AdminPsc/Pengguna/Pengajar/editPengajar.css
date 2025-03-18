@@ -155,10 +155,33 @@
     opacity: 0.5;
   }
   
-  .loading {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 300px;
+  /* Loading spinner */
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .search-add-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
   }
+  
+  .search-add-container input {
+    width: 100%;
+    margin-right: 0;
+  }
+  
+  .button-group {
+    width: 100%;
+  }
+  
+  .add-button, .add-multiple-button {
+    flex: 1;
+  }
+}
   
