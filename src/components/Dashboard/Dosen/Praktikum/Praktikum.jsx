@@ -325,6 +325,7 @@ export default function Praktikum() {
                         type="date"
                         name="start_period"
                         onChange={handleChange}
+                        min={new Date().toISOString().split("T")[0]}
                       />
                     </div>
                     <div className="edit-form-group-mahasiswa">
@@ -333,6 +334,7 @@ export default function Praktikum() {
                         type="date"
                         name="end_period"
                         onChange={handleChange}
+                        min={formData.start_period || new Date().toISOString().split("T")[0]}
                       />
                     </div>
                   </form>
@@ -364,8 +366,8 @@ export default function Praktikum() {
                     ? "↑"
                     : "↓"
                   : sortConfig.direction === "descending"
-                  ? "↓"
-                  : "↑"}
+                    ? "↓"
+                    : "↑"}
               </th>
               <th className="">Kode Praktikum</th>
               <th className="">Tanggal Praktikum</th>
@@ -491,9 +493,8 @@ export default function Praktikum() {
               (_, index) => (
                 <button
                   key={index + 1}
-                  className={`page-item ${
-                    currentPage === index + 1 ? "active" : ""
-                  }`}
+                  className={`page-item ${currentPage === index + 1 ? "active" : ""
+                    }`}
                   onClick={() => paginate(index + 1)}
                 >
                   {index + 1}
@@ -501,11 +502,10 @@ export default function Praktikum() {
               )
             )}
             <button
-              className={`page-item ${
-                currentPage === Math.ceil(data.length / itemsPerPage)
+              className={`page-item ${currentPage === Math.ceil(data.length / itemsPerPage)
                   ? "disabled"
                   : ""
-              }`}
+                }`}
               onClick={() => paginate(currentPage + 1)}
               disabled={currentPage === Math.ceil(data.length / itemsPerPage)}
             >
