@@ -1,143 +1,361 @@
 .tambah-dosen-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 999;
-  }
-  
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.tambah-dosen-container {
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding: 2rem;
+  width: 90%;
+  max-width: 1200px; /* Increased from default */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.tambah-dosen-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.tambah-dosen-header h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+  margin: 0;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #666;
+}
+
+.close-button:hover {
+  color: #333;
+}
+
+.tambah-dosen-form {
+  margin-bottom: 1.5rem;
+}
+
+.form-group {
+  margin-bottom: 1.2rem;
+}
+
+.form-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: #555;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #1a73e8;
+  outline: none;
+  box-shadow: 0 0 4px rgba(26, 115, 232, 0.2);
+}
+
+.password-info {
+  background-color: #f8f9fa;
+  padding: 0.8rem;
+  border-radius: 5px;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: #666;
+  font-style: italic;
+}
+
+.tambah-dosen-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.cancel-button,
+.save-button {
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.cancel-button {
+  background-color: #e53935;
+  color: #fff;
+}
+
+.cancel-button:hover {
+  background-color: #c62828;
+}
+
+.save-button {
+  background-color: #05f811;
+  color: #fff;
+}
+
+.save-button:hover {
+  background-color: #47208b;
+}
+
+/* Import section styles */
+.import-section {
+  background-color: #f0f8ff;
+  border: 1px dashed #4a90e2;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+.import-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 10px;
+}
+
+.import-button, 
+.template-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 15px;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+
+.import-button {
+  background-color: #4a90e2;
+  color: white;
+}
+
+.import-button:hover {
+  background-color: #3a7bc8;
+}
+
+.template-button {
+  background-color: #f5f5f5;
+  color: #333;
+  border: 1px solid #ddd;
+}
+
+.template-button:hover {
+  background-color: #e8e8e8;
+}
+
+.import-error {
+  color: #d32f2f;
+  background-color: #ffebee;
+  padding: 10px;
+  border-radius: 4px;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.import-success {
+  color: #2e7d32;
+  background-color: #e8f5e9;
+  padding: 10px;
+  border-radius: 4px;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+/* Multiple instructors styles */
+.instructors-counter {
+  background-color: #e8f4fd;
+  color: #0077cc;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  margin-bottom: 15px;
+  display: inline-block;
+}
+
+.instructors-table-container {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.section-description {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.instructors-table {
+  width: 100%;
+  margin-bottom: 20px;
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.instructors-table-header {
+  display: flex;
+  background-color: #f5f5f5;
+  font-weight: bold;
+  padding: 12px 0;
+  border-bottom: 2px solid #ddd;
+}
+
+.instructor-field-header {
+  flex: 1;
+  padding: 0 15px;
+}
+
+.instructor-field-header.actions {
+  flex: 0.5;
+  text-align: center;
+}
+
+.instructor-row {
+  display: flex;
+  padding: 15px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.instructor-field {
+  flex: 1;
+  padding: 0 15px;
+}
+
+.instructor-field.actions {
+  flex: 0.5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.instructor-field input,
+.instructor-field select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.remove-instructor-btn {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.remove-instructor-btn:hover {
+  background-color: #d32f2f;
+}
+
+.remove-instructor-btn:disabled {
+  background-color: #e0e0e0;
+  cursor: not-allowed;
+}
+
+.add-instructor-row {
+  margin: 20px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.add-instructor-btn {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+.add-instructor-btn:hover {
+  background-color: #45a049;
+}
+
+/* Loading spinner */
+.loading-spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
   .tambah-dosen-container {
-    background-color: #ffffff;
-    border-radius: 10px;
-    width: 90%;
-    max-width: 500px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-  }
-  
-  .tambah-dosen-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     padding: 1.5rem;
-    background-color: #673ab7;
-    color: white;
-  }
-  
-  .tambah-dosen-header h2 {
-    margin: 0;
-    font-size: 1.25rem;
-  }
-  
-  .close-button {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 1.5rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .tambah-dosen-form {
-    padding: 1.5rem;
-  }
-  
-  .form-group {
-    margin-bottom: 1.2rem;
-  }
-  
-  .form-group label {
-    display: block;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-    color: #333;
-  }
-  
-  .form-group input,
-  .form-group select {
-    width: 100%;
-    padding: 0.8rem;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 0.9rem;
-    color: #333;
-    box-sizing: border-box;
-  }
-  
-  .form-group input:focus,
-  .form-group select:focus {
-    border-color: #673ab7;
-    outline: none;
-    box-shadow: 0 0 4px rgba(103, 58, 183, 0.2);
-  }
-  
-  .password-info {
-    background-color: #f0f0f0;
-    padding: 0.8rem 1rem;
-    border-radius: 5px;
-    font-size: 0.85rem;
-    color: #555;
-    margin-top: 0.5rem;
+    max-width: 95%;
   }
   
   .tambah-dosen-actions {
-    display: flex;
-    justify-content: flex-end;
-    padding: 1rem 1.5rem;
-    background-color: #f5f5f5;
-    gap: 1rem;
+    flex-direction: column;
+    gap: 0.5rem;
   }
   
+  .cancel-button,
   .save-button {
-    background-color: #05f811;
-    color: white;
-    border: none;
-    padding: 0.7rem 1.5rem;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: background-color 0.3s;
+    width: 100%;
   }
   
-  .save-button:hover {
-    background-color: #47208b;
+  .import-buttons {
+    flex-direction: column;
   }
-  
-  .save-button:disabled {
-    background-color: #cccccc;
-    cursor: not-allowed;
-  }
-  
-  .cancel-button {
-    background-color: #e53935;
-    color: white;
-    border: none;
-    padding: 0.7rem 1.5rem;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: background-color 0.3s;
-  }
-  
-  .cancel-button:hover {
-    background-color: #b71c1c;
-  }
-  
-  @media (max-width: 768px) {
-    .tambah-dosen-actions {
-      flex-direction: column;
-    }
-    
-    .save-button,
-    .cancel-button {
-      width: 100%;
-    }
-  }
-  
+}
