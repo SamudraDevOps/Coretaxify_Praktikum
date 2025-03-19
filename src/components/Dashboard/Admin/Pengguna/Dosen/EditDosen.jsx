@@ -84,16 +84,17 @@ const EditDosen = () => {
   };
 
   const mutationCreate = useMutation({
-    mutationFn: async (multipleDosen) => {
+    mutationFn: async ({ lecturers, contract_id }) => {
+      console.log("contract", lecturers);
       const csrf = await getCsrf();
-      const createPromises = multipleDosen.map((dosen) => {
+      const createPromises = lecturers.map((dosen) => {
         return axios.post(
           RoutesApi.url + "api/admin/users",
           {
-            contract_id: 1,
+            contract_id: contract_id,
             name: dosen.name,
             email: dosen.email,
-            status: "ACTIVE",
+            status: dosen.status,
           },
           {
             headers: {
@@ -110,6 +111,12 @@ const EditDosen = () => {
     },
     onError: (error) => {
       console.log(error);
+      Swal.fire("Gagal!", "Terjadi Kesalahan!", "error").then((result) => {
+        if (result.isConfirmed) {
+          refetch();
+          // window.location.reload();
+        }
+      });
     },
     onSuccess: (data) => {
       Swal.fire("Berhasil!", "Kelas berhasil dihapus!", "success").then(
@@ -123,7 +130,7 @@ const EditDosen = () => {
     },
   });
 
-  const handleCreateMultipleDosen = (lecturers) => {
+  const handleCreateMultipleDosen = (lecturers, contract_id) => {
     const invalidLecturer = lecturers.filter(
       (lecturer) => !lecturer.name || !lecturer.email
     );
@@ -160,7 +167,8 @@ const EditDosen = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         // alert("clicked");
-        mutationCreate.mutate(lecturers);
+        console.log("contract", contract_id);
+        mutationCreate.mutate({ lecturers, contract_id });
         // mutation.mutate({
         //   action: "create",
         //   multipleStudents: lecturers,
@@ -212,14 +220,12 @@ const EditDosen = () => {
     },
     onSuccess: (data) => {
       console.log(data);
-      Swal.fire("Berhasil!", "Data dosen berhasil dihapus!", "success").then(
-        (result) => {
-          if (result.isConfirmed) {
-            refetch();
-            // window.location.reload();
-          }
+      Swal.fire("Berhasil!", "Terjadi Kesalahan!", "error").then((result) => {
+        if (result.isConfirmed) {
+          refetch();
+          // window.location.reload();
         }
-      );
+      });
       // const role = data.data.user.roles[0].name;
       // setCookie("token", data.data.token, { path: "/" });
       // setCookie("role", role, { path: "/" });
@@ -230,12 +236,20 @@ const EditDosen = () => {
     },
     onError: (error) => {
       console.log(error);
+      Swal.fire("Gagal!", "Data dosen berhasil dihapus!", "success").then(
+        (result) => {
+          if (result.isConfirmed) {
+            refetch();
+            // window.location.reload();
+          }
+        }
+      );
     },
   });
 
   if (isLoading) {
     return (
-      <div className="loading">
+      <div className="w-full h-screen flex items-center justify-center">
         <ClipLoader color="#7502B5" size={50} />
       </div>
       // <div className="h-full w-full text-2xl italic font-bold text-center flex items-center justify-center">Loading...</div>
@@ -246,177 +260,182 @@ const EditDosen = () => {
   }
 
   return (
-    <div className="kontrak-container">
-      <div className="header">
-        <h2>Data Dosen</h2>
-      </div>
-      <div className="search-add-container">
-        <div className="search-input-container">
-          <input
-            type="text"
-            className="search-input"
-            placeholder="Cari Data Dosen 🔎"
-          />
+    <div className="">
+      {mutation.isPending && (
+        <div className="fixed inset-0 h-screen flex items-center justify-center bg-slate-600 z-50 bg-opacity-50 ">
+          <ClipLoader color="#7502B5" size={50} className="!opacity-100" />
         </div>
-        {/* <button
-          className="add-button mr-3"
-          onClick={() => {
-            setIsOpen(true);
-            setTambahPopupOpen(false);
-          }}
-        >
-          + Import Dosen
-        </button> */}
-        <button
-          className="add-button"
-          onClick={() => {
-            setTambahPopupOpen(true);
-            setIsOpen(false);
-          }}
-        >
-          + Tambah Dosen
-        </button>
-      </div>
-      <ImportDosen
-        isOpen={isOpen}
-        onClose={() => setIsOpen(false)}
-        onSave={handleData}
-      />
-      {/* <TambahDosen
-        isOpen={tambahPopupOpen}
-        onClose={() => setTambahPopupOpen(false)}
-        onSave={handleData}
-      /> */}
-      {tambahPopupOpen && (
-        <TambahDosen
-          // isMultipleMode={editPopupOpen}
+      )}
+      {}
+      <div className="kontrak-container ">
+        <div className="header">
+          <h2>Data Dosen</h2>
+        </div>
+        <div className="search-add-container">
+          <div className="search-input-container">
+            <input
+              type="text"
+              className="search-input"
+              placeholder="Cari Data Dosen 🔎"
+            />
+          </div>
+          {/* <button
+            className="add-button mr-3"
+            onClick={() => {
+              setIsOpen(true);
+              setTambahPopupOpen(false);
+            }}
+          >
+            + Import Dosen
+          </button> */}
+          <button
+            className="add-button"
+            onClick={() => {
+              setTambahPopupOpen(true);
+              setIsOpen(false);
+            }}
+          >
+            + Tambah Dosen
+          </button>
+        </div>
+        <ImportDosen
+          isOpen={isOpen}
+          onClose={() => setIsOpen(false)}
+          onSave={handleData}
+        />
+        {/* <TambahDosen
+          isOpen={tambahPopupOpen}
           onClose={() => setTambahPopupOpen(false)}
+          onSave={handleData}
+        /> */}
+        {tambahPopupOpen && (
+          <TambahDosen
+            dataContract={dataContract}
+            // isMultipleMode={editPopupOpen}
+            onClose={() => setTambahPopupOpen(false)}
+            dosen={selectedDosen}
+            onSave={handleCreateMultipleDosen}
+            // id={id}
+          />
+        )}
+        <EditPopupDosen
+          isOpen={editPopupOpen}
+          onClose={() => setEditPopupOpen(false)}
           dosen={selectedDosen}
-          onSave={handleCreateMultipleDosen}
+          onSave={handleUpdateDosen}
+          refetch={refetch}
           // id={id}
         />
-      )}
-      <EditPopupDosen
-        isOpen={editPopupOpen}
-        onClose={() => setEditPopupOpen(false)}
-        dosen={selectedDosen}
-        onSave={handleUpdateDosen}
-        refetch={refetch}
-        // id={id}
-      />
-      <div className="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th onClick={() => handleSort("namaDosen")}>
-                Nama Dosen{" "}
-                {sortConfig.key === "namaDosen"
-                  ? sortConfig.direction === "ascending"
-                    ? "↑"
-                    : "↓"
-                  : ""}
-              </th>
-              <th onClick={() => handleSort("instansi")}>
-                Email{" "}
-                {sortConfig.key === "instansi"
-                  ? sortConfig.direction === "ascending"
-                    ? "↑"
-                    : "↓"
-                  : ""}
-              </th>
-              {/* <th>Kode Registrasi</th>
-
-              <th>Kode Pembelian</th>
-              <th>Status</th> */}
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.data.map((item) => (
-              <tr key={item.id}>
-                <td>{item.name}</td>
-                <td>{item.email}</td>
-
-                {/* <td>{item.}</td>
-
-                <td>{item.kodePembelian}</td>
-                <td>{item.status}</td> */}
-                <td>
-                  <button
-                    className="action-button"
-                    onClick={() => handleEdit(item)}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    className="action-button delete"
-                    onClick={() => {
-                      Swal.fire({
-                        title: "Hapus Dosen?",
-                        text: "Data dosen akan dihapus secara permanen!",
-                        icon: "warning",
-                        showCancelButton: true,
-                        confirmButtonText: "Ya, hapus!",
-                        cancelButtonText: "Batal",
-                      }).then((result) => {
-                        if (result.isConfirmed) {
-                          setId(item.id);
-                          mutation.mutate(item.id);
-                          // setData(data.filter((d) => d.id !== item.id));
-                          // Swal.fire(
-                          //   "Berhasil!",
-                          //   "Data dosen berhasil dihapus!",
-                          //   "success"
-                          // );
-                        }
-                      });
-                    }}
-                  >
-                    Delete
-                  </button>
-                </td>
+        <div className="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th onClick={() => handleSort("namaDosen")}>
+                  Nama Dosen{" "}
+                  {sortConfig.key === "namaDosen"
+                    ? sortConfig.direction === "ascending"
+                      ? "↑"
+                      : "↓"
+                    : ""}
+                </th>
+                <th onClick={() => handleSort("instansi")}>
+                  Email{" "}
+                  {sortConfig.key === "instansi"
+                    ? sortConfig.direction === "ascending"
+                      ? "↑"
+                      : "↓"
+                    : ""}
+                </th>
+                {/* <th>Kode Registrasi</th>
+                <th>Kode Pembelian</th>
+                <th>Status</th> */}
+                <th>Action</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-        <div className="pagination-container">
-          {/* <div className="pagination-info">
-            {`Showing ${indexOfFirstItem + 1} to ${Math.min(
-              indexOfLastItem,
-              data.length
-            )} of ${data.length} entries`}
-          </div> */}
-
-          <div className="pagination">
-            <button
-              className={`page-item`}
-              onClick={() => {
-                setUrl(data.links.prev);
-              }}
-              disabled={data.meta.current_page === 1}
-            >
-              &lt;
-            </button>
-            <button className="page-item">{data.meta.current_page}</button>
-            {/* {Array.from({ length: Math.ceil(data.length / itemsPerPage) }, (_, index) => (
-                            <button key={index + 1} className={`page-item ${currentPage === index + 1 ? "active" : ""}`} onClick={() => paginate(index + 1)}>
-                                {index + 1}
-                            </button>
-                        ))} */}
-            <button
-              className={`page-item ${
-                currentPage === Math.ceil(data.length / itemsPerPage)
-                  ? "disabled"
-                  : ""
-              }`}
-              onClick={() => {
-                console.log(data.links.next);
-                setUrl(data.links.next);
-              }}
-              disabled={data.links.next == null}
-            >
-              &gt;
-            </button>
+            </thead>
+            <tbody>
+              {data.data.map((item) => (
+                <tr key={item.id}>
+                  <td>{item.name}</td>
+                  <td>{item.email}</td>
+                  {/* <td>{item.}</td>
+                  <td>{item.kodePembelian}</td>
+                  <td>{item.status}</td> */}
+                  <td>
+                    <button
+                      className="action-button"
+                      onClick={() => handleEdit(item)}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="action-button delete"
+                      onClick={() => {
+                        Swal.fire({
+                          title: "Hapus Dosen?",
+                          text: "Data dosen akan dihapus secara permanen!",
+                          icon: "warning",
+                          showCancelButton: true,
+                          confirmButtonText: "Ya, hapus!",
+                          cancelButtonText: "Batal",
+                        }).then((result) => {
+                          if (result.isConfirmed) {
+                            setId(item.id);
+                            mutation.mutate(item.id);
+                            // setData(data.filter((d) => d.id !== item.id));
+                            // Swal.fire(
+                            //   "Berhasil!",
+                            //   "Data dosen berhasil dihapus!",
+                            //   "success"
+                            // );
+                          }
+                        });
+                      }}
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <div className="pagination-container">
+            {/* <div className="pagination-info">
+              {`Showing ${indexOfFirstItem + 1} to ${Math.min(
+                indexOfLastItem,
+                data.length
+              )} of ${data.length} entries`}
+            </div> */}
+            <div className="pagination">
+              <button
+                className={`page-item`}
+                onClick={() => {
+                  setUrl(data.links.prev);
+                }}
+                disabled={data.meta.current_page === 1}
+              >
+                &lt;
+              </button>
+              <button className="page-item">{data.meta.current_page}</button>
+              {/* {Array.from({ length: Math.ceil(data.length / itemsPerPage) }, (_, index) => (
+                              <button key={index + 1} className={`page-item ${currentPage === index + 1 ? "active" : ""}`} onClick={() => paginate(index + 1)}>
+                                  {index + 1}
+                              </button>
+                          ))} */}
+              <button
+                className={`page-item ${
+                  currentPage === Math.ceil(data.length / itemsPerPage)
+                    ? "disabled"
+                    : ""
+                }`}
+                onClick={() => {
+                  console.log(data.links.next);
+                  setUrl(data.links.next);
+                }}
+                disabled={data.links.next == null}
+              >
+                &gt;
+              </button>
+            </div>
           </div>
         </div>
       </div>

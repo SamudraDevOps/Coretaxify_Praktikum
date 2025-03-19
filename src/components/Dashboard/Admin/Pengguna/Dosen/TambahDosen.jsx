@@ -5,7 +5,7 @@ import * as XLSX from "xlsx";
 
 const TambahDosen = ({
   onClose,
-  data = {},
+  dataContract,
   onSave,
   // formData,
   // setFormData,
@@ -17,7 +17,16 @@ const TambahDosen = ({
 }) => {
   // For multiple students mode
   const [students, setStudents] = useState(
-    isMultipleMode ? [{ name: "", email: "", status: "ACTIVE" }] : []
+    isMultipleMode
+      ? [
+          {
+            name: "",
+            email: "",
+            status: "ACTIVE",
+            // contract_id: "",
+          },
+        ]
+      : []
   );
   const [importError, setImportError] = useState("");
   const [isImporting, setIsImporting] = useState(false);
@@ -26,6 +35,7 @@ const TambahDosen = ({
     name: "",
     email: "",
     status: "",
+    contract_id: "",
   });
   const fileInputRef = useRef(null);
 
@@ -74,7 +84,7 @@ const TambahDosen = ({
       return;
     }
 
-    onSave(validStudents);
+    onSave(validStudents, formData.contract_id);
   };
 
   // file input
@@ -195,7 +205,7 @@ const TambahDosen = ({
   };
 
   return (
-    <div className="edit-popup-container-mahasiswa">
+    <div className="edit-popup-container-mahasiswa ">
       <div className="edit-popup-content-mahasiswa">
         <div className="edit-popup-header-mahasiswa">
           <h2>{title}</h2>
@@ -207,6 +217,23 @@ const TambahDosen = ({
             {importSuccess && (
               <div className="import-success">{importSuccess}</div>
             )}
+            <select
+              name="contract_id"
+              value={formData.contract_id}
+              onChange={handleChange}
+              // onChange={(e) =>
+              //   handleStudentChange(index, "name", e.target.value)
+              // }
+              className="w-fit border px-2 py-1 rounded mb-5"
+              required
+            >
+              <option value="">Pilih Kontrak</option>
+              {dataContract.data.map((item) => (
+                <option key={item.id} value={item.id}>
+                  {item.contract_code + " - " + item.university.name}
+                </option>
+              ))}
+            </select>
             <div className="import-section">
               <div className="import-buttons">
                 <button
@@ -279,7 +306,7 @@ const TambahDosen = ({
                       required
                     />
                   </div>
-                  {/* <div className="student-field">
+                  <div className="student-field">
                     <select
                       value={student.status}
                       onChange={(e) =>
@@ -289,7 +316,7 @@ const TambahDosen = ({
                       <option value="ACTIVE">Active</option>
                       <option value="INACTIVE">Inactive</option>
                     </select>
-                  </div> */}
+                  </div>
                   <div className="student-field actions">
                     <button
                       type="button"
