@@ -11,6 +11,8 @@ import { useCookies } from "react-cookie";
 import { getCookie, getCookieToken } from "@/service";
 import { getContracts } from "@/hooks/dashboard";
 import ImportDosen from "./ImportDosen";
+import { getCsrf } from "@/service/getCsrf";
+import IntentEnum from "@/constant/intent";
 
 const EditDosen = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -24,7 +26,7 @@ const EditDosen = () => {
   const [cookies, setCookie] = useCookies(["user"]);
   const itemsPerPage = 10;
 
-  const { isLoading, isError, data, error } = useQuery({
+  const { isLoading, isError, data, error, refetch } = useQuery({
     queryKey: ["dosenadmin", url],
     queryFn: async () => {
       const { data } = await axios.get(url, {
@@ -56,9 +58,9 @@ const EditDosen = () => {
   };
 
   const handleUpdateDosen = (updatedDosen) => {
-    setData(
-      data.map((item) => (item.id === updatedDosen.id ? updatedDosen : item))
-    );
+    // setData(
+    //   data.map((item) => (item.id === updatedDosen.id ? updatedDosen : item))
+    // );
     setEditPopupOpen(false);
   };
 
@@ -81,11 +83,92 @@ const EditDosen = () => {
     setData(sortedData);
   };
 
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  //   const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
+  const mutationCreate = useMutation({
+    mutationFn: async (multipleDosen) => {
+      const csrf = await getCsrf();
+      const createPromises = multipleDosen.map((dosen) => {
+        return axios.post(
+          RoutesApi.url + "api/admin/users",
+          {
+            contract_id: 1,
+            name: dosen.name,
+            email: dosen.email,
+            status: "ACTIVE",
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+              "X-CSRF-TOKEN": csrf,
+              Authorization: `Bearer ${cookies.token}`,
+            },
+          }
+        );
+      });
+      // execute all request and return the combined
+      return Promise.all(createPromises);
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+    onSuccess: (data) => {
+      Swal.fire("Berhasil!", "Kelas berhasil dihapus!", "success").then(
+        (result) => {
+          if (result.isConfirmed) {
+            setTambahPopupOpen(false);
+            refetch();
+          }
+        }
+      );
+    },
+  });
 
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const handleCreateMultipleDosen = (lecturers) => {
+    const invalidLecturer = lecturers.filter(
+      (lecturer) => !lecturer.name || !lecturer.email
+    );
+
+    if (invalidLecturer.length > 0) {
+      Swal.fire(
+        "Validasi Gagal",
+        "Semua Dosen harus memili nama, email",
+        "error"
+      );
+      return;
+    }
+
+    // check duplicate email
+    const emails = lecturers.map((lecturer) => lecturer.email);
+    const uniqueEmails = new Set(emails);
+
+    if (emails.length !== uniqueEmails.size) {
+      Swal.fire(
+        "Validasi Gagal",
+        "Terdapat email duplikat. Email setiap dosen harus unik",
+        "error"
+      );
+      return;
+    }
+
+    Swal.fire({
+      title: "Tambah Dosen",
+      text: `Anda akan menambahkan ${lecturers.length} mahasiswa baru. Lanjutkan?`,
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Ya, lanjutkan",
+      cancelButtonText: "Batal",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // alert("clicked");
+        mutationCreate.mutate(lecturers);
+        // mutation.mutate({
+        //   action: "create",
+        //   multipleStudents: lecturers,
+        // });
+      }
+    });
+  };
+
   const mutation = useMutation({
     mutationFn: async (id) => {
       console.log("button clicked");
@@ -132,7 +215,8 @@ const EditDosen = () => {
       Swal.fire("Berhasil!", "Data dosen berhasil dihapus!", "success").then(
         (result) => {
           if (result.isConfirmed) {
-            window.location.reload();
+            refetch();
+            // window.location.reload();
           }
         }
       );
@@ -198,11 +282,20 @@ const EditDosen = () => {
         onClose={() => setIsOpen(false)}
         onSave={handleData}
       />
-      <TambahDosen
+      {/* <TambahDosen
         isOpen={tambahPopupOpen}
         onClose={() => setTambahPopupOpen(false)}
         onSave={handleData}
-      />
+      /> */}
+      {tambahPopupOpen && (
+        <TambahDosen
+          // isMultipleMode={editPopupOpen}
+          onClose={() => setTambahPopupOpen(false)}
+          dosen={selectedDosen}
+          onSave={handleCreateMultipleDosen}
+          // id={id}
+        />
+      )}
       <EditPopupDosen
         isOpen={editPopupOpen}
         onClose={() => setEditPopupOpen(false)}

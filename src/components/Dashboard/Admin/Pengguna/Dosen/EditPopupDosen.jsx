@@ -145,7 +145,7 @@ const EditPopupDosen = ({ isOpen, onClose, dosen, onSave }) => {
         </div>
         <form>
           <div className="edit-form-group-dosen">
-            <label>Nama Dosen awdk:</label>
+            <label>Nama Dosen :</label>
             <input
               type="text"
               name="name"
