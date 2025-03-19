@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { FaRegEye, FaEyeSlash } from "react-icons/fa";
 import CTaxifyLogo from "../../../../assets/images/4.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { RoutesApi } from "@/Routes";
 import { useCookies } from "react-cookie";
+import Swal from "sweetalert2";
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -22,40 +23,59 @@ const Register = () => {
     name: "",
     email: "",
     password: "",
+    password_confirmation: "",
     contract_code: "",
   });
+  const navigate = useNavigate();
 
   const mutation = useMutation({
     mutationFn: async () => {
       console.log("button clicked");
+
+      if (!formData.email.includes("@")) {
+        throw new Error("Email harus mengandung @");
+      }
+
+      if (formData.password !== repeatPassword) {
+        throw new Error("Password tidak cocok");
+      }
+
+      if (showRegistrationCode && !formData.contract_code.trim()) {
+        throw new Error("Password tidak cocok");
+      }
+
+      formData.password_confirmation = repeatPassword;
+
       // const { response } = await axios.post(RoutesApi.login, {
-      const response = await axios.get(`${RoutesApi.url}api/csrf-token`, {
+      const response = await axios.get(RoutesApi.csrf, {
         // withCredentials: true,
         headers: {
           "X-Requested-With": "XMLHttpRequest",
           Accept: "application/json",
         },
       });
-      console.log(response.data.token);
+      // console.log(response.data.token);
       axios.defaults.headers.common["X-CSRF-TOKEN"] = response.data.token;
-      console.log(cookies.token);
+      // console.log(cookies.token);
       // if (setShowRegistrationCode == false) {
       //   return null;
       // }
+
       const data = await axios.post(
         RoutesApi.register,
-        {
-          name: formData.name,
-          email: formData.email,
-          password: formData.password,
-          contract_code: formData.contract_code,
-        },
+        formData,
+        // {
+        //   name: formData.name,
+        //   email: formData.email,
+        //   password: formData.password,
+        //   contract_code: formData.contract_code,
+        // },
         {
           headers: {
             "Content-Type": "application/json",
             Accept: "application/json",
             "X-CSRF-TOKEN": response.data.token,
-            Authorization: `Bearer ${cookies.token}`,
+            // Authorization: `Bearer ${cookies.token}`,
           },
           //   params: {
           //     intent: RoutesApi.postAdmin.intent,
@@ -65,18 +85,36 @@ const Register = () => {
       return data;
     },
     onSuccess: (data) => {
-      console.log(data);
-      if (data.status === 200) {
-        window.location.href = "/confirm-otp";
+      console.log("Registration successful:", data);
+      
+      // Store email for OTP verification
+      localStorage.setItem("pendingVerificationEmail", formData.email);
+      
+      // Store token from registration response
+      if (data.data && data.data.token) {
+        setCookie("token", data.data.token, { path: "/" });
+        
+        // Store role if available
+        if (data.data.user && data.data.user.roles && data.data.user.roles.length > 0) {
+          const role = data.data.user.roles[0].name;
+          setCookie("role", role, { path: "/" });
+        }
       }
-      //   window.location.reload();
-
-      // window.location.href = "/" + role;
-      // alert("Login successful!");
-      // queryClient.invalidateQueries({ queryKey: ["todos"] });
+      
+      Swal.fire({
+        title: "Registrasi Berhasil!",
+        text: "Silakan verifikasi email Anda dengan kode OTP yang telah dikirim.",
+        icon: "success",
+        confirmButtonText: "Verifikasi Sekarang",
+      }).then(() => {
+        navigate("/confirm-otp");
+      });
     },
     onError: (error) => {
-      console.log(error);
+      console.log("Registration error: ", error);
+
+      const errorMessage = error.response?.data?.message || error.message;
+      Swal.fire("Registrasi Gagal!", errorMessage, "error");
     },
   });
 
@@ -110,23 +148,23 @@ const Register = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    mutation.mutate();
+    // if (!email.includes("@")) {
+    //   setEmailError("Email harus mengandung @");
+    //   return;
+    // }
 
-    if (!email.includes("@")) {
-      setEmailError("Email harus mengandung @");
-      return;
-    }
+    // if (password !== repeatPassword) {
+    //   setPasswordError("Password tidak cocok");
+    //   return;
+    // }
 
-    if (password !== repeatPassword) {
-      setPasswordError("Password tidak cocok");
-      return;
-    }
+    // if (showRegistrationCode && registrationCode.trim() === "") {
+    //   setRegistrationCodeError("Kode registrasi wajib diisi");
+    //   return;
+    // }
 
-    if (showRegistrationCode && registrationCode.trim() === "") {
-      setRegistrationCodeError("Kode registrasi wajib diisi");
-      return;
-    }
-
-    console.log("Form Submitted");
+    // console.log("Form Submitted");
   };
 
   return (
@@ -240,11 +278,13 @@ const Register = () => {
           {!showRegistrationCode ? (
             <div className="flex gap-4">
               <button
-                onClick={() => mutation.mutate()}
-                type="button"
+                type="submit"
                 className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600"
+                // onClick={() => mutation.mutate()}
+                disabled={mutation.isPending}
               >
-                Coba Gratis 14 Hari
+                {mutation.isPending ? "Mendaftar..." : "Coba Gratis 14 Hari"}
+                {/* Coba Gratis 14 Hari */}
               </button>
               <button
                 type="button"
@@ -277,17 +317,25 @@ const Register = () => {
               )}
               <button
                 // onClick={() => console.log(formData)}
-                onClick={() => mutation.mutate()}
                 type="submit"
                 className="mt-4 w-full bg-purple-900 text-white py-2 rounded-md hover:bg-purple-950"
+                disabled={mutation.isPending}
+                // onClick={() => mutation.mutate()}
               >
-                Daftar Sekarang
+                {mutation.isPending ? "Mendaftar..." : "Daftar Sekarang"}
+                {/* Daftar Sekarang */}
               </button>
             </div>
           )}
 
           {passwordError && (
             <p className="text-red-500 text-sm">{passwordError}</p>
+          )}
+
+          {mutation.isError && !passwordError && !emailError && !registrationCodeError && (
+            <p className="text-red-500 text-sm">
+              {mutation.error.response?.data?.message || mutation.error.message}
+            </p>
           )}
         </form>
         <p className="text-center text-sm text-black-600 mt-4">

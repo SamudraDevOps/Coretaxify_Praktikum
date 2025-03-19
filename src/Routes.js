@@ -72,6 +72,7 @@ export const RoutesApi = {
   profile_update: apiUrl + "profile/update", // req name, email, password, password_confirmation, image
   verify_otp: apiUrl + "verify-otp", // req email, otp
   resend_otp: apiUrl + "resend-otp", // req email
+  verification_status: apiUrl + "verification-status", // req token
 
   // get tasks : lecturer
   getTasksLecturer: apiUrl + `${role.lecturer}/contract-tasks`,
