@@ -258,7 +258,7 @@ const EditDosen = () => {
             placeholder="Cari Data Dosen 🔎"
           />
         </div>
-        <button
+        {/* <button
           className="add-button mr-3"
           onClick={() => {
             setIsOpen(true);
@@ -266,7 +266,7 @@ const EditDosen = () => {
           }}
         >
           + Import Dosen
-        </button>
+        </button> */}
         <button
           className="add-button"
           onClick={() => {
@@ -301,6 +301,7 @@ const EditDosen = () => {
         onClose={() => setEditPopupOpen(false)}
         dosen={selectedDosen}
         onSave={handleUpdateDosen}
+        refetch={refetch}
         // id={id}
       />
       <div className="table-container">

@@ -120,7 +120,7 @@ const TambahDosen = ({
         // check if required column exist
         const nameIndex = headers.indexOf("name");
         const emailIndex = headers.indexOf("email");
-        // const statusIndex = headers.indexOf("status");
+        const statusIndex = headers.indexOf("status");
 
         if (nameIndex === -1 || emailIndex === -1) {
           setImportError(
@@ -137,9 +137,9 @@ const TambahDosen = ({
             return {
               name: row[nameIndex] || "",
               email: row[emailIndex] || "",
-              // status: ["ACTIVE", "INACTIVE"].includes(status)
-              //   ? status
-              //   : "ACTIVE",
+              status: ["ACTIVE", "INACTIVE"].includes(status)
+                ? status
+                : "ACTIVE",
             };
           })
           .filter((student) => student.name && student.email);
@@ -181,17 +181,17 @@ const TambahDosen = ({
   const downloadTemplate = () => {
     // create worksheet
     const ws = XLSX.utils.aoa_to_sheet([
-      ["name", "email"],
-      ["John Doe", "john.doe@example.com"],
-      ["Jane Smith", "jane.smith@example.com"],
+      ["name", "email", "status"],
+      ["John Doe", "john.doe@example.com", "ACTIVE"],
+      ["Jane Smith", "jane.smith@example.com", "ACTIVE"],
     ]);
 
     // create workbook
     const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Students");
+    XLSX.utils.book_append_sheet(wb, ws, "dosen");
 
     // generate and download
-    XLSX.writeFile(wb, "student_import_template.xlsx");
+    XLSX.writeFile(wb, "dosen_import_template.xlsx");
   };
 
   return (
