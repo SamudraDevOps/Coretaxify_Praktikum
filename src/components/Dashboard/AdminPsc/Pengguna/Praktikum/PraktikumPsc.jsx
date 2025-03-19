@@ -19,7 +19,7 @@ const PraktikumPsc = () => {
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
   const [selectedAssignment, setSelectedAssignment] = useState(null);
   const [cookies] = useCookies(["user"]);
-  const [url, setUrl] = useState(RoutesApi.psc.assignments.url);
+  const [url, setUrl] = useState(RoutesApi.psc.assignments.index().url);
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
 
@@ -27,7 +27,7 @@ const PraktikumPsc = () => {
   const { data: groupsData, isLoading: groupsLoading } = useQuery({
     queryKey: ["groups_by_role"],
     queryFn: async () => {
-      const { data } = await axios.get(RoutesApi.psc.groups.url, {
+      const { data } = await axios.get(RoutesApi.psc.groups.index().url, {
         headers: {
           Authorization: `Bearer ${cookies.token}`,
           Accept: "application/json",
@@ -45,7 +45,7 @@ const PraktikumPsc = () => {
   const { data: tasksData } = useQuery({
     queryKey: ["soal_data"],
     queryFn: async () => {
-      const { data } = await axios.get(RoutesApi.psc.tasks.url, {
+      const { data } = await axios.get(RoutesApi.psc.tasks.index().url, {
         headers: {
           Authorization: `Bearer ${cookies.token}`,
           Accept: "application/json",
@@ -83,7 +83,7 @@ const PraktikumPsc = () => {
   const mutation = useMutation({
     mutationFn: async ({ id, action }) => {
       // Get CSRF token
-      const response = await axios.get(`${RoutesApi.url}api/csrf-token`, {
+      const response = await axios.get(RoutesApi.csrf, {
         headers: {
           "X-Requested-With": "XMLHttpRequest",
           Accept: "application/json",
@@ -127,7 +127,7 @@ const PraktikumPsc = () => {
         }
 
         return await axios.post(
-          RoutesApi.psc.assignments.url,
+          RoutesApi.psc.assignments.store().url,
           formDataObj,
           {
             headers: {
@@ -173,8 +173,9 @@ const PraktikumPsc = () => {
         // Append method to handle Laravel's form method spoofing
         formDataObj.append("_method", "PUT");
 
+        const updateEndpoint = RoutesApi.psc.assignments.update(id);
         return await axios.post(
-          `${RoutesApi.psc.assignments.url}/${id}`,
+          updateEndpoint.url,
           formDataObj,
           {
             headers: {
@@ -187,8 +188,9 @@ const PraktikumPsc = () => {
         );
       } else if (action === "delete" && id) {
         // Delete assignment
+        const deleteEndpoint = RoutesApi.psc.assignments.destroy(id);
         return await axios.delete(
-          `${RoutesApi.psc.assignments.url}/${id}`,
+          deleteEndpoint.url,
           {
             headers: {
               "X-CSRF-TOKEN": response.data.token,
@@ -226,8 +228,9 @@ const PraktikumPsc = () => {
   const downloadMutation = useMutation({
     mutationFn: async (id) => {
       try {
+        const showEndpoint = RoutesApi.psc.assignments.show(id);
         const response = await axios.get(
-          `${RoutesApi.psc.assignments.url}/${id}`,
+          showEndpoint.url,
           {
             headers: {
               Authorization: `Bearer ${cookies.token}`,
