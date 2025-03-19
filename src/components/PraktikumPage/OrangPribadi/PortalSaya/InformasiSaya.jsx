@@ -7,7 +7,7 @@ import { useUserType } from '@/components/context/userTypeContext';
 
 const InformasiSaya = () => {
     const [activeTab, setActiveTab] = useState("general");
-    const { userType } = useUserType(); // Ambil userType dari context
+    const { userType } = useUserType(); 
     const [userTypeFromStorage, setUserTypeFromStorage] = useState("");
 
     useEffect(() => {
@@ -58,6 +58,7 @@ const InformasiSaya = () => {
                                         ["Nomor KITAS/KITAP", "-"],
                                         ["Tanggal KITAS/KITAP", "-"],
                                         ["Jenis Pekerjaan", "Pelajar/Mahasiswa"],
+                                        ["Nama Ibu Kandung", "-"],
                                         ["Nomer Kartu Keluarga", "902991093901939"],
                                         ["NPWP Kepala FTU", "-"],
                                         ["Nama Kepala FTU", "-"],

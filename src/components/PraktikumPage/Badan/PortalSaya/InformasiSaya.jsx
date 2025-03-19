@@ -1,18 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import SidebarProfilSayaBadan from './SidebarProfilSaya';
 import { BsFiletypeXls } from "react-icons/bs";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Link } from "react-router-dom";
+import { useUserType } from '@/components/context/userTypeContext';
 
 const InformasiSayaBadan = () => {
     const [activeTab, setActiveTab] = useState("general");
+    const { userType } = useUserType();
+    const [userTypeFromStorage, setUserTypeFromStorage] = useState("");
+
+    useEffect(() => {
+        const storedUserType = localStorage.getItem("userType");
+        if (storedUserType) {
+            setUserTypeFromStorage(storedUserType);
+        }
+    }, []);
+
+    const getUserTypePath = () => {
+        const type = userType || userTypeFromStorage; 
+        return type === "Orang Pribadi" ? 1 : 2;
+    };
+
     return (
         <div className='flex h-screen bg-gray-100'>
             <SidebarProfilSayaBadan />
             <main className="flex-auto p-3 bg-white rounded-md h-full">
                 <div className="flex justify-between items-center mb-6">
                     <h2 className="text-2xl font-semibold">Informasi Umum Wajib Pajak</h2>
-                    <button className="px-4 py-2 bg-yellow-300 hover:bg-yellow-400 text-blue-900 rounded-md" onClick={() => window.location.href = "/admin/praktikum/profil-saya/informasi-umum/edit-data-profil"}>
+                    <button className="px-4 py-2 bg-yellow-300 hover:bg-yellow-400 text-blue-900 rounded-md" onClick={() => window.location.href = `/admin/praktikum/${getUserTypePath()}/profil-saya/informasi-umum/edit-data-profil`}>
                         Edit
                     </button>
                 </div>
@@ -30,37 +46,37 @@ const InformasiSayaBadan = () => {
                                     {[
                                         ["Nomor Pokok Wajib Pajak", "3510145907990002"],
                                         ["Nomor Identitas Kependudukan", "3510145907990002"],
-                                        ["Jenis Wajib Pajak", "Orang Pribadi atau Warisan Belum Terbagi"],
-                                        ["Kategori Individu", "Orang Pribadi"],
+                                        ["Bentuk Badan Hukum", "Orang Pribadi atau Warisan Belum Terbagi"],
+                                        ["Nomor Keputusan Pengesahan", "Orang Pribadi"],
                                         ["Nama", "PUTRI NURIL WULANATINING ASIH"],
-                                        ["Tempat Lahir", "BANYUWANGI"],
-                                        ["Tanggal Lahir", "19 Juli 1999"],
-                                        ["Jenis Kelamin", "Wanita"],
-                                        ["Status Perkawinan", "Tidak Kawin"],
-                                        ["Agama", "Islam"],
-                                        ["Kewarganegaraan", "Warga Negara Indonesia"],
-                                        ["Negara Asal", "Indonesia"],
-                                        ["Nomor Pokok Wajib Pajak dari Negara Asal", "-"],
-                                        ["Nomor KITAS/KITAP", "-"],
-                                        ["Tanggal KITAS/KITAP", "-"],
-                                        ["Jenis Pekerjaan", "Pelajar/Mahasiswa"],
-                                        ["Nomer Kartu Keluarga", "902991093901939"],
-                                        ["NPWP Kepala FTU", "-"],
-                                        ["Nama Kepala FTU", "-"],
-                                        ["Sumber Penghasilan", "Pekerjaan"],
-                                        ["Izin Usaha", "-"],
-                                        ["Tanggal Izin Usaha", "-"],
-                                        ["Memiliki Karyawan", "Tidak"],
+                                        ["Tanggal Keputusan Pengesahan", "BANYUWANGI"],
+                                        ["Nomor Akta Pendirian", "19 Juli 1999"],
+                                        ["Tempat Pendirian", "Wanita"],
+                                        ["Tempat Perubahan", "Tidak Kawin"],
+                                        ["Tanggal Pendirian", "Islam"],
+                                        ["Akta Perubahan", "Warga Negara Indonesia"],
+                                        ["NIK Notaris", "Indonesia"],
+                                        ["Tanggal Perubahan", "-"],
+                                        ["Nama Notaris/Pejabat Penandatangan Nama Notaris/Pejabat Penandatangan", "-"],
+                                        ["Jenis Perusahaan/Modal", "-"],
+                                        ["Modal Dasar", "Pelajar/Mahasiswa"],
+                                        ["Modal Ditempatkan", "-"],
+                                        ["Modal Disetor", "902991093901939"],
+                                        ["Participating Interest", "-"],
+                                        ["Status Operator", "-"],
+                                        ["Merek Dagang/usaha", "Pekerjaan"],
+                                        ["Memiliki Karyawan", "-"],
                                         ["Jumlah Karyawan", "-"],
                                         ["Metode Pembukuan/Pencatatatan", "Pencatatan"],
                                         ["Mata Uang Pembukuan", "Rupiah Indonesia"],
                                         ["Periode Pembukuan", "0-12"],
-                                        ["Tempat Kerja", "-"],
-                                        ["Pendapatan per Bulan", "Kurang dari Rp 4.500.000"],
-                                        ["Omset per Tahun", "Lebih dari Rp 4,8 M"],
-                                        ["Tanggal Pendaftaran", "09 Maret 2022"],
-                                        ["Tanggal Aktivasi", "09 Maret 2022"],
-                                        ["Status Wajib Pajak", "Aktif"],
+                                        ["Tanggal Pendaftaran", "0-12"],
+                                        ["Omset Per tahun", "-"],
+                                        ["Jumlah Peredaran Bruto", "-"],
+                                        ["Tanggal Aktivasi", "Kurang dari Rp 4.500.000"],
+                                        ["Status Wajib Pajak", "Lebih dari Rp 4,8 M"],
+                                        ["Tanggal Pengukuhan Pengusaha Kena Pajak", "09 Maret 2022"],
+                                        ["Penonaktifan Akses Pembuatan Faktur Pajak", "09 Maret 2022"],
 
                                     ].map(([label, value], index) => (
                                         <div key={index} className="grid grid-cols-[250px_10px_auto]">
@@ -72,10 +88,6 @@ const InformasiSayaBadan = () => {
                                 </div>
                                 <div className="space-y-2 h-full">
                                     {[
-                                        ["Penunjukan Perwakilan", "X"],
-                                        ["Penonaktifan Akses Pembuatan Faktur Pajak", "X"],
-                                        ["Participating Interest", "X"],
-                                        ["Status Operator", "X"],
                                         ["Pemungut PPN eCommerce", "X"],
                                         ["Penghasilan atau Pemotong atau Pemungut PPN", "X"],
                                         ["PPN yang dianggap", "X"],
@@ -86,15 +98,13 @@ const InformasiSayaBadan = () => {
                                         ["PMK-131/PMK.03/2017", "X"],
                                         ["Perusahaan Tercatat", "X"],
                                         ["Badan Usaha Milik Negara", "X"],
-                                        ["Bahasa yang Dipilih", "English"],
-                                        ["Kantor Wilayah", "Kantor Wilayah DJP Jawa Timur III"],
-                                        ["Kantor Pelayanan Pajak", "Kantor Pelayanan Pajak Pratama Banyuwangi"],
-                                        ["Nomor Telepon Seluler Utama", "081330799798"],
-                                        ["Alamat Surat Elektronik Utama", "putrinurilwulan4@gmail.com"],
-                                        ["Seksi Pengawasan", "-"],
-                                        ["Status Pengusaha Kena Pajak", "X"],
-                                        ["Tanggal Pengukuhan Pengusaha Kena Pajak"]
-                                    ].map(([label, value], index) => (
+                                        ["Bahasa yang Dipilih", "X"],
+                                        ["Kantor Wilayah", "X"],
+                                        ["Kantor Pelayanan Pajak", "X"],
+                                        ["Nomor Telepon Seluler Utama", "X"],
+                                        ["Alamat Surat Elektronik Utama", "English"],
+                                        ["Seksi Pengawasan", "Kantor Wilayah DJP Jawa Timur III"],
+                                        ].map(([label, value], index) => (
                                         <div key={index} className="grid grid-cols-[250px_10px_auto]">
                                             <p className="font-bold text-gray-800">{label}</p>
                                             <p className="text-center">:</p>
