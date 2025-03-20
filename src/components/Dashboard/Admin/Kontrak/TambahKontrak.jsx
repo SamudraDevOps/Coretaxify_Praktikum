@@ -295,6 +295,7 @@ const TambahKontrak = ({
               name="periodeAkhir"
               value={formData.periodeAkhir}
               onChange={handleChange}
+              min={formData.periodeAwal || new Date().toISOString().split("T")[0]} 
               required
             />
           </div>
