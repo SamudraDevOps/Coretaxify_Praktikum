@@ -58,23 +58,24 @@ const apiResource = (baseUrl, resourceName) => {
 
 export const RoutesApi = {
   // base url
-  // url: url,
+  apiUrl: apiUrl,
 
-  // // auth non-login
-  // csrf: url + "csrf-token",
-  // register: url + "register", // req name, email, password, password_confirmation, contract_code (class_code for psc)
-  // verify_otp: url + "verify-otp", // req email, otp
-  // resend_otp: url + "resend-otp", // req email
-  // login: url + "login", // req email, password
-  // reset_password: url + "reset-password", // req email
+  // auth non-login
+  csrf: apiUrl + "csrf-token",
+  register: apiUrl + "register", // req name, email, password, password_confirmation, contract_code (class_code for psc)
+  login: apiUrl + "login", // req email, password
+  reset_password: apiUrl + "reset-password", // req email
   
-  // // auth after-login
-  // logout: url + "logout", // req token
-  // profile: url + "profile", // req token
-  // profile_update: url + "profile/update", // req name, email, password, password_confirmation, image
+  // auth after-login
+  logout: apiUrl + "logout", // req token
+  profile: apiUrl + "profile", // req token
+  profile_update: apiUrl + "profile/update", // req name, email, password, password_confirmation, image
+  verify_otp: apiUrl + "verify-otp", // req email, otp
+  resend_otp: apiUrl + "resend-otp", // req email
+  verification_status: apiUrl + "verification-status", // req token
 
   // get tasks : lecturer
-  // getTasksLecturer: url + `${role.lecturer}/contract-tasks`,
+  getTasksLecturer: apiUrl + `${role.lecturer}/contract-tasks`,
 
   // api that use resource
   // admin

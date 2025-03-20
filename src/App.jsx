@@ -106,7 +106,7 @@ import DosenPraktikumKelasMember from "./components/Dashboard/Dosen/Kelas/DosenP
 
 const Main = () => {
   const [loading, setLoading] = useState(true);
-  const [cookies, setCookie] = useCookies([""]);
+  const [cookies, setCookie] = useCookies(["token, role"]);
 
   useEffect(() => {
     setLoading(true);
@@ -114,6 +114,50 @@ const Main = () => {
       setLoading(false);
     }, 0);
   }, []);
+
+  // In the useEffect that validates the token
+  useEffect(() => {
+    const validateToken = async () => {
+      if (cookies.token) {
+        try {
+          // Try to get user profile to validate token
+          await axios.get(RoutesApi.profile, {
+            headers: {
+              Authorization: `Bearer ${cookies.token}`,
+              Accept: "application/json",
+            }
+          });
+          // Token is valid, check verification status
+          try {
+            const verificationResponse = await axios.get(RoutesApi.apiUrl + "verification-status", {
+              headers: {
+                Authorization: `Bearer ${cookies.token}`,
+                Accept: "application/json",
+              }
+            });
+            
+            // If not verified, store email for OTP verification
+            if (!verificationResponse.data.verified) {
+              localStorage.setItem("pendingVerificationEmail", verificationResponse.data.email);
+            }
+          } catch (verificationError) {
+            console.error("Verification status check error:", verificationError);
+          }
+        } catch (error) {
+          console.error("Token validation error:", error);
+          // If token is invalid, clear cookies and redirect to login
+          if (error.response?.status === 401) {
+            setCookie("token", "", { path: "/", expires: new Date(0) });
+            setCookie("role", "", { path: "/", expires: new Date(0) });
+            window.location.href = "/login";
+          }
+        }
+      }
+    };
+
+    validateToken();
+  }, [cookies.token, setCookie]);
+
   return loading ? (
     <div className="loading">
       <ClipLoader color="#7502B5" size={50} />
