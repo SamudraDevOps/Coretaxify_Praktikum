@@ -87,6 +87,7 @@ const EditDosen = () => {
     mutationFn: async ({ lecturers, contract_id }) => {
       console.log("contract", lecturers);
       const csrf = await getCsrf();
+
       const createPromises = lecturers.map((dosen) => {
         return axios.post(
           RoutesApi.url + "api/admin/users",

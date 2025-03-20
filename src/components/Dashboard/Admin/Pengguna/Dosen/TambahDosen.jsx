@@ -54,7 +54,7 @@ const TambahDosen = ({
 
   // Add a new student row
   const addStudentRow = () => {
-    setStudents([...students, { name: "", email: "" }]);
+    setStudents([...students, { name: "", email: "", status: "ACTIVE" }]);
   };
 
   // Remove a student row
@@ -83,6 +83,7 @@ const TambahDosen = ({
       alert("Terdapat email duplikat. Email dosen tidak boleh sama");
       return;
     }
+    console.log("validStudents", students);
 
     onSave(validStudents, formData.contract_id);
   };
@@ -272,7 +273,7 @@ const TambahDosen = ({
             </div>
 
             <div className="students-counter">
-              <strong>{students.length}</strong> mahasiswa akan ditambahkan
+              <strong>{students.length}</strong> dosen akan ditambahkan
             </div>
             <div className="students-table">
               <div className="students-table-header">
@@ -370,7 +371,7 @@ const TambahDosen = ({
           // single student
           <form>
             <div className="edit-form-group-mahasiswa">
-              <label>Nama Mahasiswa:</label>
+              <label>Nama Dosen:</label>
               <input
                 type="text"
                 name="name"
