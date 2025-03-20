@@ -276,7 +276,7 @@ const TambahDosen = ({
             </div>
             <div className="students-table">
               <div className="students-table-header">
-                <div className="student-field-header">Nama Mahasiswa</div>
+                <div className="student-field-header">Nama Dosen</div>
                 <div className="student-field-header">Email</div>
                 {/* <div className="student-field-header">Status</div> */}
                 <div className="student-field-header actions">Actions</div>

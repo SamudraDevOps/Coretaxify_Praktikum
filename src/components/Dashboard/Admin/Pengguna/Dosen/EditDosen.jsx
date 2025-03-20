@@ -119,7 +119,7 @@ const EditDosen = () => {
       });
     },
     onSuccess: (data) => {
-      Swal.fire("Berhasil!", "Kelas berhasil dihapus!", "success").then(
+      Swal.fire("Berhasil!", "Dosen berhasil ditambahkan!", "success").then(
         (result) => {
           if (result.isConfirmed) {
             setTambahPopupOpen(false);
@@ -220,12 +220,14 @@ const EditDosen = () => {
     },
     onSuccess: (data) => {
       console.log(data);
-      Swal.fire("Berhasil!", "Terjadi Kesalahan!", "error").then((result) => {
-        if (result.isConfirmed) {
-          refetch();
-          // window.location.reload();
+      Swal.fire("Berhasil!", "Data Dosen berhasil dihapus.", "success").then(
+        (result) => {
+          if (result.isConfirmed) {
+            refetch();
+            // window.location.reload();
+          }
         }
-      });
+      );
       // const role = data.data.user.roles[0].name;
       // setCookie("token", data.data.token, { path: "/" });
       // setCookie("role", role, { path: "/" });
@@ -236,14 +238,12 @@ const EditDosen = () => {
     },
     onError: (error) => {
       console.log(error);
-      Swal.fire("Gagal!", "Data dosen berhasil dihapus!", "success").then(
-        (result) => {
-          if (result.isConfirmed) {
-            refetch();
-            // window.location.reload();
-          }
+      Swal.fire("Gagal!", "Terjadi kesalahan!", "success").then((result) => {
+        if (result.isConfirmed) {
+          refetch();
+          // window.location.reload();
         }
-      );
+      });
     },
   });
 
