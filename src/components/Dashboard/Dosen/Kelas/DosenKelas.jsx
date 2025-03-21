@@ -32,6 +32,8 @@ import { HiDotsVertical } from "react-icons/hi";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 import { RxCross1 } from "react-icons/rx";
+import { FaRegCopy } from "react-icons/fa";
+import { useToast } from "@/hooks/use-toast";
 
 export default function DosenKelas() {
   const [isOpen, setIsOpen] = useState(false);
@@ -43,6 +45,7 @@ export default function DosenKelas() {
   const itemsPerPage = 10;
   const [cookies, setCookie] = useCookies(["user"]);
   const [filePreview, setFilePreview] = useState(null);
+  const { toast } = useToast();
 
   const { isLoading, isError, data, error, refetch } = useQuery({
     queryKey: ["kelas_dosen", url],
@@ -315,7 +318,16 @@ export default function DosenKelas() {
 
   return (
     <div className="kontrak-container">
-      <div className="header">
+      <div
+        className="header "
+        onClick={() => {
+          alert("miaw")
+          toast({
+            title: "Kode Kelas berhasil di copy",
+            description: "",
+          });
+        }}
+      >
         <h2>Kelas</h2>
       </div>
       <div className="search-add-container">
@@ -514,10 +526,28 @@ export default function DosenKelas() {
               </div>
               <div className="p-4">
                 <ul className="text-gray-700 text-sm space-y-2 h-10">
-                  <li>
+                  <li className="flex gap-2">
                     <strong className="text-indigo-700">
                       Kode Kelas : {item.class_code}
                     </strong>
+
+                    {/* <div className=""> */}
+                    <FaRegCopy
+                      onClick={(e) => {
+                        // e.stopPropagation();
+
+                        e.preventDefault();
+                        navigator.clipboard.writeText(item.class_code);
+                        toast({
+                          title: "Kode Kelas berhasil di copy",
+                          description: "",
+                        });
+                        // alert("miaw");
+                      }}
+                      className="hover:bg-slate-300 p-1 rounded-md"
+                      size={25}
+                    />
+                    {/* </div> */}
                   </li>
                 </ul>
               </div>
