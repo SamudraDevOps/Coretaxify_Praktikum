@@ -32,6 +32,8 @@ import {
 } from "@/hooks/dashboard";
 import { getCookie } from "@/service";
 import { RxCross1 } from "react-icons/rx";
+import { FaRegCopy } from "react-icons/fa";
+import { useToast } from "@/hooks/use-toast";
 
 export default function DosenPraktikumKelas() {
   const [isOpen, setIsOpen] = useState(false);
@@ -43,6 +45,7 @@ export default function DosenPraktikumKelas() {
   const [url, setUrl] = useState(RoutesApi.classGroup.url);
   const [updateUrl, setUpdateUrl] = useState("");
   const [filePreview, setFilePreview] = useState(null);
+  const { toast } = useToast();
   const [formData, setFormData] = useState({
     name: "",
     // assignment_code: "",
@@ -322,7 +325,10 @@ export default function DosenPraktikumKelas() {
                         type="date"
                         name="end_period"
                         onChange={handleChange}
-                        min={formData.periodeAwal || new Date().toISOString().split("T")[0]} 
+                        min={
+                          formData.periodeAwal ||
+                          new Date().toISOString().split("T")[0]
+                        }
                       />
                     </div>
                   </form>
@@ -373,7 +379,25 @@ export default function DosenPraktikumKelas() {
               <tr key={index}>
                 <td className="max-w-5">{index + 1}</td>
                 <td>{item.name}</td>
-                <td>{item.assignment_code}</td>
+                <td className="flex gap-3 justify-center">
+                  {item.assignment_code}
+
+                  <FaRegCopy
+                    onClick={(e) => {
+                      // e.stopPropagation();
+
+                      e.preventDefault();
+                      navigator.clipboard.writeText(item.assignment_code);
+                      toast({
+                        title: "Copy berhasil",
+                        description: "Kode Kelas berhasil dicopy",
+                      });
+                      // alert("miaw");
+                    }}
+                    className="hover:bg-slate-300 p-1 rounded-md"
+                    size={25}
+                  />
+                </td>
                 <td>{item.end_period}</td>
                 <td>
                   {/* <a href="/google">tes</a> */}
