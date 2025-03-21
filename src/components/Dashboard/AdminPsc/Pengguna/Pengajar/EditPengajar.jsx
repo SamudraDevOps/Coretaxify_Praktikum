@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./editPengajar.css";
 import EditPopupPengajar from "./EditPopupPengajar";
-import TambahDosen from "./TambahDosen";
+import TambahPengajar from "./TambahPengajar";
 import Swal from "sweetalert2";
 import { CookiesProvider, useCookies } from "react-cookie";
 import axios from "axios";
@@ -391,7 +391,7 @@ const EditPengajar = () => {
       
       {/* Create Single Instructor Popup */}
       {isCreateOpen && (
-        <TambahDosen
+        <TambahPengajar
           isOpen={isCreateOpen}
           onClose={() => setIsCreateOpen(false)}
           onSave={handleCreateInstructor}
@@ -403,7 +403,7 @@ const EditPengajar = () => {
       
       {/* Create Multiple Instructors Popup */}
       {isMultipleCreateOpen && (
-        <TambahDosen
+        <TambahPengajar
           isOpen={isMultipleCreateOpen}
           onClose={() => setIsMultipleCreateOpen(false)}
           onSave={handleCreateMultipleInstructors}

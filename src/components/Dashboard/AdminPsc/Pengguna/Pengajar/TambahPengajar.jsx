@@ -1,10 +1,10 @@
 import React, { useState, useRef } from "react";
-import "./tambahDosen.css";
+import "./tambahPengajar.css";
 import { IoMdClose } from "react-icons/io";
 import { FaFileImport, FaPlus, FaTrash } from "react-icons/fa";
 import * as XLSX from 'xlsx';
 
-const TambahDosen = ({ 
+const TambahPengajar = ({ 
   isOpen, 
   onClose, 
   onSave,
@@ -179,9 +179,9 @@ const TambahDosen = ({
   };
 
   return (
-    <div className="tambah-dosen-overlay">
-      <div className="tambah-dosen-container">
-        <div className="tambah-dosen-header">
+    <div className="tambah-instruktur-overlay">
+      <div className="tambah-instruktur-container">
+        <div className="tambah-instruktur-header">
           <h2>Tambah Pengajar</h2>
           <button className="close-button" onClick={onClose}>
             <IoMdClose />
@@ -310,7 +310,7 @@ const TambahDosen = ({
               </button>
             </div>
             
-            <div className="tambah-dosen-actions">
+            <div className="tambah-instruktur-actions">
               <button 
                 className="cancel-button" 
                 onClick={onClose}
@@ -336,7 +336,7 @@ const TambahDosen = ({
           </div>
         ) : (
           <> 
-            <div className="tambah-dosen-form">
+            <div className="tambah-instruktur-form">
               <div className="form-group">
                 <label>Nama Pengajar:</label>
                 <input
@@ -376,7 +376,7 @@ const TambahDosen = ({
                 <p>Password akan digenerate secara otomatis dan akan dikirimkan ke email pengajar.</p>
               </div>
             </div>
-            <div className="tambah-dosen-actions">
+            <div className="tambah-instruktur-actions">
               <button 
                 className="cancel-button" 
                 onClick={onClose}
@@ -398,4 +398,4 @@ const TambahDosen = ({
   );
 };
 
-export default TambahDosen;
+export default TambahPengajar;
