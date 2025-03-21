@@ -320,13 +320,13 @@ export default function DosenKelas() {
     <div className="kontrak-container">
       <div
         className="header "
-        onClick={() => {
-          alert("miaw")
-          toast({
-            title: "Kode Kelas berhasil di copy",
-            description: "",
-          });
-        }}
+        // onClick={() => {
+        //   alert("miaw")
+        //   toast({
+        //     title: "Kode Kelas berhasil di copy",
+        //     description: "",
+        //   });
+        // }}
       >
         <h2>Kelas</h2>
       </div>
@@ -373,7 +373,7 @@ export default function DosenKelas() {
               <div className="bg-purple-700 flex justify-between text-white p-4 rounded-t-lg w-150 relative">
                 <div className="">
                   <h3 className="font-bold text-lg">{item.name}</h3>
-                  <p className="text-sm">Pengajar : { }</p>
+                  <p className="text-sm">Pengajar : {}</p>
                 </div>
 
                 <AlertDialog
@@ -539,8 +539,8 @@ export default function DosenKelas() {
                         e.preventDefault();
                         navigator.clipboard.writeText(item.class_code);
                         toast({
-                          title: "Kode Kelas berhasil di copy",
-                          description: "",
+                          title: "Copy berhasil",
+                          description: "Kode Kelas berhasil dicopy",
                         });
                         // alert("miaw");
                       }}
@@ -591,10 +591,11 @@ export default function DosenKelas() {
                             </button>
                         ))} */}
           <button
-            className={`page-item ${currentPage === Math.ceil(data.length / itemsPerPage)
+            className={`page-item ${
+              currentPage === Math.ceil(data.length / itemsPerPage)
                 ? "disabled"
                 : ""
-              }`}
+            }`}
             onClick={() => {
               console.log(data.links.next);
               setUrl(data.links.next);
@@ -678,7 +679,10 @@ export default function DosenKelas() {
                       name="end_period"
                       value={formData.end_period}
                       onChange={handleChange}
-                      min={formData.start_period || new Date().toISOString().split("T")[0]} 
+                      min={
+                        formData.start_period ||
+                        new Date().toISOString().split("T")[0]
+                      }
                     />
                   </div>
                   <div className="edit-form-group-mahasiswa">
