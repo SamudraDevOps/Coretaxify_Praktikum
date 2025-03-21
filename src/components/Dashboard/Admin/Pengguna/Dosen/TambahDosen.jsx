@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
-import "./editPopupMahasiswa.css";
+import "./editPopupDosen.css";
+// import "../../../AdminPsc/Pengguna/Mahasiswa/editPopupMahasiswa.css"
 import { FaPlus, FaTrash, FaFileImport } from "react-icons/fa";
 import * as XLSX from "xlsx";
 
@@ -164,9 +165,7 @@ const TambahDosen = ({
         setStudents(importedStudents);
 
         // show success message
-        setImportSuccess(
-          `${importedStudents.length} mahasiswa berhasil diimport.`
-        );
+        setImportSuccess(`${importedStudents.length} dosen berhasil diimport.`);
 
         // reset file input
         e.target.value = null;
@@ -206,9 +205,9 @@ const TambahDosen = ({
   };
 
   return (
-    <div className="edit-popup-container-mahasiswa ">
-      <div className="edit-popup-content-mahasiswa">
-        <div className="edit-popup-header-mahasiswa">
+    <div className="edit-popup-container-dosen-admin ">
+      <div className="edit-popup-content-dosen-admin">
+        <div className="edit-popup-header-dosen-admin">
           <h2>{title}</h2>
         </div>
 
@@ -273,7 +272,7 @@ const TambahDosen = ({
             </div>
 
             <div className="students-counter">
-              <strong>{students.length}</strong> dosen akan ditambahkan
+              <strong>{students.length}</strong> dosen-admin akan ditambahkan
             </div>
             <div className="students-table">
               <div className="students-table-header">
@@ -342,7 +341,7 @@ const TambahDosen = ({
               </button>
             </div>
 
-            <div className="edit-popup-actions-mahasiswa">
+            <div className="edit-popup-actions-dosen-admin">
               <button
                 className="edit-save-button"
                 type="button"
@@ -370,7 +369,7 @@ const TambahDosen = ({
         ) : (
           // single student
           <form>
-            <div className="edit-form-group-mahasiswa">
+            <div className="edit-form-group-dosen-admin">
               <label>Nama Dosen:</label>
               <input
                 type="text"
@@ -382,7 +381,7 @@ const TambahDosen = ({
                 className={isReadOnly ? "read-only-field" : ""}
               />
             </div>
-            <div className="edit-form-group-mahasiswa">
+            <div className="edit-form-group-dosen-admin">
               <label>Email:</label>
               <input
                 type="email"
@@ -394,7 +393,7 @@ const TambahDosen = ({
                 className={isReadOnly ? "read-only-field" : ""}
               />
             </div>
-            <div className="edit-form-group-mahasiswa">
+            <div className="edit-form-group-dosen-admin">
               <label>Status:</label>
               {isReadOnly ? (
                 <input
@@ -417,17 +416,17 @@ const TambahDosen = ({
               )}
             </div>
             {isCreateMode && (
-              <div className="edit-form-group-mahasiswa">
+              <div className="edit-form-group-dosen-admin">
                 <p className="text-info">
                   <small>
                     Password akan digenerate secara otomatis dan akan dikirimkan
-                    ke email mahasiswa.
+                    ke email dosen-admin.
                   </small>
                 </p>
               </div>
             )}
 
-            <div className="edit-popup-actions-mahasiswa">
+            <div className="edit-popup-actions-dosen-admin">
               {!isReadOnly && (
                 <button
                   className="edit-save-button"
