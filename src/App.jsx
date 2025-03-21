@@ -26,6 +26,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import RoleProtectedRoutes from "./components/Dashboard/Auth/RoleProtectedRoutes";
+import NotFound from "./components/NotFound";
 // import { BrowserRouter, Routes, Route, Router } from "react-router";
 import ClipLoader from "react-spinners/ClipLoader";
 import EditArtikel from "./components/Dashboard/Admin/LandingPage/EditArtikel";
@@ -213,6 +214,20 @@ const Main = () => {
           <Route path="/psc/praktikum/:assignmentId/members" element={<AssignmentPscMember />} />
           <Route path="/psc/ujian" element={{/* <UjianPsc /> */}} />
           <Route path="/psc/edit-mahasiswa" element={<EditMahasiswaPsc />} />
+        </Route>
+
+        {/* MAHASISWA-PSC ROUTE */}
+        <Route element={<RoleProtectedRoutes allowedRoles={["mahasiswa-psc"]} layout= "mahasiswa-psc" />}>
+          {/* <Route path="/mahasiswa-psc/kelas" element={<MahasiswaPscKelas />} /> */}
+          {/* <Route path="/mahasiswa-psc/kelas/:id" element={<MahasiswaPscPraktikumKelas />} /> */}
+          {/* <Route path="/mahasiswa-psc/kelas/:id/praktikum/:idpraktikum" element={<MahasiswaPscPraktikumKelasMember />} /> */}
+          {/* <Route path="/mahasiswa-psc/praktikum" element={<MahasiswaPscPraktikum />} /> */}
+          {/* <Route path="/mahasiswa-psc/ujian" element={<MahasiswaPscUjian />} /> */}
+        </Route>
+
+        {/* PENGAJAR ROUTE */}
+        <Route element={<RoleProtectedRoutes allowedRoles={["instruktur"]} layout= "mahasiswa-psc" />}>
+          
         </Route>
 
         {/* Praktikum */}
@@ -424,6 +439,9 @@ const Main = () => {
           }
         />
         {/* Praktikum */}
+
+        {/* NOT FOUND ROUTE - LAST REGISTERED ROUTE */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
     // </BrowserRouter>
