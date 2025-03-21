@@ -10,6 +10,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
+import { FaRegCopy } from "react-icons/fa";
 
 import EditKontrak from "./EditKontrak";
 import { deleteContract, getContracts, testAlert } from "@/hooks/dashboard";
@@ -289,7 +290,25 @@ const Kontrak = () => {
                 <td>{item.spt}</td>
                 <td>{item.bupot}</td>
                 <td>{item.faktur}</td>
-                <td>{item.contract_code}</td>
+                <td className="">
+                  <div className="flex justify-center items-center gap-3">
+                    {item.contract_code}
+                    <FaRegCopy
+                      onClick={(e) => {
+                        // e.stopPropagation();
+                        e.preventDefault();
+                        navigator.clipboard.writeText(item.contract_code);
+                        toast({
+                          title: "Copy berhasil",
+                          description: "Kode Kelas berhasil dicopy",
+                        });
+                        // alert("miaw");
+                      }}
+                      className="hover:bg-slate-300 p-1 rounded-md"
+                      size={25}
+                    />
+                  </div>
+                </td>
                 <td>{item.is_buy_task === 1 ? "Ya" : "Tidak"}</td>
                 <td>{item.status}</td>
                 <td>
