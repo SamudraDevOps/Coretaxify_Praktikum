@@ -154,21 +154,38 @@ const EditPopupMahasiswa = ({
   };
 
   // download template
-  const downloadTemplate = () => {
-    // create worksheet
-    const ws = XLSX.utils.aoa_to_sheet([
-      ['name', 'email', 'status'],
-      ['John Doe', 'john.doe@example.com', 'ACTIVE'],
-      ['Jane Smith', 'jane.smith@example.com', 'INACTIVE'],
-    ]);
+  // Add or modify the downloadTemplate function in EditPopupMahasiswa.jsx
 
-    // create workbook
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Students');
-
-    // generate and download
-    XLSX.writeFile(wb, 'student_import_template.xlsx');
-  };
+const downloadTemplate = () => {
+  // Create a sample worksheet
+  const ws = XLSX.utils.aoa_to_sheet([
+    ['name', 'email', 'status'],
+    ['John Doe', 'john@example.com', 'ACTIVE'],
+    ['Jane Smith', 'jane@example.com', 'ACTIVE'],
+    ['Bob Johnson', 'bob@example.com', 'INACTIVE']
+  ]);
+  
+  // Set column widths for better readability
+  const colWidths = [{ wch: 25 }, { wch: 30 }, { wch: 15 }];
+  ws['!cols'] = colWidths;
+  
+  // Add cell comments
+  if (!ws.A1.c) ws.A1.c = [];
+  if (!ws.B1.c) ws.B1.c = [];
+  if (!ws.C1.c) ws.C1.c = [];
+  
+  // Add comments to header cells
+  ws.A1.c.push({a: "System", t: "Enter the full name of the student"});
+  ws.B1.c.push({a: "System", t: "Must be a valid email format (e.g., user@example.com)"});
+  ws.C1.c.push({a: "System", t: "Must be either ACTIVE or INACTIVE (case sensitive)"});
+  
+  // Create a workbook
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Students');
+  
+  // Generate and download the file
+  XLSX.writeFile(wb, 'student_import_template.xlsx');
+};
 
   return (
     <div className="edit-popup-container-mahasiswa">

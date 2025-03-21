@@ -1,5 +1,5 @@
 import React from "react";
-import "./editPopupMahasiswa.css";
+import "./editPopupMahasiswaKelas.css";
 
 const EditPopupMahasiswa = ({ 
   onClose, 
@@ -7,8 +7,9 @@ const EditPopupMahasiswa = ({
   onSave,
   formData,
   setFormData,
-  isReadOnly = false,
-  title = "Edit Mahasiswa"
+  isLoading = false,
+  title = "Edit Mahasiswa",
+  isReadOnly = false
 }) => {
   const handleChange = (e) => {
     if (isReadOnly) return;
@@ -17,16 +18,13 @@ const EditPopupMahasiswa = ({
   };
 
   return (
-    <div className="edit-popup-container-mahasiswa">
-      <div className="edit-popup-content-mahasiswa">
-        <div className="edit-popup-header-mahasiswa">
+    <div className="edit-popup-container-mahasiswa-kelas">
+      <div className="edit-popup-content-mahasiswa-kelas">
+        <div className="edit-popup-header-mahasiswa-kelas">
           <h2>{title}</h2>
         </div>
-        <form onSubmit={(e) => {
-          e.preventDefault();
-          if (!isReadOnly && onSave) onSave();
-        }}>
-          <div className="edit-form-group-mahasiswa">
+        <form>
+          <div className="edit-form-group-mahasiswa-kelas">
             <label>Nama Mahasiswa:</label>
             <input
               type="text"
@@ -35,10 +33,10 @@ const EditPopupMahasiswa = ({
               onChange={handleChange}
               required
               readOnly={isReadOnly}
-              className={isReadOnly ? "read-only-field" : ""}
+              className={isReadOnly ? "read-only-field-kelas" : ""}
             />
           </div>
-          <div className="edit-form-group-mahasiswa">
+          <div className="edit-form-group-mahasiswa-kelas">
             <label>Email:</label>
             <input
               type="email"
@@ -47,17 +45,45 @@ const EditPopupMahasiswa = ({
               onChange={handleChange}
               required
               readOnly={isReadOnly}
-              className={isReadOnly ? "read-only-field" : ""}
+              className={isReadOnly ? "read-only-field-kelas" : ""}
             />
           </div>
-          <div className="edit-popup-actions-mahasiswa">
-            {!isReadOnly && onSave && (
-              <button className="edit-save-button" type="submit">
-                Simpan
+          <div className="edit-form-group-mahasiswa-kelas">
+            <label>Status:</label>
+            {isReadOnly ? (
+              <input
+                type="text"
+                value={formData.status || ""}
+                readOnly
+                className="read-only-field-kelas"
+              />
+            ) : (
+              <select
+                name="status"
+                value={formData.status || ""}
+                onChange={handleChange}
+                required
+              >
+                <option value="">Pilih Status</option>
+                <option value="ACTIVE">Active</option>
+                <option value="INACTIVE">Inactive</option>
+              </select>
+            )}
+          </div>
+          
+          <div className="edit-popup-actions-mahasiswa-kelas">
+            {!isReadOnly && (
+              <button
+                className="edit-save-button-kelas"
+                type="button"
+                onClick={onSave}
+                disabled={isLoading}
+              >
+                {isLoading ? "Loading..." : "Simpan"}
               </button>
             )}
             <button
-              className="edit-cancel-button"
+              className="edit-cancel-button-kelas"
               type="button"
               onClick={onClose}
             >

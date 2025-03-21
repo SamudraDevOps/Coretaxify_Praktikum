@@ -32,7 +32,7 @@ const SidebarProfilSaya = () => {
                 <h2 className="text-lg font-bold mb-5">3510145907990002</h2> {/* Dari akun yang login */}
                 <h3 className="text-md font-semibold mb-5">PUTRI NURIL WULANATINING ASIH</h3> {/* Dari akun yang login */}
             </div>
-
+            
             <nav>
                 <ul className="space-y-1">
                     {menuItems.map((item, index) => {

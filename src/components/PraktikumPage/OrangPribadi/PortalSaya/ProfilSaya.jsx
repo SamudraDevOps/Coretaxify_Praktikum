@@ -29,27 +29,46 @@ const ProfilSaya = () => {
                         </TabsList>
 
                         <TabsContent value="profil">
-                            <div className="grid grid-cols-2 gap-6 p-4">
-                                <div className="space-y-4">
-                                    <p><strong>Nama:</strong> PUTRI NURIL WULANATINING ASIH</p>
-                                    <p><strong>Nomor Pokok Wajib Pajak:</strong> 3510145907990002</p>
-                                    <p><strong>Kegiatan Utama:</strong> PEGAWAI SWASTA</p>
-                                    <p><strong>Jenis Wajib Pajak:</strong> Orang Pribadi</p>
-                                    <p><strong>Kategori:</strong> Orang Pribadi</p>
-                                    <p><strong>Status NPWP:</strong> <span className="text-green-600 font-bold">Aktif</span></p>
-                                    <p><strong>Tanggal Terdaftar:</strong> 09 Maret 2022</p>
-                                    <p><strong>Tanggal Aktivasi:</strong> 09 Maret 2022</p>
-                                    <p><strong>Kantor Wilayah DJP:</strong> Kantor Wilayah DJP Jawa Timur III</p>
-                                    <p><strong>Kantor Pelayanan Pajak:</strong> Kantor Pelayanan Pajak Pratama Banyuwangi</p>
-                                    <p><strong>Seksi Pengawasan:</strong> Seksi Pengawasan II</p>
-                                    <p><strong>Tanggal Pembaruan Profil Terakhir:</strong> 20 Februari 2025</p>
+                            <div className="p-6 grid grid-cols-2 gap-4 w-full border-r-0 border-gray-500">
+                                <div className="space-y-2 h-full">
+                                    {[
+                                        ["Nama", "Putri Nuril Wulanatining"],
+                                        ["Nomor Pokok Wajib Pajak", "3510145907990002"],
+                                        ["Kegiatan Utama", "Kegiatan Penunjang Pendidikan"],
+                                        ["Jenis Wajib Pajak", "Orang Pribadi"],
+                                        ["Kategori Wajib Pajak", "Orang Pribadi"],
+                                        ["Status NPWP", "Aktif"],
+                                        ["Tanggal Terdaftar", "16 Maret 2024"],
+                                        ["Tanggal Aktivasi", "16 Maret 2024"],
+                                        ["Status Pengusaha Kena Pajak", ""],
+                                        ["Total Pengukuhan Pengusaha Kena Pajak", ""],
+                                        ["Kantor Wilayah Direktorat Jenderal Pajak", "Kantor Wilayah DJP Jawa Timur III"],
+                                        ["Kantor Pelayanan Pajak", "Kantor Pelayanan Pajak Pratama Banyuwangi"],
+                                        ["Seksi Pengawasan Pajak", "Seksi Pengawasan II"],
+                                        ["Tanggal Pembaruan Profil", "20 Februari 2025"],
+
+                                    ].map(([label, value], index) => (
+                                        <div key={index} className="grid grid-cols-[250px_10px_auto]">
+                                            <p className="font-bold text-gray-800">{label}</p>
+                                            <p className="text-center">:</p>
+                                            <p>{value}</p>
+                                        </div>
+                                    ))}
                                 </div>
-                                <div>
-                                    <p className="font-bold">Alamat Utama</p>
-                                    <p>JALAN NANGKA PERUM KALIREJO PERMAI BLOK P NO.1 RT 004 RW 003, KABAT, KAB. BANYUWANGI, JAWA TIMUR</p>
-                                    <p className="font-bold mt-4">Kontak Utama</p>
-                                    <p><strong>Nomor HP:</strong> 081330799798</p>
-                                    <p><strong>Email:</strong> putrinurilwulan4@gmail.com</p>
+                                <div className="space-y-2 h-full">
+                                    {[
+                                        ["Alamat Utama", "Jalan Nangka Perum Kalirejo Permai Blok A No. 15, RT.001/RW.001, Kalirejo, Kec. Banyuwangi, Kabupaten Banyuwangi, Jawa Timur 68411"],
+                                        ["Kontak Utama", "Nomor Handphone : 081234567890", "Email Utama : email@example.com",],
+                                        ["Klasifikasi Lapangan Usaha Utama", "Kode Klafikasi Lapangan Usaha : Z5000", "Deskripsi Klafikasi Lapangan Usaha : Pegawai Swasta"],
+
+                                    ].map(([label, value, text], index) => (
+                                        <div key={index} className="cols grid-cols-[250px_10px_auto]">
+                                            <p className="font-bold text-gray-800 ">{label} :</p>
+                                            {/* <p className="text-center">:</p> */}
+                                            <p className="mt-4 grid ">{value}</p>
+                                            <p className="mt-2">{text}</p>
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
                         </TabsContent>

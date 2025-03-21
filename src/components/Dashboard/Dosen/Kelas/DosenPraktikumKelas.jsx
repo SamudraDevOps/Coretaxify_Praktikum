@@ -313,6 +313,7 @@ export default function DosenPraktikumKelas() {
                         type="date"
                         name="start_period"
                         onChange={handleChange}
+                        min={new Date().toISOString().split("T")[0]}
                       />
                     </div>
                     <div className="edit-form-group-mahasiswa">
@@ -321,6 +322,7 @@ export default function DosenPraktikumKelas() {
                         type="date"
                         name="end_period"
                         onChange={handleChange}
+                        min={formData.periodeAwal || new Date().toISOString().split("T")[0]} 
                       />
                     </div>
                   </form>
