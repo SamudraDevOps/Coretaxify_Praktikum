@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 
 const TambahFakturKeluaran = () => {
     const [showDokumenTransaksi, setShowDokumenTransaksi] = useState(false);
+    const [showInformasiPembeli, setShowInformasiPembeli] = useState(false);
 
     const [selectedYear, setSelectedYear] = useState(new Date());
 
@@ -102,11 +103,68 @@ const TambahFakturKeluaran = () => {
                         </div>
                         <div className='space-y-2'>
                             <label className='block text-sm font-medium'>Pilih Alamat</label>
-                            <input type="text" className='p-2 border rounded w-full' placeholder='Link Bang, tanya pm jan tanya saia' disabled/>
+                            <input type="text" className='p-2 border rounded w-full' placeholder='Link Bang, tanya pm jan tanya saia' disabled />
                         </div>
                         <div className='space-y-2'>
                             <label className='block text-sm font-medium'>IDTKU</label>
-                            <input type="text" className='p-2 border rounded w-full bg-gray-100' value="000000" disabled/>
+                            <input type="text" className='p-2 border rounded w-full bg-gray-100' value="000000" disabled />
+                        </div>
+                    </div>
+                )}
+                <div className='border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100' onClick={() => setShowInformasiPembeli(!showInformasiPembeli)}>
+                    <h3 className='text-lg font-semibold'>Informasi Pembeli</h3>
+                    {showInformasiPembeli ? <FaChevronUp /> : <FaChevronDown />}
+                </div>
+                {showInformasiPembeli && (
+                    <div className='border rounded-md p-4 mb-2 grid grid-cols-3 gap-4 w-full'>
+                        <div className='space-y-2'>
+                            <label className='block text-sm font-medium'>NPWP </label>
+                            <input type="text" className='p-2 border rounded w-full' />
+                        </div>
+                        <div className='space-y-2'>
+                            <label className='block text-sm font-medium'>ID</label>
+                            <div className='grid grid-cols-2 gap-3 '>
+                                <div className='flex items-center gap-2'>
+                                    <input type="radio" name="identification" className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600' value="NPWP" />
+                                    <label className='text-sm'>NPWP</label>
+                                </div>
+                                <div className='flex items-center gap-2'>
+                                    <input type="radio" name="identification" className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600' value="Paspor" />
+                                    <label className='text-sm'>Paspor</label>
+                                </div>
+                                <div className='flex items-center gap-2'>
+                                    <input type="radio" name="identification" className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600' value="NIK" />
+                                    <label className='text-sm'>NIK</label>
+                                </div>
+                                <div className='flex items-center gap-2'>
+                                    <input type="radio" name="identification" className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600' value="Identitas Lain" />
+                                    <label className='text-sm'>Identitas Lain</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div className='space-y-2'>
+                            <label className='block text-sm font-medium'>Negara</label>
+                            <input type="text" className='p-2 border rounded w-full' />
+                        </div>
+                        <div className='space-y-2'>
+                            <label className='block text-sm font-medium'>Nomor Dokumen</label>
+                            <input type="text" className='p-2 border rounded w-full bg-gray-100' disabled/>
+                        </div>
+                        <div className='space-y-2'>
+                            <label className='block text-sm font-medium'>Nama</label>
+                            <input type="text" className='p-2 border rounded w-full' />
+                        </div>
+                        <div className='space-y-2'>
+                            <label className='block text-sm font-medium'>Alamat</label>
+                            <input type="text" className='p-2 border rounded w-full' disabled placeholder='Ngelink kang'/>
+                        </div>
+                        <div className='space-y-2'>
+                            <label className='block text-sm font-medium'>IDTKU</label>
+                            <input type="text" className='p-2 border rounded w-full bg-gray-100' value="000000"/>
+                        </div>
+                        <div className='space-y-2'>
+                            <label className='block text-sm font-medium'>Email</label>
+                            <input type="text" className='p-2 border rounded w-full' />
                         </div>
                     </div>
                 )}
