@@ -478,7 +478,6 @@ const Main = () => {
         />
         {/* Praktikum */}
 
-<<<<<<< HEAD
           {/* Praktikum  Orang Pribadi*/}
           <Route
             path="/admin/praktikum/1/prak1"
@@ -899,10 +898,8 @@ const Main = () => {
             }
           />
           {/* Praktikum Orang Pribadi*/}
-=======
         {/* NOT FOUND ROUTE - LAST REGISTERED ROUTE */}
         <Route path="*" element={<NotFound />} />
->>>>>>> aca2fea7f40c1084a001cc981cb5bcbc76128785
       </Routes>
     </Router>
     // </BrowserRouter>
