@@ -20,7 +20,7 @@ export default function UploadSoal() {
   const [selectedSoal, setSelectedSoal] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [cookies] = useCookies(["user"]);
-  const [url, setUrl] = useState(RoutesApi.psc.tasks.url);
+  const [url, setUrl] = useState(RoutesApi.psc.tasks.index().url);
   const [search, setSearch] = useState("");
 
   // Form data state for creating/editing soal
@@ -47,7 +47,7 @@ export default function UploadSoal() {
   const mutation = useMutation({
     mutationFn: async ({ id, action }) => {
       // Get CSRF token
-      const response = await axios.get(`${RoutesApi.url}api/csrf-token`, {
+      const response = await axios.get(RoutesApi.csrf, {
         headers: {
           "X-Requested-With": "XMLHttpRequest",
           Accept: "application/json",
@@ -59,11 +59,12 @@ export default function UploadSoal() {
       if (action === "create") {
         // Create new task
         const formDataObj = new FormData();
+        const storeEndpoint = RoutesApi.psc.tasks.store();
         formDataObj.append("name", formData.name);
         formDataObj.append("import_file", formData.import_file);
 
         return await axios.post(
-          RoutesApi.psc.tasks.url,
+          storeEndpoint.url,
           formDataObj,
           {
             headers: {
@@ -90,8 +91,9 @@ export default function UploadSoal() {
         // Append method to handle Laravel's form method spoofing
         formDataObj.append("_method", "PUT");
 
+        const updateEndpoint = RoutesApi.psc.tasks.update(id);
         return await axios.post(
-          `${RoutesApi.psc.tasks.url}/${id}`,
+          updateEndpoint.url,
           formDataObj,
           {
             headers: {
@@ -104,8 +106,9 @@ export default function UploadSoal() {
         );
       } else if (action === "delete" && id) {
         // Delete task
+        const deleteEndpoint = RoutesApi.psc.tasks.delete(id);
         return await axios.delete(
-          `${RoutesApi.psc.tasks.url}/${id}`,
+          deleteEndpoint.url,
           {
             headers: {
               "X-CSRF-TOKEN": response.data.token,

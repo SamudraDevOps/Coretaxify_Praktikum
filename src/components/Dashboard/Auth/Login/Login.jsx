@@ -1,19 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaRegEye, FaEyeSlash } from "react-icons/fa";
-// import CTaxifyLogo from "..//Assets/image/4.png";
 import CTaxifyLogo from "../../../../assets/images/4.png";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { RoutesApi } from "@/Routes";
-import { CookiesProvider, useCookies } from "react-cookie";
-// import { p } from "react-router/dist/development/fog-of-war-Ckdfl79L";
+import { useCookies } from "react-cookie";
+import Swal from "sweetalert2";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [cookies, setCookie] = useCookies(["token"]);
+  // const [cookies, setCookie] = useCookies(["token"]);
   const [errors, setErrors] = useState({});
 
   const validate = () => {
@@ -45,52 +44,111 @@ const Login = () => {
   useEffect(() => {
     validate();
   }, [username, password]);
+  const [cookies, setCookie] = useCookies(["token", "role"]);
+  const navigate = useNavigate();
+
+  // Check if already logged in
+  useEffect(() => {
+    if (cookies.token && cookies.role) {
+      navigate(`/${cookies.role}`);
+    }
+  }, [cookies.token, cookies.role, navigate]);
 
   const togglePassword = () => {
     setShowPassword(!showPassword);
   };
+
   const mutation = useMutation({
     mutationFn: async () => {
-      console.log("button clicked");
-
-      // const { response } = await axios.post(RoutesApi.login, {
-      const response = await axios.get(`${RoutesApi.url}api/csrf-token`, {
-        // withCredentials: true,
+      // Get CSRF token
+      const response = await axios.get(RoutesApi.csrf, {
         headers: {
           "X-Requested-With": "XMLHttpRequest",
           Accept: "application/json",
         },
       });
-      // console.log(response);
+      
       axios.defaults.headers.common["X-CSRF-TOKEN"] = response.data.token;
-      const data = await axios.post(
-        RoutesApi.login,
-        {
-          email: username,
-          password: password,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            Authorization: `Bearer ${response.data.token}`,
+      
+      try {
+        // Login
+        const data = await axios.post(
+          RoutesApi.login,
+          {
+            email: username,
+            password: password,
           },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+              "X-CSRF-TOKEN": response.data.token,
+            },
+          }
+        );
+        return data;
+      } catch (error) {
+        // Check if this is a 403 with verification_required flag
+        if (error.response && 
+            error.response.status === 403 && 
+            error.response.data.verification_required) {
+          // This is not a real error, but a signal that verification is needed
+          return {
+            status: 403,
+            data: error.response.data,
+            needsVerification: true
+          };
         }
-      );
-      // console.log(data);
-      return data;
+        // For other errors, rethrow
+        throw error;
+      }
     },
-    onSuccess: (data) => {
-      console.log(data);
-      const role = data.data.user.roles[0].name;
-      setCookie("token", data.data.token, { path: "/" });
+    onSuccess: (response) => {
+      console.log("Login response:", response);
+      
+      // Check if verification is required
+      if (response.status === 403 && response.needsVerification) {
+        // Store token for verification
+        setCookie("token", response.data.token, { path: "/" });
+        
+        // Store user email for verification
+        localStorage.setItem("pendingVerificationEmail", username);
+        
+        // Extract and store role information if available
+        if (response.data.user && response.data.user.roles && response.data.user.roles.length > 0) {
+          const role = response.data.user.roles[0].name;
+          setCookie("role", role, { path: "/" });
+        }
+        
+        // Redirect to OTP verification
+        Swal.fire({
+          title: "Verifikasi Email Diperlukan",
+          text: "Silakan verifikasi email Anda terlebih dahulu.",
+          icon: "info",
+          confirmButtonText: "Verifikasi Sekarang",
+        }).then(() => {
+          navigate("/confirm-otp");
+        });
+        return;
+      }
+      
+      // Normal login flow for verified users
+      const role = response.data.user.roles[0].name;
+      setCookie("token", response.data.token, { path: "/" });
       setCookie("role", role, { path: "/" });
-
-      window.location.href = "/" + role;
-      // alert("Login successful!");
-      // queryClient.invalidateQueries({ queryKey: ["todos"] });
+      
+      // Redirect to dashboard
+      navigate(`/${role}`);
     },
-  });
+    onError: (error) => {
+      console.error("Login error:", error);
+      Swal.fire(
+        "Login Gagal!",
+        error.response?.data?.message || "Email atau password salah.",
+        "error"
+      );
+    },
+  });  
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -123,10 +181,10 @@ const Login = () => {
               Email
             </label>
             <input
-              type="text"
+              type="email"
               id="username"
               className="mt-1 block w-full p-2 border rounded-md"
-              placeholder="Masukkan username Anda"
+              placeholder="Masukkan email Anda"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
@@ -177,14 +235,18 @@ const Login = () => {
 
           <button
             type="submit"
-            className="w-full bg-purple-900 text-white py-2 rounded-md hover:bg-purple-950 h-10 "
+            className="w-full bg-purple-900 text-white py-2 rounded-md hover:bg-purple-950 h-10"
+            disabled={mutation.isPending}
           >
-            {mutation.status == "pending" ? <p>Loading...</p> : <>Login</>}
+            {mutation.isPending ? "Memproses..." : "Login"}
           </button>
+          
+          {mutation.isError && (
+            <div className="text-xs mt-2 text-red-700">
+              {mutation.error.response?.data?.message || "Terjadi kesalahan. Silakan coba lagi."}
+            </div>
+          )}
         </form>
-        <div className="text-xs  mt-2 text-red-700">
-          {mutation.isError && mutation.error.response.data.message}
-        </div>
 
         <p className="text-center text-sm text-black-600 mt-4">
           Belum punya akun?{" "}

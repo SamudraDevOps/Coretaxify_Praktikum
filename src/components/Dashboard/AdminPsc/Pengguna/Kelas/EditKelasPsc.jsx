@@ -19,7 +19,7 @@ const EditKelasPsc = () => {
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
   const [currentPage, setCurrentPage] = useState(1);
   const [cookies] = useCookies(["user"]);
-  const [url, setUrl] = useState(RoutesApi.psc.groups.url);
+  const [url, setUrl] = useState(RoutesApi.psc.groups.index().url);
   const [search, setSearch] = useState("");
 
   // Form data state for creating/editing
@@ -72,7 +72,7 @@ const EditKelasPsc = () => {
   const mutation = useMutation({
     mutationFn: async ({ id, action }) => {
       // Get CSRF token
-      const response = await axios.get(`${RoutesApi.url}api/csrf-token`, {
+      const response = await axios.get(RoutesApi.csrf, {
         headers: {
           "X-Requested-With": "XMLHttpRequest",
           Accept: "application/json",
@@ -98,7 +98,7 @@ const EditKelasPsc = () => {
         }
 
         return await axios.post(
-          RoutesApi.psc.groups.url,
+          RoutesApi.psc.groups.store().url,
           formDataObj,
           {
             headers: {
@@ -114,9 +114,9 @@ const EditKelasPsc = () => {
         );
       } else if (action === "update" && id) {
         // Update existing group
-        apiUrl = `${RoutesApi.psc.groups.url}/${id}`;
+        const updateEndpoint = RoutesApi.psc.groups.update(id);
         return await axios.put(
-          apiUrl,
+          updateEndpoint.url,
           {
             name: formData.name,
             status: formData.status,
@@ -135,8 +135,8 @@ const EditKelasPsc = () => {
         );
       } else if (action === "delete" && id) {
         // Delete group
-        apiUrl = `${RoutesApi.psc.groups.url}/${id}`;
-        return await axios.delete(apiUrl, {
+        const deleteEndpoint = RoutesApi.psc.groups.destroy(id);
+        return await axios.delete(deleteEndpoint.url, {
           headers: {
             "X-CSRF-TOKEN": response.data.token,
             Authorization: `Bearer ${cookies.token}`,
