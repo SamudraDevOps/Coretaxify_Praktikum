@@ -5,13 +5,89 @@ import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Button } from "@/components/ui/button";
+import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogFooter, AlertDialogTitle, AlertDialogDescription, AlertDialogAction, AlertDialogCancel } from "@/components/ui/alert-dialog";
 
 
 const TambahFakturKeluaran = () => {
     const [showDokumenTransaksi, setShowDokumenTransaksi] = useState(false);
     const [showInformasiPembeli, setShowInformasiPembeli] = useState(false);
-
+    const [showDetailTransaksi, setShowDetailTransaksi] = useState(false);
+    const [kodeTransaksi, setKodeTransaksi] = useState('');
+    const [harga, setHarga] = useState("");
+    const [kuantitas, setKuantitas] = useState(0);
+    const [totalHarga, setTotalHarga] = useState("");
+    const [potonganHarga, setPotonganHarga] = useState("");
+    const [dpp, setDPP] = useState("");
     const [selectedYear, setSelectedYear] = useState(new Date());
+
+    const [isChecked, setIsChecked] = useState(false);
+    const [jumlah, setJumlah] = useState("");
+
+    const formatRupiah = (value) => {
+        const numberString = value.replace(/[^0-9]/g, "");
+        return new Intl.NumberFormat("id-ID", {
+            style: "currency",
+            currency: "IDR",
+            minimumFractionDigits: 0
+        }).format(numberString);
+    };
+
+    const handleHargaChange = (e) => {
+        const rawValue = e.target.value;
+        const formattedValue = formatRupiah(rawValue);
+        setHarga(formattedValue);
+
+        const numericHarga = parseInt(rawValue.replace(/\D/g, ""), 10) || 0;
+        const newTotalHarga = numericHarga * kuantitas;
+        setTotalHarga(formatRupiah(newTotalHarga.toString()));
+        setDPP(formatRupiah((newTotalHarga - parseInt(potonganHarga.replace(/\D/g, ""), 10) || 0).toString()));
+        setJumlah(formatRupiah((newTotalHarga - parseInt(potonganHarga.replace(/\D/g, ""), 10) || 0).toString()));
+    };
+
+    const handleKuantitasChange = (e) => {
+        const qty = parseInt(e.target.value, 10) || 0;
+        setKuantitas(qty);
+
+        const numericHarga = parseInt(harga.replace(/\D/g, ""), 10) || 0;
+        const newTotalHarga = numericHarga * qty;
+        setTotalHarga(formatRupiah(newTotalHarga.toString()));
+        setDPP(formatRupiah((newTotalHarga - parseInt(potonganHarga.replace(/\D/g, ""), 10) || 0).toString()));
+        setJumlah(formatRupiah((newTotalHarga - parseInt(potonganHarga.replace(/\D/g, ""), 10) || 0).toString()));
+    };
+
+    const handlePotonganHargaChange = (e) => {
+        const rawValue = e.target.value;
+        const formattedValue = formatRupiah(rawValue);
+        setPotonganHarga(formattedValue);
+
+        const numericPotongan = parseInt(rawValue.replace(/\D/g, ""), 10) || 0;
+        const numericTotalHarga = parseInt(totalHarga.replace(/\D/g, ""), 10) || 0;
+        setDPP(formatRupiah((numericTotalHarga - numericPotongan).toString()));
+        setJumlah(formatRupiah((numericTotalHarga - numericPotongan).toString()));
+    };
+    const handleKodeTransaksiChange = (event) => {
+        setKodeTransaksi(event.target.value);
+    };
+ 
+
+    const handleCheckboxChange = () => {
+        setIsChecked(!isChecked);
+    };
+
+    const handleJumlahChange = (e) => {
+        if (isChecked) {
+            setJumlah(e.target.value);
+        }
+    };
+
+    const handleDppChange = (e) => {
+        const value = e.target.value;
+        setDpp(value);
+        if (!isChecked) {
+            setJumlah(value); // Jika checkbox tidak dicentang, jumlah selalu mengikuti DPP
+        }
+    };
+
 
 
     return (
@@ -34,11 +110,13 @@ const TambahFakturKeluaran = () => {
                         </div>
                         <div className='space-y-2'>
                             <label className='block text-sm font-medium'>Nomor Faktur</label>
-                            <input type="text" className='p-2 border rounded w-full' />
+                            <input type="text" className='p-2 border rounded w-full bg-gray-100' disabled placeholder='Ngelink' />
                         </div>
                         <div className='space-y-2'>
                             <label className='block text-sm font-medium'>Kode Transaksi</label>
-                            <select className='p-2 border rounded w-full'>
+                            <select className='p-2 border rounded w-full'
+                                value={kodeTransaksi}
+                                onChange={handleKodeTransaksiChange} >
                                 <option value="01">01 -  kepada selain pemungut PPN</option>
                                 <option value="02">02 -  kepada Pemungut PPN Instansi Pemerintah</option>
                                 <option value="03">03 -  kepada Pemungut PPN selain instansi Pemerintah</option>
@@ -62,8 +140,8 @@ const TambahFakturKeluaran = () => {
                         </div>
                         <div className='space-y-2'>
                             <label className='block text-sm font-medium'>Masa Pajak</label>
-                            <input type="month" className='p-2 border rounded w-full' />
-                            {/* <select className='p-2 border rounded w-full'>
+                            {/* <input type="month" className='p-2 border rounded w-full' /> */}
+                            <select className='p-2 border rounded w-full'>
                                 <option value="Januari">Januari</option>
                                 <option value="Februari">Februari</option>
                                 <option value="Maret">Maret</option>
@@ -76,7 +154,7 @@ const TambahFakturKeluaran = () => {
                                 <option value="Oktober">Oktober</option>
                                 <option value="November">November</option>
                                 <option value="Desember">Desember</option>
-                            </select> */}
+                            </select>
                         </div>
                         <div className="space-y-2">
                             <label className="block text-sm font-medium">Tahun</label>
@@ -148,7 +226,7 @@ const TambahFakturKeluaran = () => {
                         </div>
                         <div className='space-y-2'>
                             <label className='block text-sm font-medium'>Nomor Dokumen</label>
-                            <input type="text" className='p-2 border rounded w-full bg-gray-100' disabled/>
+                            <input type="text" className='p-2 border rounded w-full bg-gray-100' disabled />
                         </div>
                         <div className='space-y-2'>
                             <label className='block text-sm font-medium'>Nama</label>
@@ -156,15 +234,206 @@ const TambahFakturKeluaran = () => {
                         </div>
                         <div className='space-y-2'>
                             <label className='block text-sm font-medium'>Alamat</label>
-                            <input type="text" className='p-2 border rounded w-full' disabled placeholder='Ngelink kang'/>
+                            <input type="text" className='p-2 border rounded w-full' disabled placeholder='Ngelink kang' />
                         </div>
                         <div className='space-y-2'>
                             <label className='block text-sm font-medium'>IDTKU</label>
-                            <input type="text" className='p-2 border rounded w-full bg-gray-100' value="000000"/>
+                            <input type="text" className='p-2 border rounded w-full bg-gray-100' value="000000" />
                         </div>
                         <div className='space-y-2'>
                             <label className='block text-sm font-medium'>Email</label>
                             <input type="text" className='p-2 border rounded w-full' />
+                        </div>
+                    </div>
+                )}
+                <div className='border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100' onClick={() => setShowDetailTransaksi(!showDetailTransaksi)}>
+                    <h3 className='text-lg font-semibold'>Detail Transaksi</h3>
+                    {showDetailTransaksi ? <FaChevronUp /> : <FaChevronDown />}
+                </div>
+                {showDetailTransaksi && (
+                    <div className='border rounded-md p-4 mb-2 w-full'>
+                        <div className="flex justify-between mb-4 border-b pb-3">
+                            <AlertDialog>
+                                <AlertDialogTrigger asChild>
+                                    <button className="flex items-center bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded">
+                                        Tambah
+                                    </button>
+                                </AlertDialogTrigger>
+                                <AlertDialogContent className="bg-white rounded-md shadow-md p-4 !min-w-[1000px]">
+                                    <AlertDialogHeader className="text-lg font-semibold ">
+                                        <AlertDialogTitle className="text-lg font-semibold border-b pb-2 w-full">
+                                            Tambah Transaksi
+                                        </AlertDialogTitle>
+                                    </AlertDialogHeader>
+                                    <div className="grid grid-cols-2 gap-6 w-full overflow-auto h-96">
+                                        {/* Kolom Kiri */}
+                                        <div className="space-y-4 h-full">
+                                            <div className="space-y-2">
+                                                <label className="block text-sm font-medium">Tipe</label>
+                                                <div className="grid grid-cols-2 gap-3">
+                                                    <div className="flex items-center gap-2">
+                                                        <input type="radio" name="identification" className="w-4 h-4" value="Barang" />
+                                                        <label className="text-sm">Barang</label>
+                                                    </div>
+                                                    <div className="flex items-center gap-2">
+                                                        <input type="radio" name="identification" className="w-4 h-4" value="Jasa" />
+                                                        <label className="text-sm">Jasa</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="space-y-2">
+                                                <label className="block text-sm font-medium">Kode</label>
+                                                <select className='p-2 border rounded w-full'>
+                                                    <option value="Kode 1">Kode 1</option>
+                                                    <option value="Kode 2">Kode 2</option>
+                                                    <option value="Kode 3">Kode 3</option>
+                                                </select>
+                                            </div>
+                                            <div className="space-y-2">
+                                                <label className="block text-sm font-medium">Nama </label>
+                                                <input type="text" className="p-2 border rounded w-full" />
+                                            </div>
+                                            <div className='space-y-2'>
+                                                <label className='block text-sm font-medium'>Satuan</label>
+                                                <select className='p-2 border rounded w-full'>
+                                                    <option value="Satuan 1">Satuan 1</option>
+                                                    <option value="Satuan 2">Satuan 2</option>
+                                                    <option value="Satuan 3">Satuan 3</option>
+                                                </select>
+                                            </div>
+                                            <div className="space-y-2">
+                                                <label className="block text-sm font-medium">Harga Satuan</label>
+                                                <input
+                                                    type="text"
+                                                    className="p-2 border rounded w-full"
+                                                    value={harga}
+                                                    onChange={handleHargaChange}
+                                                    placeholder="Rp 0"
+                                                />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <label className="block text-sm font-medium">Kuantitas</label>
+                                                <input
+                                                    type="number"
+                                                    className="p-2 border rounded w-full"
+                                                    min="0"
+                                                    step="1"
+                                                    value={kuantitas}
+                                                    onChange={handleKuantitasChange}
+                                                />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <label className="block text-sm font-medium">Total Harga</label>
+                                                <input
+                                                    type="text"
+                                                    className="p-2 border rounded w-full bg-gray-100"
+                                                    value={totalHarga}
+                                                    readOnly
+                                                    placeholder="Rp 0"
+                                                />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <label className="block text-sm font-medium">Potongan Harga</label>
+                                                <input
+                                                    type="text"
+                                                    className="p-2 border rounded w-full"
+                                                    value={potonganHarga}
+                                                    onChange={handlePotonganHargaChange}
+                                                    placeholder="Rp 0"
+                                                />
+                                            </div>
+
+                                        </div>
+
+                                        {/* Kolom Kanan */}
+                                        <div className="space-y-4 h-full ">
+                                            <div className="space-y-2">
+                                                <label className="block text-sm font-medium">DPP</label>
+                                                <input
+                                                    type="text"
+                                                    className="p-2 border rounded w-full bg-gray-100"
+                                                    value={dpp}
+                                                    onChange={handleDppChange}
+                                                    readOnly
+                                                    placeholder="Rp 0"
+                                                />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <div className="flex items-center gap-2">
+                                                    <input
+                                                        type="checkbox"
+                                                        className="justify-start p-3 border rounded"
+                                                        checked={isChecked}
+                                                        onChange={handleCheckboxChange}
+                                                    />
+                                                    <label className="block text-sm font-medium">
+                                                        DPP Nilai Lain / DPP
+                                                    </label>
+                                                </div>
+
+                                                <div className="space-y-2">
+                                                    <label className="block text-sm font-medium"></label>
+                                                    <input
+                                                        type="text"
+                                                        className="p-2 border rounded w-full bg-gray-100"
+                                                        value={jumlah}
+                                                        onChange={handleJumlahChange}
+                                                        disabled={!isChecked}
+                                                        placeholder="Rp 0"
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <AlertDialogFooter className="flex justify-end mt-6 space-x-2">
+                                        <AlertDialogCancel className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600">Batal</AlertDialogCancel>
+                                        <AlertDialogAction className="bg-blue-900 text-white px-4 py-2 rounded-md hover:bg-blue-950">Simpan</AlertDialogAction>
+                                    </AlertDialogFooter>
+                                </AlertDialogContent>
+                            </AlertDialog>
+                        </div>
+                        <div className=" w-[1050px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden ">
+                            <table className="table-auto border border-gray-300 overflow-hidden">
+                                <thead>
+                                    <tr>
+                                        <th className="border border-gray-300 px-1 py-2">No</th>
+                                        <th className="border border-gray-300 px-4 py-2">Checklist</th>
+                                        <th className="border border-gray-300 px-4 py-2">Aksi</th>
+                                        <th className="border border-gray-300 px-4 py-2">Tipe</th>
+                                        <th className="border border-gray-300 px-4 py-2">Nama</th>
+                                        <th className="border border-gray-300 px-4 py-2">Kode</th>
+                                        <th className="border border-gray-300 px-4 py-2">Kuantitas</th>
+                                        <th className="border border-gray-300 px-4 py-2">Satuan</th>
+                                        <th className="border border-gray-300 px-4 py-2">Harga Satuan</th>
+                                        <th className="border border-gray-300 px-4 py-2">Total Harga</th>
+                                        <th className="border border-gray-300 px-4 py-2">Pemotongan Harga</th>
+                                        <th className="border border-gray-300 px-4 py-2">Tarif PPn</th>
+                                        <th className="border border-gray-300 px-4 py-2">PPn</th>
+                                        <th className="border border-gray-300 px-4 py-2">DPP</th>
+                                        <th className="border border-gray-300 px-4 py-2">DPP Nilai Lain / DPP</th>
+                                        <th className="border border-gray-300 px-4 py-2">PPnMB</th>
+                                        <th className="border border-gray-300 px-4 py-2">Tarif PPnBM</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="text-gray-600">
+                                    <tr>
+                                        <tr>
+                                            <td colSpan="10" className="text-center p-4 border">Belum ada data</td>
+                                        </tr>
+                                    </tr>
+                                    {/* <tr className="bg-gray-100">
+                                        <td className="px-1 py-4 border">
+                                            <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-2 rounded">Edit</button>
+                                            <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-2 rounded ml-2">Lihat</button>
+                                        </td>
+                                        <td className="px-4 py-4 border">1234567890</td>
+                                        <td className="px-4 py-4 border">Jenis Tempat Kegiatan Usaha</td>
+                                        <td className="px-4 py-4 border">Nama Tempat Kegiatan Usaha</td>
+                                        <td className="px-4 py-4 border">Kode KLU Tempat Kegiatan Usaha</td>
+                                    </tr> */}
+                                </tbody>
+                            </table>
+
                         </div>
                     </div>
                 )}
