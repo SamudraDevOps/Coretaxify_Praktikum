@@ -6,7 +6,7 @@ import { RoutesApi } from "@/Routes";
 import { ClipLoader } from "react-spinners";
 
 export default function ProtectedRoutes({ children }) {
-  const [cookies] = useCookies(["token", "role"]);
+  const [cookies, setCookie, removeCookie] = useCookies(["token", "role"]);
   const [isVerified, setIsVerified] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const location = useLocation();
@@ -36,6 +36,14 @@ export default function ProtectedRoutes({ children }) {
         }
       } catch (error) {
         console.error("Error checking verification status:", error);
+
+        if (error.response && error.response.status === 401) {
+          console.log("Token is invalid or expired. Removing cookies...");
+          // Remove the cookies
+          removeCookie("token", { path: "/" });
+          removeCookie("role", { path: "/" });
+        }
+
         // If we can't check verification, assume not verified
         setIsVerified(false);
       } finally {
