@@ -1,5 +1,5 @@
 import React from "react";
-import "./editPopupDosen.css";
+import "./editPopupPengajar.css";
 
 const EditPopupPengajar = ({ 
   onClose, 
