@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { FaRegEye, FaEyeSlash } from "react-icons/fa";
 // import CTaxifyLogo from "..//Assets/image/4.png";
@@ -14,6 +14,37 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [cookies, setCookie] = useCookies(["token"]);
+  const [errors, setErrors] = useState({});
+
+  const validate = () => {
+    let newErrors = {};
+    console.log(username);
+    if (!username) {
+      newErrors.username = "Email dibutuhkan.";
+    } else if (!/\S+@\S+\.\S+/.test(username)) {
+      newErrors.username = "Email tidak valid.";
+    }
+
+    if (!password) {
+      newErrors.password = "Password dibutuhkan.";
+    } else if (password.length < 4) {
+      newErrors.password = "Panjang password minimal 4 karakter.";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (validate()) {
+      alert("Form submitted successfully!");
+    }
+  };
+
+  useEffect(() => {
+    validate();
+  }, [username, password]);
 
   const togglePassword = () => {
     setShowPassword(!showPassword);
@@ -21,6 +52,7 @@ const Login = () => {
   const mutation = useMutation({
     mutationFn: async () => {
       console.log("button clicked");
+
       // const { response } = await axios.post(RoutesApi.login, {
       const response = await axios.get(`${RoutesApi.url}api/csrf-token`, {
         // withCredentials: true,
@@ -62,7 +94,9 @@ const Login = () => {
 
   const handleLogin = (e) => {
     e.preventDefault();
+    // if (validate()) {
     mutation.mutate();
+    // }
 
     // console.log("Username:", username);
     // console.log("Password:", password);
@@ -97,6 +131,9 @@ const Login = () => {
               onChange={(e) => setUsername(e.target.value)}
               required
             />
+            {errors.username && (
+              <p className="text-red-500 text-sm">{errors.username}</p>
+            )}
           </div>
 
           <div>
@@ -124,6 +161,9 @@ const Login = () => {
                 {showPassword ? <FaEyeSlash /> : <FaRegEye />}
               </button>
             </div>
+              {errors.password && (
+                <p className="text-red-500 text-sm">{errors.password}</p>
+              )}
           </div>
 
           <div className="text-right">
