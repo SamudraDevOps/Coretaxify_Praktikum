@@ -1,17 +1,77 @@
-import React from "react";
-import { CookiesProvider, useCookies } from "react-cookie";
-import { Route, Link, Routes, useLocation } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
+import { Navigate, useLocation } from "react-router-dom";
+import axios from "axios";
+import { RoutesApi } from "@/Routes";
+import { ClipLoader } from "react-spinners";
+
 export default function ProtectedRoutes({ children }) {
-  const [cookies, setCookie] = useCookies([""]);
-  const getUrlRole = () => {
-    const url = useLocation().pathname;
-    const urlSplit = url.split("/");
-    const role = urlSplit[1];
-    return role;
-  };
-  // alert(getUrlRole
-  if (cookies.token == null) {
-    window.location.href = "/login";
+  const [cookies, setCookie, removeCookie] = useCookies(["token", "role"]);
+  const [isVerified, setIsVerified] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const location = useLocation();
+
+  useEffect(() => {
+    // If no token, we don't need to check verification status
+    if (!cookies.token) {
+      setIsLoading(false);
+      return;
+    }
+
+    // Check verification status
+    const checkVerification = async () => {
+      try {
+        const response = await axios.get(RoutesApi.apiUrl + "verification-status", {
+          headers: {
+            Authorization: `Bearer ${cookies.token}`,
+            Accept: "application/json",
+          }
+        });
+        
+        setIsVerified(response.data.verified);
+        
+        // If not verified, store email for OTP verification
+        if (!response.data.verified) {
+          localStorage.setItem("pendingVerificationEmail", response.data.email);
+        }
+      } catch (error) {
+        console.error("Error checking verification status:", error);
+
+        if (error.response && error.response.status === 401) {
+          console.log("Token is invalid or expired. Removing cookies...");
+          // Remove the cookies
+          removeCookie("token", { path: "/" });
+          removeCookie("role", { path: "/" });
+        }
+
+        // If we can't check verification, assume not verified
+        setIsVerified(false);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    checkVerification();
+  }, [cookies.token]);
+
+  if (isLoading) {
+    return (
+      <div className="loading">
+        <ClipLoader color="#7502B5" size={50} />
+      </div>
+    );
   }
+
+  // If no token, redirect to login
+  if (!cookies.token) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  // If not verified, redirect to OTP verification
+  if (isVerified === false) {
+    return <Navigate to="/confirm-otp" state={{ from: location }} replace />;
+  }
+
+  // User is authenticated and verified
   return children;
 }

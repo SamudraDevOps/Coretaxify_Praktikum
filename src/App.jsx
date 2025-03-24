@@ -25,6 +25,8 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
+import RoleProtectedRoutes from "./components/Dashboard/Auth/RoleProtectedRoutes";
+import NotFound from "./components/NotFound";
 // import { BrowserRouter, Routes, Route, Router } from "react-router";
 import ClipLoader from "react-spinners/ClipLoader";
 import EditArtikel from "./components/Dashboard/Admin/LandingPage/EditArtikel";
@@ -109,7 +111,7 @@ import DosenPraktikumKelasMember from "./components/Dashboard/Dosen/Kelas/DosenP
 
 const Main = () => {
   const [loading, setLoading] = useState(true);
-  const [cookies, setCookie] = useCookies([""]);
+  const [cookies, setCookie] = useCookies(["token, role"]);
 
   useEffect(() => {
     setLoading(true);
@@ -117,6 +119,50 @@ const Main = () => {
       setLoading(false);
     }, 0);
   }, []);
+
+  // In the useEffect that validates the token
+  useEffect(() => {
+    const validateToken = async () => {
+      if (cookies.token) {
+        try {
+          // Try to get user profile to validate token
+          await axios.get(RoutesApi.profile, {
+            headers: {
+              Authorization: `Bearer ${cookies.token}`,
+              Accept: "application/json",
+            }
+          });
+          // Token is valid, check verification status
+          try {
+            const verificationResponse = await axios.get(RoutesApi.apiUrl + "verification-status", {
+              headers: {
+                Authorization: `Bearer ${cookies.token}`,
+                Accept: "application/json",
+              }
+            });
+            
+            // If not verified, store email for OTP verification
+            if (!verificationResponse.data.verified) {
+              localStorage.setItem("pendingVerificationEmail", verificationResponse.data.email);
+            }
+          } catch (verificationError) {
+            console.error("Verification status check error:", verificationError);
+          }
+        } catch (error) {
+          console.error("Token validation error:", error);
+          // If token is invalid, clear cookies and redirect to login
+          if (error.response?.status === 401) {
+            setCookie("token", "", { path: "/", expires: new Date(0) });
+            setCookie("role", "", { path: "/", expires: new Date(0) });
+            window.location.href = "/login";
+          }
+        }
+      }
+    };
+
+    validateToken();
+  }, [cookies.token, setCookie]);
+
   return loading ? (
     <div className="loading">
       <ClipLoader color="#7502B5" size={50} />
@@ -126,6 +172,8 @@ const Main = () => {
     // <userContext.js>
     <Router>
       <Routes>
+
+        {/* ROOT REDIRECT */}
         <Route
           path="/"
           element={
@@ -134,10 +182,84 @@ const Main = () => {
             </ProtectedRoutes>
           }
         />
+
+        {/* AUTHENTICATION */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/confirm-otp" element={<ConfirmOTP />} />
+        
+        {/* ADMIN ROUTE */}
+        <Route element={<RoleProtectedRoutes allowedRoles={["admin"]} layout="admin" />}>
+          <Route path="/admin" element={<DashboardAdmin />}/>
+          <Route path="/admin/kontrak" element={<Kontrak />} />
+          <Route path="/admin/coretaxify" element={<CoretaxifyList />} />
+          <Route path="/admin/edit-dosen" element={<EditDosen />} />
+          <Route path="/admin/upload-soal" element={<UploadSoal />} />
+          <Route path="/admin/praktikum" element={<Praktikum />} />
+          <Route path="/admin/coretaxify/coretaxify-send" element={ <CoretaxifySendDetail />} />
+          <Route path="/admin/ujian" element={<Ujian />} />
+          <Route path="/admin/edit-admin" element={<EditAdmin />} />
+          <Route path="/admin/edit-kelas" element={<EditKelas />} />
+          <Route path="/admin/edit-mahasiswa" element={<EditMahasiswa />} />
+          <Route path="/admin/edit-artikel" element={<EditArtikel />} />
+          <Route path="/admin/edit-ulasan" element={<EditUlasan />} />
+          <Route path="/admin/kontrak-backup" element={<KontrakBackup />} />
+          <Route path="/admin/praktikum-backup" element={<PraktikumBackup />} />
+          <Route path="/admin/praktikum" element={<Praktikum />} />
+        </Route>
+
+        {/* DOSEN ROUTE */}
+        <Route element={<RoleProtectedRoutes allowedRoles={["dosen"]} layout= "admin" />}>
+          <Route path="/dosen" element={<DashboardDosen />} />
+          <Route path="/dosen/kelas" element={<DosenKelas />} />
+          <Route path="/dosen/kelas/praktikum/:id" element={<DosenPraktikumKelas />} />
+          <Route path="/dosen/kelas/:id/praktikum/:idpraktikum" element={<DosenPraktikumKelasMember />} />
+          <Route path="/dosen/praktikum" element={<Praktikum />} />
+          <Route path="/dosen/penilaian" element={<PenilaianDosen />} />
+          <Route path="/dosen/penilaian/detail-tugas" element={<DetailTugasPenilaianDosen />} />
+          <Route path="/dosen/penilaian/detail-tugas/detail-penilaian" element={<DetailPenilaian />} />
+          <Route path="/dosen/ujian" element={<UjianDosen />} />
+        </Route>
+        
+        {/* MAHASISWA ROUTE */}
+        <Route element={<RoleProtectedRoutes allowedRoles={["mahasiswa"]} layout= "admin" />}>
+          <Route path="/mahasiswa/kelas" element={<MahasiswaKelas />} />
+          <Route path="/mahasiswa/kelas/:id" element={<MahasiswaPraktikumKelas />} />
+          <Route path="/mahasiswa" element={<Navigate to="/mahasiswa/kelas" replace />} />
+          <Route path="/mahasiswa/praktikum" element={<MahasiswaPraktikum />} />
+          <Route path="/mahasiswa/ujian" element={<MahasiswaUjian />} />
+        </Route>
+
+        {/* PSC ROUTE */}
+        <Route element={<RoleProtectedRoutes allowedRoles={["psc"]} layout= "admin" />}>
+          <Route path="/psc/" element={<DashboardPsc />} />
+          <Route path="/psc/master-soal" element={<UploadSoalPsc />} />
+          <Route path="/psc/edit-pengajar" element={<EditPengajar />} />
+          <Route path="/psc/edit-kelas" element={<EditKelasPsc />} />
+          {/* <Route path="/psc/edit-kelas/1" element={<EditMahasiswaPscKelas />} /> */}
+          <Route path="/psc/kelas/:groupId/mahasiswa" element={<EditMahasiswaPscKelas />} />
+          {/* <Route path="/psc/kelas/:groupId/mahasiswa/:memberId" element={<MemberDetailPage />} /> */}
+          <Route path="/psc/praktikum" element={<PraktikumPsc />} />
+          <Route path="/psc/praktikum/:assignmentId/members" element={<AssignmentPscMember />} />
+          <Route path="/psc/ujian" element={{/* <UjianPsc /> */}} />
+          <Route path="/psc/edit-mahasiswa" element={<EditMahasiswaPsc />} />
+        </Route>
+
+        {/* MAHASISWA-PSC ROUTE */}
+        <Route element={<RoleProtectedRoutes allowedRoles={["mahasiswa-psc"]} layout= "mahasiswa-psc" />}>
+          {/* <Route path="/mahasiswa-psc/kelas" element={<MahasiswaPscKelas />} /> */}
+          {/* <Route path="/mahasiswa-psc/kelas/:id" element={<MahasiswaPscPraktikumKelas />} /> */}
+          {/* <Route path="/mahasiswa-psc/kelas/:id/praktikum/:idpraktikum" element={<MahasiswaPscPraktikumKelasMember />} /> */}
+          {/* <Route path="/mahasiswa-psc/praktikum" element={<MahasiswaPscPraktikum />} /> */}
+          {/* <Route path="/mahasiswa-psc/ujian" element={<MahasiswaPscUjian />} /> */}
+        </Route>
+
+        {/* PENGAJAR ROUTE */}
+        <Route element={<RoleProtectedRoutes allowedRoles={["instruktur"]} layout= "mahasiswa-psc" />}>
+          
+        </Route>
+        
         <Route
           path="/admin"
           element={
@@ -1252,6 +1374,10 @@ const Main = () => {
             }
           />
         {/* Praktikum Badan*/}
+        
+        {/* NOT FOUND ROUTE - LAST REGISTERED ROUTE */}
+        <Route path="*" element={<NotFound />} />
+        
       </Routes>
     </Router>
     // </BrowserRouter>

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./editPengajar.css";
 import EditPopupPengajar from "./EditPopupPengajar";
-import TambahDosen from "./TambahDosen";
+import TambahPengajar from "./TambahPengajar";
 import Swal from "sweetalert2";
 import { CookiesProvider, useCookies } from "react-cookie";
 import axios from "axios";
@@ -20,7 +20,7 @@ const EditPengajar = () => {
   const [selectedData, setSelectedData] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [cookies, setCookie] = useCookies(["user"]);
-  const [url, setUrl] = useState(`${RoutesApi.psc.users.url}`);
+  const [url, setUrl] = useState(RoutesApi.psc.users.index().url);
   const [search, setSearch] = useState("");
 
   // Form data state for editing/creating instructor
@@ -51,7 +51,7 @@ const EditPengajar = () => {
   const mutation = useMutation({
     mutationFn: async ({ id, action, multipleInstructors = null }) => {
       // Get CSRF token
-      const response = await axios.get(`${RoutesApi.url}api/csrf-token`, {
+      const response = await axios.get(RoutesApi.csrf, {
         headers: {
           "X-Requested-With": "XMLHttpRequest",
           Accept: "application/json",
@@ -62,14 +62,14 @@ const EditPengajar = () => {
       let apiUrl;
 
       if (action === "create") {
-        apiUrl = RoutesApi.psc.users.url;
+        const storeEndpoint = RoutesApi.psc.users.store();
         
         // Check if we're creating multiple instructors
         if (multipleInstructors && multipleInstructors.length > 0) {
           // For bulk creation, we need to make multiple requests
           const createPromises = multipleInstructors.map(instructor => {
             return axios.post(
-              apiUrl,
+              storeEndpoint.url,
               {
                 name: instructor.name,
                 email: instructor.email,
@@ -95,7 +95,7 @@ const EditPengajar = () => {
         } else {
           // Create single instructor
           return await axios.post(
-            apiUrl,
+            storeEndpoint.url,
             {
               name: formData.name,
               email: formData.email,
@@ -116,9 +116,9 @@ const EditPengajar = () => {
           );
         }
       } else if (action === "update" && id) {
-        apiUrl = `${RoutesApi.psc.users.url}/${id}`;
+        const updateEndpoint = RoutesApi.psc.users.update(id);
         return await axios.put(
-          apiUrl,
+          updateEndpoint.url,
           {
             name: formData.name,
             email: formData.email,
@@ -134,8 +134,8 @@ const EditPengajar = () => {
           }
         );
       } else if (action === "delete" && id) {
-        apiUrl = `${RoutesApi.psc.users.url}/${id}`;
-        return await axios.delete(apiUrl, {
+        const deleteEndpoint = RoutesApi.psc.users.destroy(id);
+        return await axios.delete(deleteEndpoint.url, {
           headers: {
             "X-CSRF-TOKEN": response.data.token,
             Authorization: `Bearer ${cookies.token}`,
@@ -391,7 +391,7 @@ const EditPengajar = () => {
       
       {/* Create Single Instructor Popup */}
       {isCreateOpen && (
-        <TambahDosen
+        <TambahPengajar
           isOpen={isCreateOpen}
           onClose={() => setIsCreateOpen(false)}
           onSave={handleCreateInstructor}
@@ -403,7 +403,7 @@ const EditPengajar = () => {
       
       {/* Create Multiple Instructors Popup */}
       {isMultipleCreateOpen && (
-        <TambahDosen
+        <TambahPengajar
           isOpen={isMultipleCreateOpen}
           onClose={() => setIsMultipleCreateOpen(false)}
           onSave={handleCreateMultipleInstructors}
