@@ -1,15 +1,15 @@
 import React from "react";
-import "./editPopupDosen.css";
+import "./editPopupPengajar.css";
 
-const EditPopupPengajar = ({ 
-  onClose, 
-  data = {}, 
+const EditPopupPengajar = ({
+  onClose,
+  data = {},
   onSave,
   formData,
   setFormData,
   isLoading = false,
   title = "Edit Pengajar",
-  isReadOnly = false
+  isReadOnly = false,
 }) => {
   const handleChange = (e) => {
     if (isReadOnly) return;
@@ -70,7 +70,7 @@ const EditPopupPengajar = ({
               </select>
             )}
           </div>
-          
+
           <div className="edit-popup-actions-instruktur">
             {!isReadOnly && (
               <button
@@ -97,4 +97,3 @@ const EditPopupPengajar = ({
 };
 
 export default EditPopupPengajar;
-              
