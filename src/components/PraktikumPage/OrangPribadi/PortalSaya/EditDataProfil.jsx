@@ -22,6 +22,7 @@ const EditDataProfil = () => {
     const [showTempatKegiatanUsaha, setShowTempatKegiatanUsaha] = useState(false);
     const [showDetailBank, setShowDetailBank] = useState(false);
     const [showNomorIdentifikasiEksternal, setShowNomorIdentifikasiEksternal] = useState(false);
+    const [showUnitPajakKeluarga, setShowUnitPajakKeluarga] = useState(false);
     const [contacts, setContacts] = useState([]);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -63,7 +64,7 @@ const EditDataProfil = () => {
                 <div className="border rounded-md p-4 mb-4">
                     <h3 className="text-lg font-semibold mb-3">Kuasa Wajib Pajak</h3>
                     <div className="flex items-center gap-2 mb-3">
-                        <input type="checkbox" className="h-5 w-5" onChange={() => setIsPerwakilan(!isPerwakilan)} />
+                        <input type="checkbox" className="h-5 w-5 cursor-not-allowed bg-gray-400" disabled onChange={() => setIsPerwakilan(!isPerwakilan)} />
                         <label className="text-gray-700">Diisi oleh perwakilan Wajib Pajak?</label>
                     </div>
                     <div className={`grid grid-cols-1 md:grid-cols-1 gap-4  ${!isPerwakilan && "opacity-50 pointer-events-none"}`}>
@@ -101,7 +102,7 @@ const EditDataProfil = () => {
                             </div>
                             <div>
                                 <label className="block font-medium text-gray-700">Jenis Wajib Pajak</label>
-                                <input type="text" className="w-full p-2 border rounded-md bg-gray-100 text-gray-600 cursor-not-allowed" readOnly value="Badan Usaha " />
+                                <input type="text" className="w-full p-2 border rounded-md bg-gray-100 text-gray-600 cursor-not-allowed" readOnly value="Orang Pribadi " />
                             </div>
                             <div>
                                 <label className="block font-medium text-gray-700">Nama</label>
@@ -123,7 +124,7 @@ const EditDataProfil = () => {
                                 <input type="text" className="w-full p-2 border rounded-md bg-white text-gray-600" />
                             </div>
                             <div>
-                                <label className="block font-medium text-gray-700">Tempt Lahir</label>
+                                <label className="block font-medium text-gray-700">Tempat Lahir</label>
                                 <input type="date" className="w-full p-2 border rounded-md bg-white text-gray-600" />
                             </div>
                             <div>
@@ -140,6 +141,7 @@ const EditDataProfil = () => {
                             <div>
                                 <label className="block font-medium text-gray-700">Status Perkawinan</label>
                                 <select className="w-full p-2 border rounded-md bg-white text-gray-700">
+                                    <option value="kawin">Kawin</option>
                                     <option value="tidak kawin">Tidak Kawin</option>
                                     <option value="cerai hidup">Cerai Hidup</option>
                                     <option value="cerai mati">Cerai Mati</option>
@@ -157,6 +159,7 @@ const EditDataProfil = () => {
                                     <option value="adik">Adik</option>
                                     <option value="ayah kandung">Ayah Kandung</option>
                                     <option value="ibu kandung">Ibu Kandung</option>
+                                    <option value="lainnya">Lainnya</option>
                                 </select>
                             </div>
                             <div>
@@ -238,23 +241,23 @@ const EditDataProfil = () => {
                                         </div>
                                         {selectedSumberPenghasilan === "pekerjaan" && (
                                             <div>
-                                                <div className="mt-2">
+                                                <div className="mt-4">
                                                     <label className="block text-sm font-medium text-gray-700">Metode Pembukuan/Pencatatan</label>
                                                     <input type="text" className="w-full p-2 border rounded-md bg-white text-gray-600" />
                                                 </div>
-                                                <div className="mt-2">
+                                                <div className="mt-4">
                                                     <label className="block text-sm font-medium text-gray-700">Mata Uang Pembukuan</label>
                                                     <input type="text" className="w-full p-2 border rounded-md bg-white text-gray-600" />
                                                 </div>
-                                                <div className="mt-2">
+                                                <div className="mt-4">
                                                     <label className="block text-sm font-medium text-gray-700">Periode Pembukuan</label>
                                                     <input type="text" className="w-full p-2 border rounded-md bg-white text-gray-600" />
                                                 </div>
-                                                <div className="mt-2">
+                                                <div className="mt-4">
                                                     <label className="block text-sm font-medium text-gray-700">Tempat Kerja</label>
                                                     <input type="text" className="w-full p-2 border rounded-md bg-white text-gray-600" />
                                                 </div>
-                                                <div className="mt-2">
+                                                <div className="mt-4">
                                                     <label className="block text-sm font-medium text-gray-700">Penghasilan Per Bulan</label>
                                                     <select className="w-full p-2 border rounded-md bg-white text-gray-600">
                                                         <option value="kurang dari rp. 4.500.000">Kurang Dari Rp. 4.500.000</option>
@@ -264,11 +267,11 @@ const EditDataProfil = () => {
                                                         <option value="lebih dari rp. 20.000.000">Lebih Dari Rp. 20.000.000</option>
                                                     </select>
                                                 </div>
-                                                <div className="mt-2">
+                                                <div className="mt-4">
                                                     <label className="block text-sm font-medium text-gray-700">Deskripsi Kegiatan</label>
                                                     <input type="text" className="w-full p-2 border rounded-md bg-white text-gray-600" />
                                                 </div>
-                                                <div className="mt-2">
+                                                <div className="mt-4">
                                                     <label className="block text-sm font-medium text-gray-700 ">Tanggal Mulai</label>
                                                     <input type="date" className="w-full p-2 border rounded-md bg-white text-gray-600" />
                                                 </div>
@@ -276,35 +279,35 @@ const EditDataProfil = () => {
                                         )}
                                         {selectedSumberPenghasilan === "pekerjaan-bebas" && (
                                             <div>
-                                                <div className="mt-2">
+                                                <div className="mt-4">
                                                     <label className="block text-sm font-medium text-gray-700">Izin Usaha</label>
                                                     <input type="text" className="w-full p-2 border rounded-md bg-white text-gray-600" />
                                                 </div>
-                                                <div className="mt-2">
+                                                <div className="mt-4">
                                                     <label className="block text-sm font-medium text-gray-700">Tanggal Izin Usaha</label>
                                                     <input type="date" className="w-full p-2 border rounded-md bg-white text-gray-600" />
                                                 </div>
-                                                <div className="mt-2">
+                                                <div className="mt-4">
                                                     <label className="block text-sm font-medium text-gray-700">Merek Dagang Usaha</label>
                                                     <input type="text" className="w-full p-2 border rounded-md bg-white text-gray-600" />
                                                 </div>
-                                                <div className="mt-2">
+                                                <div className="mt-4">
                                                     <label className="block text-sm font-medium text-gray-700">Metode Pembukan/Pencatatan</label>
                                                     <input type="text" className="w-full p-2 border rounded-md bg-white text-gray-600" />
                                                 </div>
-                                                <div className="mt-2">
+                                                <div className="mt-4">
                                                     <label className="block text-sm font-medium text-gray-700">Mata Uang Pembukuan</label>
                                                     <input type="text" className="w-full p-2 border rounded-md bg-white text-gray-600" />
                                                 </div>
-                                                <div className="mt-2">
+                                                <div className="mt-4">
                                                     <label className="block text-sm font-medium text-gray-700">Periode Pembukuan</label>
                                                     <input type="text" className="w-full p-2 border rounded-md bg-white text-gray-600" />
                                                 </div>
-                                                <div className="mt-2">
+                                                <div className="mt-4">
                                                     <label className="block text-sm font-medium text-gray-700">Tempat Kerja</label>
                                                     <input type="text" className="w-full p-2 border rounded-md bg-white text-gray-600" />
                                                 </div>
-                                                <div className="mt-2">
+                                                <div className="mt-4">
                                                     <label className="block text-sm font-medium text-gray-700">Penghasilan Per Bulan</label>
                                                     <select className="w-full p-2 border rounded-md bg-white text-gray-600">
                                                         <option value="kurang dari rp. 4.500.000">Kurang Dari Rp. 4.500.000</option>
@@ -314,18 +317,18 @@ const EditDataProfil = () => {
                                                         <option value="lebih dari rp. 20.000.000">Lebih Dari Rp. 20.000.000</option>
                                                     </select>
                                                 </div>
-                                                <div className="mt-2">
+                                                <div className="mt-4">
                                                     <label className="block text-sm font-medium text-gray-700">Peredaran Bruto/Penerimaan Bruto</label>
                                                     <select className="w-full p-2 border rounded-md bg-white text-gray-600">
                                                         <option value="Rp.0 s/d Rp.4,8 M">Rp.0 s/d Rp.4.8 M</option>
                                                         <option value="lebih dari Rp.4,8 M">Lebih Dari Rp.4.8 M</option>
                                                     </select>
                                                 </div>
-                                                <div className="mt-2">
+                                                <div className="mt-4">
                                                     <label className="block text-sm font-medium text-gray-700">Deskripsi Kegiatan</label>
                                                     <input type="text" className="w-full p-2 border rounded-md bg-white text-gray-600" />
                                                 </div>
-                                                <div className="mt-2">
+                                                <div className="mt-4">
                                                     <label className="block text-sm font-medium text-gray-700">Tanggal Mulai</label>
                                                     <input type="date" className="w-full p-2 border rounded-md bg-white text-gray-600" />
                                                 </div>
@@ -333,46 +336,46 @@ const EditDataProfil = () => {
                                         )}
                                         {selectedSumberPenghasilan === "Kegiatan-usaha" && (
                                             <div>
-                                                <div className="mt-2">
+                                                <div className="mt-4">
                                                     <label className="block text-sm font-medium text-gray-700">Izin Usaha</label>
                                                     <input type="text" className="w-full p-2 border rounded-md bg-white text-gray-600" />
                                                 </div>
-                                                <div className="mt-2">
+                                                <div className="mt-4">
                                                     <label className="block text-sm font-medium text-gray-700">Tanggal Izin Usaha</label>
                                                     <input type="date" className="w-full p-2 border rounded-md bg-white text-gray-600" />
                                                 </div>
-                                                <div className="mt-2">
+                                                <div className="mt-4">
                                                     <label className="block text-sm font-medium text-gray-700">Merek Dagang Usaha</label>
                                                     <input type="text" className="w-full p-2 border rounded-md bg-white text-gray-600" />
                                                 </div>
-                                                <div className="mt-2">
+                                                <div className="mt-4">
                                                     <label className="block text-sm font-medium text-gray-700">Metode Pembukan/Pencatatan</label>
                                                     <input type="text" className="w-full p-2 border rounded-md bg-white text-gray-600" />
                                                 </div>
-                                                <div className="mt-2">
+                                                <div className="mt-4">
                                                     <label className="block text-sm font-medium text-gray-700">Mata Uang Pembukuan</label>
                                                     <input type="text" className="w-full p-2 border rounded-md bg-white text-gray-600" />
                                                 </div>
-                                                <div className="mt-2">
+                                                <div className="mt-4">
                                                     <label className="block text-sm font-medium text-gray-700">Periode Pembukuan</label>
                                                     <input type="text" className="w-full p-2 border rounded-md bg-white text-gray-600" />
                                                 </div>
-                                                <div className="mt-2">
+                                                <div className="mt-4">
                                                     <label className="block text-sm font-medium text-gray-700">Tempat Kerja</label>
                                                     <input type="text" className="w-full p-2 border rounded-md bg-white text-gray-600" />
                                                 </div>
-                                                <div className="mt-2">
+                                                <div className="mt-4">
                                                     <label className="block text-sm font-medium text-gray-700">Peredaran Bruto/Penerimaan Bruto</label>
                                                     <select className="w-full p-2 border rounded-md bg-white text-gray-600">
                                                         <option value="Rp.0 s/d Rp.4,8 M">Rp.0 s/d Rp.4.8 M</option>
                                                         <option value="lebih dari Rp.4,8 M">Lebih Dari Rp.4.8 M</option>
                                                     </select>
                                                 </div>
-                                                <div className="mt-2">
+                                                <div className="mt-4">
                                                     <label className="block text-sm font-medium text-gray-700">Deskripsi Kegiatan</label>
                                                     <input type="text" className="w-full p-2 border rounded-md bg-white text-gray-600" />
                                                 </div>
-                                                <div className="mt-2">
+                                                <div className="mt-4">
                                                     <label className="block text-sm font-medium text-gray-700">Tanggal Mulai</label>
                                                     <input type="date" className="w-full p-2 border rounded-md bg-white text-gray-600" />
                                                 </div>
@@ -594,7 +597,7 @@ const EditDataProfil = () => {
                                                     <>
                                                         <div className="grid grid-cols-4 gap-4 ">
                                                             <div className="">
-                                                                <label className="block text-sm font-medium">Apakah PIC?</label>
+                                                                <label className="block text-sm font-medium ">Apakah PIC?</label>
                                                                 <input type="checkbox" className="justify-start p-3 border rounded" checked />
                                                             </div>
                                                             <div>
@@ -605,58 +608,18 @@ const EditDataProfil = () => {
                                                                     onChange={(e) => setSelectedRelatedPersonType(e.target.value)}
                                                                 >
                                                                     <option value="">--Pilih jenis orang terkait--</option>
-                                                                    <option value="direktur">Direktur</option>
-                                                                    <option value="komisaris">Komisaris</option>
+                                                                    <option value="wakilwbt">Wakil WBT</option>
                                                                     <option value="lainnya">Lainnya</option>
-                                                                    <option value="wakil">Wakil</option>
+                                                                    
                                                                 </select>
                                                             </div>
-                                                            {selectedRelatedPersonType === "direktur" && (
-                                                                <div>
-                                                                    <label className="block text-sm font-medium">Sub Jenis Orang Terkait</label>
-                                                                    <select className="w-full p-2 border rounded">
-                                                                        <option value="">-- Pilih Sub Jenis --</option>
-                                                                        <option value="dewan-pengawas-syariah">Dewan Pengawas Syariah</option>
-                                                                        <option value="direktur">Direktur</option>
-                                                                        <option value="direktur-independen">Diretur Independen</option>
-                                                                        <option value="direktur-utama">Direktur Utama</option>
-                                                                        <option value="presiden-direktur">Presiden Direktur</option>
-                                                                        <option value="wakil-direktur">Wakil Direktur</option>
-                                                                        <option value="wakil-direktur-utama">Wakil Direktur Utama</option>
-                                                                        <option value="wakil-presiden-direktur">Wakil Presiden Direktur</option>
-                                                                    </select>
-
-                                                                </div>
-
-                                                            )}
-                                                            {selectedRelatedPersonType === "komisaris" && (
-                                                                <div>
-                                                                    <label className="block text-sm font-medium">Sub Jenis Orang Terkait</label>
-                                                                    <select className="w-full p-2 border rounded">
-                                                                        <option value="">-- Pilih Sub Jenis --</option>
-                                                                        <option value="komisaris">Komisaris</option>
-                                                                        <option value="komisaris-independen">Komisaris Independen</option>
-                                                                        <option value="komisaris-utama">Komisaris Utama</option>
-                                                                        <option value="presiden-komisaris">Presiden Komisaris</option>
-                                                                        <option value="presiden-komisaris-independen">Presiden Komisaris Independen</option>
-                                                                        <option value="wakil-komisaris-utama">Wakil Komisaris Utama</option>
-                                                                        <option value="wakil-presiden-komisaris">Wakil Presiden Komisaris</option>
-                                                                    </select>
-                                                                </div>
-                                                            )}
-                                                            {selectedRelatedPersonType === "wakil" && (
-                                                                <div>
-                                                                    <label className="block text-sm font-medium">Sub Jenis Orang Terkait</label>
-                                                                    <select className="w-full p-2 border rounded">
-                                                                        <option value="">-- Pilih Sub Jenis --</option>
-                                                                        <option value="curator">Curator</option>
-                                                                        <option value="karyawan">Karyawan</option>
-                                                                        <option value="liquidator">Liquidator</option>
-                                                                        <option value="pemilik-manfaat-lainnya">Pemilik Manfaat Lainnya</option>
-                                                                    </select>
-                                                                </div>
-                                                            )}
                                                             {selectedRelatedPersonType === "lainnya" && (
+                                                                <div>
+                                                                    <label className="block text-sm font-medium">Keterangan</label>
+                                                                    <input type="text" className="w-full p-2 border rounded" />
+                                                                </div>
+                                                            )}
+                                                            {selectedRelatedPersonType === "wakilwbt" && (
                                                                 <div>
                                                                     <label className="block text-sm font-medium">Keterangan</label>
                                                                     <input type="text" className="w-full p-2 border rounded" />
@@ -1005,6 +968,134 @@ const EditDataProfil = () => {
                                         <td className="px-4 py-4 border">98018308108202131</td>
                                         <td className="px-4 py-4 border">09-03-2024</td>
                                         <td className="px-4 py-4 border"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+
+                    </div>
+                )}
+                <div className="border rounded-md p-4 mb-2 bg-gray-100 cursor-pointer flex justify-between items-center" onClick={() => setShowUnitPajakKeluarga(!showUnitPajakKeluarga)}>
+                    <h3 className="text-lg font-semibold">Unit Pajak Keluarga</h3>
+                    {showUnitPajakKeluarga ? <FaChevronUp /> : <FaChevronDown />}
+                </div>
+                {showUnitPajakKeluarga && (
+                    <div className="border rounded-md p-4 mb-4">
+                        <div className="flex justify-between items-center mb-4">
+                            <AlertDialog>
+                                <AlertDialogTrigger className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md">+ Tambah</AlertDialogTrigger>
+                                <AlertDialogContent className="bg-white !min-w-[1000px] rounded-lg shadow-lg ">
+                                    <AlertDialogHeader>
+                                        <AlertDialogTitle className="text-xl font-bold">Tambah Data Unit Keluarga Baru</AlertDialogTitle>
+                                    </AlertDialogHeader>
+                                    <div className="grid gap-4 overflow-auto h-96">
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700">NIK Anggota Keluarga</label>
+                                            <input type="text" className="w-full p-2 border rounded-md mt-1"  />
+                                            {/*  */}
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700">Jenis Kelamin</label>
+                                            <select className="w-full p-2 border rounded">
+                                                <option value="Pria">Pria</option>
+                                                <option value="Wanita">Wanita</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700">Tempat Lahir</label>
+                                            <input type="text" className="w-full p-2 border rounded"/>
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700">Nomor Kartu Keluarga</label>
+                                            <input type="text" className="w-full p-2 border rounded" />
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700">Nama Anggota Keluarga</label>
+                                            <input type="text" className="w-full p-2 border rounded" />
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700">Tanggal Lahir</label>
+                                            <input type="date" className="w-full p-2 border rounded"/>
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700">Status Hubungan</label>
+                                            <input type="text" className="w-full p-2 border rounded" />
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700">Pekerjaan</label>
+                                            <input type="text" className="w-full p-2 border rounded" />
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700">Status Unit Perpajakan</label>
+                                            <select className="w-full p-2 border rounded" >
+                                                <option value="tanggungan">Tanggungan</option>
+                                                <option value="kepala unit kepala keluarga lain HB">Kepala Unit Keluarga Lain (HB)</option>
+                                                <option value="kepala unit kepala keluarga lain OP">Kepala Unit Keluarga Lain (OP)</option>
+                                                <option value="kepala unit keluarga">Kepala Unit Keluarga</option>
+                                                <option value="kepala unit keluarga lain MT">Kepala Unit Kepala Lain (MT)</option>
+                                                <option value="bukan tanggungan">Bukan Tanggungan</option>
+                                                <option value="kepala unit keluarga lain PH">Kepala Unit Keluarga Lain (PH)</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700">Status PTKP</label>
+                                            <select className="w-full p-2 border rounded" >
+                                                <option value="K/0">K/0</option>
+                                                <option value="K/1">K/1</option>
+                                                <option value="K/2">K/2</option>
+                                                <option value="K/3">K/3</option>
+                                                <option value="TK/0">TK/0</option>
+                                                <option value="TK/1">TK/1</option>
+                                                <option value="TK/2">TK/2</option>
+                                                <option value="TK/3">TK/3</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700">Tanggal Mulai</label>
+                                            <input type="date" className="w-full p-2 border rounded"/> 
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700">Tanggal Selesai</label>
+                                            <input type="date" className="w-full p-2 border rounded"/>
+                                        </div>
+                                    </div>
+                                    <AlertDialogFooter className="flex justify-end mt-6 space-x-2">
+                                        <AlertDialogCancel className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600">Batal</AlertDialogCancel>
+                                        <AlertDialogAction className="bg-blue-900 text-white px-4 py-2 rounded-md hover:bg-blue-950">Simpan</AlertDialogAction>
+                                    </AlertDialogFooter>
+                                </AlertDialogContent>
+                            </AlertDialog>
+                        </div>
+                        <div className=" w-[1050px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden ">
+                            <table className="table-auto border border-gray-300 overflow-hidden">
+                                <thead>
+                                    <tr>
+                                        <th className="border border-gray-300 px-1 py-2">Aksi</th>
+                                        <th className="border border-gray-300 px-4 py-2">Anggota Keluarga sesuai NIK</th>
+                                        <th className="border border-gray-300 px-4 py-2">Nomor Kartu Keluarga</th>
+                                        <th className="border border-gray-300 px-4 py-2">Nama Anggota Keluarga</th>
+                                        <th className="border border-gray-300 px-4 py-2">Tanggal Lahir</th>
+                                        <th className="border border-gray-300 px-4 py-2">Status Hubungan Keluarga</th>
+                                        <th className="border border-gray-300 px-4 py-2">Pekerjaan</th>
+                                        <th className="border border-gray-300 px-4 py-2">Status Unit Perpajakan</th>
+                                        <th className="border border-gray-300 px-4 py-2">Status PTKP</th>
+                                        <th className="border border-gray-300 px-4 py-2">Tanggal Mulai</th>
+                                        <th className="border border-gray-300 px-4 py-2">Tanggal Selesai</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="text-gray-600">
+                                    <tr className="bg-gray-100">
+                                        <td className="px-1 py-4 border"></td>
+                                        {/* <td className="px-1 py-4 border">
+                                            <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-2 rounded">Edit</button>
+                                            <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-2 rounded ml-2">Lihat</button>
+                                            <button className="bg-red-500 hover:bg-red-600 text-white py-2 px-2 rounded ml-2">Hapus</button>
+                                        </td>
+                                        <td className="px-4 py-4 border">NPWP 15 Digit</td>
+                                        <td className="px-4 py-4 border">98018308108202131</td>
+                                        <td className="px-4 py-4 border">09-03-2024</td>
+                                        <td className="px-4 py-4 border"></td> */}
                                     </tr>
                                 </tbody>
                             </table>
