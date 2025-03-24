@@ -52,7 +52,7 @@ export const joinAssignmentMahasiswa = (cookie, formData, refetch) =>
       console.log(data);
       Swal.fire(
         "Berhasil!",
-        "Data Mahasiswa berhasil dihapus!",
+        "Berhasil bergabung dengan Praktikum!",
         "success"
       ).then((result) => {
         if (result.isConfirmed) {

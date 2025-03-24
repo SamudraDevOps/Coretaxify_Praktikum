@@ -13,5 +13,6 @@ export default function ProtectedRoutes({ children }) {
   if (cookies.token == null) {
     window.location.href = "/login";
   }
+  // TODO add token checker
   return children;
 }
