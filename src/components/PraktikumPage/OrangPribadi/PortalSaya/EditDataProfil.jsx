@@ -597,7 +597,7 @@ const EditDataProfil = () => {
                                                     <>
                                                         <div className="grid grid-cols-4 gap-4 ">
                                                             <div className="">
-                                                                <label className="block text-sm font-medium">Apakah PIC?</label>
+                                                                <label className="block text-sm font-medium ">Apakah PIC?</label>
                                                                 <input type="checkbox" className="justify-start p-3 border rounded" checked />
                                                             </div>
                                                             <div>

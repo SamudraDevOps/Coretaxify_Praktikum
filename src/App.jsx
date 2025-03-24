@@ -95,6 +95,7 @@ import TwoAuthenticationBadan from "./components/PraktikumPage/Badan/PortalSaya/
 import PermohonanTertundaBadan from "./components/PraktikumPage/Badan/PortalSaya/PermohonanTertunda";
 import DashboardEFaktur from "./components/PraktikumPage/Badan/EFaktur/DashboardEFaktur";
 import PajakKeluaran from "./components/PraktikumPage/Badan/EFaktur/PajakKeluaran";
+import TambahFakturKeluaran from "./components/PraktikumPage/Badan/EFaktur/TambahFakturKeluaran";
 
 // Route Badan
 import ProtectedRoutes from "./components/Dashboard/Auth/ProtectedRoutes";
@@ -1241,6 +1242,15 @@ const Main = () => {
             </>
           }
         />
+          <Route
+            path="/admin/praktikum/2/e-faktur/pajak-keluaran/tambah-faktur-keluaran"
+            element={
+              <>
+                <Header />
+                <TambahFakturKeluaran />
+              </>
+            }
+          />
         {/* Praktikum Badan*/}
       </Routes>
     </Router>
