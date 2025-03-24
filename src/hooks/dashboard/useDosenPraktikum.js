@@ -47,7 +47,8 @@ export const updatePraktikumDosen = (
   cookies,
   class_id,
   formData,
-  supporting_files
+  supporting_files,
+  refetch
 ) =>
   useMutation({
     mutationFn: async (id) => {
@@ -88,7 +89,13 @@ export const updatePraktikumDosen = (
     },
     onSuccess: (data) => {
       console.log(data);
-      Swal.fire("Berhasil!", "Praktikum berhasil diubah!", "success");
+      Swal.fire("Berhasil!", "Praktikum berhasil diubah!", "success").then(
+        (result) => {
+          if (result.isConfirmed) {
+            refetch();
+          }
+        }
+      );
       // window.location.reload();
     },
     onError: (error) => {
@@ -116,7 +123,8 @@ export const createPraktikumDosen = (
   cookies,
   class_id,
   formData,
-  supporting_files
+  supporting_files,
+  refetch
 ) =>
   useMutation({
     mutationFn: async () => {
@@ -148,7 +156,13 @@ export const createPraktikumDosen = (
     },
     onSuccess: (data) => {
       console.log(data);
-      Swal.fire("Berhasil!", "Praktikum berhasil dibuat!", "success");
+      Swal.fire("Berhasil!", "Praktikum berhasil diubah!", "success").then(
+        (result) => {
+          if (result.isConfirmed) {
+            refetch();
+          }
+        }
+      );
       // window.location.reload();
     },
     onError: (error) => {
@@ -157,7 +171,7 @@ export const createPraktikumDosen = (
     },
   });
 
-export const deletePraktikumDosen = (cookies, class_id) =>
+export const deletePraktikumDosen = (cookies, class_id,refetch) =>
   useMutation({
     mutationFn: async (assignment_id) => {
       const csrf = await getCsrf();
@@ -178,7 +192,13 @@ export const deletePraktikumDosen = (cookies, class_id) =>
     },
     onSuccess: (data) => {
       console.log(data);
-      Swal.fire("Berhasil!", "Praktikum berhasil dihapus!", "success");
+      Swal.fire("Berhasil!", "Praktikum berhasil diubah!", "success").then(
+        (result) => {
+          if (result.isConfirmed) {
+            refetch();
+          }
+        }
+      );
       // window.location.reload();
     },
     onError: (error) => {

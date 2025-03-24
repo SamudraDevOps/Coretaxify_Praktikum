@@ -1,16 +1,21 @@
+import { getContracts } from "@/hooks/dashboard";
 import { RoutesApi } from "@/Routes";
+import { getCookieToken } from "@/service";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import React, { useState } from "react";
 import { useCookies } from "react-cookie";
 import { IoMdDownload } from "react-icons/io";
+import { RxCross1 } from "react-icons/rx";
 import Swal from "sweetalert2";
+import { ClipLoader } from "react-spinners";
 
 const TambahDosen = ({ isOpen, onClose, onSave }) => {
   const [cookies, setCookie] = useCookies(["user"]);
   const [formData, setFormData] = useState({
     contractId: "",
-    fileDosen: "",
+    name: "",
+    email: "",
     // namaDosen: "",
     // instansi: "",
     // kuotaKelas: "",
@@ -18,6 +23,13 @@ const TambahDosen = ({ isOpen, onClose, onSave }) => {
     // jumlahSiswa: "",
     // status: "",
   });
+
+  const {
+    isLoading: isLoadingContract,
+    isError: isErrorContract,
+    data: dataContract,
+    error: errorContract,
+  } = getContracts(RoutesApi.url + "api/admin/contract", getCookieToken());
 
   const mutation = useMutation({
     mutationFn: async () => {
@@ -38,7 +50,8 @@ const TambahDosen = ({ isOpen, onClose, onSave }) => {
         // "http://127.0.0.1:8000/api/admin/users?intent=api.user.import.dosen",
         {
           contract_id: formData.contractId,
-          import_file: formData.fileDosen,
+          name: formData.name,
+          email: formData.email,
         },
         {
           headers: {
@@ -46,9 +59,6 @@ const TambahDosen = ({ isOpen, onClose, onSave }) => {
             Accept: "application/json",
             "X-CSRF-TOKEN": response.data.token,
             Authorization: `Bearer ${cookies.token}`,
-          },
-          params: {
-            intent: RoutesApi.importDosenAdmin.intent,
           },
         }
       );
@@ -96,10 +106,24 @@ const TambahDosen = ({ isOpen, onClose, onSave }) => {
   };
 
   if (!isOpen) return null;
+  if (isLoadingContract) {
+    return (
+      <div className="loading">
+        <ClipLoader color="#7502B5" size={50} />
+      </div>
+      // <div className="h-full w-full text-2xl italic font-bold text-center flex items-center justify-center">Loading...</div>
+    );
+  }
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 p-4">
       <div className="bg-white w-full max-w-3xl rounded-lg shadow-lg p-6">
+        <div className="w-full flex justify-end">
+          <RxCross1
+            className="text-2xl hover:cursor-pointer"
+            onClick={onClose}
+          />
+        </div>
         <div className="flex justify-between items-center border-b pb-3">
           <h2 className="text-xl font-bold text-gray-800">Tambah Data Dosen</h2>
           {/* <button className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded flex items-center">
@@ -107,31 +131,55 @@ const TambahDosen = ({ isOpen, onClose, onSave }) => {
             Import
           </button> */}
         </div>
-        <div className="pt-4">
-          {/* <select
-            name="instansi"
+        <div className="overflow-x-auto py-4">
+          <label htmlFor="name" className="mr-10 ">
+            Nama Dosen :
+          </label>
+          <input
+            type="text"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            className="w-full border px-2 py-1 rounded my-2"
+            required
+          />
+          <label htmlFor="email" className="mr-10 ">
+            Email Dosen :
+          </label>
+          <input
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            className="w-full border px-2 py-1 rounded my-2"
+            required
+          />
+          <label htmlFor="contractId" className="mr-10 ">
+            Kontrak :
+          </label>
+          <select
+            name="contractId"
             value={formData.instansi}
             onChange={handleChange}
-            className="w-60 border px-2 py-1 rounded"
+            className="w-fit border px-2 py-1 rounded"
             required
           >
-            <option value="">Pilih Instansi</option>
-            <option value="Instansi 1">Instansi 1</option>
-            <option value="Instansi 2">Instansi 2</option>
-            <option value="Instansi 3">Instansi 3</option>
-          </select> */}
-        </div>
-        <div className="overflow-x-auto">
-          <label htmlFor="contractId">ID Kontrak :</label>
-          <input
+            <option value="">Pilih Kontrak</option>
+            {dataContract.data.map((item) => (
+              <option key={item.id} value={item.id}>
+                {item.contract_code + " - " + item.university.name}
+              </option>
+            ))}
+          </select>
+          {/* <input
             type="text"
             name="contractId"
             value={formData.contractId}
             onChange={handleChange}
             className="w-full border px-2 py-1 rounded my-2"
             required
-          />
-          <div className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded flex items-center">
+          /> */}
+          {/* <div className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded flex items-center mt-4">
             <IoMdDownload className="mr-2" />
             <input
               type="file"
@@ -141,64 +189,7 @@ const TambahDosen = ({ isOpen, onClose, onSave }) => {
                 setFormData({ ...formData, fileDosen: e.target.files[0] })
               }
             />
-          </div>
-          {/* <table className="w-full border-collapse mt-4">
-            <thead>
-              <tr className="bg-purple-600 text-white text-left text-sm">
-                <th className="p-2 w-1/6 text-center">Email</th>
-                <th className="p-2 w-1/6 text-center">Nama Dosen</th>
-                <th className="p-2 w-1/6 text-center">Kode Registrasi</th>
-                <th className="p-2 w-1/6 text-center">Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr className="border-t text-sm p-2">
-                <td className="p-4">
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    className="w-full border px-2 py-1 rounded"
-                    required
-                  />
-                </td>
-                <td className="p-4">
-                  <input
-                    type="text"
-                    name="namaDosen"
-                    value={formData.namaDosen}
-                    onChange={handleChange}
-                    className="w-full border px-2 py-1 rounded"
-                    required
-                  />
-                </td>
-                <td className="p-2">
-                  <input
-                    type="number"
-                    name="jumlahSiswa"
-                    value={formData.jumlahSiswa}
-                    onChange={handleChange}
-                    className="w-full border px-2 py-1 rounded"
-                    required
-                  />
-                </td>
-                <td className="p-2">
-                  <select
-                    name="status"
-                    value={formData.status}
-                    onChange={handleChange}
-                    className="w-full border px-2 py-1 rounded"
-                    required
-                  >
-                    <option value="">Pilih Status</option>
-                    <option value="Active">Active</option>
-                    <option value="Expired">Expired</option>
-                  </select>
-                </td>
-              </tr>
-            </tbody>
-          </table> */}
+          </div> */}
         </div>
         <div className="flex justify-end mt-4 gap-2">
           <button

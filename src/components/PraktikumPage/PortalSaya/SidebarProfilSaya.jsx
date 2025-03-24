@@ -1,7 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useUserType } from '../context/UserTypeContext'; 
 
 const SidebarProfilSaya = () => {
+    const { userType } = useUserType(); 
+    const userTypeId = userType === "Orang Pribadi" ? 1 : 2; 
+
     const menuItems = [
         "Ikhtisar Profil Wajib Pajak",
         "Informasi Umum",
@@ -32,9 +36,10 @@ const SidebarProfilSaya = () => {
             <nav>
                 <ul className="space-y-1">
                     {menuItems.map((item, index) => {
+                        const formattedItem = item.replace(/ /g, "-").toLowerCase();
                         const linkPath = index === 0
-                            ? "/admin/praktikum/profil-saya"
-                            : `/admin/praktikum/profil-saya/${item.replace(/ /g, "-").toLowerCase()}`;
+                            ? `/admin/praktikum/${userTypeId}/profil-saya`
+                            : `/admin/praktikum/${userTypeId}/profil-saya/${formattedItem}`;
 
                         return (
                             <li key={index} className="p-2 hover:bg-blue-700 hover:text-white rounded-md cursor-pointer">

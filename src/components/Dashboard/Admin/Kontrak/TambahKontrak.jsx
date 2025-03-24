@@ -8,6 +8,7 @@ import { CookiesProvider, useCookies } from "react-cookie";
 import { IoClose } from "react-icons/io5";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { RxCross1 } from "react-icons/rx";
 
 import { useToast } from "@/hooks/use-toast";
 
@@ -167,6 +168,12 @@ const TambahKontrak = ({
   return (
     <div className="kontrak-popup-overlay">
       <div className="kontrak-popup-container">
+        <div className="w-full flex justify-end">
+          <RxCross1
+            className="text-2xl hover:cursor-pointer"
+            onClick={onClose}
+          />
+        </div>
         <h2>Tambah Data Kontrak</h2>
         <form>
           <div className="kontrak-form-group">
@@ -262,6 +269,12 @@ const TambahKontrak = ({
               name="mahasiswa"
               value={formData.mahasiswa}
               onChange={handleChange}
+              onWheel={(e) => e.target.blur()}
+              onKeyDown={(e) => {
+                if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+                  e.preventDefault();
+                }
+              }}
               required
             />
           </div>
@@ -282,6 +295,7 @@ const TambahKontrak = ({
               name="periodeAkhir"
               value={formData.periodeAkhir}
               onChange={handleChange}
+              min={formData.periodeAwal || new Date().toISOString().split("T")[0]} 
               required
             />
           </div>
@@ -292,6 +306,12 @@ const TambahKontrak = ({
               name="spt"
               value={formData.spt}
               onChange={handleChange}
+              onWheel={(e) => e.target.blur()}
+              onKeyDown={(e) => {
+                if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+                  e.preventDefault();
+                }
+              }}
               required
             />
           </div>
@@ -302,6 +322,12 @@ const TambahKontrak = ({
               name="bupot"
               value={formData.bupot}
               onChange={handleChange}
+              onWheel={(e) => e.target.blur()}
+              onKeyDown={(e) => {
+                if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+                  e.preventDefault();
+                }
+              }}
               required
             />
           </div>
@@ -312,6 +338,12 @@ const TambahKontrak = ({
               name="faktur"
               value={formData.faktur}
               onChange={handleChange}
+              onWheel={(e) => e.target.blur()}
+              onKeyDown={(e) => {
+                if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+                  e.preventDefault(); 
+                }
+              }}
               required
             />
           </div>

@@ -21,10 +21,12 @@ import axios from "axios";
 import { RoutesApi } from "@/Routes";
 import { ClipLoader } from "react-spinners";
 import { FaFile } from "react-icons/fa";
+import IntentEnum from "@/constant/intent";
+import { RxCross1 } from "react-icons/rx";
 
 export default function Praktikum() {
   const [isOpen, setIsOpen] = useState(false);
-  const [url, setUrl] = useState(RoutesApi.assignment.url);
+  const [url, setUrl] = useState(`${RoutesApi.url}api/admin/assignments`);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
   const [selectedData, setSelectedData] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -48,6 +50,9 @@ export default function Praktikum() {
       const { data } = await axios.get(url, {
         headers: {
           Authorization: `Bearer ${cookies.token}`,
+        },
+        params: {
+          intent: IntentEnum.API_GET_ASSIGNMENT_ALL,
         },
       });
       console.log(data.data);
@@ -325,6 +330,7 @@ export default function Praktikum() {
                         type="date"
                         name="start_period"
                         onChange={handleChange}
+                        min={new Date().toISOString().split("T")[0]}
                       />
                     </div>
                     <div className="edit-form-group-mahasiswa">
@@ -333,6 +339,7 @@ export default function Praktikum() {
                         type="date"
                         name="end_period"
                         onChange={handleChange}
+                        min={formData.start_period || new Date().toISOString().split("T")[0]}
                       />
                     </div>
                   </form>
@@ -364,8 +371,8 @@ export default function Praktikum() {
                     ? "↑"
                     : "↓"
                   : sortConfig.direction === "descending"
-                  ? "↓"
-                  : "↑"}
+                    ? "↓"
+                    : "↑"}
               </th>
               <th className="">Kode Praktikum</th>
               <th className="">Tanggal Praktikum</th>
@@ -389,6 +396,14 @@ export default function Praktikum() {
                     </AlertDialogTrigger>
                     <AlertDialogContent>
                       <AlertDialogHeader>
+                        <div className="w-full flex justify-end">
+                          <AlertDialogCancel className="border-none shadow-none">
+                            <RxCross1
+                              className="text-2xl text-black hover:cursor-pointer"
+                              // onClick={onClose}
+                            />
+                          </AlertDialogCancel>
+                        </div>
                         <AlertDialogTitle>Edit Praktikum</AlertDialogTitle>
                         <AlertDialogDescription className="w-full">
                           <div className="">
@@ -471,12 +486,12 @@ export default function Praktikum() {
           </tbody>
         </table>
         <div className="">
-          <div className="pagination-info">
+          {/* <div className="pagination-info">
             {`Showing ${indexOfFirstItem + 1} to ${Math.min(
               indexOfLastItem,
               data.length
             )} of ${data.length} entries`}
-          </div>
+          </div> */}
 
           <div className="pagination">
             <button
@@ -491,9 +506,8 @@ export default function Praktikum() {
               (_, index) => (
                 <button
                   key={index + 1}
-                  className={`page-item ${
-                    currentPage === index + 1 ? "active" : ""
-                  }`}
+                  className={`page-item ${currentPage === index + 1 ? "active" : ""
+                    }`}
                   onClick={() => paginate(index + 1)}
                 >
                   {index + 1}
@@ -501,11 +515,10 @@ export default function Praktikum() {
               )
             )}
             <button
-              className={`page-item ${
-                currentPage === Math.ceil(data.length / itemsPerPage)
+              className={`page-item ${currentPage === Math.ceil(data.length / itemsPerPage)
                   ? "disabled"
                   : ""
-              }`}
+                }`}
               onClick={() => paginate(currentPage + 1)}
               disabled={currentPage === Math.ceil(data.length / itemsPerPage)}
             >
