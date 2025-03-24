@@ -71,6 +71,13 @@ import WakilKuasaSaya from "./components/PraktikumPage/OrangPribadi/PortalSaya/W
 import WajibPajakYangDiwakili from "./components/PraktikumPage/OrangPribadi/PortalSaya/WajibPajakYangDiwakili";
 import TwoAuthentication from "./components/PraktikumPage/OrangPribadi/PortalSaya/TwoAuthentication";
 import PermohonanTertunda from "./components/PraktikumPage/OrangPribadi/PortalSaya/PermohonanTertunda";
+
+// MAHASISWA-PSC
+import MahasiswaPscKelas from "./components/Dashboard/MahasiswaPsc/Kelas/MahasiswaPscKelas";
+import MahasiswaPscKelasPraktikum from "./components/Dashboard/MahasiswaPsc/Kelas/Praktikum/MahasiswaPscKelasPraktikum";
+import MahasiswaPscPraktikum from "./components/Dashboard/MahasiswaPsc/Praktikum/MahasiswaPscPraktikum";
+import MahasiswaPscUjian from "./components/Dashboard/MahasiswaPsc/Ujian/MahasiswaPscUjian";
+
 //Route Praktikum
 
 // Route Badan
@@ -247,16 +254,17 @@ const Main = () => {
         </Route>
 
         {/* MAHASISWA-PSC ROUTE */}
-        <Route element={<RoleProtectedRoutes allowedRoles={["mahasiswa-psc"]} layout= "mahasiswa-psc" />}>
-          {/* <Route path="/mahasiswa-psc/kelas" element={<MahasiswaPscKelas />} /> */}
-          {/* <Route path="/mahasiswa-psc/kelas/:id" element={<MahasiswaPscPraktikumKelas />} /> */}
+        <Route element={<RoleProtectedRoutes allowedRoles={["mahasiswa-psc"]} layout= "admin" />}>
+          <Route path="/mahasiswa-psc" element={<Navigate to="/mahasiswa-psc/kelas" replace />} />
+          <Route path="/mahasiswa-psc/kelas" element={<MahasiswaPscKelas />} />
+          <Route path="/mahasiswa-psc/kelas/:id/praktikum" element={<MahasiswaPscKelasPraktikum />} />
           {/* <Route path="/mahasiswa-psc/kelas/:id/praktikum/:idpraktikum" element={<MahasiswaPscPraktikumKelasMember />} /> */}
-          {/* <Route path="/mahasiswa-psc/praktikum" element={<MahasiswaPscPraktikum />} /> */}
-          {/* <Route path="/mahasiswa-psc/ujian" element={<MahasiswaPscUjian />} /> */}
+          <Route path="/mahasiswa-psc/praktikum" element={<MahasiswaPscPraktikum />} />
+          <Route path="/mahasiswa-psc/ujian" element={<MahasiswaPscUjian />} />
         </Route>
 
         {/* PENGAJAR ROUTE */}
-        <Route element={<RoleProtectedRoutes allowedRoles={["instruktur"]} layout= "mahasiswa-psc" />}>
+        <Route element={<RoleProtectedRoutes allowedRoles={["instruktur"]} layout= "admin" />}>
           
         </Route>
 
