@@ -9,8 +9,26 @@ import { IoClose } from "react-icons/io5";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { RxCross1 } from "react-icons/rx";
+import { createPortal } from "react-dom";
 
-import { useToast } from "@/hooks/use-toast";
+// import { useToast } from "@/hooks/use-toast";
+import { Check, ChevronsUpDown } from "lucide-react";
+
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 const TambahKontrak = ({
   isOpen,
@@ -20,7 +38,7 @@ const TambahKontrak = ({
   taskData,
   setOpen,
 }) => {
-  const { toast } = useToast();
+  // const { toast } = useToast();
   const [formData, setFormData] = useState({
     jenisKontrak: "",
     instansi: "",
@@ -163,6 +181,32 @@ const TambahKontrak = ({
     setFormData({ ...formData, kodePembelian: `${prefix}-${formattedNumber}` });
   };
 
+  const [open, setOpenSelect] = useState(false);
+  const [value, setValue] = useState("");
+
+  const frameworks = [
+    {
+      value: "next.js",
+      label: "Next.js",
+    },
+    {
+      value: "sveltekit",
+      label: "SvelteKit",
+    },
+    {
+      value: "nuxt.js",
+      label: "Nuxt.js",
+    },
+    {
+      value: "remix",
+      label: "Remix",
+    },
+    {
+      value: "astro",
+      label: "Astro",
+    },
+  ];
+
   if (!isOpen) return null;
 
   return (
@@ -190,9 +234,23 @@ const TambahKontrak = ({
               <option value="BNSP">BNSP</option>
             </select>
           </div>
+          {/* <div className="kontrak-form-group">
+            <label>
+              Choose a browser from this list:
+              <input list="browsers" name="myBrowser" />
+            </label>
+            <datalist id="browsers">
+              <option value="Chrome" />
+              <option value="Firefox" />
+              <option value="Internet Explorer" />
+              <option value="Opera" />
+              <option value="Safari" />
+              <option value="Microsoft Edge" />
+            </datalist>
+          </div> */}
           <div className="kontrak-form-group">
             <label>Instansi</label>
-            <select
+            {/* <select
               name="instansi"
               value={formData.instansi}
               onChange={handleChange}
@@ -204,8 +262,60 @@ const TambahKontrak = ({
                   {item.name}
                 </option>
               ))}
-            </select>
+            </select> */}
             {/* <input type="text" name="instansi" value={formData.instansi} onChange={handleChange} required /> */}
+          </div>
+          <div className="kontrak-form-group">
+            <Popover open={open} onOpenChange={setOpenSelect}>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  role="combobox"
+                  aria-expanded={open}
+                  className="w-full justify-between"
+                >
+                  {value
+                    ? UniData.find((uni) => uni.name === value)?.name
+                    : "Pilih Instansi..."}
+                  <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                </Button>
+              </PopoverTrigger>
+              {/* {createPortal( */}
+              <PopoverContent className="w-[200px] p-0 z-[9999]" sideOffset={5}>
+                <Command>
+                  <CommandInput placeholder="Pilih Instansi..." />
+                  <CommandList>
+                    <CommandEmpty>Instansi tidak ditemukan.</CommandEmpty>
+                    <CommandGroup>
+                      {UniData.map((uni) => (
+                        <CommandItem
+                          key={uni.id}
+                          value={uni.id}
+                          onSelect={(currentValue) => {
+                            // alert(currentValue);
+                            setValue(
+                              currentValue === value ? "" : currentValue
+                            );
+                            setOpenSelect(false);
+                          }}
+                        >
+                          <Check
+                            className={cn(
+                              "mr-2 h-4 w-4",
+                              value === uni.name ? "opacity-100" : "opacity-0"
+                            )}
+                          />
+                          {uni.name}
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  </CommandList>
+                </Command>
+              </PopoverContent>
+              {/* , */}
+              {/* document.body
+               )} */}
+            </Popover>
           </div>
           <div className="kontrak-form-group">
             <label>Soal</label>
@@ -295,7 +405,9 @@ const TambahKontrak = ({
               name="periodeAkhir"
               value={formData.periodeAkhir}
               onChange={handleChange}
-              min={formData.periodeAwal || new Date().toISOString().split("T")[0]} 
+              min={
+                formData.periodeAwal || new Date().toISOString().split("T")[0]
+              }
               required
             />
           </div>
@@ -341,7 +453,7 @@ const TambahKontrak = ({
               onWheel={(e) => e.target.blur()}
               onKeyDown={(e) => {
                 if (e.key === "ArrowUp" || e.key === "ArrowDown") {
-                  e.preventDefault(); 
+                  e.preventDefault();
                 }
               }}
               required

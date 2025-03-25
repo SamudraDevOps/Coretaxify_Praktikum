@@ -72,6 +72,9 @@ const Kontrak = () => {
         headers: {
           Authorization: `Bearer ${cookies.token}`,
         },
+        params: {
+          perPage: 10000,
+        },
       });
       console.log(data.data);
       return data.data;
