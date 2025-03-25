@@ -80,6 +80,10 @@ export default function UploadSoal() {
       Swal.fire("Berhasil!", "Data Soal berhasil dibuat !", "success").then(
         (result) => {
           if (result.isConfirmed) {
+            setFormData({
+              name: "",
+              file: null,
+            });
             refetch();
             // window.location.reload();
           }
@@ -171,7 +175,7 @@ export default function UploadSoal() {
       Swal.fire("Berhasil!", "Data Soal berhasil dihapus!", "success").then(
         (result) => {
           if (result.isConfirmed) {
-            window.location.reload();
+            refetch();
           }
         }
       );
@@ -372,7 +376,7 @@ export default function UploadSoal() {
                 <td>{item.name}</td>
                 <td>
                   <a
-                    href={item.file}
+                    href={item.file_path_url}
                     download
                     className="text-blue-500 hover:text-blue-700 hover:underline"
                   >

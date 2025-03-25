@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaRegEye, FaEyeSlash } from "react-icons/fa";
 import CTaxifyLogo from "../../../../assets/images/4.png";
 import { Link, useNavigate } from "react-router-dom";
@@ -27,6 +27,34 @@ const Register = () => {
     contract_code: "",
   });
   const navigate = useNavigate();
+
+  const [errors, setErrors] = useState({});
+
+  const validate = () => {
+    let newErrors = {};
+    if (!formData.email) {
+      newErrors.email = "Email dibutuhkan.";
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = "Email tidak valid.";
+    }
+
+    if (!formData.name) {
+      newErrors.username = "Username dibutuhkan.";
+    }
+
+    if (!formData.password) {
+      newErrors.password = "Password dibutuhkan.";
+    } else if (formData.password.length < 4) {
+      newErrors.password = "Panjang password minimal 4 karakter.";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  useEffect(() => {
+    validate();
+  }, [formData.username, formData.password]);
 
   const mutation = useMutation({
     mutationFn: async () => {
@@ -198,6 +226,9 @@ const Register = () => {
                 setFormData({ ...formData, [name]: value });
               }}
             />
+            {errors.username && (
+              <p className="text-red-500 text-sm">{errors.username}</p>
+            )}
           </div>
 
           <div>
@@ -217,6 +248,9 @@ const Register = () => {
               placeholder="Masukkan email"
               required
             />
+            {errors.email && (
+              <p className="text-red-500 text-sm">{errors.email}</p>
+            )}
             {emailError && <p className="text-red-500 text-sm">{emailError}</p>}
           </div>
 
@@ -246,6 +280,9 @@ const Register = () => {
                 {showPassword ? <FaEyeSlash /> : <FaRegEye />}
               </button>
             </div>
+            {errors.password && (
+              <p className="text-red-500 text-sm">{errors.password}</p>
+            )}
           </div>
 
           <div>
@@ -273,6 +310,9 @@ const Register = () => {
                 {showPassword ? <FaEyeSlash /> : <FaRegEye />}
               </button>
             </div>
+            {errors.password && (
+              <p className="text-red-500 text-sm">{errors.password}</p>
+            )}
           </div>
 
           {!showRegistrationCode ? (

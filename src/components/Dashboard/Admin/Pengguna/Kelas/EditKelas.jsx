@@ -19,10 +19,13 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { RxCross1 } from "react-icons/rx";
+import { FaRegCopy } from "react-icons/fa";
+import { useToast } from "@/hooks/use-toast";
 
 const EditKelas = () => {
   const [url, setUrl] = useState(RoutesApi.classAdmin);
   const [cookies, setCookie] = useCookies(["token"]);
+  const { toast } = useToast();
   const { isLoading, isError, data, error } = useQuery({
     queryKey: ["classes", url],
     queryFn: async () => {
@@ -236,7 +239,27 @@ const EditKelas = () => {
               <tr key={item.id}>
                 <td>{item.name}</td>
                 {/* <td>{item.qty_student}</td> */}
-                <td>{item.class_code}</td>
+                <td>
+                  <div className="flex gap-2 items-center justify-center">
+                    {item.class_code}
+
+                    <FaRegCopy
+                      onClick={(e) => {
+                        // e.stopPropagation();
+
+                        e.preventDefault();
+                        navigator.clipboard.writeText(item.class_code);
+                        toast({
+                          title: "Copy berhasil",
+                          description: "Kode Kelas berhasil dicopy",
+                        });
+                        // alert("miaw");
+                      }}
+                      className="hover:bg-slate-300 p-1 rounded-md"
+                      size={25}
+                    />
+                  </div>
+                </td>
                 <td>{item.status}</td>
                 <td>
                   <AlertDialog>

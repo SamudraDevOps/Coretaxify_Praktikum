@@ -32,6 +32,8 @@ import { HiDotsVertical } from "react-icons/hi";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 import { RxCross1 } from "react-icons/rx";
+import { FaRegCopy } from "react-icons/fa";
+import { useToast } from "@/hooks/use-toast";
 
 export default function DosenKelas() {
   const [isOpen, setIsOpen] = useState(false);
@@ -43,6 +45,7 @@ export default function DosenKelas() {
   const itemsPerPage = 10;
   const [cookies, setCookie] = useCookies(["user"]);
   const [filePreview, setFilePreview] = useState(null);
+  const { toast } = useToast();
 
   const { isLoading, isError, data, error, refetch } = useQuery({
     queryKey: ["kelas_dosen", url],
@@ -254,7 +257,11 @@ export default function DosenKelas() {
     },
     onSuccess: (data) => {
       console.log(data);
-      Swal.fire("Berhasil!", "Operasi berhasil dilakukan!", "success");
+      Swal.fire("Berhasil!", "Operasi berhasil dilakukan!", "success").then(
+        () => {
+          refetch();
+        }
+      );
     },
     onError: (error, action) => {
       console.log(action);
@@ -311,7 +318,16 @@ export default function DosenKelas() {
 
   return (
     <div className="kontrak-container">
-      <div className="header">
+      <div
+        className="header "
+        // onClick={() => {
+        //   alert("miaw")
+        //   toast({
+        //     title: "Kode Kelas berhasil di copy",
+        //     description: "",
+        //   });
+        // }}
+      >
         <h2>Kelas</h2>
       </div>
       <div className="search-add-container">
@@ -357,7 +373,7 @@ export default function DosenKelas() {
               <div className="bg-purple-700 flex justify-between text-white p-4 rounded-t-lg w-150 relative">
                 <div className="">
                   <h3 className="font-bold text-lg">{item.name}</h3>
-                  <p className="text-sm">Pengajar : { }</p>
+                  <p className="text-sm">Pengajar : {}</p>
                 </div>
 
                 <AlertDialog
@@ -510,10 +526,28 @@ export default function DosenKelas() {
               </div>
               <div className="p-4">
                 <ul className="text-gray-700 text-sm space-y-2 h-10">
-                  <li>
+                  <li className="flex gap-2">
                     <strong className="text-indigo-700">
                       Kode Kelas : {item.class_code}
                     </strong>
+
+                    {/* <div className=""> */}
+                    <FaRegCopy
+                      onClick={(e) => {
+                        // e.stopPropagation();
+
+                        e.preventDefault();
+                        navigator.clipboard.writeText(item.class_code);
+                        toast({
+                          title: "Copy berhasil",
+                          description: "Kode Kelas berhasil dicopy",
+                        });
+                        // alert("miaw");
+                      }}
+                      className="hover:bg-slate-300 p-1 rounded-md"
+                      size={25}
+                    />
+                    {/* </div> */}
                   </li>
                 </ul>
               </div>
@@ -557,10 +591,11 @@ export default function DosenKelas() {
                             </button>
                         ))} */}
           <button
-            className={`page-item ${currentPage === Math.ceil(data.length / itemsPerPage)
+            className={`page-item ${
+              currentPage === Math.ceil(data.length / itemsPerPage)
                 ? "disabled"
                 : ""
-              }`}
+            }`}
             onClick={() => {
               console.log(data.links.next);
               setUrl(data.links.next);
@@ -644,7 +679,10 @@ export default function DosenKelas() {
                       name="end_period"
                       value={formData.end_period}
                       onChange={handleChange}
-                      min={formData.start_period || new Date().toISOString().split("T")[0]} 
+                      min={
+                        formData.start_period ||
+                        new Date().toISOString().split("T")[0]
+                      }
                     />
                   </div>
                   <div className="edit-form-group-mahasiswa">

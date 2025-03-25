@@ -20,6 +20,8 @@ import axios from "axios";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { RoutesApi } from "@/Routes";
 import { ClipLoader } from "react-spinners";
+import { joinAssignmentMahasiswa } from "@/hooks/dashboard/useMahasiswa";
+import { getCookie } from "@/service";
 
 export default function MahasiswaPraktikum() {
   const [isOpen, setIsOpen] = useState(false);
@@ -30,7 +32,7 @@ export default function MahasiswaPraktikum() {
   const [cookies, setCookie] = useCookies(["user"]);
   const [url, setUrl] = useState(`${RoutesApi.url}api/student/assignments`);
 
-  const { isLoading, isError, data, error } = useQuery({
+  const { isLoading, isError, data, error, refetch } = useQuery({
     queryKey: ["praktikum", url],
     queryFn: async () => {
       const { data } = await axios.get(url, {
@@ -43,6 +45,8 @@ export default function MahasiswaPraktikum() {
       return data;
     },
   });
+
+  // const mutation = useMutation(())
 
   const handleSort = (key) => {
     let direction = "ascending";
@@ -85,6 +89,7 @@ export default function MahasiswaPraktikum() {
 
   const handleSave = () => {
     // Logic to save the data
+    // const
     onClose();
   };
   const [file, setFile] = useState();
@@ -102,47 +107,48 @@ export default function MahasiswaPraktikum() {
   //       String(value).toLowerCase().includes(search.toLowerCase())
   //     ),
   // }));
-  const mutation = useMutation({
-    mutationFn: async (id) => {
-      console.log("button clicked");
-      // const { response } = await axios.post(RoutesApi.login, {
-      const response = await axios.get(`${RoutesApi.url}api/csrf-token`, {
-        // withCredentials: true,
-        headers: {
-          "X-Requested-With": "XMLHttpRequest",
-          Accept: "application/json",
-        },
-      });
-      console.log(response.data.token);
-      axios.defaults.headers.common["X-CSRF-TOKEN"] = response.data.token;
-      console.log(cookies.token);
-      const data = await axios.post(
-        RoutesApi.assignmentStudent.url,
-        {
-          assignment_code: formData.assignment_code,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            "X-CSRF-TOKEN": response.data.token,
-            Authorization: `Bearer ${cookies.token}`,
-          },
-          params: {
-            intent: RoutesApi.assignmentStudent.intent,
-          },
-        }
-      );
-      return data;
-    },
-    onSuccess: (data) => {
-      console.log(data);
-      window.location.reload();
-    },
-    onError: (error) => {
-      console.log(error);
-    },
-  });
+  const mutation = joinAssignmentMahasiswa(getCookie(), formData, refetch);
+  // const mutation = useMutation({
+  //   mutationFn: async (id) => {
+  //     console.log("button clicked");
+  //     // const { response } = await axios.post(RoutesApi.login, {
+  //     const response = await axios.get(`${RoutesApi.url}api/csrf-token`, {
+  //       // withCredentials: true,
+  //       headers: {
+  //         "X-Requested-With": "XMLHttpRequest",
+  //         Accept: "application/json",
+  //       },
+  //     });
+  //     console.log(response.data.token);
+  //     axios.defaults.headers.common["X-CSRF-TOKEN"] = response.data.token;
+  //     console.log(cookies.token);
+  //     const data = await axios.post(
+  //       RoutesApi.assignmentStudent.url,
+  //       {
+  //         assignment_code: formData.assignment_code,
+  //       },
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           Accept: "application/json",
+  //           "X-CSRF-TOKEN": response.data.token,
+  //           Authorization: `Bearer ${cookies.token}`,
+  //         },
+  //         params: {
+  //           intent: RoutesApi.assignmentStudent.intent,
+  //         },
+  //       }
+  //     );
+  //     return data;
+  //   },
+  //   onSuccess: (data) => {
+  //     console.log(data);
+  //     window.location.reload();
+  //   },
+  //   onError: (error) => {
+  //     console.log(error);
+  //   },
+  // });
 
   if (isLoading) {
     return (
@@ -165,7 +171,7 @@ export default function MahasiswaPraktikum() {
         ))} */}
       </div>
       <div className="search-add-container flex justify-between">
-        <div className="search-input-container">
+        <div className="search-input-container flex justify-between pr-7 w-full">
           <input
             type="text"
             id="search"
@@ -173,6 +179,39 @@ export default function MahasiswaPraktikum() {
             placeholder="Cari Praktikum   🔎"
             onChange={(e) => setSearch(e.target.value)}
           />
+          <AlertDialog>
+            <AlertDialogTrigger className="bg-blue-800 p-2 rounded-md text-white hover:bg-blue-900">
+              Tambah Praktikum
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <div className="edit-form-group-mahasiswa">
+                <label className="!text-black">Kode Praktikum :</label>
+                <div className="flex items-center gap-2">
+                  <input
+                    className="text-black"
+                    name="assignment_code"
+                    value={formData.assignment_code}
+                    onChange={handleChange}
+                    // readOnly
+                  />
+                </div>
+              </div>
+              <AlertDialogFooter>
+                <AlertDialogCancel className="bg-red-600 text-white hover:bg-red-800 hover:text-white">
+                  Batal
+                </AlertDialogCancel>
+                <AlertDialogAction
+                  className="bg-green-600"
+                  // onClick={handleSave}
+                  onClick={() => {
+                    mutation.mutate();
+                  }}
+                >
+                  Gabung Praktikum
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       </div>
       <div className="table-container">
