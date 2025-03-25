@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { RxCross1 } from "react-icons/rx";
 import { createPortal } from "react-dom";
+import Swal from "sweetalert2";
 
 // import { useToast } from "@/hooks/use-toast";
 import { Check, ChevronsUpDown } from "lucide-react";
@@ -37,6 +38,7 @@ const TambahKontrak = ({
   UniData,
   taskData,
   setOpen,
+  refetch,
 }) => {
   // const { toast } = useToast();
   const [formData, setFormData] = useState({
@@ -127,7 +129,16 @@ const TambahKontrak = ({
     },
     onSuccess: (data) => {
       console.log(data);
-      window.location.reload();
+      Swal.fire({
+        title: "Kontrak berhasil dibuat",
+        // text: "Silakan verifikasi email Anda terlebih dahulu.",
+        icon: "success",
+        confirmButtonText: "Lanjutkan",
+      }).then(() => {
+        refetch();
+        // navigate("/confirm-otp");
+      });
+      // window.location.reload();
 
       // window.location.href = "/" + role;
       // alert("Login successful!");
@@ -274,8 +285,10 @@ const TambahKontrak = ({
                   aria-expanded={open}
                   className="w-full justify-between"
                 >
-                  {value
-                    ? UniData.find((uni) => uni.name === value)?.name
+                  {formData.instansi
+                    ? UniData.find(
+                        (uni) => uni.id.toString() === formData.instansi
+                      )?.name || "Pilih Instansi..."
                     : "Pilih Instansi..."}
                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
@@ -290,9 +303,13 @@ const TambahKontrak = ({
                       {UniData.map((uni) => (
                         <CommandItem
                           key={uni.id}
-                          value={uni.id}
+                          value={uni.name}
                           onSelect={(currentValue) => {
                             // alert(currentValue);
+                            setFormData({
+                              ...formData,
+                              instansi: uni.id.toString(),
+                            });
                             setValue(
                               currentValue === value ? "" : currentValue
                             );
@@ -302,7 +319,9 @@ const TambahKontrak = ({
                           <Check
                             className={cn(
                               "mr-2 h-4 w-4",
-                              value === uni.name ? "opacity-100" : "opacity-0"
+                              formData.instansi === uni.id.toString()
+                                ? "opacity-100"
+                                : "opacity-0"
                             )}
                           />
                           {uni.name}

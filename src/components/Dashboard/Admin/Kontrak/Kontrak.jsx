@@ -248,6 +248,7 @@ const Kontrak = () => {
         </button>
       </div>
       <TambahKontrak
+        refetch={refetch}
         UniData={dataUni}
         taskData={taskData}
         isOpen={isOpen}
