@@ -1,9 +1,69 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaFile } from "react-icons/fa";
+import axios from "axios";
+import { RoutesApi } from "@/Routes"
+import { useMutation } from '@tanstack/react-query';
+import { useCookies } from "react-cookie";
+import { IntentEnum } from "@/enums/IntentEnum";
 
 const AssignmentsTable = ({ assignments, loading, error, refetch }) => {
     const navigate = useNavigate();
+    const [cookies] = useCookies(["user"]);
+
+    const downloadMutation = useMutation({
+        mutationFn: async (id) => {
+            try {
+                const showEndpoint = RoutesApi.psc.assignments.show(id);
+                const response = await axios.get(
+                showEndpoint.url,
+                {
+                    headers: {
+                    Authorization: `Bearer ${cookies.token}`,
+                    Accept: "*/*",
+                    },
+                    params: {
+                    intent: IntentEnum.API_USER_DOWNLOAD_FILE
+                    },
+                    responseType: 'blob'
+                }
+                );
+                
+                // Extract filename from Content-Disposition header if present
+                let filename = 'file.pdf'; // Default fallback name
+                const contentDisposition = response.headers['content-disposition'];
+                
+                if (contentDisposition) {
+                // Extract filename from the header
+                const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                const matches = filenameRegex.exec(contentDisposition);
+                if (matches !== null && matches[1]) {
+                    // Clean up the filename
+                    filename = matches[1].replace(/['"]/g, '');
+                }
+                }
+                
+                // Create a blob URL and trigger download
+                const url = window.URL.createObjectURL(new Blob([response.data]));
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', filename);
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                return response;
+            } catch (error) {
+                console.error("Download error:", error);
+                Swal.fire("Gagal!", "Gagal mengunduh file", "error");
+                throw error;
+            }
+        }
+    });
+
+    const handleDownload = (id) => {
+        downloadMutation.mutate(id);
+    };
 
     if (loading) {
         return (
@@ -52,8 +112,8 @@ const AssignmentsTable = ({ assignments, loading, error, refetch }) => {
             {assignments.map((assignment) => (
                 <div 
                     key={assignment.id} 
-                    className="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden cursor-pointer"
-                    onClick={() => navigate(`/mahasiswa-psc/praktikum/${assignment.id}`)}
+                    className="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden"
+                    // onClick={() => navigate(`/mahasiswa-psc/praktikum/${assignment.id}`)}
                 >
                     <div className="h-3 bg-purple-600"></div>
                     <div className="p-5">
@@ -66,37 +126,25 @@ const AssignmentsTable = ({ assignments, loading, error, refetch }) => {
                             </span>
                         </div>
                         
-                        <div className="mb-4">
-                            <p className="text-sm text-gray-600 line-clamp-2">{assignment.description || 'Tidak ada deskripsi'}</p>
-                        </div>
-                        
-                        {assignment.file_path && (
-                            <div className="flex items-center text-sm text-blue-600 mb-4">
-                                <FaFile className="mr-1" />
-                                <span>File pendukung tersedia</span>
-                            </div>
-                        )}
-                        
                         <div className="flex justify-between text-sm text-gray-500">
                             <div>
-                                <p>Mulai: {assignment.start_date || 'N/A'}</p>
+                                <p>Mulai: {assignment.start_period || 'N/A'}</p>
                             </div>
                             <div>
-                                <p>Deadline: {assignment.end_date || 'N/A'}</p>
+                                <p>Deadline: {assignment.end_period || 'N/A'}</p>
                             </div>
                         </div>
-                        
-                        <div className="mt-4">
-                            <button 
-                                className="w-full px-4 py-2 bg-purple-600 text-white text-sm font-medium rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    navigate(`/mahasiswa-psc/praktikum/${assignment.id}`);
-                                }}
-                            >
-                                Lihat Detail
-                            </button>
-                        </div>
+                        {assignment.supporting_file && (
+                            <div className="mt-4">
+                                <button 
+                                    className="w-full px-4 py-2 bg-purple-600 text-white text-sm font-medium rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+                                    onClick={() => handleDownload(assignment.id)}  
+                                    disabled={downloadMutation.isPending}
+                                >
+                                    {downloadMutation.isPending ? "Loading..." : "Download File Pendukung"}
+                                </button>
+                            </div>
+                        )}
                     </div>
                 </div>
             ))}

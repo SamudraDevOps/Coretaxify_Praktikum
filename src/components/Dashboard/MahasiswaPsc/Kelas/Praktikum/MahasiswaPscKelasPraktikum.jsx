@@ -8,7 +8,7 @@ import { Alert, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 import { useParams, useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from "react-icons/fa";
-import AssignmentsTable from './AssignmentsTable';
+import AssignmentsCard from './AssignmentsCard';
 
 const MahasiswaPscKelasPraktikum = () => {
     const { id } = useParams();
@@ -129,7 +129,7 @@ const MahasiswaPscKelasPraktikum = () => {
                 </div>
             </div>
 
-            <AssignmentsTable 
+            <AssignmentsCard 
                 assignments={filteredAssignments}
                 loading={isLoadingAssignments}
                 error={isErrorAssignments ? assignmentsError : null}
