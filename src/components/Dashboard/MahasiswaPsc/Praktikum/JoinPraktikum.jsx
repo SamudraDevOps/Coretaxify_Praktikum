@@ -53,18 +53,20 @@ const JoinPraktikum = ({ isOpen, setIsOpen, onSuccess }) => {
       );
     },
     onSuccess: (data) => {
+      setIsOpen(false);
+      setPraktikumCode('');
       Swal.fire({
         title: "Berhasil!",
         text: "Anda berhasil bergabung dengan praktikum!",
         icon: "success",
         confirmButtonText: "OK",
       });
-      setPraktikumCode('');
-      setIsOpen(false);
       if (onSuccess) onSuccess();
     },
     onError: (error) => {
       console.error(error);
+      setIsOpen(false);
+      setPraktikumCode('');
       Swal.fire({
         title: "Gagal!",
         text: error.response?.data?.message || "Terjadi kesalahan saat bergabung dengan praktikum.",
@@ -76,6 +78,7 @@ const JoinPraktikum = ({ isOpen, setIsOpen, onSuccess }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setIsOpen(false);
     if (!praktikumCode.trim()) {
       Swal.fire({
         title: "Error!",
