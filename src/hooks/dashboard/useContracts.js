@@ -14,6 +14,9 @@ export const getContracts = (url, cookie) =>
         headers: {
           Authorization: `Bearer ${cookie}`,
         },
+        params:{
+          perPage:20
+        }
       });
       console.log(data.data);
       return data.data;
