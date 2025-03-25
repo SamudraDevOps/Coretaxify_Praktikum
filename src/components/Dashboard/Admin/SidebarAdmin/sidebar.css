@@ -1,76 +1,95 @@
 /* Sidebar Styles */
 .sidebar {
-          background-color: #f8f9fa;
-          color: #757575;
-          width: 250px;
-          transition: width 0.3s ease;
-          height: 100vh;
-          display: flex;
-          flex-direction: column;
-          position: fixed;
+  background-color: #f8f9fa;
+  color: #757575;
+  width: 250px;
+  transition: width 0.3s ease;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  overflow: hidden;
 }
 
 .sidebar.closed {
-          width: 80px;
+  width: 80px;
+}
+
+.flex-grow {
+  flex-grow: 1;
+  overflow-y: auto; /* Allows scrolling within the menu section */
 }
 
 .sidebar-header {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          padding: 1rem 1rem;
-          background: #fff;
-          border-bottom: 1px solid #eee;
-          margin-left: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1rem;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+  margin-left: 20px;
 }
 
 .sidebar-logo {
-          width: 200px;
-          margin-right: 10px; /* Berikan jarak antara logo dan ikon */
+  width: 200px;
+  margin-right: 10px; /* Berikan jarak antara logo dan ikon */
 }
 
 .menu-toggle {
-          font-size: 1.5rem;
-          cursor: pointer;
-          color: #673ab7;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #673ab7;
 }
 
 .sidebar-menu {
-          list-style: none;
-          padding: 0;
-          margin: 0;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-menu::-webkit-scrollbar {
+  width: 5px;
+}
+
+.sidebar-menu::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar-menu::-webkit-scrollbar-thumb {
+  background-color: rgba(155, 155, 155, 0.5);
+  border-radius: 20px;
 }
 
 .menu-item {
-          display: flex;
-          align-items: center;
-          padding: 0.8rem 1rem;
-          cursor: pointer;
-          transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  padding: 0.8rem 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
 
 .menu-item:hover {
-          background-color: #ececec;
+  background-color: #ececec;
 }
 
 .menu-icon {
-          font-size: 1.5rem;
-          margin-right: 1rem;
-          color: #673ab7;
+  font-size: 1.5rem;
+  margin-right: 1rem;
+  color: #673ab7;
 }
 
 .menu-item span {
-          font-size: 1rem;
-          font-weight: 500;
+  font-size: 1rem;
+  font-weight: 500;
 }
 
 .sidebar.closed .menu-item span {
-          display: none;
+  display: none;
 }
 
 .sidebar.closed .menu-icon {
-          margin-right: 0;
+  margin-right: 0;
 }
 
 /* Dropdown Menu */
@@ -134,11 +153,11 @@ position: relative;
 
 /* Profile Section */
 .sidebar-profile {
-          margin-top: auto;
-          /* Tempatkan di bagian bawah */
-          padding: 1rem;
-          border-top: 1px solid #eee;
-          background: #fff;
+  margin-top: auto;
+  /* Tempatkan di bagian bawah */
+  padding: 1rem;
+  border-top: 1px solid #eee;
+  background: #fff;
 }
 
 .profile-header {
