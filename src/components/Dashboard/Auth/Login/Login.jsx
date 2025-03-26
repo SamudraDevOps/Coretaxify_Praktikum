@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaRegEye, FaEyeSlash } from "react-icons/fa";
 import CTaxifyLogo from "../../../../assets/images/4.png";
@@ -12,16 +12,28 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  // const [cookies, setCookie] = useCookies(["token"]);
   const [errors, setErrors] = useState({});
+  const [cookies, setCookie] = useCookies(["token", "role"]);
+  const navigate = useNavigate();
+
+  // Check if already logged in
+  React.useEffect(() => {
+    if (cookies.token && cookies.role) {
+      navigate(`/${cookies.role}`);
+    }
+  }, [cookies.token, cookies.role, navigate]);
+
+  const togglePassword = () => {
+    setShowPassword(!showPassword);
+  };
 
   const validate = () => {
     let newErrors = {};
-    console.log(username);
+    
     if (!username) {
       newErrors.username = "Email dibutuhkan.";
     } else if (!/\S+@\S+\.\S+/.test(username)) {
-      newErrors.username = "Email tidak valid. Tambahkan '@' dan '.' seperti ini: example@email.com";
+      newErrors.username = "Email tidak valid. Berikan '@' dan '.' Seperti contoh: 'email@example.com'";
     }
 
     if (!password) {
@@ -34,28 +46,20 @@ const Login = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (validate()) {
-      alert("Form submitted successfully!");
+  const handleUsernameChange = (e) => {
+    setUsername(e.target.value);
+    // Clear the username error when user types
+    if (errors.username) {
+      setErrors({...errors, username: ""});
     }
   };
 
-  // useEffect(() => {
-  //   validate();
-  // }, [username, password]);
-  const [cookies, setCookie] = useCookies(["token", "role"]);
-  const navigate = useNavigate();
-
-  // Check if already logged in
-  useEffect(() => {
-    if (cookies.token && cookies.role) {
-      navigate(`/${cookies.role}`);
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+    // Clear the password error when user types
+    if (errors.password) {
+      setErrors({...errors, password: ""});
     }
-  }, [cookies.token, cookies.role, navigate]);
-
-  const togglePassword = () => {
-    setShowPassword(!showPassword);
   };
 
   const mutation = useMutation({
@@ -152,13 +156,11 @@ const Login = () => {
 
   const handleLogin = (e) => {
     e.preventDefault();
+    
+    // Only validate when form is submitted
     if (validate()) {
       mutation.mutate();
     }
-
-    // console.log("Username:", username);
-    // console.log("Password:", password);
-    // alert("Login berhasil!");
   };
 
   return (
@@ -186,7 +188,7 @@ const Login = () => {
               className="mt-1 block w-full p-2 border rounded-md"
               placeholder="Masukkan email Anda"
               value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              onChange={handleUsernameChange}
               // required
             />
             {errors.username && (
@@ -208,7 +210,7 @@ const Login = () => {
                 className="mt-1 block w-full p-2 border rounded-md"
                 placeholder="Masukkan password Anda"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={handlePasswordChange}
                 // required
               />
               <button
