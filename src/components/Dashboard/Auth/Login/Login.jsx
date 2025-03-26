@@ -21,7 +21,7 @@ const Login = () => {
     if (!username) {
       newErrors.username = "Email dibutuhkan.";
     } else if (!/\S+@\S+\.\S+/.test(username)) {
-      newErrors.username = "Email tidak valid.";
+      newErrors.username = "Email tidak valid. Tambahkan '@' dan '.' seperti ini: example@email.com";
     }
 
     if (!password) {
@@ -41,9 +41,9 @@ const Login = () => {
     }
   };
 
-  useEffect(() => {
-    validate();
-  }, [username, password]);
+  // useEffect(() => {
+  //   validate();
+  // }, [username, password]);
   const [cookies, setCookie] = useCookies(["token", "role"]);
   const navigate = useNavigate();
 
@@ -152,9 +152,9 @@ const Login = () => {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    // if (validate()) {
-    mutation.mutate();
-    // }
+    if (validate()) {
+      mutation.mutate();
+    }
 
     // console.log("Username:", username);
     // console.log("Password:", password);
@@ -181,13 +181,13 @@ const Login = () => {
               Email
             </label>
             <input
-              type="email"
+              type="text"
               id="username"
               className="mt-1 block w-full p-2 border rounded-md"
               placeholder="Masukkan email Anda"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              required
+              // required
             />
             {errors.username && (
               <p className="text-red-500 text-sm">{errors.username}</p>
@@ -209,7 +209,7 @@ const Login = () => {
                 placeholder="Masukkan password Anda"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                required
+                // required
               />
               <button
                 type="button"
