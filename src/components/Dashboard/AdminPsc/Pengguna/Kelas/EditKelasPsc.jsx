@@ -29,7 +29,7 @@ const EditKelasPsc = () => {
     class_code: "",
     start_period: "",
     end_period: "",
-    import_file: null
+    // import_file: null
   });
 
   const [createFormData, setCreateFormData] = useState({
@@ -38,7 +38,7 @@ const EditKelasPsc = () => {
     class_code: "",
     start_period: "",
     end_period: "",
-    import_file: null
+    // import_file: null
   });
 
   // Generate random code for new groups
@@ -93,9 +93,9 @@ const EditKelasPsc = () => {
         formDataObj.append("end_period", createFormData.end_period);
         
         // Add optional import file if present
-        if (createFormData.import_file) {
-          formDataObj.append("import_file", createFormData.import_file);
-        }
+        // if (createFormData.import_file) {
+        //   formDataObj.append("import_file", createFormData.import_file);
+        // }
 
         return await axios.post(
           RoutesApi.psc.groups.store().url,
@@ -157,7 +157,7 @@ const EditKelasPsc = () => {
         class_code: "",
         start_period: "",
         end_period: "",
-        import_file: null
+        // import_file: null
       });
     },
     onError: (error) => {

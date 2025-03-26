@@ -115,7 +115,7 @@ const CreateGroupPopup = ({
             </select>
           </div>
           
-          <div className="edit-form-group-kelas">
+          {/* <div className="edit-form-group-kelas">
             <label>Import Data (Opsional):</label>
             <input
               type="file"
@@ -124,7 +124,7 @@ const CreateGroupPopup = ({
               accept=".xlsx,.xls"
             />
             <small>Format: XLSX, XLS (Max 5MB)</small>
-          </div>
+          </div> */}
           
           <div className="edit-popup-actions-kelas">
             <button
