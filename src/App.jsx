@@ -105,8 +105,9 @@ import PermohonanTertundaBadan from "./components/PraktikumPage/Badan/PortalSaya
 import DashboardEFaktur from "./components/PraktikumPage/Badan/EFaktur/DashboardEFaktur";
 import PajakKeluaran from "./components/PraktikumPage/Badan/EFaktur/PajakKeluaran";
 import TambahFakturKeluaran from "./components/PraktikumPage/Badan/EFaktur/TambahFakturKeluaran";
-
+import PajakMasukan from "./components/PraktikumPage/Badan/EFaktur/PajakMasukan";
 // Route Badan
+
 import ProtectedRoutes from "./components/Dashboard/Auth/ProtectedRoutes";
 import MahasiswaPraktikumKelas from "./components/Dashboard/Mahasiswa/Kelas/MahasiswaPraktikumKelas";
 import DashboardPsc from "./components/Dashboard/AdminPsc/Dashboard/DashboardPsc";
@@ -147,7 +148,7 @@ const Main = () => {
                 Accept: "application/json",
               }
             });
-            
+
             // If not verified, store email for OTP verification
             if (!verificationResponse.data.verified) {
               localStorage.setItem("pendingVerificationEmail", verificationResponse.data.email);
@@ -195,16 +196,16 @@ const Main = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/confirm-otp" element={<ConfirmOTP />} />
-        
+
         {/* ADMIN ROUTE */}
         <Route element={<RoleProtectedRoutes allowedRoles={["admin"]} layout="admin" />}>
-          <Route path="/admin" element={<DashboardAdmin />}/>
+          <Route path="/admin" element={<DashboardAdmin />} />
           <Route path="/admin/kontrak" element={<Kontrak />} />
           <Route path="/admin/coretaxify" element={<CoretaxifyList />} />
           <Route path="/admin/edit-dosen" element={<EditDosen />} />
           <Route path="/admin/upload-soal" element={<UploadSoal />} />
           <Route path="/admin/praktikum" element={<Praktikum />} />
-          <Route path="/admin/coretaxify/coretaxify-send" element={ <CoretaxifySendDetail />} />
+          <Route path="/admin/coretaxify/coretaxify-send" element={<CoretaxifySendDetail />} />
           <Route path="/admin/ujian" element={<Ujian />} />
           <Route path="/admin/edit-admin" element={<EditAdmin />} />
           <Route path="/admin/edit-kelas" element={<EditKelas />} />
@@ -217,7 +218,7 @@ const Main = () => {
         </Route>
 
         {/* DOSEN ROUTE */}
-        <Route element={<RoleProtectedRoutes allowedRoles={["dosen"]} layout= "admin" />}>
+        <Route element={<RoleProtectedRoutes allowedRoles={["dosen"]} layout="admin" />}>
           <Route path="/dosen" element={<DashboardDosen />} />
           <Route path="/dosen/kelas" element={<DosenKelas />} />
           <Route path="/dosen/kelas/praktikum/:id" element={<DosenPraktikumKelas />} />
@@ -228,9 +229,9 @@ const Main = () => {
           <Route path="/dosen/penilaian/detail-tugas/detail-penilaian" element={<DetailPenilaian />} />
           <Route path="/dosen/ujian" element={<UjianDosen />} />
         </Route>
-        
+
         {/* MAHASISWA ROUTE */}
-        <Route element={<RoleProtectedRoutes allowedRoles={["mahasiswa"]} layout= "admin" />}>
+        <Route element={<RoleProtectedRoutes allowedRoles={["mahasiswa"]} layout="admin" />}>
           <Route path="/mahasiswa/kelas" element={<MahasiswaKelas />} />
           <Route path="/mahasiswa/kelas/:id" element={<MahasiswaPraktikumKelas />} />
           <Route path="/mahasiswa" element={<Navigate to="/mahasiswa/kelas" replace />} />
@@ -239,7 +240,7 @@ const Main = () => {
         </Route>
 
         {/* PSC ROUTE */}
-        <Route element={<RoleProtectedRoutes allowedRoles={["psc"]} layout= "admin" />}>
+        <Route element={<RoleProtectedRoutes allowedRoles={["psc"]} layout="admin" />}>
           <Route path="/psc/" element={<DashboardPsc />} />
           <Route path="/psc/master-soal" element={<UploadSoalPsc />} />
           <Route path="/psc/edit-pengajar" element={<EditPengajar />} />
@@ -249,7 +250,7 @@ const Main = () => {
           {/* <Route path="/psc/kelas/:groupId/mahasiswa/:memberId" element={<MemberDetailPage />} /> */}
           <Route path="/psc/praktikum" element={<PraktikumPsc />} />
           <Route path="/psc/praktikum/:assignmentId/members" element={<AssignmentPscMember />} />
-          <Route path="/psc/ujian" element={{/* <UjianPsc /> */}} />
+          <Route path="/psc/ujian" element={{/* <UjianPsc /> */ }} />
           <Route path="/psc/edit-mahasiswa" element={<EditMahasiswaPsc />} />
         </Route>
 
