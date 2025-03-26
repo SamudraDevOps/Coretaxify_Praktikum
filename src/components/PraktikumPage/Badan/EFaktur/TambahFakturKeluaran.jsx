@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaCalendarAlt, FaFilter, FaSearch, FaTimes, FaChevronDown, FaChevronUp } from "react-icons/fa";
 import SideBarEFaktur from './SideBarEFaktur';
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogFooter, AlertDialogTitle, AlertDialogDescription, AlertDialogAction, AlertDialogCancel } from "@/components/ui/alert-dialog";
 
 
-const TambahFakturKeluaran = () => {
+const TambahFakturKeluaran = ({ }) => {
     const [showDokumenTransaksi, setShowDokumenTransaksi] = useState(false);
     const [showInformasiPembeli, setShowInformasiPembeli] = useState(false);
     const [showDetailTransaksi, setShowDetailTransaksi] = useState(false);
@@ -21,27 +21,38 @@ const TambahFakturKeluaran = () => {
     const [selectedYear, setSelectedYear] = useState(new Date());
 
     const [isChecked, setIsChecked] = useState(false);
-    const [jumlah, setJumlah] = useState("");
+    const [jumlah, setJumlah] = useState(formatRupiah(dpp.toString()));
+    const [tarifPPN, setTarifPPN] = useState("Rp 0");
+    const [tarifPPnBM, setTarifPPnBM] = useState("");
+    const [ppnBM, setPPnBM] = useState("Rp 0");
+    const [isCustomPPnBM, setIsCustomPPnBM] = useState(false);
 
-    const formatRupiah = (value) => {
-        const numberString = value.replace(/[^0-9]/g, "");
+    function formatRupiah(value) {
+        const numberString = value.replace(/[^0-9]/g, ""); // Hanya angka
         return new Intl.NumberFormat("id-ID", {
             style: "currency",
             currency: "IDR",
             minimumFractionDigits: 0
-        }).format(numberString);
-    };
+        }).format(numberString || 0);
+    }
+
+    function formatPersen(value) {
+        const numberString = value.replace(/[^0-9]/g, ""); // Hanya angka
+        return numberString ? `${numberString}%` : "";
+    }
 
     const handleHargaChange = (e) => {
         const rawValue = e.target.value;
-        const formattedValue = formatRupiah(rawValue);
-        setHarga(formattedValue);
-
         const numericHarga = parseInt(rawValue.replace(/\D/g, ""), 10) || 0;
+        setHarga(formatRupiah(rawValue));
+
         const newTotalHarga = numericHarga * kuantitas;
         setTotalHarga(formatRupiah(newTotalHarga.toString()));
-        setDPP(formatRupiah((newTotalHarga - parseInt(potonganHarga.replace(/\D/g, ""), 10) || 0).toString()));
-        setJumlah(formatRupiah((newTotalHarga - parseInt(potonganHarga.replace(/\D/g, ""), 10) || 0).toString()));
+        const newDPP = newTotalHarga - (parseInt(potonganHarga.replace(/\D/g, ""), 10) || 0);
+        setDPP(formatRupiah(newDPP.toString()));
+        if (!isChecked) {
+            setJumlah(formatRupiah(newDPP.toString()));
+        }
     };
 
     const handleKuantitasChange = (e) => {
@@ -51,32 +62,82 @@ const TambahFakturKeluaran = () => {
         const numericHarga = parseInt(harga.replace(/\D/g, ""), 10) || 0;
         const newTotalHarga = numericHarga * qty;
         setTotalHarga(formatRupiah(newTotalHarga.toString()));
-        setDPP(formatRupiah((newTotalHarga - parseInt(potonganHarga.replace(/\D/g, ""), 10) || 0).toString()));
-        setJumlah(formatRupiah((newTotalHarga - parseInt(potonganHarga.replace(/\D/g, ""), 10) || 0).toString()));
+        const newDPP = newTotalHarga - (parseInt(potonganHarga.replace(/\D/g, ""), 10) || 0);
+        setDPP(formatRupiah(newDPP.toString()));
+        if (!isChecked) {
+            setJumlah(formatRupiah(newDPP.toString()));
+        }
     };
 
     const handlePotonganHargaChange = (e) => {
         const rawValue = e.target.value;
-        const formattedValue = formatRupiah(rawValue);
-        setPotonganHarga(formattedValue);
-
         const numericPotongan = parseInt(rawValue.replace(/\D/g, ""), 10) || 0;
+        setPotonganHarga(formatRupiah(rawValue));
+
         const numericTotalHarga = parseInt(totalHarga.replace(/\D/g, ""), 10) || 0;
-        setDPP(formatRupiah((numericTotalHarga - numericPotongan).toString()));
-        setJumlah(formatRupiah((numericTotalHarga - numericPotongan).toString()));
+        const newDPP = numericTotalHarga - numericPotongan;
+        setDPP(formatRupiah(newDPP.toString()));
+        if (!isChecked) {
+            setJumlah(formatRupiah(newDPP.toString()));
+        }
     };
     const handleKodeTransaksiChange = (event) => {
         setKodeTransaksi(event.target.value);
     };
- 
 
+    useEffect(() => {
+        if (kodeTransaksi === "01") {
+            setIsChecked(false);
+        }
+    }, [kodeTransaksi]);
+
+    function updateTarifPPN(newJumlah) {
+        const numericJumlah = parseInt(newJumlah.replace(/\D/g, ""), 10) || 0;
+        setTarifPPN(formatRupiah((numericJumlah * 0.12).toString())); // PPN 12%
+
+        // Hitung PPnBM jika PPnBM belum diedit manual
+        if (!isCustomPPnBM) {
+            const numericPPnBM = parseInt(tarifPPnBM.replace(/\D/g, ""), 10) || 0;
+            setPPnBM(formatRupiah(((numericJumlah * numericPPnBM) / 100).toString()));
+        }
+    }
     const handleCheckboxChange = () => {
-        setIsChecked(!isChecked);
+        if (kodeTransaksi !== "01") {
+            setIsChecked(!isChecked);
+        }
     };
 
     const handleJumlahChange = (e) => {
         if (isChecked) {
-            setJumlah(e.target.value);
+            const numericJumlah = parseInt(e.target.value.replace(/\D/g, ""), 10) || 0;
+            const formattedJumlah = formatRupiah(numericJumlah.toString());
+            setJumlah(formattedJumlah);
+            updateTarifPPN(numericJumlah.toString());
+        }
+    };
+
+    const handleTarifPPnBMChange = (e) => {
+        const formattedTarif = formatPersen(e.target.value);
+        setTarifPPnBM(formattedTarif);
+
+        // Hitung ulang PPnBM jika PPnBM tidak diedit manual
+        if (!isCustomPPnBM) {
+            const numericJumlah = parseInt(jumlah.replace(/\D/g, ""), 10) || 0;
+            const numericPPnBM = parseInt(formattedTarif.replace(/\D/g, ""), 10) || 0;
+            setPPnBM(formatRupiah(((numericJumlah * numericPPnBM) / 100).toString()));
+        }
+    };
+
+    const handlePPnBMChange = (e) => {
+        setIsCustomPPnBM(true); // Tandai bahwa user mengedit manual
+        setPPnBM(formatRupiah(e.target.value));
+
+        // Jika nilai PPnBM dikosongkan, hitung ulang berdasarkan tarif PPnBM
+        if (e.target.value === "" || e.target.value === "Rp 0") {
+            setIsCustomPPnBM(false); // Reset custom edit jika dikosongkan
+            const numericJumlah = parseInt(jumlah.replace(/\D/g, ""), 10) || 0;
+            const numericPPnBM = parseInt(tarifPPnBM.replace(/\D/g, ""), 10) || 0;
+            setPPnBM(formatRupiah(((numericJumlah * numericPPnBM) / 100).toString()));
         }
     };
 
@@ -88,7 +149,24 @@ const TambahFakturKeluaran = () => {
         }
     };
 
+    useEffect(() => {
+        const formattedDPP = formatRupiah(dpp.toString());
+        setJumlah(formattedDPP);
+        updateTarifPPN(dpp.toString());
+    }, [dpp]);
 
+    const resetForm = () => {
+        setHarga("Rp 0");
+        setKuantitas(0);
+        setTotalHarga("Rp 0");
+        setPotonganHarga("Rp 0");
+        setDpp("Rp 0");
+        setJumlah("Rp 0");
+        setTarifPPN("Rp 0");
+        setTarifPPnBM("");
+        setPPnBM("Rp 0");
+        setIsChecked(false);
+    };
 
     return (
         <div className="flex h-screen bg-gray-100">
@@ -365,6 +443,7 @@ const TambahFakturKeluaran = () => {
                                                         className="justify-start p-3 border rounded"
                                                         checked={isChecked}
                                                         onChange={handleCheckboxChange}
+                                                        disabled={kodeTransaksi === "01"}
                                                     />
                                                     <label className="block text-sm font-medium">
                                                         DPP Nilai Lain / DPP
@@ -379,6 +458,45 @@ const TambahFakturKeluaran = () => {
                                                         value={jumlah}
                                                         onChange={handleJumlahChange}
                                                         disabled={!isChecked}
+                                                        placeholder="Rp 0"
+                                                    />
+                                                </div>
+                                                <div className="space-y-2">
+                                                    <label className="block text-sm font-medium">PPN</label>
+                                                    <input
+                                                        type="text"
+                                                        className="p-2 border rounded w-full bg-gray-100"
+                                                        value="12%"
+                                                        readOnly
+                                                    />
+                                                </div>
+                                                <div className="space-y-2">
+                                                    <label className="block text-sm font-medium">Tarif PPN</label>
+                                                    <input
+                                                        type="text"
+                                                        className="p-2 border rounded w-full bg-gray-100"
+                                                        value={tarifPPN}
+                                                        readOnly
+                                                        placeholder="Rp 0"
+                                                    />
+                                                </div>
+                                                <div className="space-y-2">
+                                                    <label className="block text-sm font-medium">Tarif PPnBM (%)</label>
+                                                    <input
+                                                        type="text"
+                                                        className="p-2 border rounded w-full"
+                                                        value={tarifPPnBM}
+                                                        onChange={handleTarifPPnBMChange}
+                                                        placeholder="Masukkan persen"
+                                                    />
+                                                </div>
+                                                <div className="space-y-2">
+                                                    <label className="block text-sm font-medium">PPnBM</label>
+                                                    <input
+                                                        type="text"
+                                                        className="p-2 border rounded w-full"
+                                                        value={ppnBM}
+                                                        onChange={handlePPnBMChange}
                                                         placeholder="Rp 0"
                                                     />
                                                 </div>

@@ -31,18 +31,6 @@ const Kontrak = () => {
     url,
     getCookieToken()
   );
-  // const { isLoading, isError, data, error, refetch } = useQuery({
-  //   queryKey: ["contracts", url],
-  //   queryFn: async () => {
-  //     const { data } = await axios.get(url, {
-  //       headers: {
-  //         Authorization: `Bearer ${cookies.token}`,
-  //       },
-  //     });
-  //     console.log(data.data);
-  //     return data;
-  //   },
-  // });
   const {
     isLoading: isLoadingTask,
     isError: isErrorTask,
@@ -72,54 +60,14 @@ const Kontrak = () => {
         headers: {
           Authorization: `Bearer ${cookies.token}`,
         },
+        params: {
+          perPage: 10000,
+        },
       });
       console.log(data.data);
       return data.data;
     },
   });
-
-  // const mutation = useMutation({
-  //   mutationFn: async (id) => {
-  //     console.log("button clicked");
-  //     // const { response } = await axios.post(RoutesApi.login, {
-  //     const response = await axios.get(`${RoutesApi.url}api/csrf-token`, {
-  //       // withCredentials: true,
-  //       headers: {
-  //         "X-Requested-With": "XMLHttpRequest",
-  //         Accept: "application/json",
-  //       },
-  //     });
-  //     console.log(response.data.token);
-  //     axios.defaults.headers.common["X-CSRF-TOKEN"] = response.data.token;
-  //     console.log(cookies.token);
-  //     const data = await axios.delete(RoutesApi.contractAdmin + `/${id}`, {
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Accept: "application/json",
-  //         "X-CSRF-TOKEN": response.data.token,
-  //         Authorization: `Bearer ${cookies.token}`,
-  //       },
-  //     });
-  //     return data;
-  //   },
-  //   onSuccess: (data) => {
-  //     console.log(data);
-  //     // const role = data.data.user.roles[0].name;
-  //     // setCookie("token", data.data.token, { path: "/" });
-  //     // setCookie("role", role, { path: "/" });
-  //     Swal.fire("Berhasil!", "Kelas berhasil dihapus!", "success");
-
-  //     window.location.href = "/" + role;
-  //     // alert("Login successful!");
-  //     // queryClient.invalidateQueries({ queryKey: ["todos"] });
-  //   },
-
-  //   onError: (error) => {
-  //     console.log("hello!");
-  //     console.log(error);
-  //     Swal.fire("Gagal !", error.message, "error");
-  //   },
-  // });
 
   const mutation = deleteContract(getCookie());
 
@@ -245,6 +193,7 @@ const Kontrak = () => {
         </button>
       </div>
       <TambahKontrak
+        refetch={refetch}
         UniData={dataUni}
         taskData={taskData}
         isOpen={isOpen}
