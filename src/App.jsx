@@ -79,6 +79,11 @@ import MahasiswaPscKelasPraktikum from "./components/Dashboard/MahasiswaPsc/Kela
 import MahasiswaPscPraktikum from "./components/Dashboard/MahasiswaPsc/Praktikum/MahasiswaPscPraktikum";
 import MahasiswaPscUjian from "./components/Dashboard/MahasiswaPsc/Ujian/MahasiswaPscUjian";
 
+// INSTRUKTUR
+import InstrukturPraktikum from "./components/Dashboard/Instruktur/Praktikum/InstrukturPraktikum";
+import BlankAssignment from "./components/Dashboard/Instruktur/Praktikum/Blank/BlankAssignment";
+import FilledAssignment from "./components/Dashboard/Instruktur/Praktikum/Filled/FilledAssignment";
+
 //Route Praktikum
 
 // Route Badan
@@ -266,7 +271,10 @@ const Main = () => {
 
         {/* PENGAJAR ROUTE */}
         <Route element={<RoleProtectedRoutes allowedRoles={["instruktur"]} layout= "admin" />}>
-          
+          <Route path="/instruktur" element={<Navigate to="/instruktur/praktikum" replace />} />
+          <Route path="/instruktur/praktikum" element={<InstrukturPraktikum />} />
+          <Route path="/instruktur/praktikum/terisi" element={<FilledAssignment />} />
+          <Route path="/instruktur/praktikum/kosong" element={<BlankAssignment />} />
         </Route>
 
         {/* Praktikum */}
@@ -898,6 +906,45 @@ const Main = () => {
             }
           />
           {/* Praktikum Orang Pribadi*/}
+
+          <Route
+            path="/admin/praktikum/2/e-faktur"
+            element={
+              <>
+                <Header />
+                <DashboardEFaktur />
+              </>
+            }
+          />
+          <Route
+            path="/admin/praktikum/2/e-faktur/pajak-keluaran"
+            element={
+              <>
+                <Header />
+                <PajakKeluaran />
+              </>
+            }
+          />
+          <Route
+            path="/admin/praktikum/2/e-faktur/pajak-keluaran/tambah-faktur-keluaran"
+            element={
+              <>
+                <Header />
+                <TambahFakturKeluaran />
+              </>
+            }
+          />
+          <Route
+            path="/admin/praktikum/2/e-faktur/pajak-masukan"
+            element={
+              <>
+                <Header />
+                {/* <PajakMasukan /> */}
+              </>
+            }
+          />
+  
+
         {/* NOT FOUND ROUTE - LAST REGISTERED ROUTE */}
         <Route path="*" element={<NotFound />} />
       </Routes>
