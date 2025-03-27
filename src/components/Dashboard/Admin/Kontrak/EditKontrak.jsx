@@ -42,6 +42,7 @@ const EditKontrak = ({
   setOpen,
   id,
   setEdit,
+  refetch,
 }) => {
   const { toast } = useToast();
   const { isLoading, isError, data, error } = getOneContract(
@@ -114,8 +115,8 @@ const EditKontrak = ({
     //   kodePembelian: "",
     //   status: "",
     // });
+    console.log("form before format");
     console.log(formData);
-    setEdit(-1);
     mutation.mutate();
     // onClose();
   };
@@ -147,7 +148,10 @@ const EditKontrak = ({
           contract_code: formData.kodePembelian,
           is_buy_task: Number(formData.is_buy_task),
           status: formData.status,
-          tasks: formData.opsiTambahan.map((task) => task.id),
+          // tasks: formData.opsiTambahan.map((task) => task.id),
+          tasks: formData.opsiTambahan.map((task) =>
+            typeof task === "object" && task.id ? task.id : parseInt(task)
+          ),
         },
         {
           headers: {
@@ -186,6 +190,7 @@ const EditKontrak = ({
           opsiTambahan: [],
           status: "",
         });
+        setEdit(-1);
         onClose();
         refetch();
       });
@@ -196,6 +201,7 @@ const EditKontrak = ({
     onError: (error) => {
       console.log("form");
       console.log(formData);
+      console.log(formData.opsiTambahan.map((task) => task.id));
       console.log("error");
       // console.log
       console.log(error);
@@ -253,9 +259,6 @@ const EditKontrak = ({
       </div>
       // <div className="h-full w-full text-2xl italic font-bold text-center flex items-center justify-center">Loading...</div>
     );
-  }
-  if (data.data == null) {
-    return null;
   }
   // console.log("this");
   // console.log(data);

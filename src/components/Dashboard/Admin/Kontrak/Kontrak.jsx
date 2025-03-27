@@ -202,6 +202,7 @@ const Kontrak = () => {
         setOpen={setIsOpen}
       />
       <EditKontrak
+        refetch={refetch}
         UniData={dataUni}
         isOpen={isOpenEdit}
         taskData={taskData}
