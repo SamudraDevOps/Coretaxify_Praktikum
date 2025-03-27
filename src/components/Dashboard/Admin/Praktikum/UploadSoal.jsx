@@ -136,6 +136,10 @@ export default function UploadSoal() {
       Swal.fire("Berhasil!", "Soal berhasil diperbarui!", "success").then(
         (result) => {
           if (result.isConfirmed) {
+            setFormData({
+              name: "",
+              file: null,
+            });
             refetch();
           }
         }
