@@ -353,10 +353,7 @@ export default function DosenPraktikumKelas() {
         <table>
           <thead>
             <tr>
-              <th
-                className="max-w-5"
-                onClick={() => handleSort("namaPraktikum")}
-              >
+              <th className="" onClick={() => handleSort("namaPraktikum")}>
                 Nomor{" "}
                 {sortConfig.key === "namaPraktikum"
                   ? sortConfig.direction === "ascending"
@@ -371,7 +368,6 @@ export default function DosenPraktikumKelas() {
               <th className="">Deadline </th>
               <th className="">Supporting File</th>
               <th className="">Aksi</th>
-              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -379,24 +375,24 @@ export default function DosenPraktikumKelas() {
               <tr key={index}>
                 <td className="max-w-5">{index + 1}</td>
                 <td>{item.name}</td>
-                <td className="flex gap-3 justify-center">
-                  {item.assignment_code}
-
-                  <FaRegCopy
-                    onClick={(e) => {
-                      // e.stopPropagation();
-
-                      e.preventDefault();
-                      navigator.clipboard.writeText(item.assignment_code);
-                      toast({
-                        title: "Copy berhasil",
-                        description: "Kode Kelas berhasil dicopy",
-                      });
-                      // alert("miaw");
-                    }}
-                    className="hover:bg-slate-300 p-1 rounded-md"
-                    size={25}
-                  />
+                <td className="">
+                  <div className="flex gap-2 justify-center">
+                    {item.assignment_code}
+                    <FaRegCopy
+                      onClick={(e) => {
+                        // e.stopPropagation();
+                        e.preventDefault();
+                        navigator.clipboard.writeText(item.assignment_code);
+                        toast({
+                          title: "Copy berhasil",
+                          description: "Kode Kelas berhasil dicopy",
+                        });
+                        // alert("miaw");
+                      }}
+                      className="hover:bg-slate-300 p-1 rounded-md"
+                      size={25}
+                    />
+                  </div>
                 </td>
                 <td>{item.end_period}</td>
                 <td>
