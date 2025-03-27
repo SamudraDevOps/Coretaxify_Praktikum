@@ -71,6 +71,11 @@ import WakilKuasaSaya from "./components/PraktikumPage/OrangPribadi/PortalSaya/W
 import WajibPajakYangDiwakili from "./components/PraktikumPage/OrangPribadi/PortalSaya/WajibPajakYangDiwakili";
 import TwoAuthentication from "./components/PraktikumPage/OrangPribadi/PortalSaya/TwoAuthentication";
 import PermohonanTertunda from "./components/PraktikumPage/OrangPribadi/PortalSaya/PermohonanTertunda";
+import DashboardEFakturOP from "./components/PraktikumPage/OrangPribadi/EFaktur/DashboardEFaktur";
+import PajakKeluaranOP from "./components/PraktikumPage/OrangPribadi/EFaktur/PajakKeluaran";
+import TambahFakturKeluaranOP from "./components/PraktikumPage/OrangPribadi/EFaktur/TambahFakturKeluaran";
+import PajakMasukanOP from "./components/PraktikumPage/OrangPribadi/EFaktur/PajakMasukan";
+
 //Route Praktikum
 
 // Route Badan
@@ -678,7 +683,43 @@ const Main = () => {
               <PermohonanTertunda />
             </>
           }
-        />
+        /> 
+          <Route
+            path="/admin/praktikum/1/e-faktur"
+            element={
+              <>
+                <Header />
+                <DashboardEFakturOP />
+              </>
+            }
+          />
+          <Route
+            path="/admin/praktikum/1/e-faktur/pajak-keluaran"
+            element={
+              <>
+                <Header />
+                <PajakKeluaranOP />
+              </>
+            }
+          />
+          <Route
+            path="/admin/praktikum/1/e-faktur/pajak-keluaran/tambah-faktur-keluaran"
+            element={
+              <>
+                <Header />
+                <TambahFakturKeluaranOP />
+              </>
+            }
+          />
+          <Route
+            path="/admin/praktikum/1/e-faktur/pajak-masukan"
+            element={
+              <>
+                <Header />
+                <PajakMasukanOP />
+              </>
+            }
+          />
         {/* Praktikum Orang Pribadi*/}
 
 
