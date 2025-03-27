@@ -1,6 +1,6 @@
 import React from "react";
 import "./assignmentPopup.css";
-import { IoMdClose } from "react-icons/io";
+import { RxCross1 } from "react-icons/rx";
 
 const CreateAssignmentPopup = ({
   isOpen,
@@ -62,9 +62,10 @@ const CreateAssignmentPopup = ({
       <div className="assignment-popup-container">
         <div className="assignment-popup-header">
           <h2>Tambah Praktikum</h2>
-          <button className="close-button" onClick={onClose}>
-            <IoMdClose />
-          </button>
+          <RxCross1
+            className="text-2xl hover:cursor-pointer"
+            onClick={onClose}
+          />
         </div>
         <div className="assignment-popup-form">
           <div className="form-group">

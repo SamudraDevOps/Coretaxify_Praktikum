@@ -11,6 +11,7 @@ import { RoutesApi } from "@/Routes";
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 import { IntentEnum } from "@/enums/IntentEnum"; // Import IntentEnum
+import { RxCross1 } from "react-icons/rx";
 
 const EditKelasPsc = () => {
   const [isOpen, setIsOpen] = useState(false);
