@@ -15,6 +15,7 @@ import { getOneContract } from "@/hooks/dashboard";
 import { ClipLoader } from "react-spinners";
 import { getCookieToken } from "@/service";
 
+import Swal from "sweetalert2";
 import { cn } from "@/lib/utils";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -40,12 +41,14 @@ const EditKontrak = ({
   taskData,
   setOpen,
   id,
+  setEdit,
 }) => {
   const { toast } = useToast();
   const { isLoading, isError, data, error } = getOneContract(
     RoutesApi.contractAdmin + `/${id}`,
     getCookieToken()
   );
+
   const [formData, setFormData] = useState({
     jenisKontrak: "",
     instansi: "",
@@ -61,7 +64,8 @@ const EditKontrak = ({
     status: "",
   });
   useEffect(() => {
-    if (data) {
+    console.log(data);
+    if (data != null) {
       setFormData({
         jenisKontrak: data.data.contract_type,
         instansi: data.data.university.id,
@@ -78,8 +82,8 @@ const EditKontrak = ({
       });
     }
   }, [data]);
-  console.log("makan");
-  console.log(formData);
+  // console.log("makan");
+  // console.log(formData);
 
   const [cookies, setCookie] = useCookies(["user"]);
   const [open, setOpenSelect] = useState(false);
@@ -111,6 +115,7 @@ const EditKontrak = ({
     //   status: "",
     // });
     console.log(formData);
+    setEdit(-1);
     mutation.mutate();
     // onClose();
   };
@@ -142,7 +147,7 @@ const EditKontrak = ({
           contract_code: formData.kodePembelian,
           is_buy_task: Number(formData.is_buy_task),
           status: formData.status,
-          tasks: formData.opsiTambahan,
+          tasks: formData.opsiTambahan.map((task) => task.id),
         },
         {
           headers: {
@@ -156,14 +161,43 @@ const EditKontrak = ({
       return data;
     },
     onSuccess: (data) => {
+      console.log("form");
+      console.log(formData);
+      console.log(formData.opsiTambahan.map((task) => task.id));
+      console.log("data");
       console.log(data);
-      window.location.reload();
-
+      Swal.fire({
+        title: "Kontrak berhasil diubah",
+        // text: "Silakan verifikasi email Anda terlebih dahulu.",
+        icon: "success",
+        confirmButtonText: "Lanjutkan",
+      }).then(() => {
+        setFormData({
+          jenisKontrak: "",
+          instansi: "",
+          mahasiswa: "",
+          periodeAwal: "",
+          periodeAkhir: "",
+          spt: "",
+          bupot: "",
+          faktur: "",
+          kodePembelian: "",
+          is_buy_task: 0,
+          opsiTambahan: [],
+          status: "",
+        });
+        onClose();
+        refetch();
+      });
       // window.location.href = "/" + role;
       // alert("Login successful!");
       // queryClient.invalidateQueries({ queryKey: ["todos"] });
     },
     onError: (error) => {
+      console.log("form");
+      console.log(formData);
+      console.log("error");
+      // console.log
       console.log(error);
     },
   });
@@ -220,8 +254,11 @@ const EditKontrak = ({
       // <div className="h-full w-full text-2xl italic font-bold text-center flex items-center justify-center">Loading...</div>
     );
   }
-  console.log("this");
-  console.log(data);
+  if (data.data == null) {
+    return null;
+  }
+  // console.log("this");
+  // console.log(data);
 
   return (
     <div className="kontrak-popup-overlay">
@@ -486,7 +523,7 @@ const EditKontrak = ({
           </button>
         </div>
         <div className="text-xs  mt-2 text-red-700">
-          {mutation.isError && mutation.error.response.data.message}
+          {/* {mutation.isError && mutation.error.response.data.message} */}
         </div>
       </div>
     </div>

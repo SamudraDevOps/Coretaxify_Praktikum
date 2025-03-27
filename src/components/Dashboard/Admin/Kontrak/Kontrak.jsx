@@ -19,7 +19,7 @@ import { getCookie, getCookieToken } from "@/service";
 const Kontrak = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenEdit, setIsOpenEdit] = useState(false);
-  const [idEdit, setIdEdit] = useState(0);
+  const [idEdit, setIdEdit] = useState(-1);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
@@ -208,6 +208,7 @@ const Kontrak = () => {
         id={idEdit}
         onClose={() => setIsOpenEdit(false)}
         onSave={handleData}
+        setEdit={setIdEdit}
       ></EditKontrak>
 
       <div className="table-container">

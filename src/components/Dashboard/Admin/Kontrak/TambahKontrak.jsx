@@ -128,6 +128,10 @@ const TambahKontrak = ({
       return data;
     },
     onSuccess: (data) => {
+      // console.log(data);
+      console.log("form");
+      console.log(formData);
+      console.log("data");
       console.log(data);
       Swal.fire({
         title: "Kontrak berhasil dibuat",
