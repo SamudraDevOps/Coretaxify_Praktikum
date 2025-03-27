@@ -3,7 +3,7 @@ import SideBarEFaktur from "./SideBarEFaktur";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { FaChevronDown } from "react-icons/fa";
 
-const PajakKeluaran = () => {
+const PajakKeluaranOP = () => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);
     
@@ -101,4 +101,4 @@ const PajakKeluaran = () => {
     );
 };
 
-export default PajakKeluaran;
+export default PajakKeluaranOP;

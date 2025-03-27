@@ -2,7 +2,7 @@ import React from 'react';
 import SideBarEFaktur from './SideBarEFaktur';
 import { IoDocumentTextOutline } from "react-icons/io5";
 
-const PajakMasukan = () => {
+const PajakMasukanOP = () => {
     return (
         <div className='flex h-screen'>
             <SideBarEFaktur />
@@ -57,4 +57,4 @@ const PajakMasukan = () => {
     )
 }
 
-export default PajakMasukan;
+export default PajakMasukanOP;
