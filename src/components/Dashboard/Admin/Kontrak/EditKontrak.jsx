@@ -67,6 +67,7 @@ const EditKontrak = ({
   useEffect(() => {
     console.log(data);
     if (data != null) {
+      const universityId = data.data.university.id.toString();
       setFormData({
         jenisKontrak: data.data.contract_type,
         instansi: data.data.university.id,
@@ -81,8 +82,14 @@ const EditKontrak = ({
         opsiTambahan: data.data.tasks,
         status: data.data.status,
       });
+      const university = UniData.find(
+        (uni) => uni.id.toString() === universityId
+      );
+      if (university) {
+        setValue(university.name);
+      }
     }
-  }, [data]);
+  }, [data, UniData]);
   // console.log("makan");
   // console.log(formData);
 
@@ -313,18 +320,28 @@ const EditKontrak = ({
                   aria-expanded={open}
                   className="w-full justify-between"
                 >
-                  {formData.instansi
+                  {value ||
+                    (formData.instansi
+                      ? UniData.find(
+                          (uni) => uni.id.toString() === formData.instansi
+                        )?.name
+                      : "Pilih Instansi...")}
+                  {/* {value || formData.instansi
                     ? UniData.find(
                         (uni) => uni.id.toString() === formData.instansi
                       )?.name || "Pilih Instansi..."
-                    : "Pilih Instansi..."}
+                    : "Pilih Instansi..."} */}
                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
               </PopoverTrigger>
               {/* {createPortal( */}
               <PopoverContent className="w-[450px] p-0 z-[9999]" sideOffset={5}>
                 <Command>
-                  <CommandInput placeholder="Pilih Instansi..." />
+                  <CommandInput
+                    value={value}
+                    onValueChange={setValue}
+                    placeholder="Pilih Instansi..."
+                  />
                   <CommandList>
                     <CommandEmpty>Instansi tidak ditemukan.</CommandEmpty>
                     <CommandGroup>
