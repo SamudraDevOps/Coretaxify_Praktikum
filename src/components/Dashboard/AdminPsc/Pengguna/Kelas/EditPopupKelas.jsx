@@ -31,6 +31,7 @@ const EditPopupKelas = ({ onClose, data, onSave, formData, setFormData, isLoadin
               name="start_period"
               value={formData.start_period || ""}
               onChange={handleChange}
+              max={formData.end_period}
               required
             />
           </div>
@@ -41,6 +42,7 @@ const EditPopupKelas = ({ onClose, data, onSave, formData, setFormData, isLoadin
               name="end_period"
               value={formData.end_period || ""}
               onChange={handleChange}
+              min={formData.start_period || new Date().toISOString().split("T")[0]}
               required
             />
             <small>Harus setelah periode mulai</small>

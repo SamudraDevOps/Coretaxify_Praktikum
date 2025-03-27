@@ -62,6 +62,7 @@ const CreateGroupPopup = ({
               name="start_period"
               value={formData.start_period || ""}
               onChange={handleChange}
+              max={formData.end_period}
               required
             />
           </div>
@@ -73,6 +74,7 @@ const CreateGroupPopup = ({
               name="end_period"
               value={formData.end_period || ""}
               onChange={handleChange}
+              min={formData.start_period || new Date().toISOString().split("T")[0]}
               required
             />
             <small>Harus setelah periode mulai</small>
@@ -115,7 +117,7 @@ const CreateGroupPopup = ({
             </select>
           </div>
           
-          <div className="edit-form-group-kelas">
+          {/* <div className="edit-form-group-kelas">
             <label>Import Data (Opsional):</label>
             <input
               type="file"
@@ -124,7 +126,7 @@ const CreateGroupPopup = ({
               accept=".xlsx,.xls"
             />
             <small>Format: XLSX, XLS (Max 5MB)</small>
-          </div>
+          </div> */}
           
           <div className="edit-popup-actions-kelas">
             <button
