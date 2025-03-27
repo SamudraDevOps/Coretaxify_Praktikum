@@ -135,6 +135,21 @@ const TambahKontrak = ({
         icon: "success",
         confirmButtonText: "Lanjutkan",
       }).then(() => {
+        setFormData({
+          jenisKontrak: "",
+          instansi: "",
+          mahasiswa: "",
+          periodeAwal: "",
+          periodeAkhir: "",
+          spt: "",
+          bupot: "",
+          faktur: "",
+          kodePembelian: "",
+          is_buy_task: 0,
+          opsiTambahan: [],
+          status: "",
+        });
+        onClose();
         refetch();
         // navigate("/confirm-otp");
       });
@@ -194,29 +209,6 @@ const TambahKontrak = ({
 
   const [open, setOpenSelect] = useState(false);
   const [value, setValue] = useState("");
-
-  const frameworks = [
-    {
-      value: "next.js",
-      label: "Next.js",
-    },
-    {
-      value: "sveltekit",
-      label: "SvelteKit",
-    },
-    {
-      value: "nuxt.js",
-      label: "Nuxt.js",
-    },
-    {
-      value: "remix",
-      label: "Remix",
-    },
-    {
-      value: "astro",
-      label: "Astro",
-    },
-  ];
 
   if (!isOpen) return null;
 
@@ -294,7 +286,7 @@ const TambahKontrak = ({
                 </Button>
               </PopoverTrigger>
               {/* {createPortal( */}
-              <PopoverContent className="w-[200px] p-0 z-[9999]" sideOffset={5}>
+              <PopoverContent className="w-[450px] p-0 z-[9999]" sideOffset={5}>
                 <Command>
                   <CommandInput placeholder="Pilih Instansi..." />
                   <CommandList>

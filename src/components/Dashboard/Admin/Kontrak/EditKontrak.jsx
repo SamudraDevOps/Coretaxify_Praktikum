@@ -15,6 +15,23 @@ import { getOneContract } from "@/hooks/dashboard";
 import { ClipLoader } from "react-spinners";
 import { getCookieToken } from "@/service";
 
+import { cn } from "@/lib/utils";
+import { Check, ChevronsUpDown } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+
 const EditKontrak = ({
   isOpen,
   onClose,
@@ -65,6 +82,8 @@ const EditKontrak = ({
   console.log(formData);
 
   const [cookies, setCookie] = useCookies(["user"]);
+  const [open, setOpenSelect] = useState(false);
+  const [value, setValue] = useState("");
 
   const [lastNumbers, setLastNumbers] = useState({
     Lisensi: 0,
@@ -229,7 +248,7 @@ const EditKontrak = ({
               <option value="BNSP">BNSP</option>
             </select>
           </div>
-          <div className="kontrak-form-group">
+          {/* <div className="kontrak-form-group">
             <label>Instansi</label>
             <select
               name="instansi"
@@ -244,7 +263,66 @@ const EditKontrak = ({
                 </option>
               ))}
             </select>
-            {/* <input type="text" name="instansi" value={formData.instansi} onChange={handleChange} required /> */}
+          </div> */}
+          <div className="kontrak-form-group">
+            <Popover open={open} onOpenChange={setOpenSelect}>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  role="combobox"
+                  aria-expanded={open}
+                  className="w-full justify-between"
+                >
+                  {formData.instansi
+                    ? UniData.find(
+                        (uni) => uni.id.toString() === formData.instansi
+                      )?.name || "Pilih Instansi..."
+                    : "Pilih Instansi..."}
+                  <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                </Button>
+              </PopoverTrigger>
+              {/* {createPortal( */}
+              <PopoverContent className="w-[450px] p-0 z-[9999]" sideOffset={5}>
+                <Command>
+                  <CommandInput placeholder="Pilih Instansi..." />
+                  <CommandList>
+                    <CommandEmpty>Instansi tidak ditemukan.</CommandEmpty>
+                    <CommandGroup>
+                      {UniData.map((uni) => (
+                        <CommandItem
+                          key={uni.id}
+                          value={uni.name}
+                          onSelect={(currentValue) => {
+                            // alert(currentValue);
+                            setFormData({
+                              ...formData,
+                              instansi: uni.id.toString(),
+                            });
+                            setValue(
+                              currentValue === value ? "" : currentValue
+                            );
+                            setOpenSelect(false);
+                          }}
+                        >
+                          <Check
+                            className={cn(
+                              "mr-2 h-4 w-4",
+                              formData.instansi === uni.id.toString()
+                                ? "opacity-100"
+                                : "opacity-0"
+                            )}
+                          />
+                          {uni.name}
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  </CommandList>
+                </Command>
+              </PopoverContent>
+              {/* , */}
+              {/* document.body
+               )} */}
+            </Popover>
           </div>
           <div className="kontrak-form-group">
             <label>Soal</label>
