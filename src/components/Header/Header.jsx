@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Bell,
   UserCircle,
@@ -18,7 +18,8 @@ import { ClipLoader } from "react-spinners";
 
 const Header = () => {
   // == Query ==
-  const { id } = useParams();
+  const { id, akun } = useParams();
+  console.log(akun);
   //   const getAccountPortal = () =>
   console.log(getCookieToken());
   const token = getCookieToken();
@@ -30,6 +31,9 @@ const Header = () => {
         {
           headers: {
             Authorization: `Bearer ${token}`,
+          },
+          params: {
+            // intent: "api.get.sistem.first.account",
           },
         }
       );
@@ -43,6 +47,12 @@ const Header = () => {
     },
     enabled: !!id && !!token,
   });
+
+  // useEffect(() => {
+  //   // console.log("Data:", data);
+
+  //   setUserType(data[0].id);
+  // }, [data]);
   //   getAccountPortal();
 
   const [dropdownOpen, setDropdownOpen] = useState(null);
@@ -63,10 +73,8 @@ const Header = () => {
   };
 
   const navigateTo = (path) => {
-    const userTypeId = userType === "Orang Pribadi" ? 1 : 2;
-    window.location.href = `/admin/praktikum/${userTypeId}/${path
-      .replace(/\s+/g, "-")
-      .toLowerCase()}`;
+    // alert("clicked");
+    window.location.href = `/praktikum/${id}/sistem/${path} `;
   };
   //   if (getAccountPortal().isLoading) {
   if (isLoading) {
@@ -92,6 +100,8 @@ const Header = () => {
   console.log(RoutesApi.apiUrl + "student/assignments/" + id + "/sistem");
   console.log(data);
 
+  // const acc = data.find((item) => item.id == akun);
+  // console.log(acc);
   return (
     <div className="w-full">
       <header className="bg-slate-100 text-blue-900 flex justify-between items-center px-4 md:px-8 lg:px-12 xl:px-16 py-3 shadow-md w-full overflow-x-auto">
@@ -108,14 +118,33 @@ const Header = () => {
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
             >
               <UserCircle className="w-8 h-8" />
-              <span className="hidden md:inline">{userType}</span>
+              <span className="hidden md:inline">
+                {(data && data.find((item) => item.id == akun)?.nama_akun) ||
+                  "Akun tidak ditemukan"}
+              </span>
               <ChevronDown className="w-5 h-5" />
             </button>
 
             {/* Dropdown menu */}
             {isDropdownOpen && (
               <ul className="absolute right-14 top-14 mt-2 w-64 bg-white border rounded-md shadow-lg py-1 px-2">
-                <li
+                {data.map((item) => {
+                  return (
+                    <li
+                      key={item.id}
+                      className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
+                      onClick={() => {
+                        // setUserType(item.id);
+                        console.log("User Type Berubah ke:", item.nama_akun);
+                        setIsDropdownOpen(false);
+                        navigateTo(item.id);
+                      }}
+                    >
+                      {item.nama_akun}
+                    </li>
+                  );
+                })}
+                {/* <li
                   className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
                   onClick={() => {
                     setUserType("Orang Pribadi");
@@ -137,7 +166,7 @@ const Header = () => {
                   }}
                 >
                   Badan
-                </li>
+                </li> */}
               </ul>
             )}
           </div>
