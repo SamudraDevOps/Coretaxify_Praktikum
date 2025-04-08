@@ -6,22 +6,23 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { getCookieToken } from "@/service";
 import axios from "axios";
 import { ClipLoader } from "react-spinners";
+import { RoutesApi } from "@/Routes";
 
 const ProfilSaya = () => {
   const [activeTab, setActiveTab] = useState("profil");
   const { id, akun } = useParams();
   const token = getCookieToken();
   const { isLoading, isError, data, error, refetch } = useQuery({
-    queryKey: ["getaccount", id],
+    queryKey: ["getportal", id],
     queryFn: async () => {
       const response = await axios.get(
-        `${RoutesApi.apiUrl}student/assignments/${id}/sistem`,
+        `${RoutesApi.apiUrl}student/assignments/${id}/sistem/${akun}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
           params: {
-            // intent: "api.get.sistem.first.account",
+            intent: "api.get.sistem.ikhtisar.profil",
           },
         }
       );
@@ -31,7 +32,7 @@ const ProfilSaya = () => {
         throw new Error("No data returned from API");
       }
 
-      return response.data;
+      return response.data.data;
     },
     enabled: !!id && !!token,
   });
@@ -55,10 +56,14 @@ const ProfilSaya = () => {
       </div>
     );
   }
+  console.log("Data fetched:", data);
 
   return (
     <div className="flex h-screen bg-gray-100">
-      <SidebarProfilSaya />
+      <SidebarProfilSaya
+        nama_akun={data.nama_akun}
+        npwp_akun={data.npwp_akun}
+      />
       <main className="flex-auto p-3 bg-white rounded-md h-full">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-semibold">
@@ -90,11 +95,11 @@ const ProfilSaya = () => {
               <div className="p-6 grid grid-cols-2 gap-4 w-full border-r-0 border-gray-500">
                 <div className="space-y-2 h-full">
                   {[
-                    ["Nama", "Putri Nuril Wulanatining"],
-                    ["Nomor Pokok Wajib Pajak", "3510145907990002"],
+                    ["Nama", data.nama_akun],
+                    ["Nomor Pokok Wajib Pajak", data.npwp_akun],
                     ["Kegiatan Utama", "Kegiatan Penunjang Pendidikan"],
                     ["Jenis Wajib Pajak", "Orang Pribadi"],
-                    ["Kategori Wajib Pajak", "Orang Pribadi"],
+                    ["Kategori Wajib Pajak", data.tipe_akun],
                     ["Status NPWP", "Aktif"],
                     ["Tanggal Terdaftar", "16 Maret 2024"],
                     ["Tanggal Aktivasi", "16 Maret 2024"],
@@ -123,10 +128,7 @@ const ProfilSaya = () => {
                 </div>
                 <div className="space-y-2 h-full">
                   {[
-                    [
-                      "Alamat Utama",
-                      "Jalan Nangka Perum Kalirejo Permai Blok A No. 15, RT.001/RW.001, Kalirejo, Kec. Banyuwangi, Kabupaten Banyuwangi, Jawa Timur 68411",
-                    ],
+                    ["Alamat Utama", data.alamat_utama_akun],
                     [
                       "Kontak Utama",
                       "Nomor Handphone : 081234567890",

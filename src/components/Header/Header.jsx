@@ -185,7 +185,10 @@ const Header = () => {
                   "Notifikasi Saya",
                   "Kasus Saya",
                   "Kasus Berjalan Saya",
-                  "Profil Saya",
+                  {
+                    label: "Profil Saya",
+                    links: `/praktikum/${id}/sistem/${akun}/profil-saya`,
+                  },
                   "Pengukuhan PKP",
                   "Pendaftaran Objek Pajak PBB P5L",
                   {
@@ -280,6 +283,12 @@ const Header = () => {
                       >
                         {typeof sub === "string" ? (
                           <button onClick={() => navigateTo(sub)}>{sub}</button>
+                        ) : sub.links ? (
+                          <a href={sub.links} className="block w-full">
+                            <button className="w-full text-left">
+                              {sub.label}
+                            </button>
+                          </a>
                         ) : (
                           <>
                             <button
