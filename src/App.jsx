@@ -480,8 +480,17 @@ const Main = () => {
         {/* Praktikum */}
 
         {/* Praktikum  Orang Pribadi*/}
-        <Route
+        {/* <Route
           path="/admin/praktikum/1/prak1"
+          element={
+            <>
+              <Header />
+              <Home />
+            </>
+          }
+        /> */}
+        <Route
+          path="/admin/praktikum/:id"
           element={
             <>
               <Header />
