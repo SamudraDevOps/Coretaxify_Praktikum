@@ -44,7 +44,7 @@ import EditPengajar from "./components/Dashboard/AdminPsc/Pengguna/Pengajar/Edit
 import EditKelasPsc from "./components/Dashboard/AdminPsc/Pengguna/Kelas/EditKelasPsc";
 import PraktikumPsc from "./components/Dashboard/AdminPsc/Pengguna/Praktikum/PraktikumPsc";
 import AssignmentPscMember from "./components/Dashboard/AdminPsc/Pengguna/Praktikum/Members/AssignmentPscMember";
-// import UjianPsc from "./components/Dashboard/AdminPsc/Ujian/UjianPsc";
+import ExamPsc from "./components/Dashboard/AdminPsc/Ujian/ExamPsc";
 import EditMahasiswaPsc from "./components/Dashboard/AdminPsc/Pengguna/Mahasiswa/EditMahasiswaPsc";
 import Header from "./components/Header/Header";
 import Home from "./components/Header/Home";
@@ -260,7 +260,7 @@ const Main = () => {
           {/* <Route path="/psc/kelas/:groupId/mahasiswa/:memberId" element={<MemberDetailPage />} /> */}
           <Route path="/psc/praktikum" element={<PraktikumPsc />} />
           <Route path="/psc/praktikum/:assignmentId/members" element={<AssignmentPscMember />} />
-          <Route path="/psc/ujian" element={{/* <UjianPsc /> */ }} />
+          <Route path="/psc/ujian" element={<ExamPsc />} />
           <Route path="/psc/edit-mahasiswa" element={<EditMahasiswaPsc />} />
         </Route>
 

@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
-import { IoReload } from "react-icons/io5";
+import React, { useState, useEffect } from 'react';
 import { ClipLoader } from 'react-spinners';
 import { RxCross1 } from "react-icons/rx";
-import './createExamPopUp.css';
+import './updateExamPopUp.css';
 
-const CreateExamPopUp = ({ isOpen, onClose, onCreate, tasksData, isLoading }) => {
+const UpdateExamPopUp = ({ isOpen, onClose, onUpdate, examData, tasksData, isLoading }) => {
     const [formData, setFormData] = useState({
         name: "",
         task_id: "",
@@ -12,17 +11,32 @@ const CreateExamPopUp = ({ isOpen, onClose, onCreate, tasksData, isLoading }) =>
         end_period: "",
         duration: "",
         supporting_file: null,
-        exam_code: generateRandomCode()
     });
 
-    function generateRandomCode() {
-        const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        let result = "";
-        for (let i = 0; i < 5; i++) {
-            result += characters.charAt(Math.floor(Math.random() * characters.length));
+    useEffect(() => {
+        if (examData) {
+            // Format datetime for input fields
+            const formatDateForInput = (dateString) => {
+                if (!dateString) return "";
+                try {
+                    const date = new Date(dateString);
+                    return date.toISOString().slice(0, 16); // Format: YYYY-MM-DDTHH:MM
+                } catch (error) {
+                    console.error("Error formatting date:", error);
+                    return "";
+                }
+            };
+
+            setFormData({
+                name: examData.name || "",
+                task_id: examData.task_id?.toString() || "",
+                start_period: formatDateForInput(examData.start_period) || "",
+                end_period: formatDateForInput(examData.end_period) || "",
+                duration: examData.duration?.toString() || "",
+                supporting_file: null, // File can't be pre-filled
+            });
         }
-        return result;
-    }
+    }, [examData]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -36,11 +50,7 @@ const CreateExamPopUp = ({ isOpen, onClose, onCreate, tasksData, isLoading }) =>
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        onCreate(formData);
-    };
-
-    const handleReloadCode = () => {
-        setFormData({ ...formData, exam_code: generateRandomCode() });
+        onUpdate(examData.id, formData);
     };
 
     if (!isOpen) return null;
@@ -49,7 +59,7 @@ const CreateExamPopUp = ({ isOpen, onClose, onCreate, tasksData, isLoading }) =>
         <div className="assignment-popup-overlay">
             <div className="assignment-popup-container">
                 <div className="assignment-popup-header">
-                    <h2>Tambah Ujian</h2>
+                    <h2>Edit Ujian</h2>
                     <RxCross1
                         className="text-2xl hover:cursor-pointer"
                         onClick={onClose}
@@ -94,26 +104,17 @@ const CreateExamPopUp = ({ isOpen, onClose, onCreate, tasksData, isLoading }) =>
 
                     <div className="form-group">
                         <label>Kode Ujian:</label>
-                        <div className="flex items-center gap-2">
-                            <input
-                                name="exam_code"
-                                value={formData.exam_code}
-                                onChange={handleChange}
-                                readOnly
-                                className="read-only-field"
-                            />
-                            <button
-                                type="button"
-                                className="p-3 bg-purple-800 rounded-md hover:bg-purple-900"
-                                onClick={handleReloadCode}
-                            >
-                                <IoReload className="text-lg text-white" />
-                            </button>
-                        </div>
+                        <input
+                            name="exam_code"
+                            value={examData.exam_code || ""}
+                            readOnly
+                            className="read-only-field"
+                        />
+                        <small>Kode ujian tidak dapat diubah</small>
                     </div>
 
                     <div className="form-group">
-                        <label>File Support:</label>
+                        <label>File Support (Kosongkan jika tidak ingin mengubah):</label>
                         <div className="file-upload-container">
                             <div className="file-upload-box">
                                 {formData.supporting_file ? (
@@ -124,6 +125,11 @@ const CreateExamPopUp = ({ isOpen, onClose, onCreate, tasksData, isLoading }) =>
                                     <div className="file-upload-placeholder">
                                         <p>Klik atau drop file di sini</p>
                                         <small>Format: PDF, DOC, DOCX, XLSX, XLS, etc.</small>
+                                        {examData.supporting_file && (
+                                            <p className="mt-2 text-xs text-blue-500">
+                                                File saat ini: {examData.supporting_file}
+                                            </p>
+                                        )}
                                     </div>
                                 )}
                                 <input
@@ -199,5 +205,4 @@ const CreateExamPopUp = ({ isOpen, onClose, onCreate, tasksData, isLoading }) =>
     );
 };
 
-export default CreateExamPopUp;
-
+export default UpdateExamPopUp;
