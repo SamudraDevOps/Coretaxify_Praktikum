@@ -79,6 +79,16 @@ import MahasiswaPscKelasPraktikum from "./components/Dashboard/MahasiswaPsc/Kela
 import MahasiswaPscPraktikum from "./components/Dashboard/MahasiswaPsc/Praktikum/MahasiswaPscPraktikum";
 import MahasiswaPscUjian from "./components/Dashboard/MahasiswaPsc/Ujian/MahasiswaPscUjian";
 
+// INSTRUKTUR
+import InstrukturPraktikum from "./components/Dashboard/Instruktur/Praktikum/InstrukturPraktikum";
+import BlankAssignment from "./components/Dashboard/Instruktur/Praktikum/Blank/BlankAssignment";
+import FilledAssignment from "./components/Dashboard/Instruktur/Praktikum/Filled/FilledAssignment";
+
+import DashboardEFakturOP from "./components/PraktikumPage/OrangPribadi/EFaktur/DashboardEFaktur";
+import PajakKeluaranOP from "./components/PraktikumPage/OrangPribadi/EFaktur/PajakKeluaran";
+import TambahFakturKeluaranOP from "./components/PraktikumPage/OrangPribadi/EFaktur/TambahFakturKeluaran";
+import PajakMasukanOP from "./components/PraktikumPage/OrangPribadi/EFaktur/PajakMasukan";
+
 //Route Praktikum
 
 // Route Badan
@@ -129,47 +139,47 @@ const Main = () => {
   }, []);
 
   // In the useEffect that validates the token
-  useEffect(() => {
-    const validateToken = async () => {
-      if (cookies.token) {
-        try {
-          // Try to get user profile to validate token
-          await axios.get(RoutesApi.profile, {
-            headers: {
-              Authorization: `Bearer ${cookies.token}`,
-              Accept: "application/json",
-            }
-          });
-          // Token is valid, check verification status
-          try {
-            const verificationResponse = await axios.get(RoutesApi.apiUrl + "verification-status", {
-              headers: {
-                Authorization: `Bearer ${cookies.token}`,
-                Accept: "application/json",
-              }
-            });
+  // useEffect(() => {
+  //   const validateToken = async () => {
+  //     if (cookies.token) {
+  //       try {
+  //         // Try to get user profile to validate token
+  //         await axios.get(RoutesApi.profile, {
+  //           headers: {
+  //             Authorization: `Bearer ${cookies.token}`,
+  //             Accept: "application/json",
+  //           }
+  //         });
+  //         // Token is valid, check verification status
+  //         try {
+  //           const verificationResponse = await axios.get(RoutesApi.apiUrl + "verification-status", {
+  //             headers: {
+  //               Authorization: `Bearer ${cookies.token}`,
+  //               Accept: "application/json",
+  //             }
+  //           });
 
-            // If not verified, store email for OTP verification
-            if (!verificationResponse.data.verified) {
-              localStorage.setItem("pendingVerificationEmail", verificationResponse.data.email);
-            }
-          } catch (verificationError) {
-            console.error("Verification status check error:", verificationError);
-          }
-        } catch (error) {
-          console.error("Token validation error:", error);
-          // If token is invalid, clear cookies and redirect to login
-          if (error.response?.status === 401) {
-            setCookie("token", "", { path: "/", expires: new Date(0) });
-            setCookie("role", "", { path: "/", expires: new Date(0) });
-            window.location.href = "/login";
-          }
-        }
-      }
-    };
+  //           // If not verified, store email for OTP verification
+  //           if (!verificationResponse.data.verified) {
+  //             localStorage.setItem("pendingVerificationEmail", verificationResponse.data.email);
+  //           }
+  //         } catch (verificationError) {
+  //           console.error("Verification status check error:", verificationError);
+  //         }
+  //       } catch (error) {
+  //         console.error("Token validation error:", error);
+  //         // If token is invalid, clear cookies and redirect to login
+  //         if (error.response?.status === 401) {
+  //           setCookie("token", "", { path: "/", expires: new Date(0) });
+  //           setCookie("role", "", { path: "/", expires: new Date(0) });
+  //           window.location.href = "/login";
+  //         }
+  //       }
+  //     }
+  //   };
 
-    validateToken();
-  }, [cookies.token, setCookie]);
+  //   validateToken();
+  // }, [cookies.token, setCookie]);
 
   return loading ? (
     <div className="loading">
@@ -266,7 +276,10 @@ const Main = () => {
 
         {/* PENGAJAR ROUTE */}
         <Route element={<RoleProtectedRoutes allowedRoles={["instruktur"]} layout= "admin" />}>
-          
+          <Route path="/instruktur" element={<Navigate to="/instruktur/praktikum" replace />} />
+          <Route path="/instruktur/praktikum" element={<InstrukturPraktikum />} />
+          <Route path="/instruktur/praktikum/terisi" element={<FilledAssignment />} />
+          <Route path="/instruktur/praktikum/kosong" element={<BlankAssignment />} />
         </Route>
 
         {/* Praktikum */}
@@ -695,7 +708,43 @@ const Main = () => {
               <PermohonanTertunda />
             </>
           }
-        />
+        /> 
+          <Route
+            path="/admin/praktikum/1/e-faktur"
+            element={
+              <>
+                <Header />
+                <DashboardEFakturOP />
+              </>
+            }
+          />
+          <Route
+            path="/admin/praktikum/1/e-faktur/pajak-keluaran"
+            element={
+              <>
+                <Header />
+                <PajakKeluaranOP />
+              </>
+            }
+          />
+          <Route
+            path="/admin/praktikum/1/e-faktur/pajak-keluaran/tambah-faktur-keluaran"
+            element={
+              <>
+                <Header />
+                <TambahFakturKeluaranOP />
+              </>
+            }
+          />
+          <Route
+            path="/admin/praktikum/1/e-faktur/pajak-masukan"
+            element={
+              <>
+                <Header />
+                <PajakMasukanOP />
+              </>
+            }
+          />
         {/* Praktikum Orang Pribadi*/}
 
           {/* Praktikum  Orang Badan*/}
@@ -907,6 +956,45 @@ const Main = () => {
             }
           />
           {/* Praktikum Orang Pribadi*/}
+
+          <Route
+            path="/admin/praktikum/2/e-faktur"
+            element={
+              <>
+                <Header />
+                <DashboardEFaktur />
+              </>
+            }
+          />
+          <Route
+            path="/admin/praktikum/2/e-faktur/pajak-keluaran"
+            element={
+              <>
+                <Header />
+                <PajakKeluaran />
+              </>
+            }
+          />
+          <Route
+            path="/admin/praktikum/2/e-faktur/pajak-keluaran/tambah-faktur-keluaran"
+            element={
+              <>
+                <Header />
+                <TambahFakturKeluaran />
+              </>
+            }
+          />
+          <Route
+            path="/admin/praktikum/2/e-faktur/pajak-masukan"
+            element={
+              <>
+                <Header />
+                {/* <PajakMasukan /> */}
+              </>
+            }
+          />
+  
+
         {/* NOT FOUND ROUTE - LAST REGISTERED ROUTE */}
         <Route path="*" element={<NotFound />} />
       </Routes>

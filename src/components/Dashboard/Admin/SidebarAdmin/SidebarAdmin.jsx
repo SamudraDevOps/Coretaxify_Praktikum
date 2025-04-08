@@ -157,7 +157,7 @@ const SidebarAdmin = () => {
             </li>
           </div>
           <li
-            className={cookies.role == "psc" ? "!hidden " : `menu-item`}
+            className={cookies.role == "psc" || cookies.role == "instruktur" ? "!hidden " : `menu-item`}
             onClick={() => {
               if (cookies.role == "admin" || cookies.role == "dosen") {
                 window.location.href = `/${cookies.role}/coretaxify`;
@@ -407,6 +407,43 @@ const SidebarAdmin = () => {
                       }}
                     >
                       Backup Praktikum
+                    </li>
+                  </ul>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          </div>
+          <div className={cookies.role == "instruktur" ? "" : "!hidden"}>
+            <Accordion type="single" collapsible className="pl-4">
+              <AccordionItem
+                value="item-1"
+                className="border-none hover:no-underline"
+              >
+                <AccordionTrigger className="w-full ">
+                  <div className="flex">
+                    <FaLaptopCode className="menu-icon" />
+                    <span className={`text-[16px] ${isOpen ? "" : "hidden "}`}>
+                      Praktikum
+                    </span>
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent className={`${isOpen ? "" : "hidden"}`}>
+                  <ul className="">
+                    <li
+                      className="dropdown-item"
+                      onClick={() => {
+                        window.location.href = `/${cookies.role}/praktikum-kosong`;
+                      }}
+                    >
+                      Praktikum Kosong
+                    </li>
+                    <li
+                      className="dropdown-item"
+                      onClick={() => {
+                        window.location.href = `/${cookies.role}/praktikum-terisi`;
+                      }}
+                    >
+                      Praktikum Terisi
                     </li>
                   </ul>
                 </AccordionContent>
