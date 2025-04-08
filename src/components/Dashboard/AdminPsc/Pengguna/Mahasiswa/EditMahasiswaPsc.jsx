@@ -140,13 +140,19 @@ const EditMahasiswaPsc = () => {
       }
     },
 
-    onSuccess: () => {
-      if (Array.isArray(data)) {
-        Swal.fire("Berhasil!", `${data.length} mahasiswa berhasil ditambahkan!`, "success");
-      } else {
-        Swal.fire("Berhasil!", "Operasi berhasil dilakukan!", "success");
+    onSuccess: (variables) => {
+      const { action } = variables;
+      if (action === "create") {
+        if (Array.isArray(data)) {
+          Swal.fire("Berhasil!", `${data.length} mahasiswa berhasil ditambahkan!`, "success");
+        } else {
+          Swal.fire("Berhasil!", "Operasi berhasil dilakukan!", "success");
+        }
+      } else if (action === "update") {
+        Swal.fire("Berhasil!", "Mahasiswa berhasil diperbarui!", "success");
+      } else if (action === "delete") {
+        Swal.fire("Berhasil!", "Mahasiswa berhasil dihapus!", "success");
       }
-      
       refetch();
       setIsOpen(false);
       setIsCreateOpen(false);
