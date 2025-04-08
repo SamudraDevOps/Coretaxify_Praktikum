@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogFooter, AlertDialogTitle, AlertDialogDescription, AlertDialogAction, AlertDialogCancel } from "@/components/ui/alert-dialog";
 
 
-const TambahFakturKeluaran = ({ }) => {
+const TambahFakturKeluaranOP = ({ }) => {
     const [showDokumenTransaksi, setShowDokumenTransaksi] = useState(false);
     const [showInformasiPembeli, setShowInformasiPembeli] = useState(false);
     const [showDetailTransaksi, setShowDetailTransaksi] = useState(false);
@@ -638,4 +638,4 @@ const TambahFakturKeluaran = ({ }) => {
     )
 }
 
-export default TambahFakturKeluaran;
+export default TambahFakturKeluaranOP;

@@ -63,12 +63,12 @@ const TambahKontrak = ({
     Unit: 0,
     BNSP: 0,
   });
-  
+
   // Custom dropdown state
   const [openInstansi, setOpenInstansi] = useState(false);
   const [searchInstansi, setSearchInstansi] = useState("");
   const dropdownRef = useRef(null);
-  
+
   // Reset form when popup is opened
   useEffect(() => {
     if (isOpen) {
@@ -77,7 +77,7 @@ const TambahKontrak = ({
       setSearchInstansi("");
     }
   }, [isOpen]);
-  
+
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -85,7 +85,7 @@ const TambahKontrak = ({
         setOpenInstansi(false);
       }
     };
-    
+
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -101,7 +101,7 @@ const TambahKontrak = ({
     console.log(formData);
     mutation.mutate();
   };
-  
+
   const mutation = useMutation({
     mutationFn: async () => {
       console.log("button clicked");
@@ -142,15 +142,31 @@ const TambahKontrak = ({
       return data;
     },
     onSuccess: (data) => {
+      // console.log(data);
+      console.log("form");
+      console.log(formData);
+      console.log("data");
       console.log(data);
       Swal.fire({
         title: "Kontrak berhasil dibuat",
         icon: "success",
         confirmButtonText: "Lanjutkan",
       }).then(() => {
-        // Close the popup after successful submission
+        setFormData({
+          jenisKontrak: "",
+          instansi: "",
+          mahasiswa: "",
+          periodeAwal: "",
+          periodeAkhir: "",
+          spt: "",
+          bupot: "",
+          faktur: "",
+          kodePembelian: "",
+          is_buy_task: 0,
+          opsiTambahan: [],
+          status: "",
+        });
         onClose();
-        // Refresh the data
         refetch();
       });
     },
@@ -202,9 +218,11 @@ const TambahKontrak = ({
     setFormData({ ...formData, kodePembelian: `${prefix}-${formattedNumber}` });
   };
 
+  const [open, setOpenSelect] = useState(false);
+  const [value, setValue] = useState("");
   // Filter universities based on search
-  const filteredUniversities = searchInstansi 
-    ? UniData.filter(uni => 
+  const filteredUniversities = searchInstansi
+    ? UniData.filter((uni) =>
         uni.name.toLowerCase().includes(searchInstansi.toLowerCase())
       )
     : UniData;
@@ -236,64 +254,70 @@ const TambahKontrak = ({
               <option value="BNSP">BNSP</option>
             </select>
           </div>
-          
+
           {/* Custom Instansi dropdown */}
-          <div className="kontrak-form-group" ref={dropdownRef}>
-            <label>Instansi</label>
-            <div 
-              className="custom-select" 
-              onClick={() => setOpenInstansi(!openInstansi)}
-            >
-              <div className="selected-option">
-                {formData.instansi
-                  ? UniData.find(uni => uni.id.toString() === formData.instansi)?.name
-                  : "Pilih Instansi"}
-              </div>
-              <div className="select-arrow">
-                <ChevronsUpDown className="h-4 w-4" />
-              </div>
-            </div>
-            
-            {openInstansi && (
-              <div className="custom-dropdown">
-                <div className="search-container">
-                  <input
-                    type="text"
-                    placeholder="Cari instansi..."
-                    value={searchInstansi}
-                    onChange={(e) => setSearchInstansi(e.target.value)}
-                    onClick={(e) => e.stopPropagation()}
-                    className="search-input"
-                  />
-                  <Search className="search-icon" />
-                </div>
-                <div className="options-container">
-                  {filteredUniversities.length > 0 ? (
-                    filteredUniversities.map((uni) => (
-                      <div
-                        key={uni.id}
-                        className={`option ${formData.instansi === uni.id.toString() ? 'selected' : ''}`}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setFormData({...formData, instansi: uni.id.toString()});
-                          setOpenInstansi(false);
-                          setSearchInstansi("");
-                        }}
-                      >
-                        {formData.instansi === uni.id.toString() && (
-                          <Check className="check-icon" />
-                        )}
-                        <span>{uni.name}</span>
-                      </div>
-                    ))
-                  ) : (
-                    <div className="no-results">Instansi tidak ditemukan</div>
-                  )}
-                </div>
-              </div>
-            )}
+
+          <div className="kontrak-form-group">
+            <Popover open={open} onOpenChange={setOpenSelect}>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  role="combobox"
+                  aria-expanded={open}
+                  className="w-full justify-between"
+                >
+                  {formData.instansi
+                    ? UniData.find(
+                        (uni) => uni.id.toString() === formData.instansi
+                      )?.name || "Pilih Instansi..."
+                    : "Pilih Instansi..."}
+                  <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                </Button>
+              </PopoverTrigger>
+              {/* {createPortal( */}
+              <PopoverContent className="w-[450px] p-0 z-[9999]" sideOffset={5}>
+                <Command>
+                  <CommandInput placeholder="Pilih Instansi..." />
+                  <CommandList>
+                    <CommandEmpty>Instansi tidak ditemukan.</CommandEmpty>
+                    <CommandGroup>
+                      {UniData.map((uni) => (
+                        <CommandItem
+                          key={uni.id}
+                          value={uni.name}
+                          onSelect={(currentValue) => {
+                            // alert(currentValue);
+                            setFormData({
+                              ...formData,
+                              instansi: uni.id.toString(),
+                            });
+                            setValue(
+                              currentValue === value ? "" : currentValue
+                            );
+                            setOpenSelect(false);
+                          }}
+                        >
+                          <Check
+                            className={cn(
+                              "mr-2 h-4 w-4",
+                              formData.instansi === uni.id.toString()
+                                ? "opacity-100"
+                                : "opacity-0"
+                            )}
+                          />
+                          {uni.name}
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  </CommandList>
+                </Command>
+              </PopoverContent>
+              {/* , */}
+              {/* document.body
+               )} */}
+            </Popover>
           </div>
-          
+
           <div className="kontrak-form-group">
             <label>Soal</label>
             <RadioGroup

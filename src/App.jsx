@@ -84,6 +84,11 @@ import InstrukturPraktikum from "./components/Dashboard/Instruktur/Praktikum/Ins
 import BlankAssignment from "./components/Dashboard/Instruktur/Praktikum/Blank/BlankAssignment";
 import FilledAssignment from "./components/Dashboard/Instruktur/Praktikum/Filled/FilledAssignment";
 
+import DashboardEFakturOP from "./components/PraktikumPage/OrangPribadi/EFaktur/DashboardEFaktur";
+import PajakKeluaranOP from "./components/PraktikumPage/OrangPribadi/EFaktur/PajakKeluaran";
+import TambahFakturKeluaranOP from "./components/PraktikumPage/OrangPribadi/EFaktur/TambahFakturKeluaran";
+import PajakMasukanOP from "./components/PraktikumPage/OrangPribadi/EFaktur/PajakMasukan";
+
 //Route Praktikum
 
 // Route Badan
@@ -488,8 +493,17 @@ const Main = () => {
         {/* Praktikum */}
 
         {/* Praktikum  Orang Pribadi*/}
-        <Route
+        {/* <Route
           path="/admin/praktikum/1/prak1"
+          element={
+            <>
+              <Header />
+              <Home />
+            </>
+          }
+        /> */}
+        <Route
+          path="/admin/praktikum/:id"
           element={
             <>
               <Header />
@@ -694,7 +708,43 @@ const Main = () => {
               <PermohonanTertunda />
             </>
           }
-        />
+        /> 
+          <Route
+            path="/admin/praktikum/1/e-faktur"
+            element={
+              <>
+                <Header />
+                <DashboardEFakturOP />
+              </>
+            }
+          />
+          <Route
+            path="/admin/praktikum/1/e-faktur/pajak-keluaran"
+            element={
+              <>
+                <Header />
+                <PajakKeluaranOP />
+              </>
+            }
+          />
+          <Route
+            path="/admin/praktikum/1/e-faktur/pajak-keluaran/tambah-faktur-keluaran"
+            element={
+              <>
+                <Header />
+                <TambahFakturKeluaranOP />
+              </>
+            }
+          />
+          <Route
+            path="/admin/praktikum/1/e-faktur/pajak-masukan"
+            element={
+              <>
+                <Header />
+                <PajakMasukanOP />
+              </>
+            }
+          />
         {/* Praktikum Orang Pribadi*/}
 
           {/* Praktikum  Orang Badan*/}
