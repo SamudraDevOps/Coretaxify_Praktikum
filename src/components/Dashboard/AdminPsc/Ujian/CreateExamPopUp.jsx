@@ -143,6 +143,7 @@ const CreateExamPopUp = ({ isOpen, onClose, onCreate, tasksData, isLoading }) =>
                             name="start_period"
                             value={formData.start_period}
                             onChange={handleChange}
+                            max={formData.end_period}
                             required
                         />
                     </div>
@@ -154,6 +155,7 @@ const CreateExamPopUp = ({ isOpen, onClose, onCreate, tasksData, isLoading }) =>
                             name="end_period"
                             value={formData.end_period}
                             onChange={handleChange}
+                            min={formData.start_period || new Date().toISOString().split("T")[0]}
                             required
                         />
                     </div>
