@@ -14,6 +14,9 @@ export const getContracts = (url, cookie) =>
         headers: {
           Authorization: `Bearer ${cookie}`,
         },
+        params: {
+          perPage: 20,
+        },
       });
       console.log(data.data);
       return data.data;
@@ -24,6 +27,11 @@ export const getOneContract = (url, cookie) =>
     queryKey: [dashboard_const.contracts, url],
     queryFn: async () => {
       console.log(url);
+      if (url.endsWith("/-1") || url.endsWith("-1")) {
+        // Return empty data or a default structure to avoid errors
+
+        return null;
+      }
       const { data } = await axios.get(url, {
         headers: {
           Authorization: `Bearer ${cookie}`,

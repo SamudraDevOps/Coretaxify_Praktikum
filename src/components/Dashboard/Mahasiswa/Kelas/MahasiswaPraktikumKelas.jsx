@@ -172,7 +172,7 @@ export default function MahasiswaPraktikumKelas() {
         ))} */}
       </div>
       <div className="search-add-container flex justify-between">
-        <div className="search-input-container">
+        <div className="search-input-container w-full flex justify-between pr-10">
           <input
             type="text"
             id="search"

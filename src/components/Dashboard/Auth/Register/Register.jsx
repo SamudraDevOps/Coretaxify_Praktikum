@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { FaRegEye, FaEyeSlash } from "react-icons/fa";
 import CTaxifyLogo from "../../../../assets/images/4.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { RoutesApi } from "@/Routes";
 import { useCookies } from "react-cookie";
+import Swal from "sweetalert2";
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -22,111 +23,169 @@ const Register = () => {
     name: "",
     email: "",
     password: "",
+    password_confirmation: "",
     contract_code: "",
   });
+  const navigate = useNavigate();
+
+  const [errors, setErrors] = useState({});
+
+  const validate = () => {
+    let newErrors = {};
+    if (!formData.email) {
+      newErrors.email = "Email dibutuhkan.";
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = "Email tidak valid.";
+    }
+
+    if (!formData.name) {
+      newErrors.username = "Username dibutuhkan.";
+    }
+
+    if (!formData.password) {
+      newErrors.password = "Password dibutuhkan.";
+    } else if (formData.password.length < 4) {
+      newErrors.password = "Panjang password minimal 4 karakter.";
+    }
+
+    if (formData.password !== repeatPassword) {
+      newErrors.password = "Password tidak cocok.";
+    }
+
+    if (showRegistrationCode && !formData.contract_code.trim()) {
+      newErrors.registrationCode = "Kode registrasi wajib diisi.";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const mutation = useMutation({
     mutationFn: async () => {
       console.log("button clicked");
-      // const { response } = await axios.post(RoutesApi.login, {
-      const response = await axios.get(`${RoutesApi.url}api/csrf-token`, {
-        // withCredentials: true,
+
+      formData.password_confirmation = repeatPassword;
+
+      const response = await axios.get(RoutesApi.csrf, {
         headers: {
           "X-Requested-With": "XMLHttpRequest",
           Accept: "application/json",
         },
       });
-      console.log(response.data.token);
+      
       axios.defaults.headers.common["X-CSRF-TOKEN"] = response.data.token;
-      console.log(cookies.token);
-      // if (setShowRegistrationCode == false) {
-      //   return null;
-      // }
+
       const data = await axios.post(
         RoutesApi.register,
-        {
-          name: formData.name,
-          email: formData.email,
-          password: formData.password,
-          contract_code: formData.contract_code,
-        },
+        formData,
         {
           headers: {
             "Content-Type": "application/json",
             Accept: "application/json",
             "X-CSRF-TOKEN": response.data.token,
-            Authorization: `Bearer ${cookies.token}`,
           },
-          //   params: {
-          //     intent: RoutesApi.postAdmin.intent,
-          //   },
         }
       );
       return data;
     },
     onSuccess: (data) => {
-      console.log(data);
-      if (data.status === 200) {
-        window.location.href = "/confirm-otp";
+      console.log("Registration successful:", data);
+      
+      // Store email for OTP verification
+      localStorage.setItem("pendingVerificationEmail", formData.email);
+      
+      // Store token from registration response
+      if (data.data && data.data.token) {
+        setCookie("token", data.data.token, { path: "/" });
+        
+        // Store role if available
+        if (data.data.user && data.data.user.roles && data.data.user.roles.length > 0) {
+          const role = data.data.user.roles[0].name;
+          setCookie("role", role, { path: "/" });
+        }
       }
-      //   window.location.reload();
-
-      // window.location.href = "/" + role;
-      // alert("Login successful!");
-      // queryClient.invalidateQueries({ queryKey: ["todos"] });
+      
+      Swal.fire({
+        title: "Registrasi Berhasil!",
+        text: "Silakan verifikasi email Anda dengan kode OTP yang telah dikirim.",
+        icon: "success",
+        confirmButtonText: "Verifikasi Sekarang",
+      }).then(() => {
+        navigate("/confirm-otp");
+      });
     },
     onError: (error) => {
-      console.log(error);
+      console.log("Registration error: ", error);
+
+      const errorMessage = error.response?.data?.message || error.message;
+      Swal.fire("Registrasi Gagal!", errorMessage, "error");
     },
   });
 
   const handleEmailChange = (event) => {
-    setEmail(event.target.value);
     const { name, value } = event.target;
+    setEmail(value);
     setFormData({ ...formData, [name]: value });
+    
+    // Clear email errors when user types
     setEmailError("");
+    if (errors.email) {
+      setErrors({...errors, email: ""});
+    }
   };
 
   const handlePasswordChange = (event) => {
-    setPassword(event.target.value);
     const { name, value } = event.target;
+    setPassword(value);
     setFormData({ ...formData, [name]: value });
+    
+    // Clear password errors when user types
     setPasswordError("");
+    if (errors.password) {
+      setErrors({...errors, password: ""});
+    }
   };
 
   const handleRepeatPasswordChange = (event) => {
     setRepeatPassword(event.target.value);
-    // const { name, value } = event.target;
-    // setFormData({ ...formData, [name]: value });
+    
+    // Clear password errors when user types
     setPasswordError("");
+    if (errors.password) {
+      setErrors({...errors, password: ""});
+    }
   };
 
   const handleRegistrationCodeChange = (event) => {
-    setRegistrationCode(event.target.value);
+    const { name, value } = event.target;
+    setRegistrationCode(value);
+    setFormData({ ...formData, [name]: value });
+    
+    // Clear registration code errors when user types
+    setRegistrationCodeError("");
+    if (errors.registrationCode) {
+      setErrors({...errors, registrationCode: ""});
+    }
+  };
+
+  const handleUsernameChange = (event) => {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
-    setRegistrationCodeError("");
+    
+    // Clear username errors when user types
+    // Clear username errors when user types
+    if (errors.username) {
+      setErrors({...errors, username: ""});
+    }
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
-    if (!email.includes("@")) {
-      setEmailError("Email harus mengandung @");
-      return;
+    
+    // Only validate when form is submitted
+    if (validate()) {
+      mutation.mutate();
     }
-
-    if (password !== repeatPassword) {
-      setPasswordError("Password tidak cocok");
-      return;
-    }
-
-    if (showRegistrationCode && registrationCode.trim() === "") {
-      setRegistrationCodeError("Kode registrasi wajib diisi");
-      return;
-    }
-
-    console.log("Form Submitted");
   };
 
   return (
@@ -154,12 +213,12 @@ const Register = () => {
               name="name"
               className="mt-1 block w-full p-2 border rounded-md"
               placeholder="Masukkan username"
-              required
-              onChange={(e) => {
-                const { name, value } = e.target;
-                setFormData({ ...formData, [name]: value });
-              }}
+              // required
+              onChange={handleUsernameChange}
             />
+            {errors.username && (
+              <p className="text-red-500 text-sm">{errors.username}</p>
+            )}
           </div>
 
           <div>
@@ -177,8 +236,11 @@ const Register = () => {
               onChange={handleEmailChange}
               className="mt-1 block w-full p-2 border rounded-md"
               placeholder="Masukkan email"
-              required
+              // required
             />
+            {errors.email && (
+              <p className="text-red-500 text-sm">{errors.email}</p>
+            )}
             {emailError && <p className="text-red-500 text-sm">{emailError}</p>}
           </div>
 
@@ -198,7 +260,7 @@ const Register = () => {
                 onChange={handlePasswordChange}
                 className="mt-1 block w-full p-2 border rounded-md"
                 placeholder="Masukkan password"
-                required
+                // required
               />
               <button
                 type="button"
@@ -208,6 +270,9 @@ const Register = () => {
                 {showPassword ? <FaEyeSlash /> : <FaRegEye />}
               </button>
             </div>
+            {errors.password && (
+              <p className="text-red-500 text-sm">{errors.password}</p>
+            )}
           </div>
 
           <div>
@@ -225,7 +290,7 @@ const Register = () => {
                 onChange={handleRepeatPasswordChange}
                 className="mt-1 block w-full p-2 border rounded-md"
                 placeholder="Ulangi password"
-                required
+                // required
               />
               <button
                 type="button"
@@ -235,16 +300,19 @@ const Register = () => {
                 {showPassword ? <FaEyeSlash /> : <FaRegEye />}
               </button>
             </div>
+            {errors.password && (
+              <p className="text-red-500 text-sm">{errors.password}</p>
+            )}
           </div>
 
           {!showRegistrationCode ? (
             <div className="flex gap-4">
               <button
-                onClick={() => mutation.mutate()}
-                type="button"
+                type="submit"
                 className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600"
+                disabled={mutation.isPending}
               >
-                Coba Gratis 14 Hari
+                {mutation.isPending ? "Mendaftar..." : "Coba Gratis 14 Hari"}
               </button>
               <button
                 type="button"
@@ -270,24 +338,32 @@ const Register = () => {
                 name="contract_code"
                 className="mt-1 block w-full p-2 border rounded-md"
                 placeholder="Masukkan Kode Registrasi"
-                required
+                // required
               />
+              {errors.registrationCode && (
+                <p className="text-red-500 text-sm">{errors.registrationCode}</p>
+              )}
               {registrationCodeError && (
                 <p className="text-red-500 text-sm">{registrationCodeError}</p>
               )}
               <button
-                // onClick={() => console.log(formData)}
-                onClick={() => mutation.mutate()}
                 type="submit"
                 className="mt-4 w-full bg-purple-900 text-white py-2 rounded-md hover:bg-purple-950"
+                disabled={mutation.isPending}
               >
-                Daftar Sekarang
+                {mutation.isPending ? "Mendaftar..." : "Daftar Sekarang"}
               </button>
             </div>
           )}
 
           {passwordError && (
             <p className="text-red-500 text-sm">{passwordError}</p>
+          )}
+
+          {mutation.isError && !passwordError && !emailError && !registrationCodeError && (
+            <p className="text-red-500 text-sm">
+              {mutation.error.response?.data?.message || mutation.error.message}
+            </p>
           )}
         </form>
         <p className="text-center text-sm text-black-600 mt-4">
@@ -304,4 +380,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default Register;    

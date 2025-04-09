@@ -19,7 +19,7 @@ const EditMahasiswaPscKelas = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [cookies, setCookie] = useCookies(["user"]);
   const [search, setSearch] = useState("");
-  const [url, setUrl] = useState(`${RoutesApi.psc.groups.url}/${groupId}/members`);
+  const [url, setUrl] = useState(`${RoutesApi.psc.groups.nested(groupId, 'members').index().url}`);
   const [klassInfo, setKlassInfo] = useState(null);
 
   // Form data state for member details (view-only)
@@ -33,7 +33,7 @@ const EditMahasiswaPscKelas = () => {
   const { data: classData } = useQuery({
     queryKey: ["kelas_detail", groupId],
     queryFn: async () => {
-      const { data } = await axios.get(`${RoutesApi.psc.groups.url}/${groupId}`, {
+      const { data } = await axios.get(RoutesApi.psc.groups.show(groupId).url, {
         headers: {
           Authorization: `Bearer ${cookies.token}`,
           Accept: "application/json",
@@ -73,7 +73,7 @@ const EditMahasiswaPscKelas = () => {
   const mutation = useMutation({
     mutationFn: async ({ id }) => {
       // Get CSRF token
-      const response = await axios.get(`${RoutesApi.url}api/csrf-token`, {
+      const response = await axios.get(RoutesApi.csrf, {
         headers: {
           "X-Requested-With": "XMLHttpRequest",
           Accept: "application/json",
@@ -81,9 +81,9 @@ const EditMahasiswaPscKelas = () => {
       });
 
       axios.defaults.headers.common["X-CSRF-TOKEN"] = response.data.token;
-      const apiUrl = `${RoutesApi.psc.groups.url}/${groupId}/members/${id}`;
+      const deleteEndpoint = RoutesApi.psc.groups.nested(groupId, 'members').destroy(id);
       
-      return await axios.delete(apiUrl, {
+      return await axios.delete(deleteEndpoint.url, {
         headers: {
           "X-CSRF-TOKEN": response.data.token,
           Authorization: `Bearer ${cookies.token}`,

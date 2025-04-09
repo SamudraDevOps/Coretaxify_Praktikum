@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./editPopupDosen.css";
+import "./editPopupDosenBackup.css";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { RoutesApi } from "@/Routes";
@@ -10,7 +10,7 @@ import { getContracts } from "@/hooks/dashboard";
 import { getCookieToken } from "@/service";
 import { RxCross1 } from "react-icons/rx";
 
-const EditPopupDosen = ({ isOpen, onClose, dosen, onSave }) => {
+const EditPopupDosen = ({ isOpen, onClose, dosen, onSave, refetch }) => {
   const [cookies, setCookie] = useCookies(["user"]);
 
   const [formData, setFormData] = useState({
@@ -107,7 +107,8 @@ const EditPopupDosen = ({ isOpen, onClose, dosen, onSave }) => {
       Swal.fire("Berhasil!", "Data dosen berhasil diubah!", "success").then(
         (result) => {
           if (result.isConfirmed) {
-            window.location.reload();
+            refetch();
+            // window.location.reload();
           }
         }
       );
@@ -145,7 +146,7 @@ const EditPopupDosen = ({ isOpen, onClose, dosen, onSave }) => {
         </div>
         <form>
           <div className="edit-form-group-dosen">
-            <label>Nama Dosen awdk:</label>
+            <label>Nama Dosen :</label>
             <input
               type="text"
               name="name"

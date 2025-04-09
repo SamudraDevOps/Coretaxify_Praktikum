@@ -9,10 +9,11 @@ import {
   useQueryClient,
   QueryClient,
   QueryClientProvider,
-} from '@tanstack/react-query'
+} from "@tanstack/react-query";
 import App from "./App.jsx";
 import { UserTypeProvider } from "./components/context/userTypeContext";
-const queryClient = new QueryClient()
+import { Toaster } from "@/components/ui/toaster";
+const queryClient = new QueryClient();
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -20,6 +21,7 @@ createRoot(document.getElementById("root")).render(
     <UserTypeProvider>
       <QueryClientProvider client={queryClient}>
         <App />
+        <Toaster />
       </QueryClientProvider>
     </UserTypeProvider>
 

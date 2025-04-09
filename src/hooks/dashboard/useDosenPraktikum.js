@@ -5,6 +5,12 @@ import axios from "axios";
 import { RoutesApi } from "@/Routes";
 import IntentEnum from "@/constant/intent";
 
+const formatDate = (dateString) => {
+  if (!dateString) return "";
+  // Add time component to make it match Y-m-d H:i:s format
+  return `${dateString} 00:00:00`;
+};
+
 export const getDosenPraktikumKelas = (url, id, cookie) =>
   useQuery({
     queryKey: ["praktikum", url],
@@ -61,8 +67,8 @@ export const updatePraktikumDosen = (
         {
           name: formData.name,
           task_id: formData.task_id,
-          start_period: formData.start_period,
-          end_period: formData.end_period,
+          start_period: formatDate(formData.start_period),
+          end_period: formatDate(formData.end_period),
           // start_period: new Date(formData.start_period)
           //   .toISOString()
           //   .split(".")[0]
@@ -129,15 +135,15 @@ export const createPraktikumDosen = (
   useMutation({
     mutationFn: async () => {
       const csrf = await getCsrf();
-      console.log(supporting_files);
+      console.log(formData);
       axios.defaults.headers.common["X-CSRF-TOKEN"] = csrf;
       const data = await axios.post(
         `${RoutesApi.url}api/lecturer/groups/${class_id}/assignments`,
         {
           name: formData.name,
           task_id: formData.task_id,
-          start_period: formData.start_period,
-          end_period: formData.end_period,
+          start_period: formatDate(formData.start_period),
+          end_period: formatDate(formData.end_period),
           supporting_file: supporting_files,
         },
         {
@@ -171,7 +177,7 @@ export const createPraktikumDosen = (
     },
   });
 
-export const deletePraktikumDosen = (cookies, class_id,refetch) =>
+export const deletePraktikumDosen = (cookies, class_id, refetch) =>
   useMutation({
     mutationFn: async (assignment_id) => {
       const csrf = await getCsrf();

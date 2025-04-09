@@ -19,7 +19,7 @@ const EditMahasiswaPsc = () => {
   const [selectedData, setSelectedData] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [cookies, setCookie] = useCookies(["user"]);
-  const [url, setUrl] = useState(`${RoutesApi.psc.users.url}`);
+  const [url, setUrl] = useState(RoutesApi.psc.users.index().url);
   const [search, setSearch] = useState("");
 
   // Form data state for editing/creating student
@@ -50,7 +50,7 @@ const EditMahasiswaPsc = () => {
   const mutation = useMutation({
     mutationFn: async ({ id, action, multipleStudents = null }) => {
       // Get CSRF token
-      const response = await axios.get(`${RoutesApi.url}api/csrf-token`, {
+      const response = await axios.get(RoutesApi.csrf, {
         headers: {
           "X-Requested-With": "XMLHttpRequest",
           Accept: "application/json",
@@ -58,15 +58,13 @@ const EditMahasiswaPsc = () => {
       });
 
       axios.defaults.headers.common["X-CSRF-TOKEN"] = response.data.token;
-      let apiUrl;
 
       if (action === "create") {
-        apiUrl = RoutesApi.psc.users.url;
 
         if (multipleStudents && multipleStudents.length > 0) {
           const createPromises = multipleStudents.map(student => {
             return axios.post(
-              apiUrl,
+              RoutesApi.psc.users.store().url,
               {
                 name: student.name,
                 email: student.email,
@@ -89,7 +87,7 @@ const EditMahasiswaPsc = () => {
           return Promise.all(createPromises);
         } else {
           return await axios.post(
-            apiUrl,
+            RoutesApi.psc.users.store().url,
             {
               name: formData.name,
               email: formData.email,
@@ -110,9 +108,9 @@ const EditMahasiswaPsc = () => {
           );
         }
       } else if (action === "update" && id) {
-        apiUrl = `${RoutesApi.psc.users.url}/${id}`;
+        const updateEndpoint = RoutesApi.psc.users.update(id);
         return await axios.put(
-          apiUrl,
+          updateEndpoint.url,
           {
             name: formData.name,
             email: formData.email,
@@ -129,13 +127,16 @@ const EditMahasiswaPsc = () => {
           }
         );
       } else if (action === "delete" && id) {
-        apiUrl = `${RoutesApi.psc.users.url}/${id}`;
-        return await axios.delete(apiUrl, {
-          headers: {
-            "X-CSRF-TOKEN": response.data.token,
-            Authorization: `Bearer ${cookies.token}`,
+        const deleteEndpoint = RoutesApi.psc.users.destroy(id);
+        return await axios.delete(
+          deleteEndpoint.url, 
+          {
+            headers: {
+              "X-CSRF-TOKEN": response.data.token,
+              Authorization: `Bearer ${cookies.token}`,
+            }
           }
-        });
+        );
       }
     },
 

@@ -23,6 +23,8 @@ import { ClipLoader } from "react-spinners";
 import { FaFile } from "react-icons/fa";
 import IntentEnum from "@/constant/intent";
 import { RxCross1 } from "react-icons/rx";
+import { FaRegCopy } from "react-icons/fa";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Praktikum() {
   const [isOpen, setIsOpen] = useState(false);
@@ -32,6 +34,7 @@ export default function Praktikum() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const [cookies, setCookie] = useCookies(["user"]);
+  const { toast } = useToast();
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -55,7 +58,7 @@ export default function Praktikum() {
           intent: IntentEnum.API_GET_ASSIGNMENT_ALL,
         },
       });
-      console.log(data.data);
+      console.log(data);
       return data;
     },
   });
@@ -72,7 +75,7 @@ export default function Praktikum() {
           Authorization: `Bearer ${cookies.token}`,
         },
       });
-      console.log(data);
+      // console.log(data.meta);
       return data;
     },
   });
@@ -226,11 +229,11 @@ export default function Praktikum() {
           />
         </div>
         <AlertDialog>
-          <AlertDialogTrigger>
+          {/* <AlertDialogTrigger>
             <div className="bg-blue-800 p-2 rounded-lg text-white">
               + Tambah Praktikum
             </div>
-          </AlertDialogTrigger>
+          </AlertDialogTrigger> */}
           <AlertDialogContent>
             <AlertDialogHeader>
               <AlertDialogTitle>Tambah Praktikum</AlertDialogTitle>
@@ -260,11 +263,11 @@ export default function Praktikum() {
                       <label>Kelas Praktikum:</label>
                       <select name="group_id" onChange={handleChange} id="">
                         <option value="">Pilih Kelas</option>
-                        {dataClass.map((item) => (
+                        {/* {dataClass.map((item) => (
                           <option key={item.id} value={item.id}>
                             {item.name}
                           </option>
-                        ))}
+                        ))} */}
                       </select>
                     </div>
                     <div className="edit-form-group-mahasiswa">
@@ -274,7 +277,7 @@ export default function Praktikum() {
                           htmlFor="dropzone-file"
                           className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
                         >
-                          <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                          {/* <div className="flex flex-col items-center justify-center pt-5 pb-6">
                             {filePreview ? (
                               <>
                                 <div className="grid justify-center items-center p-20">
@@ -312,7 +315,7 @@ export default function Praktikum() {
                                 </p>
                               </>
                             )}
-                          </div>
+                          </div> */}
 
                           <input
                             id="dropzone-file"
@@ -339,7 +342,10 @@ export default function Praktikum() {
                         type="date"
                         name="end_period"
                         onChange={handleChange}
-                        min={formData.start_period || new Date().toISOString().split("T")[0]}
+                        min={
+                          formData.start_period ||
+                          new Date().toISOString().split("T")[0]
+                        }
                       />
                     </div>
                   </form>
@@ -371,8 +377,8 @@ export default function Praktikum() {
                     ? "↑"
                     : "↓"
                   : sortConfig.direction === "descending"
-                    ? "↓"
-                    : "↑"}
+                  ? "↓"
+                  : "↑"}
               </th>
               <th className="">Kode Praktikum</th>
               <th className="">Tanggal Praktikum</th>
@@ -383,17 +389,32 @@ export default function Praktikum() {
             {data.data.map((item, index) => (
               <tr key={index}>
                 <td>{item.name}</td>
-                <td className="max-w-5">
+                <td className="flex items-center justify-center gap-">
                   <p className="truncate">{item.assignment_code}</p>
+                  <FaRegCopy
+                    onClick={(e) => {
+                      // e.stopPropagation();
+
+                      e.preventDefault();
+                      navigator.clipboard.writeText(item.assignment_code);
+                      toast({
+                        title: "Copy berhasil",
+                        description: "Kode Kelas berhasil dicopy",
+                      });
+                      // alert("miaw");
+                    }}
+                    className="hover:bg-slate-300 p-1 rounded-md"
+                    size={25}
+                  />
                 </td>
                 <td className="max-w-5">
                   <p className="">{item.start_period}</p>
                 </td>
                 <td>
                   <AlertDialog>
-                    <AlertDialogTrigger className="action-button edit">
+                    {/* <AlertDialogTrigger className="action-button edit">
                       Edit
-                    </AlertDialogTrigger>
+                    </AlertDialogTrigger> */}
                     <AlertDialogContent>
                       <AlertDialogHeader>
                         <div className="w-full flex justify-end">
@@ -452,7 +473,7 @@ export default function Praktikum() {
                   >
                     Edit
                   </button> */}
-                  <button
+                  {/* <button
                     className="action-button delete"
                     onClick={() => {
                       Swal.fire({
@@ -479,7 +500,7 @@ export default function Praktikum() {
                     }}
                   >
                     Delete
-                  </button>
+                  </button> */}
                 </td>
               </tr>
             ))}
@@ -493,38 +514,32 @@ export default function Praktikum() {
             )} of ${data.length} entries`}
           </div> */}
 
-          <div className="pagination">
+          {/* <div className="pagination">
             <button
-              className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
-              onClick={() => paginate(currentPage - 1)}
-              disabled={currentPage === 1}
+              className={`page-item`}
+              onClick={() => {
+                setUrl(data.links.prev);
+              }}
+              disabled={data.meta.current_page === 1}
             >
               &lt;
             </button>
-            {Array.from(
-              { length: Math.ceil(data.length / itemsPerPage) },
-              (_, index) => (
-                <button
-                  key={index + 1}
-                  className={`page-item ${currentPage === index + 1 ? "active" : ""
-                    }`}
-                  onClick={() => paginate(index + 1)}
-                >
-                  {index + 1}
-                </button>
-              )
-            )}
+            <button className="page-item">{data.meta.current_page}</button>
             <button
-              className={`page-item ${currentPage === Math.ceil(data.length / itemsPerPage)
+              className={`page-item ${
+                currentPage === Math.ceil(data.length / itemsPerPage)
                   ? "disabled"
                   : ""
-                }`}
-              onClick={() => paginate(currentPage + 1)}
-              disabled={currentPage === Math.ceil(data.length / itemsPerPage)}
+              }`}
+              onClick={() => {
+                console.log(data.links.next);
+                setUrl(data.links.next);
+              }}
+              disabled={data.links.next == null}
             >
               &gt;
             </button>
-          </div>
+          </div> */}
         </div>
       </div>
       {isOpen && (

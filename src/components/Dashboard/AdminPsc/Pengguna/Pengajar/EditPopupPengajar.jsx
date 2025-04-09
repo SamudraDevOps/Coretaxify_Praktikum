@@ -1,15 +1,15 @@
 import React from "react";
-import "./editPopupDosen.css";
+import "./editPopupPengajar.css";
 
-const EditPopupPengajar = ({ 
-  onClose, 
-  data = {}, 
+const EditPopupPengajar = ({
+  onClose,
+  data = {},
   onSave,
   formData,
   setFormData,
   isLoading = false,
   title = "Edit Pengajar",
-  isReadOnly = false
+  isReadOnly = false,
 }) => {
   const handleChange = (e) => {
     if (isReadOnly) return;
@@ -18,13 +18,13 @@ const EditPopupPengajar = ({
   };
 
   return (
-    <div className="edit-popup-container-dosen">
-      <div className="edit-popup-content-dosen">
-        <div className="edit-popup-header-dosen">
+    <div className="edit-popup-container-instruktur">
+      <div className="edit-popup-content-instruktur">
+        <div className="edit-popup-header-instruktur">
           <h2>{title}</h2>
         </div>
         <form>
-          <div className="edit-form-group-dosen">
+          <div className="edit-form-group-instruktur">
             <label>Nama Pengajar:</label>
             <input
               type="text"
@@ -36,7 +36,7 @@ const EditPopupPengajar = ({
               className={isReadOnly ? "read-only-field" : ""}
             />
           </div>
-          <div className="edit-form-group-dosen">
+          <div className="edit-form-group-instruktur">
             <label>Email:</label>
             <input
               type="email"
@@ -48,7 +48,7 @@ const EditPopupPengajar = ({
               className={isReadOnly ? "read-only-field" : ""}
             />
           </div>
-          <div className="edit-form-group-dosen">
+          <div className="edit-form-group-instruktur">
             <label>Status:</label>
             {isReadOnly ? (
               <input
@@ -70,8 +70,8 @@ const EditPopupPengajar = ({
               </select>
             )}
           </div>
-          
-          <div className="edit-popup-actions-dosen">
+
+          <div className="edit-popup-actions-instruktur">
             {!isReadOnly && (
               <button
                 className="edit-save-button"
@@ -97,4 +97,3 @@ const EditPopupPengajar = ({
 };
 
 export default EditPopupPengajar;
-              

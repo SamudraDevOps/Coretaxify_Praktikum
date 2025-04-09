@@ -10,6 +10,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
+import { FaRegCopy } from "react-icons/fa";
 
 import EditKontrak from "./EditKontrak";
 import { deleteContract, getContracts, testAlert } from "@/hooks/dashboard";
@@ -18,7 +19,7 @@ import { getCookie, getCookieToken } from "@/service";
 const Kontrak = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenEdit, setIsOpenEdit] = useState(false);
-  const [idEdit, setIdEdit] = useState(0);
+  const [idEdit, setIdEdit] = useState(-1);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
@@ -30,18 +31,6 @@ const Kontrak = () => {
     url,
     getCookieToken()
   );
-  // const { isLoading, isError, data, error, refetch } = useQuery({
-  //   queryKey: ["contracts", url],
-  //   queryFn: async () => {
-  //     const { data } = await axios.get(url, {
-  //       headers: {
-  //         Authorization: `Bearer ${cookies.token}`,
-  //       },
-  //     });
-  //     console.log(data.data);
-  //     return data;
-  //   },
-  // });
   const {
     isLoading: isLoadingTask,
     isError: isErrorTask,
@@ -71,54 +60,14 @@ const Kontrak = () => {
         headers: {
           Authorization: `Bearer ${cookies.token}`,
         },
+        params: {
+          perPage: 10000,
+        },
       });
       console.log(data.data);
       return data.data;
     },
   });
-
-  // const mutation = useMutation({
-  //   mutationFn: async (id) => {
-  //     console.log("button clicked");
-  //     // const { response } = await axios.post(RoutesApi.login, {
-  //     const response = await axios.get(`${RoutesApi.url}api/csrf-token`, {
-  //       // withCredentials: true,
-  //       headers: {
-  //         "X-Requested-With": "XMLHttpRequest",
-  //         Accept: "application/json",
-  //       },
-  //     });
-  //     console.log(response.data.token);
-  //     axios.defaults.headers.common["X-CSRF-TOKEN"] = response.data.token;
-  //     console.log(cookies.token);
-  //     const data = await axios.delete(RoutesApi.contractAdmin + `/${id}`, {
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Accept: "application/json",
-  //         "X-CSRF-TOKEN": response.data.token,
-  //         Authorization: `Bearer ${cookies.token}`,
-  //       },
-  //     });
-  //     return data;
-  //   },
-  //   onSuccess: (data) => {
-  //     console.log(data);
-  //     // const role = data.data.user.roles[0].name;
-  //     // setCookie("token", data.data.token, { path: "/" });
-  //     // setCookie("role", role, { path: "/" });
-  //     Swal.fire("Berhasil!", "Kelas berhasil dihapus!", "success");
-
-  //     window.location.href = "/" + role;
-  //     // alert("Login successful!");
-  //     // queryClient.invalidateQueries({ queryKey: ["todos"] });
-  //   },
-
-  //   onError: (error) => {
-  //     console.log("hello!");
-  //     console.log(error);
-  //     Swal.fire("Gagal !", error.message, "error");
-  //   },
-  // });
 
   const mutation = deleteContract(getCookie());
 
@@ -244,6 +193,7 @@ const Kontrak = () => {
         </button>
       </div>
       <TambahKontrak
+        refetch={refetch}
         UniData={dataUni}
         taskData={taskData}
         isOpen={isOpen}
@@ -252,12 +202,14 @@ const Kontrak = () => {
         setOpen={setIsOpen}
       />
       <EditKontrak
+        refetch={refetch}
         UniData={dataUni}
         isOpen={isOpenEdit}
         taskData={taskData}
         id={idEdit}
         onClose={() => setIsOpenEdit(false)}
         onSave={handleData}
+        setEdit={setIdEdit}
       ></EditKontrak>
 
       <div className="table-container">
@@ -289,7 +241,25 @@ const Kontrak = () => {
                 <td>{item.spt}</td>
                 <td>{item.bupot}</td>
                 <td>{item.faktur}</td>
-                <td>{item.contract_code}</td>
+                <td className="">
+                  <div className="flex justify-center items-center gap-3">
+                    {item.contract_code}
+                    <FaRegCopy
+                      onClick={(e) => {
+                        // e.stopPropagation();
+                        e.preventDefault();
+                        navigator.clipboard.writeText(item.contract_code);
+                        toast({
+                          title: "Copy berhasil",
+                          description: "Kode Kelas berhasil dicopy",
+                        });
+                        // alert("miaw");
+                      }}
+                      className="hover:bg-slate-300 p-1 rounded-md"
+                      size={25}
+                    />
+                  </div>
+                </td>
                 <td>{item.is_buy_task === 1 ? "Ya" : "Tidak"}</td>
                 <td>{item.status}</td>
                 <td>

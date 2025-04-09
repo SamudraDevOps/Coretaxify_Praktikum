@@ -30,10 +30,10 @@ const PajakKeluaran = () => {
                 </div>
                 <div className="flex justify-between mb-4 border-b pb-3">
                     <div className="flex items-center gap-3">
-                        <div className="relative inline-block text-left" ref={dropdownRef}>
+                        <div className="flex  text-left text-sm" ref={dropdownRef}>
                             <button
                                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                                className="flex items-center bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded"
+                                className="flex items-center bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-2 rounded"
                             >
                                 Import <FaChevronDown className="ml-2" />
                             </button>
@@ -57,17 +57,17 @@ const PajakKeluaran = () => {
                         </div>
 
                         <button
-                            className="flex items-center bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded"
+                            className="flex items-center bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded text-sm"
                             onClick={() => window.location.href = "/admin/praktikum/2/e-faktur/pajak-keluaran/tambah-faktur-keluaran"}
                         >
                             Tambah
                         </button>
                     </div>
                     <div className="flex items-center gap-3">
-                        <button className='flex items-center bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded'>
+                        <button className='flex items-center bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded text-sm'>
                             Upload Faktur
                         </button>
-                        <button className='flex items-center bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-2 rounded'>
+                        <button className='flex items-center bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-2 rounded text-sm'>
                             Hapus Dokumen
                         </button>
                     </div>

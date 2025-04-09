@@ -1,4 +1,4 @@
-.tambah-dosen-overlay {
+.tambah-instruktur-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -11,7 +11,7 @@
   z-index: 1000;
 }
 
-.tambah-dosen-container {
+.tambah-instruktur-container {
   background-color: #ffffff;
   border-radius: 10px;
   padding: 2rem;
@@ -22,14 +22,14 @@
   overflow-y: auto;
 }
 
-.tambah-dosen-header {
+.tambah-instruktur-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1.5rem;
 }
 
-.tambah-dosen-header h2 {
+.tambah-instruktur-header h2 {
   font-size: 1.5rem;
   font-weight: bold;
   color: #333;
@@ -48,7 +48,7 @@
   color: #333;
 }
 
-.tambah-dosen-form {
+.tambah-instruktur-form {
   margin-bottom: 1.5rem;
 }
 
@@ -90,7 +90,7 @@
   font-style: italic;
 }
 
-.tambah-dosen-actions {
+.tambah-instruktur-actions {
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
@@ -340,12 +340,12 @@
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-  .tambah-dosen-container {
+  .tambah-instruktur-container {
     padding: 1.5rem;
     max-width: 95%;
   }
   
-  .tambah-dosen-actions {
+  .tambah-instruktur-actions {
     flex-direction: column;
     gap: 0.5rem;
   }
