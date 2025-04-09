@@ -106,7 +106,7 @@ export default function UploadSoal() {
         );
       } else if (action === "delete" && id) {
         // Delete task
-        const deleteEndpoint = RoutesApi.psc.tasks.delete(id);
+        const deleteEndpoint = RoutesApi.psc.tasks.destroy(id);
         return await axios.delete(
           deleteEndpoint.url,
           {
