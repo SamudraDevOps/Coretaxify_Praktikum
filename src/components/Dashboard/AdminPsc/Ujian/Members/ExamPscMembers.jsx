@@ -8,17 +8,35 @@ import { RoutesApi } from "@/Routes";
 import { ClipLoader } from "react-spinners";
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
-import ExamPscMemberDetailPopup from "./ExamPscMemberDetailPopup";
+import { useParams, useNavigate } from "react-router-dom";
+// import ExamPscMemb from "./ExamPscMemb";
 
-const ExamPscMembers = ({ isOpen, onClose, examId, examName }) => {
-  if (!isOpen) return null;
-
+const ExamPscMembers = () => {
+  const { examId } = useParams();
+  const navigate = useNavigate();
   const [selectedMember, setSelectedMember] = useState(null);
-  const [isDetailOpen, setIsDetailOpen] = useState(false);
+  // const [isDetailOpen, setIsDetailOpen] = useState(false);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
   const [cookies] = useCookies(["user"]);
-  const [url, setUrl] = useState(`${RoutesApi.psc.exams.url}/${examId}/members`);
+  const [url, setUrl] = useState(
+    `${RoutesApi.psc.exams.url}/${examId}/members`
+  );
   const [search, setSearch] = useState("");
+
+  // Fetch exam details
+  const { data: examData } = useQuery({
+    queryKey: ["exam_detail", examId],
+    queryFn: async () => {
+      const { data } = await axios.get(`${RoutesApi.psc.exams.url}/${examId}`, {
+        headers: {
+          Authorization: `Bearer ${cookies.token}`,
+          Accept: "application/json",
+        },
+      });
+      return data;
+    },
+    enabled: !!examId,
+  });
 
   // Fetch members data
   const { isLoading, isError, data, error, refetch } = useQuery({
@@ -28,18 +46,18 @@ const ExamPscMembers = ({ isOpen, onClose, examId, examName }) => {
         headers: {
           Authorization: `Bearer ${cookies.token}`,
           Accept: "application/json",
-        }
+        },
       });
       return data;
     },
-    enabled: !!examId
+    enabled: !!examId,
   });
 
   // Member removal mutation
   const removeMemberMutation = useMutation({
     mutationFn: async (memberId) => {
       // Get CSRF token
-      const response = await axios.get(`${RoutesApi.url}api/csrf-token`, {
+      const response = await axios.get(`${RoutesApi.csrf.url()}`, {
         headers: {
           "X-Requested-With": "XMLHttpRequest",
           Accept: "application/json",
@@ -47,19 +65,23 @@ const ExamPscMembers = ({ isOpen, onClose, examId, examName }) => {
       });
 
       axios.defaults.headers.common["X-CSRF-TOKEN"] = response.data.token;
-      
+
       return await axios.delete(
         `${RoutesApi.psc.exams.url}/${examId}/members/${memberId}`,
         {
           headers: {
             "X-CSRF-TOKEN": response.data.token,
             Authorization: `Bearer ${cookies.token}`,
-          }
+          },
         }
       );
     },
     onSuccess: () => {
-      Swal.fire("Berhasil!", "Member berhasil dihapus dari ujian!", "success");
+      Swal.fire(
+        "Berhasil!",
+        "Member berhasil dikeluarkan dari ujian!",
+        "success"
+      );
       refetch();
     },
     onError: (error) => {
@@ -73,36 +95,36 @@ const ExamPscMembers = ({ isOpen, onClose, examId, examName }) => {
   });
 
   // Member detail fetch mutation
-  const memberDetailMutation = useMutation({
-    mutationFn: async (memberId) => {
-      return await axios.get(
-        `${RoutesApi.psc.exams.url}/${examId}/members/${memberId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${cookies.token}`,
-            Accept: "application/json",
-          }
-        }
-      );
-    },
-    onSuccess: (response) => {
-      setSelectedMember(response.data);
-      setIsDetailOpen(true);
-    },
-    onError: (error) => {
-      console.log(error.response);
-      Swal.fire("Gagal!", "Gagal mengambil detail member", "error");
-    },
-  });
+  // const memberDetailMutation = useMutation({
+  //   mutationFn: async (memberId) => {
+  //     return await axios.get(
+  //       `${RoutesApi.psc.exams.url}/${examId}/members/${memberId}`,
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${cookies.token}`,
+  //           Accept: "application/json",
+  //         }
+  //       }
+  //     );
+  //   },
+  //   onSuccess: (response) => {
+  //     setSelectedMember(response.data);
+  //     setIsDetailOpen(true);
+  //   },
+  //   onError: (error) => {
+  //     console.log(error.response);
+  //     Swal.fire("Gagal!", "Gagal mengambil detail member", "error");
+  //   },
+  // });
 
-  const handleViewDetail = (memberId) => {
-    memberDetailMutation.mutate(memberId);
-  };
+  // const handleViewDetail = (memberId) => {
+  //   memberDetailMutation.mutate(memberId);
+  // };
 
   const handleRemoveMember = (memberId) => {
     Swal.fire({
-      title: "Hapus Member?",
-      text: "Member akan dihapus dari ujian ini!",
+      title: "Hapus Anggota?",
+      text: "Anggota akan dikeluarkan dari ujian ini!",
       icon: "warning",
       showCancelButton: true,
       confirmButtonText: "Ya, hapus!",
@@ -126,15 +148,15 @@ const ExamPscMembers = ({ isOpen, onClose, examId, examName }) => {
     setSearch(e.target.value);
   };
 
+  const handleBack = () => {
+    navigate("/psc/ujian");
+  };
+
   // Loading state
   if (isLoading) {
     return (
-      <div className="member-detail-popup-overlay">
-        <div className="member-detail-popup-container">
-          <div className="loading">
-            <ClipLoader color="#7502B5" size={50} />
-          </div>
-        </div>
+      <div className="loading">
+        <ClipLoader color="#7502B5" size={50} />
       </div>
     );
   }
@@ -142,44 +164,41 @@ const ExamPscMembers = ({ isOpen, onClose, examId, examName }) => {
   // Error state
   if (isError) {
     return (
-      <div className="member-detail-popup-overlay">
-        <div className="member-detail-popup-container">
-          <Alert variant="destructive" className="w-full bg-white">
-            <AlertCircle className="h-4 w-4" />
-            <AlertTitle>Error!</AlertTitle>
-            <div className="">
-              <p>{error?.message ?? "Error!"}</p>
-              <div className="w-full flex justify-end">
-                <button
-                  className="bg-green-500 p-2 rounded-md text-white"
-                  onClick={() => refetch()}
-                >
-                  Ulangi
-                </button>
-              </div>
+      <div className="h-screen w-full justify-center items-center flex">
+        <Alert variant="destructive" className="w-1/2 bg-white">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>Error!</AlertTitle>
+          <div className="">
+            <p>{error?.message ?? "Error!"}</p>
+            <div className="w-full flex justify-end">
+              <button
+                className="bg-green-500 p-2 rounded-md text-white"
+                onClick={() => refetch()}
+              >
+                Ulangi
+              </button>
             </div>
-          </Alert>
-        </div>
+          </div>
+        </Alert>
       </div>
     );
   }
 
   // Filter data based on search
-  const filteredData = data?.data?.filter(item => 
-    item.name?.toLowerCase().includes(search.toLowerCase()) ||
-    item.email?.toLowerCase().includes(search.toLowerCase())
-  ) || [];
+  const filteredData =
+    data?.data?.filter(
+      (item) =>
+        item.name?.toLowerCase().includes(search.toLowerCase()) ||
+        item.email?.toLowerCase().includes(search.toLowerCase())
+    ) || [];
 
   return (
-    <div className="member-detail-popup-overlay">
-      <div className="member-detail-popup-container" style={{ width: '90%', maxWidth: '1000px' }}>
-        <div className="member-detail-popup-header">
-          <h2>Peserta Ujian: {examName}</h2>
-          <button className="close-button" onClick={onClose}>
-            &times;
-          </button>
-        </div>
-        <div className="search-input-container mb-4">
+    <div className="member-container">
+      <div className="header">
+        <h2>Peserta Ujian: {examData?.data?.name || "Loading..."}</h2>
+      </div>
+      <div className="search-add-container">
+        <div className="search-input-container">
           <input
             type="text"
             id="search"
@@ -189,40 +208,47 @@ const ExamPscMembers = ({ isOpen, onClose, examId, examName }) => {
             onChange={handleSearchChange}
           />
         </div>
-        <div className="table-container">
-          <table>
-            <thead>
-              <tr>
-                <th>No</th>
-                <th onClick={() => handleSort("name")}>
-                  Nama{" "}
-                  {sortConfig.key === "name"
-                    ? sortConfig.direction === "ascending"
-                      ? "↑"
-                      : "↓"
-                    : ""}
-                </th>
-                <th onClick={() => handleSort("email")}>
-                  Email{" "}
-                  {sortConfig.key === "email"
-                    ? sortConfig.direction === "ascending"
-                      ? "↑"
-                      : "↓"
-                    : ""}
-                </th>
-                <th>Status</th>
-                <th>Nilai</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredData.length > 0 ? (
-                filteredData.map((item, index) => (
-                  <tr key={item.id}>
-                    <td>{index + 1}</td>
-                    <td>{item.name}</td>
-                    <td>{item.email}</td>
-                    <td>
+        <button
+          className="back-button"
+          onClick={handleBack}
+        >
+          Kembali
+        </button>
+      </div>
+      <div className="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>No</th>
+              <th onClick={() => handleSort("name")}>
+                Nama{" "}
+                {sortConfig.key === "name"
+                  ? sortConfig.direction === "ascending"
+                    ? "↑"
+                    : "↓"
+                  : ""}
+              </th>
+              <th onClick={() => handleSort("email")}>
+                Email{" "}
+                {sortConfig.key === "email"
+                  ? sortConfig.direction === "ascending"
+                    ? "↑"
+                    : "↓"
+                  : ""}
+              </th>
+              <th>Status</th>
+              <th>Nilai</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredData.length > 0 ? (
+              filteredData.map((item, index) => (
+                <tr key={item.id}>
+                  <td>{index + 1}</td>
+                  <td>{item.name}</td>
+                  <td>{item.email}</td>
+                  {/* <td>
                       {item.pivot?.status === 'COMPLETED' ? (
                         <span className="status-badge completed">Selesai</span>
                       ) : item.pivot?.status === 'IN_PROGRESS' ? (
@@ -230,72 +256,75 @@ const ExamPscMembers = ({ isOpen, onClose, examId, examName }) => {
                       ) : (
                         <span className="status-badge not-started">Belum Mulai</span>
                       )}
-                    </td>
-                    <td>{item.pivot?.score || '-'}</td>
-                    <td>
-                      <button
+                    </td> */}
+                  <td>{item.status}</td>
+                  <td>{item.pivot?.score || "-"}</td>
+                  <td>
+                    {/* <button
                         className="action-button view"
                         onClick={() => handleViewDetail(item.id)}
                       >
                         Detail
-                      </button>
-                      <button
-                        className="action-button delete"
-                        onClick={() => handleRemoveMember(item.id)}
-                      >
-                        Remove
-                      </button>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="6" className="text-center py-4">
-                    Belum ada peserta yang bergabung
+                      </button> */}
+                    <button
+                      className="action-button delete"
+                      onClick={() => handleRemoveMember(item.id)}
+                    >
+                      Remove
+                    </button>
                   </td>
                 </tr>
-              )}
-            </tbody>
-          </table>
-          <div className="pagination-container">
-            <div className="pagination-info">
-              {data?.meta ? `Showing ${data.meta.from} to ${data.meta.to} of ${data.meta.total} entries` : "No data available"}
-            </div>
-            <div className="pagination">
-              <button
-                className="page-item"
-                onClick={() => {
-                  if (data?.links?.prev) setUrl(data.links.prev);
-                }}
-                disabled={!data?.links?.prev}
-              >
-                &lt;
-              </button>
-              <button className="page-item active">{data?.meta?.current_page || 1}</button>
-              <button
-                className="page-item"
-                onClick={() => {
-                  if (data?.links?.next) setUrl(data.links.next);
-                }}
-                disabled={!data?.links?.next}
-              >
-                &gt;
-              </button>
-            </div>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="6" className="text-center py-4">
+                  Belum ada peserta yang bergabung
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+        <div className="pagination-container">
+          <div className="pagination-info">
+            {data?.meta
+              ? `Showing ${data.meta.from} to ${data.meta.to} of ${data.meta.total} entries`
+              : "No data available"}
+          </div>
+          <div className="pagination">
+            <button
+              className="page-item"
+              onClick={() => {
+                if (data?.links?.prev) setUrl(data.links.prev);
+              }}
+              disabled={!data?.links?.prev}
+            >
+              &lt;
+            </button>
+            <button className="page-item active">
+              {data?.meta?.current_page || 1}
+            </button>
+            <button
+              className="page-item"
+              onClick={() => {
+                if (data?.links?.next) setUrl(data.links.next);
+              }}
+              disabled={!data?.links?.next}
+            >
+              &gt;
+            </button>
           </div>
         </div>
+      </div>
 
-        {/* Member Detail Popup */}
-        {isDetailOpen && (
-          <ExamPscMemberDetailPopup
+      {/* Member */}
+      {/* {isDetailOpen && (
+          <ExamPscMemb
             onClose={() => setIsDetailOpen(false)}
             member={selectedMember}
           />
-        )}
-      </div>
+        )} */}
     </div>
   );
 };
 
 export default ExamPscMembers;
-
