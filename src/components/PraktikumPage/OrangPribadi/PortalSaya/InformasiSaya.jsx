@@ -5,12 +5,42 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Link } from "react-router-dom";
 import { useUserType } from "@/components/context/userTypeContext";
 import { useParams } from "react-router";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { getCookieToken } from "@/service";
+import axios from "axios";
+import { ClipLoader } from "react-spinners";
+import { RoutesApi } from "@/Routes";
 
 const InformasiSaya = () => {
   const [activeTab, setActiveTab] = useState("general");
   const { userType } = useUserType();
   const [userTypeFromStorage, setUserTypeFromStorage] = useState("");
   const { id, akun } = useParams();
+  const token = getCookieToken();
+  const { isLoading, isError, data, error, refetch } = useQuery({
+    queryKey: ["informasiumum", id],
+    queryFn: async () => {
+      const response = await axios.get(
+        `${RoutesApi.apiUrl}student/assignments/${id}/sistem/${akun}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          params: {
+            intent: "api.get.sistem.informasi.umum",
+          },
+        }
+      );
+
+      // Check if response data exists
+      if (!response.data) {
+        throw new Error("No data returned from API");
+      }
+
+      return response.data.data;
+    },
+    enabled: !!id && !!token,
+  });
 
   useEffect(() => {
     const storedUserType = localStorage.getItem("userType");
@@ -22,6 +52,27 @@ const InformasiSaya = () => {
     const type = userType || userTypeFromStorage;
     return type === "Orang Pribadi" ? 1 : 2;
   };
+  if (isLoading) {
+    return (
+      <div className="loading">
+        <ClipLoader color="#7502B5" size={50} />
+      </div>
+    );
+  }
+  if (isError) {
+    return (
+      <div className="error-container">
+        <p>Error loading data: {error.message}</p>
+        <button
+          onClick={() => refetch()}
+          className="px-4 py-2 bg-fuchsia-500 text-white rounded-md mt-2"
+        >
+          Try Again
+        </button>
+      </div>
+    );
+  }
+  console.log("Data fetched:", data);
   return (
     <div className="flex h-screen bg-gray-100">
       <SidebarProfilSaya
@@ -56,14 +107,14 @@ const InformasiSaya = () => {
               <div className="p-6 grid grid-cols-2 gap-4 w-full border-r-0 border-gray-500">
                 <div className="space-y-2">
                   {[
-                    ["Nomor Pokok Wajib Pajak", "3510145907990002"],
-                    ["Nomor Identitas Kependudukan", "3510145907990002"],
+                    ["Nomor Pokok Wajib Pajak", data.npwp_akun],
+                    ["Nomor Identitas Kependudukan", data.npwp_akun],
                     [
                       "Jenis Wajib Pajak",
-                      "Orang Pribadi atau Warisan Belum Terbagi",
+                      data.tipe_akun
                     ],
                     ["Kategori Individu", "Orang Pribadi"],
-                    ["Nama", "PUTRI NURIL WULANATINING ASIH"],
+                    ["Nama", data.nama_akun],
                     ["Tempat Lahir", "BANYUWANGI"],
                     ["Tanggal Lahir", "19 Juli 1999"],
                     ["Jenis Kelamin", "Wanita"],
