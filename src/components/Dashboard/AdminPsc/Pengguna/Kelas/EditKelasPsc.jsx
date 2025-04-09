@@ -145,8 +145,15 @@ const EditKelasPsc = () => {
         });
       }
     },
-    onSuccess: () => {
-      Swal.fire("Berhasil!", "Operasi berhasil dilakukan!", "success");
+    onSuccess: (variables) => {
+      const { action } = variables;
+      if (action === "create") {
+        Swal.fire("Berhasil!", "Kelas berhasil dibuat!", "success");
+      } else if (action === "update") {
+        Swal.fire("Berhasil!", "Kelas berhasil diperbarui!", "success");
+      } else if (action === "delete") {
+        Swal.fire("Berhasil!", "Kelas berhasil dihapus!", "success");
+      }
       refetch();
       setIsOpen(false);
       setIsCreateOpen(false);
