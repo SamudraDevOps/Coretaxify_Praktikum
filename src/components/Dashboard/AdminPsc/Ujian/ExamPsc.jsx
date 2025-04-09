@@ -25,9 +25,7 @@ const ExamPsc = () => {
   const [selectedExamId, setSelectedExamId] = useState(null);
   const [selectedExamName, setSelectedExamName] = useState("");
   const [isViewMembersOpen, setIsViewMembersOpen] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
-  const itemsPerPage = 10;
   const navigate = useNavigate();
 
   const { isLoading, isError, data, error, refetch } = useQuery({
@@ -53,6 +51,53 @@ const ExamPsc = () => {
         },
       });
       return data;
+    },
+  });
+
+  const downloadMutation = useMutation({
+    mutationFn: async (id) => {
+      try {
+        const showEndpoint = RoutesApi.psc.exams.show(id);
+        const response = await axios.get(showEndpoint.url, {
+          headers: {
+            Authorization: `Bearer ${cookies.token}`,
+            Accept: "*/*",
+          },
+          params: {
+            intent: IntentEnum.API_USER_DOWNLOAD_FILE,
+          },
+          responseType: "blob",
+        });
+
+        // Extract filename from Content-Disposition header if present
+        let filename = "file.pdf"; // Default fallback name
+        const contentDisposition = response.headers["content-disposition"];
+
+        if (contentDisposition) {
+          // Extract filename from the header
+          const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+          const matches = filenameRegex.exec(contentDisposition);
+          if (matches !== null && matches[1]) {
+            // Clean up the filename
+            filename = matches[1].replace(/['"]/g, "");
+          }
+        }
+
+        // Create a blob URL and trigger download
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", filename);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        return response;
+      } catch (error) {
+        console.error("Download error:", error);
+        Swal.fire("Gagal!", "Gagal mengunduh file", "error");
+        throw error;
+      }
     },
   });
 
@@ -145,7 +190,7 @@ const ExamPsc = () => {
         });
       } else if (action === "delete" && id) {
         // Delete existing exam
-        const deleteEndpoint = RoutesApi.psc.exams.delete(id);
+        const deleteEndpoint = RoutesApi.psc.exams.destroy(id);
         return await axios.delete(deleteEndpoint.url, {
           headers: {
             "X-CSRF-TOKEN": response.data.token,
@@ -178,53 +223,6 @@ const ExamPsc = () => {
         return;
       }
       Swal.fire("Gagal!", error.response.data.message, "error");
-    },
-  });
-
-  const downloadMutation = useMutation({
-    mutationFn: async (id) => {
-      try {
-        const showEndpoint = RoutesApi.psc.exams.show(id);
-        const response = await axios.get(showEndpoint.url, {
-          headers: {
-            Authorization: `Bearer ${cookies.token}`,
-            Accept: "*/*",
-          },
-          params: {
-            intent: IntentEnum.API_USER_DOWNLOAD_FILE,
-          },
-          responseType: "blob",
-        });
-
-        // Extract filename from Content-Disposition header if present
-        let filename = "file.pdf"; // Default fallback name
-        const contentDisposition = response.headers["content-disposition"];
-
-        if (contentDisposition) {
-          // Extract filename from the header
-          const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
-          const matches = filenameRegex.exec(contentDisposition);
-          if (matches !== null && matches[1]) {
-            // Clean up the filename
-            filename = matches[1].replace(/['"]/g, "");
-          }
-        }
-
-        // Create a blob URL and trigger download
-        const url = window.URL.createObjectURL(new Blob([response.data]));
-        const link = document.createElement("a");
-        link.href = url;
-        link.setAttribute("download", filename);
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-
-        return response;
-      } catch (error) {
-        console.error("Download error:", error);
-        Swal.fire("Gagal!", "Gagal mengunduh file", "error");
-        throw error;
-      }
     },
   });
 
@@ -263,9 +261,6 @@ const ExamPsc = () => {
 
   const handleViewMembers = (examId, name) => {
     navigate(`/psc/ujian/${examId}/members`);
-    // setSelectedExamId(id);
-    // setSelectedExamName(name);
-    // setIsViewMembersOpen(true);
   };
 
   const handleDownload = (id) => {
@@ -284,8 +279,6 @@ const ExamPsc = () => {
     }
     setSortConfig({ key, direction });
   };
-
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const formatDate = (dateString) => {
     if (!dateString) return "-";
@@ -340,25 +333,19 @@ const ExamPsc = () => {
         item.status?.toLowerCase().includes(search.toLowerCase())
     ) || [];
 
-  // Separate active and other exams
-  const activeExams = filteredData.filter((exam) => exam.status === "ACTIVE");
-  const otherExams = filteredData.filter((exam) => exam.status !== "ACTIVE");
-
-  // Calculate pagination for active exams
-  const indexOfLastActiveItem = currentPage * itemsPerPage;
-  const indexOfFirstActiveItem = indexOfLastActiveItem - itemsPerPage;
-  const currentActiveItems = activeExams.slice(
-    indexOfFirstActiveItem,
-    indexOfLastActiveItem
-  );
-
-  // Calculate pagination for other exams
-  const indexOfLastOtherItem = currentPage * itemsPerPage;
-  const indexOfFirstOtherItem = indexOfLastOtherItem - itemsPerPage;
-  const currentOtherItems = otherExams.slice(
-    indexOfFirstOtherItem,
-    indexOfLastOtherItem
-  );
+  // Apply sorting if sortConfig is set
+  const sortedExams = [...filteredData];
+  if (sortConfig.key) {
+    sortedExams.sort((a, b) => {
+      if (a[sortConfig.key] < b[sortConfig.key]) {
+        return sortConfig.direction === "ascending" ? -1 : 1;
+      }
+      if (a[sortConfig.key] > b[sortConfig.key]) {
+        return sortConfig.direction === "ascending" ? 1 : -1;
+      }
+      return 0;
+    });
+  }
 
   return (
     <div className="ujian-container">
@@ -384,309 +371,124 @@ const ExamPsc = () => {
         </button>
       </div>
 
-      {activeExams.length > 0 && (
-        <div className="mb-8">
-          <h3 className="text-xl font-semibold mb-4 text-gray-700">
-            Ujian Aktif
-          </h3>
-          <div className="table-container">
-            <table>
-              <thead>
-                <tr>
-                  <th>No</th>
-                  <th onClick={() => handleSort("name")}>
-                    Nama Ujian{" "}
-                    {sortConfig.key === "name"
-                      ? sortConfig.direction === "ascending"
-                        ? "↑"
-                        : "↓"
-                      : "↑"}
-                  </th>
-                  <th>Soal</th>
-                  <th>File Support</th>
-                  <th>Tanggal Mulai</th>
-                  <th>Tanggal Selesai</th>
-                  <th>Durasi (menit)</th>
-                  <th>Status</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {currentActiveItems.length > 0 ? (
-                  currentActiveItems.map((exam, index) => (
-                    <tr key={exam.id}>
-                      <td>{indexOfFirstActiveItem + index + 1}</td>
-                      <td>{exam.name}</td>
-                      <td>{getTaskName(exam.task_id)}</td>
-                      <td>
-                        {exam.supporting_file ? (
-                          <button
-                            onClick={() => handleDownload(exam.id)}
-                            className="download-button"
-                            disabled={downloadMutation.isPending}
-                          >
-                            {downloadMutation.isPending
-                              ? "Loading..."
-                              : "Download"}
-                          </button>
-                        ) : (
-                          <span>-</span>
-                        )}
-                      </td>
-                      <td>{formatDate(exam.start_period)}</td>
-                      <td>{formatDate(exam.end_period)}</td>
-                      <td>{exam.duration}</td>
-                      <td>
-                        {exam.status === "ACTIVE" ? (
-                          <span className="status-badge active">Aktif</span>
-                        ) : exam.status === "COMPLETED" ? (
-                          <span className="status-badge completed">
-                            Selesai
-                          </span>
-                        ) : (
-                          <span className="status-badge inactive">
-                            Tidak Aktif
-                          </span>
-                        )}
-                      </td>
-                      <td>
-                        <button
-                          className="action-button edit"
-                          onClick={() => handleEditClick(exam)}
-                        >
-                          Edit
-                        </button>
-                        <button
-                          className="action-button delete"
-                          onClick={() => handleDeleteExam(exam.id)}
-                        >
-                          Delete
-                        </button>
-                        <button
-                          className="action-button view"
-                          onClick={() => handleViewMembers(exam.id, exam.name)}
-                        >
-                          Detail
-                        </button>
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan="9" className="text-center">
-                      Tidak ada data ujian aktif
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-
-            {activeExams.length > itemsPerPage && (
-              <div className="pagination-container sticky">
-                <div className="pagination-info">
-                  {`Showing ${indexOfFirstActiveItem + 1} to ${Math.min(
-                    indexOfLastActiveItem,
-                    activeExams.length
-                  )} of ${activeExams.length} entries`}
-                </div>
-
-                <div className="pagination">
-                  <button
-                    className={`page-item ${
-                      currentPage === 1 ? "disabled" : ""
-                    }`}
-                    onClick={() => paginate(currentPage - 1)}
-                    disabled={currentPage === 1}
-                  >
-                    &lt;
-                  </button>
-                  {Array.from(
-                    { length: Math.ceil(activeExams.length / itemsPerPage) },
-                    (_, index) => (
+      <div className="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>No</th>
+              <th onClick={() => handleSort("name")}>
+                Nama Ujian{" "}
+                {sortConfig.key === "name"
+                  ? sortConfig.direction === "ascending"
+                    ? "↑"
+                    : "↓"
+                  : "↑"}
+              </th>
+              <th>Kode Ujian</th>
+              <th>Soal</th>
+              <th>File Support</th>
+              <th>Tanggal Mulai</th>
+              <th>Tanggal Selesai</th>
+              <th>Durasi (menit)</th>
+              {/* <th>Status</th> */}
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {sortedExams.length > 0 ? (
+              sortedExams.map((exam, index) => (
+                <tr key={exam.id}>
+                  <td>{index + 1}</td>
+                  <td>{exam.name}</td>
+                  <td>{exam.exam_code}</td>
+                  <td>{getTaskName(exam.task_id)}</td>
+                  <td>
+                    {exam.supporting_file ? (
                       <button
-                        key={index + 1}
-                        className={`page-item ${
-                          currentPage === index + 1 ? "active" : ""
-                        }`}
-                        onClick={() => paginate(index + 1)}
+                        onClick={() => handleDownload(exam.id)}
+                        className="download-button"
+                        disabled={downloadMutation.isPending}
                       >
-                        {index + 1}
+                        {downloadMutation.isPending ? "Loading..." : "Download"}
                       </button>
-                    )
-                  )}
-                  <button
-                    className={`page-item ${
-                      currentPage ===
-                      Math.ceil(activeExams.length / itemsPerPage)
-                        ? "disabled"
-                        : ""
-                    }`}
-                    onClick={() => paginate(currentPage + 1)}
-                    disabled={
-                      currentPage ===
-                      Math.ceil(activeExams.length / itemsPerPage)
-                    }
-                  >
-                    &gt;
-                  </button>
-                </div>
-              </div>
+                    ) : (
+                      <span>-</span>
+                    )}
+                  </td>
+                  <td>{formatDate(exam.start_period)}</td>
+                  <td>{formatDate(exam.end_period)}</td>
+                  <td>{exam.duration}</td>
+                  {/* <td>
+                    {exam.status === "ACTIVE" ? (
+                      <span className="status-badge active">Aktif</span>
+                    ) : exam.status === "COMPLETED" ? (
+                      <span className="status-badge completed">Selesai</span>
+                    ) : (
+                      <span className="status-badge inactive">Tidak Aktif</span>
+                    )}
+                  </td> */}
+                  <td>
+                    <button
+                      className="action-button edit"
+                      onClick={() => handleEditClick(exam)}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="action-button delete"
+                      onClick={() => handleDeleteExam(exam.id)}
+                    >
+                      Delete
+                    </button>
+                    <button
+                      className="action-button view"
+                      onClick={() => handleViewMembers(exam.id, exam.name)}
+                    >
+                      Detail
+                    </button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="9" className="text-center">
+                  Tidak ada data ujian
+                </td>
+              </tr>
             )}
+          </tbody>
+        </table>
+        <div className="pagination-container">
+          <div className="pagination-info">
+            {data?.meta
+              ? `Showing ${data.meta.from} to ${data.meta.to} of ${data.meta.total} entries`
+              : "No data available"}
+          </div>
+          <div className="pagination">
+            <button
+              className="page-item"
+              onClick={() => {
+                if (data?.links?.prev) setUrl(data.links.prev);
+              }}
+              disabled={!data?.links?.prev}
+            >
+              &lt;
+            </button>
+            <button className="page-item active">
+              {data?.meta?.current_page || 1}
+            </button>
+            <button
+              className="page-item"
+              onClick={() => {
+                if (data?.links?.next) setUrl(data.links.next);
+              }}
+              disabled={!data?.links?.next}
+            >
+              &gt;
+            </button>
           </div>
         </div>
-      )}
-
-      {otherExams.length > 0 && (
-        <div>
-          <h3 className="text-xl font-semibold mb-4 text-gray-700">
-            Ujian Lainnya
-          </h3>
-          <div className="table-container">
-            <table>
-              <thead>
-                <tr>
-                  <th>No</th>
-                  <th onClick={() => handleSort("name")}>
-                    Nama Ujian{" "}
-                    {sortConfig.key === "name"
-                      ? sortConfig.direction === "ascending"
-                        ? "↑"
-                        : "↓"
-                      : "↑"}
-                  </th>
-                  <th>Soal</th>
-                  <th>File Support</th>
-                  <th>Tanggal Mulai</th>
-                  <th>Tanggal Selesai</th>
-                  <th>Durasi (menit)</th>
-                  <th>Status</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {currentOtherItems.length > 0 ? (
-                  currentOtherItems.map((exam, index) => (
-                    <tr key={exam.id}>
-                      <td>{indexOfFirstOtherItem + index + 1}</td>
-                      <td>{exam.name}</td>
-                      <td>{getTaskName(exam.task_id)}</td>
-                      <td>
-                        {exam.supporting_file ? (
-                          <button
-                            onClick={() => handleDownload(exam.id)}
-                            className="download-button"
-                            disabled={downloadMutation.isPending}
-                          >
-                            {downloadMutation.isPending
-                              ? "Loading..."
-                              : "Download"}
-                          </button>
-                        ) : (
-                          <span>-</span>
-                        )}
-                      </td>
-                      <td>{formatDate(exam.start_period)}</td>
-                      <td>{formatDate(exam.end_period)}</td>
-                      <td>{exam.duration}</td>
-                      <td>
-                        {exam.status === "ACTIVE" ? (
-                          <span className="status-badge active">Aktif</span>
-                        ) : exam.status === "COMPLETED" ? (
-                          <span className="status-badge completed">
-                            Selesai
-                          </span>
-                        ) : (
-                          <span className="status-badge inactive">
-                            Tidak Aktif
-                          </span>
-                        )}
-                      </td>
-                      <td>
-                        <button
-                          className="action-button edit"
-                          onClick={() => handleEditClick(exam)}
-                        >
-                          Edit
-                        </button>
-                        <button
-                          className="action-button delete"
-                          onClick={() => handleDeleteExam(exam.id)}
-                        >
-                          Delete
-                        </button>
-                        <button
-                          className="action-button view"
-                          onClick={() => handleViewMembers(exam.id, exam.name)}
-                        >
-                          Detail
-                        </button>
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan="9" className="text-center">
-                      Tidak ada data ujian lainnya
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-
-            {otherExams.length > itemsPerPage && (
-              <div className="pagination-container sticky">
-                <div className="pagination-info">
-                  {`Showing ${indexOfFirstOtherItem + 1} to ${Math.min(
-                    indexOfLastOtherItem,
-                    otherExams.length
-                  )} of ${otherExams.length} entries`}
-                </div>
-
-                <div className="pagination">
-                  <button
-                    className={`page-item ${
-                      currentPage === 1 ? "disabled" : ""
-                    }`}
-                    onClick={() => paginate(currentPage - 1)}
-                    disabled={currentPage === 1}
-                  >
-                    &lt;
-                  </button>
-                  {Array.from(
-                    { length: Math.ceil(otherExams.length / itemsPerPage) },
-                    (_, index) => (
-                      <button
-                        key={index + 1}
-                        className={`page-item ${
-                          currentPage === index + 1 ? "active" : ""
-                        }`}
-                        onClick={() => paginate(index + 1)}
-                      >
-                        {index + 1}
-                      </button>
-                    )
-                  )}
-                  <button
-                    className={`page-item ${
-                      currentPage ===
-                      Math.ceil(otherExams.length / itemsPerPage)
-                        ? "disabled"
-                        : ""
-                    }`}
-                    onClick={() => paginate(currentPage + 1)}
-                    disabled={
-                      currentPage ===
-                      Math.ceil(otherExams.length / itemsPerPage)
-                    }
-                  >
-                    &gt;
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
+      </div>
 
       {/* Create Exam Modal */}
       {isCreateExamOpen && (
