@@ -11,6 +11,7 @@ import { RoutesApi } from "@/Routes";
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 import { IntentEnum } from "@/enums/IntentEnum"; // Import IntentEnum
+import { RxCross1 } from "react-icons/rx";
 
 const EditKelasPsc = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -144,8 +145,15 @@ const EditKelasPsc = () => {
         });
       }
     },
-    onSuccess: () => {
-      Swal.fire("Berhasil!", "Operasi berhasil dilakukan!", "success");
+    onSuccess: (variables) => {
+      const { action } = variables;
+      if (action === "create") {
+        Swal.fire("Berhasil!", "Kelas berhasil dibuat!", "success");
+      } else if (action === "update") {
+        Swal.fire("Berhasil!", "Kelas berhasil diperbarui!", "success");
+      } else if (action === "delete") {
+        Swal.fire("Berhasil!", "Kelas berhasil dihapus!", "success");
+      }
       refetch();
       setIsOpen(false);
       setIsCreateOpen(false);

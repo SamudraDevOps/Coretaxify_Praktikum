@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./editPopupKelas.css"; // Reuse existing styles
 import { IoReload } from "react-icons/io5";
+import { RxCross1 } from "react-icons/rx";
 
 const CreateGroupPopup = ({ 
   isOpen, 
@@ -41,6 +42,10 @@ const CreateGroupPopup = ({
       <div className="edit-popup-content-kelas">
         <div className="edit-popup-header-kelas">
           <h2>Tambah Kelas Baru</h2>
+          <RxCross1
+            className="text-2xl hover:cursor-pointer"
+            onClick={onClose}
+          />
         </div>
         <form>
           <div className="edit-form-group-kelas">

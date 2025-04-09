@@ -1,5 +1,6 @@
 import React from "react";
 import "./editPopupKelas.css";
+import { RxCross1 } from "react-icons/rx";
 
 const EditPopupKelas = ({ onClose, data, onSave, formData, setFormData, isLoading }) => {
   const handleChange = (e) => {
@@ -12,6 +13,10 @@ const EditPopupKelas = ({ onClose, data, onSave, formData, setFormData, isLoadin
       <div className="edit-popup-content-kelas">
         <div className="edit-popup-header-kelas">
           <h2>Edit Kelas</h2>
+          <RxCross1
+              className="text-2xl hover:cursor-pointer"
+              onClick={onClose}
+            />
         </div>
         <form>
           <div className="edit-form-group-kelas">

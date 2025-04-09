@@ -200,8 +200,15 @@ const PraktikumPsc = () => {
         );
       }
     },
-    onSuccess: () => {
-      Swal.fire("Berhasil!", "Operasi berhasil dilakukan!", "success");
+    onSuccess: (variables) => {
+      const { action } = variables;
+      if (action === "create") {
+        Swal.fire("Berhasil!", "Praktikum berhasil dibuat!", "success");
+      } else if (action === "update") {
+        Swal.fire("Berhasil!", "Praktikum berhasil diperbarui!", "success");
+      } else if (action === "delete") {
+        Swal.fire("Berhasil!", "Praktikum berhasil dihapus!", "success");
+      }
       refetch();
       setIsCreateOpen(false);
       setIsUpdateOpen(false);

@@ -1,5 +1,6 @@
 import React from "react";
 import "./editPopupPengajar.css";
+import { RxCross1 } from "react-icons/rx";
 
 const EditPopupPengajar = ({
   onClose,
@@ -22,6 +23,10 @@ const EditPopupPengajar = ({
       <div className="edit-popup-content-instruktur">
         <div className="edit-popup-header-instruktur">
           <h2>{title}</h2>
+          <RxCross1
+            className="text-2xl hover:cursor-pointer"
+            onClick={onClose}
+          />
         </div>
         <form>
           <div className="edit-form-group-instruktur">
