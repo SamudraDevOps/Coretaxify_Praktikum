@@ -505,7 +505,7 @@ const Main = () => {
           }
         /> */}
         <Route
-          path="/admin/praktikum/:id"
+          path="/praktikum/:id/sistem/:akun"
           element={
             <>
               <Header />
@@ -559,9 +559,10 @@ const Main = () => {
           }
         />
         <Route
-          path="/admin/praktikum/1/profil-saya"
+          path="/praktikum/:id/sistem/:akun/profil-saya"
           element={
             <>
+            {/* <p>12</p> */}
               <Header />
               <ProfilSaya />
             </>
