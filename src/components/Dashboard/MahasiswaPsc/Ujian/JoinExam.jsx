@@ -71,6 +71,8 @@ const JoinExam = ({ isOpen, setIsOpen, onSuccess }) => {
         icon: "error",
         confirmButtonText: "OK",
       });
+      setExamCode('');
+      setIsOpen(false);
     },
   });
 
