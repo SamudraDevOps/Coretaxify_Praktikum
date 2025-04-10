@@ -436,7 +436,7 @@ const Main = () => {
             </>
           }
         />
-        <Route
+        {/* <Route
           path="/admin/praktikum/profil-saya/informasi-umum/edit-data-profil"
           element={
             <>
@@ -444,7 +444,7 @@ const Main = () => {
               <EditDataProfil />
             </>
           }
-        />
+        /> */}
         <Route
           path="/admin/praktikum/profil-saya/alamat"
           element={
@@ -658,7 +658,8 @@ const Main = () => {
           }
         />
         <Route
-          path="/admin/praktikum/1/profil-saya/informasi-umum/edit-data-profil"
+          path="/praktikum/:id/sistem/:akun/edit-informasi-umum"
+          // path="/admin/praktikum/1/profil-saya/informasi-umum/edit-data-profil"
           element={
             <>
               <Header />

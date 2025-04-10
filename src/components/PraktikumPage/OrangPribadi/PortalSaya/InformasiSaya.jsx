@@ -4,6 +4,7 @@ import { BsFiletypeXls } from "react-icons/bs";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Link } from "react-router-dom";
 import { useUserType } from "@/components/context/userTypeContext";
+
 import { useParams } from "react-router";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { getCookieToken } from "@/service";
@@ -15,6 +16,7 @@ const InformasiSaya = () => {
   const [activeTab, setActiveTab] = useState("general");
   const { userType } = useUserType();
   const [userTypeFromStorage, setUserTypeFromStorage] = useState("");
+  
   const { id, akun } = useParams();
   const token = getCookieToken();
   const { isLoading, isError, data, error, refetch } = useQuery({
@@ -83,14 +85,16 @@ const InformasiSaya = () => {
       <main className="flex-auto p-3 bg-white rounded-md h-full">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-semibold">Informasi Umum Wajib Pajak</h2>
-          <button
-            className="px-4 py-2 bg-yellow-300 hover:bg-yellow-400 text-blue-900 rounded-md"
-            onClick={() =>
-              (window.location.href = `/admin/praktikum/${getUserTypePath()}/profil-saya/informasi-umum/edit-data-profil`)
-            }
-          >
-            Edit
-          </button>
+          <a href={`/praktikum/${id}/sistem/${akun}/edit-informasi-umum`}>
+            <button
+              className="px-4 py-2 bg-yellow-300 hover:bg-yellow-400 text-blue-900 rounded-md"
+              // onClick={() =>
+              //   (window.location.href = `/admin/praktikum/${getUserTypePath()}/profil-saya/informasi-umum/edit-data-profil`)
+              // }
+            >
+              Edit
+            </button>
+          </a>
         </div>
 
         <div className="w-full p-2 ml-0 border-t">
@@ -109,11 +113,8 @@ const InformasiSaya = () => {
                   {[
                     ["Nomor Pokok Wajib Pajak", data.npwp_akun],
                     ["Nomor Identitas Kependudukan", data.npwp_akun],
-                    [
-                      "Jenis Wajib Pajak",
-                      data.tipe_akun
-                    ],
-                    ["Kategori Individu", "Orang Pribadi"],
+                    ["Jenis Wajib Pajak", data.tipe_akun],
+                    ["Kategori Individu", data.n],
                     ["Nama", data.nama_akun],
                     ["Tempat Lahir", "BANYUWANGI"],
                     ["Tanggal Lahir", "19 Juli 1999"],
