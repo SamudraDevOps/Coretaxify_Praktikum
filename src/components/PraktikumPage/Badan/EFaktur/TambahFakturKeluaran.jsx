@@ -194,9 +194,11 @@ const TambahFakturKeluaran = ({ }) => {
     };
 
     return (
+        console.log("Rendering TambahFakturKeluaran"),
         <div className="flex h-screen bg-gray-100">
             <SideBarEFaktur />
             <div className='flex-grow p-6 bg-white h-full'>
+                <h2 className="text-2xl font-semibold text-gray-800 mb-4">Tambah Data</h2>
                 <div className='border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100' onClick={() => setShowDokumenTransaksi(!showDokumenTransaksi)}>
                     <h3 className='text-lg font-semibold'>Dokumen Transaksi</h3>
                     {showDokumenTransaksi ? <FaChevronUp /> : <FaChevronDown />}
@@ -584,7 +586,7 @@ const TambahFakturKeluaran = ({ }) => {
                                 </AlertDialogContent>
                             </AlertDialog>
                         </div>
-                        <div className=" w-[1050px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden ">
+                        <div className=" w-auto overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden ">
                             <table className="table-auto border border-gray-300 overflow-hidden">
                                 <thead>
                                     <tr>
