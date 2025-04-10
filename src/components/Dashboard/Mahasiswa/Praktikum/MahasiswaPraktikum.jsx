@@ -73,7 +73,7 @@ export default function MahasiswaPraktikum() {
         (result) => {
           if (result.isConfirmed) {
             // Navigate to the praktikum system or refresh
-            // window.location.href = `/student/praktikum/${assignmentId}`;
+            window.location.href = `/praktikum/${data.data.assignment_user_id}`;
             refetch();
           }
         }

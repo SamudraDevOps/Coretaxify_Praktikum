@@ -584,7 +584,7 @@ const Main = () => {
           }
         /> */}
         <Route
-          path="/praktikum/:id/sistem/:akun"
+          path="/praktikum/:id/"
           element={
             <>
               <Header />
