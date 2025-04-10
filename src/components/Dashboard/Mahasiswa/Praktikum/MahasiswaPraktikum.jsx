@@ -22,6 +22,7 @@ import { RoutesApi } from "@/Routes";
 import { ClipLoader } from "react-spinners";
 import { joinAssignmentMahasiswa } from "@/hooks/dashboard/useMahasiswa";
 import { getCookie } from "@/service";
+import { getCsrf } from "@/service/getCsrf";
 
 export default function MahasiswaPraktikum() {
   const [isOpen, setIsOpen] = useState(false);
@@ -43,6 +44,44 @@ export default function MahasiswaPraktikum() {
       });
       console.log(data);
       return data;
+    },
+  });
+
+  const startPraktikum = useMutation({
+    mutationFn: async (assignment_id) => {
+      console.log("Start button clicked");
+      const csrf = await getCsrf();
+      const data = await axios.post(
+        `${RoutesApi.url}api/student/sistem`,
+        {
+          assignment: String(assignment_id),
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": csrf,
+            Authorization: `Bearer ${cookies.token}`,
+          },
+        }
+      );
+      return data;
+    },
+    onSuccess: (data) => {
+      console.log(data);
+      Swal.fire("Berhasil!", "Praktikum berhasil dimulai!", "success").then(
+        (result) => {
+          if (result.isConfirmed) {
+            // Navigate to the praktikum system or refresh
+            // window.location.href = `/student/praktikum/${assignmentId}`;
+            refetch();
+          }
+        }
+      );
+    },
+    onError: (error) => {
+      console.log("Error starting praktikum:", error);
+      Swal.fire("Gagal!", error.message, "error");
     },
   });
 
@@ -108,48 +147,6 @@ export default function MahasiswaPraktikum() {
   //     ),
   // }));
   const mutation = joinAssignmentMahasiswa(getCookie(), formData, refetch);
-  // const mutation = useMutation({
-  //   mutationFn: async (id) => {
-  //     console.log("button clicked");
-  //     // const { response } = await axios.post(RoutesApi.login, {
-  //     const response = await axios.get(`${RoutesApi.url}api/csrf-token`, {
-  //       // withCredentials: true,
-  //       headers: {
-  //         "X-Requested-With": "XMLHttpRequest",
-  //         Accept: "application/json",
-  //       },
-  //     });
-  //     console.log(response.data.token);
-  //     axios.defaults.headers.common["X-CSRF-TOKEN"] = response.data.token;
-  //     console.log(cookies.token);
-  //     const data = await axios.post(
-  //       RoutesApi.assignmentStudent.url,
-  //       {
-  //         assignment_code: formData.assignment_code,
-  //       },
-  //       {
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Accept: "application/json",
-  //           "X-CSRF-TOKEN": response.data.token,
-  //           Authorization: `Bearer ${cookies.token}`,
-  //         },
-  //         params: {
-  //           intent: RoutesApi.assignmentStudent.intent,
-  //         },
-  //       }
-  //     );
-  //     return data;
-  //   },
-  //   onSuccess: (data) => {
-  //     console.log(data);
-  //     window.location.reload();
-  //   },
-  //   onError: (error) => {
-  //     console.log(error);
-  //   },
-  // });
-
   if (isLoading) {
     return (
       <div className="loading">
@@ -249,7 +246,14 @@ export default function MahasiswaPraktikum() {
                   <p className="">{item.end_period}</p>
                 </td>
                 <td>
-                  <button className="action-button">Mulai</button>
+                  <button
+                    className="action-button"
+                    onClick={() => {
+                      startPraktikum.mutate(item.id);
+                    }}
+                  >
+                    Mulai
+                  </button>
                 </td>
               </tr>
             ))}
