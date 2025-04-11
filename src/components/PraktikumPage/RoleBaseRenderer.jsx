@@ -7,27 +7,54 @@ import { ClipLoader } from "react-spinners";
 import { getCookie } from "@/service";
 import { getCsrf } from "@/service/getCsrf";
 import { CookiesProvider, useCookies } from "react-cookie";
+import { getCookieToken } from "@/service";
+import Header from "../Header/Header";
 
 export default function RoleBasedRenderer({ OrangPribadi, Badan }) {
   const { id, akun } = useParams();
   const [cookies, setCookie] = useCookies(["user"]);
-  const { data, isLoading, isError, error } = useQuery({
-    queryKey: ["account", id],
+  const token = getCookieToken();
+  // const { data, isLoading, isError, error } = useQuery({
+  //   queryKey: ["account", id],
+  //   queryFn: async () => {
+  //     console.log(cookies.token);
+  //     const { data } = await axios.get(
+  //       `${RoutesApi.apiUrl}student/assignments/${id}/sistem/${akun}`,
+  //       // "http://127.0.0.1:8000/api/student/assignments/1/sistem/1",
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${cookies.token}`,
+  //           Accept: "application/json",
+  //         },
+  //       }
+  //     );
+  //     console.log(data);
+  //     return data;
+  //   },
+  // });
+  const { isLoading, isError, data, error, refetch } = useQuery({
+    queryKey: ["getportal", id],
     queryFn: async () => {
-      console.log(cookies.token);
-      const { data } = await axios.get(
+      const response = await axios.get(
         `${RoutesApi.apiUrl}student/assignments/${id}/sistem/${akun}`,
-        // "http://127.0.0.1:8000/api/student/assignments/1/sistem/1",
         {
           headers: {
-            Authorization: `Bearer ${cookies.token}`,
-            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          params: {
+            intent: "api.get.sistem.ikhtisar.profil",
           },
         }
       );
-      console.log(data);
-      return data;
+
+      // Check if response data exists
+      if (!response.data) {
+        throw new Error("No data returned from API");
+      }
+
+      return response.data.data;
     },
+    enabled: !!id && !!token,
   });
 
   if (isLoading) {
@@ -48,9 +75,23 @@ export default function RoleBasedRenderer({ OrangPribadi, Badan }) {
     );
   }
 
+  console.log(data);
   // const user = data.find((user) => id === parseInt(akun));
   // console.log(user);
-  const isOrangPribadi = data.data.tipe_akun === "Orang Pribadi";
-  // console.log(data.data);
-  return <>{isOrangPribadi ? <OrangPribadi /> : <Badan />}</>;
+  const isOrangPribadi = data.tipe_akun === "Orang Pribadi";
+  return (
+    <>
+      {isOrangPribadi ? (
+        <>
+          <Header></Header>
+          <OrangPribadi data={data} />
+        </>
+      ) : (
+        <>
+          <Header></Header>
+          <Badan data={data} />
+        </>
+      )}
+    </>
+  );
 }

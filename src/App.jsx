@@ -634,8 +634,12 @@ const Main = () => {
           element={
             <>
               {/* <p>12</p> */}
-              <Header />
-              <ProfilSaya />
+              {/* <Header />
+              <ProfilSaya /> */}
+              <RoleBasedRenderer
+                OrangPribadi={ProfilSaya}
+                Badan={ProfilSayaBadan}
+              ></RoleBasedRenderer>
             </>
           }
         />

@@ -8,53 +8,56 @@ import axios from "axios";
 import { ClipLoader } from "react-spinners";
 import { RoutesApi } from "@/Routes";
 
-const ProfilSaya = () => {
+const ProfilSaya = ({ data }) => {
   const [activeTab, setActiveTab] = useState("profil");
   const { id, akun } = useParams();
   const token = getCookieToken();
-  const { isLoading, isError, data, error, refetch } = useQuery({
-    queryKey: ["getportal", id],
-    queryFn: async () => {
-      const response = await axios.get(
-        `${RoutesApi.apiUrl}student/assignments/${id}/sistem/${akun}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          params: {
-            intent: "api.get.sistem.ikhtisar.profil",
-          },
-        }
-      );
+  // const { isLoading, isError, data, error, refetch } = useQuery({
+  //   queryKey: ["getportal", id],
+  //   queryFn: async () => {
+  //     const response = await axios.get(
+  //       `${RoutesApi.apiUrl}student/assignments/${id}/sistem/${akun}`,
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //         params: {
+  //           intent: "api.get.sistem.ikhtisar.profil",
+  //         },
+  //       }
+  //     );
 
-      // Check if response data exists
-      if (!response.data) {
-        throw new Error("No data returned from API");
-      }
+  //     // Check if response data exists
+  //     if (!response.data) {
+  //       throw new Error("No data returned from API");
+  //     }
 
-      return response.data.data;
-    },
-    enabled: !!id && !!token,
-  });
-  if (isLoading) {
-    return (
-      <div className="loading">
-        <ClipLoader color="#7502B5" size={50} />
-      </div>
-    );
-  }
-  if (isError) {
-    return (
-      <div className="error-container">
-        <p>Error loading data: {error.message}</p>
-        <button
-          onClick={() => refetch()}
-          className="px-4 py-2 bg-fuchsia-500 text-white rounded-md mt-2"
-        >
-          Try Again
-        </button>
-      </div>
-    );
+  //     return response.data.data;
+  //   },
+  //   enabled: !!id && !!token,
+  // });
+  // if (isLoading) {
+  //   return (
+  //     <div className="loading">
+  //       <ClipLoader color="#7502B5" size={50} />
+  //     </div>
+  //   );
+  // }
+  // if (isError) {
+  //   return (
+  //     <div className="error-container">
+  //       <p>Error loading data: {error.message}</p>
+  //       <button
+  //         onClick={() => refetch()}
+  //         className="px-4 py-2 bg-fuchsia-500 text-white rounded-md mt-2"
+  //       >
+  //         Try Again
+  //       </button>
+  //     </div>
+  //   );
+  // }
+  if (!data) {
+    return <p>Error</p>;
   }
   console.log("Data fetched:", data);
 
