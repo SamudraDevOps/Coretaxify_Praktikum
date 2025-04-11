@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { FaCalendarAlt, FaFilter, FaSearch, FaTimes, FaChevronDown, FaChevronUp } from "react-icons/fa";
 import SideBarEFaktur from './SideBarEFaktur';
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Button } from "@/components/ui/button";
+import { RoutesApi } from "@/Routes";
 import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogFooter, AlertDialogTitle, AlertDialogDescription, AlertDialogAction, AlertDialogCancel } from "@/components/ui/alert-dialog";
 
 
@@ -20,6 +22,9 @@ const TambahFakturKeluaran = ({ }) => {
     const [dpp, setDPP] = useState("");
     const [selectedYear, setSelectedYear] = useState(new Date());
     const [informasiTambahan, setInformasiTambahan] = useState("");
+    const [tipe, setTipe] = useState("");
+    const [selectedKode, setSelectedKode] = useState('');
+    const [listKode, setListKode] = useState([]);
     const [capFasilitas, setCapFasilitas] = useState("");
     const [nomorPendukung, setNomorPendukung] = useState("");
 
@@ -30,6 +35,28 @@ const TambahFakturKeluaran = ({ }) => {
     const [tarifPPnBM, setTarifPPnBM] = useState("");
     const [ppnBM, setPPnBM] = useState("Rp 0");
     const [isCustomPPnBM, setIsCustomPPnBM] = useState(false);
+
+    const RoutesApi = {
+        kodeTransaksi: "http://127.0.0.1:8000/api/kode-transaksi"
+    };
+
+    const fetchKodeByJenis = async (jenis) => {
+        try {
+            const { data } = await axios.get(RoutesApi.kodeTransaksi, {
+                params: { jenis }  // otomatis jadi ?jenis=Barang atau Jasa
+            });
+
+            console.log(data.data);
+            setListKode(data.data);
+        } catch (err) {
+            console.error("Gagal fetch kode transaksi:", err);
+        }
+    };
+    const handleTipeChange = (e) => {
+        const value = e.target.value;
+        setTipe(value);
+        fetchKodeByJenis(value);
+    };
 
     function formatRupiah(value) {
         const numberString = value.replace(/[^0-9]/g, ""); // Hanya angka
@@ -194,10 +221,11 @@ const TambahFakturKeluaran = ({ }) => {
     };
 
     return (
+        console.log(""),
         console.log("Rendering TambahFakturKeluaran"),
         <div className="flex h-screen bg-gray-100">
             <SideBarEFaktur />
-            <div className='flex-grow p-6 bg-white h-full'>
+            <div className='flex-grow p-6 bg-white h-full overflow-y-auto'>
                 <h2 className="text-2xl font-semibold text-gray-800 mb-4">Tambah Data</h2>
                 <div className='border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100' onClick={() => setShowDokumenTransaksi(!showDokumenTransaksi)}>
                     <h3 className='text-lg font-semibold'>Dokumen Transaksi</h3>
@@ -244,91 +272,96 @@ const TambahFakturKeluaran = ({ }) => {
                             <label className="block text-sm font-medium">Jenis Faktur</label>
                             <input type="text" value="Normal" className='p-2 border rounded w-full bg-gray-100' disabled />
                         </div>
-                        <div className='space-y-2'>
-                            <label className='block text-sm font-medium'>Masa Pajak</label>
-                            {/* <input type="month" className='p-2 border rounded w-full' /> */}
-                            <select className='p-2 border rounded w-full'>
-                                <option value="Januari">Januari</option>
-                                <option value="Februari">Februari</option>
-                                <option value="Maret">Maret</option>
-                                <option value="April">April</option>
-                                <option value="Mei">Mei</option>
-                                <option value="Juni">Juni</option>
-                                <option value="Juli">Juli</option>
-                                <option value="Agustus">Agustus</option>
-                                <option value="September">September</option>
-                                <option value="Oktober">Oktober</option>
-                                <option value="November">November</option>
-                                <option value="Desember">Desember</option>
-                            </select>
-                        </div>
-                        {(kodeTransaksi === "07" || kodeTransaksi === "08") && (
-                            <>
-                                {/* Informasi Tambahan */}
-                                <div className='space-y-2'>
-                                    <label className='block text-sm font-medium'>Informasi Tambahan</label>
-                                    <select
-                                        className='p-2 border rounded w-full'
-                                        value={informasiTambahan}
-                                        onChange={handleInformasiTambahanChange}
-                                    >
-                                        <option value="">Pilih Informasi Tambahan</option>
-                                        <option value="A">Informasi A</option>
-                                        <option value="B">Informasi B</option>
-                                        <option value="C">Informasi C</option>
-                                    </select>
-                                </div>
-
-                                {/* Cap Fasilitas (Disabled) */}
-                                <div className='space-y-2'>
-                                    <label className='block text-sm font-medium'>Cap Fasilitas</label>
-                                    <select
-                                        className='p-2 border rounded w-full bg-gray-100'
-                                        value={capFasilitas}
-                                        disabled
-                                    >
-                                        <option value="">Pilih Cap Fasilitas</option>
-                                        <option value="X">Fasilitas X</option>
-                                        <option value="Y">Fasilitas Y</option>
-                                        <option value="Z">Fasilitas Z</option>
-                                    </select>
-                                </div>
-
-                                {/* Nomor Pendukung (Muncul hanya untuk Informasi A atau B) */}
-                                {(informasiTambahan === "A" || informasiTambahan === "B") && (
-                                    <div className='space-y-2'>
-                                        <label className='block text-sm font-medium'>Nomor Pendukung</label>
-                                        <input
-                                            type="text"
-                                            className='p-2 border rounded w-full'
-                                            placeholder="Masukkan Nomor Pendukung"
-                                            value={nomorPendukung}
-                                            onChange={(e) => setNomorPendukung(e.target.value)}
+                        <div className="col-span-3 grid grid-cols-3 gap-4">
+                            <div className='space-y-2'>
+                                <label className='block text-sm font-medium'>Masa Pajak</label>
+                                {/* <input type="month" className='p-2 border rounded w-full' /> */}
+                                <select className='p-2 border rounded w-full'>
+                                    <option value="Januari">Januari</option>
+                                    <option value="Februari">Februari</option>
+                                    <option value="Maret">Maret</option>
+                                    <option value="April">April</option>
+                                    <option value="Mei">Mei</option>
+                                    <option value="Juni">Juni</option>
+                                    <option value="Juli">Juli</option>
+                                    <option value="Agustus">Agustus</option>
+                                    <option value="September">September</option>
+                                    <option value="Oktober">Oktober</option>
+                                    <option value="November">November</option>
+                                    <option value="Desember">Desember</option>
+                                </select>
+                            </div>
+                            <div className="space-y-2">
+                                <label className="block text-sm font-medium">Tahun</label>
+                                <Popover className="w-full p-2">
+                                    <PopoverTrigger asChild >
+                                        <Button variant="outline" className="w-full justify-start ">
+                                            {selectedYear.getFullYear()}
+                                        </Button>
+                                    </PopoverTrigger>
+                                    <PopoverContent align="start" className="w-auto p-0">
+                                        <DatePicker
+                                            selected={selectedYear}
+                                            onChange={(date) => setSelectedYear(date)}
+                                            showYearPicker
+                                            dateFormat="yyyy"
+                                            className="border p-2 rounded-md w-full text-center"
                                         />
+                                    </PopoverContent>
+                                </Popover>
+                            </div>
+                            {/* <div className="space-y-2">
+                                <label className='block text-sm font-medium'></label>
+                            </div> */}
+                            {(kodeTransaksi === "07" || kodeTransaksi === "08") && (
+                                <>
+                                    {/* Informasi Tambahan */}
+                                    <div className='space-y-2'>
+                                        <label className='block text-sm font-medium'>Informasi Tambahan</label>
+                                        <select
+                                            className='p-2 border rounded w-full'
+                                            value={informasiTambahan}
+                                            onChange={handleInformasiTambahanChange}
+                                        >
+                                            <option value="">Pilih Informasi Tambahan</option>
+                                            <option value="A">Informasi A</option>
+                                            <option value="B">Informasi B</option>
+                                            <option value="C">Informasi C</option>
+                                        </select>
                                     </div>
-                                )}
-                            </>
-                        )}
 
-                        <div className="space-y-2">
-                            <label className="block text-sm font-medium">Tahun</label>
-                            <Popover className="w-full p-2">
-                                <PopoverTrigger asChild >
-                                    <Button variant="outline" className="w-full justify-start ">
-                                        {selectedYear.getFullYear()}
-                                    </Button>
-                                </PopoverTrigger>
-                                <PopoverContent align="start" className="w-auto p-0">
-                                    <DatePicker
-                                        selected={selectedYear}
-                                        onChange={(date) => setSelectedYear(date)}
-                                        showYearPicker
-                                        dateFormat="yyyy"
-                                        className="border p-2 rounded-md w-full text-center"
-                                    />
-                                </PopoverContent>
-                            </Popover>
+                                    {/* Cap Fasilitas (Disabled) */}
+                                    <div className='space-y-2'>
+                                        <label className='block text-sm font-medium'>Cap Fasilitas</label>
+                                        <select
+                                            className='p-2 border rounded w-full bg-gray-100'
+                                            value={capFasilitas}
+                                            disabled
+                                        >
+                                            <option value="">Pilih Cap Fasilitas</option>
+                                            <option value="X">Fasilitas X</option>
+                                            <option value="Y">Fasilitas Y</option>
+                                            <option value="Z">Fasilitas Z</option>
+                                        </select>
+                                    </div>
+
+                                    {/* Nomor Pendukung (Muncul hanya untuk Informasi A atau B) */}
+                                    {(informasiTambahan === "A" || informasiTambahan === "B") && (
+                                        <div className='space-y-2'>
+                                            <label className='block text-sm font-medium'>Nomor Pendukung</label>
+                                            <input
+                                                type="text"
+                                                className='p-2 border rounded w-full'
+                                                placeholder="Masukkan Nomor Pendukung"
+                                                value={nomorPendukung}
+                                                onChange={(e) => setNomorPendukung(e.target.value)}
+                                            />
+                                        </div>
+                                    )}
+                                </>
+                            )}
                         </div>
+
                         <div className='space-y-2'>
                             <label className='block text-sm font-medium'>Referensi</label>
                             <input type="text" className='p-2 border rounded w-full' />
@@ -426,23 +459,49 @@ const TambahFakturKeluaran = ({ }) => {
                                                 <label className="block text-sm font-medium">Tipe</label>
                                                 <div className="grid grid-cols-2 gap-3">
                                                     <div className="flex items-center gap-2">
-                                                        <input type="radio" name="identification" className="w-4 h-4" value="Barang" />
-                                                        <label className="text-sm">Barang</label>
+                                                        <label className="flex items-center gap-2">
+                                                            <input
+                                                                type="radio"
+                                                                name="tipe"
+                                                                value="Barang"
+                                                                checked={tipe === "Barang"}
+                                                                onChange={handleTipeChange}
+                                                            />
+                                                            Barang
+                                                        </label>
                                                     </div>
                                                     <div className="flex items-center gap-2">
-                                                        <input type="radio" name="identification" className="w-4 h-4" value="Jasa" />
-                                                        <label className="text-sm">Jasa</label>
+                                                        <label className="flex items-center gap-2">
+                                                            <input
+                                                                type="radio"
+                                                                name="tipe"
+                                                                value="Jasa"
+                                                                checked={tipe === "Jasa"}
+                                                                onChange={handleTipeChange}
+                                                            />
+                                                            Jasa
+                                                        </label>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div className="space-y-2">
-                                                <label className="block text-sm font-medium">Kode</label>
-                                                <select className='p-2 border rounded w-full'>
-                                                    <option value="Kode 1">Kode 1</option>
-                                                    <option value="Kode 2">Kode 2</option>
-                                                    <option value="Kode 3">Kode 3</option>
-                                                </select>
-                                            </div>
+                                            {tipe && (
+                                                <div>
+                                                    <label className="block text-sm font-medium">Kode Transaksi</label>
+                                                    <select
+                                                            className="p-2 border rounded w-[250px] max-w-full"
+                                                        value={selectedKode}
+                                                        onChange={(e) => setSelectedKode(e.target.value)}
+                                                    >
+                                                        <option value="">Pilih Kode Transaksi</option>
+                                                        {listKode.map(item => (
+                                                            <option key={item.id} value={item.kode}>
+                                                                {item.kode} - {item.nama_transaksi}
+                                                            </option>
+                                                        ))}
+                                                    </select>
+                                                </div>
+                                            )}
+
                                             <div className="space-y-2">
                                                 <label className="block text-sm font-medium">Nama </label>
                                                 <input type="text" className="p-2 border rounded w-full" />
@@ -472,8 +531,9 @@ const TambahFakturKeluaran = ({ }) => {
                                                     className="p-2 border rounded w-full"
                                                     min="0"
                                                     step="1"
-                                                    value={kuantitas}
+                                                    value={kuantitas === 0 ? '' : kuantitas}
                                                     onChange={handleKuantitasChange}
+                                                    placeholder="0"
                                                 />
                                             </div>
                                             <div className="space-y-2">
@@ -513,7 +573,7 @@ const TambahFakturKeluaran = ({ }) => {
                                                 />
                                             </div>
                                             <div className="space-y-2">
-                                                <div className="flex items-center gap-2">
+                                                <div className="flex items-center gap-2 ">
                                                     <input
                                                         type="checkbox"
                                                         className="justify-start p-3 border rounded"
@@ -530,7 +590,10 @@ const TambahFakturKeluaran = ({ }) => {
                                                     <label className="block text-sm font-medium"></label>
                                                     <input
                                                         type="text"
-                                                        className="p-2 border rounded w-full bg-gray-100"
+                                                        className={`
+                                                            p-2 border rounded w-full
+                                                            ${isChecked ? '' : 'bg-gray-100'}
+                                                        `}
                                                         value={jumlah}
                                                         onChange={handleJumlahChange}
                                                         disabled={!isChecked}
