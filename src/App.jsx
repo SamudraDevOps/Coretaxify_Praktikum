@@ -126,6 +126,7 @@ import EditMahasiswaPscKelas from "./components/Dashboard/AdminPsc/Pengguna/Kela
 import DosenPraktikumKelas from "./components/Dashboard/Dosen/Kelas/DosenPraktikumKelas";
 import { CookiesProvider, useCookies } from "react-cookie";
 import DosenPraktikumKelasMember from "./components/Dashboard/Dosen/Kelas/DosenPraktikumKelasMember";
+import RoleBasedRenderer from "./components/PraktikumPage/RoleBaseRenderer";
 
 const Main = () => {
   const [loading, setLoading] = useState(true);
@@ -199,13 +200,11 @@ const Main = () => {
             </ProtectedRoutes>
           }
         />
-
         {/* AUTHENTICATION */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/confirm-otp" element={<ConfirmOTP />} />
-
         {/* ADMIN ROUTE */}
         <Route
           element={
@@ -232,7 +231,6 @@ const Main = () => {
           <Route path="/admin/praktikum-backup" element={<PraktikumBackup />} />
           <Route path="/admin/praktikum" element={<Praktikum />} />
         </Route>
-
         {/* DOSEN ROUTE */}
         <Route
           element={
@@ -261,7 +259,6 @@ const Main = () => {
           />
           <Route path="/dosen/ujian" element={<UjianDosen />} />
         </Route>
-
         {/* MAHASISWA ROUTE */}
         <Route
           element={
@@ -280,7 +277,6 @@ const Main = () => {
           <Route path="/mahasiswa/praktikum" element={<MahasiswaPraktikum />} />
           <Route path="/mahasiswa/ujian" element={<MahasiswaUjian />} />
         </Route>
-
         {/* PSC ROUTE */}
         <Route
           element={
@@ -312,7 +308,6 @@ const Main = () => {
           />
           <Route path="/psc/edit-mahasiswa" element={<EditMahasiswaPsc />} />
         </Route>
-
         {/* MAHASISWA-PSC ROUTE */}
         <Route
           element={
@@ -338,7 +333,6 @@ const Main = () => {
           />
           <Route path="/mahasiswa-psc/ujian" element={<MahasiswaPscUjian />} />
         </Route>
-
         {/* PENGAJAR ROUTE */}
         <Route
           element={
@@ -362,7 +356,6 @@ const Main = () => {
             element={<BlankAssignment />}
           />
         </Route>
-
         {/* Praktikum */}
         <Route
           path="/admin/praktikum/prak1"
@@ -572,7 +565,6 @@ const Main = () => {
           }
         />
         {/* Praktikum */}
-
         {/* Praktikum  Orang Pribadi*/}
         {/* <Route
           path="/admin/praktikum/1/prak1"
@@ -830,7 +822,6 @@ const Main = () => {
           }
         />
         {/* Praktikum Orang Pribadi*/}
-
         {/* Praktikum  Orang Badan*/}
         <Route
           path="/admin/praktikum/2/prak1"
@@ -892,6 +883,17 @@ const Main = () => {
             <>
               <Header />
               <ProfilSayaBadan />
+            </>
+          }
+        />
+        <Route
+          path="/tes/:id/:akun"
+          element={
+            <>
+              <RoleBasedRenderer
+                OrangPribadi={DashboardAdmin}
+                Badan={DetailKontakBadan}
+              ></RoleBasedRenderer>
             </>
           }
         />
@@ -1040,7 +1042,6 @@ const Main = () => {
           }
         />
         {/* Praktikum Orang Pribadi*/}
-
         <Route
           path="/admin/praktikum/2/e-faktur"
           element={
@@ -1077,7 +1078,6 @@ const Main = () => {
             </>
           }
         />
-
         {/* NOT FOUND ROUTE - LAST REGISTERED ROUTE */}
         <Route path="*" element={<NotFound />} />
       </Routes>
