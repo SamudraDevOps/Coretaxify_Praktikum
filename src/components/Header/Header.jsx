@@ -74,7 +74,7 @@ const Header = () => {
 
   const navigateTo = (path) => {
     // alert("clicked");
-    window.location.href = `/praktikum/${id}/sistem/${path} `;
+    window.location.href = `/praktikum/${id}/sistem/${path}/profil-saya `;
   };
   //   if (getAccountPortal().isLoading) {
   if (isLoading) {
@@ -120,7 +120,7 @@ const Header = () => {
               <UserCircle className="w-8 h-8" />
               <span className="hidden md:inline">
                 {(data && data.find((item) => item.id == akun)?.nama_akun) ||
-                  "Akun tidak ditemukan"}
+                  "Pilih Akun Terlebih Dahulu"}
               </span>
               <ChevronDown className="w-5 h-5" />
             </button>
