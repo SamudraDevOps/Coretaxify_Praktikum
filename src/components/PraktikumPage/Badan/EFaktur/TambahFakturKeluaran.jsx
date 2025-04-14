@@ -24,6 +24,8 @@ const TambahFakturKeluaran = ({ }) => {
     const [informasiTambahan, setInformasiTambahan] = useState("");
     const [tipe, setTipe] = useState("");
     const [selectedKode, setSelectedKode] = useState('');
+    const [selectedSatuan, setSelectedSatuan] = useState("");
+    const [listSatuan, setListSatuan] = useState([]);
     const [listKode, setListKode] = useState([]);
     const [capFasilitas, setCapFasilitas] = useState("");
     const [nomorPendukung, setNomorPendukung] = useState("");
@@ -37,21 +39,29 @@ const TambahFakturKeluaran = ({ }) => {
     const [isCustomPPnBM, setIsCustomPPnBM] = useState(false);
 
     const RoutesApi = {
-        kodeTransaksi: "http://127.0.0.1:8000/api/kode-transaksi"
+        kodeTransaksi: "http://127.0.0.1:8000/api/kode-transaksi",
+        satuan: "http://127.0.0.1:8000/api/satuan"
     };
 
     const fetchKodeByJenis = async (jenis) => {
         try {
-            const { data } = await axios.get(RoutesApi.kodeTransaksi, {
-                params: { jenis }  // otomatis jadi ?jenis=Barang atau Jasa
+            // Fetch kode transaksi
+            const kodeRes = await axios.get(RoutesApi.kodeTransaksi, {
+                params: { jenis }
             });
+            setListKode(kodeRes.data.data);
 
-            console.log(data.data);
-            setListKode(data.data);
+            // Fetch satuan
+            const satuanRes = await axios.get(RoutesApi.satuan, {
+                params: { jenis }
+            });
+            setListSatuan(satuanRes.data.data);
+
         } catch (err) {
-            console.error("Gagal fetch kode transaksi:", err);
+            console.error("Gagal fetch data:", err);
         }
     };
+
     const handleTipeChange = (e) => {
         const value = e.target.value;
         setTipe(value);
@@ -227,7 +237,7 @@ const TambahFakturKeluaran = ({ }) => {
             <SideBarEFaktur />
             <div className='flex-grow p-6 bg-white h-full overflow-y-auto'>
                 <h2 className="text-2xl font-semibold text-gray-800 mb-4">Tambah Data</h2>
-                <div className='border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100' onClick={() => setShowDokumenTransaksi(!showDokumenTransaksi)}>
+                <div className='border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 ' onClick={() => setShowDokumenTransaksi(!showDokumenTransaksi)}>
                     <h3 className='text-lg font-semibold'>Dokumen Transaksi</h3>
                     {showDokumenTransaksi ? <FaChevronUp /> : <FaChevronDown />}
                 </div>
@@ -488,7 +498,7 @@ const TambahFakturKeluaran = ({ }) => {
                                                 <div>
                                                     <label className="block text-sm font-medium">Kode Transaksi</label>
                                                     <select
-                                                            className="p-2 border rounded w-[250px] max-w-full"
+                                                        className="p-2 border rounded w-[250px] max-w-full"
                                                         value={selectedKode}
                                                         onChange={(e) => setSelectedKode(e.target.value)}
                                                     >
@@ -506,14 +516,23 @@ const TambahFakturKeluaran = ({ }) => {
                                                 <label className="block text-sm font-medium">Nama </label>
                                                 <input type="text" className="p-2 border rounded w-full" />
                                             </div>
-                                            <div className='space-y-2'>
-                                                <label className='block text-sm font-medium'>Satuan</label>
-                                                <select className='p-2 border rounded w-full'>
-                                                    <option value="Satuan 1">Satuan 1</option>
-                                                    <option value="Satuan 2">Satuan 2</option>
-                                                    <option value="Satuan 3">Satuan 3</option>
-                                                </select>
-                                            </div>
+                                            {tipe && (
+                                                <div className='space-y-2'>
+                                                    <label className='block text-sm font-medium'>Satuan</label>
+                                                    <select
+                                                        className="p-2 border rounded w-[250px] max-w-full"
+                                                        value={selectedSatuan}
+                                                        onChange={(e) => setSelectedSatuan(e.target.value)}
+                                                    >
+                                                        <option value="">Pilih Satuan</option>
+                                                        {listSatuan.map(item => (
+                                                            <option key={item.id} value={item.satuan}>
+                                                                {item.satuan}
+                                                            </option>
+                                                        ))}
+                                                    </select>
+                                                </div>
+                                            )}
                                             <div className="space-y-2">
                                                 <label className="block text-sm font-medium">Harga Satuan</label>
                                                 <input
