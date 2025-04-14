@@ -56,12 +56,12 @@ const PajakKeluaranOP = () => {
                             )}
                         </div>
 
-                        <button
+                        {/* <button
                             className="flex items-center bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded text-sm"
                             onClick={() => window.location.href = "/admin/praktikum/2/e-faktur/pajak-keluaran/tambah-faktur-keluaran"}
                         >
                             Tambah
-                        </button>
+                        </button> */}
                     </div>
                     <div className="flex items-center gap-3">
                         <button className='flex items-center bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded text-sm'>
@@ -73,7 +73,7 @@ const PajakKeluaranOP = () => {
                     </div>
                 </div>
 
-                <div className="w-[1100px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden mt-4">
+                <div className="w-auto overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden mt-4">
                     <table className="table-auto border border-gray-300 w-full">
                         <thead className="bg-gray-200">
                             <tr>
