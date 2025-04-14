@@ -3,7 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import SidebarProfilSayaBadan from "./SidebarProfilSaya";
 import { useParams } from "react-router";
 
-const ProfilSayaBadan = ({ data }) => {
+const ProfilSayaBadan = ({ data, sidebar }) => {
   const [activeTab, setActiveTab] = useState("profil");
   const { id, akun } = useParams();
 
@@ -11,11 +11,12 @@ const ProfilSayaBadan = ({ data }) => {
     <div className="flex h-screen bg-gray-100">
       {/* <SidebarProfilSayaBadan /> */}
       <SidebarProfilSayaBadan
-        nama_akun={data.nama_akun}
-        npwp_akun={data.npwp_akun}
+        nama_akun={sidebar.data.nama_akun}
+        npwp_akun={sidebar.data.npwp_akun}
         akun={{ id, akun }}
       />
       <main className="flex-auto p-3 bg-white rounded-md h-full">
+        badan
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-semibold">
             Ikhtisar Profil Wajib Pajak
@@ -24,7 +25,6 @@ const ProfilSayaBadan = ({ data }) => {
             📥 Unduh Ikhtisar Profil
           </button>
         </div>
-
         <div className="w-full p-2 ml-0 border-t">
           <Tabs
             defaultValue="profil"

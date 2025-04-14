@@ -8,7 +8,7 @@ import axios from "axios";
 import { ClipLoader } from "react-spinners";
 import { RoutesApi } from "@/Routes";
 
-const ProfilSaya = ({ data }) => {
+const ProfilSaya = ({ data, sidebar }) => {
   const [activeTab, setActiveTab] = useState("profil");
   const { id, akun } = useParams();
   const token = getCookieToken();
@@ -64,8 +64,8 @@ const ProfilSaya = ({ data }) => {
   return (
     <div className="flex h-screen bg-gray-100">
       <SidebarProfilSaya
-        nama_akun={data.nama_akun}
-        npwp_akun={data.npwp_akun}
+        nama_akun={sidebar.data.nama_akun}
+        npwp_akun={sidebar.data.npwp_akun}
         akun={{ id, akun }}
       />
       <main className="flex-auto p-3 bg-white rounded-md h-full">

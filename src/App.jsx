@@ -127,10 +127,13 @@ import DosenPraktikumKelas from "./components/Dashboard/Dosen/Kelas/DosenPraktik
 import { CookiesProvider, useCookies } from "react-cookie";
 import DosenPraktikumKelasMember from "./components/Dashboard/Dosen/Kelas/DosenPraktikumKelasMember";
 import RoleBasedRenderer from "./components/PraktikumPage/RoleBaseRenderer";
+import { useParams } from "react-router";
+import { RoutesApi } from "@/Routes";
 
 const Main = () => {
   const [loading, setLoading] = useState(true);
   const [cookies, setCookie] = useCookies(["token, role"]);
+  // const { id, akun } = useParams();
 
   useEffect(() => {
     setLoading(true);
@@ -637,6 +640,7 @@ const Main = () => {
               {/* <Header />
               <ProfilSaya /> */}
               <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun`}
                 OrangPribadi={ProfilSaya}
                 Badan={ProfilSayaBadan}
               ></RoleBasedRenderer>

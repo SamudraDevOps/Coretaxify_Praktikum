@@ -10,54 +10,98 @@ import { CookiesProvider, useCookies } from "react-cookie";
 import { getCookieToken } from "@/service";
 import Header from "../Header/Header";
 
-export default function RoleBasedRenderer({ OrangPribadi, Badan }) {
-  const { id, akun } = useParams();
+export default function RoleBasedRenderer({ OrangPribadi, Badan, url }) {
+  // const { id, akun } = useParams();
+  const params = useParams();
   const [cookies, setCookie] = useCookies(["user"]);
   const token = getCookieToken();
-  // const { data, isLoading, isError, error } = useQuery({
-  //   queryKey: ["account", id],
-  //   queryFn: async () => {
-  //     console.log(cookies.token);
-  //     const { data } = await axios.get(
-  //       `${RoutesApi.apiUrl}student/assignments/${id}/sistem/${akun}`,
-  //       // "http://127.0.0.1:8000/api/student/assignments/1/sistem/1",
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${cookies.token}`,
-  //           Accept: "application/json",
-  //         },
-  //       }
-  //     );
-  //     console.log(data);
-  //     return data;
-  //   },
-  // });
-  const { isLoading, isError, data, error, refetch } = useQuery({
-    queryKey: ["getportal", id],
+
+  function fillPath(template, params) {
+    return template.replace(/:([a-zA-Z0-9_]+)/g, (_, key) => {
+      return params[key] !== undefined ? params[key] : `:${key}`;
+    });
+  }
+  const path = fillPath(url, params);
+  // return (
+  //   <>
+  //     <p>{path}</p>
+  //   </>
+  // );
+  const {
+    data: user,
+    isLoading: userLoading,
+    isError: isUserError,
+    error: userError,
+  } = useQuery({
+    queryKey: ["account", params.id],
     queryFn: async () => {
-      const response = await axios.get(
-        `${RoutesApi.apiUrl}student/assignments/${id}/sistem/${akun}`,
+      console.log(cookies.token);
+      const { data } = await axios.get(
+        `${RoutesApi.apiUrl}student/assignments/${params.id}/sistem/${params.akun}`,
+        // "http://127.0.0.1:8000/api/student/assignment/1/sistem/1",
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${cookies.token}`,
+            Accept: "application/json",
           },
           params: {
             intent: "api.get.sistem.ikhtisar.profil",
           },
         }
       );
-
-      // Check if response data exists
-      if (!response.data) {
-        throw new Error("No data returned from API");
-      }
-
-      return response.data.data;
+      console.log(data);
+      return data;
+      h;
     },
-    enabled: !!id && !!token,
   });
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ["account", params.id],
+    queryFn: async () => {
+      console.log(cookies.token);
+      const { data } = await axios.get(
+        path,
+        // "http://127.0.0.1:8000/api/student/assignment/1/sistem/1",
+        {
+          headers: {
+            Authorization: `Bearer ${cookies.token}`,
+            Accept: "application/json",
+          },
+          params: {
+            intent: "api.get.sistem.ikhtisar.profil",
+          },
+        }
+      );
+      console.log(data);
+      return data;
+    },
+  });
+  // const { isLoading, isError, data, error, refetch } = useQuery({
+  //   queryKey: ["getportal", id],
+  //   queryFn: async () => {
+  //     const response = await axios.get(
+  //       url,
+  //       // `${RoutesApi.apiUrl}student/assignments/${id}/sistem/${akun}`,
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //         params: {
+  //           intent: "api.get.sistem.ikhtisar.profil",
+  //         },
+  //       }
+  //     );
 
-  if (isLoading) {
+  //     // Check if response data exists
+  //     if (!response.data) {
+  //       throw new Error("No data returned from API");
+  //     }
+
+  //     return response.data.data;
+  //   },
+  //   enabled: !!id && !!token,
+  // });
+
+  if (isLoading || userLoading) {
     console.log("loading");
     return (
       <div className="loading">
@@ -66,7 +110,7 @@ export default function RoleBasedRenderer({ OrangPribadi, Badan }) {
     );
   }
 
-  if (isError) {
+  if (isError || isUserError) {
     console.log(error);
     return (
       <div className="">
@@ -78,18 +122,20 @@ export default function RoleBasedRenderer({ OrangPribadi, Badan }) {
   console.log(data);
   // const user = data.find((user) => id === parseInt(akun));
   // console.log(user);
-  const isOrangPribadi = data.tipe_akun === "Orang Pribadi";
+  // console.log(user.data.tipe_akun);
+  const isOrangPribadi = user.data.tipe_akun.includes("Orang Pribadi");
+  console.log(isOrangPribadi);
   return (
     <>
       {isOrangPribadi ? (
         <>
           <Header></Header>
-          <OrangPribadi data={data} />
+          <OrangPribadi data={data} sidebar={user} />
         </>
       ) : (
         <>
           <Header></Header>
-          <Badan data={data} />
+          <Badan data={data} sidebar={user} />
         </>
       )}
     </>
