@@ -7,6 +7,8 @@ const ProfilSayaBadan = ({ data, sidebar }) => {
   const [activeTab, setActiveTab] = useState("profil");
   const { id, akun } = useParams();
 
+  console.log(data);
+
   return (
     <div className="flex h-screen bg-gray-100">
       {/* <SidebarProfilSayaBadan /> */}
@@ -16,7 +18,6 @@ const ProfilSayaBadan = ({ data, sidebar }) => {
         akun={{ id, akun }}
       />
       <main className="flex-auto p-3 bg-white rounded-md h-full">
-        badan
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-semibold">
             Ikhtisar Profil Wajib Pajak
@@ -46,10 +47,10 @@ const ProfilSayaBadan = ({ data, sidebar }) => {
               <div className="p-6 grid grid-cols-2 gap-4 w-full border-r-0 border-gray-500">
                 <div className="space-y-2 h-full">
                   {[
-                    ["Nama", "Samudera Edukasi Teknologi"],
-                    ["Nomor Pokok Wajib Pajak", "3510145907990002"],
+                    ["Nama", data.nama_akun],
+                    ["Nomor Pokok Wajib Pajak", data.npwp_akun],
                     ["Kegiatan Utama", "Kegiatan Penunjang Pendidikan"],
-                    ["Jenis Wajib Pajak", "Badan"],
+                    ["Jenis Wajib Pajak", data.tipe_akun],
                     ["Bentuk Badan Hukum", "Perseroan Terbatas (PT)"],
                     ["Status NPWP", "Aktif"],
                     ["Tanggal Terdaftar", "16 Maret 2024"],
@@ -79,14 +80,11 @@ const ProfilSayaBadan = ({ data, sidebar }) => {
                 </div>
                 <div className="space-y-2 h-full">
                   {[
-                    [
-                      "Alamat Utama",
-                      "Jalan Nangka Perum Kalirejo Permai Blok A No. 15, RT.001/RW.001, Kalirejo, Kec. Banyuwangi, Kabupaten Banyuwangi, Jawa Timur 68411",
-                    ],
+                    ["Alamat Utama", data.alamat_utama_akun],
                     [
                       "Kontak Utama",
                       "Nomor Handphone : 081234567890",
-                      "Email Utama : email@example.com",
+                      `Email Utama : ${data.email_akun}`,
                     ],
                     [
                       "Klasifikasi Lapangan Usaha Utama",

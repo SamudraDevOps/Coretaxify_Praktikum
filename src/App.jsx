@@ -643,6 +643,7 @@ const Main = () => {
                 url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun`}
                 OrangPribadi={ProfilSaya}
                 Badan={ProfilSayaBadan}
+                intent={"api.get.sistem.ikhtisar.profil"}
               ></RoleBasedRenderer>
             </>
           }
@@ -652,8 +653,14 @@ const Main = () => {
           // path="/admin/praktikum/1/profil-saya/informasi-umum"
           element={
             <>
-              <Header />
-              <InformasiSaya />
+              {/* <Header />
+              <InformasiSaya /> */}
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun`}
+                intent={"api.get.sistem.informasi.umum"}
+                OrangPribadi={InformasiSaya}
+                Badan={InformasiSayaBadan}
+              ></RoleBasedRenderer>
             </>
           }
         />

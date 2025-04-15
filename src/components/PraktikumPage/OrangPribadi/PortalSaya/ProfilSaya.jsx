@@ -7,6 +7,7 @@ import { getCookieToken } from "@/service";
 import axios from "axios";
 import { ClipLoader } from "react-spinners";
 import { RoutesApi } from "@/Routes";
+import { Sidebar } from "react-pro-sidebar";
 
 const ProfilSaya = ({ data, sidebar }) => {
   const [activeTab, setActiveTab] = useState("profil");
@@ -56,10 +57,10 @@ const ProfilSaya = ({ data, sidebar }) => {
   //     </div>
   //   );
   // }
-  if (!data) {
+  if (!data || !sidebar) {
     return <p>Error</p>;
   }
-  console.log("Data fetched:", data);
+  console.log("Data fetched:", data, sidebar);
 
   return (
     <div className="flex h-screen bg-gray-100">

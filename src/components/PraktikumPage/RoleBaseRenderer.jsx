@@ -10,7 +10,12 @@ import { CookiesProvider, useCookies } from "react-cookie";
 import { getCookieToken } from "@/service";
 import Header from "../Header/Header";
 
-export default function RoleBasedRenderer({ OrangPribadi, Badan, url }) {
+export default function RoleBasedRenderer({
+  OrangPribadi,
+  Badan,
+  url,
+  intent,
+}) {
   // const { id, akun } = useParams();
   const params = useParams();
   const [cookies, setCookie] = useCookies(["user"]);
@@ -67,7 +72,7 @@ export default function RoleBasedRenderer({ OrangPribadi, Badan, url }) {
             Accept: "application/json",
           },
           params: {
-            intent: "api.get.sistem.ikhtisar.profil",
+            intent: intent,
           },
         }
       );
@@ -119,7 +124,7 @@ export default function RoleBasedRenderer({ OrangPribadi, Badan, url }) {
     );
   }
 
-  console.log(data);
+  // console.log(data);
   // const user = data.find((user) => id === parseInt(akun));
   // console.log(user);
   // console.log(user.data.tipe_akun);
@@ -130,12 +135,13 @@ export default function RoleBasedRenderer({ OrangPribadi, Badan, url }) {
       {isOrangPribadi ? (
         <>
           <Header></Header>
-          <OrangPribadi data={data} sidebar={user} />
+          <OrangPribadi data={data.data} sidebar={user} />
         </>
       ) : (
         <>
+          badan
           <Header></Header>
-          <Badan data={data} sidebar={user} />
+          <Badan data={data.data} sidebar={user} />
         </>
       )}
     </>

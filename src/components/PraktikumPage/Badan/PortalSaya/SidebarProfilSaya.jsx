@@ -28,11 +28,11 @@ const SidebarProfilSayaBadan = ({ nama_akun, npwp_akun, akun }) => {
   const menuItems = [
     {
       label: "Ikhtisar Profil Wajib Pajak",
-      link: `/admin/praktikum/${userTypeId}/profil-saya`,
+      link: `/praktikum/${akun.id}/sistem/${akun.akun}/profil-saya`,
     },
     {
       label: "Informasi Umum",
-      link: `/admin/praktikum/${userTypeId}/profil-saya/informasi-umum`,
+      link: `/praktikum/${akun.id}/sistem/${akun.akun}/informasi-umum`,
     },
     {
       label: "Alamat",
