@@ -116,6 +116,7 @@ import DashboardEFaktur from "./components/PraktikumPage/Badan/EFaktur/Dashboard
 import PajakKeluaran from "./components/PraktikumPage/Badan/EFaktur/PajakKeluaran";
 import TambahFakturKeluaran from "./components/PraktikumPage/Badan/EFaktur/TambahFakturKeluaran";
 import PajakMasukan from "./components/PraktikumPage/Badan/EFaktur/PajakMasukan";
+import KonsepSPT from "./components/PraktikumPage/Badan/SPT/KonsepSPT";
 // Route Badan
 
 import ProtectedRoutes from "./components/Dashboard/Auth/ProtectedRoutes";
@@ -984,8 +985,15 @@ const Main = () => {
               </>
             }
           />
-  
-
+          <Route
+            path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
+            element={
+              <>
+                <Header />
+                <KonsepSPT />
+              </>
+            }
+          /> 
         {/* NOT FOUND ROUTE - LAST REGISTERED ROUTE */}
         <Route path="*" element={<NotFound />} />
       </Routes>
