@@ -58,11 +58,70 @@ const TambahKontrak = ({
   // Form state
   const [formData, setFormData] = useState({ ...initialFormState });
   const [cookies, setCookie] = useCookies(["user"]);
+  const [errors, setErrors] = useState({});
   const [lastNumbers, setLastNumbers] = useState({
     Lisensi: 0,
     Unit: 0,
     BNSP: 0,
   });
+
+  const validate = () => {
+    let newErrors = {};
+
+    if (!formData.jenisKontrak) {
+      newErrors.jenisKontrak = "Jenis kontrak harus diisi";
+    }
+
+    if (!formData.instansi) {
+      newErrors.instansi = "Instansi harus diisi";
+    }
+
+    if (!formData.mahasiswa) {
+      newErrors.mahasiswa = "Jumlah mahasiswa harus diisi";
+    }
+
+    if (!formData.periodeAwal) {
+      newErrors.periodeAwal = "Periode awal harus diisi";
+    }
+
+    if (!formData.periodeAwal) {
+      newErrors.periodeAkhir = "Periode akhir harus diisi";
+    }
+
+    if (!formData.spt) {
+      newErrors.spt = "SPT harus diisi";
+    }
+
+    if (!formData.bupot) {
+      newErrors.bupot = "BUPOT harus diisi";
+    }
+
+    if (!formData.faktur) {
+      newErrors.faktur = "Faktur harus diisi";
+    }
+
+    if (!formData.kodePembelian) {
+      newErrors.kodePembelian = "Kode Pembelian harus diisi";
+    }
+
+    if (!formData.is_buy_task) {
+      newErrors.is_buy_task = "Pembelian Soal harus diisi";
+    }
+
+    if (!formData.status) {
+      newErrors.status = "Status harus diisi";
+    }
+
+    if (formData.is_buy_task === 1) {
+      if (!formData.opsiTambahan || formData.opsiTambahan.length === 0) {
+        newErrors.opsiTambahan = "Opsi Tambahan harus diisi";
+      }
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+    // return true;
+  };
 
   // Custom dropdown state
   const [openInstansi, setOpenInstansi] = useState(false);
@@ -95,11 +154,18 @@ const TambahKontrak = ({
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+    if(errors[name]) {
+      setErrors({ ...errors, [name]: null });
+    }
   };
 
   const handleSave = () => {
     console.log(formData);
-    mutation.mutate();
+    if (validate()) {
+      onSave(formData);
+      setFormData({ ...initialFormState });
+      mutation.mutate();
+    }
   };
 
   const mutation = useMutation({
@@ -241,18 +307,21 @@ const TambahKontrak = ({
         <h2>Tambah Data Kontrak</h2>
         <form>
           <div className="kontrak-form-group">
-            <label>Jenis Kontrak</label>
+            <label>Jenis Kontrak *</label>
             <select
               name="jenisKontrak"
               value={formData.jenisKontrak}
               onChange={handleChange}
-              required
+              // required
             >
               <option value="">Pilih Jenis Kontrak</option>
               <option value="LICENSE">Lisensi</option>
               <option value="UNIT">Unit</option>
               <option value="BNSP">BNSP</option>
             </select>
+            {errors.jenisKontrak && (
+              <p className="text-red-500 text-sm">{errors.jenisKontrak}</p>
+            )}
           </div>
 
           {/* Custom Instansi dropdown */}
@@ -285,6 +354,7 @@ const TambahKontrak = ({
                         <CommandItem
                           key={uni.id}
                           value={uni.name}
+                          onChange={handleChange}
                           onSelect={(currentValue) => {
                             // alert(currentValue);
                             setFormData({
@@ -316,10 +386,13 @@ const TambahKontrak = ({
               {/* document.body
                )} */}
             </Popover>
+            {errors.instansi && (
+              <p className="text-red-500 text-sm">{errors.instansi}</p>
+            )}
           </div>
 
           <div className="kontrak-form-group">
-            <label>Soal</label>
+            <label>Soal *</label>
             <RadioGroup
               name="is_buy_task"
               value={formData.is_buy_task.toString()}
@@ -374,7 +447,7 @@ const TambahKontrak = ({
           </div>
 
           <div className="kontrak-form-group">
-            <label>Jumlah Mahasiswa</label>
+            <label>Jumlah Mahasiswa *</label>
             <input
               type="number"
               name="mahasiswa"
@@ -386,22 +459,28 @@ const TambahKontrak = ({
                   e.preventDefault();
                 }
               }}
-              required
+              // required
             />
+            {errors.mahasiswa && (
+              <p className="text-red-500 text-sm">{errors.mahasiswa}</p>
+            )}
           </div>
           <div className="kontrak-form-group">
-            <label>Periode Awal</label>
+            <label>Periode Awal *</label>
             <input
               type="date"
               name="periodeAwal"
               value={formData.periodeAwal}
               onChange={handleChange}
               max={formData.periodeAkhir}
-              required
+              // required
             />
+            {errors.periodeAwal && (
+              <p className="text-red-500 text-sm">{errors.periodeAwal}</p>
+            )}
           </div>
           <div className="kontrak-form-group">
-            <label>Periode Akhir</label>
+            <label>Periode Akhir *</label>
             <input
               type="date"
               name="periodeAkhir"
@@ -410,11 +489,14 @@ const TambahKontrak = ({
               min={
                 formData.periodeAwal || new Date().toISOString().split("T")[0]
               }
-              required
+              // required
             />
+            {errors.periodeAkhir && (
+              <p className="text-red-500 text-sm">{errors.periodeAkhir}</p>
+            )}
           </div>
           <div className="kontrak-form-group">
-            <label>SPT</label>
+            <label>SPT *</label>
             <input
               type="number"
               name="spt"
@@ -426,11 +508,14 @@ const TambahKontrak = ({
                   e.preventDefault();
                 }
               }}
-              required
+              // required
             />
+            {errors.spt && (
+              <p className="text-red-500 text-sm">{errors.spt}</p>
+            )}
           </div>
           <div className="kontrak-form-group">
-            <label>Bupot</label>
+            <label>Bupot *</label>
             <input
               type="number"
               name="bupot"
@@ -442,11 +527,14 @@ const TambahKontrak = ({
                   e.preventDefault();
                 }
               }}
-              required
-            />
+              // required
+              />
+              {errors.bupot && (
+                <p className="text-red-500 text-sm">{errors.bupot}</p>
+              )}
           </div>
           <div className="kontrak-form-group">
-            <label>Faktur</label>
+            <label>Faktur *</label>
             <input
               type="number"
               name="faktur"
@@ -458,22 +546,28 @@ const TambahKontrak = ({
                   e.preventDefault();
                 }
               }}
-              required
+              // required
             />
+            {errors.faktur && (
+              <p className="text-red-500 text-sm">{errors.faktur}</p>
+            )}
           </div>
 
           <div className="kontrak-form-group">
-            <label>Status</label>
+            <label>Status *</label>
             <select
               name="status"
               value={formData.status}
               onChange={handleChange}
-              required
+              // required
             >
               <option value="">Pilih Status</option>
               <option value="ACTIVE">Active</option>
               <option value="INACTIVE">Expired</option>
             </select>
+            {errors.status && (
+              <p className="text-red-500 text-sm">{errors.status}</p>
+            )}
           </div>
         </form>
 
