@@ -3,6 +3,7 @@ import "./editPopupDosen.css";
 // import "../../../AdminPsc/Pengguna/Mahasiswa/editPopupMahasiswa.css"
 import { FaPlus, FaTrash, FaFileImport } from "react-icons/fa";
 import * as XLSX from "xlsx";
+import Swal from "sweetalert2";
 
 const TambahDosen = ({
   onClose,
@@ -72,7 +73,7 @@ const TambahDosen = ({
       (student) => student.name && student.email && student.status
     );
     if (validStudents.length === 0) {
-      alert("Harap isi setidaknya satu dosen dengan nama, email.");
+      Swal.fire("Gagal", "Harap isi setidaknya satu dosen dengan nama, email.", "error");
       return;
     }
 
@@ -81,7 +82,7 @@ const TambahDosen = ({
     const uniqueEmails = new Set(emails);
 
     if (emails.length !== uniqueEmails.size) {
-      alert("Terdapat email duplikat. Email dosen tidak boleh sama");
+      Swal.fire("Gagal", "Terdapat email duplikat. Email dosen tidak boleh sama", "error");
       return;
     }
     console.log("validStudents", students);
