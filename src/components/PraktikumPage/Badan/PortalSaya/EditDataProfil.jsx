@@ -57,26 +57,48 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
     useState("");
 
   const [informasiUmumData, setInformasiUmumData] = useState({
-    npwp: data.npwp_akun,
-    jenis_wajib_pajak: data.tipe_akun,
-    nama: data.nama_akun,
-    kategori_wajib_pajak: "Perseroan Terbatas (PT)",
-    negara_asal: "Indonesia",
-    nomor_keputusan_pengesahan: "",
-    tanggal_keputusan_pengesahan: "",
-    nomor_keputusan_pengesahan_perubahan: "",
-    tanggal_surat_keputusan_perubahan_pengesahan: "",
-    nomor_akta_pendirian: "",
-    tempat_pendirian: "",
-    tanggal_pendirian: "",
-    nik_notaris: "",
-    nama_notaris: "",
-    fasilitas_pmdn: "Swasta Nasional",
-    modal_dasar: "",
-    modal_ditempatkan: "",
-    modal_disetor: "",
-    kewarganegaraan: "WNI",
-    bahasa_yang_dipilih: "Bahasa Indonesia",
+    npwp: data.field_edit_informasi.informasi_umum.npwp,
+    jenis_wajib_pajak:
+      data.field_edit_informasi.informasi_umum.jenis_wajib_pajak,
+    nama: data.field_edit_informasi.informasi_umum.nama,
+    kategori_wajib_pajak:
+      data?.field_edit_informasi?.informasi_umum?.kategori_wajib_pajak ||
+      "Perseroan Terbatas (PT)",
+    negara_asal:
+      data?.field_edit_informasi?.informasi_umum?.negara_asal || "Indonesia",
+    nomor_keputusan_pengesahan:
+      data?.field_edit_informasi?.informasi_umum?.nomor_keputusan_pengesahan ||
+      "",
+    tanggal_keputusan_pengesahan:
+      data?.field_edit_informasi?.informasi_umum
+        ?.tanggal_keputusan_pengesahan || "",
+    nomor_keputusan_pengesahan_perubahan:
+      data?.field_edit_informasi?.informasi_umum
+        ?.nomor_keputusan_pengesahan_perubahan || "",
+    tanggal_surat_keputusan_perubahan_pengesahan:
+      data?.field_edit_informasi?.informasi_umum
+        ?.tanggal_surat_keputusan_perubahan_pengesahan || "",
+    nomor_akta_pendirian:
+      data?.field_edit_informasi?.informasi_umum?.nomor_akta_pendirian || "",
+    tempat_pendirian:
+      data?.field_edit_informasi?.informasi_umum?.tempat_pendirian || "",
+    tanggal_pendirian:
+      data?.field_edit_informasi?.informasi_umum?.tanggal_pendirian || "",
+    nik_notaris: data?.field_edit_informasi?.informasi_umum?.nik_notaris || "",
+    nama_notaris:
+      data?.field_edit_informasi?.informasi_umum?.nama_notaris || "",
+    fasilitas_pmdn:
+      data?.field_edit_informasi?.informasi_umum?.fasilitas_pmdn ||
+      "Swasta Nasional",
+    modal_dasar: data?.field_edit_informasi?.informasi_umum?.modal_dasar || "",
+    modal_ditempatkan:
+      data?.field_edit_informasi?.informasi_umum?.modal_ditempatkan || "",
+    modal_disetor:
+      data?.field_edit_informasi?.informasi_umum?.modal_disetor || "",
+    kewarganegaraan:
+      data?.field_edit_informasi?.informasi_umum?.kewarganegaraan || "WNI",
+    bahasa:
+      data?.field_edit_informasi?.informasi_umum?.bahasa || "Bahasa Indonesia",
   });
 
   const handleInformasiUmumChange = (e) => {
