@@ -31,7 +31,10 @@ const KonsepSPT = () => {
 
                 <div className="flex justify-between items-start mb-4 pb-3 border-b">
                     <div className="flex items-center gap-3">
-                        <button className="flex items-center bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-4 rounded">
+                        <button
+                            className="flex items-center bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-4 rounded"
+                            onClick={() => window.location.href = "/admin/praktikum/2/surat-pemberitahuan-(spt)/buat-konsep-spt"}
+                        >
                             Buat Konsep SPT
                         </button>
                         <div className="flex text-left text-sm" ref={dropdownRef}>
@@ -63,25 +66,27 @@ const KonsepSPT = () => {
                     </div>
                 </div>
 
-                <div className="w-auto overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden mt-4">
-                    <table className="table-auto border border-gray-300 w-full">
+                <div className="w-[1200px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden mt-4">
+                    <table className="table-auto w-full border border-gray-300 overflow-x-auto">
                         <thead className="bg-gray-200">
                             <tr>
                                 <th className="px-6 py-2 border">No</th>
-                                <th className="px-8 py-2 border">Checklist</th>
                                 <th className="px-4 py-2 border">Aksi</th>
-                                <th className="px-4 py-2 border">NPWP Pembeli</th>
-                                <th className="px-4 py-2 border">Nama Pembeli</th>
-                                <th className="px-4 py-2 border">Kode Transaksi</th>
-                                <th className="px-4 py-2 border">Nomor Faktur Pajak</th>
-                                <th className="px-4 py-2 border">Tanggal Faktur Pajak</th>
+                                <th className="px-8 py-2 border">Jenis Pajak</th>
+                                <th className="px-4 py-2 border">Jenis Surat Pemberitahuan Pajak</th>
                                 <th className="px-4 py-2 border">Masa Pajak</th>
-                                <th className="px-4 py-2 border">Tahun</th>
+                                <th className="px-4 py-2 border">NOP</th>
+                                <th className="px-4 py-2 border">Nama Objek Pajak</th>
+                                <th className="px-4 py-2 border">Model SPT</th>
+                                <th className="px-4 py-2 border">Tanggal Jatuh Tempo</th>
+                                <th className="px-4 py-2 border">Tanggal Dibuat</th>
+                                <th className="px-4 py-2 border">Status SPT</th>
+                                <th className="px-4 py-2 border">Kanal</th>
                             </tr>
                         </thead>
                         <tbody className="text-gray-600">
                             <tr>
-                                <td colSpan="10" className="text-center p-4 border">Belum ada data</td>
+                                <td colSpan="12" className="text-center p-4 border">Belum ada data</td>
                             </tr>
                         </tbody>
                     </table>
