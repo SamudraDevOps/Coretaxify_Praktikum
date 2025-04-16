@@ -26,6 +26,8 @@ import { getCookieToken } from "@/service";
 import axios from "axios";
 import { ClipLoader } from "react-spinners";
 import { RoutesApi } from "@/Routes";
+import { getCsrf } from "@/service/getCsrf";
+import Swal from "sweetalert2";
 const EditDataProfil = ({ data, sidebar }) => {
   const [isPerwakilan, setIsPerwakilan] = useState(false);
   const [showInformasiUmum, setShowInformasiUmum] = useState(false);
@@ -101,7 +103,8 @@ const EditDataProfil = ({ data, sidebar }) => {
   console.log("Data fetched:", data);
   const [formData, setFormData] = useState({
     npwp: data.field_edit_informasi.informasi_umum.npwp,
-    jenis_wajib_pajak: data.jenis_wajib_pajak,
+    jenis_wajib_pajak:
+      data.field_edit_informasi.informasi_umum.jenis_wajib_pajak,
     nama: data.field_edit_informasi.informasi_umum.nama,
     kategori_wajib_pajak:
       data.field_edit_informasi.informasi_umum.kategori_wajib_pajak,
@@ -126,6 +129,35 @@ const EditDataProfil = ({ data, sidebar }) => {
       data.field_edit_informasi.informasi_umum.kewarganegaraan || "WNI",
     bahasa:
       data.field_edit_informasi.informasi_umum.bahasa || "Bahasa Indonesia",
+  });
+  const updateInformasiUmum = useMutation({
+    mutationFn: async () => {
+      const csrf = await getCsrf();
+      return axios.put(
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/informasi-umum/${akun}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": csrf,
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+    },
+    onSuccess: (data) => {
+      console.log(data);
+      Swal.fire(
+        "Berhasil!",
+        "Data informasi umum berhasil disimpan!",
+        "success"
+      );
+    },
+    onError: (error) => {
+      console.error("Error saving data:", error);
+      Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
+    },
   });
   // useEffect(() => {
   //   if (
@@ -568,7 +600,7 @@ const EditDataProfil = ({ data, sidebar }) => {
               <button
                 type="submit"
                 className="px-4 py-2 bg-blue-500 text-white rounded-md"
-                onClick={handleSubmit}
+                onClick={() => updateInformasiUmum.mutate()}
               >
                 Simpan
               </button>
