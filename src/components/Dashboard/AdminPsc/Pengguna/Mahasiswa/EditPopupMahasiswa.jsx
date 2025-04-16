@@ -2,6 +2,7 @@ import React, { useState, useRef } from "react";
 import "./editPopupMahasiswa.css";
 import { FaPlus, FaTrash, FaFileImport } from "react-icons/fa";
 import * as XLSX from 'xlsx';
+import { RxCross1 } from "react-icons/rx";
 
 const EditPopupMahasiswa = ({ 
   onClose, 
@@ -192,6 +193,10 @@ const downloadTemplate = () => {
       <div className="edit-popup-content-mahasiswa">
         <div className="edit-popup-header-mahasiswa">
           <h2>{title}</h2>
+          <RxCross1
+            className="text-2xl hover:cursor-pointer"
+            onClick={onClose}
+          />
         </div>
 
         {/* Handle Multiple Students Mode */}

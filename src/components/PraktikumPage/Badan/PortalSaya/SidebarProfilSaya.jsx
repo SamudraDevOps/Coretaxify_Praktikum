@@ -114,21 +114,24 @@ const SidebarProfilSayaBadan = ({ nama_akun, npwp_akun, akun }) => {
             //     ? `/admin/praktikum/${userTypeId}/profil-saya`
             //     : `/admin/praktikum/${userTypeId}/profil-saya/${formattedItem}`;
 
-            return (
-              <li
-                key={index}
-                className="p-2 hover:bg-blue-700 hover:text-white rounded-md cursor-pointer"
-              >
-                <Link to={item.link} className="block w-full p-2">
-                  {item.label}
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
-      </nav>
-    </aside>
-  );
+                        const isActive = location.pathname === linkPath;
+
+                        return (
+                            <li
+                                key={index}
+                                className={`p-2 rounded-md cursor-pointer ${isActive ? "bg-blue-700 text-white" : "hover:bg-blue-700 hover:text-white"
+                                    }`}
+                            >
+                                <Link to={linkPath} className="block w-full p-2">
+                                    {item}
+                                </Link>
+                            </li>
+                        );
+                    })}
+                </ul>
+            </nav>
+        </aside>
+    );
 };
 
 export default SidebarProfilSayaBadan;

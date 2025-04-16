@@ -55,7 +55,7 @@ export default function UploadSoal() {
       });
 
       axios.defaults.headers.common["X-CSRF-TOKEN"] = response.data.token;
-      
+
       if (action === "create") {
         // Create new task
         const formDataObj = new FormData();
@@ -63,69 +63,65 @@ export default function UploadSoal() {
         formDataObj.append("name", formData.name);
         formDataObj.append("import_file", formData.import_file);
 
-        return await axios.post(
-          storeEndpoint.url,
-          formDataObj,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Accept: "application/json",
-              "X-CSRF-TOKEN": response.data.token,
-              Authorization: `Bearer ${cookies.token}`,
-            }
-          }
-        );
+        return await axios.post(storeEndpoint.url, formDataObj, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": response.data.token,
+            Authorization: `Bearer ${cookies.token}`,
+          },
+        });
       } else if (action === "update" && id) {
         // Update existing task
         const formDataObj = new FormData();
-        
+
         // Only append fields that have values
         if (formData.name) {
           formDataObj.append("name", formData.name);
         }
-        
+
         if (formData.import_file) {
           formDataObj.append("import_file", formData.import_file);
         }
-        
+
         // Append method to handle Laravel's form method spoofing
         formDataObj.append("_method", "PUT");
 
         const updateEndpoint = RoutesApi.psc.tasks.update(id);
-        return await axios.post(
-          updateEndpoint.url,
-          formDataObj,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Accept: "application/json",
-              "X-CSRF-TOKEN": response.data.token,
-              Authorization: `Bearer ${cookies.token}`,
-            }
-          }
-        );
+        return await axios.post(updateEndpoint.url, formDataObj, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": response.data.token,
+            Authorization: `Bearer ${cookies.token}`,
+          },
+        });
       } else if (action === "delete" && id) {
         // Delete task
-        const deleteEndpoint = RoutesApi.psc.tasks.delete(id);
-        return await axios.delete(
-          deleteEndpoint.url,
-          {
-            headers: {
-              "X-CSRF-TOKEN": response.data.token,
-              Authorization: `Bearer ${cookies.token}`,
-            }
-          }
-        );
+        const deleteEndpoint = RoutesApi.psc.tasks.destroy(id);
+        return await axios.delete(deleteEndpoint.url, {
+          headers: {
+            "X-CSRF-TOKEN": response.data.token,
+            Authorization: `Bearer ${cookies.token}`,
+          },
+        });
       }
     },
-    onSuccess: () => {
-      Swal.fire("Berhasil!", "Operasi berhasil dilakukan!", "success");
+    onSuccess: (variables) => {
+      const { action } = variables;
+      if (action === "create") {
+        Swal.fire("Berhasil!", "Soal berhasil dibuat!", "success");
+      } else if (action === "update") {
+        Swal.fire("Berhasil!", "Soal berhasil diperbarui!", "success");
+      } else if (action === "delete") {
+        Swal.fire("Berhasil!", "Soal berhasil dihapus!", "success");
+      }
       refetch();
       setIsCreateOpen(false);
       setIsUpdateOpen(false);
       setFormData({
         name: "",
-        import_file: null
+        import_file: null,
       });
     },
     onError: (error) => {

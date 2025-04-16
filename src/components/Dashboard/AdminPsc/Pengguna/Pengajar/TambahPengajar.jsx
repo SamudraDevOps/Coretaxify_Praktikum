@@ -1,8 +1,8 @@
 import React, { useState, useRef } from "react";
 import "./tambahPengajar.css";
-import { IoMdClose } from "react-icons/io";
 import { FaFileImport, FaPlus, FaTrash } from "react-icons/fa";
 import * as XLSX from 'xlsx';
+import { RxCross1 } from "react-icons/rx";
 
 const TambahPengajar = ({ 
   isOpen, 
@@ -183,9 +183,10 @@ const TambahPengajar = ({
       <div className="tambah-instruktur-container">
         <div className="tambah-instruktur-header">
           <h2>Tambah Pengajar</h2>
-          <button className="close-button" onClick={onClose}>
-            <IoMdClose />
-          </button>
+          <RxCross1
+            className="text-2xl hover:cursor-pointer"
+            onClick={onClose}
+          />
         </div>
 
         {/* Import Section */}
