@@ -660,6 +660,7 @@ const Main = () => {
                 intent={"api.get.sistem.informasi.umum"}
                 OrangPribadi={InformasiSaya}
                 Badan={InformasiSayaBadan}
+                query={"info"}
               ></RoleBasedRenderer>
             </>
           }
@@ -669,8 +670,15 @@ const Main = () => {
           // path="/admin/praktikum/1/profil-saya/informasi-umum/edit-data-profil"
           element={
             <>
-              <Header />
-              <EditDataProfil />
+              {/* <Header />
+              <EditDataProfil /> */}
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun`}
+                intent={"api.get.sistem.edit.informasi.umum"}
+                OrangPribadi={EditDataProfil}
+                Badan={EditDataProfilBadan}
+                query={"edit-info"}
+              ></RoleBasedRenderer>
             </>
           }
         />

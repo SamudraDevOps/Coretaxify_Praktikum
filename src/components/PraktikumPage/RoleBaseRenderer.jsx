@@ -15,6 +15,7 @@ export default function RoleBasedRenderer({
   Badan,
   url,
   intent,
+  query,
 }) {
   // const { id, akun } = useParams();
   const params = useParams();
@@ -60,7 +61,7 @@ export default function RoleBasedRenderer({
     },
   });
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ["account", params.id],
+    queryKey: [query, params.id],
     queryFn: async () => {
       console.log(cookies.token);
       const { data } = await axios.get(
@@ -76,10 +77,11 @@ export default function RoleBasedRenderer({
           },
         }
       );
-      console.log(data);
+      // console.log(data);
       return data;
     },
   });
+  console.log(path, intent);
   // const { isLoading, isError, data, error, refetch } = useQuery({
   //   queryKey: ["getportal", id],
   //   queryFn: async () => {
@@ -128,6 +130,7 @@ export default function RoleBasedRenderer({
   // const user = data.find((user) => id === parseInt(akun));
   // console.log(user);
   // console.log(user.data.tipe_akun);
+  console.log(user.data);
   const isOrangPribadi = user.data.tipe_akun.includes("Orang Pribadi");
   console.log(isOrangPribadi);
   return (
@@ -135,13 +138,13 @@ export default function RoleBasedRenderer({
       {isOrangPribadi ? (
         <>
           <Header></Header>
-          <OrangPribadi data={data.data} sidebar={user} />
+          <OrangPribadi data={data.data} sidebar={user.data} />
         </>
       ) : (
         <>
           badan
           <Header></Header>
-          <Badan data={data.data} sidebar={user} />
+          <Badan data={data.data} sidebar={user.data} />
         </>
       )}
     </>

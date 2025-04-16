@@ -12,7 +12,7 @@ import axios from "axios";
 import { ClipLoader } from "react-spinners";
 import { RoutesApi } from "@/Routes";
 
-const InformasiSaya = ({ data }) => {
+const InformasiSaya = ({ data, sidebar }) => {
   const [activeTab, setActiveTab] = useState("general");
   const { userType } = useUserType();
   const [userTypeFromStorage, setUserTypeFromStorage] = useState("");
@@ -74,12 +74,13 @@ const InformasiSaya = ({ data }) => {
   //     </div>
   //   );
   // }
-  console.log("Data fetched:", data);
+  console.log("pls gel");
+  console.log(data, "sidebar", sidebar);
   return (
     <div className="flex h-screen bg-gray-100">
       <SidebarProfilSaya
-        nama_akun={data.nama_akun}
-        npwp_akun={data.npwp_akun}
+        nama_akun={sidebar.nama_akun}
+        npwp_akun={sidebar.npwp_akun}
         akun={{ id, akun }}
       />
       <main className="flex-auto p-3 bg-white rounded-md h-full">

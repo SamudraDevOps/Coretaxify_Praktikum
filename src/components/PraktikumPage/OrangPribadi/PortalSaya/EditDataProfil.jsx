@@ -26,7 +26,7 @@ import { getCookieToken } from "@/service";
 import axios from "axios";
 import { ClipLoader } from "react-spinners";
 import { RoutesApi } from "@/Routes";
-const EditDataProfil = () => {
+const EditDataProfil = ({ data, sidebar }) => {
   const [isPerwakilan, setIsPerwakilan] = useState(false);
   const [showInformasiUmum, setShowInformasiUmum] = useState(false);
   const [showDataEkonomi, setShowDataEkonomi] = useState(false);
@@ -54,101 +54,130 @@ const EditDataProfil = () => {
 
   const { id, akun } = useParams();
   const token = getCookieToken();
-  const { isLoading, isError, data, error, refetch } = useQuery({
-    queryKey: ["informasiupdate", id],
-    queryFn: async () => {
-      const response = await axios.get(
-        `${RoutesApi.apiUrl}student/assignments/${id}/sistem/${akun}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          params: {
-            intent: "api.get.sistem.edit.informasi.umum",
-          },
-        }
-      );
+  // const { isLoading, isError, data, error, refetch } = useQuery({
+  //   queryKey: ["informasiupdate", id],
+  //   queryFn: async () => {
+  //     const response = await axios.get(
+  //       `${RoutesApi.apiUrl}student/assignments/${id}/sistem/${akun}`,
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //         params: {
+  //           intent: "api.get.sistem.edit.informasi.umum",
+  //         },
+  //       }
+  //     );
 
-      // Check if response data exists
-      if (!response.data) {
-        throw new Error("No data returned from API");
-      }
+  //     // Check if response data exists
+  //     if (!response.data) {
+  //       throw new Error("No data returned from API");
+  //     }
 
-      return response.data.data;
-    },
-    enabled: !!id && !!token,
-  });
+  //     return response.data.data;
+  //   },
+  //   enabled: !!id && !!token,
+  // });
 
+  // const [formData, setFormData] = useState({
+  //   npwp: "",
+  //   jenis_wajib_pajak: "",
+  //   nama: "",
+  //   kategori_wajib_pajak: "",
+  //   negara_asal: "Indonesia",
+  //   nomor_paspor: "",
+  //   tempat_lahir: "",
+  //   tanggal_lahir: "",
+  //   jenis_kelamin: "pria",
+  //   status_perkawinan: "tidak kawin",
+  //   status_hubungan: "",
+  //   agama: "islam",
+  //   jenis_pekerjaan: "swasta",
+  //   nama_ibu_kandung: "",
+  //   nomor_kartu_keluarga: "",
+  //   kewarganegaraan: "WNI",
+  //   bahasa_yang_dipilih: "Bahasa Indonesia",
+  // });
+  console.log("Data fetched:", data);
   const [formData, setFormData] = useState({
-    npwp: "",
-    jenis_wajib_pajak: "",
-    nama: "",
-    kategori_wajib_pajak: "",
+    npwp: data.field_edit_informasi.informasi_umum.npwp,
+    jenis_wajib_pajak: data.jenis_wajib_pajak,
+    nama: data.field_edit_informasi.informasi_umum.nama,
+    kategori_wajib_pajak:
+      data.field_edit_informasi.informasi_umum.kategori_wajib_pajak,
     negara_asal: "Indonesia",
-    nomor_paspor: "",
-    tempat_lahir: "",
-    tanggal_lahir: "",
-    jenis_kelamin: "pria",
-    status_perkawinan: "tidak kawin",
-    status_hubungan: "",
-    agama: "islam",
-    jenis_pekerjaan: "swasta",
-    nama_ibu_kandung: "",
-    nomor_kartu_keluarga: "",
-    kewarganegaraan: "WNI",
-    bahasa_yang_dipilih: "Bahasa Indonesia",
+    // New fields
+    nomor_paspor: data.field_edit_informasi.informasi_umum.nomor_paspor || "",
+    tempat_lahir: data.field_edit_informasi.informasi_umum.tempat_lahir || "",
+    tanggal_lahir: data.field_edit_informasi.informasi_umum.tanggal_lahir || "",
+    jenis_kelamin: data.field_edit_informasi.informasi_umum.jenis_kelamin || "",
+    status_perkawinan:
+      data.field_edit_informasi.informasi_umum.status_perkawinan || "",
+    status_hubungan_keluarga:
+      data.field_edit_informasi.informasi_umum.status_hubungan_keluarga || "",
+    agama: data.field_edit_informasi.informasi_umum.agama || "",
+    jenis_pekerjaan:
+      data.field_edit_informasi.informasi_umum.jenis_pekerjaan || "",
+    nama_ibu_kandung:
+      data.field_edit_informasi.informasi_umum.nama_ibu_kandung || "",
+    nomor_kartu_keluarga:
+      data.field_edit_informasi.informasi_umum.nomor_kartu_keluarga || "",
+    kewarganegaraan:
+      data.field_edit_informasi.informasi_umum.kewarganegaraan || "WNI",
+    bahasa:
+      data.field_edit_informasi.informasi_umum.bahasa || "Bahasa Indonesia",
   });
-  useEffect(() => {
-    if (
-      data &&
-      data.field_edit_informasi &&
-      data.field_edit_informasi.informasi_umum
-    ) {
-      // Initialize form data with values from API response
-      setFormData({
-        npwp: data.field_edit_informasi.informasi_umum.npwp || "",
-        jenis_wajib_pajak:
-          data.field_edit_informasi.informasi_umum.jenis_wajib_pajak || "",
-        nama:
-          data.field_edit_informasi.informasi_umum.nama ||
-          "Samudera Edukasi Teknologi",
-        kategori_wajib_pajak:
-          data.field_edit_informasi.informasi_umum.kategori_wajib_pajak || "",
-        negara_asal:
-          data.field_edit_informasi.informasi_umum.negara_asal || "Indonesia",
-        nomor_paspor:
-          data.field_edit_informasi.informasi_umum.nomor_paspor || "",
-        tempat_lahir:
-          data.field_edit_informasi.informasi_umum.tempat_lahir || "",
-        tanggal_lahir:
-          data.field_edit_informasi.informasi_umum.tanggal_lahir || "",
-        jenis_kelamin:
-          data.field_edit_informasi.informasi_umum.jenis_kelamin || "pria",
-        status_perkawinan:
-          data.field_edit_informasi.informasi_umum.status_perkawinan ||
-          "tidak kawin",
-        status_hubungan:
-          data.field_edit_informasi.informasi_umum.status_hubungan || "",
-        agama: data.field_edit_informasi.informasi_umum.agama || "islam",
-        jenis_pekerjaan:
-          data.field_edit_informasi.informasi_umum.jenis_pekerjaan || "swasta",
-        nama_ibu_kandung:
-          data.field_edit_informasi.informasi_umum.nama_ibu_kandung || "",
-        nomor_kartu_keluarga:
-          data.field_edit_informasi.informasi_umum.nomor_kartu_keluarga || "",
-        kewarganegaraan:
-          data.field_edit_informasi.informasi_umum.kewarganegaraan || "WNI",
-        bahasa_yang_dipilih:
-          data.field_edit_informasi.informasi_umum.bahasa_yang_dipilih ||
-          "Bahasa Indonesia",
-      });
+  // useEffect(() => {
+  //   if (
+  //     data &&
+  //     data.field_edit_informasi &&
+  //     data.field_edit_informasi.informasi_umum
+  //   ) {
+  //     // Initialize form data with values from API response
+  //     setFormData({
+  //       npwp: data.field_edit_informasi.informasi_umum.npwp || "",
+  //       jenis_wajib_pajak:
+  //         data.field_edit_informasi.informasi_umum.jenis_wajib_pajak || "",
+  //       nama:
+  //         data.field_edit_informasi.informasi_umum.nama ||
+  //         "Samudera Edukasi Teknologi",
+  //       kategori_wajib_pajak:
+  //         data.field_edit_informasi.informasi_umum.kategori_wajib_pajak || "",
+  //       negara_asal:
+  //         data.field_edit_informasi.informasi_umum.negara_asal || "Indonesia",
+  //       nomor_paspor:
+  //         data.field_edit_informasi.informasi_umum.nomor_paspor || "",
+  //       tempat_lahir:
+  //         data.field_edit_informasi.informasi_umum.tempat_lahir || "",
+  //       tanggal_lahir:
+  //         data.field_edit_informasi.informasi_umum.tanggal_lahir || "",
+  //       jenis_kelamin:
+  //         data.field_edit_informasi.informasi_umum.jenis_kelamin || "pria",
+  //       status_perkawinan:
+  //         data.field_edit_informasi.informasi_umum.status_perkawinan ||
+  //         "tidak kawin",
+  //       status_hubungan:
+  //         data.field_edit_informasi.informasi_umum.status_hubungan || "",
+  //       agama: data.field_edit_informasi.informasi_umum.agama || "islam",
+  //       jenis_pekerjaan:
+  //         data.field_edit_informasi.informasi_umum.jenis_pekerjaan || "swasta",
+  //       nama_ibu_kandung:
+  //         data.field_edit_informasi.informasi_umum.nama_ibu_kandung || "",
+  //       nomor_kartu_keluarga:
+  //         data.field_edit_informasi.informasi_umum.nomor_kartu_keluarga || "",
+  //       kewarganegaraan:
+  //         data.field_edit_informasi.informasi_umum.kewarganegaraan || "WNI",
+  //       bahasa_yang_dipilih:
+  //         data.field_edit_informasi.informasi_umum.bahasa_yang_dipilih ||
+  //         "Bahasa Indonesia",
+  //     });
 
-      console.log(
-        "Form data initialized with API data:",
-        data.field_edit_informasi.informasi_umum
-      );
-    }
-  }, [data]);
+  //     console.log(
+  //       "Form data initialized with API data:",
+  //       data.field_edit_informasi.informasi_umum
+  //     );
+  //   }
+  // }, [data]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -176,32 +205,31 @@ const EditDataProfil = () => {
     }));
   };
 
-  if (isLoading) {
-    return (
-      <div className="loading">
-        <ClipLoader color="#7502B5" size={50} />
-      </div>
-    );
-  }
-  if (isError) {
-    return (
-      <div className="error-container">
-        <p>Error loading data: {error.message}</p>
-        <button
-          onClick={() => refetch()}
-          className="px-4 py-2 bg-fuchsia-500 text-white rounded-md mt-2"
-        >
-          Try Again
-        </button>
-      </div>
-    );
-  }
-  console.log("Data fetched:", data);
+  // if (isLoading) {
+  //   return (
+  //     <div className="loading">
+  //       <ClipLoader color="#7502B5" size={50} />
+  //     </div>
+  //   );
+  // }
+  // if (isError) {
+  //   return (
+  //     <div className="error-container">
+  //       <p>Error loading data: {error.message}</p>
+  //       <button
+  //         onClick={() => refetch()}
+  //         className="px-4 py-2 bg-fuchsia-500 text-white rounded-md mt-2"
+  //       >
+  //         Try Again
+  //       </button>
+  //     </div>
+  //   );
+  // }
   return (
     <div className="flex h-screen bg-gray-100">
       <SidebarProfilSaya
-        nama_akun={data.field_edit_informasi.informasi_umum.nama}
-        npwp_akun={data.field_edit_informasi.informasi_umum.npwp}
+        nama_akun={sidebar.nama_akun}
+        npwp_akun={sidebar.npwp_akun}
         akun={{ id, akun }}
       />
       <div className="flex-grow p-6 bg-white  h-full">
@@ -493,6 +521,7 @@ const EditDataProfil = () => {
                   name="nama_ibu_kandung"
                   className="w-full p-2 border rounded-md bg-white text-gray-600"
                   onChange={handleChange}
+                  placeholder={formData.nama_ibu_kandung}
                   value={formData.nama_ibu_kandung}
                 />
               </div>

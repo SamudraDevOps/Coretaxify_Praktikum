@@ -65,8 +65,8 @@ const ProfilSaya = ({ data, sidebar }) => {
   return (
     <div className="flex h-screen bg-gray-100">
       <SidebarProfilSaya
-        nama_akun={sidebar.data.nama_akun}
-        npwp_akun={sidebar.data.npwp_akun}
+        nama_akun={sidebar.nama_akun}
+        npwp_akun={sidebar.npwp_akun}
         akun={{ id, akun }}
       />
       <main className="flex-auto p-3 bg-white rounded-md h-full">

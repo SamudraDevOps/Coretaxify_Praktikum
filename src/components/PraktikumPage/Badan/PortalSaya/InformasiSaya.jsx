@@ -29,21 +29,23 @@ const InformasiSayaBadan = ({ data, sidebar }) => {
   return (
     <div className="flex h-screen bg-gray-100">
       <SidebarProfilSayaBadan
-        nama_akun={data.nama_akun}
-        npwp_akun={data.npwp_akun}
+        nama_akun={sidebar.nama_akun}
+        npwp_akun={sidebar.npwp_akun}
         akun={{ id, akun }}
       />
       <main className="flex-auto p-3 bg-white rounded-md h-full">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-semibold">Informasi Umum Wajib Pajak</h2>
-          <button
-            className="px-4 py-2 bg-yellow-300 hover:bg-yellow-400 text-blue-900 rounded-md"
-            onClick={() =>
-              (window.location.href = `/admin/praktikum/${getUserTypePath()}/profil-saya/informasi-umum/edit-data-profil`)
-            }
-          >
-            Edit
-          </button>
+          <a href={`/praktikum/${id}/sistem/${akun}/edit-informasi-umum`}>
+            <button
+              className="px-4 py-2 bg-yellow-300 hover:bg-yellow-400 text-blue-900 rounded-md"
+              // onClick={() =>
+              //   (window.location.href = `/admin/praktikum/${getUserTypePath()}/profil-saya/informasi-umum/edit-data-profil`)
+              // }
+            >
+              Edit
+            </button>
+          </a>
         </div>
 
         <div className="w-full p-2 ml-0 border-t">

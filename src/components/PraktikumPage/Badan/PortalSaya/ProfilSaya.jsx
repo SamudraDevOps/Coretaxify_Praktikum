@@ -13,8 +13,8 @@ const ProfilSayaBadan = ({ data, sidebar }) => {
     <div className="flex h-screen bg-gray-100">
       {/* <SidebarProfilSayaBadan /> */}
       <SidebarProfilSayaBadan
-        nama_akun={sidebar.data.nama_akun}
-        npwp_akun={sidebar.data.npwp_akun}
+        nama_akun={sidebar.nama_akun}
+        npwp_akun={sidebar.npwp_akun}
         akun={{ id, akun }}
       />
       <main className="flex-auto p-3 bg-white rounded-md h-full">
