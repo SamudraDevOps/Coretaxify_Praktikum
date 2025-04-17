@@ -28,6 +28,7 @@ import { ClipLoader } from "react-spinners";
 import { RoutesApi } from "@/Routes";
 import { getCsrf } from "@/service/getCsrf";
 import Swal from "sweetalert2";
+import { deleteContract } from "@/hooks/dashboard";
 const EditDataProfil = ({ data, sidebar }) => {
   const [isPerwakilan, setIsPerwakilan] = useState(false);
   const [showInformasiUmum, setShowInformasiUmum] = useState(false);
@@ -130,12 +131,19 @@ const EditDataProfil = ({ data, sidebar }) => {
     bahasa:
       data.field_edit_informasi.informasi_umum.bahasa || "Bahasa Indonesia",
   });
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
   const updateInformasiUmum = useMutation({
     mutationFn: async () => {
       const csrf = await getCsrf();
       return axios.put(
         `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/informasi-umum/${akun}`,
-        formData,
+        contactFormData,
         {
           headers: {
             "Content-Type": "application/json",
@@ -159,58 +167,90 @@ const EditDataProfil = ({ data, sidebar }) => {
       Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
     },
   });
-  // useEffect(() => {
-  //   if (
-  //     data &&
-  //     data.field_edit_informasi &&
-  //     data.field_edit_informasi.informasi_umum
-  //   ) {
-  //     // Initialize form data with values from API response
-  //     setFormData({
-  //       npwp: data.field_edit_informasi.informasi_umum.npwp || "",
-  //       jenis_wajib_pajak:
-  //         data.field_edit_informasi.informasi_umum.jenis_wajib_pajak || "",
-  //       nama:
-  //         data.field_edit_informasi.informasi_umum.nama ||
-  //         "Samudera Edukasi Teknologi",
-  //       kategori_wajib_pajak:
-  //         data.field_edit_informasi.informasi_umum.kategori_wajib_pajak || "",
-  //       negara_asal:
-  //         data.field_edit_informasi.informasi_umum.negara_asal || "Indonesia",
-  //       nomor_paspor:
-  //         data.field_edit_informasi.informasi_umum.nomor_paspor || "",
-  //       tempat_lahir:
-  //         data.field_edit_informasi.informasi_umum.tempat_lahir || "",
-  //       tanggal_lahir:
-  //         data.field_edit_informasi.informasi_umum.tanggal_lahir || "",
-  //       jenis_kelamin:
-  //         data.field_edit_informasi.informasi_umum.jenis_kelamin || "pria",
-  //       status_perkawinan:
-  //         data.field_edit_informasi.informasi_umum.status_perkawinan ||
-  //         "tidak kawin",
-  //       status_hubungan:
-  //         data.field_edit_informasi.informasi_umum.status_hubungan || "",
-  //       agama: data.field_edit_informasi.informasi_umum.agama || "islam",
-  //       jenis_pekerjaan:
-  //         data.field_edit_informasi.informasi_umum.jenis_pekerjaan || "swasta",
-  //       nama_ibu_kandung:
-  //         data.field_edit_informasi.informasi_umum.nama_ibu_kandung || "",
-  //       nomor_kartu_keluarga:
-  //         data.field_edit_informasi.informasi_umum.nomor_kartu_keluarga || "",
-  //       kewarganegaraan:
-  //         data.field_edit_informasi.informasi_umum.kewarganegaraan || "WNI",
-  //       bahasa_yang_dipilih:
-  //         data.field_edit_informasi.informasi_umum.bahasa_yang_dipilih ||
-  //         "Bahasa Indonesia",
-  //     });
-
-  //     console.log(
-  //       "Form data initialized with API data:",
-  //       data.field_edit_informasi.informasi_umum
-  //     );
-  //   }
-  // }, [data]);
-
+  const [contactFormData, setContactFormData] = useState({
+    jenis_kontak: "",
+    nomor_telpon: "",
+    nomor_handphone: "",
+    nomor_faksimile: "",
+    alamat_email: "",
+    alamat_situs_wajib: "",
+    keterangan: "",
+    tanggal_mulai: "",
+    tanggal_berakhir: "",
+  });
+  const handleContactChange = (e) => {
+    const { name, value } = e.target;
+    setContactFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+  // http://127.0.0.1:8000/api/student/assignments/1/sistem/1/detail-kontak
+  const createContact = useMutation({
+    mutationFn: async () => {
+      const csrf = await getCsrf();
+      return axios.post(
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/detail-kontak`,
+        contactFormData,
+        {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": csrf,
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+    },
+    onSuccess: (data) => {
+      console.log(data);
+      Swal.fire(
+        "Berhasil!",
+        "Data detail kontak berhasil disimpan!",
+        "success"
+      ).then((result) => {
+        if (result.isConfirmed) {
+          window.location.reload();
+        }
+      });
+    },
+    onError: (error) => {
+      console.error("Error saving data:", error);
+      Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
+    },
+  });
+  const deleteContact = useMutation({
+    mutationFn: async (id) => {
+      const csrf = await getCsrf();
+      return axios.delete(
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/detail-kontak/${id}`,
+        {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": csrf,
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+    },
+    onSuccess: (data) => {
+      console.log(data);
+      Swal.fire(
+        "Berhasil!",
+        "Data detail kontak berhasil dihapus!",
+        "success"
+      ).then((result) => {
+        if (result.isConfirmed) {
+          window.location.reload();
+        }
+      });
+    },
+    onError: (error) => {
+      console.error("Error saving data:", error);
+      Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
+    },
+  });
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(formData);
@@ -229,34 +269,6 @@ const EditDataProfil = ({ data, sidebar }) => {
     //     }
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
-
-  // if (isLoading) {
-  //   return (
-  //     <div className="loading">
-  //       <ClipLoader color="#7502B5" size={50} />
-  //     </div>
-  //   );
-  // }
-  // if (isError) {
-  //   return (
-  //     <div className="error-container">
-  //       <p>Error loading data: {error.message}</p>
-  //       <button
-  //         onClick={() => refetch()}
-  //         className="px-4 py-2 bg-fuchsia-500 text-white rounded-md mt-2"
-  //       >
-  //         Try Again
-  //       </button>
-  //     </div>
-  //   );
-  // }
   return (
     <div className="flex h-screen bg-gray-100">
       <SidebarProfilSaya
@@ -1044,7 +1056,11 @@ const EditDataProfil = ({ data, sidebar }) => {
                       <label className="block text-sm font-medium text-gray-700">
                         Jenis Kontak
                       </label>
-                      <select className="w-full p-2 border rounded-md bg-white mt-1">
+                      <select
+                        className="w-full p-2 border rounded-md bg-white mt-1"
+                        name="jenis_kontak"
+                        onChange={handleContactChange}
+                      >
                         <option value="kontak-alternatif-wajib-pajak">
                           Kontak Alternatif Wajib Pajak
                         </option>
@@ -1068,8 +1084,10 @@ const EditDataProfil = ({ data, sidebar }) => {
                       </label>
                       <input
                         type="text"
+                        name="nomor_telpon"
                         className="w-full p-2 border rounded-md bg-white mt-1"
                         placeholder="Masukkan nomor telepon"
+                        onChange={handleContactChange}
                       />
                     </div>
                     <div>
@@ -1078,7 +1096,9 @@ const EditDataProfil = ({ data, sidebar }) => {
                       </label>
                       <input
                         type="text"
+                        name="nomor_handphone"
                         className="w-full p-2 border rounded"
+                        onChange={handleContactChange}
                       />
                     </div>
                     <div>
@@ -1087,7 +1107,9 @@ const EditDataProfil = ({ data, sidebar }) => {
                       </label>
                       <input
                         type="text"
+                        name="nomor_faksimile"
                         className="w-full p-2 border rounded"
+                        onChange={handleContactChange}
                       />
                     </div>
                     <div>
@@ -1096,8 +1118,10 @@ const EditDataProfil = ({ data, sidebar }) => {
                       </label>
                       <input
                         type="text"
+                        name="alamat_email"
                         className="w-full p-2 border rounded bg-gray-100 cursor-not-allowed"
-                        disabled
+                        onChange={handleContactChange}
+                        // disabled
                       />
                       {/* Ngelink dari upload awal akun */}
                     </div>
@@ -1107,14 +1131,20 @@ const EditDataProfil = ({ data, sidebar }) => {
                       </label>
                       <input
                         type="text"
+                        name="alamat_situs_wajib"
                         className="w-full p-2 border rounded"
+                        onChange={handleContactChange}
                       />
                     </div>
                     <div>
                       <label className="block text-sm font-medium">
                         Keterangan
                       </label>
-                      <textarea className="w-full p-2 border rounded "></textarea>
+                      <textarea
+                        name="keterangan"
+                        className="w-full p-2 border rounded"
+                        onChange={handleContactChange}
+                      ></textarea>
                     </div>
                     <div>
                       <label className="block text-sm font-medium">
@@ -1122,7 +1152,9 @@ const EditDataProfil = ({ data, sidebar }) => {
                       </label>
                       <input
                         type="date"
+                        name="tanggal_mulai"
                         className="w-full p-2 border rounded"
+                        onChange={handleContactChange}
                       />
                     </div>
                     <div>
@@ -1131,15 +1163,22 @@ const EditDataProfil = ({ data, sidebar }) => {
                       </label>
                       <input
                         type="date"
+                        name="tanggal_berakhir"
                         className="w-full p-2 border rounded"
+                        onChange={handleContactChange}
                       />
                     </div>
                   </div>
+
                   <AlertDialogFooter className="flex justify-end mt-6 space-x-2">
                     <AlertDialogCancel className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600">
                       Batal
                     </AlertDialogCancel>
-                    <AlertDialogAction className="bg-blue-900 text-white px-4 py-2 rounded-md hover:bg-blue-950">
+                    <AlertDialogAction
+                      onClick={() => createContact.mutate()}
+                      // onClick={()=>console.log(contactFormData)}
+                      className="bg-blue-900 text-white px-4 py-2 rounded-md hover:bg-blue-950"
+                    >
                       Simpan
                     </AlertDialogAction>
                   </AlertDialogFooter>
@@ -1164,39 +1203,72 @@ const EditDataProfil = ({ data, sidebar }) => {
                   </tr>
                 </thead>
                 <tbody className="text-gray-600">
-                  {contacts.length === 0 ? (
+                  {data.field_edit_informasi.detail_kontak.length === 0 ? (
                     <tr>
                       <td colSpan="10" className="text-center p-4 border">
                         Belum ada kontak
                       </td>
                     </tr>
                   ) : (
-                    contacts.map((contact, index) => (
-                      <tr key={index} className="bg-gray-100">
-                        <td className="px-4 py-4 border">
-                          <button>Edit</button>
-                        </td>
-                        <td className="px-2 py-4 border">{contact.jenis}</td>
-                        <td className="px-4 py-4 border">{contact.telepon}</td>
-                        <td className="px-4 py-4 border">
-                          {contact.handphone}
-                        </td>
-                        <td className="px-4 py-4 border">
-                          {contact.faksimile}
-                        </td>
-                        <td className="px-4 py-4 border">{contact.email}</td>
-                        <td className="px-4 py-4 border">{contact.situsweb}</td>
-                        <td className="px-4 py-4 border">
-                          {contact.keterangan}
-                        </td>
-                        <td className="px-4 py-4 border">
-                          {contact.tanggalMulai}
-                        </td>
-                        <td className="px-4 py-4 border">
-                          {contact.tanggalBerakhir}
-                        </td>
-                      </tr>
-                    ))
+                    data.field_edit_informasi.detail_kontak.map(
+                      (contact, index) => (
+                        <tr key={index} className="bg-gray-100">
+                          <td className="px-4 py-4 border flex gap-2">
+                            <button>Edit</button>
+                            <button
+                              className="action-button delete"
+                              onClick={() => {
+                                Swal.fire({
+                                  title: "Hapus Kelas?",
+                                  text: "Kelas akan dihapus secara permanen!",
+                                  icon: "warning",
+                                  showCancelButton: true,
+                                  confirmButtonText: "Ya, hapus!",
+                                  cancelButtonText: "Batal",
+                                }).then((result) => {
+                                  if (result.isConfirmed) {
+                                    deleteContact.mutate(contact.id);
+                                  }
+                                });
+                              }}
+                            >
+                              {deleteContact.status == "pending" ? (
+                                <p>Loading...</p>
+                              ) : (
+                                <>Delete</>
+                              )}
+                            </button>
+                          </td>
+                          <td className="px-2 py-4 border">
+                            {contact.jenis_kontak}
+                          </td>
+                          <td className="px-4 py-4 border">
+                            {contact.nomor_telpon}
+                          </td>
+                          <td className="px-4 py-4 border">
+                            {contact.nomor_handphone}
+                          </td>
+                          <td className="px-4 py-4 border">
+                            {contact.nomor_faksimile}
+                          </td>
+                          <td className="px-4 py-4 border">
+                            {contact.alamat_email}
+                          </td>
+                          <td className="px-4 py-4 border">
+                            {contact.alamat_situs_wajib}
+                          </td>
+                          <td className="px-4 py-4 border">
+                            {contact.keterangan}
+                          </td>
+                          <td className="px-4 py-4 border">
+                            {contact.tanggal_mulai}
+                          </td>
+                          <td className="px-4 py-4 border">
+                            {contact.tanggal_berakhir}
+                          </td>
+                        </tr>
+                      )
+                    )
                   )}
                 </tbody>
               </table>
