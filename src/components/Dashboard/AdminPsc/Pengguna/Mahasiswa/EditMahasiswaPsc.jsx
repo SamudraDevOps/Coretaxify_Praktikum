@@ -140,7 +140,7 @@ const EditMahasiswaPsc = () => {
       }
     },
 
-    onSuccess: (variables) => {
+    onSuccess: (data, variables) => {
       const { action } = variables;
       if (action === "create") {
         if (Array.isArray(data)) {

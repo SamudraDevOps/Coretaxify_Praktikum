@@ -107,7 +107,7 @@ export default function UploadSoal() {
         });
       }
     },
-    onSuccess: (variables) => {
+    onSuccess: (data, variables) => {
       const { action } = variables;
       if (action === "create") {
         Swal.fire("Berhasil!", "Soal berhasil dibuat!", "success");
