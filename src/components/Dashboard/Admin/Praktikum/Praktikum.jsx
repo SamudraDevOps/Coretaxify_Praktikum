@@ -67,15 +67,7 @@ export default function Praktikum() {
             Authorization: `Bearer ${cookies.token}`,
           },
         });
-      } else if (action === "delete" && id) {
-        const deleteEndpoint = RoutesApi.admin.assignments.destroy(id);
-        return await axios.delete(deleteEndpoint.url, {
-          headers: {
-            "X-CSRF-TOKEN": response.data.token,
-            Authorization: `Bearer ${cookies.token}`,
-          },
-        });
-      }
+      } 
     },
     onSuccess: (data, variables) => {
       const { action } = variables;
@@ -107,6 +99,10 @@ export default function Praktikum() {
     });
 
     setIsUpdateOpen(true);
+  };
+
+  const handleViewMembers = (assignmentId) => {
+    navigate(`/admin/praktikum/${assignmentId}/members`);
   };
 
   const handleSort = (key) => {
@@ -184,7 +180,6 @@ export default function Praktikum() {
               <th className="">Instansi</th>
               <th className="">Status</th>
               <th className="">Aksi</th>
-              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -203,27 +198,10 @@ export default function Praktikum() {
                     Edit
                   </button>
                   <button
-                    className="action-button delete"
-                    onClick={() => {
-                      Swal.fire({
-                        title: "Hapus Praktikum?",
-                        text: "Praktikum akan dihapus secara permanen!",
-                        icon: "warning",
-                        showCancelButton: true,
-                        confirmButtonText: "Ya, hapus!",
-                        cancelButtonText: "Batal",
-                        dangerMode: true,
-                      }).then((result) => {
-                        if (result.isConfirmed) {
-                          mutation.mutate({
-                            id: item.id,
-                            action: "delete",
-                          });
-                        }
-                      });
-                    }}
+                    className="action-button view"
+                    onClick={() => handleViewMembers(item.id)}
                   >
-                    Delete
+                    Detail
                   </button>
                 </td>
               </tr>

@@ -35,6 +35,7 @@ import Praktikum from "./components/Dashboard/Dosen/Praktikum/Praktikum";
 // import Praktikum from "./components/Dashboard/Admin/Praktikum/Praktikum";
 import Ujian from "./components/Dashboard/Admin/Praktikum/Ujian";
 import AdminPraktikum from "./components/Dashboard/Admin/Praktikum/Praktikum";
+import AdminPraktikumMember from "./components/Dashboard/Admin/Praktikum/Members/PraktikumMember";
 import UploadSoal from "./components/Dashboard/Admin/Praktikum/UploadSoal";
 import KontrakBackup from "./components/Dashboard/Admin/Kontrak/KontrakBackup";
 import PraktikumBackup from "./components/Dashboard/Admin/Praktikum/PraktikumBackup";
@@ -219,6 +220,7 @@ const Main = () => {
           <Route path="/admin/edit-dosen" element={<EditDosen />} />
           <Route path="/admin/upload-soal" element={<UploadSoal />} />
           <Route path="/admin/praktikum" element={<AdminPraktikum />} />
+          <Route path="/admin/praktikum/:assignmentId/members" element={<AdminPraktikumMember />} />
           <Route
             path="/admin/coretaxify/coretaxify-send"
             element={<CoretaxifySendDetail />}
