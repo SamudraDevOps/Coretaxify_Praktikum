@@ -219,11 +219,45 @@ const EditDataProfil = ({ data, sidebar }) => {
       Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
     },
   });
+  const updateContact = useMutation({
+    mutationFn: async (contact_id) => {
+      const csrf = await getCsrf();
+
+      return axios.put(
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/detail-kontak/${contact_id}`,
+        contactFormData,
+        {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": csrf,
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+    },
+    onSuccess: (data) => {
+      console.log(data);
+      Swal.fire(
+        "Berhasil!",
+        "Data detail kontak berhasil diubah!",
+        "success"
+      ).then((result) => {
+        if (result.isConfirmed) {
+          window.location.reload();
+        }
+      });
+    },
+    onError: (error) => {
+      console.error("Error saving data:", error);
+      Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
+    },
+  });
   const deleteContact = useMutation({
-    mutationFn: async (id) => {
+    mutationFn: async (contact_id) => {
       const csrf = await getCsrf();
       return axios.delete(
-        `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/detail-kontak/${id}`,
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/detail-kontak/${contact_id}`,
         {
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",
@@ -1214,7 +1248,172 @@ const EditDataProfil = ({ data, sidebar }) => {
                       (contact, index) => (
                         <tr key={index} className="bg-gray-100">
                           <td className="px-4 py-4 border flex gap-2">
-                            <button>Edit</button>
+                            {/* <button>Edit</button> */}
+                            <AlertDialog>
+                              <AlertDialogTrigger
+                                onClick={() => setContactFormData(contact)}
+                                className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"
+                              >
+                                Ubah Kontak
+                              </AlertDialogTrigger>
+                              <AlertDialogContent className="bg-white !min-w-[1000px] rounded-lg shadow-lg ">
+                                <AlertDialogHeader>
+                                  <AlertDialogTitle className="text-xl font-bold">
+                                    Ubah Kontak Wajib Pajak
+                                  </AlertDialogTitle>
+                                </AlertDialogHeader>
+                                <div className="grid gap-4 overflow-auto h-96">
+                                  <div>
+                                    <label className="block text-sm font-medium text-gray-700">
+                                      Jenis Kontak
+                                    </label>
+                                    <select
+                                      className="w-full p-2 border rounded-md bg-white mt-1"
+                                      name="jenis_kontak"
+                                      value={contactFormData.jenis_kontak || ""}
+                                      onChange={handleContactChange}
+                                    >
+                                      <option value="kontak-alternatif-wajib-pajak">
+                                        Kontak Alternatif Wajib Pajak
+                                      </option>
+                                      <option value="kontak-utama-wajib-pajak">
+                                        Kontak Utama Wajib Pajak
+                                      </option>
+                                      <option value="kontak-orang-alternatif">
+                                        Kontak Orang Alternatif
+                                      </option>
+                                      <option value="kontak-orang-utama">
+                                        Kontak Orang Utama
+                                      </option>
+                                      <option value="kontak-teknis-wajib-pajak">
+                                        Kontak Teknis Wajib Pajak
+                                      </option>
+                                    </select>
+                                  </div>
+                                  <div>
+                                    <label className="block text-sm font-medium text-gray-700">
+                                      Nomor Telepon
+                                    </label>
+                                    <input
+                                      type="text"
+                                      name="nomor_telpon"
+                                      className="w-full p-2 border rounded-md bg-white mt-1"
+                                      placeholder="Masukkan nomor telepon"
+                                      value={contactFormData.nomor_telpon || ""}
+                                      onChange={handleContactChange}
+                                    />
+                                  </div>
+                                  <div>
+                                    <label className="block text-sm font-medium">
+                                      Nomor Handphone Baru
+                                    </label>
+                                    <input
+                                      type="text"
+                                      name="nomor_handphone"
+                                      className="w-full p-2 border rounded"
+                                      value={
+                                        contactFormData.nomor_handphone || ""
+                                      }
+                                      onChange={handleContactChange}
+                                    />
+                                  </div>
+                                  <div>
+                                    <label className="block text-sm font-medium">
+                                      Nomor Faksimile
+                                    </label>
+                                    <input
+                                      type="text"
+                                      name="nomor_faksimile"
+                                      className="w-full p-2 border rounded"
+                                      value={
+                                        contactFormData.nomor_faksimile || ""
+                                      }
+                                      onChange={handleContactChange}
+                                    />
+                                  </div>
+                                  <div>
+                                    <label className="block text-sm font-medium">
+                                      Alamat Email
+                                    </label>
+                                    <input
+                                      type="text"
+                                      name="alamat_email"
+                                      className="w-full p-2 border rounded bg-gray-100"
+                                      value={contactFormData.alamat_email || ""}
+                                      onChange={handleContactChange}
+                                    />
+                                  </div>
+                                  <div>
+                                    <label className="block text-sm font-medium">
+                                      Website
+                                    </label>
+                                    <input
+                                      type="text"
+                                      name="alamat_situs_wajib"
+                                      className="w-full p-2 border rounded"
+                                      value={
+                                        contactFormData.alamat_situs_wajib || ""
+                                      }
+                                      onChange={handleContactChange}
+                                    />
+                                  </div>
+                                  <div>
+                                    <label className="block text-sm font-medium">
+                                      Keterangan
+                                    </label>
+                                    <textarea
+                                      name="keterangan"
+                                      className="w-full p-2 border rounded"
+                                      value={contactFormData.keterangan || ""}
+                                      onChange={handleContactChange}
+                                    ></textarea>
+                                  </div>
+                                  <div>
+                                    <label className="block text-sm font-medium">
+                                      Tanggal Mulai
+                                    </label>
+                                    <input
+                                      type="date"
+                                      name="tanggal_mulai"
+                                      className="w-full p-2 border rounded"
+                                      value={
+                                        contactFormData.tanggal_mulai || ""
+                                      }
+                                      onChange={handleContactChange}
+                                    />
+                                  </div>
+                                  <div>
+                                    <label className="block text-sm font-medium">
+                                      Tanggal Berakhir
+                                    </label>
+                                    <input
+                                      type="date"
+                                      name="tanggal_berakhir"
+                                      className="w-full p-2 border rounded"
+                                      value={
+                                        contactFormData.tanggal_berakhir || ""
+                                      }
+                                      onChange={handleContactChange}
+                                    />
+                                  </div>
+                                </div>
+
+                                <AlertDialogFooter className="flex justify-end mt-6 space-x-2">
+                                  <AlertDialogCancel className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600">
+                                    Batal
+                                  </AlertDialogCancel>
+                                  <AlertDialogAction
+                                    onClick={() =>
+                                      updateContact.mutate(contact.id)
+                                    }
+                                    // onClick={()=>console.log(contactFormData)}
+                                    className="bg-blue-900 text-white px-4 py-2 rounded-md hover:bg-blue-950"
+                                  >
+                                    Simpan
+                                  </AlertDialogAction>
+                                </AlertDialogFooter>
+                              </AlertDialogContent>
+                            </AlertDialog>
                             <button
                               className="action-button delete"
                               onClick={() => {
