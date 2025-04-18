@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FaCalendarAlt, FaFilter, FaSearch, FaTimes, FaChevronDown, FaChevronUp } from "react-icons/fa";
 
@@ -8,7 +8,23 @@ const CreateKonsepSPT = () => {
     const [showHeader, setShowHeader] = useState(false);
     const [showPenyerahanBarangJasa, setShowPenyerahanBarangJasa] = useState(false);
     const [showPerolehanBarangJasa, setShowPerolehanBarangJasa] = useState(false);
-    const rows = [
+
+    const [showScrollTop, setShowScrollTop] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setShowScrollTop(window.scrollY > 200);
+        };
+
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
+    const scrollToTop = () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+
+    const rowsPenyerahanBarangdanJasa = [
         "Ekspor BKP/BKP Tidak Berwujud/JKP",
         "Penyerahan yang PPN atau PPN dan PPnBM-nya harus dipungut sendiri dengan DPP Nilai Lain atau Besaran Tertentu (dengan Faktur Pajak Kode 04 dan 05)",
         "Penyerahan yang PPN atau PPN dan PPnBM-nya harus dipungut sendiri kepada turis sesuai dengan Pasal 16E UU PPN (dengan Faktur Pajak Kode 06)",
@@ -19,6 +35,20 @@ const CreateKonsepSPT = () => {
         "Penyerahan yang mendapat fasilitas PPN atau PPnBM Dibebaskan (dengan Faktur Pajak Kode 08)",
         "Penyerahan yang mendapat fasilitas PPN atau PPnBM dengan Faktur Pajak yang dilaporkan secara digunggung"
     ];
+
+    const rowsPerolehanBarangdanJasa = [
+        "A. Impor BKP, Pemanfaatan BKP Tidak Berwujud dan/atau JKP dari luar Daerah Pabean di dalam Daerah Pabean yang Pajak Masukannya dapat dikreditkan",
+        "B. Perolehan BKP/JKP dari dalam negeri dengan DPP Nilai Lain atau Besaran Tertentu yang Pajak Masukannya dapat dikreditkan (dengan Faktur Pajak Kode 04 dan 05)",
+        "C. Perolehan BKP dari dalam negeri selain dengan DPP Nilai Lain yang Pajak Masukannya dapat dikreditkan (dengan Faktur Pajak Kode 01, 09, dan 10)",
+        "D. Perolehan BKP/JKP dari dalam negeri sebagai Pemungut PPN yang Pajak Masukannya dapat dikreditkan (dengan Faktur Pajak Kode 02 dan 03)",
+        "E. Kompensasi kelebihan Pajak Masukan",
+        "F. Hasil penghitungan kembali Pajak Masukan yang telah dikreditkan",
+        "G. Jumlah Pajak Masukan yang dapat diperhitungkan (II.A + II.B + II.C + II.D + II.E + II.F)",
+        "H. Impor atau perolehan BKP/JKP yang Pajak Masukannya tidak dikreditkan dan/atau impor atau perolehan BKP/JKP yang mendapat fasilitas",
+        "I. Impor atau perolehan BKP/JKP dengan Faktur Pajak yang dilaporkan secara digunggung dan barang/jasa yang tidak terutang PPN",
+        "J. Jumlah Perolehan (II.A + II.B + II.C + II.D + II.E + II.F + II.G + II.H + II.I)"
+    ];
+
     const getPrefilled = (i) => ({
         harga: (i === 1 && "105.500.000") || (i === 5 && "651.119.260") || (i === 8 && "756.619.260") || "0",
         dpp: (i === 1 && "96.708.334") || (i === 5 && "596.859.332") || "0",
@@ -164,7 +194,7 @@ const CreateKonsepSPT = () => {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {rows.map((desc, i) => {
+                                                {rowsPenyerahanBarangdanJasa.map((desc, i) => {
                                                     const prefilled = getPrefilled(i);
                                                     const isHargaDisabled = prefilled.harga !== "0";
                                                     const isDppDisabled = prefilled.dpp !== "0";
@@ -232,7 +262,7 @@ const CreateKonsepSPT = () => {
                                         <table className="min-w-full text-sm text-left border overflow-x-auto">
                                             <thead className="bg-purple-700 text-white text-center">
                                                 <tr>
-                                                    <th className="p-2 min-w-[300px]">Penyerahan BKP/JKP yang terutang PPN</th>
+                                                    <th className="p-2 min-w-[300px]"></th>
                                                     <th className="p-2 min-w-[150px]">Harga Jual/Penggantian/ <br />Nilai Ekspor/DPP</th>
                                                     <th className="p-2 min-w-[150px]">DPP Nilai Lain/ DPP</th>
                                                     <th className="p-2 min-w-[150px]">PPN</th>
@@ -240,7 +270,7 @@ const CreateKonsepSPT = () => {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {rows.map((desc, i) => {
+                                                {rowsPerolehanBarangdanJasa.map((desc, i) => {
                                                     const prefilled = getPrefilled(i);
                                                     const isHargaDisabled = prefilled.harga !== "0";
                                                     const isDppDisabled = prefilled.dpp !== "0";
@@ -249,7 +279,7 @@ const CreateKonsepSPT = () => {
                                                     return (
                                                         <tr key={i} className="border-b">
                                                             <td className="p-2 whitespace-normal break-words text-sm">
-                                                                {`${i + 1}. ${desc}`}
+                                                                {` ${desc}`}
                                                             </td>
 
                                                             <td className="p-2">
@@ -299,7 +329,31 @@ const CreateKonsepSPT = () => {
 
                                     </div>
                                 )}
+                                {showScrollTop && (
+                                    <button
+                                        onClick={scrollToTop}
+                                        className="fixed bottom-6 right-6 bg-purple-700 text-white p-3 rounded-full shadow-lg hover:bg-purple-800 transition duration-300 w-12 h-12 flex items-center justify-center"
+                                        aria-label="Scroll to top"
+                                    >
+                                        ↑
+                                    </button>
+                                )}
                             </div>
+                        </TabsContent>
+                        <TabsContent value="a-1">
+                            <h2>Coming Soon</h2>
+                        </TabsContent>
+                        <TabsContent value="a-2">
+                            <h2>Coming Soon</h2>
+                        </TabsContent>
+                        <TabsContent value="b-1">
+                            <h2>Coming Soon</h2>
+                        </TabsContent>
+                        <TabsContent value="b-2">
+                            <h2>Coming Soon</h2>
+                        </TabsContent>
+                        <TabsContent value="c">
+                            <h2>Coming Soon</h2>
                         </TabsContent>
                     </Tabs>
                 </div>
