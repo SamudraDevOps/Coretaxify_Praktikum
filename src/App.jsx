@@ -118,6 +118,7 @@ import TambahFakturKeluaran from "./components/PraktikumPage/Badan/EFaktur/Tamba
 import PajakMasukan from "./components/PraktikumPage/Badan/EFaktur/PajakMasukan";
 import KonsepSPT from "./components/PraktikumPage/Badan/SPT/KonsepSPT";
 import BuatKonsepSPT from "./components/PraktikumPage/Badan/SPT/BuatKonsepSPT";
+import CreateKonsepSPT from "./components/PraktikumPage/Badan/SPT/CreateKonsepSPT";
 // Route Badan
 
 import ProtectedRoutes from "./components/Dashboard/Auth/ProtectedRoutes";
@@ -1003,7 +1004,16 @@ const Main = () => {
                 <BuatKonsepSPT />
               </>
             }
-          /> 
+          />
+          <Route
+            path="/admin/praktikum/2/surat-pemberitahuan-(spt)/tambah-konsep-spt"
+            element={
+              <>
+                <Header />
+                <CreateKonsepSPT />
+              </>
+            }
+          />  
         {/* NOT FOUND ROUTE - LAST REGISTERED ROUTE */}
         <Route path="*" element={<NotFound />} />
       </Routes>
