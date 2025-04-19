@@ -5,9 +5,12 @@ import { FaCalendarAlt, FaFilter, FaSearch, FaTimes, FaChevronDown, FaChevronUp 
 
 const CreateKonsepSPT = () => {
     const [activeTab, setActiveTab] = useState("induk");
-    const [showHeader, setShowHeader] = useState(false);
+    const [showHeaderInduk, setShowHeaderInduk] = useState(false);
     const [showPenyerahanBarangJasa, setShowPenyerahanBarangJasa] = useState(false);
     const [showPerolehanBarangJasa, setShowPerolehanBarangJasa] = useState(false);
+
+    const [showHeadera1, setShowHeadera1] = useState(false);
+    const [showHeadera2, setShowHeadera2] = useState(false);
 
     const [showScrollTop, setShowScrollTop] = useState(false);
 
@@ -75,11 +78,11 @@ const CreateKonsepSPT = () => {
 
                         <TabsContent value="induk">
                             <div className="mt-4">
-                                <div className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full" onClick={() => setShowHeader(!showHeader)}>
+                                <div className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full" onClick={() => setShowHeaderInduk(!showHeaderInduk)}>
                                     <h3 className='text-lg font-semibold'>Header</h3>
-                                    {showHeader ? <FaChevronUp /> : <FaChevronDown />}
+                                    {showHeaderInduk ? <FaChevronUp /> : <FaChevronDown />}
                                 </div>
-                                {showHeader && (
+                                {showHeaderInduk && (
                                     <div className="border rounded-md p-4 mb-4">
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                             {/* Kiri */}
@@ -341,7 +344,86 @@ const CreateKonsepSPT = () => {
                             </div>
                         </TabsContent>
                         <TabsContent value="a-1">
-                            <h2>Coming Soon</h2>
+                            <div className="mt-4">
+                                <div className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full" onClick={() => setShowHeadera1(!showHeadera1)}>
+                                    <h3 className='text-lg font-semibold'>Header</h3>
+                                    {showHeadera1 ? <FaChevronUp /> : <FaChevronDown />}
+                                </div>
+                                {showHeadera1 && (
+                                    <div className="border rounded-md p-4 mb-4">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            {/* Kiri */}
+                                            <div>
+                                                <label className="block font-medium text-gray-700">NAMA PKP *</label>
+                                                <input
+                                                    type="text"
+                                                    readOnly
+                                                    value="KANTOR AKUNTAN PUBLIK MOH WILDAN DAN ADI DARMAWAN"
+                                                    className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
+                                                />
+                                            </div>
+
+                                            <div>
+                                                <label className="block font-medium text-gray-700">MASA *</label>
+                                                <input
+                                                    type="text"
+                                                    readOnly
+                                                    value="032025"
+                                                    className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block font-medium text-gray-700">NPWP*</label>
+                                                <input
+                                                    type="text"
+                                                    readOnly
+                                                    value="0934274002429000"
+                                                    className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block font-medium text-gray-700">Normal/Pembetulan</label>
+                                                <select disabled className="w-full p-2 border rounded-md bg-gray-100 text-gray-600 cursor-not-allowed">
+                                                    <option>Normal</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+                                <div className="border">
+                                    <table className="min-w-full text-sm text-left border overflow-x-auto">
+                                        <thead className="bg-purple-700 text-white text-center">
+                                            <tr>
+                                                <th className="p-2 border-b ">No</th>
+                                                <th className="p-2 border-b min-w-[200px]">Nama Pembeli BKP/Penerima Manfaat BKP Tidak Berwujud/Penerima JKP</th>
+                                                <th className="p-2  border-b min-w-[150px]">Dokumen Tertentu Atau Nomor</th>
+                                                <th className="p-2 border-b min-w-[150px]">Dokumen Tertentu Atau Tanggal</th>
+                                                <th className="p-2 border-b min-w-[150px]">DP (Rupiah)</th>
+                                                <th className="p-2 border-b min-w-[150px]">Keterangan</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody className="text-gray-600 text-center">
+                                            <tr>
+                                                <td className="p-2 border-b text-center">1</td>
+                                                <td className="p-2 border-b">KANTOR AKUNTAN PUBLIK MOH WILDAN DAN ADI DARMAWAN</td>
+                                                <td className="p-2 border-b">-</td>
+                                                <td className="p-2 border-b">-</td>
+                                                <td className="p-2 border-b">-</td>
+                                                <td className="p-2 border-b">-</td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot className="text-gray-800 font-semibold bg-gray-100">
+                                            <tr>
+                                                <td className="p-2 text-center min-w-[150px]" colSpan={4}>Jumlah</td>
+                                                <td className="p-2 text-center  ">0</td>
+                                                <td className="p-2"></td>
+                                            </tr>
+                                        </tfoot>
+
+                                    </table>
+
+                                </div>
+                            </div>
                         </TabsContent>
                         <TabsContent value="a-2">
                             <h2>Coming Soon</h2>
