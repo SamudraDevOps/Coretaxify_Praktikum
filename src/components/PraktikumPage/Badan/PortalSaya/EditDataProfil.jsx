@@ -1158,11 +1158,31 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                   </tr>
                 </thead>
                 <tbody className="text-gray-600">
-                  <tr className="bg-gray-100">
-                    <td colSpan="10" className="text-center p-4 border">
-                      Belum ada data
-                    </td>
-                  </tr>
+                  {data.field_edit_informasi.pihak_terkait.length === 0 ? (
+                    <tr className="bg-gray-100">
+                      <td colSpan="10" className="text-center p-4 border">
+                        Belum ada data
+                      </td>
+                    </tr>
+                  ) : (
+                    data.field_edit_informasi.pihak_terkait.map((pihak) => (
+                      <tr className="bg-gray-100">
+                        <td>m</td>
+                        <td className="text-center p-4 border">
+                          {pihak.jenis_orang_terkait}
+                        </td>
+                        <td className="text-center p-4 border">{pihak.npwp}</td>
+                        <td className="text-center p-4 border">{pihak.npwp}</td>
+                        <td className="text-center p-4 border">{pihak.npwp}</td>
+                        <td className="text-center p-4 border">
+                          {pihak.nama_pengurus}
+                        </td>
+                        <td className="text-center p-4 border">
+                          {pihak.nama_pengurus}
+                        </td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>
