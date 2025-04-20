@@ -21,12 +21,13 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useParams } from "react-router";
 import axios from "axios";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { getCsrf } from "@/service/getCsrf";
 import { getCookieToken } from "@/service";
 import { RoutesApi } from "@/Routes";
 import { useCookies } from "react-cookie";
 import Swal from "sweetalert2";
+import { ClipLoader } from "react-spinners";
 
 const EditDataProfilBadan = ({ data, sidebar }) => {
   const [cookies] = useCookies(["token"]);
@@ -100,6 +101,82 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
       data?.field_edit_informasi?.informasi_umum?.kewarganegaraan || "WNI",
     bahasa:
       data?.field_edit_informasi?.informasi_umum?.bahasa || "Bahasa Indonesia",
+  });
+
+  const {
+    data: orangTerkait,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["orang_terkait"],
+    queryFn: async () => {
+      const data = await axios.get(
+        RoutesApi.apiUrl + `student/assignments/${id}/sistem/${akun}`,
+        {
+          headers: {
+            Authorization: `Bearer ${cookies.token}`,
+          },
+          params: {
+            intent: "api.sistem.get.akun.orang.pibadi",
+          },
+        }
+      );
+      // console.log(data.data);
+      return data.data;
+    },
+  });
+  const [formOrangTerkait, setFormOrangTerkait] = useState({
+    // jenis_orang_terkait: "",
+    sub_orang_terkait: "",
+    kewarganegaraan: "Indonesia",
+    negara_asal: "Indonesia",
+    keterangan: "keterangan",
+    akun_op: "",
+    tanggal_mulai: "",
+    tanggal_berakhir: "",
+  });
+  const handlePersonTypeChange = (e) => {
+    console.log("AA");
+    const { name, value } = e.target;
+    console.log(name, value);
+    setFormOrangTerkait((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+  const createPihakTerkait = useMutation({
+    mutationFn: async (data) => {
+      const csrf = await getCsrf();
+      return axios.post(
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/pihak-terkait`,
+        formOrangTerkait,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": csrf,
+            Authorization: `Bearer ${cookies.token}`,
+          },
+        }
+      );
+    },
+    onSuccess: (data) => {
+      console.log(data);
+      Swal.fire(
+        "Berhasil!",
+        "Data informasi umum berhasil disimpan!",
+        "success"
+      ).then((result) => {
+        if (result.isConfirmed) {
+          window.location.reload();
+        }
+      });
+    },
+    onError: (error) => {
+      console.error("Error saving data:", error);
+      Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
+    },
   });
 
   const handleInformasiUmumChange = (e) => {
@@ -255,6 +332,14 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
       Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
     },
   });
+  if (isLoading) {
+    return (
+      <div className="loading">
+        <ClipLoader color="#7502B5" size={50} />
+      </div>
+      // <div className="h-full w-full text-2xl italic font-bold text-center flex items-center justify-center">Loading...</div>
+    );
+  }
   return (
     <div className="flex h-screen bg-gray-100">
       <SidebarProfilSayaBadan
@@ -1180,6 +1265,15 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                         <td className="text-center p-4 border">
                           {pihak.nama_pengurus}
                         </td>
+                        <td className="text-center p-4 border">
+                          {pihak.keterangan}
+                        </td>
+                        <td className="text-center p-4 border">
+                          {pihak.tanggal_mulai}
+                        </td>
+                        <td className="text-center p-4 border">
+                          {pihak.tanggal_berakhir}
+                        </td>
                       </tr>
                     ))
                   )}
@@ -1221,22 +1315,26 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                       <div className="h-full mt-0">
                         {selectedType === "related-person" && (
                           <>
-                            <div className="grid grid-cols-4 gap-4 ">
-                              <div className="">
+                            <div className="grid grid-cols-4 gap-4">
+                              <div>
                                 <label className="block text-sm font-medium">
                                   Apakah PIC?
                                 </label>
                                 <input
                                   type="checkbox"
+                                  name="is_pic"
                                   className="justify-start p-3 border rounded"
-                                  checked
+                                  // checked={isPIC}
+                                  // onChange={handleCheckboxChange}
                                 />
                               </div>
+
                               <div>
                                 <label className="block text-sm font-medium">
                                   Jenis Orang Terkait
                                 </label>
                                 <select
+                                  name="jenis_orang_terkait"
                                   className="w-full p-2 border rounded"
                                   value={selectedRelatedPersonType}
                                   onChange={(e) =>
@@ -1252,12 +1350,18 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                                   <option value="wakil">Wakil</option>
                                 </select>
                               </div>
+
                               {selectedRelatedPersonType === "direktur" && (
                                 <div>
                                   <label className="block text-sm font-medium">
                                     Sub Jenis Orang Terkait
                                   </label>
-                                  <select className="w-full p-2 border rounded">
+                                  <select
+                                    className="w-full p-2 border rounded"
+                                    // value={handlePersonTypeChange}
+                                    name="sub_orang_terkait"
+                                    onChange={handlePersonTypeChange}
+                                  >
                                     <option value="">
                                       -- Pilih Sub Jenis --
                                     </option>
@@ -1266,7 +1370,7 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                                     </option>
                                     <option value="direktur">Direktur</option>
                                     <option value="direktur-independen">
-                                      Diretur Independen
+                                      Direktur Independen
                                     </option>
                                     <option value="direktur-utama">
                                       Direktur Utama
@@ -1286,12 +1390,17 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                                   </select>
                                 </div>
                               )}
+
                               {selectedRelatedPersonType === "komisaris" && (
                                 <div>
                                   <label className="block text-sm font-medium">
                                     Sub Jenis Orang Terkait
                                   </label>
-                                  <select className="w-full p-2 border rounded">
+                                  <select
+                                    className="w-full p-2 border rounded"
+                                    name="sub_orang_terkait"
+                                    onChange={handlePersonTypeChange}
+                                  >
                                     <option value="">
                                       -- Pilih Sub Jenis --
                                     </option>
@@ -1317,12 +1426,18 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                                   </select>
                                 </div>
                               )}
+
                               {selectedRelatedPersonType === "wakil" && (
                                 <div>
                                   <label className="block text-sm font-medium">
                                     Sub Jenis Orang Terkait
                                   </label>
-                                  <select className="w-full p-2 border rounded">
+                                  <select
+                                    // name="sub_jenis_orang_terkait"
+                                    className="w-full p-2 border rounded"
+                                    name="sub_orang_terkait"
+                                    onChange={handlePersonTypeChange}
+                                  >
                                     <option value="">
                                       -- Pilih Sub Jenis --
                                     </option>
@@ -1337,6 +1452,7 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                                   </select>
                                 </div>
                               )}
+
                               {selectedRelatedPersonType === "lainnya" && (
                                 <div>
                                   <label className="block text-sm font-medium">
@@ -1344,94 +1460,167 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                                   </label>
                                   <input
                                     type="text"
+                                    name="keterangan"
                                     className="w-full p-2 border rounded"
+                                    // value={formData.keterangan}
+                                    // onChange={handleInputChange}
+                                    onChange={handlePersonTypeChange}
                                   />
                                 </div>
                               )}
+
                               <div className="mt-2"></div>
+
                               <div className="mt-2">
                                 <label className="block text-sm font-medium">
                                   NIK
                                 </label>
-                                <select className="w-full p-2 border rounded">
-                                  <option value="nik-1">1234567890</option>
-                                  <option value="nik-2">0987654321</option>
-                                  <option value="nik-3">1234567890</option>
+                                <select
+                                  name="akun_op"
+                                  className="w-full p-2 border rounded"
+                                  // value={formData.nik_id}
+                                  onChange={(e) => {
+                                    setFormOrangTerkait({
+                                      ...formOrangTerkait,
+                                      akun_op: e.target.value,
+                                    });
+                                    const selectedOrang =
+                                      orangTerkait.data.find(
+                                        (orang) => orang.id == e.target.value
+                                      );
+                                    if (selectedOrang) {
+                                      // Update the name input field using document.getElementById
+                                      const nameInput =
+                                        document.getElementById(
+                                          "nama-orang-terkait"
+                                        );
+                                      if (nameInput) {
+                                        nameInput.value =
+                                          selectedOrang.nama_akun ||
+                                          "Nama tidak tersedia";
+                                      }
+                                    }
+                                  }}
+                                >
+                                  <option value="">-- Pilih NIK --</option>
+                                  {orangTerkait?.data?.map((orang) => (
+                                    <option key={orang.id} value={orang.id}>
+                                      {orang.npwp_akun}
+                                    </option>
+                                  ))}
                                 </select>
-                                {/* Ngelink dari akun */}
                               </div>
+
                               <div className="mt-2">
                                 <label className="block text-sm font-medium">
                                   Nama
                                 </label>
                                 <input
+                                  id="nama-orang-terkait"
                                   type="text"
+                                  name="nama"
+                                  // value={formData.nama}
                                   className="w-full p-2 border rounded cursor-not-allowed bg-gray-200"
                                   disabled
                                 />
-                                {/* Ngelink dari NIK */}
                               </div>
+
                               <div className="mt-2">
                                 <label className="block text-sm font-medium">
                                   Kewarganegaraan
                                 </label>
                                 <input
                                   type="text"
+                                  name="kewarganegaraan"
                                   className="w-full p-2 border rounded cursor-not-allowed bg-gray-200"
-                                  value="Indonesia"
+                                  // value={formData.kewarganegaraan}
                                   readOnly
                                   disabled
                                 />
                               </div>
+
                               <div className="mt-2">
                                 <label className="block text-sm font-medium">
                                   Negara Asal
                                 </label>
                                 <input
                                   type="text"
+                                  name="negara_asal"
                                   className="w-full p-2 border rounded cursor-not-allowed bg-gray-200"
-                                  value="Indonesia"
+                                  // value={formData.negara_asal}
                                   readOnly
                                   disabled
                                 />
                               </div>
+
                               <div className="mt-2">
                                 <label className="block text-sm font-medium">
                                   Email
                                 </label>
                                 <input
                                   type="email"
+                                  id="alamat-email-terkait"
+                                  name="email"
+                                  // value={formData.email}
+                                  // onChange={handleInputChange}
                                   className="w-full p-2 border rounded"
                                 />
                               </div>
+
                               <div className="mt-2">
                                 <label className="block text-sm font-medium">
                                   Nomor Telepon
                                 </label>
                                 <input
                                   type="text"
+                                  name="nomor_telepon"
+                                  // value={formData.nomor_telepon}
+                                  // onChange={handleInputChange}
                                   className="w-full p-2 border rounded"
                                 />
                               </div>
+
                               <div className="mt-2">
                                 <label className="block text-sm font-medium">
                                   Tanggal Mulai
                                 </label>
                                 <input
                                   type="date"
+                                  name="tanggal_mulai"
+                                  // value={o.tanggal_mulai}
+                                  onChange={handlePersonTypeChange}
                                   className="w-full p-2 border rounded"
                                 />
                               </div>
+
                               <div className="mt-2">
                                 <label className="block text-sm font-medium">
                                   Tanggal Berakhir
                                 </label>
                                 <input
                                   type="date"
+                                  name="tanggal_berakhir"
+                                  // value={o.tanggal_berakhir}
+                                  onChange={handlePersonTypeChange}
                                   className="w-full p-2 border rounded"
                                 />
                               </div>
+
+                              <div className="col-span-4 flex justify-end mt-4">
+                                <button
+                                  type="button"
+                                  // onClick={() => createRelatedPerson.mutate()}
+                                  onClick={() => console.log(formOrangTerkait)}
+                                  className="bg-blue-900 text-white px-4 py-2 rounded hover:bg-blue-950"
+                                  // disabled={createRelatedPerson.isPending}
+                                >
+                                  {/* {createRelatedPerson.isPending
+                                    ? "Menyimpan..."
+                                    : "Simpan"} */}
+                                </button>
+                              </div>
                             </div>
+
                             <div className="flex justify-end p-4 border-t">
                               <button
                                 onClick={closeModal}
@@ -1439,7 +1628,11 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                               >
                                 Batal
                               </button>
-                              <button className="bg-blue-900 text-white px-4 py-2 rounded hover:bg-blue-950">
+                              <button
+                                // onClick={() => console.log(formOrangTerkait)}
+                                onClick={() => createPihakTerkait.mutate()}
+                                className="bg-blue-900 text-white px-4 py-2 rounded hover:bg-blue-950"
+                              >
                                 Simpan
                               </button>
                             </div>
