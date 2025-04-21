@@ -305,7 +305,6 @@ export default function UploadSoal() {
                       <input
                         type="text"
                         name="name"
-                        value={formData.name}
                         onChange={handleChange}
                         required
                       />
