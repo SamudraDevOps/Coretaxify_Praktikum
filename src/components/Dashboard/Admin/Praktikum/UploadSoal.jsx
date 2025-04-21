@@ -92,6 +92,7 @@ export default function UploadSoal() {
     },
     onError: (error) => {
       console.log(error);
+      Swal.fire("Gagal!", "Data soal tidak sesuai template.", "error");
     },
   });
   const mutationEdit = useMutation({
