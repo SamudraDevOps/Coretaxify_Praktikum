@@ -254,6 +254,27 @@ export default function DosenPraktikumKelas() {
                       </select>
                     </div>
                     <div className="edit-form-group-mahasiswa">
+                      <label>Tanggal Mulai:</label>
+                      <input
+                        type="date"
+                        name="start_period"
+                        onChange={handleChange}
+                        min={new Date().toISOString().split("T")[0]}
+                      />
+                    </div>
+                    <div className="edit-form-group-mahasiswa">
+                      <label>Tanggal Selesai:</label>
+                      <input
+                        type="date"
+                        name="end_period"
+                        onChange={handleChange}
+                        min={
+                          formData.periodeAwal ||
+                          new Date().toISOString().split("T")[0]
+                        }
+                      />
+                    </div>
+                    <div className="edit-form-group-mahasiswa">
                       <label>File Support:</label>
                       <div className="flex items-center justify-center w-full ">
                         <label
@@ -309,27 +330,6 @@ export default function DosenPraktikumKelas() {
                           />
                         </label>
                       </div>
-                    </div>
-                    <div className="edit-form-group-mahasiswa">
-                      <label>Tanggal Mulai:</label>
-                      <input
-                        type="date"
-                        name="start_period"
-                        onChange={handleChange}
-                        min={new Date().toISOString().split("T")[0]}
-                      />
-                    </div>
-                    <div className="edit-form-group-mahasiswa">
-                      <label>Tanggal Selesai:</label>
-                      <input
-                        type="date"
-                        name="end_period"
-                        onChange={handleChange}
-                        min={
-                          formData.periodeAwal ||
-                          new Date().toISOString().split("T")[0]
-                        }
-                      />
                     </div>
                   </form>
                 </div>
