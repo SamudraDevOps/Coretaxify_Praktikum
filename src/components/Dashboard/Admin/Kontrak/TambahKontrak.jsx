@@ -100,13 +100,13 @@ const TambahKontrak = ({
       newErrors.faktur = "Faktur harus diisi";
     }
 
-    if (!formData.kodePembelian) {
-      newErrors.kodePembelian = "Kode Pembelian harus diisi";
-    }
+    // if (!formData.kodePembelian) {
+    //   newErrors.kodePembelian = "Kode Pembelian harus diisi";
+    // }
 
-    if (!formData.is_buy_task) {
-      newErrors.is_buy_task = "Pembelian Soal harus diisi";
-    }
+    // if (!formData.is_buy_task) {
+    //   newErrors.is_buy_task = "Pembelian Soal harus diisi";
+    // }
 
     if (!formData.status) {
       newErrors.status = "Status harus diisi";
@@ -162,8 +162,8 @@ const TambahKontrak = ({
   const handleSave = () => {
     console.log(formData);
     if (validate()) {
-      onSave(formData);
-      setFormData({ ...initialFormState });
+      // onSave(formData);
+      setFormData({ formData });
       mutation.mutate();
     }
   };
@@ -205,36 +205,13 @@ const TambahKontrak = ({
           },
         }
       );
-      return data;
     },
     onSuccess: (data) => {
       // console.log(data);
-      console.log("form");
-      console.log(formData);
-      console.log("data");
-      console.log(data);
-      Swal.fire({
-        title: "Kontrak berhasil dibuat",
-        icon: "success",
-        confirmButtonText: "Lanjutkan",
-      }).then(() => {
-        setFormData({
-          jenisKontrak: "",
-          instansi: "",
-          mahasiswa: "",
-          periodeAwal: "",
-          periodeAkhir: "",
-          spt: "",
-          bupot: "",
-          faktur: "",
-          kodePembelian: "",
-          is_buy_task: 0,
-          opsiTambahan: [],
-          status: "",
-        });
-        onClose();
-        refetch();
-      });
+      setFormData({ ...initialFormState });
+      Swal.fire("Lanjutkan", "Kontrak berhasil dibuat", "success");
+      onClose();
+      refetch();
     },
     onError: (error) => {
       console.log(error);
