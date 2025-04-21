@@ -91,7 +91,7 @@ const PajakKeluaranOP = () => {
                         </thead>
                         <tbody className="text-gray-600">
                             <tr>
-                                <td colSpan="10" className="text-center p-4 border">Belum ada data</td>
+                                <td className="">1</td>
                             </tr>
                         </tbody>
                     </table>

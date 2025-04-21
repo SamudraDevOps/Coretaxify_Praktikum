@@ -73,7 +73,7 @@ const PajakKeluaran = () => {
                     </div>
                 </div>
 
-                <div className="w-auto overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden mt-4">
+                <div className="w-[1230px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden mt-4">
                     <table className="table-auto border border-gray-300 w-full">
                         <thead className="bg-gray-200">
                             <tr>
@@ -91,7 +91,11 @@ const PajakKeluaran = () => {
                         </thead>
                         <tbody className="text-gray-600">
                             <tr>
-                                <td colSpan="10" className="text-center p-4 border">Belum ada data</td>
+                               <td className="border">1</td>
+                               <td className="border">
+                                   <input type="checkbox" className="h-4 w-4 border-gray-300 rounded" />
+                               </td>
+                               <td className="border"></td>
                             </tr>
                         </tbody>
                     </table>
