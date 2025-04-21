@@ -12,6 +12,7 @@ import DashboardDosen from "./components/Dashboard/Dosen/Dashboard/DashboardDose
 import DosenKelas from "./components/Dashboard/Dosen/Kelas/DosenKelas";
 // import DosenCardKelas from "./components/Dashboard/Dosen/Kelas/DosenCardKelas";
 import UjianDosen from "./components/Dashboard/Dosen/Ujian/UjianDosen";
+import UjianDosenMember from "./components/Dashboard/Dosen/Ujian/Members/UjianDosenMember";
 import EditDosen from "./components/Dashboard/Admin/Pengguna/Dosen/EditDosen";
 import PenilaianDosen from "./components/Dashboard/Dosen/Penilaian/PenilaianDosen";
 import DetailPenilaian from "./components/Dashboard/Dosen/Penilaian/DetailPenilaianDosen";
@@ -235,34 +236,21 @@ const Main = () => {
           <Route path="/admin/praktikum-backup" element={<PraktikumBackup />} />
           <Route path="/admin/praktikum" element={<Praktikum />} />
         </Route>
+
         {/* DOSEN ROUTE */}
-        <Route
-          element={
-            <RoleProtectedRoutes allowedRoles={["dosen"]} layout="admin" />
-          }
-        >
+        <Route element={ <RoleProtectedRoutes allowedRoles={["dosen"]} layout="admin" /> } >
           <Route path="/dosen" element={<DashboardDosen />} />
           <Route path="/dosen/kelas" element={<DosenKelas />} />
-          <Route
-            path="/dosen/kelas/praktikum/:id"
-            element={<DosenPraktikumKelas />}
-          />
-          <Route
-            path="/dosen/kelas/:id/praktikum/:idpraktikum"
-            element={<DosenPraktikumKelasMember />}
-          />
+          <Route path="/dosen/kelas/praktikum/:id" element={<DosenPraktikumKelas />} />
+          <Route path="/dosen/kelas/:id/praktikum/:idpraktikum" element={<DosenPraktikumKelasMember />} />
           <Route path="/dosen/praktikum" element={<Praktikum />} />
           <Route path="/dosen/penilaian" element={<PenilaianDosen />} />
-          <Route
-            path="/dosen/penilaian/detail-tugas"
-            element={<DetailTugasPenilaianDosen />}
-          />
-          <Route
-            path="/dosen/penilaian/detail-tugas/detail-penilaian"
-            element={<DetailPenilaian />}
-          />
+          <Route path="/dosen/penilaian/detail-tugas" element={<DetailTugasPenilaianDosen />} />
+          <Route path="/dosen/penilaian/detail-tugas/detail-penilaian" element={<DetailPenilaian />} />
           <Route path="/dosen/ujian" element={<UjianDosen />} />
+          <Route path="/dosen/ujian/:examId/members" element={<UjianDosenMember />} />
         </Route>
+
         {/* MAHASISWA ROUTE */}
         <Route
           element={
