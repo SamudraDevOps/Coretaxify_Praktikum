@@ -117,6 +117,9 @@ import DashboardEFaktur from "./components/PraktikumPage/Badan/EFaktur/Dashboard
 import PajakKeluaran from "./components/PraktikumPage/Badan/EFaktur/PajakKeluaran";
 import TambahFakturKeluaran from "./components/PraktikumPage/Badan/EFaktur/TambahFakturKeluaran";
 import PajakMasukan from "./components/PraktikumPage/Badan/EFaktur/PajakMasukan";
+import KonsepSPT from "./components/PraktikumPage/Badan/SPT/KonsepSPT";
+import BuatKonsepSPT from "./components/PraktikumPage/Badan/SPT/BuatKonsepSPT";
+import CreateKonsepSPT from "./components/PraktikumPage/Badan/SPT/CreateKonsepSPT";
 // Route Badan
 
 import ProtectedRoutes from "./components/Dashboard/Auth/ProtectedRoutes";
