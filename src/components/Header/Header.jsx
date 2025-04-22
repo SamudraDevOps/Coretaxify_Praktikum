@@ -340,7 +340,7 @@ const Header = () => {
                         // setUserType(item.id);
                         console.log("User Type Berubah ke:", item.nama_akun);
                         setIsDropdownOpen(false);
-                        navigateTo(item.id);
+                        navigateTo(`sistem/${item.id}/profil-saya`);
                       }}
                     >
                       {item.nama_akun}
