@@ -45,7 +45,7 @@ import EditKelasPsc from "./components/Dashboard/AdminPsc/Pengguna/Kelas/EditKel
 import PraktikumPsc from "./components/Dashboard/AdminPsc/Pengguna/Praktikum/PraktikumPsc";
 import AssignmentPscMember from "./components/Dashboard/AdminPsc/Pengguna/Praktikum/Members/AssignmentPscMember";
 import ExamPsc from "./components/Dashboard/AdminPsc/Ujian/ExamPsc";
-import ExamPscMembers from "./components/Dashboard/AdminPsc/Ujian/Members/ExamPscMembers";;
+import ExamPscMembers from "./components/Dashboard/AdminPsc/Ujian/Members/ExamPscMembers";
 import EditMahasiswaPsc from "./components/Dashboard/AdminPsc/Pengguna/Mahasiswa/EditMahasiswaPsc";
 import Header from "./components/Header/Header";
 import Home from "./components/Header/Home";
@@ -301,9 +301,15 @@ const Main = () => {
           />
           {/* <Route path="/psc/kelas/:groupId/mahasiswa/:memberId" element={<MemberDetailPage />} /> */}
           <Route path="/psc/praktikum" element={<PraktikumPsc />} />
-          <Route path="/psc/praktikum/:assignmentId/members" element={<AssignmentPscMember />} />
+          <Route
+            path="/psc/praktikum/:assignmentId/members"
+            element={<AssignmentPscMember />}
+          />
           <Route path="/psc/ujian" element={<ExamPsc />} />
-          <Route path="/psc/ujian/:examId/members" element={<ExamPscMembers />} />
+          <Route
+            path="/psc/ujian/:examId/members"
+            element={<ExamPscMembers />}
+          />
           <Route path="/psc/edit-mahasiswa" element={<EditMahasiswaPsc />} />
         </Route>
         {/* MAHASISWA-PSC ROUTE */}
@@ -677,6 +683,21 @@ const Main = () => {
             </>
           }
         />
+        <Route
+          path="/praktikum/:id/sistem/:akun/e-faktur"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun`}
+                intent={"api.get.sistem.edit.informasi.umum"}
+                OrangPribadi={DashboardEFakturOP}
+                Badan={DashboardEFaktur}
+                query={"edit-info"}
+              ></RoleBasedRenderer>
+            </>
+          }
+        />
+
         <Route
           path="/admin/praktikum/1/profil-saya/alamat"
           element={
