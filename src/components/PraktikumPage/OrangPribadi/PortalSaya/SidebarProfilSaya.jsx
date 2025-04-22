@@ -20,7 +20,10 @@ const SidebarProfilSaya = ({ nama_akun, npwp_akun, akun }) => {
 
       link: `/praktikum/${akun.id}/sistem/${akun.akun}/alamat`,
     },
-    { label: "Detail Kontak", link: "/detail-kontak" },
+    {
+      label: "Detail Kontak",
+      link: `/praktikum/${akun.id}/sistem/${akun.akun}/detail-kontak`,
+    },
     { label: "Pihak Terkait", link: "/pihak-terkait" },
     {
       label: "Objek Pajak Bumi dan Bangunan (PBB)",

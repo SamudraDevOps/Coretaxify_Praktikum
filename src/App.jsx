@@ -518,6 +518,7 @@ const Main = () => {
           path="/admin/praktikum/profil-saya/nomor-identifikasi-eksternal"
           element={
             <>
+              {/* query={} */}
               <Header />
               <NomorIdentifikasiEksternal />
             </>
@@ -645,6 +646,7 @@ const Main = () => {
                 OrangPribadi={ProfilSaya}
                 Badan={ProfilSayaBadan}
                 intent={"api.get.sistem.ikhtisar.profil"}
+                query={"profil"}
               ></RoleBasedRenderer>
             </>
           }
@@ -658,6 +660,21 @@ const Main = () => {
                 OrangPribadi={AlamatSaya}
                 Badan={AlamatSayaBadan}
                 intent={"api.get.sistem.ikhtisar.profil"}
+                query={"alamat"}
+              ></RoleBasedRenderer>
+            </>
+          }
+        />
+        <Route
+          path="/praktikum/:id/sistem/:akun/detail-kontak"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/detail-kontak`}
+                OrangPribadi={DetailKontak}
+                Badan={DetailKontakBadan}
+                intent={"api.get.sistem.ikhtisar.profil"}
+                query={"detail-kontak"}
               ></RoleBasedRenderer>
             </>
           }

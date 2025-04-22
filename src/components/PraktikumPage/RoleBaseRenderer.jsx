@@ -108,7 +108,15 @@ export default function RoleBasedRenderer({
   //   enabled: !!id && !!token,
   // });
 
-  if (isLoading || userLoading) {
+  if (isLoading) {
+    console.log("loading");
+    return (
+      <div className="loading">
+        <ClipLoader color="#7502B5" size={50} />
+      </div>
+    );
+  }
+  if (userLoading) {
     console.log("loading");
     return (
       <div className="loading">
