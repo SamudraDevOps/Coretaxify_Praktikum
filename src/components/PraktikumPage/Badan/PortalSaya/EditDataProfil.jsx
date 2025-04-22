@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   FaCalendarAlt,
   FaFilter,
@@ -135,6 +135,7 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
     akun_op: "",
     tanggal_mulai: "",
     tanggal_berakhir: "",
+    nama_akun: "",
   });
   const handlePersonTypeChange = (e) => {
     console.log("AA");
@@ -166,6 +167,71 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
       Swal.fire(
         "Berhasil!",
         "Data informasi umum berhasil disimpan!",
+        "success"
+      ).then((result) => {
+        if (result.isConfirmed) {
+          window.location.reload();
+        }
+      });
+    },
+    onError: (error) => {
+      console.error("Error saving data:", error);
+      Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
+    },
+  });
+
+  const deleteOrangTerkait = useMutation({
+    mutationFn: async (user_id) => {
+      const csrf = await getCsrf();
+      return axios.delete(
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/pihak-terkait/${user_id}`,
+        {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": csrf,
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+    },
+    onSuccess: (data) => {
+      console.log(data);
+      Swal.fire("Berhasil!", "Pihak terkait berhasil dihapus!", "success").then(
+        (result) => {
+          if (result.isConfirmed) {
+            window.location.reload();
+          }
+        }
+      );
+    },
+    onError: (error) => {
+      console.error("Error saving data:", error);
+      Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
+    },
+  });
+  const updateOrangTerkait = useMutation({
+    mutationFn: async (contact_id) => {
+      const csrf = await getCsrf();
+
+      return axios.put(
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/detail-kontak/${contact_id}`,
+        contactFormData,
+        {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": csrf,
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+    },
+    onSuccess: (data) => {
+      console.log(data);
+      Swal.fire(
+        "Berhasil!",
+        "Data detail kontak berhasil diubah!",
         "success"
       ).then((result) => {
         if (result.isConfirmed) {
@@ -332,6 +398,13 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
       Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
     },
   });
+
+  useEffect(() => {
+    if (isModalOpen) {
+      console.log("Updated formOrangTerkait:", formOrangTerkait);
+    }
+  }, [formOrangTerkait, isModalOpen]);
+
   if (isLoading) {
     return (
       <div className="loading">
@@ -1252,7 +1325,32 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                   ) : (
                     data.field_edit_informasi.pihak_terkait.map((pihak) => (
                       <tr className="bg-gray-100">
-                        <td>m</td>
+                        <td className="flex gap-2">
+                          <button
+                            className="action-button delete"
+                            onClick={() => {
+                              Swal.fire({
+                                title: "Hapus Pihak Terkait?",
+                                text: "Pihak terkait akan dihapus secara permanen!",
+                                icon: "warning",
+                                showCancelButton: true,
+                                confirmButtonText: "Ya, hapus!",
+                                cancelButtonText: "Batal",
+                              }).then((result) => {
+                                if (result.isConfirmed) {
+                                  deleteOrangTerkait.mutate(pihak.id);
+                                }
+                              });
+                            }}
+                          >
+                            {deleteContact.status == "pending" ? (
+                              <p>Loading...</p>
+                            ) : (
+                              <>Delete</>
+                            )}
+                          </button>
+                        </td>
+                        {/* <td>m</td> */}
                         <td className="text-center p-4 border">
                           {pihak.jenis_orang_terkait}
                         </td>
@@ -1434,6 +1532,7 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                                   </label>
                                   <select
                                     // name="sub_jenis_orang_terkait"
+                                    value={formOrangTerkait.sub_orang_terkait}
                                     className="w-full p-2 border rounded"
                                     name="sub_orang_terkait"
                                     onChange={handlePersonTypeChange}
@@ -1462,7 +1561,7 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                                     type="text"
                                     name="keterangan"
                                     className="w-full p-2 border rounded"
-                                    // value={formData.keterangan}
+                                    value={formOrangTerkait.keterangan}
                                     // onChange={handleInputChange}
                                     onChange={handlePersonTypeChange}
                                   />
@@ -1476,30 +1575,34 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                                   NIK
                                 </label>
                                 <select
+                                  value={formOrangTerkait.akun_op}
                                   name="akun_op"
                                   className="w-full p-2 border rounded"
                                   // value={formData.nik_id}
                                   onChange={(e) => {
-                                    setFormOrangTerkait({
-                                      ...formOrangTerkait,
-                                      akun_op: e.target.value,
-                                    });
+                                    const selectedId = e.target.value;
                                     const selectedOrang =
                                       orangTerkait.data.find(
-                                        (orang) => orang.id == e.target.value
+                                        (orang) => orang.id == selectedId
                                       );
-                                    if (selectedOrang) {
-                                      // Update the name input field using document.getElementById
-                                      const nameInput =
-                                        document.getElementById(
-                                          "nama-orang-terkait"
-                                        );
-                                      if (nameInput) {
-                                        nameInput.value =
-                                          selectedOrang.nama_akun ||
-                                          "Nama tidak tersedia";
-                                      }
-                                    }
+
+                                    // Update the entire form state with the selected person's data
+                                    setFormOrangTerkait({
+                                      ...formOrangTerkait,
+                                      akun_op: selectedId,
+                                      // Store the name in the form state instead of manipulating DOM directly
+                                      nama_akun: selectedOrang
+                                        ? selectedOrang.nama_akun
+                                        : "",
+                                      kewarganegaraan: selectedOrang
+                                        ? selectedOrang.kewarganegaraan ||
+                                          "Indonesia"
+                                        : "Indonesia",
+                                      negara_asal: selectedOrang
+                                        ? selectedOrang.negara_asal ||
+                                          "Indonesia"
+                                        : "Indonesia",
+                                    });
                                   }}
                                 >
                                   <option value="">-- Pilih NIK --</option>
@@ -1519,6 +1622,7 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                                   id="nama-orang-terkait"
                                   type="text"
                                   name="nama"
+                                  value={formOrangTerkait.nama_akun}
                                   // value={formData.nama}
                                   className="w-full p-2 border rounded cursor-not-allowed bg-gray-200"
                                   disabled
@@ -1587,7 +1691,7 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                                 <input
                                   type="date"
                                   name="tanggal_mulai"
-                                  // value={o.tanggal_mulai}
+                                  value={formOrangTerkait.tanggal_mulai}
                                   onChange={handlePersonTypeChange}
                                   className="w-full p-2 border rounded"
                                 />
@@ -1600,7 +1704,7 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                                 <input
                                   type="date"
                                   name="tanggal_berakhir"
-                                  // value={o.tanggal_berakhir}
+                                  value={formOrangTerkait.tanggal_berakhir}
                                   onChange={handlePersonTypeChange}
                                   className="w-full p-2 border rounded"
                                 />
