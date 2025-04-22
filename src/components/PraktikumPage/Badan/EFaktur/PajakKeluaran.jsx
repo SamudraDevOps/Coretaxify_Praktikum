@@ -2,8 +2,10 @@ import React, { useState, useRef } from "react";
 import SideBarEFaktur from "./SideBarEFaktur";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { FaChevronDown } from "react-icons/fa";
+import { useParams } from "react-router";
 
 const PajakKeluaran = ({ data, sidebar }) => {
+  const { id, akun } = useParams();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -62,8 +64,7 @@ const PajakKeluaran = ({ data, sidebar }) => {
             <button
               className="flex items-center bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded text-sm"
               onClick={() =>
-                (window.location.href =
-                  "/admin/praktikum/2/e-faktur/pajak-keluaran/tambah-faktur-keluaran")
+                (window.location.href = `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran/tambah-faktur-keluaran`)
               }
             >
               Tambah

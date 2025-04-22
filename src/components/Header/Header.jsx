@@ -75,7 +75,15 @@ const Header = () => {
   const navigateTo = (path) => {
     // alert("clicked");
     // window.location.href = `/praktikum/${id}/sistem/${path}/profil-saya `;
-    window.location.href = path;
+    // window.location.href = path;
+    const pathParts = path.split("/");
+    const lastPart = pathParts[pathParts.length - 1];
+
+    // Construct the new path with the base path and the last part
+    const newPath = `/praktikum/${id}/sistem/${akun}/${lastPart}`;
+
+    // Navigate to the new path
+    window.location.href = newPath;
   };
   //   if (getAccountPortal().isLoading) {
   if (isLoading) {
