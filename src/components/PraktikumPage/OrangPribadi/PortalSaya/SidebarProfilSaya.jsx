@@ -15,7 +15,11 @@ const SidebarProfilSaya = ({ nama_akun, npwp_akun, akun }) => {
       label: "Informasi Umum",
       link: `/praktikum/${akun.id}/sistem/${akun.akun}/informasi-umum`,
     },
-    { label: "Alamat", link: "/alamat" },
+    {
+      label: "Alamat",
+
+      link: `/praktikum/${akun.id}/sistem/${akun.akun}/alamat`,
+    },
     { label: "Detail Kontak", link: "/detail-kontak" },
     { label: "Pihak Terkait", link: "/pihak-terkait" },
     {

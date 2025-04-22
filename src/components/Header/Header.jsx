@@ -341,18 +341,20 @@ const Header = () => {
               <ul className="absolute right-14 top-14 mt-2 w-64 bg-white border rounded-md shadow-lg py-1 px-2">
                 {data.map((item) => {
                   return (
-                    <li
-                      key={item.id}
-                      className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
-                      onClick={() => {
-                        // setUserType(item.id);
-                        console.log("User Type Berubah ke:", item.nama_akun);
-                        setIsDropdownOpen(false);
-                        navigateTo(`sistem/${item.id}/profil-saya`);
-                      }}
-                    >
-                      {item.nama_akun}
-                    </li>
+                    <a href={`/praktikum/${id}/sistem/${item.id}/profil-saya`}>
+                      <li
+                        key={item.id}
+                        className="px-4 py-2  hover:bg-gray-200 cursor-pointer"
+                        onClick={() => {
+                          // setUserType(item.id);
+                          console.log("User Type Berubah ke:", item.nama_akun);
+                          setIsDropdownOpen(false);
+                          // navigateTo(`profil-saya`);
+                        }}
+                      >
+                        {item.nama_akun}
+                      </li>
+                    </a>
                   );
                 })}
                 {/* <li

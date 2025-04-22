@@ -650,6 +650,19 @@ const Main = () => {
           }
         />
         <Route
+          path="/praktikum/:id/sistem/:akun/alamat"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun`}
+                OrangPribadi={AlamatSaya}
+                Badan={AlamatSayaBadan}
+                intent={"api.get.sistem.ikhtisar.profil"}
+              ></RoleBasedRenderer>
+            </>
+          }
+        />
+        <Route
           path="/praktikum/:id/sistem/:akun/informasi-umum"
           // path="/admin/praktikum/1/profil-saya/informasi-umum"
           element={

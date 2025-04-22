@@ -36,7 +36,7 @@ const SidebarProfilSayaBadan = ({ nama_akun, npwp_akun, akun }) => {
     },
     {
       label: "Alamat",
-      link: `/admin/praktikum/${userTypeId}/profil-saya/alamat`,
+      link: `/praktikum/${akun.id}/sistem/${akun.akun}/alamat`,
     },
     {
       label: "Detail Kontak",
