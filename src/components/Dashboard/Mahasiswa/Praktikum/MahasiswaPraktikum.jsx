@@ -236,7 +236,7 @@ export default function MahasiswaPraktikum() {
             {data.data.map((item, index) => (
               <tr key={index}>
                 <td>{item.group.name}</td>
-                <td></td>
+                <td>{item.group.teacher}</td>
                 {/* <td>{item.dosen.name}</td> */}
                 <td>{item.name}</td>
                 {/* <td className="max-w-5">
