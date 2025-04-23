@@ -323,6 +323,58 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
     },
   });
 
+  const [bankFormData, setBankFormData] = useState({
+    nama_bank: "",
+    nomor_rekening_bank: "",
+    jenis_rekening_bank: "akun-bisnis",
+    nama_pemilik_bank: "",
+    tanggal_mulai: "",
+    tanggal_berakhir: "",
+  });
+
+  const handleBankChange = (e) => {
+    const { name, value } = e.target;
+    setBankFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  // Add this mutation with your other mutations
+  const createBankDetail = useMutation({
+    mutationFn: async () => {
+      const csrf = await getCsrf();
+      return axios.post(
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/detail-bank`,
+        bankFormData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": csrf,
+            Authorization: `Bearer ${cookies.token}`,
+          },
+        }
+      );
+    },
+    onSuccess: (data) => {
+      console.log(data);
+      Swal.fire(
+        "Berhasil!",
+        "Data detail bank berhasil disimpan!",
+        "success"
+      ).then((result) => {
+        if (result.isConfirmed) {
+          window.location.reload();
+        }
+      });
+    },
+    onError: (error) => {
+      console.error("Error saving data:", error);
+      Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
+    },
+  });
+
   const handleInformasiUmumChange = (e) => {
     const { name, value } = e.target;
     setInformasiUmumData((prev) => ({
@@ -2136,7 +2188,12 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                       <label className="block text-sm font-medium text-gray-700">
                         Bank *
                       </label>
-                      <select className="w-full p-2 border rounded">
+                      <select
+                        className="w-full p-2 border rounded"
+                        name="nama_bank"
+                        value={bankFormData.nama_bank}
+                        onChange={handleBankChange}
+                      >
                         <option value="">Pilih Bank</option>
                         <option value="mandiri">
                           PT BANK MANDIRI (PERSERO) Tbk
@@ -2200,6 +2257,9 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                       </label>
                       <input
                         type="text"
+                        name="nomor_rekening_bank"
+                        value={bankFormData.nomor_rekening_bank}
+                        onChange={handleBankChange}
                         className="w-full p-2 border rounded"
                       />
                     </div>
@@ -2207,7 +2267,12 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                       <label className="block text-sm font-medium text-gray-700">
                         Jenis Rekening Bank
                       </label>
-                      <select className="w-full p-2 border rounded">
+                      <select
+                        name="jenis_rekening_bank"
+                        value={bankFormData.jenis_rekening_bank}
+                        onChange={handleBankChange}
+                        className="w-full p-2 border rounded"
+                      >
                         <option value="akun-bisnis">Akun Bisnis</option>
                         <option value="akun-pribadi">Akun Pribadi</option>
                       </select>
@@ -2216,7 +2281,12 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                       <label className="block text-sm font-medium text-gray-700">
                         Nama Pemilik Bank
                       </label>
-                      <textarea className="w-full p-2 border rounded"></textarea>
+                      <textarea
+                        name="nama_pemilik_bank"
+                        value={bankFormData.nama_pemilik_bank}
+                        onChange={handleBankChange}
+                        className="w-full p-2 border rounded"
+                      ></textarea>
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700">
@@ -2224,6 +2294,9 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                       </label>
                       <input
                         type="date"
+                        name="tanggal_mulai"
+                        value={bankFormData.tanggal_mulai}
+                        onChange={handleBankChange}
                         className="w-full p-2 border rounded"
                       />
                     </div>
@@ -2233,6 +2306,9 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                       </label>
                       <input
                         type="date"
+                        name="tanggal_berakhir"
+                        value={bankFormData.tanggal_berakhir}
+                        onChange={handleBankChange}
                         className="w-full p-2 border rounded"
                       />
                     </div>
@@ -2241,8 +2317,11 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                     <AlertDialogCancel className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600">
                       Batal
                     </AlertDialogCancel>
-                    <AlertDialogAction className="bg-blue-900 text-white px-4 py-2 rounded-md hover:bg-blue-950">
-                      Simpan
+                    <AlertDialogAction
+                      onClick={() => createBankDetail.mutate()}
+                      className="bg-blue-900 text-white px-4 py-2 rounded-md hover:bg-blue-950"
+                    >
+                      Simpan aowk
                     </AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
@@ -2271,18 +2350,26 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                   </tr>
                 </thead>
                 <tbody className="text-gray-600">
-                  <tr className="bg-gray-100">
-                    <td className="px-1 py-4 border">
-                      <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-2 rounded">
-                        Edit
-                      </button>
-                    </td>
-                    <td className="px-4 py-4 border">Bank Syariah Indonesia</td>
-                    <td className="px-4 py-4 border">1234567890</td>
-                    <td className="px-4 py-4 border">Rekening Koran</td>
-                    <td className="px-4 py-4 border">01-01-2023</td>
-                    <td className="px-4 py-4 border">01-01-2023</td>
-                  </tr>
+                  {data.field_edit_informasi.detail_bank.map((bank) => (
+                    <tr className="bg-gray-100">
+                      <td className="px-1 py-4 border">
+                        <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-2 rounded">
+                          Edit
+                        </button>
+                      </td>
+                      <td className="px-4 py-4 border">{bank.nama_bank}</td>
+                      <td className="px-4 py-4 border">
+                        {bank.nomor_rekening_bank}
+                      </td>
+                      <td className="px-4 py-4 border">
+                        {bank.jenis_rekening_bank}
+                      </td>
+                      <td className="px-4 py-4 border">{bank.tanggal_mulai}</td>
+                      <td className="px-4 py-4 border">
+                        {bank.tanggal_berakhir}
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
