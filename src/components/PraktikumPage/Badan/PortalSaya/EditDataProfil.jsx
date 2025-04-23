@@ -210,19 +210,34 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
       Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
     },
   });
-  const updateOrangTerkait = useMutation({
-    mutationFn: async (contact_id) => {
-      const csrf = await getCsrf();
 
-      return axios.put(
-        `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/detail-kontak/${contact_id}`,
-        contactFormData,
+  const [tkuFormData, setTkuFormData] = useState({
+    nitku: "",
+    jenis_tku: "",
+    nama_tku: "",
+    jenis_usaha: "",
+  });
+
+  const handleTkuChange = (e) => {
+    const { name, value } = e.target;
+    setTkuFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const createTku = useMutation({
+    mutationFn: async () => {
+      const csrf = await getCsrf();
+      return axios.post(
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/tempat-kegiatan-usaha`,
+        tkuFormData,
         {
           headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
+            "Content-Type": "application/json",
             Accept: "application/json",
             "X-CSRF-TOKEN": csrf,
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${cookies.token}`,
           },
         }
       );
@@ -231,7 +246,7 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
       console.log(data);
       Swal.fire(
         "Berhasil!",
-        "Data detail kontak berhasil diubah!",
+        "Data tempat kegiatan usaha berhasil disimpan!",
         "success"
       ).then((result) => {
         if (result.isConfirmed) {
@@ -1818,7 +1833,7 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
             <div className="spcae-y-2 h-full">
               <h1 className="text-lg font-semibold">Alamat Utama</h1>
               <p className="mt-2">
-                Detail Alamat Utama : Link dari import an awal kang
+                Detail Alamat Utama : {data.alamat_utama_akun}
               </p>
             </div>
           </div>
@@ -1852,8 +1867,11 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                       </label>
                       <input
                         type="text"
+                        name="nitku"
+                        value={tkuFormData.nitku}
+                        onChange={handleTkuChange}
                         className="w-full p-2 border rounded-md bg-white mt-1"
-                        placeholder="Masukkan nomor telepon"
+                        placeholder="Masukkan NITKU"
                       />
                     </div>
                     <div>
@@ -1862,6 +1880,9 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                       </label>
                       <input
                         type="text"
+                        name="jenis_tku"
+                        value={tkuFormData.jenis_tku}
+                        onChange={handleTkuChange}
                         className="w-full p-2 border rounded"
                       />
                     </div>
@@ -1871,6 +1892,9 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                       </label>
                       <input
                         type="text"
+                        name="nama_tku"
+                        value={tkuFormData.nama_tku}
+                        onChange={handleTkuChange}
                         className="w-full p-2 border rounded"
                       />
                     </div>
@@ -1880,15 +1904,22 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                       </label>
                       <input
                         type="text"
+                        name="jenis_usaha"
+                        value={tkuFormData.jenis_usaha}
+                        onChange={handleTkuChange}
                         className="w-full p-2 border rounded"
                       />
                     </div>
                   </div>
+
                   <AlertDialogFooter className="flex justify-end mt-6 space-x-2">
                     <AlertDialogCancel className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600">
                       Batal
                     </AlertDialogCancel>
-                    <AlertDialogAction className="bg-blue-900 text-white px-4 py-2 rounded-md hover:bg-blue-950">
+                    <AlertDialogAction
+                      onClick={() => createTku.mutate()}
+                      className="bg-blue-900 text-white px-4 py-2 rounded-md hover:bg-blue-950"
+                    >
                       Simpan
                     </AlertDialogAction>
                   </AlertDialogFooter>
@@ -1913,6 +1944,9 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                   </tr>
                 </thead>
                 <tbody className="text-gray-600">
+                  {/* {
+                    data.fi
+                  } */}
                   <tr className="bg-gray-100">
                     <td className="px-1 py-4 border">
                       <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-2 rounded">
