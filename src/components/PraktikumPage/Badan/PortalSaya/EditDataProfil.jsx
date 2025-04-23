@@ -467,7 +467,11 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
         "Berhasil!",
         "Data informasi umum berhasil disimpan!",
         "success"
-      );
+      ).then((result) => {
+        if (result.isConfirmed) {
+          window.location.reload();
+        }
+      });
     },
     onError: (error) => {
       console.error("Error saving data:", error);
@@ -970,7 +974,7 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                 className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
                 onClick={() => updateInformasiUmum.mutate()}
               >
-                Simpan a
+                Simpan
               </button>
             </div>
           </div>

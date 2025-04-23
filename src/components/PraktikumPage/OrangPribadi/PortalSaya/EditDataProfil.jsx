@@ -29,7 +29,9 @@ import { RoutesApi } from "@/Routes";
 import { getCsrf } from "@/service/getCsrf";
 import Swal from "sweetalert2";
 import { deleteContract } from "@/hooks/dashboard";
+import { useCookies } from "react-cookie";
 const EditDataProfil = ({ data, sidebar }) => {
+  const [cookies] = useCookies(["token"]);
   const [isPerwakilan, setIsPerwakilan] = useState(false);
   const [showInformasiUmum, setShowInformasiUmum] = useState(false);
   const [showDataEkonomi, setShowDataEkonomi] = useState(false);
@@ -131,6 +133,342 @@ const EditDataProfil = ({ data, sidebar }) => {
     bahasa:
       data.field_edit_informasi.informasi_umum.bahasa || "Bahasa Indonesia",
   });
+
+  const {
+    data: orangTerkait,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["orang_terkait"],
+    queryFn: async () => {
+      const data = await axios.get(
+        RoutesApi.apiUrl + `student/assignments/${id}/sistem/${akun}`,
+        {
+          headers: {
+            Authorization: `Bearer ${cookies.token}`,
+          },
+          params: {
+            intent: "api.sistem.get.akun.orang.pibadi",
+          },
+        }
+      );
+      // console.log(data.data);
+      return data.data;
+    },
+  });
+  const [formOrangTerkait, setFormOrangTerkait] = useState({
+    // jenis_orang_terkait: "",
+    sub_orang_terkait: "",
+    kewarganegaraan: "Indonesia",
+    negara_asal: "Indonesia",
+    keterangan: "keterangan",
+    akun_op: "",
+    tanggal_mulai: "",
+    tanggal_berakhir: "",
+    nama_akun: "",
+  });
+  const handlePersonTypeChange = (e) => {
+    console.log("AA");
+    const { name, value } = e.target;
+    console.log(name, value);
+    setFormOrangTerkait((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+  const createPihakTerkait = useMutation({
+    mutationFn: async (data) => {
+      const csrf = await getCsrf();
+      return axios.post(
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/pihak-terkait`,
+        formOrangTerkait,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": csrf,
+            Authorization: `Bearer ${cookies.token}`,
+          },
+        }
+      );
+    },
+    onSuccess: (data) => {
+      console.log(data);
+      Swal.fire(
+        "Berhasil!",
+        "Data informasi umum berhasil disimpan!",
+        "success"
+      ).then((result) => {
+        if (result.isConfirmed) {
+          window.location.reload();
+        }
+      });
+    },
+    onError: (error) => {
+      console.error("Error saving data:", error);
+      Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
+    },
+  });
+
+  const deleteOrangTerkait = useMutation({
+    mutationFn: async (user_id) => {
+      const csrf = await getCsrf();
+      return axios.delete(
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/pihak-terkait/${user_id}`,
+        {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": csrf,
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+    },
+    onSuccess: (data) => {
+      console.log(data);
+      Swal.fire("Berhasil!", "Pihak terkait berhasil dihapus!", "success").then(
+        (result) => {
+          if (result.isConfirmed) {
+            window.location.reload();
+          }
+        }
+      );
+    },
+    onError: (error) => {
+      console.error("Error saving data:", error);
+      Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
+    },
+  });
+
+  const [tkuFormData, setTkuFormData] = useState({
+    nitku: "",
+    jenis_tku: "",
+    nama_tku: "",
+    jenis_usaha: "",
+  });
+
+  const handleTkuChange = (e) => {
+    const { name, value } = e.target;
+    setTkuFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const createTku = useMutation({
+    mutationFn: async () => {
+      const csrf = await getCsrf();
+      return axios.post(
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/tempat-kegiatan-usaha`,
+        tkuFormData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": csrf,
+            Authorization: `Bearer ${cookies.token}`,
+          },
+        }
+      );
+    },
+    onSuccess: (data) => {
+      console.log(data);
+      Swal.fire(
+        "Berhasil!",
+        "Data tempat kegiatan usaha berhasil disimpan!",
+        "success"
+      ).then((result) => {
+        if (result.isConfirmed) {
+          window.location.reload();
+        }
+      });
+    },
+    onError: (error) => {
+      console.error("Error saving data:", error);
+      Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
+    },
+  });
+  const updateTku = useMutation({
+    mutationFn: async (idTku) => {
+      const csrf = await getCsrf();
+      return axios.put(
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/tempat-kegiatan-usaha/${idTku}`,
+        tkuFormData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": csrf,
+            Authorization: `Bearer ${cookies.token}`,
+          },
+        }
+      );
+    },
+    onSuccess: (data) => {
+      console.log(data);
+      Swal.fire(
+        "Berhasil!",
+        "Data tempat kegiatan usaha berhasil disimpan!",
+        "success"
+      ).then((result) => {
+        if (result.isConfirmed) {
+          window.location.reload();
+        }
+      });
+    },
+    onError: (error) => {
+      console.error("Error saving data:", error);
+      Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
+    },
+  });
+  const deleteTku = useMutation({
+    mutationFn: async (idTku) => {
+      const csrf = await getCsrf();
+      return axios.delete(
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/tempat-kegiatan-usaha/${idTku}`,
+        {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": csrf,
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+    },
+    onSuccess: (data) => {
+      console.log(data);
+      Swal.fire("Berhasil!", "Data TKU berhasil dihapus!", "success").then(
+        (result) => {
+          if (result.isConfirmed) {
+            window.location.reload();
+          }
+        }
+      );
+    },
+    onError: (error) => {
+      console.error("Error saving data:", error);
+      Swal.fire("Gagal!", "Terjadi kesalahan saat menghapus data.", "error");
+    },
+  });
+
+  const [bankFormData, setBankFormData] = useState({
+    nama_bank: "",
+    nomor_rekening_bank: "",
+    jenis_rekening_bank: "akun-bisnis",
+    nama_pemilik_bank: "",
+    tanggal_mulai: "",
+    tanggal_berakhir: "",
+  });
+
+  const handleBankChange = (e) => {
+    const { name, value } = e.target;
+    setBankFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  // Add this mutation with your other mutations
+  const createBankDetail = useMutation({
+    mutationFn: async () => {
+      const csrf = await getCsrf();
+      return axios.post(
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/detail-bank`,
+        bankFormData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": csrf,
+            Authorization: `Bearer ${cookies.token}`,
+          },
+        }
+      );
+    },
+    onSuccess: (data) => {
+      console.log(data);
+      Swal.fire(
+        "Berhasil!",
+        "Data detail bank berhasil disimpan!",
+        "success"
+      ).then((result) => {
+        if (result.isConfirmed) {
+          window.location.reload();
+        }
+      });
+    },
+    onError: (error) => {
+      console.error("Error saving data:", error);
+      Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
+    },
+  });
+  const updateDetailBank = useMutation({
+    mutationFn: async (bank_id) => {
+      const csrf = await getCsrf();
+      return axios.put(
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/detail-bank/${bank_id}`,
+        bankFormData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": csrf,
+            Authorization: `Bearer ${cookies.token}`,
+          },
+        }
+      );
+    },
+    onSuccess: (data) => {
+      console.log(data);
+      Swal.fire(
+        "Berhasil!",
+        "Data detail bank berhasil disimpan!",
+        "success"
+      ).then((result) => {
+        if (result.isConfirmed) {
+          window.location.reload();
+        }
+      });
+    },
+    onError: (error) => {
+      console.error("Error saving data:", error);
+      Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
+    },
+  });
+  const deleteDetailBank = useMutation({
+    mutationFn: async (bank_id) => {
+      const csrf = await getCsrf();
+      return axios.delete(
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/detail-bank/${bank_id}`,
+        {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": csrf,
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+    },
+    onSuccess: (data) => {
+      console.log(data);
+      Swal.fire("Berhasil!", "Pihak terkait berhasil dihapus!", "success").then(
+        (result) => {
+          if (result.isConfirmed) {
+            window.location.reload();
+          }
+        }
+      );
+    },
+    onError: (error) => {
+      console.error("Error saving data:", error);
+      Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
+    },
+  });
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevState) => ({
@@ -143,7 +481,7 @@ const EditDataProfil = ({ data, sidebar }) => {
       const csrf = await getCsrf();
       return axios.put(
         `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/informasi-umum/${akun}`,
-        contactFormData,
+        formData,
         {
           headers: {
             "Content-Type": "application/json",
@@ -160,7 +498,11 @@ const EditDataProfil = ({ data, sidebar }) => {
         "Berhasil!",
         "Data informasi umum berhasil disimpan!",
         "success"
-      );
+      ).then((result) => {
+        if (result.isConfirmed) {
+          window.location.reload();
+        }
+      });
     },
     onError: (error) => {
       console.error("Error saving data:", error);
@@ -647,6 +989,7 @@ const EditDataProfil = ({ data, sidebar }) => {
                 type="submit"
                 className="px-4 py-2 bg-blue-500 text-white rounded-md"
                 onClick={() => updateInformasiUmum.mutate()}
+                // onClick={() => console.log(formData)}
               >
                 Simpan
               </button>
@@ -1775,7 +2118,7 @@ const EditDataProfil = ({ data, sidebar }) => {
             <div className="spcae-y-2 h-full">
               <h1 className="text-lg font-semibold">Alamat Utama</h1>
               <p className="mt-2">
-                Detail Alamat Utama : Link dari import an awal kang
+                Detail Alamat Utama : {data.alamat_utama_akun}
               </p>
             </div>
           </div>
@@ -1809,8 +2152,11 @@ const EditDataProfil = ({ data, sidebar }) => {
                       </label>
                       <input
                         type="text"
+                        name="nitku"
+                        value={tkuFormData.nitku}
+                        onChange={handleTkuChange}
                         className="w-full p-2 border rounded-md bg-white mt-1"
-                        placeholder="Masukkan nomor telepon"
+                        placeholder="Masukkan NITKU"
                       />
                     </div>
                     <div>
@@ -1819,6 +2165,9 @@ const EditDataProfil = ({ data, sidebar }) => {
                       </label>
                       <input
                         type="text"
+                        name="jenis_tku"
+                        value={tkuFormData.jenis_tku}
+                        onChange={handleTkuChange}
                         className="w-full p-2 border rounded"
                       />
                     </div>
@@ -1828,6 +2177,9 @@ const EditDataProfil = ({ data, sidebar }) => {
                       </label>
                       <input
                         type="text"
+                        name="nama_tku"
+                        value={tkuFormData.nama_tku}
+                        onChange={handleTkuChange}
                         className="w-full p-2 border rounded"
                       />
                     </div>
@@ -1837,15 +2189,22 @@ const EditDataProfil = ({ data, sidebar }) => {
                       </label>
                       <input
                         type="text"
+                        name="jenis_usaha"
+                        value={tkuFormData.jenis_usaha}
+                        onChange={handleTkuChange}
                         className="w-full p-2 border rounded"
                       />
                     </div>
                   </div>
+
                   <AlertDialogFooter className="flex justify-end mt-6 space-x-2">
                     <AlertDialogCancel className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600">
                       Batal
                     </AlertDialogCancel>
-                    <AlertDialogAction className="bg-blue-900 text-white px-4 py-2 rounded-md hover:bg-blue-950">
+                    <AlertDialogAction
+                      onClick={() => createTku.mutate()}
+                      className="bg-blue-900 text-white px-4 py-2 rounded-md hover:bg-blue-950"
+                    >
                       Simpan
                     </AlertDialogAction>
                   </AlertDialogFooter>
@@ -1870,26 +2229,105 @@ const EditDataProfil = ({ data, sidebar }) => {
                   </tr>
                 </thead>
                 <tbody className="text-gray-600">
-                  <tr className="bg-gray-100">
-                    <td className="px-1 py-4 border">
-                      <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-2 rounded">
-                        Edit
-                      </button>
-                      <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-2 rounded ml-2">
-                        Lihat
-                      </button>
-                    </td>
-                    <td className="px-4 py-4 border">1234567890</td>
-                    <td className="px-4 py-4 border">
-                      Jenis Tempat Kegiatan Usaha
-                    </td>
-                    <td className="px-4 py-4 border">
-                      Nama Tempat Kegiatan Usaha
-                    </td>
-                    <td className="px-4 py-4 border">
-                      Kode KLU Tempat Kegiatan Usaha
-                    </td>
-                  </tr>
+                  {data.field_edit_informasi.tempat_kegiatan_usaha.map(
+                    (tku) => (
+                      <tr className="bg-gray-100">
+                        <td className="px-1 py-4 border">
+                          <AlertDialog>
+                            <AlertDialogTrigger
+                              onClick={() => setTkuFormData(tku)}
+                              className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"
+                            >
+                              Edit
+                            </AlertDialogTrigger>
+                            <AlertDialogContent className="bg-white !min-w-[1000px] rounded-lg shadow-lg ">
+                              <AlertDialogHeader>
+                                <AlertDialogTitle className="text-xl font-bold">
+                                  Tambahkan Tempat Kegiatan Baru
+                                </AlertDialogTitle>
+                              </AlertDialogHeader>
+                              <div className="grid gap-4 overflow-auto h-96">
+                                <div>
+                                  <label className="block text-sm font-medium text-gray-700">
+                                    NITKU
+                                  </label>
+                                  <input
+                                    type="text"
+                                    name="nitku"
+                                    value={tkuFormData.nitku}
+                                    onChange={handleTkuChange}
+                                    className="w-full p-2 border rounded-md bg-white mt-1"
+                                    placeholder="Masukkan NITKU"
+                                  />
+                                </div>
+                                <div>
+                                  <label className="block text-sm font-medium text-gray-700">
+                                    Jenis TKU *
+                                  </label>
+                                  <input
+                                    type="text"
+                                    name="jenis_tku"
+                                    value={tkuFormData.jenis_tku}
+                                    onChange={handleTkuChange}
+                                    className="w-full p-2 border rounded"
+                                  />
+                                </div>
+                                <div>
+                                  <label className="block text-sm font-medium text-gray-700">
+                                    Nama TKU
+                                  </label>
+                                  <input
+                                    type="text"
+                                    name="nama_tku"
+                                    value={tkuFormData.nama_tku}
+                                    onChange={handleTkuChange}
+                                    className="w-full p-2 border rounded"
+                                  />
+                                </div>
+                                <div>
+                                  <label className="block text-sm font-medium text-gray-700">
+                                    Jenis Usaha
+                                  </label>
+                                  <input
+                                    type="text"
+                                    name="jenis_usaha"
+                                    value={tkuFormData.jenis_usaha}
+                                    onChange={handleTkuChange}
+                                    className="w-full p-2 border rounded"
+                                  />
+                                </div>
+                              </div>
+
+                              <AlertDialogFooter className="flex justify-end mt-6 space-x-2">
+                                <AlertDialogCancel className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600">
+                                  Batal
+                                </AlertDialogCancel>
+                                <AlertDialogAction
+                                  onClick={() => updateTku.mutate(tku.id)}
+                                  className="bg-blue-900 text-white px-4 py-2 rounded-md hover:bg-blue-950"
+                                >
+                                  Simpan
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
+                          <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-2 rounded ml-2">
+                            Lihat
+                          </button>
+                          <button
+                            onClick={() => deleteTku.mutate(tku.id)}
+                            className="bg-red-500 hover:bg-red-600 text-white py-2 px-2 rounded ml-2"
+                          >
+                            Hapus
+                          </button>
+                        </td>
+                        <td className="px-4 py-4 border">{tku.nitku}</td>
+                        <td className="px-4 py-4 border">{tku.jenis_tku}</td>
+                        <td className="px-4 py-4 border">{tku.nama_tku} </td>
+                        <td className="px-4 py-4 border">{tku.nama_tku} </td>
+                      </tr>
+                    )
+                  )}
                 </tbody>
               </table>
             </div>
@@ -1920,7 +2358,12 @@ const EditDataProfil = ({ data, sidebar }) => {
                       <label className="block text-sm font-medium text-gray-700">
                         Bank *
                       </label>
-                      <select className="w-full p-2 border rounded">
+                      <select
+                        className="w-full p-2 border rounded"
+                        name="nama_bank"
+                        value={bankFormData.nama_bank}
+                        onChange={handleBankChange}
+                      >
                         <option value="">Pilih Bank</option>
                         <option value="mandiri">
                           PT BANK MANDIRI (PERSERO) Tbk
@@ -1984,6 +2427,9 @@ const EditDataProfil = ({ data, sidebar }) => {
                       </label>
                       <input
                         type="text"
+                        name="nomor_rekening_bank"
+                        value={bankFormData.nomor_rekening_bank}
+                        onChange={handleBankChange}
                         className="w-full p-2 border rounded"
                       />
                     </div>
@@ -1991,7 +2437,12 @@ const EditDataProfil = ({ data, sidebar }) => {
                       <label className="block text-sm font-medium text-gray-700">
                         Jenis Rekening Bank
                       </label>
-                      <select className="w-full p-2 border rounded">
+                      <select
+                        name="jenis_rekening_bank"
+                        value={bankFormData.jenis_rekening_bank}
+                        onChange={handleBankChange}
+                        className="w-full p-2 border rounded"
+                      >
                         <option value="akun-bisnis">Akun Bisnis</option>
                         <option value="akun-pribadi">Akun Pribadi</option>
                       </select>
@@ -2000,7 +2451,12 @@ const EditDataProfil = ({ data, sidebar }) => {
                       <label className="block text-sm font-medium text-gray-700">
                         Nama Pemilik Bank
                       </label>
-                      <textarea className="w-full p-2 border rounded"></textarea>
+                      <textarea
+                        name="nama_pemilik_bank"
+                        value={bankFormData.nama_pemilik_bank}
+                        onChange={handleBankChange}
+                        className="w-full p-2 border rounded"
+                      ></textarea>
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700">
@@ -2008,6 +2464,9 @@ const EditDataProfil = ({ data, sidebar }) => {
                       </label>
                       <input
                         type="date"
+                        name="tanggal_mulai"
+                        value={bankFormData.tanggal_mulai}
+                        onChange={handleBankChange}
                         className="w-full p-2 border rounded"
                       />
                     </div>
@@ -2017,6 +2476,9 @@ const EditDataProfil = ({ data, sidebar }) => {
                       </label>
                       <input
                         type="date"
+                        name="tanggal_berakhir"
+                        value={bankFormData.tanggal_berakhir}
+                        onChange={handleBankChange}
                         className="w-full p-2 border rounded"
                       />
                     </div>
@@ -2025,8 +2487,11 @@ const EditDataProfil = ({ data, sidebar }) => {
                     <AlertDialogCancel className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600">
                       Batal
                     </AlertDialogCancel>
-                    <AlertDialogAction className="bg-blue-900 text-white px-4 py-2 rounded-md hover:bg-blue-950">
-                      Simpan
+                    <AlertDialogAction
+                      onClick={() => createBankDetail.mutate()}
+                      className="bg-blue-900 text-white px-4 py-2 rounded-md hover:bg-blue-950"
+                    >
+                      Simpan aowk
                     </AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
@@ -2055,18 +2520,200 @@ const EditDataProfil = ({ data, sidebar }) => {
                   </tr>
                 </thead>
                 <tbody className="text-gray-600">
-                  <tr className="bg-gray-100">
-                    <td className="px-1 py-4 border">
-                      <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-2 rounded">
-                        Edit
-                      </button>
-                    </td>
-                    <td className="px-4 py-4 border">Bank Syariah Indonesia</td>
-                    <td className="px-4 py-4 border">1234567890</td>
-                    <td className="px-4 py-4 border">Rekening Koran</td>
-                    <td className="px-4 py-4 border">01-01-2023</td>
-                    <td className="px-4 py-4 border">01-01-2023</td>
-                  </tr>
+                  {data.field_edit_informasi.detail_bank.map((bank) => (
+                    <tr className="bg-gray-100">
+                      <td className="px-1 py-4 border">
+                        <AlertDialog>
+                          <AlertDialogTrigger
+                            onClick={() => setBankFormData(bank)}
+                            className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"
+                          >
+                            Edit
+                          </AlertDialogTrigger>
+                          <AlertDialogContent className="bg-white !min-w-[1000px] rounded-lg shadow-lg ">
+                            <AlertDialogHeader>
+                              <AlertDialogTitle className="text-xl font-bold">
+                                Tambahkan Tempat Kegiatan Baru
+                              </AlertDialogTitle>
+                            </AlertDialogHeader>
+                            <div className="grid gap-4 overflow-auto h-96">
+                              <div>
+                                <label className="block text-sm font-medium text-gray-700">
+                                  Bank *
+                                </label>
+                                <select
+                                  className="w-full p-2 border rounded"
+                                  name="nama_bank"
+                                  value={bankFormData.nama_bank}
+                                  onChange={handleBankChange}
+                                >
+                                  <option value="">Pilih Bank</option>
+                                  <option value="mandiri">
+                                    PT BANK MANDIRI (PERSERO) Tbk
+                                  </option>
+                                  <option value="bca">
+                                    PT BANK CENTRAL ASIA Tbk
+                                  </option>
+                                  <option value="bri">
+                                    PT BANK RAKYAT INDONESIA (PERSERO) Tbk
+                                  </option>
+                                  <option value="bni">
+                                    PT BANK NEGARA INDONESIA (PERSERO) Tbk
+                                  </option>
+                                  <option value="bukopin">
+                                    PT BANK BUKOPIN Tbk
+                                  </option>
+                                  <option value="btpn">PT BANK BTPN Tbk</option>
+                                  <option value="cimb">
+                                    PT BANK CIMB NIAGA Tbk
+                                  </option>
+                                  <option value="danamon">
+                                    PT BANK DANAMON Tbk
+                                  </option>
+                                  <option value="maybank">
+                                    PT BANK MAYBANK Tbk
+                                  </option>
+                                  <option value="mega">PT BANK MEGA Tbk</option>
+                                  <option value="permata">
+                                    PT BANK PERMATA Tbk
+                                  </option>
+                                  <option value="panin">
+                                    PT BANK PANIN Tbk
+                                  </option>
+                                  <option value="panin_syariah">
+                                    PT BANK PANIN SYARIAH Tbk
+                                  </option>
+                                  <option value="maybank_syariah">
+                                    PT BANK MAYBANK SYARIAH Tbk
+                                  </option>
+                                  <option value="bsi">
+                                    PT BANK SYARIAH INDONESIA Tbk
+                                  </option>
+                                  <option value="bsi_syariah">
+                                    PT BANK SYARIAH INDONESIA SYARIAH Tbk
+                                  </option>
+                                  <option value="bca_syariah">
+                                    PT BANK CENTRAL ASIA SYARIAH Tbk
+                                  </option>
+                                  <option value="bri_syariah">
+                                    PT BANK RAKYAT INDONESIA SYARIAH Tbk
+                                  </option>
+                                  <option value="bni_syariah">
+                                    PT BANK NEGARA INDONESIA SYARIAH Tbk
+                                  </option>
+                                  <option value="bukopin_syariah">
+                                    PT BANK BUKOPIN SYARIAH Tbk
+                                  </option>
+                                  <option value="btpn_syariah">
+                                    PT BANK BTPN SYARIAH Tbk
+                                  </option>
+                                  <option value="cimb_syariah">
+                                    PT BANK CIMB NIAGA SYARIAH Tbk
+                                  </option>
+                                  <option value="danamon_syariah">
+                                    PT BANK DANAMON SYARIAH Tbk
+                                  </option>
+                                  <option value="maybank_syariah">
+                                    PT BANK MAYBANK SYARIAH Tbk
+                                  </option>
+                                </select>
+                              </div>
+                              <div>
+                                <label className="block text-sm font-medium text-gray-700">
+                                  Nomor Rekening
+                                </label>
+                                <input
+                                  type="text"
+                                  name="nomor_rekening_bank"
+                                  value={bankFormData.nomor_rekening_bank}
+                                  onChange={handleBankChange}
+                                  className="w-full p-2 border rounded"
+                                />
+                              </div>
+                              <div>
+                                <label className="block text-sm font-medium text-gray-700">
+                                  Jenis Rekening Bank
+                                </label>
+                                <select
+                                  name="jenis_rekening_bank"
+                                  value={bankFormData.jenis_rekening_bank}
+                                  onChange={handleBankChange}
+                                  className="w-full p-2 border rounded"
+                                >
+                                  <option value="akun-bisnis">
+                                    Akun Bisnis
+                                  </option>
+                                  <option value="akun-pribadi">
+                                    Akun Pribadi
+                                  </option>
+                                </select>
+                              </div>
+                              <div>
+                                <label className="block text-sm font-medium text-gray-700">
+                                  Nama Pemilik Bank
+                                </label>
+                                <textarea
+                                  name="nama_pemilik_bank"
+                                  value={bankFormData.nama_pemilik_bank}
+                                  onChange={handleBankChange}
+                                  className="w-full p-2 border rounded"
+                                ></textarea>
+                              </div>
+                              <div>
+                                <label className="block text-sm font-medium text-gray-700">
+                                  Tanggal Mulai
+                                </label>
+                                <input
+                                  type="date"
+                                  name="tanggal_mulai"
+                                  value={bankFormData.tanggal_mulai}
+                                  onChange={handleBankChange}
+                                  className="w-full p-2 border rounded"
+                                />
+                              </div>
+                              <div>
+                                <label className="block text-sm font-medium text-gray-700">
+                                  Tanggal Berakhir
+                                </label>
+                                <input
+                                  type="date"
+                                  name="tanggal_berakhir"
+                                  value={bankFormData.tanggal_berakhir}
+                                  onChange={handleBankChange}
+                                  className="w-full p-2 border rounded"
+                                />
+                              </div>
+                            </div>
+                            <AlertDialogFooter className="flex justify-end mt-6 space-x-2">
+                              <AlertDialogCancel className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600">
+                                Batal
+                              </AlertDialogCancel>
+                              <AlertDialogAction
+                                onClick={() => updateDetailBank.mutate(bank.id)}
+                                className="bg-blue-900 text-white px-4 py-2 rounded-md hover:bg-blue-950"
+                              >
+                                Simpan
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
+                        <button className="bg-red-500 hover:bg-red-600 text-white py-2 px-2 rounded ml-2">
+                          Hapus
+                        </button>
+                      </td>
+                      <td className="px-4 py-4 border">{bank.nama_bank}</td>
+                      <td className="px-4 py-4 border">
+                        {bank.nomor_rekening_bank}
+                      </td>
+                      <td className="px-4 py-4 border">
+                        {bank.jenis_rekening_bank}
+                      </td>
+                      <td className="px-4 py-4 border">{bank.tanggal_mulai}</td>
+                      <td className="px-4 py-4 border">
+                        {bank.tanggal_berakhir}
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
