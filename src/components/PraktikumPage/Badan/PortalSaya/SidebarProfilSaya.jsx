@@ -44,7 +44,7 @@ const SidebarProfilSayaBadan = ({ nama_akun, npwp_akun, akun }) => {
     },
     {
       label: "Pihak Terkait",
-      link: `/admin/praktikum/${userTypeId}/profil-saya/pihak-terkait`,
+      link: `/praktikum/${akun.id}/sistem/${akun.akun}/pihak-terkait`,
     },
     {
       label: "Objek Pajak Bumi dan Bangunan (PBB)",

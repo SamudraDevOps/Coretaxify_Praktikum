@@ -680,6 +680,20 @@ const Main = () => {
           }
         />
         <Route
+          path="/praktikum/:id/sistem/:akun/pihak-terkait"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/pihak-terkait`}
+                intent={""}
+                OrangPribadi={PihakTerkait}
+                Badan={PihakTerkaitBadan}
+                query={"pihak-terkait"}
+              ></RoleBasedRenderer>
+            </>
+          }
+        />
+        <Route
           path="/praktikum/:id/sistem/:akun/informasi-umum"
           // path="/admin/praktikum/1/profil-saya/informasi-umum"
           element={
