@@ -1944,29 +1944,24 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                   </tr>
                 </thead>
                 <tbody className="text-gray-600">
-                  {/* {
-                    data.fi
-                  } */}
-                  <tr className="bg-gray-100">
-                    <td className="px-1 py-4 border">
-                      <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-2 rounded">
-                        Edit
-                      </button>
-                      <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-2 rounded ml-2">
-                        Lihat
-                      </button>
-                    </td>
-                    <td className="px-4 py-4 border">1234567890</td>
-                    <td className="px-4 py-4 border">
-                      Jenis Tempat Kegiatan Usaha
-                    </td>
-                    <td className="px-4 py-4 border">
-                      Nama Tempat Kegiatan Usaha
-                    </td>
-                    <td className="px-4 py-4 border">
-                      Kode KLU Tempat Kegiatan Usaha
-                    </td>
-                  </tr>
+                  {data.field_edit_informasi.tempat_kegiatan_usaha.map(
+                    (tku) => (
+                      <tr className="bg-gray-100">
+                        <td className="px-1 py-4 border">
+                          <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-2 rounded">
+                            Edit
+                          </button>
+                          <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-2 rounded ml-2">
+                            Lihat
+                          </button>
+                        </td>
+                        <td className="px-4 py-4 border">{tku.nitku}</td>
+                        <td className="px-4 py-4 border">{tku.jenis_tku}</td>
+                        <td className="px-4 py-4 border">{tku.nama_tku} </td>
+                        <td className="px-4 py-4 border">{tku.nama_tku} </td>
+                      </tr>
+                    )
+                  )}
                 </tbody>
               </table>
             </div>
