@@ -374,6 +374,69 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
       Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
     },
   });
+  const updateDetailBank = useMutation({
+    mutationFn: async (bank_id) => {
+      const csrf = await getCsrf();
+      return axios.put(
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/detail-bank/${bank_id}`,
+        bankFormData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": csrf,
+            Authorization: `Bearer ${cookies.token}`,
+          },
+        }
+      );
+    },
+    onSuccess: (data) => {
+      console.log(data);
+      Swal.fire(
+        "Berhasil!",
+        "Data detail bank berhasil disimpan!",
+        "success"
+      ).then((result) => {
+        if (result.isConfirmed) {
+          window.location.reload();
+        }
+      });
+    },
+    onError: (error) => {
+      console.error("Error saving data:", error);
+      Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
+    },
+  });
+  const deleteDetailBank = useMutation({
+    mutationFn: async (bank_id) => {
+      const csrf = await getCsrf();
+      return axios.delete(
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/detail-bank/${bank_id}`,
+        {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": csrf,
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+    },
+    onSuccess: (data) => {
+      console.log(data);
+      Swal.fire("Berhasil!", "Pihak terkait berhasil dihapus!", "success").then(
+        (result) => {
+          if (result.isConfirmed) {
+            window.location.reload();
+          }
+        }
+      );
+    },
+    onError: (error) => {
+      console.error("Error saving data:", error);
+      Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
+    },
+  });
 
   const handleInformasiUmumChange = (e) => {
     const { name, value } = e.target;
@@ -411,6 +474,7 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
       Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
     },
   });
+
   const [contactFormData, setContactFormData] = useState({
     jenis_kontak: "",
     nomor_telpon: "",
@@ -2353,8 +2417,182 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                   {data.field_edit_informasi.detail_bank.map((bank) => (
                     <tr className="bg-gray-100">
                       <td className="px-1 py-4 border">
-                        <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-2 rounded">
-                          Edit
+                        <AlertDialog>
+                          <AlertDialogTrigger
+                            onClick={() => setBankFormData(bank)}
+                            className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"
+                          >
+                            Edit
+                          </AlertDialogTrigger>
+                          <AlertDialogContent className="bg-white !min-w-[1000px] rounded-lg shadow-lg ">
+                            <AlertDialogHeader>
+                              <AlertDialogTitle className="text-xl font-bold">
+                                Tambahkan Tempat Kegiatan Baru
+                              </AlertDialogTitle>
+                            </AlertDialogHeader>
+                            <div className="grid gap-4 overflow-auto h-96">
+                              <div>
+                                <label className="block text-sm font-medium text-gray-700">
+                                  Bank *
+                                </label>
+                                <select
+                                  className="w-full p-2 border rounded"
+                                  name="nama_bank"
+                                  value={bankFormData.nama_bank}
+                                  onChange={handleBankChange}
+                                >
+                                  <option value="">Pilih Bank</option>
+                                  <option value="mandiri">
+                                    PT BANK MANDIRI (PERSERO) Tbk
+                                  </option>
+                                  <option value="bca">
+                                    PT BANK CENTRAL ASIA Tbk
+                                  </option>
+                                  <option value="bri">
+                                    PT BANK RAKYAT INDONESIA (PERSERO) Tbk
+                                  </option>
+                                  <option value="bni">
+                                    PT BANK NEGARA INDONESIA (PERSERO) Tbk
+                                  </option>
+                                  <option value="bukopin">
+                                    PT BANK BUKOPIN Tbk
+                                  </option>
+                                  <option value="btpn">PT BANK BTPN Tbk</option>
+                                  <option value="cimb">
+                                    PT BANK CIMB NIAGA Tbk
+                                  </option>
+                                  <option value="danamon">
+                                    PT BANK DANAMON Tbk
+                                  </option>
+                                  <option value="maybank">
+                                    PT BANK MAYBANK Tbk
+                                  </option>
+                                  <option value="mega">PT BANK MEGA Tbk</option>
+                                  <option value="permata">
+                                    PT BANK PERMATA Tbk
+                                  </option>
+                                  <option value="panin">
+                                    PT BANK PANIN Tbk
+                                  </option>
+                                  <option value="panin_syariah">
+                                    PT BANK PANIN SYARIAH Tbk
+                                  </option>
+                                  <option value="maybank_syariah">
+                                    PT BANK MAYBANK SYARIAH Tbk
+                                  </option>
+                                  <option value="bsi">
+                                    PT BANK SYARIAH INDONESIA Tbk
+                                  </option>
+                                  <option value="bsi_syariah">
+                                    PT BANK SYARIAH INDONESIA SYARIAH Tbk
+                                  </option>
+                                  <option value="bca_syariah">
+                                    PT BANK CENTRAL ASIA SYARIAH Tbk
+                                  </option>
+                                  <option value="bri_syariah">
+                                    PT BANK RAKYAT INDONESIA SYARIAH Tbk
+                                  </option>
+                                  <option value="bni_syariah">
+                                    PT BANK NEGARA INDONESIA SYARIAH Tbk
+                                  </option>
+                                  <option value="bukopin_syariah">
+                                    PT BANK BUKOPIN SYARIAH Tbk
+                                  </option>
+                                  <option value="btpn_syariah">
+                                    PT BANK BTPN SYARIAH Tbk
+                                  </option>
+                                  <option value="cimb_syariah">
+                                    PT BANK CIMB NIAGA SYARIAH Tbk
+                                  </option>
+                                  <option value="danamon_syariah">
+                                    PT BANK DANAMON SYARIAH Tbk
+                                  </option>
+                                  <option value="maybank_syariah">
+                                    PT BANK MAYBANK SYARIAH Tbk
+                                  </option>
+                                </select>
+                              </div>
+                              <div>
+                                <label className="block text-sm font-medium text-gray-700">
+                                  Nomor Rekening
+                                </label>
+                                <input
+                                  type="text"
+                                  name="nomor_rekening_bank"
+                                  value={bankFormData.nomor_rekening_bank}
+                                  onChange={handleBankChange}
+                                  className="w-full p-2 border rounded"
+                                />
+                              </div>
+                              <div>
+                                <label className="block text-sm font-medium text-gray-700">
+                                  Jenis Rekening Bank
+                                </label>
+                                <select
+                                  name="jenis_rekening_bank"
+                                  value={bankFormData.jenis_rekening_bank}
+                                  onChange={handleBankChange}
+                                  className="w-full p-2 border rounded"
+                                >
+                                  <option value="akun-bisnis">
+                                    Akun Bisnis
+                                  </option>
+                                  <option value="akun-pribadi">
+                                    Akun Pribadi
+                                  </option>
+                                </select>
+                              </div>
+                              <div>
+                                <label className="block text-sm font-medium text-gray-700">
+                                  Nama Pemilik Bank
+                                </label>
+                                <textarea
+                                  name="nama_pemilik_bank"
+                                  value={bankFormData.nama_pemilik_bank}
+                                  onChange={handleBankChange}
+                                  className="w-full p-2 border rounded"
+                                ></textarea>
+                              </div>
+                              <div>
+                                <label className="block text-sm font-medium text-gray-700">
+                                  Tanggal Mulai
+                                </label>
+                                <input
+                                  type="date"
+                                  name="tanggal_mulai"
+                                  value={bankFormData.tanggal_mulai}
+                                  onChange={handleBankChange}
+                                  className="w-full p-2 border rounded"
+                                />
+                              </div>
+                              <div>
+                                <label className="block text-sm font-medium text-gray-700">
+                                  Tanggal Berakhir
+                                </label>
+                                <input
+                                  type="date"
+                                  name="tanggal_berakhir"
+                                  value={bankFormData.tanggal_berakhir}
+                                  onChange={handleBankChange}
+                                  className="w-full p-2 border rounded"
+                                />
+                              </div>
+                            </div>
+                            <AlertDialogFooter className="flex justify-end mt-6 space-x-2">
+                              <AlertDialogCancel className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600">
+                                Batal
+                              </AlertDialogCancel>
+                              <AlertDialogAction
+                                onClick={() => updateDetailBank.mutate(bank.id)}
+                                className="bg-blue-900 text-white px-4 py-2 rounded-md hover:bg-blue-950"
+                              >
+                                Simpan
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
+                        <button className="bg-red-500 hover:bg-red-600 text-white py-2 px-2 rounded ml-2">
+                          Hapus
                         </button>
                       </td>
                       <td className="px-4 py-4 border">{bank.nama_bank}</td>
