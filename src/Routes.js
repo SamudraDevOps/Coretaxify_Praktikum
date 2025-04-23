@@ -82,6 +82,7 @@ export const RoutesApi = {
   admin: {
     users: apiResource(apiUrl + `${role.admin}`, 'users'),
     accounts: apiResource(apiUrl + `${role.admin}`, 'accounts'),
+    assignments: apiResource(apiUrl + `${role.admin}`, 'assignments'),
     groups: apiResource(apiUrl + `${role.admin}`, 'groups'),
     roles: apiResource(apiUrl + `${role.admin}`, 'roles'),
     tasks: apiResource(apiUrl + `${role.admin}`, 'tasks'),

@@ -112,7 +112,11 @@ const EditDosen = () => {
     },
     onError: (error) => {
       console.log(error);
-      Swal.fire("Gagal!", "Terjadi Kesalahan!", "error").then((result) => {
+      if (error.response === undefined) {
+        Swal.fire("Gagal !", error.message, "error");
+        return;
+      }
+      Swal.fire("Gagal !", error.response.data.message, "error").then((result) => {
         if (result.isConfirmed) {
           refetch();
           // window.location.reload();

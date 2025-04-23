@@ -84,8 +84,11 @@ export const deleteContract = (cookie) =>
     },
 
     onError: (error) => {
-      console.log("hello!");
-      console.log(error);
-      Swal.fire("Gagal !", error.message, "error");
+      if(error.response.data.message.includes("Integrity constraint violation") || error.response.data.message.includes("foreign key constraint fails")) {
+        Swal.fire("Gagal!", "Data tidak dapat dihapus karena masih digunakan oleh data lain.", "error");
+      } else {
+        console.log(error);
+        Swal.fire("Gagal!", error.message, "error");
+      }
     },
   });

@@ -162,7 +162,7 @@ export const createPraktikumDosen = (
     },
     onSuccess: (data) => {
       console.log(data);
-      Swal.fire("Berhasil!", "Praktikum berhasil diubah!", "success").then(
+      Swal.fire("Berhasil!", "Praktikum berhasil dibuat!", "success").then(
         (result) => {
           if (result.isConfirmed) {
             refetch();
@@ -198,7 +198,7 @@ export const deletePraktikumDosen = (cookies, class_id, refetch) =>
     },
     onSuccess: (data) => {
       console.log(data);
-      Swal.fire("Berhasil!", "Praktikum berhasil diubah!", "success").then(
+      Swal.fire("Berhasil!", "Praktikum berhasil dihapus!", "success").then(
         (result) => {
           if (result.isConfirmed) {
             refetch();

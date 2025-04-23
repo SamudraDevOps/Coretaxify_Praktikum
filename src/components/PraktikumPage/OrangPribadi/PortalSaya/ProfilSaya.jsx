@@ -63,6 +63,7 @@ const ProfilSaya = () => {
       <SidebarProfilSaya
         nama_akun={data.nama_akun}
         npwp_akun={data.npwp_akun}
+        akun={{ id, akun }}
       />
       <main className="flex-auto p-3 bg-white rounded-md h-full">
         <div className="flex justify-between items-center mb-6">
