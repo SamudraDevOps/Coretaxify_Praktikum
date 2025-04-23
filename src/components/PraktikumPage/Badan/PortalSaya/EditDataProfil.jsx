@@ -259,6 +259,39 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
       Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
     },
   });
+  const updateTku = useMutation({
+    mutationFn: async (idTku) => {
+      const csrf = await getCsrf();
+      return axios.put(
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/tempat-kegiatan-usaha/${idTku}`,
+        tkuFormData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": csrf,
+            Authorization: `Bearer ${cookies.token}`,
+          },
+        }
+      );
+    },
+    onSuccess: (data) => {
+      console.log(data);
+      Swal.fire(
+        "Berhasil!",
+        "Data tempat kegiatan usaha berhasil disimpan!",
+        "success"
+      ).then((result) => {
+        if (result.isConfirmed) {
+          window.location.reload();
+        }
+      });
+    },
+    onError: (error) => {
+      console.error("Error saving data:", error);
+      Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
+    },
+  });
 
   const handleInformasiUmumChange = (e) => {
     const { name, value } = e.target;
@@ -1948,9 +1981,84 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                     (tku) => (
                       <tr className="bg-gray-100">
                         <td className="px-1 py-4 border">
-                          <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-2 rounded">
-                            Edit
-                          </button>
+                          <AlertDialog>
+                            <AlertDialogTrigger
+                              onClick={() => setTkuFormData(tku)}
+                              className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"
+                            >
+                              Edit
+                            </AlertDialogTrigger>
+                            <AlertDialogContent className="bg-white !min-w-[1000px] rounded-lg shadow-lg ">
+                              <AlertDialogHeader>
+                                <AlertDialogTitle className="text-xl font-bold">
+                                  Tambahkan Tempat Kegiatan Baru
+                                </AlertDialogTitle>
+                              </AlertDialogHeader>
+                              <div className="grid gap-4 overflow-auto h-96">
+                                <div>
+                                  <label className="block text-sm font-medium text-gray-700">
+                                    NITKU
+                                  </label>
+                                  <input
+                                    type="text"
+                                    name="nitku"
+                                    value={tkuFormData.nitku}
+                                    onChange={handleTkuChange}
+                                    className="w-full p-2 border rounded-md bg-white mt-1"
+                                    placeholder="Masukkan NITKU"
+                                  />
+                                </div>
+                                <div>
+                                  <label className="block text-sm font-medium text-gray-700">
+                                    Jenis TKU *
+                                  </label>
+                                  <input
+                                    type="text"
+                                    name="jenis_tku"
+                                    value={tkuFormData.jenis_tku}
+                                    onChange={handleTkuChange}
+                                    className="w-full p-2 border rounded"
+                                  />
+                                </div>
+                                <div>
+                                  <label className="block text-sm font-medium text-gray-700">
+                                    Nama TKU
+                                  </label>
+                                  <input
+                                    type="text"
+                                    name="nama_tku"
+                                    value={tkuFormData.nama_tku}
+                                    onChange={handleTkuChange}
+                                    className="w-full p-2 border rounded"
+                                  />
+                                </div>
+                                <div>
+                                  <label className="block text-sm font-medium text-gray-700">
+                                    Jenis Usaha
+                                  </label>
+                                  <input
+                                    type="text"
+                                    name="jenis_usaha"
+                                    value={tkuFormData.jenis_usaha}
+                                    onChange={handleTkuChange}
+                                    className="w-full p-2 border rounded"
+                                  />
+                                </div>
+                              </div>
+
+                              <AlertDialogFooter className="flex justify-end mt-6 space-x-2">
+                                <AlertDialogCancel className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600">
+                                  Batal
+                                </AlertDialogCancel>
+                                <AlertDialogAction
+                                  onClick={() => updateTku.mutate(tku.id)}
+                                  className="bg-blue-900 text-white px-4 py-2 rounded-md hover:bg-blue-950"
+                                >
+                                  Simpan
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
                           <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-2 rounded ml-2">
                             Lihat
                           </button>
