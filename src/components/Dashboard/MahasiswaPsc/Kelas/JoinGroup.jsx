@@ -112,7 +112,7 @@ const JoinGroup = ({ isOpen, setIsOpen, onSuccess }) => {
                   id="groupCode"
                   className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600"
                   placeholder="Masukkan kode kelas"
-                  value={groupCode}
+                  value=""
                   onChange={(e) => setGroupCode(e.target.value)}
                   required
                 />
