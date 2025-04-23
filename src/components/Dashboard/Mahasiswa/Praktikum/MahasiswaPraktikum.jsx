@@ -187,7 +187,7 @@ export default function MahasiswaPraktikum() {
                   <input
                     className="text-black"
                     name="assignment_code"
-                    value={formData.assignment_code}
+                    value=""
                     onChange={handleChange}
                     // readOnly
                   />
