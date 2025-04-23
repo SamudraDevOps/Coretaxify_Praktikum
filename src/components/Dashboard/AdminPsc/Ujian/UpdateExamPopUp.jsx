@@ -121,35 +121,6 @@ const UpdateExamPopUp = ({
           </div>
 
           <div className="form-group">
-            <label>File Support (Kosongkan jika tidak ingin mengubah):</label>
-            <div className="file-upload-container">
-              <div className="file-upload-box">
-                {formData.supporting_file ? (
-                  <div className="file-selected">
-                    <p>{formData.supporting_file.name}</p>
-                  </div>
-                ) : (
-                  <div className="file-upload-placeholder">
-                    <p>Klik atau drop file di sini</p>
-                    <small>Format: PDF, DOC, DOCX, XLSX, XLS, etc.</small>
-                    {examData.supporting_file && (
-                      <p className="mt-2 text-xs text-blue-500">
-                        File saat ini: {examData.supporting_file}
-                      </p>
-                    )}
-                  </div>
-                )}
-                <input
-                  type="file"
-                  name="supporting_file"
-                  onChange={handleFileChange}
-                  className="file-input"
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="form-group">
             <label>Tanggal Mulai:</label>
             <input
               type="datetime-local"
@@ -185,6 +156,35 @@ const UpdateExamPopUp = ({
               placeholder="Masukkan durasi ujian dalam menit"
               required
             />
+          </div>
+
+          <div className="form-group">
+            <label>File Support (Kosongkan jika tidak ingin mengubah):</label>
+            <div className="file-upload-container">
+              <div className="file-upload-box">
+                {formData.supporting_file ? (
+                  <div className="file-selected">
+                    <p>{formData.supporting_file.name}</p>
+                  </div>
+                ) : (
+                  <div className="file-upload-placeholder">
+                    <p>Klik atau drop file di sini</p>
+                    <small>Format: PDF, DOC, DOCX, XLSX, XLS, etc.</small>
+                    {examData.supporting_file && (
+                      <p className="mt-2 text-xs text-blue-500">
+                        File saat ini: {examData.supporting_file}
+                      </p>
+                    )}
+                  </div>
+                )}
+                <input
+                  type="file"
+                  name="supporting_file"
+                  onChange={handleFileChange}
+                  className="file-input"
+                />
+              </div>
+            </div>
           </div>
 
           <div className="assignment-popup-actions">

@@ -386,10 +386,10 @@ const ExamPsc = () => {
               </th>
               <th>Kode Ujian</th>
               <th>Soal</th>
-              <th>File Support</th>
               <th>Tanggal Mulai</th>
               <th>Tanggal Selesai</th>
               <th>Durasi (menit)</th>
+              <th>File Support</th>
               {/* <th>Status</th> */}
               <th>Action</th>
             </tr>
@@ -402,6 +402,9 @@ const ExamPsc = () => {
                   <td>{exam.name}</td>
                   <td>{exam.exam_code}</td>
                   <td>{getTaskName(exam.task_id)}</td>
+                  <td>{formatDate(exam.start_period)}</td>
+                  <td>{formatDate(exam.end_period)}</td>
+                  <td>{exam.duration}</td>
                   <td>
                     {exam.supporting_file ? (
                       <button
@@ -415,9 +418,6 @@ const ExamPsc = () => {
                       <span>-</span>
                     )}
                   </td>
-                  <td>{formatDate(exam.start_period)}</td>
-                  <td>{formatDate(exam.end_period)}</td>
-                  <td>{exam.duration}</td>
                   {/* <td>
                     {exam.status === "ACTIVE" ? (
                       <span className="status-badge active">Aktif</span>
