@@ -292,6 +292,36 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
       Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
     },
   });
+  const deleteTku = useMutation({
+    mutationFn: async (idTku) => {
+      const csrf = await getCsrf();
+      return axios.delete(
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/tempat-kegiatan-usaha/${idTku}`,
+        {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": csrf,
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+    },
+    onSuccess: (data) => {
+      console.log(data);
+      Swal.fire("Berhasil!", "Data TKU berhasil dihapus!", "success").then(
+        (result) => {
+          if (result.isConfirmed) {
+            window.location.reload();
+          }
+        }
+      );
+    },
+    onError: (error) => {
+      console.error("Error saving data:", error);
+      Swal.fire("Gagal!", "Terjadi kesalahan saat menghapus data.", "error");
+    },
+  });
 
   const handleInformasiUmumChange = (e) => {
     const { name, value } = e.target;
@@ -2061,6 +2091,12 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                           </AlertDialog>
                           <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-2 rounded ml-2">
                             Lihat
+                          </button>
+                          <button
+                            onClick={() => deleteTku.mutate(tku.id)}
+                            className="bg-red-500 hover:bg-red-600 text-white py-2 px-2 rounded ml-2"
+                          >
+                            Hapus
                           </button>
                         </td>
                         <td className="px-4 py-4 border">{tku.nitku}</td>
