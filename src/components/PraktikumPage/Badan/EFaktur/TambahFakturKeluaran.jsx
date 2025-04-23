@@ -99,7 +99,15 @@ const TambahFakturKeluaran = ({ }) => {
     const handleInformasiTambahanChange = (e) => {
         const selectedInfo = e.target.value;
         setInformasiTambahan(selectedInfo);
-
+        setFormData(prev => ({
+            ...prev,
+            informasiTambahan: selectedInfo,
+            capFasilitas:
+                selectedInfo === "A" ? "X" :
+                    selectedInfo === "B" ? "Y" :
+                        selectedInfo === "C" ? "Z" : "",
+            nomorPendukung: "" // reset ketika berubah
+        }));
         // Atur nilai Cap Fasilitas secara otomatis
         if (selectedInfo === "A") {
             setCapFasilitas("X");
@@ -144,9 +152,14 @@ const TambahFakturKeluaran = ({ }) => {
         }
     };
     const handleKodeTransaksiChange = (event) => {
-        setKodeTransaksi(event.target.value);
-    };
+        const value = event.target.value;
+        setKodeTransaksi(value);
 
+        setFormData(prev => ({
+            ...prev,
+            kodeTransaksi: value,
+        }));
+    };
     useEffect(() => {
         if (kodeTransaksi === "01") {
             setIsChecked(false);
@@ -230,6 +243,50 @@ const TambahFakturKeluaran = ({ }) => {
         setIsChecked(false);
     };
 
+    const [formData, setFormData] = useState({
+        uangMuka: false,
+        pelunasan: false,
+        nomorFaktur: "",
+        kodeTransaksi: "",
+        tanggalFaktur: "",
+        jenisFaktur: "Normal",
+        masaPajak: "",
+        tahun: new Date().getFullYear(),
+        informasiTambahan: "",
+        capFasilitas: "",
+        nomorPendukung: "",
+        referensi: "",
+        alamat: "",
+        idtku: "000000",
+        npwp: "",
+        identification: "",
+        negara:"",
+        nomorDokumen:"",
+        nama: "",
+        email:"",
+    });
+
+    const handleChange = (e) => {
+        const { name, value, type, checked } = e.target;
+        setFormData((prev) => ({
+            ...prev,
+            [name]: type === "checkbox" ? checked : value,
+        }));
+    };
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        // Lakukan tindakan setelah formulir disubmit
+        console.log(formData);
+    };
+
+    const handleSimpan = () => {
+        const data = {
+            dokumenTransaksi: {
+                uangMuka,
+            }
+        }
+    }
+
     return (
         console.log(""),
         console.log("Rendering TambahFakturKeluaran"),
@@ -245,11 +302,11 @@ const TambahFakturKeluaran = ({ }) => {
                     <div className='border rounded-md p-4 mb-2 grid grid-cols-3 gap-4 w-full'>
                         <div className="space-y-2">
                             <label className='block text-sm font-medium'>Uang Muka</label>
-                            <input type="checkbox" className='justify-start p-3 border rounded' />
+                            <input type="checkbox" name="uangMuka" checked={formData.uangMuka} onChange={handleChange} className='justify-start p-3 border rounded' />
                         </div>
                         <div className="space-y-2">
                             <label className='block text-sm font-medium'>Pelunasan</label>
-                            <input type="checkbox" className='justify-start p-3 border rounded' />
+                            <input type="checkbox" name='pelunasan' checked={formData.pelunasan} onChange={handleChange} className='justify-start p-3 border rounded' />
                         </div>
                         <div className='space-y-2'>
                             <label className='block text-sm font-medium'>Nomor Faktur</label>
@@ -258,7 +315,8 @@ const TambahFakturKeluaran = ({ }) => {
                         <div className='space-y-2'>
                             <label className='block text-sm font-medium'>Kode Transaksi</label>
                             <select className='p-2 border rounded w-full'
-                                value={kodeTransaksi}
+                                name="kodeTransaksi"
+                                value={formData.kodeTransaksi}
                                 onChange={handleKodeTransaksiChange} >
                                 <option value="">Pilih Kode Transaksi</option>
                                 <option value="01">01 -  kepada selain pemungut PPN</option>
@@ -276,17 +334,18 @@ const TambahFakturKeluaran = ({ }) => {
                         </div>
                         <div className='space-y-2'>
                             <label className='block text-sm font-medium'>Tanggal Faktur</label>
-                            <input type="date" className='p-2 border rounded w-full' />
+                            <input type="date" value={formData.tanggalFaktur} onChange={handleChange} name='tanggalFaktur' className='p-2 border rounded w-full' />
                         </div>
                         <div className='space-y-2'>
                             <label className="block text-sm font-medium">Jenis Faktur</label>
-                            <input type="text" value="Normal" className='p-2 border rounded w-full bg-gray-100' disabled />
+                            <input type="text" value="Normal" name='jenisFaktur' className='p-2 border rounded w-full bg-gray-100' disabled />
                         </div>
                         <div className="col-span-3 grid grid-cols-3 gap-4">
                             <div className='space-y-2'>
                                 <label className='block text-sm font-medium'>Masa Pajak</label>
                                 {/* <input type="month" className='p-2 border rounded w-full' /> */}
-                                <select className='p-2 border rounded w-full'>
+                                <select className='p-2 border rounded w-full' name='masaPajak' value={formData.masaPajak} onChange={handleChange}>
+                                    <option value="">Pilih Masa Pajak</option>
                                     <option value="Januari">Januari</option>
                                     <option value="Februari">Februari</option>
                                     <option value="Maret">Maret</option>
@@ -361,10 +420,18 @@ const TambahFakturKeluaran = ({ }) => {
                                             <label className='block text-sm font-medium'>Nomor Pendukung</label>
                                             <input
                                                 type="text"
+                                                name="nomorPendukung"
                                                 className='p-2 border rounded w-full'
                                                 placeholder="Masukkan Nomor Pendukung"
-                                                value={nomorPendukung}
-                                                onChange={(e) => setNomorPendukung(e.target.value)}
+                                                value={formData.nomorPendukung}
+                                                onChange={(e) => {
+                                                    const value = e.target.value;
+                                                    setNomorPendukung(value);
+                                                    setFormData(prev => ({
+                                                        ...prev,
+                                                        nomorPendukung: value
+                                                    }));
+                                                }}
                                             />
                                         </div>
                                     )}
@@ -374,11 +441,11 @@ const TambahFakturKeluaran = ({ }) => {
 
                         <div className='space-y-2'>
                             <label className='block text-sm font-medium'>Referensi</label>
-                            <input type="text" className='p-2 border rounded w-full' />
+                            <input type="text" value={formData.referensi} name="referensi" onChange={handleChange} className='p-2 border rounded w-full' />
                         </div>
                         <div className='space-y-2'>
                             <label className='block text-sm font-medium'>Pilih Alamat</label>
-                            <input type="text" className='p-2 border rounded w-full' placeholder='Link Bang, tanya pm jan tanya saia' disabled />
+                            <input type="text" name="alamat" value={formData.alamat} onChange={handleChange} className='p-2 border rounded w-full' placeholder='Link Bang, tanya pm jan tanya saia' disabled />
                         </div>
                         <div className='space-y-2'>
                             <label className='block text-sm font-medium'>IDTKU</label>
@@ -394,52 +461,50 @@ const TambahFakturKeluaran = ({ }) => {
                     <div className='border rounded-md p-4 mb-2 grid grid-cols-3 gap-4 w-full'>
                         <div className='space-y-2'>
                             <label className='block text-sm font-medium'>NPWP </label>
-                            <input type="text" className='p-2 border rounded w-full' />
+                            <input type="text" name='npwp' value={formData.npwp} onChange={handleChange} className='p-2 border rounded w-full' />
                         </div>
                         <div className='space-y-2'>
                             <label className='block text-sm font-medium'>ID</label>
                             <div className='grid grid-cols-2 gap-3 '>
-                                <div className='flex items-center gap-2'>
-                                    <input type="radio" name="identification" className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600' value="NPWP" />
-                                    <label className='text-sm'>NPWP</label>
-                                </div>
-                                <div className='flex items-center gap-2'>
-                                    <input type="radio" name="identification" className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600' value="Paspor" />
-                                    <label className='text-sm'>Paspor</label>
-                                </div>
-                                <div className='flex items-center gap-2'>
-                                    <input type="radio" name="identification" className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600' value="NIK" />
-                                    <label className='text-sm'>NIK</label>
-                                </div>
-                                <div className='flex items-center gap-2'>
-                                    <input type="radio" name="identification" className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600' value="Identitas Lain" />
-                                    <label className='text-sm'>Identitas Lain</label>
-                                </div>
+                                {['NPWP', 'Paspor', 'NIK', 'Identitas Lain'].map((value) => (
+                                    <div key={value} className='flex items-center gap-2'>
+                                        <input
+                                            type="radio"
+                                            name="identification"
+                                            value={value}
+                                            checked={formData.identification === value}
+                                            onChange={handleChange}
+                                            className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500'
+                                        />
+                                        <label className='text-sm'>{value}</label>
+                                    </div>
+                                ))}
                             </div>
+
                         </div>
                         <div className='space-y-2'>
                             <label className='block text-sm font-medium'>Negara</label>
-                            <input type="text" className='p-2 border rounded w-full' />
+                            <input type="text" name='negara' value={formData.negara} onChange={handleChange} className='p-2 border rounded w-full' />
                         </div>
                         <div className='space-y-2'>
                             <label className='block text-sm font-medium'>Nomor Dokumen</label>
-                            <input type="text" className='p-2 border rounded w-full bg-gray-100' disabled />
+                            <input type="text" name='nomorDokumen' value={formData.nomorDokumen} onChange={handleChange} className='p-2 border rounded w-full bg-gray-100' disabled />
                         </div>
                         <div className='space-y-2'>
                             <label className='block text-sm font-medium'>Nama</label>
-                            <input type="text" className='p-2 border rounded w-full' />
+                            <input type="text" name='nama' value={formData.nama} onChange={handleChange} className='p-2 border rounded w-full' />
                         </div>
                         <div className='space-y-2'>
                             <label className='block text-sm font-medium'>Alamat</label>
-                            <input type="text" className='p-2 border rounded w-full' disabled placeholder='Ngelink kang' />
+                            <input type="text" name='alamat' value={formData.alamat} onChange={handleChange} className='p-2 border rounded w-full' disabled placeholder='Ngelink kang' />
                         </div>
                         <div className='space-y-2'>
                             <label className='block text-sm font-medium'>IDTKU</label>
-                            <input type="text" className='p-2 border rounded w-full bg-gray-100' value="000000" />
+                            <input type="text" name='idtku' value={formData.idtku} onChange={handleChange} className='p-2 border rounded w-full bg-gray-100'  />
                         </div>
                         <div className='space-y-2'>
                             <label className='block text-sm font-medium'>Email</label>
-                            <input type="text" className='p-2 border rounded w-full' />
+                            <input type="text" name='email' value={formData.email} onChange={handleChange} className='p-2 border rounded w-full' />
                         </div>
                     </div>
                 )}
@@ -715,7 +780,7 @@ const TambahFakturKeluaran = ({ }) => {
                 )}
                 <div className="flex justify-end mt-4 gap-3">
                     <button className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded">Batal</button>
-                    <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">Simpan</button>
+                    <button onClick={handleSubmit} className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">Simpan</button>
                 </div>
             </div>
         </div>

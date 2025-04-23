@@ -46,11 +46,11 @@ const PajakKeluaranOP = () => {
                                         >
                                             Download Template
                                         </a>
-                                        <a
-                                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+                                        <button
+                                            className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
                                         >
                                             Import Dokumen
-                                        </a>
+                                        </button>
                                     </div>
                                 </div>
                             )}
@@ -100,5 +100,4 @@ const PajakKeluaranOP = () => {
         </div>
     );
 };
-
 export default PajakKeluaranOP;
