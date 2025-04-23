@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "./editPopupDosen.css";
 // import "../../../AdminPsc/Pengguna/Mahasiswa/editPopupMahasiswa.css"
 import { FaPlus, FaTrash, FaFileImport } from "react-icons/fa";
@@ -16,20 +16,28 @@ const TambahDosen = ({
   isCreateMode = false,
   isReadOnly = false,
   isMultipleMode = true, // bulk
+  initialStudents = null,
 }) => {
   // For multiple students mode
   const [students, setStudents] = useState(
-    isMultipleMode
-      ? [
-          {
-            name: "",
-            email: "",
-            status: "ACTIVE",
-            // contract_id: "",
-          },
-        ]
-      : []
+    initialStudents ||
+      (isMultipleMode
+        ? [
+            {
+              name: "",
+              email: "",
+              status: "ACTIVE",
+              // contract_id: "",
+            },
+          ]
+        : [])
   );
+
+  useEffect(() => {
+    if (initialStudents) {
+      setStudents(initialStudents);
+    }
+  }, [initialStudents]);
   const [importError, setImportError] = useState("");
   const [isImporting, setIsImporting] = useState(false);
   const [importSuccess, setImportSuccess] = useState("");
@@ -141,20 +149,7 @@ const TambahDosen = ({
     }
 
     // Save valid students and update the form with only invalid ones
-    onSave(validStudents, formData.contract_id);
-
-    // If there are invalid students, keep them in the form and show errors
-    if (invalidStudents.length > 0) {
-      setStudents(invalidStudents);
-
-      Swal.fire({
-        title: "Sebagian Data Berhasil Disimpan",
-        html: `${validStudents.length} dosen berhasil disimpan.<br><br>
-               ${invalidStudents.length} dosen gagal disimpan dengan error:<br>
-               ${errors.join("<br>")}`,
-        icon: "warning",
-      });
-    }
+    onSave(validStudents, formData.contract_id, invalidStudents, errors);
   };
 
   // file input
