@@ -29,6 +29,7 @@ const TambahFakturKeluaran = ({ }) => {
     const [listKode, setListKode] = useState([]);
     const [capFasilitas, setCapFasilitas] = useState("");
     const [nomorPendukung, setNomorPendukung] = useState("");
+    const [savedTransaksi, setSavedTransaksi] = useState("");
 
 
     const [isChecked, setIsChecked] = useState(false);
@@ -260,11 +261,109 @@ const TambahFakturKeluaran = ({ }) => {
         idtku: "000000",
         npwp: "",
         identification: "",
-        negara:"",
-        nomorDokumen:"",
+        negara: "",
+        nomorDokumen: "",
         nama: "",
-        email:"",
+        email: "",
+        detailTransaksi: [] // Tambahkan properti ini untuk menyimpan detail transaksi
     });
+
+    const [namaBarang, setNamaBarang] = useState("");
+
+    const handleSimpanTransaksi = () => {
+        // Validate required fields
+        if (!tipe || !selectedKode || !selectedSatuan || !namaBarang || !harga || kuantitas <= 0) {
+            alert("Mohon lengkapi semua data transaksi");
+            return;
+        }
+
+        // Create new transaction object with all necessary data
+        const newTransaksi = {
+            id: Date.now(), // Generate unique ID for each transaction
+            tipe,
+            nama: namaBarang,
+            kode: selectedKode,
+            satuan: selectedSatuan,
+            harga,
+            kuantitas,
+            totalHarga,
+            potonganHarga,
+            dpp,
+            jumlah,
+            tarifPPN: "12%",
+            ppnNominal: tarifPPN,
+            tarifPPnBM,
+            ppnBM
+        };
+
+        // Update the savedTransaksi state with the new transaction
+        const updatedTransaksi = savedTransaksi ? [...savedTransaksi, newTransaksi] : [newTransaksi];
+        setSavedTransaksi(updatedTransaksi);
+
+        // Update formData with the new transaction
+        setFormData(prev => ({
+            ...prev,
+            detailTransaksi: updatedTransaksi
+        }));
+
+        // Reset form fields after saving
+        setTipe("");
+        setNamaBarang("");
+        setSelectedKode("");
+        setSelectedSatuan("");
+        setHarga("Rp 0");
+        setKuantitas(0);
+        setTotalHarga("Rp 0");
+        setPotonganHarga("Rp 0");
+        setDPP("Rp 0");
+        setJumlah("Rp 0");
+        setTarifPPN("Rp 0");
+        setTarifPPnBM("");
+        setPPnBM("Rp 0");
+        setIsChecked(false);
+        setIsCustomPPnBM(false);
+    };
+
+    const handleHapusTransaksi = (id) => {
+        // Filter out the transaction with the given id
+        const updatedTransaksi = savedTransaksi.filter(item => item.id !== id);
+
+        // Update both states
+        setSavedTransaksi(updatedTransaksi);
+        setFormData(prev => ({
+            ...prev,
+            detailTransaksi: updatedTransaksi
+        }));
+    };
+
+    const handleEditTransaksi = (id) => {
+        // Find the transaction to edit
+        const transaksiToEdit = savedTransaksi.find(item => item.id === id);
+
+        if (transaksiToEdit) {
+            // Set form fields with the transaction data
+            setTipe(transaksiToEdit.tipe);
+            setNamaBarang(transaksiToEdit.nama);
+            setSelectedKode(transaksiToEdit.kode);
+            setSelectedSatuan(transaksiToEdit.satuan);
+            setHarga(transaksiToEdit.harga);
+            setKuantitas(transaksiToEdit.kuantitas);
+            setTotalHarga(transaksiToEdit.totalHarga);
+            setPotonganHarga(transaksiToEdit.potonganHarga);
+            setDPP(transaksiToEdit.dpp);
+            setJumlah(transaksiToEdit.jumlah);
+            setTarifPPnBM(transaksiToEdit.tarifPPnBM);
+            setPPnBM(transaksiToEdit.ppnBM);
+
+            // Remove the transaction from the list
+            handleHapusTransaksi(id);
+
+            // Open the dialog to edit
+            // You'll need to add a ref or state to control the dialog
+            // For example:
+            // setIsDialogOpen(true);
+        }
+    };
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -275,8 +374,40 @@ const TambahFakturKeluaran = ({ }) => {
     };
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        // Validasi apakah ada detail transaksi
+        if (!formData.detailTransaksi || formData.detailTransaksi.length === 0) {
+            alert("Mohon tambahkan minimal satu detail transaksi");
+            return;
+        }
+
+        // Hitung total DPP, PPN, dan PPnBM dari semua transaksi
+        const totalDPP = formData.detailTransaksi.reduce((sum, item) => {
+            return sum + (parseInt(item.dpp.replace(/\D/g, ""), 10) || 0);
+        }, 0);
+
+        const totalPPN = formData.detailTransaksi.reduce((sum, item) => {
+            return sum + (parseInt(item.ppnNominal.replace(/\D/g, ""), 10) || 0);
+        }, 0);
+
+        const totalPPnBM = formData.detailTransaksi.reduce((sum, item) => {
+            return sum + (parseInt(item.ppnBM.replace(/\D/g, ""), 10) || 0);
+        }, 0);
+
+        // Tambahkan total ke formData
+        const finalFormData = {
+            ...formData,
+            totalDPP: formatRupiah(totalDPP.toString()),
+            totalPPN: formatRupiah(totalPPN.toString()),
+            totalPPnBM: formatRupiah(totalPPnBM.toString()),
+            totalTagihan: formatRupiah((totalDPP + totalPPN + totalPPnBM).toString())
+        };
+
         // Lakukan tindakan setelah formulir disubmit
-        console.log(formData);
+        console.log(finalFormData);
+
+        // Di sini Anda bisa menambahkan kode untuk mengirim data ke server
+        // Misalnya dengan axios.post('/api/faktur', finalFormData)
     };
 
     const handleSimpan = () => {
@@ -500,7 +631,7 @@ const TambahFakturKeluaran = ({ }) => {
                         </div>
                         <div className='space-y-2'>
                             <label className='block text-sm font-medium'>IDTKU</label>
-                            <input type="text" name='idtku' value={formData.idtku} onChange={handleChange} className='p-2 border rounded w-full bg-gray-100'  />
+                            <input type="text" name='idtku' value={formData.idtku} onChange={handleChange} className='p-2 border rounded w-full bg-gray-100' />
                         </div>
                         <div className='space-y-2'>
                             <label className='block text-sm font-medium'>Email</label>
@@ -579,7 +710,13 @@ const TambahFakturKeluaran = ({ }) => {
 
                                             <div className="space-y-2">
                                                 <label className="block text-sm font-medium">Nama </label>
-                                                <input type="text" className="p-2 border rounded w-full" />
+                                                <input
+                                                    type="text"
+                                                    className="p-2 border rounded w-full"
+                                                    value={namaBarang}
+                                                    onChange={(e) => setNamaBarang(e.target.value)}
+                                                    placeholder="Masukkan nama barang/jasa"
+                                                />
                                             </div>
                                             {tipe && (
                                                 <div className='space-y-2'>
@@ -728,7 +865,7 @@ const TambahFakturKeluaran = ({ }) => {
                                     </div>
                                     <AlertDialogFooter className="flex justify-end mt-6 space-x-2">
                                         <AlertDialogCancel className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600">Batal</AlertDialogCancel>
-                                        <AlertDialogAction className="bg-blue-900 text-white px-4 py-2 rounded-md hover:bg-blue-950">Simpan</AlertDialogAction>
+                                        <AlertDialogAction className="bg-blue-900 text-white px-4 py-2 rounded-md hover:bg-blue-950" onClick={handleSimpanTransaksi}>Simpan</AlertDialogAction>
                                     </AlertDialogFooter>
                                 </AlertDialogContent>
                             </AlertDialog>
@@ -757,21 +894,49 @@ const TambahFakturKeluaran = ({ }) => {
                                     </tr>
                                 </thead>
                                 <tbody className="text-gray-600">
-                                    <tr>
+                                    {savedTransaksi && savedTransaksi.length > 0 ? (
+                                        savedTransaksi.map((item, index) => (
+                                            <tr key={item.id} className={index % 2 === 0 ? "bg-gray-100" : ""}>
+                                                <td className="px-1 py-2 border">{index + 1}</td>
+                                                <td className="px-1 py-2 border">
+                                                    <input type="checkbox" className="w-4 h-4" />
+                                                </td>
+                                                <td className="px-1 py-2 border">
+                                                    <button
+                                                        className="bg-blue-500 hover:bg-blue-600 text-white py-1 px-2 rounded text-xs"
+                                                        onClick={() => handleEditTransaksi(item.id)}
+                                                    >
+                                                        Edit
+                                                    </button>
+                                                    <button
+                                                        className="bg-red-500 hover:bg-red-600 text-white py-1 px-2 rounded text-xs ml-1"
+                                                        onClick={() => handleHapusTransaksi(item.id)}
+                                                    >
+                                                        Hapus
+                                                    </button>
+                                                </td>
+
+                                                <td className="px-2 py-2 border">{item.tipe}</td>
+                                                <td className="px-2 py-2 border">{item.nama}</td>
+                                                <td className="px-2 py-2 border">{item.kode}</td>
+                                                <td className="px-2 py-2 border">{item.kuantitas}</td>
+                                                <td className="px-2 py-2 border">{item.satuan}</td>
+                                                <td className="px-2 py-2 border">{item.harga}</td>
+                                                <td className="px-2 py-2 border">{item.totalHarga}</td>
+                                                <td className="px-2 py-2 border">{item.potonganHarga}</td>
+                                                <td className="px-2 py-2 border">{item.tarifPPN}</td>
+                                                <td className="px-2 py-2 border">{item.ppnNominal}</td>
+                                                <td className="px-2 py-2 border">{item.dpp}</td>
+                                                <td className="px-2 py-2 border">{item.jumlah}</td>
+                                                <td className="px-2 py-2 border">{item.ppnBM}</td>
+                                                <td className="px-2 py-2 border">{item.tarifPPnBM}</td>
+                                            </tr>
+                                        ))
+                                    ) : (
                                         <tr>
-                                            <td colSpan="10" className="text-center p-4 border">Belum ada data</td>
+                                            <td colSpan="17" className="text-center p-4 border">Belum ada data</td>
                                         </tr>
-                                    </tr>
-                                    {/* <tr className="bg-gray-100">
-                                        <td className="px-1 py-4 border">
-                                            <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-2 rounded">Edit</button>
-                                            <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-2 rounded ml-2">Lihat</button>
-                                        </td>
-                                        <td className="px-4 py-4 border">1234567890</td>
-                                        <td className="px-4 py-4 border">Jenis Tempat Kegiatan Usaha</td>
-                                        <td className="px-4 py-4 border">Nama Tempat Kegiatan Usaha</td>
-                                        <td className="px-4 py-4 border">Kode KLU Tempat Kegiatan Usaha</td>
-                                    </tr> */}
+                                    )}
                                 </tbody>
                             </table>
 
