@@ -1,58 +1,14 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import {
-  FaCalendarAlt,
-  FaFilter,
-  FaSearch,
-  FaTimes,
-  FaChevronDown,
-  FaChevronUp,
-} from "react-icons/fa";
-import SideBarEFaktur from "./SideBarEFaktur";
-import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-} from "@/components/ui/popover";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { FaCalendarAlt, FaFilter, FaSearch, FaTimes, FaChevronDown, FaChevronUp } from "react-icons/fa";
+import SideBarEFaktur from './SideBarEFaktur';
+import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Button } from "@/components/ui/button";
 import { RoutesApi } from "@/Routes";
-import {
-  AlertDialog,
-  AlertDialogTrigger,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogFooter,
-  AlertDialogTitle,
-  AlertDialogDescription,
-  AlertDialogAction,
-  AlertDialogCancel,
-} from "@/components/ui/alert-dialog";
-import { useQuery } from "@tanstack/react-query";
-import { useParams } from "react-router";
-import { ClipLoader } from "react-spinners";
-import { useCookies } from "react-cookie";
+import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogFooter, AlertDialogTitle, AlertDialogDescription, AlertDialogAction, AlertDialogCancel } from "@/components/ui/alert-dialog";
 
-const TambahFakturKeluaran = ({ data, sidebar }) => {
-  const [showDokumenTransaksi, setShowDokumenTransaksi] = useState(false);
-  const [showInformasiPembeli, setShowInformasiPembeli] = useState(false);
-  const [showDetailTransaksi, setShowDetailTransaksi] = useState(false);
-  const [kodeTransaksi, setKodeTransaksi] = useState("");
-  const [harga, setHarga] = useState("");
-  const [kuantitas, setKuantitas] = useState(0);
-  const [totalHarga, setTotalHarga] = useState("");
-  const [potonganHarga, setPotonganHarga] = useState("");
-  const [dpp, setDPP] = useState("");
-  const [selectedYear, setSelectedYear] = useState(new Date());
-  const [informasiTambahan, setInformasiTambahan] = useState("");
-  const [tipe, setTipe] = useState("");
-  const [selectedKode, setSelectedKode] = useState("");
-  const [selectedSatuan, setSelectedSatuan] = useState("");
-  const [listSatuan, setListSatuan] = useState([]);
-  const [listKode, setListKode] = useState([]);
-  const [capFasilitas, setCapFasilitas] = useState("");
-  const [nomorPendukung, setNomorPendukung] = useState("");
 
 const TambahFakturKeluaran = ({ }) => {
     const [showDokumenTransaksi, setShowDokumenTransaksi] = useState(false);
@@ -75,70 +31,62 @@ const TambahFakturKeluaran = ({ }) => {
     const [nomorPendukung, setNomorPendukung] = useState("");
     const [savedTransaksi, setSavedTransaksi] = useState("");
 
-  const [cookies, setCookie] = useCookies(["user"]);
-  const { id, akun } = useParams();
 
-  //   const RoutesApi = {
-  //     kodeTransaksi: "http://127.0.0.1:8000/api/kode-transaksi",
-  //     satuan: "http://127.0.0.1:8000/api/satuan",
-  //   };
+    const [isChecked, setIsChecked] = useState(false);
+    const [jumlah, setJumlah] = useState(formatRupiah(dpp.toString()));
+    const [tarifPPN, setTarifPPN] = useState("Rp 0");
+    const [tarifPPnBM, setTarifPPnBM] = useState("");
+    const [ppnBM, setPPnBM] = useState("Rp 0");
+    const [isCustomPPnBM, setIsCustomPPnBM] = useState(false);
 
-  const fetchKodeByJenis = async (jenis) => {
-    try {
-      // Fetch kode transaksi
-      const kodeRes = await axios.get(RoutesApi.apiUrl + "kode-transaksi", {
-        params: { jenis },
-      });
-      setListKode(kodeRes.data.data);
+    const RoutesApi = {
+        kodeTransaksi: "http://127.0.0.1:8000/api/kode-transaksi",
+        satuan: "http://127.0.0.1:8000/api/satuan"
+    };
 
-      // Fetch satuan
-      const satuanRes = await axios.get(RoutesApi.url + "satuan", {
-        params: { jenis },
-      });
-      setListSatuan(satuanRes.data.data);
-    } catch (err) {
-      console.error("Gagal fetch data:", err);
+    const fetchKodeByJenis = async (jenis) => {
+        try {
+            // Fetch kode transaksi
+            const kodeRes = await axios.get(RoutesApi.kodeTransaksi, {
+                params: { jenis }
+            });
+            setListKode(kodeRes.data.data);
+
+            // Fetch satuan
+            const satuanRes = await axios.get(RoutesApi.satuan, {
+                params: { jenis }
+            });
+            setListSatuan(satuanRes.data.data);
+
+        } catch (err) {
+            console.error("Gagal fetch data:", err);
+        }
+    };
+
+    const handleTipeChange = (e) => {
+        const value = e.target.value;
+        setTipe(value);
+        fetchKodeByJenis(value);
+    };
+
+    function formatRupiah(value) {
+        const numberString = value.replace(/[^0-9]/g, ""); // Hanya angka
+        return new Intl.NumberFormat("id-ID", {
+            style: "currency",
+            currency: "IDR",
+            minimumFractionDigits: 0
+        }).format(numberString || 0);
     }
-  };
 
-  const handleTipeChange = (e) => {
-    const value = e.target.value;
-    setTipe(value);
-    fetchKodeByJenis(value);
-  };
-
-  function formatRupiah(value) {
-    const numberString = value.replace(/[^0-9]/g, ""); // Hanya angka
-    return new Intl.NumberFormat("id-ID", {
-      style: "currency",
-      currency: "IDR",
-      minimumFractionDigits: 0,
-    }).format(numberString || 0);
-  }
-
-  function formatPersen(value) {
-    const numberString = value.replace(/[^0-9]/g, ""); // Hanya angka
-    return numberString ? `${numberString}%` : "";
-  }
-
-  const handleHargaChange = (e) => {
-    const rawValue = e.target.value;
-    const numericHarga = parseInt(rawValue.replace(/\D/g, ""), 10) || 0;
-    setHarga(formatRupiah(rawValue));
-
-    const newTotalHarga = numericHarga * kuantitas;
-    setTotalHarga(formatRupiah(newTotalHarga.toString()));
-    const newDPP =
-      newTotalHarga - (parseInt(potonganHarga.replace(/\D/g, ""), 10) || 0);
-    setDPP(formatRupiah(newDPP.toString()));
-    if (!isChecked) {
-      setJumlah(formatRupiah(newDPP.toString()));
+    function formatPersen(value) {
+        const numberString = value.replace(/[^0-9]/g, ""); // Hanya angka
+        return numberString ? `${numberString}%` : "";
     }
-  };
 
-  const handleInformasiTambahanChange = (e) => {
-    const selectedInfo = e.target.value;
-    setInformasiTambahan(selectedInfo);
+    const handleHargaChange = (e) => {
+        const rawValue = e.target.value;
+        const numericHarga = parseInt(rawValue.replace(/\D/g, ""), 10) || 0;
+        setHarga(formatRupiah(rawValue));
 
         const newTotalHarga = numericHarga * kuantitas;
         setTotalHarga(formatRupiah(newTotalHarga.toString()));
@@ -229,144 +177,72 @@ const TambahFakturKeluaran = ({ }) => {
             setPPnBM(formatRupiah(((numericJumlah * numericPPnBM) / 100).toString()));
         }
     }
-  };
-
-  const handleKuantitasChange = (e) => {
-    const qty = parseInt(e.target.value, 10) || 0;
-    setKuantitas(qty);
-
-    const numericHarga = parseInt(harga.replace(/\D/g, ""), 10) || 0;
-    const newTotalHarga = numericHarga * qty;
-    setTotalHarga(formatRupiah(newTotalHarga.toString()));
-    const newDPP =
-      newTotalHarga - (parseInt(potonganHarga.replace(/\D/g, ""), 10) || 0);
-    setDPP(formatRupiah(newDPP.toString()));
-    if (!isChecked) {
-      setJumlah(formatRupiah(newDPP.toString()));
-    }
-  };
-
-  const handlePotonganHargaChange = (e) => {
-    const rawValue = e.target.value;
-    const numericPotongan = parseInt(rawValue.replace(/\D/g, ""), 10) || 0;
-    setPotonganHarga(formatRupiah(rawValue));
-
-    const numericTotalHarga = parseInt(totalHarga.replace(/\D/g, ""), 10) || 0;
-    const newDPP = numericTotalHarga - numericPotongan;
-    setDPP(formatRupiah(newDPP.toString()));
-    if (!isChecked) {
-      setJumlah(formatRupiah(newDPP.toString()));
-    }
-  };
-  const handleKodeTransaksiChange = (event) => {
-    setKodeTransaksi(event.target.value);
-  };
-
-  useEffect(() => {
-    if (kodeTransaksi === "01") {
-      setIsChecked(false);
-    }
-  }, [kodeTransaksi]);
-
-  function updateTarifPPN(newJumlah) {
-    const numericJumlah = parseInt(newJumlah.replace(/\D/g, ""), 10) || 0;
-    setTarifPPN(formatRupiah((numericJumlah * 0.12).toString())); // PPN 12%
-
-    // Hitung PPnBM jika PPnBM belum diedit manual
-    if (!isCustomPPnBM) {
-      const numericPPnBM = parseInt(tarifPPnBM.replace(/\D/g, ""), 10) || 0;
-      setPPnBM(formatRupiah(((numericJumlah * numericPPnBM) / 100).toString()));
-    }
-  }
-  const handleCheckboxChange = () => {
-    if (kodeTransaksi !== "01") {
-      setIsChecked(!isChecked);
-    }
-  };
-
-  const handleJumlahChange = (e) => {
-    if (isChecked) {
-      const numericJumlah =
-        parseInt(e.target.value.replace(/\D/g, ""), 10) || 0;
-      const formattedJumlah = formatRupiah(numericJumlah.toString());
-      setJumlah(formattedJumlah);
-      updateTarifPPN(numericJumlah.toString());
-    }
-  };
-
-  const handleTarifPPnBMChange = (e) => {
-    const formattedTarif = formatPersen(e.target.value);
-    setTarifPPnBM(formattedTarif);
-
-    // Hitung ulang PPnBM jika PPnBM tidak diedit manual
-    if (!isCustomPPnBM) {
-      const numericJumlah = parseInt(jumlah.replace(/\D/g, ""), 10) || 0;
-      const numericPPnBM = parseInt(formattedTarif.replace(/\D/g, ""), 10) || 0;
-      setPPnBM(formatRupiah(((numericJumlah * numericPPnBM) / 100).toString()));
-    }
-  };
-
-  const handlePPnBMChange = (e) => {
-    setIsCustomPPnBM(true); // Tandai bahwa user mengedit manual
-    setPPnBM(formatRupiah(e.target.value));
-
-    // Jika nilai PPnBM dikosongkan, hitung ulang berdasarkan tarif PPnBM
-    if (e.target.value === "" || e.target.value === "Rp 0") {
-      setIsCustomPPnBM(false); // Reset custom edit jika dikosongkan
-      const numericJumlah = parseInt(jumlah.replace(/\D/g, ""), 10) || 0;
-      const numericPPnBM = parseInt(tarifPPnBM.replace(/\D/g, ""), 10) || 0;
-      setPPnBM(formatRupiah(((numericJumlah * numericPPnBM) / 100).toString()));
-    }
-  };
-
-  const handleDppChange = (e) => {
-    const value = e.target.value;
-    setDPP(value);
-    if (!isChecked) {
-      setJumlah(value); // Jika checkbox tidak dicentang, jumlah selalu mengikuti DPP
-    }
-  };
-
-  useEffect(() => {
-    const formattedDPP = formatRupiah(dpp.toString());
-    setJumlah(formattedDPP);
-    updateTarifPPN(dpp.toString());
-  }, [dpp]);
-
-  const resetForm = () => {
-    setHarga("Rp 0");
-    setKuantitas(0);
-    setTotalHarga("Rp 0");
-    setPotonganHarga("Rp 0");
-    setDPP("Rp 0");
-    setJumlah("Rp 0");
-    setTarifPPN("Rp 0");
-    setTarifPPnBM("");
-    setPPnBM("Rp 0");
-    setIsChecked(false);
-  };
-  const {
-    isLoading,
-    isError,
-    data: dataNpwp,
-    error,
-    refetch,
-  } = useQuery({
-    queryKey: ["npwp_faktur"],
-    queryFn: async () => {
-      const { data } = await axios.get(
-        RoutesApi.apiUrl + `student/assignments/${id}/sistem/${akun}/getAkun`,
-        {
-          headers: {
-            Authorization: `Bearer ${cookies.token}`,
-            Accept: "application/json",
-          },
+    const handleCheckboxChange = () => {
+        if (kodeTransaksi !== "01") {
+            setIsChecked(!isChecked);
         }
-      );
-      console.log(data);
-      return data;
-    },
-  });
+    };
+
+    const handleJumlahChange = (e) => {
+        if (isChecked) {
+            const numericJumlah = parseInt(e.target.value.replace(/\D/g, ""), 10) || 0;
+            const formattedJumlah = formatRupiah(numericJumlah.toString());
+            setJumlah(formattedJumlah);
+            updateTarifPPN(numericJumlah.toString());
+        }
+    };
+
+    const handleTarifPPnBMChange = (e) => {
+        const formattedTarif = formatPersen(e.target.value);
+        setTarifPPnBM(formattedTarif);
+
+        // Hitung ulang PPnBM jika PPnBM tidak diedit manual
+        if (!isCustomPPnBM) {
+            const numericJumlah = parseInt(jumlah.replace(/\D/g, ""), 10) || 0;
+            const numericPPnBM = parseInt(formattedTarif.replace(/\D/g, ""), 10) || 0;
+            setPPnBM(formatRupiah(((numericJumlah * numericPPnBM) / 100).toString()));
+        }
+    };
+
+    const handlePPnBMChange = (e) => {
+        setIsCustomPPnBM(true); // Tandai bahwa user mengedit manual
+        setPPnBM(formatRupiah(e.target.value));
+
+        // Jika nilai PPnBM dikosongkan, hitung ulang berdasarkan tarif PPnBM
+        if (e.target.value === "" || e.target.value === "Rp 0") {
+            setIsCustomPPnBM(false); // Reset custom edit jika dikosongkan
+            const numericJumlah = parseInt(jumlah.replace(/\D/g, ""), 10) || 0;
+            const numericPPnBM = parseInt(tarifPPnBM.replace(/\D/g, ""), 10) || 0;
+            setPPnBM(formatRupiah(((numericJumlah * numericPPnBM) / 100).toString()));
+        }
+    };
+
+    const handleDppChange = (e) => {
+        const value = e.target.value;
+        setDpp(value);
+        if (!isChecked) {
+            setJumlah(value); // Jika checkbox tidak dicentang, jumlah selalu mengikuti DPP
+        }
+    };
+
+    useEffect(() => {
+        const formattedDPP = formatRupiah(dpp.toString());
+        setJumlah(formattedDPP);
+        updateTarifPPN(dpp.toString());
+    }, [dpp]);
+
+    const resetForm = () => {
+        setHarga("Rp 0");
+        setKuantitas(0);
+        setTotalHarga("Rp 0");
+        setPotonganHarga("Rp 0");
+        setDpp("Rp 0");
+        setJumlah("Rp 0");
+        setTarifPPN("Rp 0");
+        setTarifPPnBM("");
+        setPPnBM("Rp 0");
+        setIsChecked(false);
+    };
 
     const [formData, setFormData] = useState({
         uangMuka: false,
@@ -389,7 +265,7 @@ const TambahFakturKeluaran = ({ }) => {
         nomorDokumen: "",
         nama: "",
         email: "",
-        detailTransaksi: [] // Tambahkan properti ini untuk menyimpan detail transaksi
+        detailTransaksi: [] 
     });
 
     const [namaBarang, setNamaBarang] = useState("");
@@ -401,9 +277,9 @@ const TambahFakturKeluaran = ({ }) => {
             return;
         }
 
-        // Create new transaction object with all necessary data
+        
         const newTransaksi = {
-            id: Date.now(), // Generate unique ID for each transaction
+            id: Date.now(), 
             tipe,
             nama: namaBarang,
             kode: selectedKode,
@@ -420,17 +296,14 @@ const TambahFakturKeluaran = ({ }) => {
             ppnBM
         };
 
-        // Update the savedTransaksi state with the new transaction
         const updatedTransaksi = savedTransaksi ? [...savedTransaksi, newTransaksi] : [newTransaksi];
         setSavedTransaksi(updatedTransaksi);
 
-        // Update formData with the new transaction
         setFormData(prev => ({
             ...prev,
             detailTransaksi: updatedTransaksi
         }));
 
-        // Reset form fields after saving
         setTipe("");
         setNamaBarang("");
         setSelectedKode("");
@@ -449,10 +322,8 @@ const TambahFakturKeluaran = ({ }) => {
     };
 
     const handleHapusTransaksi = (id) => {
-        // Filter out the transaction with the given id
         const updatedTransaksi = savedTransaksi.filter(item => item.id !== id);
 
-        // Update both states
         setSavedTransaksi(updatedTransaksi);
         setFormData(prev => ({
             ...prev,
@@ -461,11 +332,9 @@ const TambahFakturKeluaran = ({ }) => {
     };
 
     const handleEditTransaksi = (id) => {
-        // Find the transaction to edit
         const transaksiToEdit = savedTransaksi.find(item => item.id === id);
 
         if (transaksiToEdit) {
-            // Set form fields with the transaction data
             setTipe(transaksiToEdit.tipe);
             setNamaBarang(transaksiToEdit.nama);
             setSelectedKode(transaksiToEdit.kode);
@@ -479,13 +348,7 @@ const TambahFakturKeluaran = ({ }) => {
             setTarifPPnBM(transaksiToEdit.tarifPPnBM);
             setPPnBM(transaksiToEdit.ppnBM);
 
-            // Remove the transaction from the list
             handleHapusTransaksi(id);
-
-            // Open the dialog to edit
-            // You'll need to add a ref or state to control the dialog
-            // For example:
-            // setIsDialogOpen(true);
         }
     };
 
@@ -527,11 +390,8 @@ const TambahFakturKeluaran = ({ }) => {
             totalTagihan: formatRupiah((totalDPP + totalPPN + totalPPnBM).toString())
         };
 
-        // Lakukan tindakan setelah formulir disubmit
         console.log(finalFormData);
 
-        // Di sini Anda bisa menambahkan kode untuk mengirim data ke server
-        // Misalnya dengan axios.post('/api/faktur', finalFormData)
     };
 
     const handleSimpan = () => {
@@ -707,130 +567,10 @@ const TambahFakturKeluaran = ({ }) => {
                             <input type="text" className='p-2 border rounded w-full bg-gray-100' value="000000" disabled />
                         </div>
                     </div>
-
-                    {/* Cap Fasilitas (Disabled) */}
-                    <div className="space-y-2">
-                      <label className="block text-sm font-medium">
-                        Cap Fasilitas
-                      </label>
-                      <select
-                        className="p-2 border rounded w-full bg-gray-100"
-                        value={capFasilitas}
-                        disabled
-                      >
-                        <option value="">Pilih Cap Fasilitas</option>
-                        <option value="X">Fasilitas X</option>
-                        <option value="Y">Fasilitas Y</option>
-                        <option value="Z">Fasilitas Z</option>
-                      </select>
-                    </div>
-
-                    {/* Nomor Pendukung (Muncul hanya untuk Informasi A atau B) */}
-                    {(informasiTambahan === "A" ||
-                      informasiTambahan === "B") && (
-                      <div className="space-y-2">
-                        <label className="block text-sm font-medium">
-                          Nomor Pendukung
-                        </label>
-                        <input
-                          type="text"
-                          className="p-2 border rounded w-full"
-                          placeholder="Masukkan Nomor Pendukung"
-                          value={nomorPendukung}
-                          onChange={(e) => setNomorPendukung(e.target.value)}
-                        />
-                      </div>
-                    )}
-                  </>
                 )}
-              </div>
-
-              <div className="space-y-2">
-                <label className="block text-sm font-medium">Referensi</label>
-                <input type="text" className="p-2 border rounded w-full" />
-              </div>
-              <div className="space-y-2">
-                <label className="block text-sm font-medium">
-                  Pilih Alamat
-                </label>
-                <input
-                  type="text"
-                  className="p-2 border rounded w-full"
-                  placeholder="Link Bang, tanya pm jan tanya saia"
-                  disabled
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="block text-sm font-medium">IDTKU</label>
-                <input
-                  type="text"
-                  className="p-2 border rounded w-full bg-gray-100"
-                  value="000000"
-                  disabled
-                />
-              </div>
-            </div>
-          )}
-          <div
-            className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100"
-            onClick={() => setShowInformasiPembeli(!showInformasiPembeli)}
-          >
-            <h3 className="text-lg font-semibold">Informasi Pembeli</h3>
-            {showInformasiPembeli ? <FaChevronUp /> : <FaChevronDown />}
-          </div>
-          {showInformasiPembeli && (
-            <div className="border rounded-md p-4 mb-2 grid grid-cols-3 gap-4 w-full">
-              <div className="space-y-2">
-                <label className="block text-sm font-medium">NPWP </label>
-                <select name="" id="" className="p-2 border rounded w-full">
-                  <option value="">Pilih NPWP</option>
-                  {dataNpwp.map((item, index) => (
-                    <option key={index} value={item.npwp}>
-                      {item.npwp_akun} - {item.nama_akun}
-                    </option>
-                  ))}
-                </select>
-                {/* <input type="text" className="p-2 border rounded w-full" /> */}
-              </div>
-              <div className="space-y-2">
-                <label className="block text-sm font-medium">ID</label>
-                <div className="grid grid-cols-2 gap-3 ">
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="radio"
-                      name="identification"
-                      className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                      value="NPWP"
-                    />
-                    <label className="text-sm">NPWP</label>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="radio"
-                      name="identification"
-                      className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                      value="Paspor"
-                    />
-                    <label className="text-sm">Paspor</label>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="radio"
-                      name="identification"
-                      className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                      value="NIK"
-                    />
-                    <label className="text-sm">NIK</label>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="radio"
-                      name="identification"
-                      className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                      value="Identitas Lain"
-                    />
-                    <label className="text-sm">Identitas Lain</label>
-                  </div>
+                <div className='border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100' onClick={() => setShowInformasiPembeli(!showInformasiPembeli)}>
+                    <h3 className='text-lg font-semibold'>Informasi Pembeli</h3>
+                    {showInformasiPembeli ? <FaChevronUp /> : <FaChevronDown />}
                 </div>
                 {showInformasiPembeli && (
                     <div className='border rounded-md p-4 mb-2 grid grid-cols-3 gap-4 w-full'>
@@ -1022,46 +762,42 @@ const TambahFakturKeluaran = ({ }) => {
                                                 />
                                             </div>
 
-                      {/* Kolom Kanan */}
-                      <div className="space-y-4 h-full ">
-                        <div className="space-y-2">
-                          <label className="block text-sm font-medium">
-                            DPP
-                          </label>
-                          <input
-                            type="text"
-                            className="p-2 border rounded w-full bg-gray-100"
-                            value={dpp}
-                            onChange={handleDppChange}
-                            readOnly
-                            placeholder="Rp 0"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <div className="flex items-center gap-2 ">
-                            <input
-                              type="checkbox"
-                              className="justify-start p-3 border rounded"
-                              checked={isChecked}
-                              onChange={handleCheckboxChange}
-                              disabled={kodeTransaksi === "01"}
-                            />
-                            <label className="block text-sm font-medium">
-                              DPP Nilai Lain / DPP
-                            </label>
-                          </div>
+                                        </div>
 
-                          <div className="space-y-2">
-                            <label className="block text-sm font-medium"></label>
-                            <input
-                              type="text"
-                              className={`
+                                        {/* Kolom Kanan */}
+                                        <div className="space-y-4 h-full ">
+                                            <div className="space-y-2">
+                                                <label className="block text-sm font-medium">DPP</label>
+                                                <input
+                                                    type="text"
+                                                    className="p-2 border rounded w-full bg-gray-100"
+                                                    value={dpp}
+                                                    onChange={handleDppChange}
+                                                    readOnly
+                                                    placeholder="Rp 0"
+                                                />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <div className="flex items-center gap-2 ">
+                                                    <input
+                                                        type="checkbox"
+                                                        className="justify-start p-3 border rounded"
+                                                        checked={isChecked}
+                                                        onChange={handleCheckboxChange}
+                                                        disabled={kodeTransaksi === "01"}
+                                                    />
+                                                    <label className="block text-sm font-medium">
+                                                        DPP Nilai Lain / DPP
+                                                    </label>
+                                                </div>
+
+                                                <div className="space-y-2">
+                                                    <label className="block text-sm font-medium"></label>
+                                                    <input
+                                                        type="text"
+                                                        className={`
                                                             p-2 border rounded w-full
-                                                            ${
-                                                              isChecked
-                                                                ? ""
-                                                                : "bg-gray-100"
-                                                            }
+                                                            ${isChecked ? '' : 'bg-gray-100'}
                                                         `}
                                                         value={jumlah}
                                                         onChange={handleJumlahChange}
@@ -1196,19 +932,8 @@ const TambahFakturKeluaran = ({ }) => {
                     <button onClick={handleSubmit} className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">Simpan</button>
                 </div>
             </div>
-          )}
-          <div className="flex justify-end mt-4 gap-3">
-            <button className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded">
-              Batal
-            </button>
-            <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">
-              Simpan
-            </button>
-          </div>
         </div>
-      </div>
     )
-  );
-};
+}
 
 export default TambahFakturKeluaran;
