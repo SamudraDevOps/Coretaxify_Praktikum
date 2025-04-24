@@ -265,7 +265,7 @@ const TambahFakturKeluaran = ({ }) => {
         nomorDokumen: "",
         nama: "",
         email: "",
-        detailTransaksi: [] // Tambahkan properti ini untuk menyimpan detail transaksi
+        detailTransaksi: [] 
     });
 
     const [namaBarang, setNamaBarang] = useState("");
@@ -277,9 +277,9 @@ const TambahFakturKeluaran = ({ }) => {
             return;
         }
 
-        // Create new transaction object with all necessary data
+        
         const newTransaksi = {
-            id: Date.now(), // Generate unique ID for each transaction
+            id: Date.now(), 
             tipe,
             nama: namaBarang,
             kode: selectedKode,
@@ -296,17 +296,14 @@ const TambahFakturKeluaran = ({ }) => {
             ppnBM
         };
 
-        // Update the savedTransaksi state with the new transaction
         const updatedTransaksi = savedTransaksi ? [...savedTransaksi, newTransaksi] : [newTransaksi];
         setSavedTransaksi(updatedTransaksi);
 
-        // Update formData with the new transaction
         setFormData(prev => ({
             ...prev,
             detailTransaksi: updatedTransaksi
         }));
 
-        // Reset form fields after saving
         setTipe("");
         setNamaBarang("");
         setSelectedKode("");
@@ -325,10 +322,8 @@ const TambahFakturKeluaran = ({ }) => {
     };
 
     const handleHapusTransaksi = (id) => {
-        // Filter out the transaction with the given id
         const updatedTransaksi = savedTransaksi.filter(item => item.id !== id);
 
-        // Update both states
         setSavedTransaksi(updatedTransaksi);
         setFormData(prev => ({
             ...prev,
@@ -337,11 +332,9 @@ const TambahFakturKeluaran = ({ }) => {
     };
 
     const handleEditTransaksi = (id) => {
-        // Find the transaction to edit
         const transaksiToEdit = savedTransaksi.find(item => item.id === id);
 
         if (transaksiToEdit) {
-            // Set form fields with the transaction data
             setTipe(transaksiToEdit.tipe);
             setNamaBarang(transaksiToEdit.nama);
             setSelectedKode(transaksiToEdit.kode);
@@ -355,13 +348,7 @@ const TambahFakturKeluaran = ({ }) => {
             setTarifPPnBM(transaksiToEdit.tarifPPnBM);
             setPPnBM(transaksiToEdit.ppnBM);
 
-            // Remove the transaction from the list
             handleHapusTransaksi(id);
-
-            // Open the dialog to edit
-            // You'll need to add a ref or state to control the dialog
-            // For example:
-            // setIsDialogOpen(true);
         }
     };
 
@@ -403,11 +390,8 @@ const TambahFakturKeluaran = ({ }) => {
             totalTagihan: formatRupiah((totalDPP + totalPPN + totalPPnBM).toString())
         };
 
-        // Lakukan tindakan setelah formulir disubmit
         console.log(finalFormData);
 
-        // Di sini Anda bisa menambahkan kode untuk mengirim data ke server
-        // Misalnya dengan axios.post('/api/faktur', finalFormData)
     };
 
     const handleSimpan = () => {
