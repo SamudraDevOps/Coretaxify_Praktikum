@@ -56,8 +56,33 @@ const PajakKeluaranOP = ({ data, sidebar }) => {
                     </a>
                   </div>
                 </div>
-              )}
-            </div>
+                <div className="flex justify-between mb-4 border-b pb-3">
+                    <div className="flex items-center gap-3">
+                        <div className="flex  text-left text-sm" ref={dropdownRef}>
+                            <button
+                                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                                className="flex items-center bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-2 rounded"
+                            >
+                                Import <FaChevronDown className="ml-2" />
+                            </button>
+                            {isDropdownOpen && (
+                                <div className="absolute mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                                    <div className="py-1">
+                                        <a
+                                            href="/template-import-pajak-keluaran.xlsx"
+                                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                        >
+                                            Download Template
+                                        </a>
+                                        <button
+                                            className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+                                        >
+                                            Import Dokumen
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
 
             {/* <button
                             className="flex items-center bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded text-sm"
@@ -103,5 +128,4 @@ const PajakKeluaranOP = ({ data, sidebar }) => {
     </div>
   );
 };
-
 export default PajakKeluaranOP;
