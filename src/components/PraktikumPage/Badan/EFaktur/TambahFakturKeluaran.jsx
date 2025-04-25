@@ -38,13 +38,16 @@ const TambahFakturKeluaran = ({}) => {
   const [showDokumenTransaksi, setShowDokumenTransaksi] = useState(false);
   const [showInformasiPembeli, setShowInformasiPembeli] = useState(false);
   const [showDetailTransaksi, setShowDetailTransaksi] = useState(false);
-  const [kodeTransaksi, setKodeTransaksi] = useState("");
+  const [kode_transaksi, setKodeTransaksi] = useState("");
   const [harga_satuan, setHarga] = useState("");
   const [kuantitas, setKuantitas] = useState(0);
   const [total_harga, setTotalHarga] = useState("");
   const [pemotongan_harga, setPotonganHarga] = useState("");
   const [dpp, setDPP] = useState("");
   const [selectedYear, setSelectedYear] = useState(new Date());
+  const [tahunString, setTahunString] = useState(
+    new Date().getFullYear().toString()
+  );
   const [informasi_tambahan, setInformasiTambahan] = useState("");
   const [tipe, setTipe] = useState("");
   const [selectedKode, setSelectedKode] = useState("");
@@ -193,14 +196,14 @@ const TambahFakturKeluaran = ({}) => {
 
     setFormData((prev) => ({
       ...prev,
-      kodeTransaksi: value,
+      kode_transaksi: value,
     }));
   };
   useEffect(() => {
-    if (kodeTransaksi === "01") {
+    if (kode_transaksi === "01") {
       setIsChecked(false);
     }
-  }, [kodeTransaksi]);
+  }, [kode_transaksi]);
 
   function updateTarifPPN(newJumlah) {
     // const numericJumlah = parseInt(newJumlah.replace(/\D/g, ""), 10) || 0;
@@ -215,7 +218,7 @@ const TambahFakturKeluaran = ({}) => {
     }
   }
   const handleCheckboxChange = () => {
-    if (kodeTransaksi !== "01") {
+    if (kode_transaksi !== "01") {
       setIsChecked(!isChecked);
     }
   };
@@ -289,11 +292,11 @@ const TambahFakturKeluaran = ({}) => {
     uangMuka: false,
     pelunasan: false,
     nomorFaktur: "",
-    kodeTransaksi: "",
+    kode_transaksi: "",
     tanggalFaktur: "",
     jenisFaktur: "Normal",
     masaPajak: "",
-    tahun: new Date().getFullYear(),
+    tahun: new Date().getFullYear().toString(),
     informasi_tambahan: "",
     cap_fasilitas: "",
     nomorPendukung: "",
@@ -332,12 +335,12 @@ const TambahFakturKeluaran = ({}) => {
       kode: selectedKode,
       satuan: selectedSatuan,
       harga_satuan,
-      kuantitas,
+      kuantitas: kuantitas.toString(),
       total_harga,
       pemotongan_harga,
       dpp,
       jumlah,
-      ppn: "12%",
+      ppn: parseInt("12%".replace(/\D/g, ""), 10) || 0,
       ppnNominal: ppn,
       tarif_ppnbm: parseInt(tarif_ppnbm.replace(/\D/g, ""), 10) || 0,
       ppnbm,
@@ -479,7 +482,7 @@ const TambahFakturKeluaran = ({}) => {
     // alert(finalFormData)
 
     console.log(finalFormData);
-    // createDraftFaktur.mutate(finalFormData);
+    createDraftFaktur.mutate(finalFormData);
   };
 
   const handleSimpan = () => {
@@ -546,32 +549,32 @@ const TambahFakturKeluaran = ({}) => {
                 </label>
                 <select
                   className="p-2 border rounded w-full"
-                  name="kodeTransaksi"
-                  value={formData.kodeTransaksi}
+                  name="kode_transaksi"
+                  value={formData.kode_transaksi}
                   onChange={handleKodeTransaksiChange}
                 >
                   <option value="">Pilih Kode Transaksi</option>
-                  <option value="01">01 - kepada selain pemungut PPN</option>
-                  <option value="02">
+                  <option value="1">01 - kepada selain pemungut PPN</option>
+                  <option value="2">
                     02 - kepada Pemungut PPN Instansi Pemerintah
                   </option>
-                  <option value="03">
+                  <option value="3">
                     03 - kepada Pemungut PPN selain instansi Pemerintah
                   </option>
-                  <option value="04">04 - DPP Nilai Lain</option>
-                  <option value="05">05 - Besaran tertentu</option>
-                  <option value="06">
+                  <option value="4">04 - DPP Nilai Lain</option>
+                  <option value="5">05 - Besaran tertentu</option>
+                  <option value="6">
                     06 - kepada orang pribadi pemegang paspor luar negeri (16E
                     UU PPN)
                   </option>
-                  <option value="07">
+                  <option value="7">
                     07 - penyerahan dengan fasilitas PPN atau PPN{" "}
                   </option>
-                  <option value="08">
+                  <option value="8">
                     08 - penyerahan aktiva dengan fasilitas dibebaskan PPN atau
                     PPN dan PPnBM
                   </option>
-                  <option value="09">
+                  <option value="9">
                     09 - penyerahan aktiva yang menurut tujuan semua tidak
                     diperjualbelikan (16D UU PPN)
                   </option>
@@ -641,9 +644,24 @@ const TambahFakturKeluaran = ({}) => {
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent align="start" className="w-auto p-0">
+                      {/* <DatePicker
+                        selected={selectedYear}
+                        onChange={(date) => setSelectedYear(date.toString())}
+                        showYearPicker
+                        dateFormat="yyyy"
+                        className="border p-2 rounded-md w-full text-center"
+                      /> */}
                       <DatePicker
                         selected={selectedYear}
-                        onChange={(date) => setSelectedYear(date)}
+                        onChange={(date) => {
+                          setSelectedYear(date);
+                          const yearStr = date.getFullYear().toString();
+                          setTahunString(yearStr);
+                          setFormData((prev) => ({
+                            ...prev,
+                            tahun: yearStr,
+                          }));
+                        }}
                         showYearPicker
                         dateFormat="yyyy"
                         className="border p-2 rounded-md w-full text-center"
@@ -654,7 +672,7 @@ const TambahFakturKeluaran = ({}) => {
                 {/* <div className="space-y-2">
                                 <label className='block text-sm font-medium'></label>
                             </div> */}
-                {(kodeTransaksi === "07" || kodeTransaksi === "08") && (
+                {(kode_transaksi === "07" || kode_transaksi === "08") && (
                   <>
                     {/* Informasi Tambahan */}
                     <div className="space-y-2">
@@ -1040,7 +1058,7 @@ const TambahFakturKeluaran = ({}) => {
                               className="justify-start p-3 border rounded"
                               checked={isChecked}
                               onChange={handleCheckboxChange}
-                              disabled={kodeTransaksi === "01"}
+                              disabled={kode_transaksi === "01"}
                             />
                             <label className="block text-sm font-medium">
                               DPP Nilai Lain / DPP
