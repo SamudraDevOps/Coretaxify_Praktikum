@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { RoutesApi } from "@/Routes";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import axios from "axios";
@@ -31,15 +31,17 @@ export default function UjianDosen() {
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
-  const [cookies, setCookie] = useCookies(["user"]);
+  const [cookies] = useCookies(["token"]);
   const navigate = useNavigate();
 
   const [selectedData, setSelectedData] = useState({
     name: "",
+    task_id: "",
     exam_code: "",
     supporting_file: null,
     start_period: "",
     end_period: "",
+    duration: "",
   });
 
   const { isLoading, isError, data, error, refetch } = useQuery({
@@ -176,19 +178,25 @@ export default function UjianDosen() {
           formDataObj.append("task_id", examFormData.task_id);
         if (examFormData.duration)
           formDataObj.append("duration", examFormData.duration);
-        if (examFormData.supporting_file)
+
+        // Only append supporting_file if it's a File object (newly selected file)
+        if (examFormData.supporting_file instanceof File) {
           formDataObj.append("supporting_file", examFormData.supporting_file);
+        }
+
         if (examFormData.start_period) {
           formDataObj.append(
             "start_period",
-            formatDateForBackend(formatDate(examFormData.start_period))
+            formatDateForBackend(examFormData.start_period)
           );
         }
-        if (examFormData.end_period)
+
+        if (examFormData.end_period) {
           formDataObj.append(
             "end_period",
-            formatDateForBackend(formatDate(examFormData.end_period))
+            formatDateForBackend(examFormData.end_period)
           );
+        }
 
         formDataObj.append("_method", "PUT");
 
@@ -227,6 +235,7 @@ export default function UjianDosen() {
 
       refetch();
       setIsAddOpen(false);
+      setIsOpen(false);
     },
     onError: (error) => {
       console.log(error.response);
@@ -252,6 +261,18 @@ export default function UjianDosen() {
       return format(new Date(dateString), "yyyy-MM-dd HH:mm");
     } catch (error) {
       return dateString;
+    }
+  };
+
+  // Format datetime for input fields
+  const formatDateForInput = (dateString) => {
+    if (!dateString) return "";
+    try {
+      const date = new Date(dateString);
+      return date.toISOString().slice(0, 16); // Format: YYYY-MM-DDTHH:MM
+    } catch (error) {
+      console.error("Error formatting date:", error);
+      return "";
     }
   };
 
@@ -294,20 +315,45 @@ export default function UjianDosen() {
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    setFormData({ ...formData, supporting_file: file });
+    if (file) {
+      setFormData({ ...formData, supporting_file: file });
+    }
   };
 
   const handleUpdateFileChange = (e) => {
     const file = e.target.files[0];
-    setSelectedData({ ...selectedData, supporting_file: file });
+    if (file) {
+      setSelectedData({ ...selectedData, supporting_file: file });
+    }
   };
 
-  const handleSave = (formData) => {
+  const handleSave = () => {
     mutation.mutate({ action: "create", formData });
   };
 
-  const handleUpdate = (id, formData) => {
-    mutation.mutate({ id, action: "update", formData });
+  const handleUpdate = () => {
+    mutation.mutate({
+      id: selectedData.id,
+      action: "update",
+      formData: selectedData,
+    });
+  };
+
+  const handleDelete = (id) => {
+    Swal.fire({
+      title: "Hapus Ujian?",
+      text: "Ujian akan dihapus secara permanen!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Ya, hapus!",
+      cancelButtonText: "Batal",
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        mutation.mutate({ id, action: "delete" });
+      }
+    });
   };
 
   const handleReloadCode = () => {
@@ -320,39 +366,29 @@ export default function UjianDosen() {
       direction = "descending";
     }
     setSortConfig({ key, direction });
-
-    const sortedData = [...data].sort((a, b) => {
-      if (a[key] < b[key]) {
-        return direction === "ascending" ? -1 : 1;
-      }
-      if (a[key] > b[key]) {
-        return direction === "ascending" ? 1 : -1;
-      }
-      return 0;
-    });
-    setData(sortedData);
   };
 
-  const handleEditClick = (index) => {
-    setSelectedData(index);
+  const handleEditClick = (item) => {
+    setSelectedData({
+      id: item.id,
+      name: item.name || "",
+      task_id: item.task_id?.toString() || "",
+      exam_code: item.exam_code || "",
+      start_period: formatDateForInput(item.start_period) || "",
+      end_period: formatDateForInput(item.end_period) || "",
+      duration: item.duration?.toString() || "",
+      supporting_file: null, // File can't be pre-filled
+      original_supporting_file: item.supporting_file, // Keep track of original file
+    });
+    setIsOpen(true);
   };
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  // const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const [search, setSearch] = useState("");
-
-  const processedData = data?.data.map((item) => ({
-    ...item,
-    highlight:
-      search &&
-      Object.values(item).some((value) =>
-        String(value).toLowerCase().includes(search.toLowerCase())
-      ),
-  }));
 
   if (isLoading) {
     return (
@@ -440,14 +476,12 @@ export default function UjianDosen() {
           <thead>
             <tr>
               <th>No</th>
-              <th onClick={() => handleSort("name ")}>
+              <th onClick={() => handleSort("name")}>
                 Nama Ujian{" "}
                 {sortConfig.key === "name"
                   ? sortConfig.direction === "ascending"
                     ? "↑"
                     : "↓"
-                  : sortConfig.direction === "descending"
-                  ? "↓"
                   : "↑"}
               </th>
               <th>Kode Ujian</th>
@@ -484,150 +518,15 @@ export default function UjianDosen() {
                     )}
                   </td>
                   <td>
-                    <AlertDialog>
-                      <AlertDialogTrigger
-                        className="action-button edit"
-                        onClick={() => handleEditClick(item)}
-                      >
-                        Edit
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>Edit Kelas</AlertDialogTitle>
-                          <AlertDialogDescription className="w-full">
-                            <div className="max-h-[70vh] overflow-y-auto">
-                              <form>
-                                <div className="edit-form-group-mahasiswa ">
-                                  <label>Nama Ujian:</label>
-                                  <input
-                                    type="text"
-                                    name="name"
-                                    value={selectedData.name}
-                                    onChange={handleUpdateChange}
-                                    required
-                                  />
-                                </div>
-                                <div className="edit-form-group-mahasiswa">
-                                  <label>Soal:</label>
-                                  <select
-                                    name="task_id"
-                                    value={selectedData.task_id}
-                                    onChange={handleUpdateChange}
-                                    required
-                                  >
-                                    <option value="">Pilih soal</option>
-                                    {tasksData ? (
-                                      tasksData.map((task) => (
-                                        <option
-                                          key={task.id}
-                                          value={task.id.toString()}
-                                        >
-                                          {task.name}
-                                        </option>
-                                      ))
-                                    ) : (
-                                      <option value="" disabled>
-                                        Tidak ada data soal
-                                      </option>
-                                    )}
-                                  </select>
-                                </div>
-                                <div className="edit-form-group-mahasiswa">
-                                  <label>Kode Ujian:</label>
-                                  <input
-                                    className="text-black"
-                                    name="exam_code"
-                                    value={selectedData.exam_code}
-                                    onChange={handleUpdateChange}
-                                    readOnly
-                                  />
-                                </div>
-                                <div className="edit-form-group-mahasiswa">
-                                  <label>Tanggal Mulai:</label>
-                                  <input
-                                    className="text-black"
-                                    type="datetime-local"
-                                    name="start_period"
-                                    value={selectedData.start_period}
-                                    onChange={handleUpdateChange}
-                                  />
-                                </div>
-                                <div className="edit-form-group-mahasiswa">
-                                  <label>Tanggal Selesai:</label>
-                                  <input
-                                    className="text-black"
-                                    type="datetime-local"
-                                    name="end_period"
-                                    value={selectedData.end_period}
-                                    onChange={handleUpdateChange}
-                                  />
-                                </div>
-                                <div className="form-group">
-                                  <label>File Support:</label>
-                                  <div className="file-upload-container">
-                                    <div className="file-upload-box">
-                                      {selectedData.supporting_file ? (
-                                        <div className="file-selected">
-                                          <p>{selectedData.supporting_file.name}</p>
-                                        </div>
-                                      ) : (
-                                        <div className="file-upload-placeholder">
-                                          <p>Klik atau drop file di sini</p>
-                                          <small>
-                                            Format: PDF, DOC, DOCX, XLSX, XLS,
-                                            etc.
-                                          </small>
-                                        </div>
-                                      )}
-                                      <input
-                                        type="file"
-                                        name="supporting_file"
-                                        onChange={handleUpdateFileChange}
-                                        className="file-input"
-                                      />
-                                    </div>
-                                  </div>
-                                </div>
-                              </form>
-                            </div>
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel className="bg-red-600 text-white">
-                            Kembali
-                          </AlertDialogCancel>
-                          <AlertDialogAction className="bg-green-600" onClick={() => handleUpdate(selectedData.id, selectedData)}>
-                            Simpan
-                          </AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
-
+                    <button
+                      className="action-button edit"
+                      onClick={() => handleEditClick(item)}
+                    >
+                      Edit
+                    </button>
                     <button
                       className="action-button delete"
-                      onClick={() => {
-                        Swal.fire({
-                          title: "Hapus Kelas?",
-                          text: "Kelas akan dihapus secara permanen!",
-                          icon: "warning",
-                          showCancelButton: true,
-                          confirmButtonText: "Ya, hapus!",
-                          cancelButtonText: "Batal",
-                          dangerMode: true,
-                        }).then((result) => {
-                          if (result.isConfirmed) {
-                            const newData = data.filter(
-                              (itemData) => itemData.id !== item.id
-                            );
-                            setData(newData);
-                            Swal.fire(
-                              "Berhasil!",
-                              "Kelas berhasil dihapus!",
-                              "success"
-                            );
-                          }
-                        });
-                      }}
+                      onClick={() => handleDelete(item.id)}
                     >
                       Delete
                     </button>
@@ -653,8 +552,8 @@ export default function UjianDosen() {
           <div className="pagination-info">
             {`Showing ${indexOfFirstItem + 1} to ${Math.min(
               indexOfLastItem,
-              data.length
-            )} of ${data.length} entries`}
+              filteredData.length
+            )} of ${filteredData.length} entries`}
           </div>
 
           <div className="pagination ">
@@ -666,7 +565,7 @@ export default function UjianDosen() {
               &lt;
             </button>
             {Array.from(
-              { length: Math.ceil(data.length / itemsPerPage) },
+              { length: Math.ceil(filteredData.length / itemsPerPage) },
               (_, index) => (
                 <button
                   key={index + 1}
@@ -681,42 +580,37 @@ export default function UjianDosen() {
             )}
             <button
               className={`page-item ${
-                currentPage === Math.ceil(data.length / itemsPerPage)
+                currentPage === Math.ceil(filteredData.length / itemsPerPage)
                   ? "disabled"
                   : ""
               }`}
               onClick={() => paginate(currentPage + 1)}
-              disabled={currentPage === Math.ceil(data.length / itemsPerPage)}
+              disabled={
+                currentPage === Math.ceil(filteredData.length / itemsPerPage)
+              }
             >
               &gt;
             </button>
           </div>
         </div>
       </div>
-      {isOpen && (
-        <EditPopupMahasiswa
-          onClose={() => setIsOpen(false)}
-          data={selectedData}
-        />
-      )}
-      <AlertDialog
-        open={isAddOpen}
-        onOpenChange={setIsAddOpen}
-        className="max-h-[50vh] overflow-y-auto"
-      >
-        <AlertDialogContent>
+
+      {/* Create Exam Dialog */}
+      <AlertDialog open={isAddOpen} onOpenChange={setIsAddOpen}>
+        <AlertDialogContent className="max-w-3xl">
           <AlertDialogHeader>
             <AlertDialogTitle>Tambah Ujian</AlertDialogTitle>
             <AlertDialogDescription className="w-full">
               <div className="max-h-[70vh] overflow-y-auto">
                 <form>
-                  <div className="edit-form-group-mahasiswa ">
+                  <div className="edit-form-group-mahasiswa">
                     <label>Nama Ujian:</label>
                     <input
                       type="text"
                       name="name"
                       value={formData.name}
                       onChange={handleChange}
+                      placeholder="Masukkan nama ujian"
                       required
                     />
                   </div>
@@ -757,15 +651,15 @@ export default function UjianDosen() {
                         className="p-3 bg-purple-800 rounded-md hover:bg-purple-900"
                         onClick={handleReloadCode}
                       >
-                        <IoReload className="text-lg text-white " />
+                        <IoReload className="text-lg text-white" />
                       </button>
                     </div>
                   </div>
-                  <div className="edit-form-group-mahasiswa ">
+                  <div className="edit-form-group-mahasiswa">
                     <label>Tanggal Mulai:</label>
                     <input
                       type="datetime-local"
-                      name="start_period"
+                      name="                      start_period"
                       value={formData.start_period}
                       onChange={handleChange}
                       required
@@ -792,47 +686,29 @@ export default function UjianDosen() {
                       required
                     />
                   </div>
-                  <div className="edit-form-group-mahasiswa">
+                  <div className="form-group">
                     <label>File Support:</label>
-                    <div className="flex items-center justify-center w-full ">
-                      <label
-                        htmlFor="dropzone-file"
-                        className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
-                      >
-                        <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                          <svg
-                            className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
-                            aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 20 16"
-                          >
-                            <path
-                              stroke="currentColor"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
-                            />
-                          </svg>
-                          <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                            <span className="font-semibold">
-                              Click to upload
-                            </span>{" "}
-                            or drag and drop
-                          </p>
-                          <p className="text-xs text-gray-500 dark:text-gray-400">
-                            xlsx, xls (MAX. 10mb)
-                          </p>
-                        </div>
+                    <div className="file-upload-container">
+                      <div className="file-upload-box">
+                        {formData.supporting_file ? (
+                          <div className="file-selected">
+                            <p>{formData.supporting_file.name}</p>
+                          </div>
+                        ) : (
+                          <div className="file-upload-placeholder">
+                            <p>Klik atau drop file di sini</p>
+                            <small>
+                              Format: PDF, DOC, DOCX, XLSX, XLS, etc.
+                            </small>
+                          </div>
+                        )}
                         <input
-                          id="dropzone-file"
                           type="file"
-                          className="hidden"
-                          accept=".xlsx, .xls"
+                          name="supporting_file"
                           onChange={handleFileChange}
+                          className="file-input"
                         />
-                      </label>
+                      </div>
                     </div>
                   </div>
                 </form>
@@ -843,8 +719,159 @@ export default function UjianDosen() {
             <AlertDialogCancel className="bg-red-600 text-white hover:bg-red-800 hover:text-white">
               Batal
             </AlertDialogCancel>
-            <AlertDialogAction className="bg-green-600" onClick={handleSave}>
-              Simpan
+            <AlertDialogAction
+              className="bg-green-600"
+              onClick={handleSave}
+              disabled={mutation.isPending}
+            >
+              {mutation.isPending ? (
+                <div className="flex items-center justify-center">
+                  <ClipLoader color="#ffffff" size={16} />
+                  <span className="ml-2">Menyimpan...</span>
+                </div>
+              ) : (
+                "Simpan"
+              )}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Edit Exam Dialog */}
+      <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
+        <AlertDialogContent className="max-w-3xl">
+          <AlertDialogHeader>
+            <AlertDialogTitle>Edit Ujian</AlertDialogTitle>
+            <AlertDialogDescription className="w-full">
+              <div className="max-h-[70vh] overflow-y-auto">
+                <form>
+                  <div className="edit-form-group-mahasiswa">
+                    <label>Nama Ujian:</label>
+                    <input
+                      type="text"
+                      name="name"
+                      value={selectedData.name}
+                      onChange={handleUpdateChange}
+                      required
+                    />
+                  </div>
+                  <div className="edit-form-group-mahasiswa">
+                    <label>Soal:</label>
+                    <select
+                      name="task_id"
+                      value={selectedData.task_id}
+                      onChange={handleUpdateChange}
+                      required
+                    >
+                      <option value="">Pilih soal</option>
+                      {tasksData ? (
+                        tasksData.map((task) => (
+                          <option key={task.id} value={task.id.toString()}>
+                            {task.name}
+                          </option>
+                        ))
+                      ) : (
+                        <option value="" disabled>
+                          Tidak ada data soal
+                        </option>
+                      )}
+                    </select>
+                  </div>
+                  <div className="edit-form-group-mahasiswa">
+                    <label>Kode Ujian:</label>
+                    <input
+                      className="text-black"
+                      name="exam_code"
+                      value={selectedData.exam_code}
+                      readOnly
+                    />
+                    <small>Kode ujian tidak dapat diubah</small>
+                  </div>
+                  <div className="edit-form-group-mahasiswa">
+                    <label>Tanggal Mulai:</label>
+                    <input
+                      className="text-black"
+                      type="datetime-local"
+                      name="start_period"
+                      value={selectedData.start_period}
+                      onChange={handleUpdateChange}
+                    />
+                  </div>
+                  <div className="edit-form-group-mahasiswa">
+                    <label>Tanggal Selesai:</label>
+                    <input
+                      className="text-black"
+                      type="datetime-local"
+                      name="end_period"
+                      value={selectedData.end_period}
+                      onChange={handleUpdateChange}
+                    />
+                  </div>
+                  <div className="edit-form-group-mahasiswa">
+                    <label>Durasi (menit):</label>
+                    <input
+                      type="number"
+                      name="duration"
+                      value={selectedData.duration}
+                      onChange={handleUpdateChange}
+                      placeholder="Masukkan durasi ujian dalam menit"
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>
+                      File Support (Kosongkan jika tidak ingin mengubah):
+                    </label>
+                    <div className="file-upload-container">
+                      <div className="file-upload-box">
+                        {selectedData.supporting_file instanceof File ? (
+                          <div className="file-selected">
+                            <p>{selectedData.supporting_file.name}</p>
+                          </div>
+                        ) : (
+                          <div className="file-upload-placeholder">
+                            <p>Klik atau drop file di sini</p>
+                            <small>
+                              Format: PDF, DOC, DOCX, XLSX, XLS, etc.
+                            </small>
+                            {selectedData.original_supporting_file && (
+                              <p className="mt-2 text-xs text-blue-500">
+                                File saat ini:{" "}
+                                {selectedData.original_supporting_file}
+                              </p>
+                            )}
+                          </div>
+                        )}
+                        <input
+                          type="file"
+                          name="supporting_file"
+                          onChange={handleUpdateFileChange}
+                          className="file-input"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel className="bg-red-600 text-white">
+              Kembali
+            </AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-green-600"
+              onClick={handleUpdate}
+              disabled={mutation.isPending}
+            >
+              {mutation.isPending ? (
+                <div className="flex items-center justify-center">
+                  <ClipLoader color="#ffffff" size={16} />
+                  <span className="ml-2">Menyimpan...</span>
+                </div>
+              ) : (
+                "Simpan"
+              )}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
