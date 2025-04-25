@@ -339,7 +339,7 @@ const TambahFakturKeluaran = ({}) => {
       jumlah,
       ppn: "12%",
       ppnNominal: ppn,
-      tarif_ppnbm,
+      tarif_ppnbm: parseInt(tarif_ppnbm.replace(/\D/g, ""), 10) || 0,
       ppnbm,
     };
 
