@@ -2,8 +2,11 @@ import React, { useState, useRef } from "react";
 import SideBarEFaktur from "./SideBarEFaktur";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { FaChevronDown } from "react-icons/fa";
+import { useParams } from "react-router";
 
-const PajakKeluaran = () => {
+const PajakKeluaran = ({ data, sidebar }) => {
+  const { id, akun } = useParams();
+
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -16,10 +19,13 @@ const PajakKeluaran = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-
   return (
     <div className="flex h-screen bg-gray-100">
-      <SideBarEFaktur />
+      <SideBarEFaktur
+        nama_akun={sidebar.nama_akun}
+        npwp_akun={sidebar.npwp_akun}
+        akun={{ id, akun }}
+      />
 
       <div className="flex-auto p-3 bg-white rounded-md h-full">
         <div className="flex justify-between items-center mb-4 pb-3 border-b">
