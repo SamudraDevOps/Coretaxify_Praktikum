@@ -52,6 +52,17 @@ const CreateKonsepSPT = () => {
         "J. Jumlah Perolehan (II.A + II.B + II.C + II.D + II.E + II.F + II.G + II.H + II.I)"
     ];
 
+    const rowsPerhitunganPPNKurangBayarLebihBayar = [
+        "A. Pajak Keluaran yang harus dipungut sendiri (I.A.2 + I.A.3 + I.A.4 + I.A.5)",
+        "B. PPN Disetor di muka dalam masa pajak yang sama",
+        "C. Pajak Masukan yang dapat diperhitungkan (II.G)",
+        "D. Kelebihan pemungutan PPN oleh Pemungut PPN",
+        "E. PPN kurang atau (lebih) bayar (III.A - III.B - III.C - III.D)",
+        "F. PPN Kurang atau (lebih) bayar pada SPT yang dibetulkan sebelumnya",
+        "G. PPN Kurang atau (lebih) bayar karena pembetulan SPT (III.E + III.F)",
+        "H. Diminta Untuk"
+    ];
+
     const getPrefilled = (i) => ({
         harga: (i === 1 && "105.500.000") || (i === 5 && "651.119.260") || (i === 8 && "756.619.260") || "0",
         dpp: (i === 1 && "96.708.334") || (i === 5 && "596.859.332") || "0",
