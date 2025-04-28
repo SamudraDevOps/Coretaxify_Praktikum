@@ -29,12 +29,16 @@ import {
   AlertDialogAction,
   AlertDialogCancel,
 } from "@/components/ui/alert-dialog";
-import { useMutation } from "@tanstack/react-query";
+// import { useMutation } from "@tanstack/react-query";
 import { getCsrf } from "@/service/getCsrf";
 import { useCookies } from "react-cookie";
 import { RoutesApi as RoutesApiReal } from "@/Routes";
+import { useParams } from "react-router";
+import { ClipLoader } from "react-spinners";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import Swal from "sweetalert2";
 
-const TambahFakturKeluaran = ({}) => {
+const TambahFakturKeluaran = () => {
   const [showDokumenTransaksi, setShowDokumenTransaksi] = useState(false);
   const [showInformasiPembeli, setShowInformasiPembeli] = useState(false);
   const [showDetailTransaksi, setShowDetailTransaksi] = useState(false);
@@ -65,6 +69,7 @@ const TambahFakturKeluaran = ({}) => {
   const [ppnbm, setPPnBM] = useState("Rp 0");
   const [isCustomPPnBM, setIsCustomPPnBM] = useState(false);
 
+  const { id, akun } = useParams();
   const [cookies] = useCookies(["token"]);
 
   const RoutesApi = {
@@ -89,6 +94,26 @@ const TambahFakturKeluaran = ({}) => {
       console.error("Gagal fetch data:", err);
     }
   };
+
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ["npwp_faktur"],
+    queryFn: async () => {
+      const data = await axios.get(
+        // RoutesApiReal.apiUrl + `student/assignments/${id}/sistem/${akun}`,
+        RoutesApiReal.apiUrl + `student/assignments/1/sistem/2/getAkun`,
+        {
+          headers: {
+            Authorization: `Bearer ${cookies.token}`,
+          },
+          // params: {
+          //   intent: "api.sistem.get.akun.orang.pibadi",
+          // },
+        }
+      );
+      console.log(data.data);
+      return data.data;
+    },
+  });
 
   const handleTipeChange = (e) => {
     const value = e.target.value;
@@ -293,9 +318,10 @@ const TambahFakturKeluaran = ({}) => {
     pelunasan: false,
     nomorFaktur: "",
     kode_transaksi: "",
-    tanggalFaktur: "",
+    tanggal_faktur_pajak: "",
     jenisFaktur: "Normal",
-    masaPajak: "",
+    esign_status: "Belum Ditandatangani",
+    masa_pajak: "",
     tahun: new Date().getFullYear().toString(),
     informasi_tambahan: "",
     cap_fasilitas: "",
@@ -303,7 +329,7 @@ const TambahFakturKeluaran = ({}) => {
     referensi: "",
     alamat: "",
     idtku: "000000",
-    npwp: "",
+    akun_penerima_id: "",
     identification: "",
     negara: "",
     nomorDokumen: "",
@@ -477,6 +503,9 @@ const TambahFakturKeluaran = ({}) => {
       dpp: totalDPP,
       ppn: totalPPN,
       ppnbm: totalPPnBM,
+      informasi_tambahan: informasi_tambahan,
+      cap_fasilitas: cap_fasilitas,
+
       //   totalTagihan: formatRupiah((totalDPP + totalPPN + totalPPnBM).toString()),
     };
     // alert(finalFormData)
@@ -492,6 +521,105 @@ const TambahFakturKeluaran = ({}) => {
       },
     };
   };
+
+  // Helper function to get the full cap_fasilitas text based on kode_transaksi and cap_fasilitas value
+  const getCapFasilitasText = (kode, cap) => {
+    if (kode === "7") {
+      switch (cap) {
+        case "1":
+          return "1 - Pajak Pertambahan Nilai Tidak Dipungut berdasarkan PP Nomor 10 Tahun 2012";
+        case "2":
+          return "2 - Pajak Pertambahan Nilai atau Pajak Pertambahan Nilai dan Pajak Penjualan atas Barang Mewah tidak dipungut";
+        case "3":
+          return "3 - Pajak Pertambahan Nilai dan Pajak Penjualan atas Barang Mewah Tidak Dipungut";
+        case "4":
+          return "4 - Pajak Pertambahan Nilai Tidak Dipungut Sesuai PP Nomor 71 Tahun 2012";
+        case "5":
+          return "5 - (Tidak ada Cap)";
+        case "6":
+          return "6 - PPN dan/atau PPnBM tidak dipungut berdasarkan PMK No. 194/PMK.03/2012";
+        case "7":
+          return "7 - PPN Tidak Dipungut Berdasarkan PP Nomor 15 Tahun 2015";
+        case "8":
+          return "8 - PPN Tidak Dipungut Berdasarkan PP Nomor 69 Tahun 2015";
+        case "9":
+          return "9 - PPN Tidak Dipungut Berdasarkan PP Nomor 96 Tahun 2015";
+        case "10":
+          return "10 - PPN Tidak Dipungut Berdasarkan PP Nomor 106 Tahun 2015";
+        case "11":
+          return "11 - PPN Tidak Dipungut Sesuai PP Nomor 50 Tahun 2019";
+        case "12":
+          return "12 - PPN atau PPN dan PPnBM Tidak Dipungut Sesuai Dengan PP Nomor 27 Tahun 2017";
+        case "13":
+          return "13 - PPN ditanggung PEMERINTAH EX PMK 21/PMK.010/21";
+        case "14":
+          return "14 - PPN DITANGGUNG PEMERINTAH EKS PMK 102/PMK.010/2021";
+        case "15":
+          return "15 - PPN DITANGGUNG PEMERINTAH EKS PMK 239/PMK.03/2020";
+        case "16":
+          return "16 - Insentif PPN DITANGGUNG PEMERINTAH EKSEKUSI PMK NOMOR 103/PMK.010/2021";
+        case "17":
+          return "17 - PAJAK PERTAMBAHAN NILAI TIDAK DIPUNGUT BERDASARKAN PP NOMOR 40 TAHUN 2021";
+        case "18":
+          return "18 - PAJAK PERTAMBAHAN NILAI TIDAK DIPUNGUT BERDASARKAN PP NOMOR 41 TAHUN 2021";
+        case "19":
+          return "19 - PPN DITANGGUNG PEMERINTAH EKS PMK 6/PMK.010/2022";
+        case "20":
+          return "20 - PPN DITANGGUNG PEMERINTAH EKSEKUSI PMK NOMOR 226/PMK.03/2021";
+        case "21":
+          return "21 - PPN ATAU PPN DAN PPnBM TIDAK DIPUNGUT SESUAI DENGAN PP NOMOR 53 TAHUN 2017";
+        case "22":
+          return "22 - PPN tidak dipungut berdasarkan PP Nomor 70 Tahun 2021";
+        case "23":
+          return "23 - PPN ditanggung Pemerintah Ex PMK-125/PMK.01/2020";
+        case "24":
+          return "24 - (Tidak ada Cap)";
+        case "25":
+          return "25 - PPN tidak dipungut berdasarkan PP Nomor 49 Tahun 2022";
+        case "26":
+          return "26 - PPN tidak dipungut berdasarkan PP Nomor 12 Tahun 2023";
+        case "27":
+          return "27 - PPN ditanggung Pemerintah berdasarkan PMK Nomor 38 Tahun 2023";
+        default:
+          return "";
+      }
+    } else if (kode === "8") {
+      switch (cap) {
+        case "1":
+          return "1 - PPN Dibebaskan Sesuai PP Nomor 146 Tahun 2000 Sebagaimana Telah Diubah Dengan PP Nomor 38 Tahun 2003";
+        case "2":
+          return "2 - PPN Dibebaskan Sesuai PP Nomor 12 Tahun 2001 Sebagaimana Telah Beberapa Kali Diubah Terakhir Dengan PP Nomor 31 Tahun 2007";
+        case "3":
+          return "3 - PPN dibebaskan berdasarkan Peraturan Pemerintah Nomor 28 Tahun 2009";
+        case "4":
+          return "4 - (Tidak ada cap)";
+        case "5":
+          return "5 - PPN Dibebaskan Sesuai Dengan PP Nomor 81 Tahun 2015";
+        case "6":
+          return "6 - PPN Dibebaskan Berdasarkan PP Nomor 74 Tahun 2015";
+        case "7":
+          return "7 - (tanpa cap)";
+        case "8":
+          return "8 - PPN DIBEBASKAN SESUAI PP NOMOR 81 TAHUN 2015 SEBAGAIMANA TELAH DIUBAH DENGAN PP 48 TAHUN 2020";
+        case "9":
+          return "9 - PPN DIBEBASKAN BERDASARKAN PP NOMOR 47 TAHUN 2020";
+        case "10":
+          return "10 - PPN Dibebaskan berdasarkan PP Nomor 49 Tahun 2022";
+        default:
+          return "";
+      }
+    }
+    return "";
+  };
+
+  if (isLoading) {
+    return (
+      <div className="loading">
+        <ClipLoader color="#7502B5" size={50} />
+      </div>
+      // <div className="h-full w-full text-2xl italic font-bold text-center flex items-center justify-center">Loading...</div>
+    );
+  }
 
   return (
     console.log(""),
@@ -587,9 +715,9 @@ const TambahFakturKeluaran = ({}) => {
                 </label>
                 <input
                   type="date"
-                  value={formData.tanggalFaktur}
+                  value={formData.tanggal_faktur_pajak}
                   onChange={handleChange}
-                  name="tanggalFaktur"
+                  name="tanggal_faktur_pajak"
                   className="p-2 border rounded w-full"
                 />
               </div>
@@ -613,8 +741,8 @@ const TambahFakturKeluaran = ({}) => {
                   {/* <input type="month" className='p-2 border rounded w-full' /> */}
                   <select
                     className="p-2 border rounded w-full"
-                    name="masaPajak"
-                    value={formData.masaPajak}
+                    name="masa_pajak"
+                    value={formData.masa_pajak}
                     onChange={handleChange}
                   >
                     <option value="">Pilih Masa Pajak</option>
@@ -672,7 +800,7 @@ const TambahFakturKeluaran = ({}) => {
                 {/* <div className="space-y-2">
                                 <label className='block text-sm font-medium'></label>
                             </div> */}
-                {(kode_transaksi === "07" || kode_transaksi === "08") && (
+                {(kode_transaksi === "7" || kode_transaksi === "8") && (
                   <>
                     {/* Informasi Tambahan */}
                     <div className="space-y-2">
@@ -682,12 +810,331 @@ const TambahFakturKeluaran = ({}) => {
                       <select
                         className="p-2 border rounded w-full"
                         value={informasi_tambahan}
-                        onChange={handleInformasiTambahanChange}
+                        onChange={(e) => {
+                          const selectedValue = e.target.value;
+                          setInformasiTambahan(selectedValue);
+
+                          // Set the corresponding cap_fasilitas based on the selected informasi_tambahan
+                          let capValue = "";
+                          if (kode_transaksi === "7") {
+                            switch (selectedValue) {
+                              case "1 - untuk Kawasan Bebas":
+                                capValue =
+                                  "1 - Pajak Pertambahan Nilai Tidak Dipungut berdasarkan PP Nomor 10 Tahun 2012";
+                                break;
+                              case "2 - untuk Tempat Penimbunan Berikat":
+                                capValue =
+                                  "2 - Pajak Pertambahan Nilai atau Pajak Pertambahan Nilai dan Pajak Penjualan atas Barang Mewah tidak dipungut";
+                                break;
+                              case "3 - untuk Hibah dan Bantuan Luar Negeri":
+                                capValue =
+                                  "3 - Pajak Pertambahan Nilai dan Pajak Penjualan atas Barang Mewah Tidak Dipungut";
+                                break;
+                              case "4 - untuk Avtur":
+                                capValue =
+                                  "4 - Pajak Pertambahan Nilai Tidak Dipungut Sesuai PP Nomor 71 Tahun 2012";
+                                break;
+                              case "5 - untuk Lainnya":
+                                capValue = "5 - (Tidak ada Cap)";
+                                break;
+                              case "6 - untuk Kontraktor Perjanjian Karya Pengusahaan Pertambangan Batubara Generasi I":
+                                capValue =
+                                  "6 - PPN dan/atau PPnBM tidak dipungut berdasarkan PMK No. 194/PMK.03/2012";
+                                break;
+                              case "7 - untuk Penyerahan bahan bakar minyak untuk Kapal Angkutan Laut Luar Negeri":
+                                capValue =
+                                  "7 - PPN Tidak Dipungut Berdasarkan PP Nomor 15 Tahun 2015";
+                                break;
+                              case "8 - untuk Penyerahan jasa kena pajak terkait alat angkutan tertentu":
+                                capValue =
+                                  "8 - PPN Tidak Dipungut Berdasarkan PP Nomor 69 Tahun 2015";
+                                break;
+                              case "9 - untuk Penyerahan BKP Tertentu di KEK":
+                                capValue =
+                                  "9 - PPN Tidak Dipungut Berdasarkan PP Nomor 96 Tahun 2015";
+                                break;
+                              case "10 - untuk BKP tertentu yang bersifat strategis berupa anode slime":
+                                capValue =
+                                  "10 - PPN Tidak Dipungut Berdasarkan PP Nomor 106 Tahun 2015";
+                                break;
+                              case "11 - untuk Penyerahan alat angkutan tertentu dan/atau Jasa Kena Pajak terkait alat angkutan tertentu":
+                                capValue =
+                                  "11 - PPN Tidak Dipungut Sesuai PP Nomor 50 Tahun 2019";
+                                break;
+                              case "12 - untuk Penyerahan kepada Kontraktor Kerja Sama Migas yang mengikuti ketentuan Peraturan Pemerintah Nomor 27 Tahun 2017":
+                                capValue =
+                                  "12 - PPN atau PPN dan PPnBM Tidak Dipungut Sesuai Dengan PP Nomor 27 Tahun 2017";
+                                break;
+                              case "13 - Penyerahan Rumah Tapak dan Satuan Rumah Susun Rumah Susun Ditanggung Pemerintah Tahun Anggaran 2021":
+                                capValue =
+                                  "13 - PPN ditanggung PEMERINTAH EX PMK 21/PMK.010/21";
+                                break;
+                              case "14 - Penyerahan Jasa Sewa Ruangan atau Bangunan Kepada Pedagang Eceran yang Ditanggung Pemerintah Tahun Anggaran 2021":
+                                capValue =
+                                  "14 - PPN DITANGGUNG PEMERINTAH EKS PMK 102/PMK.010/2021";
+                                break;
+                              case "15 - Penyerahan Barang dan Jasa Dalam Rangka Penanganan Pandemi COVID-19 (PMK 239/PMK. 03/2020)":
+                                capValue =
+                                  "15 - PPN DITANGGUNG PEMERINTAH EKS PMK 239/PMK.03/2020";
+                                break;
+                              case "16 - Insentif PMK-103/PMK.010/2021 berupa PPN atas Penyerahan Rumah Tapak dan Unit Hunian Rumah Susun yang Ditanggung Pemerintah Tahun Anggaran 2021":
+                                capValue =
+                                  "16 - Insentif PPN DITANGGUNG PEMERINTAH EKSEKUSI PMK NOMOR 103/PMK.010/2021";
+                                break;
+                              case "17 - Kawasan Ekonomi Khusus PP nomor 40 Tahun 2021":
+                                capValue =
+                                  "17 - PAJAK PERTAMBAHAN NILAI TIDAK DIPUNGUT BERDASARKAN PP NOMOR 40 TAHUN 2021";
+                                break;
+                              case "18 - Kawasan Bebas PP nomor 41 Tahun 2021":
+                                capValue =
+                                  "18 - PAJAK PERTAMBAHAN NILAI TIDAK DIPUNGUT BERDASARKAN PP NOMOR 41 TAHUN 2021";
+                                break;
+                              case "19 - Penyerahan Rumah Tapak dan Unit Hunian Rumah Susun yang Ditanggung Pemerintah Tahun Anggaran 2022":
+                                capValue =
+                                  "19 - PPN DITANGGUNG PEMERINTAH EKS PMK 6/PMK.010/2022";
+                                break;
+                              case "20 - PPN Ditanggung Pemerintah dalam rangka Penanganan Pandemi Corona Virus":
+                                capValue =
+                                  "20 - PPN DITANGGUNG PEMERINTAH EKSEKUSI PMK NOMOR 226/PMK.03/2021";
+                                break;
+                              case "21 - Penyerahan kepada Kontraktor Kerja Sama Migas yang mengikuti ketentuan Peraturan Pemerintah Nomor 53 Tahun 2017":
+                                capValue =
+                                  "21 - PPN ATAU PPN DAN PPnBM TIDAK DIPUNGUT SESUAI DENGAN PP NOMOR 53 TAHUN 2017";
+                                break;
+                              case "22 - BKP strategis tertentu dalam bentuk anode slime dan emas butiran":
+                                capValue =
+                                  "22 - PPN tidak dipungut berdasarkan PP Nomor 70 Tahun 2021";
+                                break;
+                              case "23 - untuk penyerahan kertas koran dan/atau majalah":
+                                capValue =
+                                  "23 - PPN ditanggung Pemerintah Ex PMK-125/PMK.01/2020";
+                                break;
+                              case "24 - PPN tidak dipungut oleh Pemerintah lainnya":
+                                capValue = "24 - (Tidak ada Cap)";
+                                break;
+                              case "25 - BKP dan JKP tertentu":
+                                capValue =
+                                  "25 - PPN tidak dipungut berdasarkan PP Nomor 49 Tahun 2022";
+                                break;
+                              case "26 - Penyerahan BKP dan JKP di Ibu Kota Negara baru":
+                                capValue =
+                                  "26 - PPN tidak dipungut berdasarkan PP Nomor 12 Tahun 2023";
+                                break;
+                              case "27 - Penyerahan kendaraan listrik berbasis baterai":
+                                capValue =
+                                  "27 - PPN ditanggung Pemerintah berdasarkan PMK Nomor 38 Tahun 2023";
+                                break;
+                              default:
+                                capValue = "";
+                            }
+                          } else if (kode_transaksi === "8") {
+                            switch (selectedValue) {
+                              case "1 - untuk BKP dan JKP Tertentu":
+                                capValue =
+                                  "1 - PPN Dibebaskan Sesuai PP Nomor 146 Tahun 2000 Sebagaimana Telah Diubah Dengan PP Nomor 38 Tahun 2003";
+                                break;
+                              case "2 - untuk BKP Tertentu yang Bersifat Strategis":
+                                capValue =
+                                  "2 - PPN Dibebaskan Sesuai PP Nomor 12 Tahun 2001 Sebagaimana Telah Beberapa Kali Diubah Terakhir Dengan PP Nomor 31 Tahun 2007";
+                                break;
+                              case "3 - untuk Jasa Kebandarudaraan":
+                                capValue =
+                                  "3 - PPN dibebaskan berdasarkan Peraturan Pemerintah Nomor 28 Tahun 2009";
+                                break;
+                              case "4 - untuk Lainnya":
+                                capValue = "4 - (Tidak ada cap)";
+                                break;
+                              case "5 - untuk BKP Tertentu yang Bersifat Strategis sesuai PP Nomor 81 Tahun 2015":
+                                capValue =
+                                  "5 - PPN Dibebaskan Sesuai Dengan PP Nomor 81 Tahun 2015";
+                                break;
+                              case "6 - untuk Penyerahan Jasa Kepelabuhan Tertentu untuk kegiatan angkutan laut Luar Negeri":
+                                capValue =
+                                  "6 - PPN Dibebaskan Berdasarkan PP Nomor 74 Tahun 2015";
+                                break;
+                              case "7 - untuk Penyerahan Air Bersih":
+                                capValue = "7 - (tanpa cap)";
+                                break;
+                              case "8 - Penyerahan BKP tertentu yang bersifat strategis berdasarkan PP 48 Tahun 2020":
+                                capValue =
+                                  "8 - PPN DIBEBASKAN SESUAI PP NOMOR 81 TAHUN 2015 SEBAGAIMANA TELAH DIUBAH DENGAN PP 48 TAHUN 2020";
+                                break;
+                              case "9 - Penyerahan kepada Perwakilan Negara Asing dan Badan Internasional serta Pejabatnya":
+                                capValue =
+                                  "9 - PPN DIBEBASKAN BERDASARKAN PP NOMOR 47 TAHUN 2020";
+                                break;
+                              case "10 - BKP dan JKP tertentu":
+                                capValue =
+                                  "10 - PPN Dibebaskan berdasarkan PP Nomor 49 Tahun 2022";
+                                break;
+                              default:
+                                capValue = "";
+                            }
+                          }
+
+                          setCapFasilitas(capValue);
+
+                          // Update formData with full text values
+                          setFormData((prev) => ({
+                            ...prev,
+                            informasi_tambahan: selectedValue,
+                            cap_fasilitas: capValue,
+                            // Reset nomorPendukung if needed
+                            nomorPendukung: "",
+                          }));
+
+                          // Reset nomorPendukung state
+                          setNomorPendukung("");
+                        }}
                       >
                         <option value="">Pilih Informasi Tambahan</option>
-                        <option value="A">Informasi A</option>
-                        <option value="B">Informasi B</option>
-                        <option value="C">Informasi C</option>
+                        {kode_transaksi === "7" ? (
+                          // Options for kode_transaksi 7
+                          <>
+                            <option value="1 - untuk Kawasan Bebas">
+                              1 - untuk Kawasan Bebas
+                            </option>
+                            <option value="2 - untuk Tempat Penimbunan Berikat">
+                              2 - untuk Tempat Penimbunan Berikat
+                            </option>
+                            <option value="3 - untuk Hibah dan Bantuan Luar Negeri">
+                              3 - untuk Hibah dan Bantuan Luar Negeri
+                            </option>
+                            <option value="4 - untuk Avtur">
+                              4 - untuk Avtur
+                            </option>
+                            <option value="5 - untuk Lainnya">
+                              5 - untuk Lainnya
+                            </option>
+                            <option value="6 - untuk Kontraktor Perjanjian Karya Pengusahaan Pertambangan Batubara Generasi I">
+                              6 - untuk Kontraktor Perjanjian Karya Pengusahaan
+                              Pertambangan Batubara Generasi I
+                            </option>
+                            <option value="7 - untuk Penyerahan bahan bakar minyak untuk Kapal Angkutan Laut Luar Negeri">
+                              7 - untuk Penyerahan bahan bakar minyak untuk
+                              Kapal Angkutan Laut Luar Negeri
+                            </option>
+                            <option value="8 - untuk Penyerahan jasa kena pajak terkait alat angkutan tertentu">
+                              8 - untuk Penyerahan jasa kena pajak terkait alat
+                              angkutan tertentu
+                            </option>
+                            <option value="9 - untuk Penyerahan BKP Tertentu di KEK">
+                              9 - untuk Penyerahan BKP Tertentu di KEK
+                            </option>
+                            <option value="10 - untuk BKP tertentu yang bersifat strategis berupa anode slime">
+                              10 - untuk BKP tertentu yang bersifat strategis
+                              berupa anode slime
+                            </option>
+                            <option value="11 - untuk Penyerahan alat angkutan tertentu dan/atau Jasa Kena Pajak terkait alat angkutan tertentu">
+                              11 - untuk Penyerahan alat angkutan tertentu
+                              dan/atau Jasa Kena Pajak terkait alat angkutan
+                              tertentu
+                            </option>
+                            <option value="12 - untuk Penyerahan kepada Kontraktor Kerja Sama Migas yang mengikuti ketentuan Peraturan Pemerintah Nomor 27 Tahun 2017">
+                              12 - untuk Penyerahan kepada Kontraktor Kerja Sama
+                              Migas yang mengikuti ketentuan Peraturan
+                              Pemerintah Nomor 27 Tahun 2017
+                            </option>
+                            <option value="13 - Penyerahan Rumah Tapak dan Satuan Rumah Susun Rumah Susun Ditanggung Pemerintah Tahun Anggaran 2021">
+                              13 - Penyerahan Rumah Tapak dan Satuan Rumah Susun
+                              Rumah Susun Ditanggung Pemerintah Tahun Anggaran
+                              2021
+                            </option>
+                            <option value="14 - Penyerahan Jasa Sewa Ruangan atau Bangunan Kepada Pedagang Eceran yang Ditanggung Pemerintah Tahun Anggaran 2021">
+                              14 - Penyerahan Jasa Sewa Ruangan atau Bangunan
+                              Kepada Pedagang Eceran yang Ditanggung Pemerintah
+                              Tahun Anggaran 2021
+                            </option>
+                            <option value="15 - Penyerahan Barang dan Jasa Dalam Rangka Penanganan Pandemi COVID-19 (PMK 239/PMK. 03/2020)">
+                              15 - Penyerahan Barang dan Jasa Dalam Rangka
+                              Penanganan Pandemi COVID-19 (PMK 239/PMK. 03/2020)
+                            </option>
+                            <option value="16 - Insentif PMK-103/PMK.010/2021 berupa PPN atas Penyerahan Rumah Tapak dan Unit Hunian Rumah Susun yang Ditanggung Pemerintah Tahun Anggaran 2021">
+                              16 - Insentif PMK-103/PMK.010/2021 berupa PPN atas
+                              Penyerahan Rumah Tapak dan Unit Hunian Rumah Susun
+                              yang Ditanggung Pemerintah Tahun Anggaran 2021
+                            </option>
+                            <option value="17 - Kawasan Ekonomi Khusus PP nomor 40 Tahun 2021">
+                              17 - Kawasan Ekonomi Khusus PP nomor 40 Tahun 2021
+                            </option>
+                            <option value="18 - Kawasan Bebas PP nomor 41 Tahun 2021">
+                              18 - Kawasan Bebas PP nomor 41 Tahun 2021
+                            </option>
+                            <option value="19 - Penyerahan Rumah Tapak dan Unit Hunian Rumah Susun yang Ditanggung Pemerintah Tahun Anggaran 2022">
+                              19 - Penyerahan Rumah Tapak dan Unit Hunian Rumah
+                              Susun yang Ditanggung Pemerintah Tahun Anggaran
+                              2022
+                            </option>
+                            <option value="20 - PPN Ditanggung Pemerintah dalam rangka Penanganan Pandemi Corona Virus">
+                              20 - PPN Ditanggung Pemerintah dalam rangka
+                              Penanganan Pandemi Corona Virus
+                            </option>
+                            <option value="21 - Penyerahan kepada Kontraktor Kerja Sama Migas yang mengikuti ketentuan Peraturan Pemerintah Nomor 53 Tahun 2017">
+                              21 - Penyerahan kepada Kontraktor Kerja Sama Migas
+                              yang mengikuti ketentuan Peraturan Pemerintah
+                              Nomor 53 Tahun 2017
+                            </option>
+                            <option value="22 - BKP strategis tertentu dalam bentuk anode slime dan emas butiran">
+                              22 - BKP strategis tertentu dalam bentuk anode
+                              slime dan emas butiran
+                            </option>
+                            <option value="23 - untuk penyerahan kertas koran dan/atau majalah">
+                              23 - untuk penyerahan kertas koran dan/atau
+                              majalah
+                            </option>
+                            <option value="24 - PPN tidak dipungut oleh Pemerintah lainnya">
+                              24 - PPN tidak dipungut oleh Pemerintah lainnya
+                            </option>
+                            <option value="25 - BKP dan JKP tertentu">
+                              25 - BKP dan JKP tertentu
+                            </option>
+                            <option value="26 - Penyerahan BKP dan JKP di Ibu Kota Negara baru">
+                              26 - Penyerahan BKP dan JKP di Ibu Kota Negara
+                              baru
+                            </option>
+                            <option value="27 - Penyerahan kendaraan listrik berbasis baterai">
+                              27 - Penyerahan kendaraan listrik berbasis baterai
+                            </option>
+                          </>
+                        ) : (
+                          // Options for kode_transaksi 8
+                          <>
+                            <option value="1 - untuk BKP dan JKP Tertentu">
+                              1 - untuk BKP dan JKP Tertentu
+                            </option>
+                            <option value="2 - untuk BKP Tertentu yang Bersifat Strategis">
+                              2 - untuk BKP Tertentu yang Bersifat Strategis
+                            </option>
+                            <option value="3 - untuk Jasa Kebandarudaraan">
+                              3 - untuk Jasa Kebandarudaraan
+                            </option>
+                            <option value="4 - untuk Lainnya">
+                              4 - untuk Lainnya
+                            </option>
+                            <option value="5 - untuk BKP Tertentu yang Bersifat Strategis sesuai PP Nomor 81 Tahun 2015">
+                              5 - untuk BKP Tertentu yang Bersifat Strategis
+                              sesuai PP Nomor 81 Tahun 2015
+                            </option>
+                            <option value="6 - untuk Penyerahan Jasa Kepelabuhan Tertentu untuk kegiatan angkutan laut Luar Negeri">
+                              6 - untuk Penyerahan Jasa Kepelabuhan Tertentu
+                              untuk kegiatan angkutan laut Luar Negeri
+                            </option>
+                            <option value="7 - untuk Penyerahan Air Bersih">
+                              7 - untuk Penyerahan Air Bersih
+                            </option>
+                            <option value="8 - Penyerahan BKP tertentu yang bersifat strategis berdasarkan PP 48 Tahun 2020">
+                              8 - Penyerahan BKP tertentu yang bersifat
+                              strategis berdasarkan PP 48 Tahun 2020
+                            </option>
+                            <option value="9 - Penyerahan kepada Perwakilan Negara Asing dan Badan Internasional serta Pejabatnya">
+                              9 - Penyerahan kepada Perwakilan Negara Asing dan
+                              Badan Internasional serta Pejabatnya
+                            </option>
+                            <option value="10 - BKP dan JKP tertentu">
+                              10 - BKP dan JKP tertentu
+                            </option>
+                          </>
+                        )}
                       </select>
                     </div>
 
@@ -696,21 +1143,36 @@ const TambahFakturKeluaran = ({}) => {
                       <label className="block text-sm font-medium">
                         Cap Fasilitas
                       </label>
-                      <select
+                      <input
+                        type="text"
                         className="p-2 border rounded w-full bg-gray-100"
                         value={cap_fasilitas}
                         disabled
-                      >
-                        <option value="">Pilih Cap Fasilitas</option>
-                        <option value="X">Fasilitas X</option>
-                        <option value="Y">Fasilitas Y</option>
-                        <option value="Z">Fasilitas Z</option>
-                      </select>
+                      />
                     </div>
 
-                    {/* Nomor Pendukung (Muncul hanya untuk Informasi A atau B) */}
-                    {(informasi_tambahan === "A" ||
-                      informasi_tambahan === "B") && (
+                    {/* Nomor Pendukung (Muncul hanya untuk informasi tambahan tertentu) */}
+                    {((kode_transaksi === "7" &&
+                      [
+                        "1 - untuk Kawasan Bebas",
+                        "2 - untuk Tempat Penimbunan Berikat",
+                        "8 - untuk Penyerahan jasa kena pajak terkait alat angkutan tertentu",
+                        "9 - untuk Penyerahan BKP Tertentu di KEK",
+                        "11 - untuk Penyerahan alat angkutan tertentu dan/atau Jasa Kena Pajak terkait alat angkutan tertentu",
+                        "12 - untuk Penyerahan kepada Kontraktor Kerja Sama Migas yang mengikuti ketentuan Peraturan Pemerintah Nomor 27 Tahun 2017",
+                        "17 - Kawasan Ekonomi Khusus PP nomor 40 Tahun 2021",
+                        "18 - Kawasan Bebas PP nomor 41 Tahun 2021",
+                        "21 - Penyerahan kepada Kontraktor Kerja Sama Migas yang mengikuti ketentuan Peraturan Pemerintah Nomor 53 Tahun 2017",
+                        "25 - BKP dan JKP tertentu",
+                        "26 - Penyerahan BKP dan JKP di Ibu Kota Negara baru",
+                      ].includes(informasi_tambahan)) ||
+                      (kode_transaksi === "8" &&
+                        [
+                          "5 - untuk BKP Tertentu yang Bersifat Strategis sesuai PP Nomor 81 Tahun 2015",
+                          "8 - Penyerahan BKP tertentu yang bersifat strategis berdasarkan PP 48 Tahun 2020",
+                          "9 - Penyerahan kepada Perwakilan Negara Asing dan Badan Internasional serta Pejabatnya",
+                          "10 - BKP dan JKP tertentu",
+                        ].includes(informasi_tambahan))) && (
                       <div className="space-y-2">
                         <label className="block text-sm font-medium">
                           Nomor Pendukung
@@ -782,14 +1244,29 @@ const TambahFakturKeluaran = ({}) => {
             <div className="border rounded-md p-4 mb-2 grid grid-cols-3 gap-4 w-full">
               <div className="space-y-2">
                 <label className="block text-sm font-medium">NPWP </label>
-                <input
-                  type="text"
-                  name="npwp"
-                  value={formData.npwp}
+                <select
+                  name="akun_penerima_id"
+                  value={formData.akun_penerima_id}
                   onChange={handleChange}
                   className="p-2 border rounded w-full"
-                />
+                >
+                  <option value="">Pilih NPWP</option>
+                  {!isLoading &&
+                    data &&
+                    data.map((item, index) => (
+                      <option key={index} value={item.id || ""}>
+                        {item.npwp_akun || "NPWP tidak tersedia"} -{" "}
+                        {item.nama_akun}
+                      </option>
+                    ))}
+                </select>
+                {isLoading && (
+                  <div className="text-sm text-gray-500">
+                    Loading NPWP data...
+                  </div>
+                )}
               </div>
+
               <div className="space-y-2">
                 <label className="block text-sm font-medium">ID</label>
                 <div className="grid grid-cols-2 gap-3 ">
