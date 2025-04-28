@@ -746,8 +746,8 @@ const Main = () => {
           element={
             <>
               <RoleBasedRenderer
-                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun`}
-                intent={"api.get.sistem.edit.informasi.umum"}
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/faktur`}
+                intent={"api.get.faktur.pengirim"}
                 OrangPribadi={PajakKeluaranOP}
                 Badan={PajakKeluaran}
                 query={"edit-info"}

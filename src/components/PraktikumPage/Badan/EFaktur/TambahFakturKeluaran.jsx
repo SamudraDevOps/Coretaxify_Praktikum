@@ -100,7 +100,8 @@ const TambahFakturKeluaran = () => {
     queryFn: async () => {
       const data = await axios.get(
         // RoutesApiReal.apiUrl + `student/assignments/${id}/sistem/${akun}`,
-        RoutesApiReal.apiUrl + `student/assignments/1/sistem/2/getAkun`,
+        RoutesApiReal.apiUrl +
+          `student/assignments/${id}/sistem/${akun}/getAkun`,
         {
           headers: {
             Authorization: `Bearer ${cookies.token}`,

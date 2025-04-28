@@ -3,6 +3,9 @@ import SideBarEFaktur from "./SideBarEFaktur";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { FaChevronDown } from "react-icons/fa";
 import { useParams } from "react-router";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import Swal from "sweetalert2";
+import axios from "axios";
 
 const PajakKeluaran = ({ data, sidebar }) => {
   const { id, akun } = useParams();
@@ -19,6 +22,7 @@ const PajakKeluaran = ({ data, sidebar }) => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+  console.log(data);
   return (
     <div className="flex h-screen bg-gray-100">
       <SideBarEFaktur
@@ -64,9 +68,11 @@ const PajakKeluaran = ({ data, sidebar }) => {
 
             <button
               className="flex items-center bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded text-sm"
-              onClick={() =>
-                (window.location.href =
-                  "/admin/praktikum/2/e-faktur/pajak-keluaran/tambah-faktur-keluaran")
+              onClick={
+                () =>
+                  (window.location.href = `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran/tambah-faktur-keluaran`)
+                // (window.location.href =
+                //   "/admin/praktikum/2/e-faktur/pajak-keluaran/tambah-faktur-keluaran")
               }
             >
               Tambah
@@ -96,14 +102,93 @@ const PajakKeluaran = ({ data, sidebar }) => {
                 <th className="px-4 py-2 border">Tanggal Faktur Pajak</th>
                 <th className="px-4 py-2 border">Masa Pajak</th>
                 <th className="px-4 py-2 border">Tahun</th>
+                <th className="px-4 py-2 border">ESignStatus</th>
+                <th className="px-4 py-2 border">
+                  Harga Jual / Penggantian / DPP
+                </th>
+                <th className="px-4 py-2 border">DPP Nilai Lain / DPP</th>
+                <th className="px-4 py-2 border">PPN</th>
+                <th className="px-4 py-2 border">PPNBM</th>
+                <th className="px-4 py-2 border">PPNBM</th>
+                <th className="px-4 py-2 border">Penandatangan</th>
+                <th className="px-4 py-2 border">Referensi</th>
+                <th className="px-4 py-2 border">Dilaporkan Oleh Penjual</th>
+                <th className="px-4 py-2 border">
+                  Dilaporkan Oleh Pemungut PPN
+                </th>
               </tr>
             </thead>
             <tbody className="text-gray-600">
-              <tr>
-                <td colSpan="10" className="text-center p-4 border">
-                  Belum ada data
-                </td>
-              </tr>
+              {data && data.length > 0 ? (
+                data.map((item, index) => (
+                  <tr key={index}>
+                    <td className="px-6 py-2 border">{index + 1}</td>
+                    <td className="px-8 py-2 border">
+                      <input
+                        type="checkbox"
+                        className="form-checkbox h-5 w-5"
+                      />
+                    </td>
+                    <td className="px-4 py-2 border">
+                      <div className="flex space-x-2">
+                        <button className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs">
+                          Edit
+                        </button>
+                        <button className="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-xs">
+                          Hapus
+                        </button>
+                      </div>
+                    </td>
+                    <td className="px-4 py-2 border">
+                      {item.akun_penerima_id.npwp_akun || "-"}
+                    </td>
+                    <td className="px-4 py-2 border">
+                      {item.akun_penerima_id.nama_akun || "-"}
+                    </td>
+                    <td className="px-4 py-2 border">
+                      {item.kode_transaksi || "-"}
+                    </td>
+                    <td className="px-4 py-2 border">
+                      {item.nomor_faktur_pajak || "-"}
+                    </td>
+                    <td className="px-4 py-2 border">
+                      {item.tanggal_faktur_pajak || "-"}
+                    </td>
+                    <td className="px-4 py-2 border">
+                      {item.masa_pajak || "-"}
+                    </td>
+                    <td className="px-4 py-2 border">{item.tahun || "-"}</td>
+                    <td className="px-4 py-2 border">
+                      {item.esign_status || "-"}
+                    </td>
+                    <td className="px-4 py-2 border">{item.dpp || "-"}</td>
+                    <td className="px-4 py-2 border">{item.dpp_lain || "-"}</td>
+                    <td className="px-4 py-2 border">{item.ppn || "-"}</td>
+                    <td className="px-4 py-2 border">{item.ppnbm || "-"}</td>
+                    {/* <td className="px-4 py-2 border">
+                      {item.ppnbm_nilai || "-"}
+                    </td> */}
+                    <td className="px-4 py-2 border">
+                      {item.penandatangan || "-"}
+                    </td>
+                    <td className="px-4 py-2 border">
+                      {item.referensi || "-"}
+                    </td>
+                    <td className="px-4 py-2 border">
+                      {item.dilaporkan_penjual == 1 ? "Ya" : "Tidak"}
+                    </td>
+                    <td className="px-4 py-2 border">
+                      {item.dilaporkan_pemungut == 1 ? "Ya" : "Tidak"}
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="20" className="text-center p-4 border">
+                    Belum ada data
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
