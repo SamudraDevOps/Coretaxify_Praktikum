@@ -15,11 +15,10 @@ const PajakKeluaran = ({ data, sidebar }) => {
   const [cookies] = useCookies(["token"]);
 
   const deleteFaktur = useMutation({
-    mutationFn: async (id) => {
+    mutationFn: async (fakturId) => {
       const csrf = await getCsrf();
       return axios.delete(
-        `${RoutesApi.url}student/assignments/${id}/sistem/${akun}/faktur/${id}`,
-        // `${RoutesApiReal.url}api/student/assignments/${id}/sistem/${akun}/faktur`,
+        `${RoutesApi.apiUrl}student/assignments/${id}/sistem/${akun}/faktur/${fakturId}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -27,9 +26,6 @@ const PajakKeluaran = ({ data, sidebar }) => {
             "X-CSRF-TOKEN": csrf,
             Authorization: `Bearer ${cookies.token}`,
           },
-          // params: {
-          //   intent: "api.create.faktur.draft",
-          // },
         }
       );
     },
@@ -44,7 +40,7 @@ const PajakKeluaran = ({ data, sidebar }) => {
       );
     },
     onError: (error) => {
-      console.error("Error saving data:", error);
+      console.error("Error deleting data:", error);
       Swal.fire("Gagal!", "Terjadi kesalahan saat menghapus data.", "error");
     },
   });
@@ -170,7 +166,9 @@ const PajakKeluaran = ({ data, sidebar }) => {
                     </td>
                     <td className="px-4 py-2 border">
                       <div className="flex space-x-2">
-                        <a href={`/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran/edit-faktur-keluaran/${item.id}`}>
+                        <a
+                          href={`/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran/edit-faktur-keluaran/${item.id}`}
+                        >
                           <button className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs">
                             Edit
                           </button>
