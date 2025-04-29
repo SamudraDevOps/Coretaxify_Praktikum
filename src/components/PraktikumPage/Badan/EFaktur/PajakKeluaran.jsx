@@ -6,9 +6,48 @@ import { useParams } from "react-router";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import Swal from "sweetalert2";
 import axios from "axios";
+import { getCsrf } from "@/service/getCsrf";
+import { RoutesApi } from "@/Routes";
+import { useCookies } from "react-cookie";
 
 const PajakKeluaran = ({ data, sidebar }) => {
   const { id, akun } = useParams();
+  const [cookies] = useCookies(["token"]);
+
+  const deleteFaktur = useMutation({
+    mutationFn: async (id) => {
+      const csrf = await getCsrf();
+      return axios.delete(
+        `${RoutesApi.url}student/assignments/${id}/sistem/${akun}/faktur/${id}`,
+        // `${RoutesApiReal.url}api/student/assignments/${id}/sistem/${akun}/faktur`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": csrf,
+            Authorization: `Bearer ${cookies.token}`,
+          },
+          // params: {
+          //   intent: "api.create.faktur.draft",
+          // },
+        }
+      );
+    },
+    onSuccess: (data) => {
+      console.log(data);
+      Swal.fire("Berhasil!", "Faktur berhasil dihapus", "success").then(
+        (result) => {
+          if (result.isConfirmed) {
+            window.location.reload();
+          }
+        }
+      );
+    },
+    onError: (error) => {
+      console.error("Error saving data:", error);
+      Swal.fire("Gagal!", "Terjadi kesalahan saat menghapus data.", "error");
+    },
+  });
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -134,7 +173,10 @@ const PajakKeluaran = ({ data, sidebar }) => {
                         <button className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs">
                           Edit
                         </button>
-                        <button className="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-xs">
+                        <button
+                          onClick={() => deleteFaktur.mutate(item.id)}
+                          className="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-xs"
+                        >
                           Hapus
                         </button>
                       </div>
