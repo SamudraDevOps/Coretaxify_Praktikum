@@ -170,9 +170,11 @@ const PajakKeluaran = ({ data, sidebar }) => {
                     </td>
                     <td className="px-4 py-2 border">
                       <div className="flex space-x-2">
-                        <button className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs">
-                          Edit
-                        </button>
+                        <a href={`/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran/edit-faktur-keluaran/${item.id}`}>
+                          <button className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs">
+                            Edit
+                          </button>
+                        </a>
                         <button
                           onClick={() => deleteFaktur.mutate(item.id)}
                           className="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-xs"

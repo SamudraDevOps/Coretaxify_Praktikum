@@ -133,6 +133,7 @@ import DosenPraktikumKelasMember from "./components/Dashboard/Dosen/Kelas/DosenP
 import RoleBasedRenderer from "./components/PraktikumPage/RoleBaseRenderer";
 import { useParams } from "react-router";
 import { RoutesApi } from "@/Routes";
+import EditFakturKeluaran from "./components/PraktikumPage/Badan/EFaktur/EditFakturKeluaran";
 
 const Main = () => {
   const [loading, setLoading] = useState(true);
@@ -764,6 +765,20 @@ const Main = () => {
                 intent={"api.get.sistem.edit.informasi.umum"}
                 OrangPribadi={TambahFakturKeluaranOP}
                 Badan={TambahFakturKeluaran}
+                query={"edit-info"}
+              ></RoleBasedRenderer>
+            </>
+          }
+        />
+        <Route
+          path="/praktikum/:id/sistem/:akun/e-faktur/pajak-keluaran/edit-faktur-keluaran/:faktur"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun`}
+                intent={"api.get.sistem.edit.informasi.umum"}
+                OrangPribadi={TambahFakturKeluaranOP}
+                Badan={EditFakturKeluaran}
                 query={"edit-info"}
               ></RoleBasedRenderer>
             </>
