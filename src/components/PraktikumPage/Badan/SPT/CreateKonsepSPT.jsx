@@ -1902,90 +1902,70 @@ const CreateKonsepSPT = () => {
                                     {setShowPernyataan ? <FaChevronUp /> : <FaChevronDown />}
                                 </div>
                                 {showPernyataan && (
-                                    <div className="border rounded-md p-4 overflow-x-auto">
-                                        <table className="min-w-full text-sm text-left border overflow-x-auto">
-                                            <thead className="bg-purple-700 text-white text-center">
-                                                <tr>
-                                                    <th className="p-2 min-w-[300px]"></th>
-                                                    <th className="p-2 min-w-[150px]">Harga Jual/Penggantian/ <br />Nilai Ekspor/DPP</th>
-                                                    <th className="p-2 min-w-[150px]">DPP Nilai Lain/ DPP</th>
-                                                    <th className="p-2 min-w-[150px]">PPN</th>
-                                                    <th className="p-2 min-w-[150px]">PPnBM</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {/* row 1 */}
-                                                <tr className="border-b">
-                                                    <td className="p-2 whitespace-normal break-words text-sm">
-                                                        A. <input type="checkbox" className="" /> Daftar Rincian Kendaraan Bermotor
-                                                    </td>
-                                                    <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
-                                                    </td>
-                                                    <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
-                                                    </td>
-                                                    <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
-                                                    </td>
-                                                    <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
-                                                    </td>
-                                                </tr>
-                                                {/* row 2 */}
-                                                <tr className="border-b">
-                                                    <td className="p-2 whitespace-normal break-words text-sm">
-                                                        B. <input type="checkbox" className="" /> Hasil penghitungan kembali Pajak Masukan yang telah dikreditkan sebagai penambah (pengurang) Pajak Masukan
-                                                    </td>
-                                                    <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
-                                                    </td>
-                                                    <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
-                                                    </td>
-                                                    <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
-                                                    </td>
-                                                    <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                                    <div className="border rounded-md p-4 mb-4">
+                                        <div className="text-sm font-bold italic">
+                                            <input type="checkbox" className="m-2" />
+                                            PERNYATAAN : DENGAN MENYADARI SEPENUHNYA AKAN SEGALA AKIBATNYA, SAYA MENYATAKAN BAHWA APA YANG TELAH SAYA BERITAHUKAN DI ATAS BESERTA LAMPIRAN-LAMPIRANNYA ADALAH BENAR, LENGKAP, JELAS, DAN TIDAK BERSYARAT
+                                        </div>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                                            <div className="grid grid-cols-2 gap-4">
+                                                <label className="block text-sm font-medium text-gray-700 col-span-1">DITANDATANGANI OLEH</label>
+                                                <div className="flex items-center space-x-2">
+                                                    <input type="radio" id="test1" name="ditandatangani" className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded" disabled />
+                                                    <label htmlFor="PKP" className="text-gray-700 text-sm">PKP</label>
+                                                    <input type="radio" id="test2" name="ditandatangani" className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded" onClick={(e) => e.target.parentElement.previousElementSibling.click()} />
+                                                    <label htmlFor="KuasaWajibPajak" className="text-gray-700 text-sm">Kuasa Wajib Pajak</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                                            <div className="grid grid-cols-2 gap-4">
+                                                <label className="block text-sm font-medium text-gray-700 col-span-1">Kota Penandatanganan SPT</label>
+                                                <div className="flex items-center space-x-2 w-full">
+                                                    <input type="text" className="rounded w-full bg-gray-300 border-black text-sm p-2 flex-1" disabled />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                                            <div className="grid grid-cols-2 gap-4">
+                                                <label className="block text-sm font-medium text-gray-700 col-span-1">Nama</label>
+                                                <div className="flex items-center space-x-2 w-full">
+                                                    <input type="text" className="rounded w-full bg-gray-300 border-black text-sm p-2 flex-1" disabled />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                                            <div className="grid grid-cols-2 gap-4">
+                                                <label className="block text-sm font-medium text-gray-700 col-span-1">Posisi</label>
+                                                <div className="flex items-center space-x-2 w-full">
+                                                    <input type="text" className="rounded w-full bg-gray-300 border-black text-sm p-2 flex-1" disabled />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                                            <div className="grid grid-cols-2 gap-4">
+                                                <label className="block text-sm font-medium text-gray-700 col-span-1">Batas waktu pengumpulan</label>
+                                                <div className="flex items-center space-x-2 w-full">
+                                                    <input type="date" className="rounded w-full bg-white border-grey-300 border text-sm p-2 flex-1" />
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 )}
+                                <div className="flex justify-start mt-4 gap-2">
+                                    <button
+                                        type="submit"
+                                        className="bg-blue-700 text-white py-2 px-4 rounded-md shadow-sm hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-sm"
+                                    >
+                                        Simpan Konsep
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        className="bg-blue-700 text-white py-2 px-4 rounded-md shadow-sm hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-sm"
+                                    >
+                                        Bayar dan Lapor
+                                    </button>
+                                </div>
                                 {showScrollTop && (
                                     <button
                                         onClick={scrollToTop}
