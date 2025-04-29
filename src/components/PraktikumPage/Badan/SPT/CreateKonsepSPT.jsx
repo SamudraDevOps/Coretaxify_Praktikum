@@ -8,7 +8,11 @@ const CreateKonsepSPT = () => {
     const [showHeaderInduk, setShowHeaderInduk] = useState(false);
     const [showPenyerahanBarangJasa, setShowPenyerahanBarangJasa] = useState(false);
     const [showPerolehanBarangJasa, setShowPerolehanBarangJasa] = useState(false);
-
+    const [showPenghitunganPPNKurangBayarLebihBayar, setShowPenghitunganBayarLebihBayar] = useState(false)
+    const [showPPNTerutangAtasKegiatanMembangunSendiri, setShowPPNTerutangAtasKegiatanMembangunSendiri] = useState(false)
+    const [showPembayaranKembaliPajakMasukanTidakDapatDikreditkan, setShowPembayaranKembaliPajakMasukanYangTidakDapatDikreditkan] = useState(false);
+    const [showPajakPenjualanAtasBarangMewah, setShowPajakPenjualanAtasBarangMewah] = useState(false);
+    const [showPemungutanPPNatauPPNdanPPNMBolehPemungutPPN, setShowPemungutanPPNatauPPNdanPPNMBolehPemungutPPN] = useState(false);
     const [showHeadera1, setShowHeadera1] = useState(false);
     const [showHeadera2, setShowHeadera2] = useState(false);
 
@@ -27,48 +31,12 @@ const CreateKonsepSPT = () => {
         window.scrollTo({ top: 0, behavior: "smooth" });
     };
 
-    const rowsPenyerahanBarangdanJasa = [
-        "Ekspor BKP/BKP Tidak Berwujud/JKP",
-        "Penyerahan yang PPN atau PPN dan PPnBM-nya harus dipungut sendiri dengan DPP Nilai Lain atau Besaran Tertentu (dengan Faktur Pajak Kode 04 dan 05)",
-        "Penyerahan yang PPN atau PPN dan PPnBM-nya harus dipungut sendiri kepada turis sesuai dengan Pasal 16E UU PPN (dengan Faktur Pajak Kode 06)",
-        "Penyerahan yang PPN atau PPN dan PPnBM-nya harus dipungut sendiri lainnya (dengan Faktur Pajak Kode 01, 09 dan 10)",
-        "Penyerahan yang PPN atau PPN dan PPnBM-nya harus dipungut sendiri dengan Faktur Pajak yang dilaporkan secara digunggung",
-        "Penyerahan yang PPN atau PPN dan PPnBM-nya harus dipungut oleh Pemungut PPN (dengan Faktur Pajak Kode 02 dan 03)",
-        "Penyerahan yang mendapat fasilitas PPN atau PPnBM Tidak Dipungut (dengan Faktur Pajak Kode 07)",
-        "Penyerahan yang mendapat fasilitas PPN atau PPnBM Dibebaskan (dengan Faktur Pajak Kode 08)",
-        "Penyerahan yang mendapat fasilitas PPN atau PPnBM dengan Faktur Pajak yang dilaporkan secara digunggung"
-    ];
-
-    const rowsPerolehanBarangdanJasa = [
-        "A. Impor BKP, Pemanfaatan BKP Tidak Berwujud dan/atau JKP dari luar Daerah Pabean di dalam Daerah Pabean yang Pajak Masukannya dapat dikreditkan",
-        "B. Perolehan BKP/JKP dari dalam negeri dengan DPP Nilai Lain atau Besaran Tertentu yang Pajak Masukannya dapat dikreditkan (dengan Faktur Pajak Kode 04 dan 05)",
-        "C. Perolehan BKP dari dalam negeri selain dengan DPP Nilai Lain yang Pajak Masukannya dapat dikreditkan (dengan Faktur Pajak Kode 01, 09, dan 10)",
-        "D. Perolehan BKP/JKP dari dalam negeri sebagai Pemungut PPN yang Pajak Masukannya dapat dikreditkan (dengan Faktur Pajak Kode 02 dan 03)",
-        "E. Kompensasi kelebihan Pajak Masukan",
-        "F. Hasil penghitungan kembali Pajak Masukan yang telah dikreditkan",
-        "G. Jumlah Pajak Masukan yang dapat diperhitungkan (II.A + II.B + II.C + II.D + II.E + II.F)",
-        "H. Impor atau perolehan BKP/JKP yang Pajak Masukannya tidak dikreditkan dan/atau impor atau perolehan BKP/JKP yang mendapat fasilitas",
-        "I. Impor atau perolehan BKP/JKP dengan Faktur Pajak yang dilaporkan secara digunggung dan barang/jasa yang tidak terutang PPN",
-        "J. Jumlah Perolehan (II.A + II.B + II.C + II.D + II.E + II.F + II.G + II.H + II.I)"
-    ];
-
-    const rowsPerhitunganPPNKurangBayarLebihBayar = [
-        "A. Pajak Keluaran yang harus dipungut sendiri (I.A.2 + I.A.3 + I.A.4 + I.A.5)",
-        "B. PPN Disetor di muka dalam masa pajak yang sama",
-        "C. Pajak Masukan yang dapat diperhitungkan (II.G)",
-        "D. Kelebihan pemungutan PPN oleh Pemungut PPN",
-        "E. PPN kurang atau (lebih) bayar (III.A - III.B - III.C - III.D)",
-        "F. PPN Kurang atau (lebih) bayar pada SPT yang dibetulkan sebelumnya",
-        "G. PPN Kurang atau (lebih) bayar karena pembetulan SPT (III.E + III.F)",
-        "H. Diminta Untuk"
-    ];
-
-    const getPrefilled = (i) => ({
-        harga: (i === 1 && "105.500.000") || (i === 5 && "651.119.260") || (i === 8 && "756.619.260") || "0",
-        dpp: (i === 1 && "96.708.334") || (i === 5 && "596.859.332") || "0",
-        ppn: (i === 1 && "11.605.000") || (i === 5 && "71.623.128") || (i === 8 && "83.228.128") || "0",
-        ppnbm: "0",
-    });
+    // const getPrefilled = (i) => ({
+    //     harga: (i === 1 && "105.500.000") || (i === 5 && "651.119.260") || (i === 8 && "756.619.260") || "0",
+    //     dpp: (i === 1 && "96.708.334") || (i === 5 && "596.859.332") || "0",
+    //     ppn: (i === 1 && "11.605.000") || (i === 5 && "71.623.128") || (i === 8 && "83.228.128") || "0",
+    //     ppnbm: "0",
+    // });
 
     return (
         <div className="flex h-screen bg-gray-100">
@@ -196,7 +164,7 @@ const CreateKonsepSPT = () => {
                                     {showPenyerahanBarangJasa ? <FaChevronUp /> : <FaChevronDown />}
                                 </div>
                                 {showPenyerahanBarangJasa && (
-                                    <div className="border rounded-md p-4 overflow-x-auto" >
+                                    <div className="border rounded-md p-4 overflow-x-auto">
                                         <table className="min-w-full text-sm text-left border overflow-x-auto">
                                             <thead className="bg-purple-700 text-white text-center">
                                                 <tr>
@@ -208,60 +176,334 @@ const CreateKonsepSPT = () => {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {rowsPenyerahanBarangdanJasa.map((desc, i) => {
-                                                    const prefilled = getPrefilled(i);
-                                                    const isHargaDisabled = prefilled.harga !== "0";
-                                                    const isDppDisabled = prefilled.dpp !== "0";
-                                                    const isPpnDisabled = prefilled.ppn !== "0";
+                                                {/* Row 1 */}
+                                                <tr className="border-b">
+                                                    <td className="p-2 whitespace-normal break-words text-sm">
+                                                        1. Ekspor BKP/BKP Tidak Berwujud/JKP
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                </tr>
 
-                                                    return (
-                                                        <tr key={i} className="border-b">
-                                                            <td className="p-2 whitespace-normal break-words text-sm">
-                                                                {`${i + 1}. ${desc}`}
-                                                            </td>
+                                                {/* Row 2 */}
+                                                <tr className="border-b">
+                                                    <td className="p-2 whitespace-normal break-words text-sm">
+                                                        2. Penyerahan yang PPN atau PPN dan PPnBM-nya harus dipungut sendiri dengan DPP Nilai Lain atau Besaran Tertentu (dengan Faktur Pajak Kode 04 dan 05)
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="105.500.000"
+                                                            disabled
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="96.708.334"
+                                                            disabled
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="11.605.000"
+                                                            disabled
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                </tr>
 
-                                                            <td className="p-2">
-                                                                <input
-                                                                    type="text"
-                                                                    className="w-full p-1 border rounded-md text-right text-sm"
-                                                                    defaultValue={prefilled.harga}
-                                                                    disabled={isHargaDisabled}
-                                                                />
-                                                            </td>
+                                                {/* Row 3 */}
+                                                <tr className="border-b">
+                                                    <td className="p-2 whitespace-normal break-words text-sm">
+                                                        3. Penyerahan yang PPN atau PPN dan PPnBM-nya harus dipungut sendiri kepada turis sesuai dengan Pasal 16E UU PPN (dengan Faktur Pajak Kode 06)
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                </tr>
 
-                                                            <td className="p-2">
-                                                                <input
-                                                                    type="text"
-                                                                    className="w-full p-1 border rounded-md text-right text-sm"
-                                                                    defaultValue={prefilled.dpp}
-                                                                    disabled={isDppDisabled}
-                                                                />
-                                                            </td>
+                                                {/* Row 4 */}
+                                                <tr className="border-b">
+                                                    <td className="p-2 whitespace-normal break-words text-sm">
+                                                        4. Penyerahan yang PPN atau PPN dan PPnBM-nya harus dipungut sendiri lainnya (dengan Faktur Pajak Kode 01, 09 dan 10)
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                </tr>
 
-                                                            <td className="p-2">
-                                                                <input
-                                                                    type="text"
-                                                                    className="w-full p-1 border rounded-md text-right text-sm"
-                                                                    defaultValue={prefilled.ppn}
-                                                                    disabled={isPpnDisabled}
-                                                                />
-                                                            </td>
+                                                {/* Row 5 */}
+                                                <tr className="border-b">
+                                                    <td className="p-2 whitespace-normal break-words text-sm">
+                                                        5. Penyerahan yang PPN atau PPN dan PPnBM-nya harus dipungut sendiri dengan Faktur Pajak yang dilaporkan secara digunggung
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2 flex items-center gap-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                        <button className="bg-blue-700 text-white text-xs px-2 py-1 rounded-md whitespace-nowrap">
+                                                            Unggah XML
+                                                        </button>
+                                                    </td>
+                                                </tr>
 
-                                                            <td className="p-2 flex items-center gap-2">
-                                                                <input
-                                                                    type="text"
-                                                                    className="w-full p-1 border rounded-md text-right text-sm"
-                                                                    defaultValue={prefilled.ppnbm}
-                                                                />
-                                                                {(i === 4 || i === 8) && (
-                                                                    <button className="bg-blue-700 text-white text-xs px-2 py-1 rounded-md whitespace-nowrap">
-                                                                        Unggah XML
-                                                                    </button>
-                                                                )}
-                                                            </td>
-                                                        </tr>
-                                                    );
-                                                })}
+                                                {/* Row 6 */}
+                                                <tr className="border-b">
+                                                    <td className="p-2 whitespace-normal break-words text-sm">
+                                                        6. Penyerahan yang PPN atau PPN dan PPnBM-nya harus dipungut oleh Pemungut PPN (dengan Faktur Pajak Kode 02 dan 03)
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="651.119.260"
+                                                            disabled
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="596.859.332"
+                                                            disabled
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="71.623.128"
+                                                            disabled
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                </tr>
+
+                                                {/* Row 7 */}
+                                                <tr className="border-b">
+                                                    <td className="p-2 whitespace-normal break-words text-sm">
+                                                        7. Penyerahan yang mendapat fasilitas PPN atau PPnBM Tidak Dipungut (dengan Faktur Pajak Kode 07)
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                </tr>
+
+                                                {/* Row 8 */}
+                                                <tr className="border-b">
+                                                    <td className="p-2 whitespace-normal break-words text-sm">
+                                                        8. Penyerahan yang mendapat fasilitas PPN atau PPnBM Dibebaskan (dengan Faktur Pajak Kode 08)
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                </tr>
+
+                                                {/* Row 9 */}
+                                                <tr className="border-b">
+                                                    <td className="p-2 whitespace-normal break-words text-sm">
+                                                        9. Penyerahan yang mendapat fasilitas PPN atau PPnBM dengan Faktur Pajak yang dilaporkan secara digunggung
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="756.619.260"
+                                                            disabled
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="83.228.128"
+                                                            disabled
+                                                        />
+                                                    </td>
+                                                    <td className="p-2 flex items-center gap-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                        <button className="bg-blue-700 text-white text-xs px-2 py-1 rounded-md whitespace-nowrap">
+                                                            Unggah XML
+                                                        </button>
+                                                    </td>
+                                                </tr>
                                             </tbody>
                                         </table>
 
@@ -272,7 +514,7 @@ const CreateKonsepSPT = () => {
                                     {showPerolehanBarangJasa ? <FaChevronUp /> : <FaChevronDown />}
                                 </div>
                                 {showPerolehanBarangJasa && (
-                                    <div className="border rounded-md p-4 overflow-x-auto" >
+                                    <div className="border rounded-md p-4 overflow-x-auto">
                                         <table className="min-w-full text-sm text-left border overflow-x-auto">
                                             <thead className="bg-purple-700 text-white text-center">
                                                 <tr>
@@ -284,63 +526,1024 @@ const CreateKonsepSPT = () => {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {rowsPerolehanBarangdanJasa.map((desc, i) => {
-                                                    const prefilled = getPrefilled(i);
-                                                    const isHargaDisabled = prefilled.harga !== "0";
-                                                    const isDppDisabled = prefilled.dpp !== "0";
-                                                    const isPpnDisabled = prefilled.ppn !== "0";
+                                                {/* Row A */}
+                                                <tr className="border-b">
+                                                    <td className="p-2 whitespace-normal break-words text-sm">
+                                                        A. Impor BKP, Pemanfaatan BKP Tidak Berwujud dan/atau JKP dari luar Daerah Pabean di dalam Daerah Pabean yang Pajak Masukannya dapat dikreditkan
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                </tr>
 
-                                                    return (
-                                                        <tr key={i} className="border-b">
-                                                            <td className="p-2 whitespace-normal break-words text-sm">
-                                                                {` ${desc}`}
-                                                            </td>
+                                                {/* Row B */}
+                                                <tr className="border-b">
+                                                    <td className="p-2 whitespace-normal break-words text-sm">
+                                                        B. Perolehan BKP/JKP dari dalam negeri dengan DPP Nilai Lain atau Besaran Tertentu yang Pajak Masukannya dapat dikreditkan (dengan Faktur Pajak Kode 04 dan 05)
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                </tr>
 
-                                                            <td className="p-2">
-                                                                <input
-                                                                    type="text"
-                                                                    className="w-full p-1 border rounded-md text-right text-sm"
-                                                                    defaultValue={prefilled.harga}
-                                                                    disabled={isHargaDisabled}
-                                                                />
-                                                            </td>
+                                                {/* Row C */}
+                                                <tr className="border-b">
+                                                    <td className="p-2 whitespace-normal break-words text-sm">
+                                                        C. Perolehan BKP dari dalam negeri selain dengan DPP Nilai Lain yang Pajak Masukannya dapat dikreditkan (dengan Faktur Pajak Kode 01, 09, dan 10)
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                </tr>
 
-                                                            <td className="p-2">
-                                                                <input
-                                                                    type="text"
-                                                                    className="w-full p-1 border rounded-md text-right text-sm"
-                                                                    defaultValue={prefilled.dpp}
-                                                                    disabled={isDppDisabled}
-                                                                />
-                                                            </td>
+                                                {/* Row D */}
+                                                <tr className="border-b">
+                                                    <td className="p-2 whitespace-normal break-words text-sm">
+                                                        D. Perolehan BKP/JKP dari dalam negeri sebagai Pemungut PPN yang Pajak Masukannya dapat dikreditkan (dengan Faktur Pajak Kode 02 dan 03)
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                </tr>
 
-                                                            <td className="p-2">
-                                                                <input
-                                                                    type="text"
-                                                                    className="w-full p-1 border rounded-md text-right text-sm"
-                                                                    defaultValue={prefilled.ppn}
-                                                                    disabled={isPpnDisabled}
-                                                                />
-                                                            </td>
+                                                {/* Row E */}
+                                                <tr className="border-b">
+                                                    <td className="p-2 whitespace-normal break-words text-sm">
+                                                        E. Kompensasi kelebihan Pajak Masukan
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2 flex items-center gap-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                        <button className="bg-blue-700 text-white text-xs px-2 py-1 rounded-md whitespace-nowrap">
+                                                            Unggah XML
+                                                        </button>
+                                                    </td>
+                                                </tr>
 
-                                                            <td className="p-2 flex items-center gap-2">
-                                                                <input
-                                                                    type="text"
-                                                                    className="w-full p-1 border rounded-md text-right text-sm"
-                                                                    defaultValue={prefilled.ppnbm}
-                                                                />
-                                                                {(i === 4 || i === 8) && (
-                                                                    <button className="bg-blue-700 text-white text-xs px-2 py-1 rounded-md whitespace-nowrap">
-                                                                        Unggah XML
-                                                                    </button>
-                                                                )}
-                                                            </td>
-                                                        </tr>
-                                                    );
-                                                })}
+                                                {/* Row F */}
+                                                <tr className="border-b">
+                                                    <td className="p-2 whitespace-normal break-words text-sm">
+                                                        F. Hasil penghitungan kembali Pajak Masukan yang telah dikreditkan
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                </tr>
+
+                                                {/* Row G */}
+                                                <tr className="border-b">
+                                                    <td className="p-2 whitespace-normal break-words text-sm">
+                                                        G. Jumlah Pajak Masukan yang dapat diperhitungkan (II.A + II.B + II.C + II.D + II.E + II.F)
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                </tr>
+
+                                                {/* Row H */}
+                                                <tr className="border-b">
+                                                    <td className="p-2 whitespace-normal break-words text-sm">
+                                                        H. Impor atau perolehan BKP/JKP yang Pajak Masukannya tidak dikreditkan dan/atau impor atau perolehan BKP/JKP yang mendapat fasilitas
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                </tr>
+
+                                                {/* Row I */}
+                                                <tr className="border-b">
+                                                    <td className="p-2 whitespace-normal break-words text-sm">
+                                                        I. Impor atau perolehan BKP/JKP dengan Faktur Pajak yang dilaporkan secara digunggung dan barang/jasa yang tidak terutang PPN
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2 flex items-center gap-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                        <button className="bg-blue-700 text-white text-xs px-2 py-1 rounded-md whitespace-nowrap">
+                                                            Unggah XML
+                                                        </button>
+                                                    </td>
+                                                </tr>
+
+                                                {/* Row J */}
+                                                <tr className="border-b">
+                                                    <td className="p-2 whitespace-normal break-words text-sm">
+                                                        J. Jumlah Perolehan (II.A + II.B + II.C + II.D + II.E + II.F + II.G + II.H + II.I)
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                </tr>
                                             </tbody>
                                         </table>
 
+                                    </div>
+                                )}
+                                <div className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100" onClick={() => setShowPenghitunganBayarLebihBayar(!showPenghitunganPPNKurangBayarLebihBayar)}>
+                                    <h3 className="text-lg font-semibold">III. Penghitungan PPN Kurang Bayar / Lebih Bayar</h3>
+                                    {showPenghitunganPPNKurangBayarLebihBayar ? <FaChevronUp /> : <FaChevronDown />}
+                                </div>
+                                {showPenghitunganPPNKurangBayarLebihBayar && (
+                                    <div className="border rounded-md p-4 overflow-x-auto">
+                                        <table className="min-w-full text-sm text-left border overflow-x-auto">
+                                            <thead className="bg-purple-700 text-white text-center">
+                                                <tr>
+                                                    <th className="p-2 min-w-[300px]"></th>
+                                                    <th className="p-2 min-w-[150px]">Harga Jual/Penggantian/ <br />Nilai Ekspor/DPP</th>
+                                                    <th className="p-2 min-w-[150px]">DPP Nilai Lain/ DPP</th>
+                                                    <th className="p-2 min-w-[150px]">PPN</th>
+                                                    <th className="p-2 min-w-[150px]">PPnBM</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {/* Row A */}
+                                                <tr className="border-b">
+                                                    <td className="p-2 whitespace-normal break-words text-sm">
+                                                        A. Pajak Keluaran yang harus dipungut sendiri (I.A.2 + I.A.3 + I.A.4 + I.A.5)
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                </tr>
+
+                                                {/* Row B */}
+                                                <tr className="border-b">
+                                                    <td className="p-2 whitespace-normal break-words text-sm">
+                                                        B. PPN Disetor di muka dalam masa pajak yang sama
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                </tr>
+
+                                                {/* Row C */}
+                                                <tr className="border-b">
+                                                    <td className="p-2 whitespace-normal break-words text-sm">
+                                                        C. Pajak Masukan yang dapat diperhitungkan (II.G)
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                </tr>
+
+                                                {/* Row D */}
+                                                <tr className="border-b">
+                                                    <td className="p-2 whitespace-normal break-words text-sm">
+                                                        D. Kelebihan pemungutan PPN oleh Pemungutan PPN
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                </tr>
+
+                                                {/* Row E */}
+                                                <tr className="border-b">
+                                                    <td className="p-2 whitespace-normal break-words text-sm">
+                                                        E. PPN kurang atau (lebih) bayar (III.A - III.B - III.C - III.D)
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2 flex items-center gap-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                        <button className="bg-blue-700 text-white text-xs px-2 py-1 rounded-md whitespace-nowrap">
+                                                            Unggah XML
+                                                        </button>
+                                                    </td>
+                                                </tr>
+
+                                                {/* Row F */}
+                                                <tr className="border-b">
+                                                    <td className="p-2 whitespace-normal break-words text-sm">
+                                                        F. PPN Kurang atau (lebih) bayar pada SPT yang dibetulkan sebelumnya
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                </tr>
+
+                                                {/* Row G */}
+                                                <tr className="border-b">
+                                                    <td className="p-2 whitespace-normal break-words text-sm">
+                                                        G. PPN kurang atau (lebih) bayar karena pembetulan SPT (III.E - III.F)
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                )}
+                                <div className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100" onClick={() => setShowPPNTerutangAtasKegiatanMembangunSendiri(!showPPNTerutangAtasKegiatanMembangunSendiri)}>
+                                    <h3 className="text-lg font-semibold">IV. PPN Terutang Atas Kegiatan Membangun Sendiri</h3>
+                                    {showPPNTerutangAtasKegiatanMembangunSendiri ? <FaChevronUp /> : <FaChevronDown />}
+                                </div>
+                                {showPPNTerutangAtasKegiatanMembangunSendiri && (
+                                    <div className="border rounded-md p-4 overflow-x-auto">
+                                        <table className="min-w-full text-sm text-left border overflow-x-auto">
+                                            <thead className="bg-purple-700 text-white text-center">
+                                                <tr>
+                                                    <th className="p-2 min-w-[300px]"></th>
+                                                    <th className="p-2 min-w-[150px]">Harga Jual/Penggantian/ <br />Nilai Ekspor/DPP</th>
+                                                    <th className="p-2 min-w-[150px]">DPP Nilai Lain/ DPP</th>
+                                                    <th className="p-2 min-w-[150px]">PPN</th>
+                                                    <th className="p-2 min-w-[150px]">PPnBM</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr className="border-b">
+                                                    <td className="p-2 whitespace-normal break-words text-sm">
+                                                        PPN Terutang
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                )}
+
+                                <div className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100" onClick={() => setShowPembayaranKembaliPajakMasukanYangTidakDapatDikreditkan(!showPembayaranKembaliPajakMasukanTidakDapatDikreditkan)}>
+                                    <h3 className="text-lg font-semibold">V. Pembayaran Kembali Pajak Masukan Yang Tidak Dapat Di Kreditkan</h3>
+                                    {showPembayaranKembaliPajakMasukanTidakDapatDikreditkan ? <FaChevronUp /> : <FaChevronDown />}
+                                </div>
+                                {showPembayaranKembaliPajakMasukanTidakDapatDikreditkan && (
+                                    <div className="border rounded-md p-4 overflow-x-auto">
+                                        <table className="min-w-full text-sm text-left border overflow-x-auto">
+                                            <thead className="bg-purple-700 text-white text-center">
+                                                <tr>
+                                                    <th className="p-2 min-w-[300px]"></th>
+                                                    <th className="p-2 min-w-[150px]">Harga Jual/Penggantian/ <br />Nilai Ekspor/DPP</th>
+                                                    <th className="p-2 min-w-[150px]">DPP Nilai Lain/ DPP</th>
+                                                    <th className="p-2 min-w-[150px]">PPN</th>
+                                                    <th className="p-2 min-w-[150px]">PPnBM</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr className="border-b">
+                                                    <td className="p-2 whitespace-normal break-words text-sm">
+                                                        Pajak yang wajib dibayarkan kembali
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                )}
+                                <div className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100" onClick={() => setShowPajakPenjualanAtasBarangMewah(!showPajakPenjualanAtasBarangMewah)}>
+                                    <h3 className="text-lg font-semibold">VI. Pajak Penjualan Atas Barang Mewah</h3>
+                                    {showPajakPenjualanAtasBarangMewah ? <FaChevronUp /> : <FaChevronDown />}
+                                </div>
+                                {showPajakPenjualanAtasBarangMewah && (
+                                    <div className="border rounded-md p-4 overflow-x-auto">
+                                        <table className="min-w-full text-sm text-left border overflow-x-auto">
+                                            <thead className="bg-purple-700 text-white text-center">
+                                                <tr>
+                                                    <th className="p-2 min-w-[300px]"></th>
+                                                    <th className="p-2 min-w-[150px]">Harga Jual/Penggantian/ <br />Nilai Ekspor/DPP</th>
+                                                    <th className="p-2 min-w-[150px]">DPP Nilai Lain/ DPP</th>
+                                                    <th className="p-2 min-w-[150px]">PPN</th>
+                                                    <th className="p-2 min-w-[150px]">PPnBM</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {/* row 1 */}
+                                                <tr className="border-b">
+                                                    <td className="p-2 whitespace-normal break-words text-sm">
+                                                        A. PPnMB yang harus dipungut sendiri (I.A.2 + I.A.3 + I.A.4 + I.A.5)
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                </tr>
+                                                {/* row 2 */}
+                                                <tr className="border-b">
+                                                    <td className="p-2 whitespace-normal break-words text-sm">
+                                                        B. Kelebihan pemungutan PPnMB oleh Pemungut PPN
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                </tr>
+                                                {/* row 3 */}
+                                                <tr className="border-b">
+                                                    <td className="p-2 whitespace-normal break-words text-sm">
+                                                        C. PPnMB kurang atau (lebih) bayar (VI.A - VI.B)
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                </tr>
+                                                {/* row 4 */}
+                                                <tr className="border-b">
+                                                    <td className="p-2 whitespace-normal break-words text-sm">
+                                                        D. PPnMB kurang atau (lebih) pada SPT yang dibetulkan sebelumnya
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                </tr>
+                                                {/* row 5 */}
+                                                <tr className="border-b">
+                                                    <td className="p-2 whitespace-normal break-words text-sm">
+                                                        E. PPnMB kurang atau (lebih) karena pembetulan SPT (VI.C - VI.D)
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                </tr>
+                                                {/* row 6 */}
+                                                <tr className="border-b">
+                                                    <td className="p-2 whitespace-normal break-words text-sm">
+
+                                                        D. <input type="checkbox" className="ml-2 top-2" /> PPnMB kurang atau (lebih) pada SPT yang dibetulkan sebelumnya
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                )}
+                                <div className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100" onClick={() => setShowPemungutanPPNatauPPNdanPPNMBolehPemungutPPN(!showPemungutanPPNatauPPNdanPPNMBolehPemungutPPN)}>
+                                    <h3 className="text-lg font-semibold">VII. Pemungutan PPN atau PPNmB oleh Pemungut PPN</h3>
+                                    {setShowPemungutanPPNatauPPNdanPPNMBolehPemungutPPN ? <FaChevronUp /> : <FaChevronDown />}
+                                </div>
+                                {showPemungutanPPNatauPPNdanPPNMBolehPemungutPPN && (
+                                    <div className="border rounded-md p-4 mb-2">
+                                        <table className="w-full">
+                                            <thead>
+                                                <tr>
+                                                    <th className="p-2 min-w-[300px]"></th>
+                                                    <th className="p-2 min-w-[150px]">Harga Jual/Penggantian/ <br />Nilai Ekspor/DPP</th>
+                                                    <th className="p-2 min-w-[150px]">DPP Nilai Lain/ DPP</th>
+                                                    <th className="p-2 min-w-[150px]">PPN</th>
+                                                    <th className="p-2 min-w-[150px]">PPnBM</th>
+                                                </tr>   
+                                            </thead>
+                                            <tbody>
+                                                {/* row 1 */}
+                                                <tr className="border-b">
+                                                    <td className="p-2 whitespace-normal break-words text-sm">
+
+                                                        D. <input type="checkbox" className="ml-2 top-2" /> PPnMB kurang atau (lebih) pada SPT yang dibetulkan sebelumnya
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                        />
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 )}
                                 {showScrollTop && (
