@@ -2,8 +2,10 @@ import React from "react";
 import SideBarEFaktur from "./SideBarEFaktur";
 import { Pie, Bar } from "react-chartjs-2";
 import "chart.js/auto";
+import { useParams } from "react-router";
 
 const DashboardEFaktur = ({ data, sidebar }) => {
+  const { id, akun } = useParams();
   const pieData = {
     labels: [
       "test (17%)",
@@ -58,6 +60,7 @@ const DashboardEFaktur = ({ data, sidebar }) => {
       <SideBarEFaktur
         nama_akun={sidebar.nama_akun}
         npwp_akun={sidebar.npwp_akun}
+        akun={{ id: id, akun: akun }}
       />
       <div className="flex-1 p-3  h-[100%] w-[100%]">
         <div className="bg-blue-900 text-white p-4 rounded-md mb-5 w-full">

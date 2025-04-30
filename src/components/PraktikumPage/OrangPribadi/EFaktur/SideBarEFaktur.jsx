@@ -2,15 +2,24 @@ import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useUserType } from "../../../context/UserTypeContext";
 
-const SideBarEFakturOP = ({ nama_akun, npwp_akun }) => {
+const SideBarEFakturOP = ({ nama_akun, npwp_akun, akun }) => {
   const { userType } = useUserType();
   const location = useLocation(); // ambil path sekarang
   const userTypeId = userType === "Orang Pribadi" ? 1 : 2;
-
+  // praktikum/1/sistem/2/e-faktur
   const efakturItems = [
-    { label: "Pajak Keluaran", link: "pajak-keluaran" },
-    { label: "Pajak Masukan", link: "pajak-masukan" },
-    { label: "Retur Pajak Keluaran", link: "retur-pajak-keluaran" },
+    {
+      label: "Pajak Keluaran",
+      link: `/praktikum/${akun.id}/sistem/${akun.akun}/pajak-keluaran`,
+    },
+    {
+      label: "Pajak Masukan",
+      link: `/praktikum/${akun.id}/sistem/${akun.akun}/pajak-masukan`,
+    },
+    {
+      label: "Retur Pajak Keluaran",
+      link: `/praktikum/${akun.id}/sistem/${akun.akun}/retur-pajak-keluaran`,
+    },
     { label: "Retur Pajak Masukan", link: "retur-pajak-masukan" },
   ];
 
