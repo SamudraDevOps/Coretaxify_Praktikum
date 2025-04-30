@@ -4,7 +4,7 @@ import { Pie, Bar } from "react-chartjs-2";
 import "chart.js/auto";
 import { useParams } from "react-router";
 
-const DashboardEFakturOP = () => {
+const DashboardEFakturOP = ({ sidebar }) => {
   const { id, akun } = useParams();
   const pieData = {
     labels: [

@@ -38,7 +38,7 @@ import { ClipLoader } from "react-spinners";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import Swal from "sweetalert2";
 
-const TambahFakturKeluaran = () => {
+const TambahFakturKeluaran = ({ data, sidebar }) => {
   const [showDokumenTransaksi, setShowDokumenTransaksi] = useState(false);
   const [showInformasiPembeli, setShowInformasiPembeli] = useState(false);
   const [showDetailTransaksi, setShowDetailTransaksi] = useState(false);
@@ -95,7 +95,12 @@ const TambahFakturKeluaran = () => {
     }
   };
 
-  const { data, isLoading, isError, error } = useQuery({
+  const {
+    data: npwp_faktur,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
     queryKey: ["npwp_faktur"],
     queryFn: async () => {
       const data = await axios.get(
@@ -629,7 +634,11 @@ const TambahFakturKeluaran = () => {
     console.log("Rendering TambahFakturKeluaran"),
     (
       <div className="flex h-screen bg-gray-100">
-        <SideBarEFaktur />
+        <SideBarEFaktur
+          nama_akun={sidebar.nama_akun}
+          npwp_akun={sidebar.npwp_akun}
+          akun={{ id, akun }}
+        />
         <div className="flex-grow p-6 bg-white h-full overflow-y-auto">
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">
             Tambah Data
@@ -1253,7 +1262,7 @@ const TambahFakturKeluaran = () => {
                   // onChange={handleChange}
                   onChange={(e) => {
                     const selectedId = e.target.value;
-                    const selectedItem = data.find(
+                    const selectedItem = npwp_faktur.find(
                       (item) => item.id.toString() == selectedId
                     );
 
@@ -1269,8 +1278,8 @@ const TambahFakturKeluaran = () => {
                 >
                   <option value="">Pilih NPWP</option>
                   {!isLoading &&
-                    data &&
-                    data.map((item, index) => (
+                    npwp_faktur &&
+                    npwp_faktur.map((item, index) => (
                       <option key={index} value={item.id}>
                         {item.npwp_akun || "NPWP tidak tersedia"} -{" "}
                         {item.nama_akun}

@@ -61,7 +61,7 @@ const SideBarEFakturOP = ({ nama_akun, npwp_akun, akun }) => {
             // const formattedItem = item.replace(/ /g, "-").toLowerCase();
             // const path = `/admin/praktikum/${userTypeId}/e-faktur/${formattedItem}`;
             console.log(location.pathname, item.link);
-            const isActive = location.pathname.includes(`/${item.link}`);
+            const isActive = location.includes(`/${item.link}`);
 
             return (
               <li

@@ -29,8 +29,9 @@ import {
   AlertDialogAction,
   AlertDialogCancel,
 } from "@/components/ui/alert-dialog";
+import { useParams } from "react-router";
 
-const TambahFakturKeluaran = ({}) => {
+const TambahFakturKeluaran = ({ sidebar }) => {
   const [showDokumenTransaksi, setShowDokumenTransaksi] = useState(false);
   const [showInformasiPembeli, setShowInformasiPembeli] = useState(false);
   const [showDetailTransaksi, setShowDetailTransaksi] = useState(false);
@@ -56,6 +57,8 @@ const TambahFakturKeluaran = ({}) => {
   const [tarifPPnBM, setTarifPPnBM] = useState("");
   const [ppnBM, setPPnBM] = useState("Rp 0");
   const [isCustomPPnBM, setIsCustomPPnBM] = useState(false);
+
+  const { id, akun } = useParams();
 
   const RoutesApi = {
     kodeTransaksi: "http://127.0.0.1:8000/api/kode-transaksi",
@@ -255,7 +258,11 @@ const TambahFakturKeluaran = ({}) => {
     console.log("Rendering TambahFakturKeluaran"),
     (
       <div className="flex h-screen bg-gray-100">
-        <SideBarEFaktur />
+        <SideBarEFaktur
+          nama_akun={sidebar.nama_akun}
+          npwp_akun={sidebar.npwp_akun}
+          akun={{ id, akun }}
+        />
         <div className="flex-grow p-6 bg-white h-full overflow-y-auto">
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">
             Tambah Data
