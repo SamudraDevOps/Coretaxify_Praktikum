@@ -39,6 +39,9 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import Swal from "sweetalert2";
 
 const TambahFakturKeluaran = ({ data, sidebar }) => {
+  const [editMode, setEditMode] = useState(false);
+  const [editingTransaksiId, setEditingTransaksiId] = useState(null);
+
   const [showDokumenTransaksi, setShowDokumenTransaksi] = useState(false);
   const [showInformasiPembeli, setShowInformasiPembeli] = useState(false);
   const [showDetailTransaksi, setShowDetailTransaksi] = useState(false);
@@ -346,6 +349,64 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
 
   const [namaBarang, setNamaBarang] = useState("");
 
+  // const handleSimpanTransaksi = () => {
+  //   // Validate required fields
+  //   if (
+  //     !tipe ||
+  //     !selectedKode ||
+  //     !selectedSatuan ||
+  //     !namaBarang ||
+  //     !harga_satuan ||
+  //     kuantitas <= 0
+  //   ) {
+  //     alert("Mohon lengkapi semua data transaksi");
+  //     return;
+  //   }
+
+  //   const newTransaksi = {
+  //     id: Date.now(),
+  //     tipe,
+  //     nama: namaBarang,
+  //     kode: selectedKode,
+  //     satuan: selectedSatuan,
+  //     harga_satuan,
+  //     kuantitas: kuantitas.toString(),
+  //     total_harga,
+  //     pemotongan_harga,
+  //     dpp,
+  //     jumlah,
+  //     ppn: parseInt("12%".replace(/\D/g, ""), 10) || 0,
+  //     ppnNominal: ppn,
+  //     tarif_ppnbm: parseInt(tarif_ppnbm.replace(/\D/g, ""), 10) || 0,
+  //     ppnbm,
+  //   };
+
+  //   const updatedTransaksi = savedTransaksi
+  //     ? [...savedTransaksi, newTransaksi]
+  //     : [newTransaksi];
+  //   setSavedTransaksi(updatedTransaksi);
+
+  //   setFormData((prev) => ({
+  //     ...prev,
+  //     detail_transaksi: updatedTransaksi,
+  //   }));
+
+  //   setTipe("");
+  //   setNamaBarang("");
+  //   setSelectedKode("");
+  //   setSelectedSatuan("");
+  //   setHarga("Rp 0");
+  //   setKuantitas(0);
+  //   setTotalHarga("Rp 0");
+  //   setPotonganHarga("Rp 0");
+  //   setDPP("Rp 0");
+  //   setJumlah("Rp 0");
+  //   setTarifPPN("Rp 0");
+  //   setTarifPPnBM("");
+  //   setPPnBM("Rp 0");
+  //   setIsChecked(false);
+  //   setIsCustomPPnBM(false);
+  // };
   const handleSimpanTransaksi = () => {
     // Validate required fields
     if (
@@ -360,8 +421,8 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
       return;
     }
 
-    const newTransaksi = {
-      id: Date.now(),
+    const transactionData = {
+      id: editMode ? editingTransaksiId : Date.now(),
       tipe,
       nama: namaBarang,
       kode: selectedKode,
@@ -378,9 +439,29 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
       ppnbm,
     };
 
-    const updatedTransaksi = savedTransaksi
-      ? [...savedTransaksi, newTransaksi]
-      : [newTransaksi];
+    let updatedTransaksi;
+
+    if (editMode) {
+      // Update existing transaction
+      updatedTransaksi = savedTransaksi.map((item) =>
+        item.id === editingTransaksiId ? transactionData : item
+      );
+
+      // Show success message
+      Swal.fire({
+        icon: "success",
+        title: "Berhasil",
+        text: "Data transaksi berhasil diperbarui",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } else {
+      // Add new transaction
+      updatedTransaksi = savedTransaksi
+        ? [...savedTransaksi, transactionData]
+        : [transactionData];
+    }
+
     setSavedTransaksi(updatedTransaksi);
 
     setFormData((prev) => ({
@@ -388,6 +469,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
       detail_transaksi: updatedTransaksi,
     }));
 
+    // Reset form and edit mode
     setTipe("");
     setNamaBarang("");
     setSelectedKode("");
@@ -403,6 +485,8 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
     setPPnBM("Rp 0");
     setIsChecked(false);
     setIsCustomPPnBM(false);
+    setEditMode(false);
+    setEditingTransaksiId(null);
   };
 
   const handleHapusTransaksi = (id) => {
@@ -419,21 +503,50 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
     const transaksiToEdit = savedTransaksi.find((item) => item.id === id);
 
     if (transaksiToEdit) {
+      // Set editing mode
+      setEditMode(true);
+      setEditingTransaksiId(id);
+
+      // Populate form fields with existing data
       setTipe(transaksiToEdit.tipe);
       setNamaBarang(transaksiToEdit.nama);
       setSelectedKode(transaksiToEdit.kode);
       setSelectedSatuan(transaksiToEdit.satuan);
       setHarga(transaksiToEdit.harga_satuan);
-      setKuantitas(transaksiToEdit.kuantitas);
+      setKuantitas(parseInt(transaksiToEdit.kuantitas));
       setTotalHarga(transaksiToEdit.total_harga);
       setPotonganHarga(transaksiToEdit.pemotongan_harga);
       setDPP(transaksiToEdit.dpp);
       setJumlah(transaksiToEdit.jumlah);
-      setTarifPPnBM(transaksiToEdit.tarif_ppnbm);
+      setTarifPPnBM(
+        transaksiToEdit.tarif_ppnbm ? `${transaksiToEdit.tarif_ppnbm}%` : ""
+      );
       setPPnBM(transaksiToEdit.ppnbm);
 
-      handleHapusTransaksi(id);
+      // Show modal or alert dialog
+      document.querySelector(".AlertDialogTrigger").click();
     }
+  };
+  const handleCancelEdit = () => {
+    setEditMode(false);
+    setEditingTransaksiId(null);
+
+    // Reset form fields
+    setTipe("");
+    setNamaBarang("");
+    setSelectedKode("");
+    setSelectedSatuan("");
+    setHarga("Rp 0");
+    setKuantitas(0);
+    setTotalHarga("Rp 0");
+    setPotonganHarga("Rp 0");
+    setDPP("Rp 0");
+    setJumlah("Rp 0");
+    setTarifPPN("Rp 0");
+    setTarifPPnBM("");
+    setPPnBM("Rp 0");
+    setIsChecked(false);
+    setIsCustomPPnBM(false);
   };
 
   const handleChange = (e) => {
@@ -1392,7 +1505,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
                     <button className="flex items-center bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded">
-                      Tambah
+                      {editMode ? "Edit Transaksi" : "Tambah Transaksi"}
                     </button>
                   </AlertDialogTrigger>
                   <AlertDialogContent className="bg-white rounded-md shadow-md p-4 !min-w-[1000px]">
@@ -1638,14 +1751,17 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                       </div>
                     </div>
                     <AlertDialogFooter className="flex justify-end mt-6 space-x-2">
-                      <AlertDialogCancel className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600">
+                      <AlertDialogCancel
+                        onClick={handleCancelEdit}
+                        className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600"
+                      >
                         Batal
                       </AlertDialogCancel>
                       <AlertDialogAction
                         className="bg-blue-900 text-white px-4 py-2 rounded-md hover:bg-blue-950"
                         onClick={handleSimpanTransaksi}
                       >
-                        Simpan
+                        {editMode ? "Perbarui" : "Simpan"}
                       </AlertDialogAction>
                     </AlertDialogFooter>
                   </AlertDialogContent>
