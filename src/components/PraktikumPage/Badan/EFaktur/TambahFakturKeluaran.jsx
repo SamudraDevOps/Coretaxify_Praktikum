@@ -38,7 +38,7 @@ import { ClipLoader } from "react-spinners";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import Swal from "sweetalert2";
 
-const TambahFakturKeluaran = () => {
+const TambahFakturKeluaran = ({ sidebar }) => {
   const [showDokumenTransaksi, setShowDokumenTransaksi] = useState(false);
   const [showInformasiPembeli, setShowInformasiPembeli] = useState(false);
   const [showDetailTransaksi, setShowDetailTransaksi] = useState(false);
@@ -629,7 +629,11 @@ const TambahFakturKeluaran = () => {
     console.log("Rendering TambahFakturKeluaran"),
     (
       <div className="flex h-screen bg-gray-100">
-        <SideBarEFaktur />
+        <SideBarEFaktur
+          nama_akun={sidebar.nama_akun}
+          npwp_akun={sidebar.npwp_akun}
+          akun={{ id, akun }}
+        />
         <div className="flex-grow p-6 bg-white h-full overflow-y-auto">
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">
             Tambah Data
