@@ -10,11 +10,11 @@ const SideBarEFakturOP = ({ nama_akun, npwp_akun, akun }) => {
   const efakturItems = [
     {
       label: "Pajak Keluaran",
-      link: `/praktikum/${akun.id}/sistem/${akun.akun}/pajak-keluaran`,
+      link: `/praktikum/${akun.id}/sistem/${akun.akun}/e-faktur/pajak-keluaran`,
     },
     {
       label: "Pajak Masukan",
-      link: `/praktikum/${akun.id}/sistem/${akun.akun}/pajak-masukan`,
+      link: `/praktikum/${akun.id}/sistem/${akun.akun}/e-faktur/pajak-keluaran`,
     },
     {
       label: "Retur Pajak Keluaran",
@@ -60,16 +60,17 @@ const SideBarEFakturOP = ({ nama_akun, npwp_akun, akun }) => {
           {efakturItems.map((item, index) => {
             // const formattedItem = item.replace(/ /g, "-").toLowerCase();
             // const path = `/admin/praktikum/${userTypeId}/e-faktur/${formattedItem}`;
-            console.log(location.pathname, item.link);
-            const isActive = location.includes(`/${item.link}`);
+            // console.log(location.pathname, item.link);
+            // const isActive = location.includes(`/${item.link}`);
 
             return (
               <li
                 key={index}
                 className={`p-2 rounded-md cursor-pointer ${
-                  isActive
-                    ? "bg-blue-700 text-white"
-                    : "hover:bg-blue-700 hover:text-white"
+                  // isActive
+                  //   ? "bg-blue-700 text-white"
+                  //   : "hover:bg-blue-700 hover:text-white"
+                  "hover:bg-blue-700"
                 }`}
               >
                 <Link to={item.link} className="block w-full p-2">
@@ -83,15 +84,17 @@ const SideBarEFakturOP = ({ nama_akun, npwp_akun, akun }) => {
           {dokumenLainItems.map((item, index) => {
             // const formattedItem = item.replace(/ /g, "-").toLowerCase();
             // const path = `/admin/praktikum/${userTypeId}/e-faktur/dokumen-lain/${formattedItem}`;
-            const isActive = location.pathname.includes(`/${item.link}`);
+            // const isActive = location.pathname.includes(`/${item.link}`);
 
             return (
               <li
                 key={index}
                 className={`p-2 rounded-md cursor-pointer ${
-                  isActive
-                    ? "bg-blue-700 text-white"
-                    : "hover:bg-blue-700 hover:text-white"
+                  //   ? "bg-blue-700 text-white"
+                  // isActive
+                  //   ? "bg-blue-700 text-white"
+                  //   : "hover:bg-blue-700 hover:text-white"
+                  "hover:bg-blue-700"
                 }`}
               >
                 <Link to={item.link} className="block w-full p-2">

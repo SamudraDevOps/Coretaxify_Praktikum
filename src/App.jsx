@@ -784,6 +784,20 @@ const Main = () => {
             </>
           }
         />
+        <Route
+          path="/praktikum/:id/sistem/:akun/e-faktur/pajak-masukan"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/faktur`}
+                intent={"api.get.faktur.penerima"}
+                OrangPribadi={PajakMasukanOP}
+                Badan={PajakMasukan}
+                query={"edit-info"}
+              ></RoleBasedRenderer>
+            </>
+          }
+        />
 
         <Route
           path="/admin/praktikum/1/profil-saya/alamat"
