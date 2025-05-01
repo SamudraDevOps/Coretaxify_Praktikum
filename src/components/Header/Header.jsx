@@ -143,8 +143,8 @@ const Header = () => {
           </div>
         </header>
 
-        <div className="w-full bg-purple-900 pt-1">
-          <nav className="w-full bg-purple-900 pb-2 px-4">
+        <div className="w-full bg-blue-800 pt-1">
+          <nav className="w-full bg-blue-800 pb-2 px-4">
             <ul className="flex space-x-6 text-white">
               {[
                 {
