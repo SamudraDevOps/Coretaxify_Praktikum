@@ -9,7 +9,7 @@ const SideBarEFakturOP = ({ nama_akun, npwp_akun, akun }) => {
   // praktikum/1/sistem/2/e-faktur
   const efakturItems = [
     {
-      label: "Pajak Keluarana",
+      label: "Pajak Keluaran",
       link: `/praktikum/${akun.id}/sistem/${akun.akun}/e-faktur/pajak-keluaran`,
     },
     {

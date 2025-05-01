@@ -556,12 +556,12 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
       [name]: type === "checkbox" ? checked : value,
     }));
   };
-  const createDraftFaktur = useMutation({
-    mutationFn: async (data) => {
+
+  const createFaktur = useMutation({
+    mutationFn: async ({ data, isDraft }) => {
       const csrf = await getCsrf();
       return axios.post(
-        `${RoutesApiReal.url}api/student/assignments/1/sistem/2/faktur`,
-        // `${RoutesApiReal.url}api/student/assignments/${id}/sistem/${akun}/faktur`,
+        `${RoutesApiReal.url}api/student/assignments/${id}/sistem/${akun}/faktur`,
         data,
         {
           headers: {
@@ -571,27 +571,32 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
             Authorization: `Bearer ${cookies.token}`,
           },
           params: {
-            intent: "api.create.faktur.draft",
+            intent: isDraft
+              ? "api.create.faktur.draft"
+              : "api.create.faktur.fix",
           },
         }
       );
     },
-    onSuccess: (data) => {
+    onSuccess: (data, variables) => {
       console.log(data);
-      Swal.fire("Berhasil!", "Draft Faktur berhasil dibuat", "success").then(
-        (result) => {
-          if (result.isConfirmed) {
-            window.location.reload();
-          }
+      const successMessage = variables.isDraft
+        ? "Draft Faktur berhasil dibuat"
+        : "Faktur berhasil diupload";
+
+      Swal.fire("Berhasil!", successMessage, "success").then((result) => {
+        if (result.isConfirmed) {
+          window.location.reload();
         }
-      );
+      });
     },
     onError: (error) => {
       console.error("Error saving data:", error);
       Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
     },
   });
-  const handleSubmit = (e) => {
+
+  const handleSubmit = (e, isDraft = true) => {
     e.preventDefault();
 
     // Validasi apakah ada detail transaksi
@@ -602,17 +607,14 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
 
     // Hitung total DPP, PPN, dan PPnBM dari semua transaksi
     const totalDPP = formData.detail_transaksi.reduce((sum, item) => {
-      //   return sum + (parseInt(item.dpp.replace(/\D/g, ""), 10) || 0);
       return sum + item.dpp;
     }, 0);
 
     const totalPPN = formData.detail_transaksi.reduce((sum, item) => {
-      //   return sum + (parseInt(item.ppnNominal.replace(/\D/g, ""), 10) || 0);
       return sum + item.ppnNominal;
     }, 0);
 
     const totalPPnBM = formData.detail_transaksi.reduce((sum, item) => {
-      //   return sum + (parseInt(item.ppnbm.replace(/\D/g, ""), 10) || 0);
       return sum + item.ppnbm;
     }, 0);
 
@@ -626,13 +628,10 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
       cap_fasilitas: cap_fasilitas,
       akun_penerima_id:
         formData.akun_penerima_id?.id || formData.akun_penerima_id,
-
-      //   totalTagihan: formatRupiah((totalDPP + totalPPN + totalPPnBM).toString()),
     };
-    // alert(finalFormData)
 
     console.log(finalFormData);
-    createDraftFaktur.mutate(finalFormData);
+    createFaktur.mutate({ data: finalFormData, isDraft });
   };
 
   const handleSimpan = () => {
@@ -1879,10 +1878,16 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
               Batal
             </button>
             <button
-              onClick={handleSubmit}
+              onClick={(e) => handleSubmit(e, true)}
               className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded"
             >
-              Simpan
+              Simpan Draft
+            </button>
+            <button
+              onClick={(e) => handleSubmit(e, false)}
+              className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded"
+            >
+              Upload Faktur
             </button>
           </div>
         </div>
