@@ -41,7 +41,7 @@ const PajakMasukan = ({ data, sidebar }) => {
             </button>
           </div>
         </div>
-        <div className="w-[1100px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden mt-4">
+        <div className="w-[1200px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden mt-4">
           <table className="table-auto border border-gray-300 w-full">
             <thead className="bg-gray-200">
               <tr>

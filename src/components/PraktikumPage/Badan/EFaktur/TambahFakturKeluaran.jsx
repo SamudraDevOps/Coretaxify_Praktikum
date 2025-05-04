@@ -37,6 +37,7 @@ import { useParams } from "react-router";
 import { ClipLoader } from "react-spinners";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import Swal from "sweetalert2";
+import Select from 'react-select';
 
 const TambahFakturKeluaran = ({ data, sidebar }) => {
   const [editMode, setEditMode] = useState(false);
@@ -109,7 +110,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
       const data = await axios.get(
         // RoutesApiReal.apiUrl + `student/assignments/${id}/sistem/${akun}`,
         RoutesApiReal.apiUrl +
-          `student/assignments/${id}/sistem/${akun}/getAkun`,
+        `student/assignments/${id}/sistem/${akun}/getAkun`,
         {
           headers: {
             Authorization: `Bearer ${cookies.token}`,
@@ -169,10 +170,10 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
         selectedInfo === "A"
           ? "X"
           : selectedInfo === "B"
-          ? "Y"
-          : selectedInfo === "C"
-          ? "Z"
-          : "",
+            ? "Y"
+            : selectedInfo === "C"
+              ? "Z"
+              : "",
       nomorPendukung: "", // reset ketika berubah
     }));
     // Atur nilai Cap Fasilitas secara otomatis
@@ -732,6 +733,11 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
     return "";
   };
 
+  const options = listKode.map((item) => ({
+    value: item.kode,
+    label: `${item.kode} - ${item.nama_transaksi}`,
+  }));
+
   if (isLoading) {
     return (
       <div className="loading">
@@ -763,7 +769,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
             {showDokumenTransaksi ? <FaChevronUp /> : <FaChevronDown />}
           </div>
           {showDokumenTransaksi && (
-            <div className="border rounded-md p-4 mb-2 grid grid-cols-3 gap-4 w-full">
+            <div className="border rounded-md p-4 mb-2 grid grid-cols-3 gap-4 w-[1200px]">
               <div className="space-y-2">
                 <label className="block text-sm font-medium">Uang Muka</label>
                 <input
@@ -1297,27 +1303,27 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                           "9 - Penyerahan kepada Perwakilan Negara Asing dan Badan Internasional serta Pejabatnya",
                           "10 - BKP dan JKP tertentu",
                         ].includes(informasi_tambahan))) && (
-                      <div className="space-y-2">
-                        <label className="block text-sm font-medium">
-                          Nomor Pendukung
-                        </label>
-                        <input
-                          type="text"
-                          name="nomorPendukung"
-                          className="p-2 border rounded w-full"
-                          placeholder="Masukkan Nomor Pendukung"
-                          value={formData.nomorPendukung}
-                          onChange={(e) => {
-                            const value = e.target.value;
-                            setNomorPendukung(value);
-                            setFormData((prev) => ({
-                              ...prev,
-                              nomorPendukung: value,
-                            }));
-                          }}
-                        />
-                      </div>
-                    )}
+                        <div className="space-y-2">
+                          <label className="block text-sm font-medium">
+                            Nomor Pendukung
+                          </label>
+                          <input
+                            type="text"
+                            name="nomorPendukung"
+                            className="p-2 border rounded w-full"
+                            placeholder="Masukkan Nomor Pendukung"
+                            value={formData.nomorPendukung}
+                            onChange={(e) => {
+                              const value = e.target.value;
+                              setNomorPendukung(value);
+                              setFormData((prev) => ({
+                                ...prev,
+                                nomorPendukung: value,
+                              }));
+                            }}
+                          />
+                        </div>
+                      )}
                   </>
                 )}
               </div>
@@ -1499,7 +1505,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
             {showDetailTransaksi ? <FaChevronUp /> : <FaChevronDown />}
           </div>
           {showDetailTransaksi && (
-            <div className="border rounded-md p-4 mb-2 w-full">
+            <div className="border rounded-md p-4 mb-2 w-[1200px]">
               <div className="flex justify-between mb-4 border-b pb-3">
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
@@ -1549,21 +1555,20 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                         </div>
                         {tipe && (
                           <div>
-                            <label className="block text-sm font-medium">
-                              Kode Transaksi
-                            </label>
-                            <select
-                              className="p-2 border rounded w-[250px] max-w-full"
-                              value={selectedKode}
-                              onChange={(e) => setSelectedKode(e.target.value)}
-                            >
-                              <option value="">Pilih Kode Transaksi</option>
-                              {listKode.map((item) => (
-                                <option key={item.id} value={item.kode}>
-                                  {item.kode} - {item.nama_transaksi}
-                                </option>
-                              ))}
-                            </select>
+                            <label className="block text-sm font-medium mb-1">Kode Transaksi</label>
+                            <div className="w-full">
+                              <Select
+                                options={options}
+                                value={options.find((opt) => opt.value === selectedKode)}
+                                onChange={(selected) => setSelectedKode(selected?.value || '')}
+                                styles={{
+                                  menu: (provided) => ({
+                                    ...provided,
+                                    width: 'full',
+                                  }),
+                                }}
+                              />
+                            </div>
                           </div>
                         )}
 
@@ -1585,7 +1590,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                               Satuan
                             </label>
                             <select
-                              className="p-2 border rounded w-[250px] max-w-full"
+                              className="p-2 border rounded w-full max-w-full"
                               value={selectedSatuan}
                               onChange={(e) =>
                                 setSelectedSatuan(e.target.value)
@@ -1687,11 +1692,10 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                               type="text"
                               className={`
                                                             p-2 border rounded w-full
-                                                            ${
-                                                              isChecked
-                                                                ? ""
-                                                                : "bg-gray-100"
-                                                            }
+                                                            ${isChecked
+                                  ? ""
+                                  : "bg-gray-100"
+                                }
                                                         `}
                               value={jumlah}
                               onChange={handleJumlahChange}
