@@ -143,8 +143,8 @@ const Header = () => {
           </div>
         </header>
 
-        <div className="w-full bg-blue-800 pt-1">
-          <nav className="w-full bg-blue-800 pb-2 px-4">
+        <div className="w-full bg-purple-700 pt-1">
+          <nav className="w-full bg-purple-700 pb-2 px-4">
             <ul className="flex space-x-6 text-white">
               {[
                 {
@@ -229,7 +229,7 @@ const Header = () => {
                 },
                 { label: "Buku Besar", submenu: [] },
               ].map((item, index) => (
-                <li key={index} className="relative">
+                <li key={index} className="relative ">
                   {item.submenu.length > 0 ? (
                     <button
                       className="px-4 py-2 flex items-center hover:bg-yellow-500 hover:text-white rounded-md"
