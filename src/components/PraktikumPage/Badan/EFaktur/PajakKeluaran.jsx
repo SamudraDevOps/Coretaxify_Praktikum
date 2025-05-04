@@ -45,8 +45,63 @@ const PajakKeluaran = ({ data, sidebar }) => {
     },
   });
 
+  const approveMultipleFaktur = useMutation({
+    mutationFn: async () => {
+      const csrf = await getCsrf();
+      return axios.post(
+        `${RoutesApi.apiUrl}student/assignments/${id}/sistem/${akun}/faktur/approve-multiple`,
+        {
+          faktur_ids: selectedFakturIds,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": csrf,
+            Authorization: `Bearer ${cookies.token}`,
+          },
+        }
+      );
+    },
+    onSuccess: (data) => {
+      console.log(data);
+      Swal.fire("Berhasil!", "Faktur berhasil diupload", "success").then(
+        (result) => {
+          if (result.isConfirmed) {
+            window.location.reload();
+          }
+        }
+      );
+    },
+    onError: (error) => {
+      console.error("Error deleting data:", error);
+      Swal.fire("Gagal!", "Terjadi kesalahan saat mengupload data.", "error");
+    },
+  });
+
+  const handleCheckboxChange = (fakturId) => {
+    if (selectedFakturIds.includes(fakturId)) {
+      setSelectedFakturIds(selectedFakturIds.filter((id) => id !== fakturId));
+    } else {
+      setSelectedFakturIds([...selectedFakturIds, fakturId]);
+    }
+  };
+
+  const handleSelectAll = () => {
+    if (isSelectAll) {
+      setSelectedFakturIds([]);
+    } else {
+      const allFakturIds = data?.map((item) => item.id) || [];
+      setSelectedFakturIds(allFakturIds);
+    }
+    setIsSelectAll(!isSelectAll);
+  };
+
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
+
+  const [selectedFakturIds, setSelectedFakturIds] = useState([]);
+  const [isSelectAll, setIsSelectAll] = useState(false);
 
   const handleClickOutside = (event) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -114,7 +169,11 @@ const PajakKeluaran = ({ data, sidebar }) => {
             </button>
           </div>
           <div className="flex items-center gap-3">
-            <button className="flex items-center bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded text-sm">
+            <button
+              onClick={() => approveMultipleFaktur.mutate()}
+              disabled={selectedFakturIds.length === 0}
+              className="flex items-center bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded text-sm"
+            >
               Upload Faktur
             </button>
             <button className="flex items-center bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-2 rounded text-sm">
@@ -162,6 +221,8 @@ const PajakKeluaran = ({ data, sidebar }) => {
                       <input
                         type="checkbox"
                         className="form-checkbox h-5 w-5"
+                        checked={selectedFakturIds.includes(item.id)}
+                        onChange={() => handleCheckboxChange(item.id)}
                       />
                     </td>
                     <td className="px-4 py-2 border">

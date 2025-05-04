@@ -14,7 +14,7 @@ const SideBarEFakturOP = ({ nama_akun, npwp_akun, akun }) => {
     },
     {
       label: "Pajak Masukan",
-      link: `/praktikum/${akun.id}/sistem/${akun.akun}/e-faktur/pajak-keluaran`,
+      link: `/praktikum/${akun.id}/sistem/${akun.akun}/e-faktur/pajak-masukan`,
     },
     {
       label: "Retur Pajak Keluaran",
