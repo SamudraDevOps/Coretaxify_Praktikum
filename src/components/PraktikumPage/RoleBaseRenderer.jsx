@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
@@ -17,6 +17,7 @@ export default function RoleBasedRenderer({
 }) {
   const params = useParams();
   const [cookies] = useCookies(["user"]);
+  const [currentPage, setCurrentPage] = useState(1);
 
   function fillPath(template, params) {
     return template.replace(/:([a-zA-Z0-9_]+)/g, (_, key) => {
@@ -50,14 +51,14 @@ export default function RoleBasedRenderer({
     },
   });
 
-  // Second query - get specific data
+  // Second query - get specific data with pagination
   const {
     data: contentData,
     isLoading: contentLoading,
     isError: contentError,
     error: contentErrorDetails,
   } = useQuery({
-    queryKey: [query, params.id, params.akun, path],
+    queryKey: [query, params.id, params.akun, path, currentPage],
     queryFn: async () => {
       const { data } = await axios.get(path, {
         headers: {
@@ -66,11 +67,17 @@ export default function RoleBasedRenderer({
         },
         params: {
           intent: intent,
+          page: currentPage, // Add page parameter
         },
       });
       return data;
     },
   });
+
+  // Handle page change
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+  };
 
   // Show loading state
   if (userLoading || contentLoading) {
@@ -113,9 +120,21 @@ export default function RoleBasedRenderer({
     <>
       <Header />
       {isOrangPribadi ? (
-        <OrangPribadi data={contentData.data} sidebar={userData.data} />
+        <OrangPribadi
+          data={contentData.data}
+          sidebar={userData.data}
+          pagination={contentData} // Pass the whole response for links
+          onPageChange={handlePageChange}
+          currentPage={currentPage}
+        />
       ) : (
-        <Badan data={contentData.data} sidebar={userData.data} />
+        <Badan
+          data={contentData.data}
+          sidebar={userData.data}
+          pagination={contentData} // Pass the whole response for links
+          onPageChange={handlePageChange}
+          currentPage={currentPage}
+        />
       )}
     </>
   );

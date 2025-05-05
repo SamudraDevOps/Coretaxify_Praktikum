@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import SideBarEFaktur from "./SideBarEFaktur";
 import { IoDocumentTextOutline } from "react-icons/io5";
-import { FaChevronDown } from "react-icons/fa";
+import { FaChevronDown, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { useParams } from "react-router";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import Swal from "sweetalert2";
@@ -10,7 +10,13 @@ import { getCsrf } from "@/service/getCsrf";
 import { RoutesApi } from "@/Routes";
 import { useCookies } from "react-cookie";
 
-const PajakKeluaran = ({ data, sidebar }) => {
+const PajakKeluaran = ({
+  data,
+  sidebar,
+  pagination,
+  onPageChange,
+  currentPage = 1,
+}) => {
   const { id, akun } = useParams();
   const [cookies] = useCookies(["token"]);
 
@@ -113,6 +119,39 @@ const PajakKeluaran = ({ data, sidebar }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
   console.log(data);
+
+  // Extract page numbers from pagination URLs
+  const getPageFromUrl = (url) => {
+    if (!url) return null;
+    const matches = url.match(/[?&]page=(\d+)/);
+    return matches ? parseInt(matches[1]) : null;
+  };
+
+  // Get page numbers from links
+  const firstPage = pagination?.links?.first
+    ? getPageFromUrl(pagination.links.first)
+    : 1;
+  const lastPage = pagination?.links?.last
+    ? getPageFromUrl(pagination.links.last)
+    : 1;
+  const nextPage = pagination?.links?.next
+    ? getPageFromUrl(pagination.links.next)
+    : null;
+  const prevPage = pagination?.links?.prev
+    ? getPageFromUrl(pagination.links.prev)
+    : null;
+
+  // Use either meta data or calculate from links
+  const totalItems = pagination?.meta?.total || data?.length || 0;
+  const itemsPerPage =
+    pagination?.meta?.per_page ||
+    (pagination?.meta?.last_page
+      ? Math.ceil(totalItems / pagination.meta.last_page)
+      : 10);
+
+  // Rest of your state and mutation code...
+  // [Keep all your existing state and mutations]
+
   return (
     <div className="flex h-screen bg-gray-100">
       <SideBarEFaktur
@@ -294,6 +333,109 @@ const PajakKeluaran = ({ data, sidebar }) => {
               )}
             </tbody>
           </table>
+          {pagination?.links && (
+            <div className="flex justify-between items-center px-4 py-3 bg-white border-t border-gray-200">
+              <div>
+                <p className="text-sm text-gray-700">
+                  Page {currentPage} of {lastPage || 1}
+                </p>
+              </div>
+              <div className="flex space-x-2">
+                <button
+                  onClick={() => onPageChange(firstPage)}
+                  disabled={!prevPage}
+                  className={`px-3 py-1 rounded ${
+                    !prevPage
+                      ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                      : "bg-blue-500 text-white hover:bg-blue-600"
+                  }`}
+                >
+                  First
+                </button>
+                <button
+                  onClick={() => onPageChange(prevPage || 1)}
+                  disabled={!prevPage}
+                  className={`px-3 py-1 rounded ${
+                    !prevPage
+                      ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                      : "bg-blue-500 text-white hover:bg-blue-600"
+                  }`}
+                >
+                  <FaChevronLeft className="h-4 w-4" />
+                </button>
+
+                {/* Show page numbers */}
+                <div className="flex space-x-1">
+                  {Array.from({ length: lastPage }, (_, i) => i + 1)
+                    .filter((pageNum) => {
+                      // Show first, last, and pages around current
+                      return (
+                        pageNum === 1 ||
+                        pageNum === lastPage ||
+                        (pageNum >= currentPage - 1 &&
+                          pageNum <= currentPage + 1)
+                      );
+                    })
+                    .map((pageNum, index, array) => {
+                      // Add ellipsis if needed
+                      const showEllipsisBefore =
+                        index > 0 && array[index - 1] !== pageNum - 1;
+                      const showEllipsisAfter =
+                        index < array.length - 1 &&
+                        array[index + 1] !== pageNum + 1;
+
+                      return (
+                        <React.Fragment key={pageNum}>
+                          {showEllipsisBefore && (
+                            <span className="px-3 py-1 bg-gray-100 rounded">
+                              ...
+                            </span>
+                          )}
+                          <button
+                            onClick={() => onPageChange(pageNum)}
+                            className={`px-3 py-1 rounded ${
+                              currentPage === pageNum
+                                ? "bg-blue-600 text-white"
+                                : "bg-gray-200 hover:bg-gray-300"
+                            }`}
+                          >
+                            {pageNum}
+                          </button>
+                          {showEllipsisAfter && (
+                            <span className="px-3 py-1 bg-gray-100 rounded">
+                              ...
+                            </span>
+                          )}
+                        </React.Fragment>
+                      );
+                    })}
+                </div>
+
+                <button
+                  onClick={() => onPageChange(nextPage || lastPage)}
+                  disabled={!nextPage}
+                  className={`px-3 py-1 rounded ${
+                    !nextPage
+                      ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                      : "bg-blue-500 text-white hover:bg-blue-600"
+                  }`}
+                >
+                  <FaChevronRight className="h-4 w-4" />
+                </button>
+                <button
+                  onClick={() => onPageChange(lastPage)}
+                  disabled={!nextPage}
+                  className={`px-3 py-1 rounded ${
+                    !nextPage
+                      ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                      : "bg-blue-500 text-white hover:bg-blue-600"
+                  }`}
+                >
+                  Last
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
