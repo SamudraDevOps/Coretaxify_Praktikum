@@ -15,6 +15,18 @@ import axios from "axios";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { getCookieToken } from "@/service";
 import { ClipLoader } from "react-spinners";
+import { useCookies } from "react-cookie";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 const Header = () => {
   // == Query ==
@@ -23,6 +35,13 @@ const Header = () => {
   //   const getAccountPortal = () =>
   console.log(getCookieToken());
   const token = getCookieToken();
+  const [cookies, setCookie, removeCookie] = useCookies(["token"]);
+  const logout = () => {
+    removeCookie("token", { path: "/" });
+    removeCookie("role", { path: "/" });
+    window.location.href = "/login";
+  };
+
   const { isLoading, isError, data, error, refetch } = useQuery({
     queryKey: ["getaccount", id],
     queryFn: async () => {
@@ -139,7 +158,23 @@ const Header = () => {
                 </ul>
               )}
             </div>
-            <LogOut className="w-6 h-6 cursor-pointer text-red-600 font-bold" />
+            <AlertDialog>
+              <AlertDialogTrigger>
+                <LogOut className="w-6 h-6 cursor-pointer text-red-600 font-bold" />
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Apakah anda yakin ?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Setelah anda logout, anda akan kembali ke halaman login.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Kembali</AlertDialogCancel>
+                  <AlertDialogAction onClick={logout}>Logout</AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
         </header>
 
@@ -383,7 +418,23 @@ const Header = () => {
               </ul>
             )}
           </div>
-          <LogOut className="w-6 h-6 cursor-pointer text-red-600 font-bold" />
+          <AlertDialog>
+            <AlertDialogTrigger>
+              <LogOut className="w-6 h-6 cursor-pointer text-red-600 font-bold" />
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Apakah anda yakin ?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Setelah anda logout, anda akan kembali ke halaman login.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Kembali</AlertDialogCancel>
+                <AlertDialogAction onClick={logout}>Logout</AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       </header>
 
