@@ -37,7 +37,7 @@ import { useParams } from "react-router";
 import { ClipLoader } from "react-spinners";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import Swal from "sweetalert2";
-import Select from 'react-select';
+import Select from "react-select";
 
 const TambahFakturKeluaran = ({ data, sidebar }) => {
   const [editMode, setEditMode] = useState(false);
@@ -110,7 +110,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
       const data = await axios.get(
         // RoutesApiReal.apiUrl + `student/assignments/${id}/sistem/${akun}`,
         RoutesApiReal.apiUrl +
-        `student/assignments/${id}/sistem/${akun}/getAkun`,
+          `student/assignments/${id}/sistem/${akun}/getAkun`,
         {
           headers: {
             Authorization: `Bearer ${cookies.token}`,
@@ -170,10 +170,10 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
         selectedInfo === "A"
           ? "X"
           : selectedInfo === "B"
-            ? "Y"
-            : selectedInfo === "C"
-              ? "Z"
-              : "",
+          ? "Y"
+          : selectedInfo === "C"
+          ? "Z"
+          : "",
       nomorPendukung: "", // reset ketika berubah
     }));
     // Atur nilai Cap Fasilitas secara otomatis
@@ -587,7 +587,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
 
       Swal.fire("Berhasil!", successMessage, "success").then((result) => {
         if (result.isConfirmed) {
-          window.location.reload();
+          window.location.href = `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran`;
         }
       });
     },
@@ -1303,27 +1303,27 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                           "9 - Penyerahan kepada Perwakilan Negara Asing dan Badan Internasional serta Pejabatnya",
                           "10 - BKP dan JKP tertentu",
                         ].includes(informasi_tambahan))) && (
-                        <div className="space-y-2">
-                          <label className="block text-sm font-medium">
-                            Nomor Pendukung
-                          </label>
-                          <input
-                            type="text"
-                            name="nomorPendukung"
-                            className="p-2 border rounded w-full"
-                            placeholder="Masukkan Nomor Pendukung"
-                            value={formData.nomorPendukung}
-                            onChange={(e) => {
-                              const value = e.target.value;
-                              setNomorPendukung(value);
-                              setFormData((prev) => ({
-                                ...prev,
-                                nomorPendukung: value,
-                              }));
-                            }}
-                          />
-                        </div>
-                      )}
+                      <div className="space-y-2">
+                        <label className="block text-sm font-medium">
+                          Nomor Pendukung
+                        </label>
+                        <input
+                          type="text"
+                          name="nomorPendukung"
+                          className="p-2 border rounded w-full"
+                          placeholder="Masukkan Nomor Pendukung"
+                          value={formData.nomorPendukung}
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            setNomorPendukung(value);
+                            setFormData((prev) => ({
+                              ...prev,
+                              nomorPendukung: value,
+                            }));
+                          }}
+                        />
+                      </div>
+                    )}
                   </>
                 )}
               </div>
@@ -1556,16 +1556,22 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                         </div>
                         {tipe && (
                           <div>
-                            <label className="block text-sm font-medium mb-1">Kode Transaksi</label>
+                            <label className="block text-sm font-medium mb-1">
+                              Kode Transaksi
+                            </label>
                             <div className="w-full">
                               <Select
                                 options={options}
-                                value={options.find((opt) => opt.value === selectedKode)}
-                                onChange={(selected) => setSelectedKode(selected?.value || '')}
+                                value={options.find(
+                                  (opt) => opt.value === selectedKode
+                                )}
+                                onChange={(selected) =>
+                                  setSelectedKode(selected?.value || "")
+                                }
                                 styles={{
                                   menu: (provided) => ({
                                     ...provided,
-                                    width: 'full',
+                                    width: "full",
                                   }),
                                 }}
                               />
@@ -1693,10 +1699,11 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                               type="text"
                               className={`
                                                             p-2 border rounded w-full
-                                                            ${isChecked
-                                  ? ""
-                                  : "bg-gray-100"
-                                }
+                                                            ${
+                                                              isChecked
+                                                                ? ""
+                                                                : "bg-gray-100"
+                                                            }
                                                         `}
                               value={jumlah}
                               onChange={handleJumlahChange}
@@ -1879,7 +1886,12 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
             </div>
           )}
           <div className="flex justify-end mt-4 gap-3">
-            <button className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded">
+            <button
+              onClick={() =>
+                (window.location.href = `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran`)
+              }
+              className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded"
+            >
               Batal
             </button>
             <button
