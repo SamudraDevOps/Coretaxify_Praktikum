@@ -1,14 +1,62 @@
-import React from "react";
+import React, { useState } from "react";
 import SideBarEFaktur from "./SideBarEFaktur";
 import { IoDocumentTextOutline } from "react-icons/io5";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { useCookies } from "react-cookie";
 import { useParams } from "react-router";
 
-const PajakMasukan = ({ data, sidebar }) => {
+const PajakMasukan = ({
+  data,
+  sidebar,
+  pagination,
+  onPageChange,
+  currentPage = 1,
+}) => {
   const { id, akun } = useParams();
   const [cookies] = useCookies(["token"]);
+  const [selectedItems, setSelectedItems] = useState([]);
+  const [selectAll, setSelectAll] = useState(false);
 
-  console.log(data);
+  // Extract page numbers from pagination URLs
+  const getPageFromUrl = (url) => {
+    if (!url) return null;
+    const matches = url.match(/[?&]page=(\d+)/);
+    return matches ? parseInt(matches[1]) : null;
+  };
+
+  // Get page numbers from links
+  const firstPage = pagination?.links?.first
+    ? getPageFromUrl(pagination.links.first)
+    : 1;
+  const lastPage = pagination?.links?.last
+    ? getPageFromUrl(pagination.links.last)
+    : 1;
+  const nextPage = pagination?.links?.next
+    ? getPageFromUrl(pagination.links.next)
+    : null;
+  const prevPage = pagination?.links?.prev
+    ? getPageFromUrl(pagination.links.prev)
+    : null;
+
+  // Handle checkbox selection
+  const handleCheckboxChange = (itemId) => {
+    if (selectedItems.includes(itemId)) {
+      setSelectedItems(selectedItems.filter((id) => id !== itemId));
+    } else {
+      setSelectedItems([...selectedItems, itemId]);
+    }
+  };
+
+  // Handle select all checkbox
+  const handleSelectAll = () => {
+    if (selectAll) {
+      setSelectedItems([]);
+    } else {
+      setSelectedItems(data?.map((item) => item.id) || []);
+    }
+    setSelectAll(!selectAll);
+  };
+
   return (
     <div className="flex h-screen">
       <SideBarEFaktur
@@ -41,12 +89,19 @@ const PajakMasukan = ({ data, sidebar }) => {
             </button>
           </div>
         </div>
-        <div className="w-[1200px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden mt-4">
+        <div className="w-auto overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden mt-4">
           <table className="table-auto border border-gray-300 w-full">
             <thead className="bg-gray-200">
               <tr>
                 <th className="px-6 py-2 border">No</th>
-                <th className="px-8 py-2 border">Checklist</th>
+                <th className="px-8 py-2 border">
+                  <input
+                    type="checkbox"
+                    className="form-checkbox h-5 w-5"
+                    checked={selectAll}
+                    onChange={handleSelectAll}
+                  />
+                </th>
                 <th className="px-4 py-2 border">Aksi</th>
                 <th className="px-4 py-2 border">NPWP Pembeli</th>
                 <th className="px-4 py-2 border">Nama Pembeli</th>
@@ -66,30 +121,30 @@ const PajakMasukan = ({ data, sidebar }) => {
                       <input
                         type="checkbox"
                         className="form-checkbox h-5 w-5"
+                        checked={selectedItems.includes(item.id)}
+                        onChange={() => handleCheckboxChange(item.id)}
                       />
                     </td>
                     <td className="px-4 py-2 border">
-                      {/* <div className="flex space-x-2">
+                      {/* Action buttons can go here */}
+                      <div className="flex space-x-2">
                         <a
-                          href={`/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran/edit-faktur-keluaran/${item.id}`}
+                          href={`/praktikum/${id}/sistem/${akun}/e-faktur/pajak-masukan/edit/${item.id}`}
                         >
                           <button className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs">
                             Edit
                           </button>
                         </a>
-                        <button
-                          //   onClick={() => deleteFaktur.mutate(item.id)}
-                          className="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-xs"
-                        >
+                        <button className="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-xs">
                           Hapus
                         </button>
-                      </div> */}
+                      </div>
                     </td>
                     <td className="px-4 py-2 border">
-                      {item.akun_penerima_id.npwp_akun || "-"}
+                      {item.akun_penerima_id?.npwp_akun || "-"}
                     </td>
                     <td className="px-4 py-2 border">
-                      {item.akun_penerima_id.nama_akun || "-"}
+                      {item.akun_penerima_id?.nama_akun || "-"}
                     </td>
                     <td className="px-4 py-2 border">
                       {item.kode_transaksi || "-"}
@@ -104,25 +159,6 @@ const PajakMasukan = ({ data, sidebar }) => {
                       {item.masa_pajak || "-"}
                     </td>
                     <td className="px-4 py-2 border">{item.tahun || "-"}</td>
-                    {/* <td className="px-4 py-2 border">
-                      {item.esign_status || "-"}
-                    </td>
-                    <td className="px-4 py-2 border">{item.dpp || "-"}</td>
-                    <td className="px-4 py-2 border">{item.dpp_lain || "-"}</td>
-                    <td className="px-4 py-2 border">{item.ppn || "-"}</td>
-                    <td className="px-4 py-2 border">{item.ppnbm || "-"}</td>
-                    <td className="px-4 py-2 border">
-                      {item.penandatangan || "-"}
-                    </td>
-                    <td className="px-4 py-2 border">
-                      {item.referensi || "-"}
-                    </td>
-                    <td className="px-4 py-2 border">
-                      {item.dilaporkan_penjual == 1 ? "Ya" : "Tidak"}
-                    </td>
-                    <td className="px-4 py-2 border">
-                      {item.dilaporkan_pemungut == 1 ? "Ya" : "Tidak"}
-                    </td> */}
                   </tr>
                 ))
               ) : (
@@ -134,6 +170,111 @@ const PajakMasukan = ({ data, sidebar }) => {
               )}
             </tbody>
           </table>
+
+          {/* Pagination Controls */}
+          {pagination?.links && (
+            <div className="flex justify-between items-center px-4 py-3 bg-white border-t border-gray-200">
+              <div>
+                <p className="text-sm text-gray-700">
+                  Page {currentPage} of {lastPage || 1}
+                </p>
+              </div>
+              <div className="flex space-x-2">
+                <button
+                  onClick={() => onPageChange(firstPage)}
+                  disabled={!prevPage}
+                  className={`px-3 py-1 rounded ${
+                    !prevPage
+                      ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                      : "bg-blue-500 text-white hover:bg-blue-600"
+                  }`}
+                >
+                  First
+                </button>
+                <button
+                  onClick={() => onPageChange(prevPage || 1)}
+                  disabled={!prevPage}
+                  className={`px-3 py-1 rounded ${
+                    !prevPage
+                      ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                      : "bg-blue-500 text-white hover:bg-blue-600"
+                  }`}
+                >
+                  <FaChevronLeft className="h-4 w-4" />
+                </button>
+
+                {/* Show page numbers */}
+                <div className="flex space-x-1">
+                  {Array.from({ length: lastPage }, (_, i) => i + 1)
+                    .filter((pageNum) => {
+                      // Show first, last, and pages around current
+                      return (
+                        pageNum === 1 ||
+                        pageNum === lastPage ||
+                        (pageNum >= currentPage - 1 &&
+                          pageNum <= currentPage + 1)
+                      );
+                    })
+                    .map((pageNum, index, array) => {
+                      // Add ellipsis if needed
+                      const showEllipsisBefore =
+                        index > 0 && array[index - 1] !== pageNum - 1;
+                      const showEllipsisAfter =
+                        index < array.length - 1 &&
+                        array[index + 1] !== pageNum + 1;
+
+                      return (
+                        <React.Fragment key={pageNum}>
+                          {showEllipsisBefore && (
+                            <span className="px-3 py-1 bg-gray-100 rounded">
+                              ...
+                            </span>
+                          )}
+                          <button
+                            onClick={() => onPageChange(pageNum)}
+                            className={`px-3 py-1 rounded ${
+                              currentPage === pageNum
+                                ? "bg-blue-600 text-white"
+                                : "bg-gray-200 hover:bg-gray-300"
+                            }`}
+                          >
+                            {pageNum}
+                          </button>
+                          {showEllipsisAfter && (
+                            <span className="px-3 py-1 bg-gray-100 rounded">
+                              ...
+                            </span>
+                          )}
+                        </React.Fragment>
+                      );
+                    })}
+                </div>
+
+                <button
+                  onClick={() => onPageChange(nextPage || lastPage)}
+                  disabled={!nextPage}
+                  className={`px-3 py-1 rounded ${
+                    !nextPage
+                      ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                      : "bg-blue-500 text-white hover:bg-blue-600"
+                  }`}
+                >
+                  <FaChevronRight className="h-4 w-4" />
+                </button>
+                <button
+                  onClick={() => onPageChange(lastPage)}
+                  disabled={!nextPage}
+                  className={`px-3 py-1 rounded ${
+                    !nextPage
+                      ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                      : "bg-blue-500 text-white hover:bg-blue-600"
+                  }`}
+                >
+                  Last
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
