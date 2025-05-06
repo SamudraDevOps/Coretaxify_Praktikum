@@ -336,7 +336,7 @@ const Header = () => {
         <p>Error loading data: {error.message}</p>
         <button
           onClick={() => refetch()}
-          className="px-4 py-2 bg-fuchsia-500 text-white rounded-md mt-2"
+          className="px-4 py-2 bg-purple-700 text-white rounded-md mt-2"
         >
           Try Again
         </button>
@@ -438,8 +438,8 @@ const Header = () => {
         </div>
       </header>
 
-      <div className="w-full bg-fuchsia-500 pt-1">
-        <nav className="w-full bg-fuchsia-500 pb-2 px-4">
+      <div className="w-full bg-purple-700 pt-1">
+        <nav className="w-full bg-purple-700 pb-2 px-4">
           <ul className="flex space-x-6 text-white">
             {[
               {
