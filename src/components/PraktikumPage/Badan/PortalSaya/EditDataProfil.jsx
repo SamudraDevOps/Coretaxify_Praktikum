@@ -731,15 +731,23 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                 <label className="block font-medium text-gray-700">
                   Jenis Wajib Pajak
                 </label>
-                <select
+                <input
                   name="jenis_wajib_pajak"
                   value={informasiUmumData.jenis_wajib_pajak}
                   onChange={handleInformasiUmumChange}
+                  className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
+                  readOnly
+                />
+                {/* <select
+                  name="jenis_wajib_pajak"
+                  value={informasiUmumData.jenis_wajib_pajak}
+                  onChange={handleInformasiUmumChange}
+                  
                   className="w-full p-2 border rounded-md bg-white text-gray-600"
                 >
                   <option>Orang Pribadi</option>
                   <option>Badan</option>
-                </select>
+                </select> */}
               </div>
               <div>
                 <label className="block font-medium text-gray-700">Nama</label>
@@ -755,7 +763,25 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                 <label className="block font-medium text-gray-700">
                   Kategori Wajib Pajak
                 </label>
-                <select
+                {/* <input
+                  name="kategori_wajib_pajak"
+                  value={informasiUmumData.kategori_wajib_pajak}
+                  onChange={handleInformasiUmumChange}
+                  className="w-full p-2 border rounded-md bg-gray-100 text-gray-600 cursor-not-allowed"
+                  readOnly
+                /> */}
+                <input
+                  name="kategori_wajib_pajak"
+                  value={
+                    informasiUmumData.kategori_wajib_pajak === "Badan"
+                      ? "Perseorangan Terbatas (PT)"
+                      : "Orang Pribadi"
+                  }
+                  onChange={handleInformasiUmumChange}
+                  className="w-full p-2 border rounded-md bg-gray-100 text-gray-600 cursor-not-allowed"
+                  readOnly
+                />
+                {/* <select
                   name="kategori_wajib_pajak"
                   value={informasiUmumData.kategori_wajib_pajak}
                   onChange={handleInformasiUmumChange}
@@ -763,7 +789,7 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                 >
                   <option>Perseroan Terbatas (PT)</option>
                   <option>Perorangan</option>
-                </select>
+                </select> */}
               </div>
               <div>
                 <label className="block font-medium text-gray-700">

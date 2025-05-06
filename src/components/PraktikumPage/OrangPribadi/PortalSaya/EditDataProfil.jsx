@@ -789,9 +789,12 @@ const EditDataProfil = ({ data, sidebar }) => {
                   Kategori Wajib Pajak
                 </label>
                 <input
-                  value={formData.kategori_wajib_pajak}
                   name="kategori_wajib_pajak"
-                  type="text"
+                  value={
+                    formData.kategori_wajib_pajak === "Badan"
+                      ? "Perseorangan Terbatas (PT)"
+                      : "Orang Pribadi"
+                  }
                   className="w-full p-2 border rounded-md bg-gray-100 text-gray-600 cursor-not-allowed"
                   readOnly
                 />
