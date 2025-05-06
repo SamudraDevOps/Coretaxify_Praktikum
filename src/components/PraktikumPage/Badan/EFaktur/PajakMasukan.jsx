@@ -110,6 +110,18 @@ const PajakMasukan = ({
                 <th className="px-4 py-2 border">Tanggal Faktur Pajak</th>
                 <th className="px-4 py-2 border">Masa Pajak</th>
                 <th className="px-4 py-2 border">Tahun</th>
+                <th className="px-4 py-2 border">Masa Pajak Pengkreditan</th>
+                <th className="px-4 py-2 border">Tahun Pajak Pengkreditan</th>
+                <th className="px-4 py-2 border">Status Faktur</th>
+                <th className="px-4 py-2 border">Harga Jual/Pengganti/DPP</th>
+                <th className="px-4 py-2 border">DPP Nilai Lain / DPP</th>
+                <th className="px-4 py-2 border">PPN</th>
+                <th className="px-4 py-2 border">PPnBM</th>
+                <th className="px-4 py-2 border">Perekam (Pengirim faktur)</th>
+                <th className="px-4 py-2 border">Nomor SP2D</th>
+                <th className="px-4 py-2 border">Valid</th>
+                <th className="px-4 py-2 border">Dilaporkan</th>
+                <th className="px-4 py-2 border">Dilaporkan Oleh Penjual</th>
               </tr>
             </thead>
             <tbody className="text-gray-600">
