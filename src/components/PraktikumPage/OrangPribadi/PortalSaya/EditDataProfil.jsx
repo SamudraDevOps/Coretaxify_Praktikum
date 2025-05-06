@@ -2368,58 +2368,76 @@ const EditDataProfil = ({ data, sidebar }) => {
                         onChange={handleBankChange}
                       >
                         <option value="">Pilih Bank</option>
-                        <option value="mandiri">
+                        <option value="PT BANK MANDIRI (PERSERO) Tbk">
                           PT BANK MANDIRI (PERSERO) Tbk
                         </option>
-                        <option value="bca">PT BANK CENTRAL ASIA Tbk</option>
-                        <option value="bri">
+                        <option value="PT BANK CENTRAL ASIA Tbk">
+                          PT BANK CENTRAL ASIA Tbk
+                        </option>
+                        <option value="PT BANK RAKYAT INDONESIA (PERSERO) Tbk">
                           PT BANK RAKYAT INDONESIA (PERSERO) Tbk
                         </option>
-                        <option value="bni">
+                        <option value="PT BANK NEGARA INDONESIA (PERSERO) Tbk">
                           PT BANK NEGARA INDONESIA (PERSERO) Tbk
                         </option>
-                        <option value="bukopin">PT BANK BUKOPIN Tbk</option>
-                        <option value="btpn">PT BANK BTPN Tbk</option>
-                        <option value="cimb">PT BANK CIMB NIAGA Tbk</option>
-                        <option value="danamon">PT BANK DANAMON Tbk</option>
-                        <option value="maybank">PT BANK MAYBANK Tbk</option>
-                        <option value="mega">PT BANK MEGA Tbk</option>
-                        <option value="permata">PT BANK PERMATA Tbk</option>
-                        <option value="panin">PT BANK PANIN Tbk</option>
-                        <option value="panin_syariah">
+                        <option value="PT BANK BUKOPIN Tbk">
+                          PT BANK BUKOPIN Tbk
+                        </option>
+                        <option value="PT BANK BTPN Tbk">
+                          PT BANK BTPN Tbk
+                        </option>
+                        <option value="PT BANK CIMB NIAGA Tbk">
+                          PT BANK CIMB NIAGA Tbk
+                        </option>
+                        <option value="PT BANK DANAMON Tbk">
+                          PT BANK DANAMON Tbk
+                        </option>
+                        <option value="PT BANK MAYBANK Tbk">
+                          PT BANK MAYBANK Tbk
+                        </option>
+                        <option value="PT BANK MEGA Tbk">
+                          PT BANK MEGA Tbk
+                        </option>
+                        <option value="PT BANK PERMATA Tbk">
+                          PT BANK PERMATA Tbk
+                        </option>
+                        <option value="PT BANK PANIN Tbk">
+                          PT BANK PANIN Tbk
+                        </option>
+                        <option value="PT BANK PANIN SYARIAH Tbk">
                           PT BANK PANIN SYARIAH Tbk
                         </option>
-                        <option value="maybank_syariah">
+                        <option value="PT BANK MAYBANK SYARIAH Tbk">
                           PT BANK MAYBANK SYARIAH Tbk
                         </option>
-                        <option value="bsi">
+                        <option value="PT BANK SYARIAH INDONESIA Tbk">
                           PT BANK SYARIAH INDONESIA Tbk
                         </option>
-                        <option value="bsi_syariah">
+                        <option value="PT BANK SYARIAH INDONESIA SYARIAH Tbk">
                           PT BANK SYARIAH INDONESIA SYARIAH Tbk
                         </option>
-                        <option value="bca_syariah">
+                        <option value="PT BANK CENTRAL ASIA SYARIAH Tbk">
                           PT BANK CENTRAL ASIA SYARIAH Tbk
                         </option>
-                        <option value="bri_syariah">
+                        <option value="PT BANK RAKYAT INDONESIA SYARIAH Tbk">
                           PT BANK RAKYAT INDONESIA SYARIAH Tbk
                         </option>
-                        <option value="bni_syariah">
+                        <option value="PT BANK NEGARA INDONESIA SYARIAH Tbk">
                           PT BANK NEGARA INDONESIA SYARIAH Tbk
                         </option>
-                        <option value="bukopin_syariah">
+                        <option value="PT BANK BUKOPIN SYARIAH Tbk">
                           PT BANK BUKOPIN SYARIAH Tbk
                         </option>
-                        <option value="btpn_syariah">
+                        <option value="PT BANK BTPN SYARIAH Tbk">
                           PT BANK BTPN SYARIAH Tbk
                         </option>
-                        <option value="cimb_syariah">
+                        <option value="PT BANK CIMB NIAGA SYARIAH Tbk">
                           PT BANK CIMB NIAGA SYARIAH Tbk
                         </option>
-                        <option value="danamon_syariah">
+                        <option value="PT BANK DANAMON SYARIAH Tbk">
                           PT BANK DANAMON SYARIAH Tbk
                         </option>
-                        <option value="maybank_syariah">
+                        <option value="PT BANK MAYBANK SYARIAH Tbk">
                           PT BANK MAYBANK SYARIAH Tbk
                         </option>
                       </select>
@@ -2494,7 +2512,7 @@ const EditDataProfil = ({ data, sidebar }) => {
                       onClick={() => createBankDetail.mutate()}
                       className="bg-blue-900 text-white px-4 py-2 rounded-md hover:bg-blue-950"
                     >
-                      Simpan aowk
+                      Simpan
                     </AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
@@ -2551,72 +2569,76 @@ const EditDataProfil = ({ data, sidebar }) => {
                                   onChange={handleBankChange}
                                 >
                                   <option value="">Pilih Bank</option>
-                                  <option value="mandiri">
+                                  <option value="PT BANK MANDIRI (PERSERO) Tbk">
                                     PT BANK MANDIRI (PERSERO) Tbk
                                   </option>
-                                  <option value="bca">
+                                  <option value="PT BANK CENTRAL ASIA Tbk">
                                     PT BANK CENTRAL ASIA Tbk
                                   </option>
-                                  <option value="bri">
+                                  <option value="PT BANK RAKYAT INDONESIA (PERSERO) Tbk">
                                     PT BANK RAKYAT INDONESIA (PERSERO) Tbk
                                   </option>
-                                  <option value="bni">
+                                  <option value="PT BANK NEGARA INDONESIA (PERSERO) Tbk">
                                     PT BANK NEGARA INDONESIA (PERSERO) Tbk
                                   </option>
-                                  <option value="bukopin">
+                                  <option value="PT BANK BUKOPIN Tbk">
                                     PT BANK BUKOPIN Tbk
                                   </option>
-                                  <option value="btpn">PT BANK BTPN Tbk</option>
-                                  <option value="cimb">
+                                  <option value="PT BANK BTPN Tbk">
+                                    PT BANK BTPN Tbk
+                                  </option>
+                                  <option value="PT BANK CIMB NIAGA Tbk">
                                     PT BANK CIMB NIAGA Tbk
                                   </option>
-                                  <option value="danamon">
+                                  <option value="PT BANK DANAMON Tbk">
                                     PT BANK DANAMON Tbk
                                   </option>
-                                  <option value="maybank">
+                                  <option value="PT BANK MAYBANK Tbk">
                                     PT BANK MAYBANK Tbk
                                   </option>
-                                  <option value="mega">PT BANK MEGA Tbk</option>
-                                  <option value="permata">
+                                  <option value="PT BANK MEGA Tbk">
+                                    PT BANK MEGA Tbk
+                                  </option>
+                                  <option value="PT BANK PERMATA Tbk">
                                     PT BANK PERMATA Tbk
                                   </option>
-                                  <option value="panin">
+                                  <option value="PT BANK PANIN Tbk">
                                     PT BANK PANIN Tbk
                                   </option>
-                                  <option value="panin_syariah">
+                                  <option value="PT BANK PANIN SYARIAH Tbk">
                                     PT BANK PANIN SYARIAH Tbk
                                   </option>
-                                  <option value="maybank_syariah">
+                                  <option value="PT BANK MAYBANK SYARIAH Tbk">
                                     PT BANK MAYBANK SYARIAH Tbk
                                   </option>
-                                  <option value="bsi">
+                                  <option value="PT BANK SYARIAH INDONESIA Tbk">
                                     PT BANK SYARIAH INDONESIA Tbk
                                   </option>
-                                  <option value="bsi_syariah">
+                                  <option value="PT BANK SYARIAH INDONESIA SYARIAH Tbk">
                                     PT BANK SYARIAH INDONESIA SYARIAH Tbk
                                   </option>
-                                  <option value="bca_syariah">
+                                  <option value="PT BANK CENTRAL ASIA SYARIAH Tbk">
                                     PT BANK CENTRAL ASIA SYARIAH Tbk
                                   </option>
-                                  <option value="bri_syariah">
+                                  <option value="PT BANK RAKYAT INDONESIA SYARIAH Tbk">
                                     PT BANK RAKYAT INDONESIA SYARIAH Tbk
                                   </option>
-                                  <option value="bni_syariah">
+                                  <option value="PT BANK NEGARA INDONESIA SYARIAH Tbk">
                                     PT BANK NEGARA INDONESIA SYARIAH Tbk
                                   </option>
-                                  <option value="bukopin_syariah">
+                                  <option value="PT BANK BUKOPIN SYARIAH Tbk">
                                     PT BANK BUKOPIN SYARIAH Tbk
                                   </option>
-                                  <option value="btpn_syariah">
+                                  <option value="PT BANK BTPN SYARIAH Tbk">
                                     PT BANK BTPN SYARIAH Tbk
                                   </option>
-                                  <option value="cimb_syariah">
+                                  <option value="PT BANK CIMB NIAGA SYARIAH Tbk">
                                     PT BANK CIMB NIAGA SYARIAH Tbk
                                   </option>
-                                  <option value="danamon_syariah">
+                                  <option value="PT BANK DANAMON SYARIAH Tbk">
                                     PT BANK DANAMON SYARIAH Tbk
                                   </option>
-                                  <option value="maybank_syariah">
+                                  <option value="PT BANK MAYBANK SYARIAH Tbk">
                                     PT BANK MAYBANK SYARIAH Tbk
                                   </option>
                                 </select>
