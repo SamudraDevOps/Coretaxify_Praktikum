@@ -44,7 +44,9 @@ const BupotBulananPegawaiTetap = () => {
                 <div className="flex justify-between items-center mb-4">
                     <h1 className="text-xl font-bold">EBUPOT MP NOT ISSUED</h1>
                     <div className="flex space-x-2">
-                        <button className="bg-blue-700 text-white px-4 py-2 rounded">+ Create eBupot MP</button>
+                        <Link to={`/admin/praktikum/${userTypeId}/bukti-pemotongan-bulanan-pegawai-tetap/tambah-bukti-pemotongan-bulanan-pegawai-tetap`}>
+                            <button className="bg-blue-700 text-white px-4 py-2 rounded" >+ Create eBupot MP</button>
+                        </Link>
                         <button className="bg-gray-300 text-gray-700 px-4 py-2 rounded" disabled>Hapus</button>
                         <button className="bg-gray-300 text-gray-700 px-4 py-2 rounded" disabled>Terbitkan</button>
                         <button className="bg-white border px-4 py-2 rounded">XML Monitoring</button>
