@@ -77,9 +77,9 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
     nomor_keputusan_pengesahan_perubahan:
       data?.field_edit_informasi?.informasi_umum
         ?.nomor_keputusan_pengesahan_perubahan || "",
-    tanggal_surat_keputusan_perubahan_pengesahan:
+    tanggal_surat_keputusasan_pengesahan_perubahan:
       data?.field_edit_informasi?.informasi_umum
-        ?.tanggal_surat_keputusan_perubahan_pengesahan || "",
+        ?.tanggal_surat_keputusasan_pengesahan_perubahan || "",
     nomor_akta_pendirian:
       data?.field_edit_informasi?.informasi_umum?.nomor_akta_pendirian || "",
     tempat_pendirian:
@@ -847,9 +847,9 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                 </label>
                 <input
                   type="date"
-                  name="tanggal_surat_keputusan_perubahan_pengesahan"
+                  name="tanggal_surat_keputusasan_pengesahan_perubahan"
                   value={
-                    informasiUmumData.tanggal_surat_keputusan_perubahan_pengesahan
+                    informasiUmumData.tanggal_surat_keputusasan_pengesahan_perubahan
                   }
                   onChange={handleInformasiUmumChange}
                   className="w-full p-2 border rounded-md bg-white text-gray-600"
