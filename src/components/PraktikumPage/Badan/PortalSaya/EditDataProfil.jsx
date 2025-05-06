@@ -103,6 +103,59 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
       data?.field_edit_informasi?.informasi_umum?.bahasa || "Bahasa Indonesia",
   });
 
+  const [dataEkonomiFormData, setDataEkonomiFormData] = useState({
+    merek_dagang: data?.field_edit_informasi?.data_ekonomi?.merek_dagang || "",
+    jumlah_karyawan:
+      data?.field_edit_informasi?.data_ekonomi?.jumlah_karyawan || "",
+    metode_pembukuan:
+      data?.field_edit_informasi?.data_ekonomi?.metode_pembukuan || "",
+    mata_uang_pembukuan:
+      data?.field_edit_informasi?.data_ekonomi?.mata_uang_pembukuan || "",
+    periode_pembukuan:
+      data?.field_edit_informasi?.data_ekonomi?.periode_pembukuan || "",
+    omset_per_tahun:
+      data?.field_edit_informasi?.data_ekonomi?.omset_per_tahun || "",
+    jumlah_peredaran_bruto:
+      data?.field_edit_informasi?.data_ekonomi?.jumlah_peredaran_bruto || "",
+  });
+  const handleDataEkonomiChange = (e) => {
+    const { name, value } = e.target;
+    setDataEkonomiFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+  const updateDataEkonomi = useMutation({
+    mutationFn: async () => {
+      const csrf = await getCsrf();
+      return axios.put(
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/data-ekonomi/${akun}`,
+        dataEkonomiFormData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": csrf,
+            Authorization: `Bearer ${cookies.token}`,
+          },
+        }
+      );
+    },
+    onSuccess: (data) => {
+      console.log(data);
+      Swal.fire("Berhasil!", "Data ekonomi berhasil disimpan!", "success").then(
+        (result) => {
+          if (result.isConfirmed) {
+            window.location.reload();
+          }
+        }
+      );
+    },
+    onError: (error) => {
+      console.error("Error saving data:", error);
+      Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
+    },
+  });
   const {
     data: orangTerkait,
     isLoading,
@@ -1021,6 +1074,9 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                 </label>
                 <input
                   type="text"
+                  name="merek_dagang"
+                  value={dataEkonomiFormData.merek_dagang}
+                  onChange={handleDataEkonomiChange}
                   className="w-full p-2 border rounded-md bg-white text-gray-600"
                 />
               </div>
@@ -1031,15 +1087,21 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                 <input
                   type="checkbox"
                   className="h-5 w-5"
+                  checked={isKaryawan}
                   onChange={() => setIsKaryawan(!isKaryawan)}
                 />
                 {isKaryawan && (
-                  <select className="w-full p-2 border rounded-md bg-white text-gray-600 mt-2">
-                    <option>Jumlah Karyawan</option>
-                    <option value="1-5">dibawah 10</option>
-                    <option value="10-100">10 sd 100</option>
-                    <option value="101-1000">101 sd 1000</option>
-                    <option value="1000+">diatas 1000</option>
+                  <select
+                    name="jumlah_karyawan"
+                    value={dataEkonomiFormData.jumlah_karyawan}
+                    onChange={handleDataEkonomiChange}
+                    className="w-full p-2 border rounded-md bg-white text-gray-600 mt-2"
+                  >
+                    <option value="">Jumlah Karyawan</option>
+                    <option value="dibawah 10">dibawah 10</option>
+                    <option value="10 sd 100">10 sd 100</option>
+                    <option value="101 sd 1000">101 sd 1000</option>
+                    <option value="diatas 1000">diatas 1000</option>
                   </select>
                 )}
               </div>
@@ -1049,6 +1111,9 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                 </label>
                 <input
                   type="text"
+                  name="metode_pembukuan"
+                  value={dataEkonomiFormData.metode_pembukuan}
+                  onChange={handleDataEkonomiChange}
                   className="w-full p-2 border rounded-md bg-white text-gray-600"
                 />
               </div>
@@ -1058,6 +1123,9 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                 </label>
                 <input
                   type="text"
+                  name="mata_uang_pembukuan"
+                  value={dataEkonomiFormData.mata_uang_pembukuan}
+                  onChange={handleDataEkonomiChange}
                   className="w-full p-2 border rounded-md bg-white text-gray-600"
                 />
               </div>
@@ -1067,6 +1135,9 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                 </label>
                 <input
                   type="text"
+                  name="periode_pembukuan"
+                  value={dataEkonomiFormData.periode_pembukuan}
+                  onChange={handleDataEkonomiChange}
                   className="w-full p-2 border rounded-md bg-white text-gray-600"
                 />
               </div>
@@ -1076,6 +1147,9 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                 </label>
                 <input
                   type="text"
+                  name="omset_per_tahun"
+                  value={dataEkonomiFormData.omset_per_tahun}
+                  onChange={handleDataEkonomiChange}
                   className="w-full p-2 border rounded-md bg-white text-gray-600"
                 />
               </div>
@@ -1085,12 +1159,18 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                 </label>
                 <input
                   type="text"
+                  name="jumlah_peredaran_bruto"
+                  value={dataEkonomiFormData.jumlah_peredaran_bruto}
+                  onChange={handleDataEkonomiChange}
                   className="w-full p-2 border rounded-md bg-white text-gray-600"
                 />
               </div>
             </div>
             <div className="flex justify-end mt-4">
-              <button className="px-4 py-2 bg-blue-500 text-white rounded-md">
+              <button
+                className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                onClick={() => updateDataEkonomi.mutate()}
+              >
                 Simpan
               </button>
             </div>
@@ -2433,7 +2513,7 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                       onClick={() => createBankDetail.mutate()}
                       className="bg-blue-900 text-white px-4 py-2 rounded-md hover:bg-blue-950"
                     >
-                      Simpan 
+                      Simpan
                     </AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
