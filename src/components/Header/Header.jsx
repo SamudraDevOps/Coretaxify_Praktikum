@@ -185,68 +185,73 @@ const Header = () => {
         <div className="flex items-center space-x-6 mr-1">
           <FileText className="w-6 h-6 cursor-pointer" />
           <Bell className="w-6 h-6 cursor-pointer" />
-          <div className="flex items-center space-x-2 cursor-pointer ">
-            <button
-              className="flex items-center space-x-2 cursor-pointer bg-white px-3 py-2 rounded-md shadow-md"
-              onClick={() => setIsCompanyDropdownOpen(!isCompanyDropdownOpen)}
-            >
-              <FileText className="w-6 h-6" />
-              <span className="hidden md:inline">
-                {localStorage.getItem("selectedCompanyName") ||
-                  (representedCompanies && representedCompanies.data.length > 0
-                    ? "Perusahaan Terwakili"
-                    : "Tidak Ada Perusahaan")}
-              </span>
-              <ChevronDown className="w-5 h-5" />
-            </button>
+          {representedCompanies &&
+            representedCompanies.data &&
+            representedCompanies.data.length > 0 && (
+              <div className="flex items-center space-x-2 cursor-pointer ">
+                <button
+                  className="flex items-center space-x-2 cursor-pointer bg-white px-3 py-2 rounded-md shadow-md"
+                  onClick={() =>
+                    setIsCompanyDropdownOpen(!isCompanyDropdownOpen)
+                  }
+                >
+                  <FileText className="w-6 h-6" />
+                  <span className="hidden md:inline">
+                    {localStorage.getItem("selectedCompanyName") ||
+                      "Perusahaan Terwakili"}
+                  </span>
+                  <ChevronDown className="w-5 h-5" />
+                </button>
 
-            {/* Dropdown menu for represented companies */}
-            {isCompanyDropdownOpen && representedCompanies.data.length > 0 && (
-              <ul className="absolute right-96 top-14 mt-2 w-64 bg-white border rounded-md shadow-lg py-1 px-2  z-50">
-                {representedCompanies.data.map((item) => {
-                  return (
-                    // <a href={`/praktikum/${id}/sistem/${item.id}/profil-saya`}>
-                    <li
-                      key={item.id}
-                      className="px-4 py-2  hover:bg-gray-200 cursor-pointer"
-                      onClick={() => {
-                        // Store company information in localStorage
-                        localStorage.setItem(
-                          "selectedCompanyType",
-                          item.tipe_akun
-                        );
-                        localStorage.setItem(
-                          "selectedCompanyName",
-                          item.nama_akun
-                        );
-                        localStorage.setItem("selectedCompanyId", item.id);
+                {/* Dropdown menu for represented companies */}
+                {isCompanyDropdownOpen && (
+                  <ul className="absolute right-96 top-14 mt-2 w-64 bg-white border rounded-md shadow-lg py-1 px-2  z-50">
+                    {representedCompanies.data.map((item) => {
+                      return (
+                        <li
+                          key={item.id}
+                          className="px-4 py-2  hover:bg-gray-200 cursor-pointer"
+                          onClick={() => {
+                            // Store company information in localStorage
+                            localStorage.setItem(
+                              "selectedCompanyType",
+                              item.tipe_akun
+                            );
+                            localStorage.setItem(
+                              "selectedCompanyName",
+                              item.nama_akun
+                            );
+                            localStorage.setItem("selectedCompanyId", item.id);
 
-                        console.log("User Type Berubah ke:", item.nama_akun);
-                        setIsCompanyDropdownOpen(false);
-                      }}
-                    >
-                      {item.nama_akun}
-                    </li>
-                    // </a>
-                  );
-                })}
+                            console.log(
+                              "User Type Berubah ke:",
+                              item.nama_akun
+                            );
+                            setIsCompanyDropdownOpen(false);
+                          }}
+                        >
+                          {item.nama_akun}
+                        </li>
+                      );
+                    })}
 
-                <a href={`/praktikum/${id}/sistem/${akun}/profil-saya`}>
-                  <li
-                    onClick={() => {
-                      alert("mamamia");
-                      localStorage.removeItem("selectedCompanyType");
-                      localStorage.removeItem("selectedCompanyId");
-                      localStorage.removeItem("selectedCompanyName");
-                    }}
-                    className="px-4 py-2  hover:bg-gray-200 cursor-pointer"
-                  >
-                    Pribadi
-                  </li>
-                </a>
-              </ul>
+                    <a href={`/praktikum/${id}/sistem/${akun}/profil-saya`}>
+                      <li
+                        onClick={() => {
+                          // alert("mamamia");
+                          localStorage.removeItem("selectedCompanyType");
+                          localStorage.removeItem("selectedCompanyId");
+                          localStorage.removeItem("selectedCompanyName");
+                        }}
+                        className="px-4 py-2  hover:bg-gray-200 cursor-pointer"
+                      >
+                        Pribadi
+                      </li>
+                    </a>
+                  </ul>
+                )}
+              </div>
             )}
-          </div>
 
           <div className="flex items-center space-x-2 cursor-pointer">
             <button
