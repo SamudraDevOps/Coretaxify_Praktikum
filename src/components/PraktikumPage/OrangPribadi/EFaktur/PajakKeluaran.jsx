@@ -3,8 +3,17 @@ import SideBarEFaktur from "./SideBarEFaktur";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { FaChevronDown } from "react-icons/fa";
 import { useParams } from "react-router";
+import PajakKeluaranBadan from "../../Badan/EFaktur/PajakKeluaran";
 
-const PajakKeluaran = ({ data, sidebar }) => {
+// import { default as PajakKeluaranBadan } from "../../Badan/EFaktur/PajakKeluaran";
+
+const PajakKeluaran = ({
+  data,
+  sidebar,
+  pagination,
+  onPageChange,
+  currentPage = 1,
+}) => {
   const { id, akun } = useParams();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -18,6 +27,19 @@ const PajakKeluaran = ({ data, sidebar }) => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  console.log(localStorage.getItem("selectedCompanyId"));
+  if (localStorage.getItem("selectedCompanyId")) {
+    return (
+      <PajakKeluaranBadan
+        data={data}
+        sidebar={sidebar}
+        pagination={pagination}
+        onPageChange={onPageChange}
+        currentPage={currentPage}
+      ></PajakKeluaranBadan>
+    );
+  }
 
   return (
     <div className="flex h-screen bg-gray-100">

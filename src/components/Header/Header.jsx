@@ -31,9 +31,9 @@ import {
 const Header = () => {
   // == Query ==
   const { id, akun } = useParams();
-  console.log(akun);
+  // console.log(akun);
   //   const getAccountPortal = () =>
-  console.log(getCookieToken());
+  // console.log(getCookieToken());
   const token = getCookieToken();
   const [cookies, setCookie, removeCookie] = useCookies(["token"]);
   const [isCompanyDropdownOpen, setIsCompanyDropdownOpen] = useState(false);
@@ -192,9 +192,10 @@ const Header = () => {
             >
               <FileText className="w-6 h-6" />
               <span className="hidden md:inline">
-                {representedCompanies && representedCompanies.data.length > 0
-                  ? "Perusahaan Terwakili"
-                  : "Tidak Ada Perusahaan"}
+                {localStorage.getItem("selectedCompanyName") ||
+                  (representedCompanies && representedCompanies.data.length > 0
+                    ? "Perusahaan Terwakili"
+                    : "Tidak Ada Perusahaan")}
               </span>
               <ChevronDown className="w-5 h-5" />
             </button>
@@ -204,22 +205,45 @@ const Header = () => {
               <ul className="absolute right-96 top-14 mt-2 w-64 bg-white border rounded-md shadow-lg py-1 px-2  z-50">
                 {representedCompanies.data.map((item) => {
                   return (
-                    <a href={`/praktikum/${id}/sistem/${item.id}/profil-saya`}>
-                      <li
-                        key={item.id}
-                        className="px-4 py-2  hover:bg-gray-200 cursor-pointer"
-                        onClick={() => {
-                          // setUserType(item.id);
-                          console.log("User Type Berubah ke:", item.nama_akun);
-                          setIsDropdownOpen(false);
-                          // navigateTo(`profil-saya`);
-                        }}
-                      >
-                        {item.nama_akun}
-                      </li>
-                    </a>
+                    // <a href={`/praktikum/${id}/sistem/${item.id}/profil-saya`}>
+                    <li
+                      key={item.id}
+                      className="px-4 py-2  hover:bg-gray-200 cursor-pointer"
+                      onClick={() => {
+                        // Store company information in localStorage
+                        localStorage.setItem(
+                          "selectedCompanyType",
+                          item.tipe_akun
+                        );
+                        localStorage.setItem(
+                          "selectedCompanyName",
+                          item.nama_akun
+                        );
+                        localStorage.setItem("selectedCompanyId", item.id);
+
+                        console.log("User Type Berubah ke:", item.nama_akun);
+                        setIsCompanyDropdownOpen(false);
+                      }}
+                    >
+                      {item.nama_akun}
+                    </li>
+                    // </a>
                   );
                 })}
+
+                <a href={`/praktikum/${id}/sistem/${akun}/profil-saya`}>
+                  <li
+                    onClick={() => {
+                      alert("mamamia");
+                      localStorage.removeItem("selectedCompanyType");
+                      localStorage.removeItem("selectedCompanyId");
+                      localStorage.removeItem("selectedCompanyName");
+                    }}
+                    className="px-4 py-2  hover:bg-gray-200 cursor-pointer"
+                  >
+                    Pribadi
+                  </li>
+                </a>
               </ul>
             )}
           </div>

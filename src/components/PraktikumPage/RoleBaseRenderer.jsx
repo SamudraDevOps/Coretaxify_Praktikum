@@ -52,15 +52,38 @@ export default function RoleBasedRenderer({
   });
 
   // Second query - get specific data with pagination
+  // Second query - get specific data with pagination
+  const companyId = localStorage.getItem("selectedCompanyId");
+  console.log("Path before processing:", path);
+  console.log("Params.akun:", params.akun);
+  console.log("Company ID from localStorage:", companyId);
+
+  // Construct a completely new URL instead of trying to replace parts
+  const baseUrl = path.split("/sistem/")[0]; // Get the part before /sistem/
+  const endUrl = path.split("/sistem/")[1]?.split(params.akun)[1] || ""; // Get the part after the account ID
+
+  const requestPath = companyId
+    ? `${baseUrl}/sistem/${companyId}${endUrl}`
+    : path;
+
+  console.log("Constructed request path:", requestPath);
+
   const {
     data: contentData,
     isLoading: contentLoading,
     isError: contentError,
     error: contentErrorDetails,
   } = useQuery({
-    queryKey: [query, params.id, params.akun, path, currentPage],
+    queryKey: [
+      query,
+      params.id,
+      params.akun,
+      requestPath,
+      currentPage,
+      companyId,
+    ],
     queryFn: async () => {
-      const { data } = await axios.get(path, {
+      const { data } = await axios.get(requestPath, {
         headers: {
           Authorization: `Bearer ${cookies.token}`,
           Accept: "application/json",
@@ -70,9 +93,12 @@ export default function RoleBasedRenderer({
           page: currentPage, // Add page parameter
         },
       });
+      console.log("Response data:", data);
       return data;
     },
   });
+
+  console.log(localStorage.getItem("selectedCompanyId"));
 
   // Handle page change
   const handlePageChange = (newPage) => {
