@@ -9,6 +9,7 @@ import axios from "axios";
 import { getCsrf } from "@/service/getCsrf";
 import { RoutesApi } from "@/Routes";
 import { useCookies } from "react-cookie";
+import { useUserType } from "@/components/context/userTypeContext";
 
 const PajakKeluaran = ({
   data,
@@ -149,8 +150,13 @@ const PajakKeluaran = ({
       ? Math.ceil(totalItems / pagination.meta.last_page)
       : 10);
 
+  // console.log(representedCompanies);
+
   // Rest of your state and mutation code...
   // [Keep all your existing state and mutations]
+
+  const item = localStorage.getItem("selectedCompanyId");
+  console.log(item);
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -159,7 +165,6 @@ const PajakKeluaran = ({
         npwp_akun={sidebar.npwp_akun}
         akun={{ id, akun }}
       />
-
       <div className="flex-auto p-3 bg-white rounded-md h-full">
         <div className="flex justify-between items-center mb-4 pb-3 border-b">
           <div className="flex items-center">
@@ -171,54 +176,60 @@ const PajakKeluaran = ({
         </div>
         <div className="flex justify-between mb-4 border-b pb-3">
           <div className="flex items-center gap-3">
-            <div className="flex  text-left text-sm" ref={dropdownRef}>
-              <button
-                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="flex items-center bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-2 rounded"
-              >
-                Import <FaChevronDown className="ml-2" />
-              </button>
-              {isDropdownOpen && (
-                <div className="absolute mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
-                  <div className="py-1">
-                    <a
-                      href="/template-import-pajak-keluaran.xlsx"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    >
-                      Download Template
-                    </a>
-                    <a className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">
-                      Import Dokumen
-                    </a>
+            {item && (
+              <div className="flex  text-left text-sm" ref={dropdownRef}>
+                <button
+                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                  className="flex items-center bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-2 rounded"
+                >
+                  Import <FaChevronDown className="ml-2" />
+                </button>
+                {isDropdownOpen && (
+                  <div className="absolute mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                    <div className="py-1">
+                      <a
+                        href="/template-import-pajak-keluaran.xlsx"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      >
+                        Download Template
+                      </a>
+                      <a className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">
+                        Import Dokumen
+                      </a>
+                    </div>
                   </div>
-                </div>
-              )}
-            </div>
+                )}
+              </div>
+            )}
+            {item && (
+              <button
+                className="flex items-center bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded text-sm"
+                onClick={
+                  () =>
+                    (window.location.href = `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran/tambah-faktur-keluaran`)
+                  // (window.location.href =
+                  //   "/admin/praktikum/2/e-faktur/pajak-keluaran/tambah-faktur-keluaran")
+                }
+              >
+                Tambah
+              </button>
+            )}
+          </div>
 
-            <button
-              className="flex items-center bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded text-sm"
-              onClick={
-                () =>
-                  (window.location.href = `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran/tambah-faktur-keluaran`)
-                // (window.location.href =
-                //   "/admin/praktikum/2/e-faktur/pajak-keluaran/tambah-faktur-keluaran")
-              }
-            >
-              Tambah
-            </button>
-          </div>
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => approveMultipleFaktur.mutate()}
-              disabled={selectedFakturIds.length === 0}
-              className="flex items-center bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded text-sm"
-            >
-              Upload Faktur
-            </button>
-            <button className="flex items-center bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-2 rounded text-sm">
-              Hapus Dokumen
-            </button>
-          </div>
+          {item && (
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => approveMultipleFaktur.mutate()}
+                disabled={selectedFakturIds.length === 0}
+                className="flex items-center bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded text-sm"
+              >
+                Upload Faktur
+              </button>
+              <button className="flex items-center bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-2 rounded text-sm">
+                Hapus Dokumen
+              </button>
+            </div>
+          )}
         </div>
 
         <div className="w-[1200px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden mt-4">
@@ -235,6 +246,7 @@ const PajakKeluaran = ({
                 <th className="px-4 py-2 border">Tanggal Faktur Pajak</th>
                 <th className="px-4 py-2 border">Masa Pajak</th>
                 <th className="px-4 py-2 border">Tahun</th>
+                <th className="px-4 py-2 border">Status</th>
                 <th className="px-4 py-2 border">ESignStatus</th>
                 <th className="px-4 py-2 border">
                   Harga Jual / Penggantian / DPP
@@ -300,6 +312,7 @@ const PajakKeluaran = ({
                       {item.masa_pajak || "-"}
                     </td>
                     <td className="px-4 py-2 border">{item.tahun || "-"}</td>
+                    <td className="px-4 py-2 border">{item.status || "-"}</td>
                     <td className="px-4 py-2 border">
                       {item.esign_status || "-"}
                     </td>

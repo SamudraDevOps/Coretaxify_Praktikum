@@ -4,7 +4,11 @@ import { IoDocumentTextOutline } from "react-icons/io5";
 import { FaChevronDown } from "react-icons/fa";
 import { useParams } from "react-router";
 import PajakKeluaranBadan from "../../Badan/EFaktur/PajakKeluaran";
-
+import { useUserType } from "@/components/context/userTypeContext";
+import axios from "axios";
+import { RoutesApi } from "@/Routes";
+import { useQuery } from "@tanstack/react-query";
+import { getCookieToken } from "@/service";
 // import { default as PajakKeluaranBadan } from "../../Badan/EFaktur/PajakKeluaran";
 
 const PajakKeluaran = ({
@@ -17,6 +21,7 @@ const PajakKeluaran = ({
   const { id, akun } = useParams();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const token = getCookieToken();
 
   const handleClickOutside = (event) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -27,9 +32,47 @@ const PajakKeluaran = ({
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+  const {
+    data: representedCompanies,
+    isLoading: isLoadingCompanies,
+    isError: isErrorCompanies,
+    error: errorCompanies,
+    refetch: refetchCompanies,
+  } = useQuery({
+    queryKey: ["representedCompanies", id, akun],
+    queryFn: async () => {
+      try {
+        const response = await axios.get(
+          `${RoutesApi.apiUrl}student/assignments/${id}/sistem/${akun}/represented-companies`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
-  console.log(localStorage.getItem("selectedCompanyId"));
-  if (localStorage.getItem("selectedCompanyId")) {
+        // Return the data if it exists
+        return response.data || [];
+      } catch (error) {
+        // For bad requests or any other errors, return an empty array
+        console.error("Error fetching represented companies:", error.message);
+        return [];
+      }
+    },
+    enabled: !!id && !!akun && !!token,
+  });
+
+  if (isLoadingCompanies) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-900">
+          AAAAA
+        </div>
+      </div>
+    );
+  }
+
+  if (representedCompanies.data.length > 0) {
     return (
       <PajakKeluaranBadan
         data={data}
