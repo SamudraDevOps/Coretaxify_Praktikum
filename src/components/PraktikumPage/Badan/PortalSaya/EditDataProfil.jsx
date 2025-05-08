@@ -2719,7 +2719,10 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                             </AlertDialogFooter>
                           </AlertDialogContent>
                         </AlertDialog>
-                        <button className="bg-red-500 hover:bg-red-600 text-white py-2 px-2 rounded ml-2">
+                        <button
+                          onClick={() => deleteDetailBank.mutate(bank.id)}
+                          className="bg-red-500 hover:bg-red-600 text-white py-2 px-2 rounded ml-2"
+                        >
                           Hapus
                         </button>
                       </td>

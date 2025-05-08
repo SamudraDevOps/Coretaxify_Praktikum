@@ -455,7 +455,7 @@ const EditDataProfil = ({ data, sidebar }) => {
     },
     onSuccess: (data) => {
       console.log(data);
-      Swal.fire("Berhasil!", "Pihak terkait berhasil dihapus!", "success").then(
+      Swal.fire("Berhasil!", "Bank berhasil dihapus!", "success").then(
         (result) => {
           if (result.isConfirmed) {
             window.location.reload();
@@ -1764,8 +1764,8 @@ const EditDataProfil = ({ data, sidebar }) => {
                               className="action-button delete"
                               onClick={() => {
                                 Swal.fire({
-                                  title: "Hapus Kelas?",
-                                  text: "Kelas akan dihapus secara permanen!",
+                                  title: "Hapus Kontak?",
+                                  text: "Kontak akan dihapus secara permanen!",
                                   icon: "warning",
                                   showCancelButton: true,
                                   confirmButtonText: "Ya, hapus!",
@@ -2722,7 +2722,10 @@ const EditDataProfil = ({ data, sidebar }) => {
                             </AlertDialogFooter>
                           </AlertDialogContent>
                         </AlertDialog>
-                        <button className="bg-red-500 hover:bg-red-600 text-white py-2 px-2 rounded ml-2">
+                        <button
+                          onClick={() => deleteDetailBank.mutate(bank.id)}
+                          className="bg-red-500 hover:bg-red-600 text-white py-2 px-2 rounded ml-2"
+                        >
                           Hapus
                         </button>
                       </td>
