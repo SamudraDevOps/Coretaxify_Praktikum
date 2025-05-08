@@ -120,6 +120,8 @@ import KonsepSPT from "./components/PraktikumPage/Badan/SPT/KonsepSPT";
 import BuatKonsepSPT from "./components/PraktikumPage/Badan/SPT/BuatKonsepSPT";
 import CreateKonsepSPT from "./components/PraktikumPage/Badan/SPT/CreateKonsepSPT";
 import BupotBulananPegawaiTetap from "./components/PraktikumPage/Badan/BUPOT/BupotBulananPegawaiTetap";
+import BupotBulananPegawaiTetapTelahTerbit from "./components/PraktikumPage/Badan/BUPOT/BupotBulananPegawaiTetapTelahTerbit";
+import BupotBulananPegawaiTetapTidakValid from "./components/PraktikumPage/Badan/BUPOT/BupotBulananPegawaiTetapTidakValid";
 import CreateEbupot from "./components/PraktikumPage/Badan/BUPOT/CreateEbupot";
 // Route Badan
 
@@ -1022,6 +1024,24 @@ const Main = () => {
               <>
                 <Header />
                 <BupotBulananPegawaiTetap />
+              </>
+            }
+          />
+          <Route
+            path="/admin/praktikum/2/bukti-pemotongan-bulanan-pegawai-tetap/telah-terbit"
+            element={
+              <>
+                <Header />
+                <BupotBulananPegawaiTetapTelahTerbit />
+              </>
+            }
+          />
+          <Route
+            path="/admin/praktikum/2/bukti-pemotongan-bulanan-pegawai-tetap/tidak-valid"
+            element={
+              <>
+                <Header />
+                <BupotBulananPegawaiTetapTidakValid />
               </>
             }
           />

@@ -2,7 +2,8 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useUserType } from '../../../context/UserTypeContext';
 
-const BupotBulananPegawaiTetap = () => {
+
+const BupotBulananPegawaiTetapTelahTerbit = () => {
     const { userType } = useUserType();
     const userTypeId = userType === "Orang Pribadi" ? 1 : 2;
     const location = useLocation();
@@ -12,10 +13,8 @@ const BupotBulananPegawaiTetap = () => {
         { label: "Telah Terbit", path: `/admin/praktikum/${userTypeId}/bukti-pemotongan-bulanan-pegawai-tetap/telah-terbit` },
         { label: "Tidak Valid", path: `/admin/praktikum/${userTypeId}/bukti-pemotongan-bulanan-pegawai-tetap/tidak-valid` },
     ];
-
     return (
         <div className="flex">
-            {/* Sidebar */}
             <div className="w-64 bg-white shadow-md p-4 min-h-screen">
                 <div className="bg-blue-900 h-10 w-full mb-4 rounded-md"></div>
                 <h2 className="text-lg font-semibold mb-4">Bukti Pemotongan Bulanan Pegawai Tetap</h2>
@@ -38,17 +37,11 @@ const BupotBulananPegawaiTetap = () => {
                     })}
                 </ul>
             </div>
-
-            {/* Main Content */}
             <div className="w-full p-6 bg-gray-50 min-h-screen">
                 <div className="flex justify-between items-center mb-4">
                     <h1 className="text-xl font-bold">EBUPOT MP NOT ISSUED</h1>
                     <div className="flex space-x-2">
-                        <Link to={`/admin/praktikum/${userTypeId}/bukti-pemotongan-bulanan-pegawai-tetap/tambah-bukti-pemotongan-bulanan-pegawai-tetap`}>
-                            <button className="bg-blue-700 text-white px-4 py-2 rounded" >+ Create eBupot MP</button>
-                        </Link>
-                        <button className="bg-gray-300 text-gray-700 px-4 py-2 rounded" disabled>Hapus</button>
-                        <button className="bg-gray-300 text-gray-700 px-4 py-2 rounded" disabled>Terbitkan</button>
+
                         <button className="bg-white border px-4 py-2 rounded">XML Monitoring</button>
                         <div className="relative">
                             <button className="bg-white border px-4 py-2 rounded">Impor Data ▾</button>
@@ -72,11 +65,14 @@ const BupotBulananPegawaiTetap = () => {
                                 <th className="px-4 py-2 border">Dasar Pengenaan Pajak (RP)</th>
                                 <th className="px-4 py-2 border">Pajak Penghasilan</th>
                                 <th className="px-4 py-2 border">Fasilitas Pajak</th>
+                                <th className="px-4 py-2 border">Dilaporkan Dalam SPT</th>
+                                <th className="px-4 py-2 border">SPT telah/sedang diperiksa</th>
+                                <th className="px-4 py-2 border">SPT Dalam penegakan hukum</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr className="text-center text-gray-500">
-                                <td colSpan="12" className="px-4 py-6 border">
+                                <td colSpan="15" className="px-4 py-6 border">
                                     Tidak ada data yang ditemukan.
                                 </td>
                             </tr>
@@ -86,7 +82,7 @@ const BupotBulananPegawaiTetap = () => {
 
             </div>
         </div>
-    );
-};
+    )
+}
 
-export default BupotBulananPegawaiTetap;
+export default BupotBulananPegawaiTetapTelahTerbit
