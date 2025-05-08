@@ -8,7 +8,7 @@ const BppuBelumTerbit = () => {
       const location = useLocation();
   
       const menuItems = [
-          { label: "Belum Terbit", path: `/admin/praktikum/${userTypeId}/bupot/bppu/belum-terbit` },
+          { label: "Belum Terbit", path: `/admin/praktikum/${userTypeId}/bppu` },
           { label: "Telah Terbit", path: `/admin/praktikum/${userTypeId}/bupot/bppu/telah-terbit` },
           { label: "Tidak Valid", path: `/admin/praktikum/${userTypeId}/bupot/bppu/tidak-valid` },
       ];
