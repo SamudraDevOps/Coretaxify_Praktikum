@@ -346,6 +346,8 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
     nama: "",
     email: "",
     detail_transaksi: [],
+    alamat: "",
+    negara: "",
   });
 
   const [namaBarang, setNamaBarang] = useState("");
@@ -746,6 +748,8 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
       // <div className="h-full w-full text-2xl italic font-bold text-center flex items-center justify-center">Loading...</div>
     );
   }
+
+  console.log(npwp_faktur);
 
   return (
     console.log(""),
@@ -1380,7 +1384,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                   // onChange={handleChange}
                   onChange={(e) => {
                     const selectedId = e.target.value;
-                    const selectedItem = npwp_faktur.find(
+                    const selectedItem = npwp_faktur.data.find(
                       (item) => item.id.toString() == selectedId
                     );
 
@@ -1388,8 +1392,11 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
 
                     setFormData((prev) => ({
                       ...prev,
-                      akun_penerima_id: selectedItem.id,
-                      nama: selectedItem?.nama_akun,
+                      akun_penerima_id: selectedItem?.id,
+                      nama: selectedItem?.nama_akun || "",
+                      alamat: selectedItem?.alamat_utama_akun || "",
+                      negara: selectedItem?.negara_asal,
+                      email: selectedItem?.email_akun,
                     }));
                   }}
                   className="p-2 border rounded w-full"
@@ -1397,7 +1404,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                   <option value="">Pilih NPWP</option>
                   {!isLoading &&
                     npwp_faktur &&
-                    npwp_faktur.map((item, index) => (
+                    npwp_faktur.data.map((item, index) => (
                       <option key={index} value={item.id}>
                         {item.npwp_akun || "NPWP tidak tersedia"} -{" "}
                         {item.nama_akun}
@@ -1436,7 +1443,8 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                   name="negara"
                   value={formData.negara}
                   onChange={handleChange}
-                  className="p-2 border rounded w-full"
+                  className="p-2 border rounded w-full bg-gray-100"
+                  readOnly
                 />
               </div>
               <div className="space-y-2">
@@ -1471,9 +1479,8 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                   name="alamat"
                   value={formData.alamat}
                   onChange={handleChange}
-                  className="p-2 border rounded w-full"
+                  className="p-2 border rounded w-full bg-gray-100"
                   disabled
-                  placeholder="Ngelink kang"
                 />
               </div>
               <div className="space-y-2">
@@ -1493,7 +1500,8 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  className="p-2 border rounded w-full"
+                  className="p-2 border rounded w-full bg-gray-100"
+                  disabled
                 />
               </div>
             </div>
