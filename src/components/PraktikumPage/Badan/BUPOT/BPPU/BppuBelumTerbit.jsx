@@ -44,7 +44,7 @@ const BppuBelumTerbit = () => {
                   <div className="flex justify-between items-center mb-4">
                       <h1 className="text-xl font-bold">EBUPOT BPU NOT ISSUED</h1>
                       <div className="flex space-x-2">
-                          <Link to={`/admin/praktikum/${userTypeId}/bukti-pemotongan-bulanan-pegawai-tetap/tambah-bukti-pemotongan-bulanan-pegawai-tetap`}>
+                          <Link to={`/admin/praktikum/${userTypeId}/bppu/tambah-bppu`}>
                               <button className="bg-blue-700 text-white px-4 py-2 rounded" >+ Create eBupot BPU</button>
                           </Link>
                           <button className="bg-gray-300 text-gray-700 px-4 py-2 rounded" disabled>Hapus</button>

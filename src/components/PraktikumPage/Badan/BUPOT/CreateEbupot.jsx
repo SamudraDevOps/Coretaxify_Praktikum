@@ -32,12 +32,8 @@ const CreateEbupot = () => {
         setPenghasilanBruto(formatted);        // tampil di input (pakai titik)
         setPenghasilanBrutoRaw(Number(rawInput)); // nilai bersih (tanpa titik)
     };
-    
-
-
 
     return (
-        
         <div className="flex h-screen bg-gray-100">
             <div className="flex-auto p-3 bg-white rounded-md h-full">
                 <div className="flex justify-between items-center mb-6">
@@ -353,9 +349,9 @@ const CreateEbupot = () => {
                             <label className='block text-sm font-medium text-gray-700'>
                                 KAP
                             </label>
-                            <input 
-                                type="text" 
-                                className='w-full border p-2 rounded bg-gray-100' 
+                            <input
+                                type="text"
+                                className='w-full border p-2 rounded bg-gray-100'
                                 disabled
                                 value="411121-100"
                             />
