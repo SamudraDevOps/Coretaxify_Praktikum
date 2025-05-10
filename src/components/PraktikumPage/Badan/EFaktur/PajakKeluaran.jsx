@@ -178,6 +178,7 @@ const PajakKeluaran = ({
           <div className="flex items-center gap-3">
             {item && (
               <div className="flex  text-left text-sm" ref={dropdownRef}>
+                aowkoeko
                 <button
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                   className="flex items-center bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-2 rounded"
@@ -201,19 +202,19 @@ const PajakKeluaran = ({
                 )}
               </div>
             )}
-            {item && (
-              <button
-                className="flex items-center bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded text-sm"
-                onClick={
-                  () =>
-                    (window.location.href = `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran/tambah-faktur-keluaran`)
-                  // (window.location.href =
-                  //   "/admin/praktikum/2/e-faktur/pajak-keluaran/tambah-faktur-keluaran")
-                }
-              >
-                Tambah
-              </button>
-            )}
+            {/* {item && ( */}
+            <button
+              className="flex items-center bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded text-sm"
+              onClick={
+                () =>
+                  (window.location.href = `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran/tambah-faktur-keluaran`)
+                // (window.location.href =
+                //   "/admin/praktikum/2/e-faktur/pajak-keluaran/tambah-faktur-keluaran")
+              }
+            >
+              Tambah
+            </button>
+            {/* )} */}
           </div>
 
           {item && (

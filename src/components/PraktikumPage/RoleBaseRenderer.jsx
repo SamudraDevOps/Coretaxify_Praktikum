@@ -186,7 +186,7 @@ export default function RoleBasedRenderer({
       ) : (
         <Badan
           data={contentData.data}
-          sidebar={userData.data} // We might need to fetch Badan-specific sidebar data
+          sidebar={userData.data} 
           pagination={contentData}
           onPageChange={handlePageChange}
           currentPage={currentPage}

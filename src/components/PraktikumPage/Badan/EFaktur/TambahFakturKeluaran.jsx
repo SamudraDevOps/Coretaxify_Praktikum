@@ -346,8 +346,6 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
     nama: "",
     email: "",
     detail_transaksi: [],
-    alamat: "",
-    negara: "",
   });
 
   const [namaBarang, setNamaBarang] = useState("");
