@@ -173,65 +173,28 @@ export default function RoleBasedRenderer({
   return (
     <>
       <Header />
-      <div className="container mx-auto p-4">
-        {/* Company switcher - Show only if user represents any companies */}
-        {representedCompanies?.data && representedCompanies.data.length > 0 && (
-          <div className="bg-white p-4 mb-4 rounded-lg shadow">
-            <div className="flex flex-col sm:flex-row justify-between items-center">
-              <div className="mb-2 sm:mb-0">
-                <span className="font-bold">Current View: </span>
-                <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full">
-                  {viewAsCompanyId ? "Badan" : "Orang Pribadi"}
-                </span>
-              </div>
-              <div className="flex items-center">
-                <span className="mr-2">Switch to:</span>
-                <select
-                  className="form-select border border-gray-300 rounded p-2"
-                  value={effectiveCompanyId}
-                  onChange={(e) => handleCompanyChange(e.target.value)}
-                >
-                  {/* Option for user's own account */}
-                  <option value={params.akun}>
-                    {userData.data.nama_akun} (Orang Pribadi)
-                  </option>
-
-                  {/* Options for represented companies */}
-                  {representedCompanies.data.map((company) => (
-                    <option key={company.id} value={company.id}>
-                      {company.name} (Badan)
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Render appropriate component based on the account type */}
-        {isViewingOrangPribadi ? (
-          <OrangPribadi
-            data={contentData.data}
-            sidebar={userData.data}
-            pagination={contentData}
-            onPageChange={handlePageChange}
-            currentPage={currentPage}
-            onCompanyChange={handleCompanyChange}
-            representedCompanies={representedCompanies?.data || []}
-          />
-        ) : (
-          <Badan
-            data={contentData.data}
-            sidebar={userData.data} // We might need to fetch Badan-specific sidebar data
-            pagination={contentData}
-            onPageChange={handlePageChange}
-            currentPage={currentPage}
-            onCompanyChange={handleCompanyChange}
-            representedCompanies={representedCompanies?.data || []}
-            isViewingAsRepresentative={!!viewAsCompanyId}
-          />
-        )}
-      </div>
+      {isViewingOrangPribadi ? (
+        <OrangPribadi
+          data={contentData.data}
+          sidebar={userData.data}
+          pagination={contentData}
+          onPageChange={handlePageChange}
+          currentPage={currentPage}
+          onCompanyChange={handleCompanyChange}
+          representedCompanies={representedCompanies?.data || []}
+        />
+      ) : (
+        <Badan
+          data={contentData.data}
+          sidebar={userData.data} // We might need to fetch Badan-specific sidebar data
+          pagination={contentData}
+          onPageChange={handlePageChange}
+          currentPage={currentPage}
+          onCompanyChange={handleCompanyChange}
+          representedCompanies={representedCompanies?.data || []}
+          isViewingAsRepresentative={!!viewAsCompanyId}
+        />
+      )}
     </>
   );
 }
