@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import Logo from "../../assets/images/5.png";
 import { useUserType } from "../context/userTypeContext";
-import { useParams } from "react-router";
+import { useParams, useSearchParams, useNavigate } from "react-router";
 import { RoutesApi } from "@/Routes";
 import axios from "axios";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -31,9 +31,10 @@ import {
 const Header = () => {
   // == Query ==
   const { id, akun } = useParams();
-  // console.log(akun);
-  //   const getAccountPortal = () =>
-  // console.log(getCookieToken());
+  const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const viewAsCompanyId = searchParams.get("viewAs");
+
   const token = getCookieToken();
   const [cookies, setCookie, removeCookie] = useCookies(["token"]);
   const [isCompanyDropdownOpen, setIsCompanyDropdownOpen] = useState(false);
@@ -51,9 +52,6 @@ const Header = () => {
         {
           headers: {
             Authorization: `Bearer ${token}`,
-          },
-          params: {
-            // intent: "api.get.sistem.first.account",
           },
         }
       );
@@ -98,17 +96,46 @@ const Header = () => {
     enabled: !!id && !!akun && !!token,
   });
 
-  // useEffect(() => {
-  //   // console.log("Data:", data);
+  // Function to handle company switching
+  const handleCompanyChange = (companyId, companyName, companyType) => {
+    // Update URL with viewAs parameter
+    if (companyId) {
+      const currentPath = window.location.pathname;
 
-  //   setUserType(data[0].id);
-  // }, [data]);
-  //   getAccountPortal();
+      // If we're on a specific feature page, preserve that
+      const basePathParts = currentPath.split("/").slice(0, 5); // Get /praktikum/:id/sistem/:akun
+      const basePath = basePathParts.join("/");
+
+      // Get the remaining path segments (features, etc.)
+      const featureParts = currentPath.split("/").slice(5);
+      const featurePath =
+        featureParts.length > 0 ? `/${featureParts.join("/")}` : "/profil-saya";
+
+      // Set the viewAs parameter and redirect
+      searchParams.set("viewAs", companyId);
+      navigate(`${basePath}${featurePath}?${searchParams.toString()}`);
+    } else {
+      // Remove viewAs parameter when switching back to personal account
+      searchParams.delete("viewAs");
+
+      // Get the current path but go back to the base user account
+      const currentPath = window.location.pathname;
+      const basePathParts = currentPath.split("/").slice(0, 5); // Get /praktikum/:id/sistem/:akun
+      const basePath = basePathParts.join("/");
+
+      // Get the remaining path segments (features, etc.)
+      const featureParts = currentPath.split("/").slice(5);
+      const featurePath =
+        featureParts.length > 0 ? `/${featureParts.join("/")}` : "/profil-saya";
+
+      navigate(`${basePath}${featurePath}`);
+    }
+    setIsCompanyDropdownOpen(false);
+  };
 
   const [dropdownOpen, setDropdownOpen] = useState(null);
   const [subDropdownOpen, setSubDropdownOpen] = useState(null);
   const { userType, setUserType } = useUserType();
-  //   alert(id)
 
   console.log("User Type Context (Saat Render):", userType);
 
@@ -123,33 +150,43 @@ const Header = () => {
   };
 
   const navigateTo = (path) => {
-    // alert("clicked");
-    // window.location.href = `/praktikum/${id}/sistem/${path}/profil-saya `;
-    // window.location.href = path;
     const pathParts = path.split("/");
     const lastPart = pathParts[pathParts.length - 1];
 
     // Construct the new path with the base path and the last part
     const newPath = `/praktikum/${id}/sistem/${akun}/${lastPart}`;
 
-    // Navigate to the new path
-    window.location.href = newPath;
+    // Preserve the viewAs parameter if it exists
+    if (viewAsCompanyId) {
+      navigate(`${newPath}?viewAs=${viewAsCompanyId}`);
+    } else {
+      navigate(newPath);
+    }
   };
-  //   if (getAccountPortal().isLoading) {
-  if (isLoading) {
+
+  // Get the currently active company name
+  const getActiveCompanyName = () => {
+    if (!representedCompanies || !representedCompanies.data)
+      return "Perusahaan Terwakili";
+
+    if (viewAsCompanyId) {
+      const activeCompany = representedCompanies.data.find(
+        (c) => c.id === viewAsCompanyId
+      );
+      return activeCompany ? activeCompany.nama_akun : "Perusahaan Terwakili";
+    }
+
+    return "Pribadi";
+  };
+
+  if (isLoading || isLoadingCompanies) {
     return (
       <div className="loading h-screen">
         <ClipLoader color="#7502B5" size={50} />
       </div>
     );
   }
-  if (isLoadingCompanies) {
-    return (
-      <div className="loading h-screen">
-        <ClipLoader color="#7502B5" size={50} />
-      </div>
-    );
-  }
+
   if (isError) {
     return (
       <div className="error-container">
@@ -163,18 +200,7 @@ const Header = () => {
       </div>
     );
   }
-  // if (isErrorCompanies) {
-  //   return (
-  //     <div className="loading h-screen">
-  //       <ClipLoader color="#7502B5" size={50} />
-  //     </div>
-  //   );
-  // }
-  console.log(RoutesApi.apiUrl + "student/assignments/" + id + "/sistem");
-  console.log(representedCompanies);
 
-  // const acc = data.find((item) => item.id == akun);
-  // console.log(acc);
   return (
     <div className="w-full">
       <header className="bg-slate-100 text-blue-900 flex justify-between items-center px-4 md:px-8 lg:px-12 xl:px-16 py-3 shadow-md w-full overflow-x-auto">
@@ -197,57 +223,42 @@ const Header = () => {
                 >
                   <FileText className="w-6 h-6" />
                   <span className="hidden md:inline">
-                    {localStorage.getItem("selectedCompanyName") ||
-                      "Perusahaan Terwakili"}
+                    {viewAsCompanyId ? getActiveCompanyName() : "Pribadi"}
                   </span>
                   <ChevronDown className="w-5 h-5" />
                 </button>
 
                 {/* Dropdown menu for represented companies */}
                 {isCompanyDropdownOpen && (
-                  <ul className="absolute right-96 top-14 mt-2 w-64 bg-white border rounded-md shadow-lg py-1 px-2  z-50">
-                    {representedCompanies.data.map((item) => {
-                      return (
-                        <li
-                          key={item.id}
-                          className="px-4 py-2  hover:bg-gray-200 cursor-pointer"
-                          onClick={() => {
-                            // Store company information in localStorage
-                            localStorage.setItem(
-                              "selectedCompanyType",
-                              item.tipe_akun
-                            );
-                            localStorage.setItem(
-                              "selectedCompanyName",
-                              item.nama_akun
-                            );
-                            localStorage.setItem("selectedCompanyId", item.id);
-
-                            console.log(
-                              "User Type Berubah ke:",
-                              item.nama_akun
-                            );
-                            setIsCompanyDropdownOpen(false);
-                          }}
-                        >
-                          {item.nama_akun}
-                        </li>
-                      );
-                    })}
-
-                    <a href={`/praktikum/${id}/sistem/${akun}/profil-saya`}>
+                  <ul className="absolute right-96 top-14 mt-2 w-64 bg-white border rounded-md shadow-lg py-1 px-2 z-50">
+                    {representedCompanies.data.map((item) => (
                       <li
-                        onClick={() => {
-                          // alert("mamamia");
-                          localStorage.removeItem("selectedCompanyType");
-                          localStorage.removeItem("selectedCompanyId");
-                          localStorage.removeItem("selectedCompanyName");
-                        }}
-                        className="px-4 py-2  hover:bg-gray-200 cursor-pointer"
+                        key={item.id}
+                        className={`px-4 py-2 hover:bg-gray-200 cursor-pointer ${
+                          viewAsCompanyId === item.id
+                            ? "bg-gray-100 font-bold"
+                            : ""
+                        }`}
+                        onClick={() =>
+                          handleCompanyChange(
+                            item.id,
+                            item.nama_akun,
+                            item.tipe_akun
+                          )
+                        }
                       >
-                        Pribadi
+                        {item.nama_akun}
                       </li>
-                    </a>
+                    ))}
+
+                    <li
+                      className={`px-4 py-2 hover:bg-gray-200 cursor-pointer ${
+                        !viewAsCompanyId ? "bg-gray-100 font-bold" : ""
+                      }`}
+                      onClick={() => handleCompanyChange(null)}
+                    >
+                      Pribadi
+                    </li>
                   </ul>
                 )}
               </div>
@@ -269,47 +280,20 @@ const Header = () => {
             {/* Dropdown menu */}
             {isDropdownOpen && (
               <ul className="absolute right-14 top-14 mt-2 w-64 bg-white border rounded-md shadow-lg py-1 px-2">
-                {data.map((item) => {
-                  return (
-                    <a href={`/praktikum/${id}/sistem/${item.id}/profil-saya`}>
-                      <li
-                        key={item.id}
-                        className="px-4 py-2  hover:bg-gray-200 cursor-pointer"
-                        onClick={() => {
-                          // setUserType(item.id);
-                          console.log("User Type Berubah ke:", item.nama_akun);
-                          setIsDropdownOpen(false);
-                          // navigateTo(`profil-saya`);
-                        }}
-                      >
-                        {item.nama_akun}
-                      </li>
-                    </a>
-                  );
-                })}
-                {/* <li
-                  className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
-                  onClick={() => {
-                    setUserType("Orang Pribadi");
-
-                    console.log("User Type Berubah ke:", "Orang Pribadi");
-                    setIsDropdownOpen(false);
-                    window.location.href = "/admin/praktikum/1/prak1";
-                  }}
-                >
-                  Orang Pribadi
-                </li>
-                <li
-                  className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
-                  onClick={() => {
-                    setUserType("Badan");
-                    console.log("User Type Berubah ke:", "Badan");
-                    setIsDropdownOpen(false);
-                    window.location.href = "/admin/praktikum/2/prak1";
-                  }}
-                >
-                  Badan
-                </li> */}
+                {data.map((item) => (
+                  <li
+                    key={item.id}
+                    className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
+                    onClick={() => {
+                      // When switching accounts, remove viewAs parameter and navigate
+                      const newPath = `/praktikum/${id}/sistem/${item.id}/profil-saya`;
+                      navigate(newPath);
+                      setIsDropdownOpen(false);
+                    }}
+                  >
+                    {item.nama_akun}
+                  </li>
+                ))}
               </ul>
             )}
           </div>
@@ -380,7 +364,6 @@ const Header = () => {
               },
               {
                 label: "E-Faktur",
-
                 links: `e-faktur`,
                 submenu: [],
               },
@@ -448,11 +431,21 @@ const Header = () => {
                         {typeof sub === "string" ? (
                           <button onClick={() => navigateTo(sub)}>{sub}</button>
                         ) : sub.links ? (
-                          <a href={sub.links} className="block w-full">
-                            <button className="w-full text-left">
-                              {sub.label}
-                            </button>
-                          </a>
+                          <button
+                            className="w-full text-left"
+                            onClick={() => {
+                              const newPath = sub.links;
+                              if (viewAsCompanyId) {
+                                navigate(
+                                  `${newPath}?viewAs=${viewAsCompanyId}`
+                                );
+                              } else {
+                                navigate(newPath);
+                              }
+                            }}
+                          >
+                            {sub.label}
+                          </button>
                         ) : (
                           <>
                             <button

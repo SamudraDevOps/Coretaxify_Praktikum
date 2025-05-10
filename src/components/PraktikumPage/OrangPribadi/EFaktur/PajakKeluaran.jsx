@@ -2,14 +2,13 @@ import React, { useState, useRef } from "react";
 import SideBarEFaktur from "./SideBarEFaktur";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { FaChevronDown } from "react-icons/fa";
-import { useParams } from "react-router";
+import { useParams, useSearchParams, useNavigate } from "react-router";
 import PajakKeluaranBadan from "../../Badan/EFaktur/PajakKeluaran";
 import { useUserType } from "@/components/context/userTypeContext";
 import axios from "axios";
 import { RoutesApi } from "@/Routes";
 import { useQuery } from "@tanstack/react-query";
 import { getCookieToken } from "@/service";
-// import { default as PajakKeluaranBadan } from "../../Badan/EFaktur/PajakKeluaran";
 
 const PajakKeluaran = ({
   data,
@@ -19,19 +18,33 @@ const PajakKeluaran = ({
   currentPage = 1,
 }) => {
   const { id, akun } = useParams();
+  const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const viewAsCompanyId = searchParams.get("viewAs");
+
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isCompanyDropdownOpen, setIsCompanyDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const companyDropdownRef = useRef(null);
   const token = getCookieToken();
 
   const handleClickOutside = (event) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
       setIsDropdownOpen(false);
     }
+    if (
+      companyDropdownRef.current &&
+      !companyDropdownRef.current.contains(event.target)
+    ) {
+      setIsCompanyDropdownOpen(false);
+    }
   };
+
   React.useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
   const {
     data: representedCompanies,
     isLoading: isLoadingCompanies,
@@ -62,17 +75,52 @@ const PajakKeluaran = ({
     enabled: !!id && !!akun && !!token,
   });
 
+  // Function to handle company switching
+  const handleCompanyChange = (companyId) => {
+    if (companyId) {
+      // Set viewAs parameter and navigate
+      searchParams.set("viewAs", companyId);
+      navigate(
+        `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran?${searchParams.toString()}`
+      );
+    } else {
+      // Remove viewAs parameter and navigate
+      searchParams.delete("viewAs");
+      navigate(`/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran`);
+    }
+    setIsCompanyDropdownOpen(false);
+  };
+
+  // Get the currently active company name
+  const getActiveCompanyName = () => {
+    if (!representedCompanies || !representedCompanies.data)
+      return "Perusahaan Terwakili";
+
+    if (viewAsCompanyId) {
+      const activeCompany = representedCompanies.data.find(
+        (c) => c.id === viewAsCompanyId
+      );
+      return activeCompany ? activeCompany.nama_akun : "Perusahaan Terwakili";
+    }
+
+    return "Pribadi";
+  };
+
   if (isLoadingCompanies) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-900">
-          AAAAA
-        </div>
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-900"></div>
       </div>
     );
   }
 
-  if (representedCompanies.data.length > 0) {
+  // If viewing as a company or if there's a need to render the Badan component
+  if (
+    viewAsCompanyId ||
+    (representedCompanies.data &&
+      representedCompanies.data.length > 0 &&
+      viewAsCompanyId)
+  ) {
     return (
       <PajakKeluaranBadan
         data={data}
@@ -80,7 +128,7 @@ const PajakKeluaran = ({
         pagination={pagination}
         onPageChange={onPageChange}
         currentPage={currentPage}
-      ></PajakKeluaranBadan>
+      />
     );
   }
 
@@ -100,10 +148,52 @@ const PajakKeluaran = ({
               Pajak Keluaran
             </h1>
           </div>
+
+          {/* Company Selector - If there are multiple companies, show a dropdown */}
+          {representedCompanies.data &&
+            representedCompanies.data.length > 0 && (
+              <div className="relative" ref={companyDropdownRef}>
+                <button
+                  onClick={() =>
+                    setIsCompanyDropdownOpen(!isCompanyDropdownOpen)
+                  }
+                  className="flex items-center bg-blue-900 text-white px-4 py-2 rounded"
+                >
+                  {viewAsCompanyId ? getActiveCompanyName() : "Pribadi"}{" "}
+                  <FaChevronDown className="ml-2" />
+                </button>
+                {isCompanyDropdownOpen && (
+                  <div className="absolute right-0 mt-2 w-64 bg-white rounded-md shadow-lg z-10">
+                    {representedCompanies.data.map((company) => (
+                      <div
+                        key={company.id}
+                        className={`px-4 py-2 hover:bg-gray-100 cursor-pointer ${
+                          viewAsCompanyId === company.id
+                            ? "bg-gray-100 font-bold"
+                            : ""
+                        }`}
+                        onClick={() => handleCompanyChange(company.id)}
+                      >
+                        {company.nama_akun}
+                      </div>
+                    ))}
+                    <div
+                      className={`px-4 py-2 hover:bg-gray-100 cursor-pointer ${
+                        !viewAsCompanyId ? "bg-gray-100 font-bold" : ""
+                      }`}
+                      onClick={() => handleCompanyChange(null)}
+                    >
+                      Pribadi
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
         </div>
+
         <div className="flex justify-between mb-4 border-b pb-3">
           <div className="flex items-center gap-3">
-            <div className="flex  text-left text-sm" ref={dropdownRef}>
+            <div className="flex text-left text-sm" ref={dropdownRef}>
               <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                 className="flex items-center bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-2 rounded"
@@ -126,16 +216,6 @@ const PajakKeluaran = ({
                 </div>
               )}
             </div>
-
-            {/* <button
-              className="flex items-center bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded text-sm"
-              onClick={() =>
-                (window.location.href =
-                  "/admin/praktikum/2/e-faktur/pajak-keluaran/tambah-faktur-keluaran")
-              }
-            >
-              Tambah
-            </button> */}
           </div>
           <div className="flex items-center gap-3">
             <button className="flex items-center bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded text-sm">
@@ -177,7 +257,7 @@ const PajakKeluaran = ({
             </thead>
             <tbody className="text-gray-600">
               <tr>
-                <td colSpan="10" className="text-center p-4 border">
+                <td colSpan="22" className="text-center p-4 border">
                   Belum ada data
                 </td>
               </tr>
