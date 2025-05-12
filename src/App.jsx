@@ -125,6 +125,8 @@ import BupotBulananPegawaiTetapTidakValid from "./components/PraktikumPage/Badan
 import BppuBelumTerbit from "./components/PraktikumPage/Badan/BUPOT/BPPU/BppuBelumTerbit";
 import CreateEbupot from "./components/PraktikumPage/Badan/BUPOT/CreateEbupot";
 import CreateBppu from "./components/PraktikumPage/Badan/BUPOT/BPPU/CreateBppu";
+import BppuTelahTerbit from "./components/PraktikumPage/Badan/BUPOT/BPPU/BppuTelahTerbit";
+import BppuTidakValid from "./components/PraktikumPage/Badan/BUPOT/BPPU/BppuTidakValid";
 // Route Badan
 
 import ProtectedRoutes from "./components/Dashboard/Auth/ProtectedRoutes";
@@ -1056,21 +1058,39 @@ const Main = () => {
             </>
           }
         />
+        <Route
+          path="/admin/praktikum/2/bppu"
+          element={
+            <>
+              <Header />
+              <BppuBelumTerbit />
+            </>
+          }
+        />
+        <Route
+          path="/admin/praktikum/2/bppu/tambah-bppu"
+          element={
+            <>
+              <Header />
+              <CreateBppu />
+            </>
+          }
+        />
+        <Route
+          path="/admin/praktikum/2/bppu/telah-terbit"
+          element={
+            <>
+              <Header />
+              <BppuTelahTerbit />
+            </>
+          }
+        />
           <Route
-            path="/admin/praktikum/2/bppu"
+            path="/admin/praktikum/2/bppu/tidak-valid"
             element={
               <>
                 <Header />
-                <BppuBelumTerbit />
-              </>
-            }
-          />
-          <Route
-            path="/admin/praktikum/2/bppu/tambah-bppu"
-            element={
-              <>
-                <Header />
-                <CreateBppu />
+                <BppuTidakValid />
               </>
             }
           />

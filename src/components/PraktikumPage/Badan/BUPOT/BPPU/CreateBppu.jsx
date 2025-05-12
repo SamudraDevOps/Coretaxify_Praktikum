@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 const CreateBppu = () => {
   const [showInformaiUmumBupot, setShowInformasiUmumBupot] = useState(false);
   const [showFasilitasPerpajakan, setShowFasilitasPerpajakan] = useState(false);
+  const [showDokumenReferensi, setShowDokumenReferensi] = useState(false);
   const [selectedYear, setSelectedYear] = useState(new Date());
   const [pegawaiAsing, setPegawaiAsing] = useState('');
   const [selectedNegara, setSelectedNegara] = useState(null);
@@ -19,6 +20,9 @@ const CreateBppu = () => {
   const [penghasilanBruto, setPenghasilanBruto] = useState('');
   const [penghasilanBrutoRaw, setPenghasilanBrutoRaw] = useState(0);
   const [fasilitasPajak, setFasilitasPajak] = useState('');
+  const [selectedFasilitasPajak, setSelectedFasilitasPajak] = useState(null);
+  const [selectedDokumenReferensi, setSelectedDokumenReferensi] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(null);
 
   const formatRupiah = (value) => {
     const numberString = value.replace(/[^\d]/g, '');
@@ -37,7 +41,7 @@ const CreateBppu = () => {
     <div className="flex h-screen bg-gray-100">
       <div className="flex-auto p-3 bg-white rounded-md h-full">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-3xl font-light text-yellow-500 mt-4">EBUPOT MP</h2>
+          <h2 className="text-3xl font-light text-yellow-500 mt-4">EBUPOT BPU</h2>
         </div>
         <div className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full" onClick={() => setShowInformasiUmumBupot(!showInformaiUmumBupot)}>
           <h3 className='text-lg font-semibold'>Informasi Umum</h3>
@@ -354,6 +358,72 @@ const CreateBppu = () => {
                 className='w-full border p-2 rounded bg-gray-100'
                 disabled
                 value="411121-100"
+              />
+            </div>
+            <div className="mt-4">
+              <label className='block text-sm font-medium text-gray-700'>
+                NITKU/Nomor Identitas Sub Unit Organisasi <span className='text-red-500'>*</span>
+              </label>
+              <input
+                type="text"
+                className='w-full border p-2 rounded bg-gray-100'
+                disabled
+                value="Badan"
+              />
+            </div>
+          </div>
+        )}
+        <div className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full" onClick={() => setShowDokumenReferensi(!showDokumenReferensi)}>
+          <h3 className='text-lg font-semibold'>Dokumen Referensi</h3>
+          {showDokumenReferensi ? <FaChevronUp /> : <FaChevronDown />}
+        </div>
+        {showDokumenReferensi && (
+          <div className="border rounded-md p-4 mb-2 bg-white">
+            <div className="mt-4">
+              <label className="block text-sm font-medium text-gray-700">
+                Jenis Dokumen <span className="text-red-500">*</span>
+              </label>
+              <Select
+                placeholder="Pilih Jenis Dokumen"
+                className="w-full "
+                value={selectedDokumenReferensi}
+                onChange={(selected) => setSelectedDokumenReferensi(selected)}
+                options={[
+                  { value: 'Akta Perjanjian', label: 'Akta Perjanjian' },
+                  { value: 'Akta Rapat Umum Pemegang Saham', label: 'Akta Rapat Umum Pemegang Saham' },
+                  { value: 'Bukti Pembayaran', label: 'Bukti Pembayaran' },
+                  { value: 'Dokumen Ketentuan Pajak', label: 'Dokumen Ketentuan Pajak' },
+                  { value: 'Dokumen Lainnya', label: 'Dokumen Lainnya' },
+                  { value: 'Dokumen Pemberian Fasilitas Lainnya', label: 'Dokumen Pemberian Fasilitas Lainnya' },
+                  { value: 'Faktur Pajak', label: 'Faktur Pajak' },
+                  { value: 'Jasa Giro', label: 'Jasa Giro' },
+                  { value: 'Kontrak', label: 'Kontrak' },
+                  { value: 'Pengumuman', label: 'Pengumuman' },
+                  { value: 'Surat Keputusan', label: 'Surat Keputusan' },
+                  { value: 'Surat Pernyataan', label: 'Surat Pernyataan' },
+                  { value: 'Surat tagihan', label: 'Surat tagihan' },
+                  { value: 'Trade Confirmation', label: 'Trade Confirmation' },
+                ]}
+              />
+            </div>
+            <div className="mt-4">
+              <label className="block text-sm font-medium text-gray-700">
+                Nomor Dokumen  <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                className="w-full border p-2 rounded bg-white"
+                placeholder="Masukkan Nomor Dokumen"
+              />
+            </div>
+            <div className="mt-4">
+              <label className="block text-sm font-medium text-gray-700">
+                Tanggal Dokumen <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="date"
+                className="w-full border p-2 rounded bg-white"
+                placeholder="Masukkan Tanggal Dokumen"
               />
             </div>
             <div className="mt-4">

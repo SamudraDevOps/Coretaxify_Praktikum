@@ -9,8 +9,8 @@ const BppuBelumTerbit = () => {
   
       const menuItems = [
           { label: "Belum Terbit", path: `/admin/praktikum/${userTypeId}/bppu` },
-          { label: "Telah Terbit", path: `/admin/praktikum/${userTypeId}/bupot/bppu/telah-terbit` },
-          { label: "Tidak Valid", path: `/admin/praktikum/${userTypeId}/bupot/bppu/tidak-valid` },
+          { label: "Telah Terbit", path: `/admin/praktikum/${userTypeId}/bppu/telah-terbit` },
+          { label: "Tidak Valid", path: `/admin/praktikum/${userTypeId}/bppu/tidak-valid` },
       ];
   
       return (
