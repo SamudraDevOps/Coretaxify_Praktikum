@@ -16,7 +16,7 @@ const BppuTelahTerbit = () => {
         <div className="flex">
             <div className="w-64 bg-white shadow-md p-4 min-h-screen">
                 <div className="bg-blue-900 h-10 w-full mb-4 rounded-md"></div>
-                <h2 className="text-lg font-semibold mb-4">Bukti Pemotongan Bulanan Pegawai Tetap</h2>
+                <h2 className="text-lg font-semibold mb-4">BPPU</h2>
                 <ul className="space-y-1">
                     {menuItems.map((item, index) => {
                         const isActive = location.pathname === item.path;

@@ -127,6 +127,7 @@ import CreateEbupot from "./components/PraktikumPage/Badan/BUPOT/CreateEbupot";
 import CreateBppu from "./components/PraktikumPage/Badan/BUPOT/BPPU/CreateBppu";
 import BppuTelahTerbit from "./components/PraktikumPage/Badan/BUPOT/BPPU/BppuTelahTerbit";
 import BppuTidakValid from "./components/PraktikumPage/Badan/BUPOT/BPPU/BppuTidakValid";
+import BpnrBelumTerbit from "./components/PraktikumPage/Badan/BUPOT/BPNR/BpnrBelumTerbit";
 // Route Badan
 
 import ProtectedRoutes from "./components/Dashboard/Auth/ProtectedRoutes";
@@ -1085,15 +1086,24 @@ const Main = () => {
             </>
           }
         />
-          <Route
-            path="/admin/praktikum/2/bppu/tidak-valid"
-            element={
-              <>
-                <Header />
-                <BppuTidakValid />
-              </>
-            }
-          />
+        <Route
+          path="/admin/praktikum/2/bppu/tidak-valid"
+          element={
+            <>
+              <Header />
+              <BppuTidakValid />
+            </>
+          }
+        />
+        <Route
+          path="/admin/praktikum/2/bpnr"
+          element={
+            <>
+              <Header />
+              <BpnrBelumTerbit />
+            </>
+          }
+        />
         {/* NOT FOUND ROUTE - LAST REGISTERED ROUTE */}
         <Route path="*" element={<NotFound />} />
       </Routes>
