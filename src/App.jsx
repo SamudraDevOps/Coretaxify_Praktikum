@@ -123,6 +123,15 @@ import PajakMasukan from "./components/PraktikumPage/Badan/EFaktur/PajakMasukan"
 import KonsepSPT from "./components/PraktikumPage/Badan/SPT/KonsepSPT";
 import BuatKonsepSPT from "./components/PraktikumPage/Badan/SPT/BuatKonsepSPT";
 import CreateKonsepSPT from "./components/PraktikumPage/Badan/SPT/CreateKonsepSPT";
+import BupotBulananPegawaiTetap from "./components/PraktikumPage/Badan/BUPOT/BupotBulananPegawaiTetap";
+import BupotBulananPegawaiTetapTelahTerbit from "./components/PraktikumPage/Badan/BUPOT/BupotBulananPegawaiTetapTelahTerbit";
+import BupotBulananPegawaiTetapTidakValid from "./components/PraktikumPage/Badan/BUPOT/BupotBulananPegawaiTetapTidakValid";
+import BppuBelumTerbit from "./components/PraktikumPage/Badan/BUPOT/BPPU/BppuBelumTerbit";
+import CreateEbupot from "./components/PraktikumPage/Badan/BUPOT/CreateEbupot";
+import CreateBppu from "./components/PraktikumPage/Badan/BUPOT/BPPU/CreateBppu";
+import BppuTelahTerbit from "./components/PraktikumPage/Badan/BUPOT/BPPU/BppuTelahTerbit";
+import BppuTidakValid from "./components/PraktikumPage/Badan/BUPOT/BPPU/BppuTidakValid";
+import BpnrBelumTerbit from "./components/PraktikumPage/Badan/BUPOT/BPNR/BpnrBelumTerbit";
 // Route Badan
 
 import ProtectedRoutes from "./components/Dashboard/Auth/ProtectedRoutes";
@@ -953,6 +962,7 @@ const Main = () => {
           }
         />
         {/* Praktikum Orang Pribadi*/}
+
         {/* Praktikum  Orang Badan*/}
         <Route
           path="/admin/praktikum/2/prak1"
@@ -1173,6 +1183,7 @@ const Main = () => {
           }
         />
         {/* Praktikum Orang Pribadi*/}
+
         <Route
           path="/admin/praktikum/2/e-faktur"
           element={
@@ -1206,6 +1217,114 @@ const Main = () => {
             <>
               <Header />
               {/* <PajakMasukan /> */}
+            </>
+          }
+        />
+        <Route
+          path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
+          element={
+            <>
+              <Header />
+              <KonsepSPT />
+            </>
+          }
+        />
+        <Route
+          path="/admin/praktikum/2/surat-pemberitahuan-(spt)/buat-konsep-spt"
+          element={
+            <>
+              <Header />
+              <BuatKonsepSPT />
+            </>
+          }
+        />
+        <Route
+          path="/admin/praktikum/2/surat-pemberitahuan-(spt)/tambah-konsep-spt"
+          element={
+            <>
+              <Header />
+              <CreateKonsepSPT />
+            </>
+          }
+        />
+        <Route
+          path="/admin/praktikum/2/bukti-pemotongan-bulanan-pegawai-tetap"
+          element={
+            <>
+              <Header />
+              <BupotBulananPegawaiTetap />
+            </>
+          }
+        />
+        <Route
+          path="/admin/praktikum/2/bukti-pemotongan-bulanan-pegawai-tetap/telah-terbit"
+          element={
+            <>
+              <Header />
+              <BupotBulananPegawaiTetapTelahTerbit />
+            </>
+          }
+        />
+        <Route
+          path="/admin/praktikum/2/bukti-pemotongan-bulanan-pegawai-tetap/tidak-valid"
+          element={
+            <>
+              <Header />
+              <BupotBulananPegawaiTetapTidakValid />
+            </>
+          }
+        />
+        <Route
+          path="/admin/praktikum/2/bukti-pemotongan-bulanan-pegawai-tetap/tambah-bukti-pemotongan-bulanan-pegawai-tetap"
+          element={
+            <>
+              <Header />
+              <CreateEbupot />
+            </>
+          }
+        />
+        <Route
+          path="/admin/praktikum/2/bppu"
+          element={
+            <>
+              <Header />
+              <BppuBelumTerbit />
+            </>
+          }
+        />
+        <Route
+          path="/admin/praktikum/2/bppu/tambah-bppu"
+          element={
+            <>
+              <Header />
+              <CreateBppu />
+            </>
+          }
+        />
+        <Route
+          path="/admin/praktikum/2/bppu/telah-terbit"
+          element={
+            <>
+              <Header />
+              <BppuTelahTerbit />
+            </>
+          }
+        />
+        <Route
+          path="/admin/praktikum/2/bppu/tidak-valid"
+          element={
+            <>
+              <Header />
+              <BppuTidakValid />
+            </>
+          }
+        />
+        <Route
+          path="/admin/praktikum/2/bpnr"
+          element={
+            <>
+              <Header />
+              <BpnrBelumTerbit />
             </>
           }
         />
