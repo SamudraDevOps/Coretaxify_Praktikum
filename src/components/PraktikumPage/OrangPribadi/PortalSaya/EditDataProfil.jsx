@@ -2530,6 +2530,9 @@ const EditDataProfil = ({ data, sidebar }) => {
                       Nomor Rekening
                     </th>
                     <th className="border border-gray-300 px-4 py-2">
+                      Nama Pemilik Bank
+                    </th>
+                    <th className="border border-gray-300 px-4 py-2">
                       Jenis Rekening Bank
                     </th>
                     <th className="border border-gray-300 px-4 py-2">
@@ -2732,6 +2735,9 @@ const EditDataProfil = ({ data, sidebar }) => {
                       <td className="px-4 py-4 border">{bank.nama_bank}</td>
                       <td className="px-4 py-4 border">
                         {bank.nomor_rekening_bank}
+                      </td>
+                      <td className="px-4 py-4 border">
+                        {bank.nama_pemilik_bank}
                       </td>
                       <td className="px-4 py-4 border">
                         {bank.jenis_rekening_bank}

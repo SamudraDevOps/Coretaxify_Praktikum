@@ -178,7 +178,6 @@ const PajakKeluaran = ({
           <div className="flex items-center gap-3">
             {item && (
               <div className="flex  text-left text-sm" ref={dropdownRef}>
-                aowkoeko
                 <button
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                   className="flex items-center bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-2 rounded"
