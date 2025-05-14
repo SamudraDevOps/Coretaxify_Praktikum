@@ -367,19 +367,64 @@ const Header = () => {
                 links: `e-faktur`,
                 submenu: [],
               },
+              // {
+              //   label: "e-Bupot",
+              //   submenu: [
+              //     "BPPU",
+              //     "BPNR",
+              //     "Penyetoran Sendiri",
+              //     "Pemotongan Secara Digunggung",
+              //     "BP 21 - Bukti Pemotongan Selain Pegawai Tetap",
+              //     "BP 26 - Bukti Pemotongan Wajib Pajak Luar Negeri",
+              //     "BP A1 - Bukti Pemotongan A1 Masa Pajak Terakhir",
+              //     "BP A2 - Bukti Pemotongan A1 Masa Pajak Terakhir",
+              //     "Bukti Pemotongan Bulanan Pegawai Tetap",
+              //     "Unggah Dokumen Yang Dipersamakan dengan Bukti Pemotongan/Pemungutan",
+              //   ],
+              // },
               {
                 label: "e-Bupot",
                 submenu: [
-                  "BPPU",
-                  "BPNR",
-                  "Penyetoran Sendiri",
-                  "Pemotongan Secara Digunggung",
-                  "BP 21 - Bukti Pemotongan Selain Pegawai Tetap",
-                  "BP 26 - Bukti Pemotongan Wajib Pajak Luar Negeri",
-                  "BP A1 - Bukti Pemotongan A1 Masa Pajak Terakhir",
-                  "BP A2 - Bukti Pemotongan A1 Masa Pajak Terakhir",
-                  "Bukti Pemotongan Bulanan Pegawai Tetap",
-                  "Unggah Dokumen Yang Dipersamakan dengan Bukti Pemotongan/Pemungutan",
+                  {
+                    label: "BPPU",
+                    links: `/praktikum/${id}/sistem/${akun}/bupot/bppu`
+                  },
+                  {
+                    label: "BPNR",
+                    links: `/praktikum/${id}/sistem/${akun}/bupot/bpnr`
+                  },
+                  {
+                    label: "Penyetoran Sendiri",
+                    links: `/praktikum/${id}/sistem/${akun}/bupot/ps`
+                  },
+                  {
+                    label: "Pemotongan Secara Digunggung",
+                    links: `/praktikum/${id}/sistem/${akun}/bupot/psd`
+                  },
+                  {
+                    label: "BP 21 - Bukti Pemotongan Selain Pegawai Tetap",
+                    links: `/praktikum/${id}/sistem/${akun}/bupot/bp21`
+                  },
+                  {
+                    label: "BP 26 - Bukti Pemotongan Wajib Pajak Luar Negeri",
+                    links: `/praktikum/${id}/sistem/${akun}/bupot/bp26`
+                  },
+                  {
+                    label: "BP A1 - Bukti Pemotongan A1 Masa Pajak Terakhir",
+                    links: `/praktikum/${id}/sistem/${akun}/bupot/bpa1`
+                  },
+                  {
+                    label: "BP A2 - Bukti Pemotongan A1 Masa Pajak Terakhir",
+                    links: `/praktikum/${id}/sistem/${akun}/bupot/bpa2`
+                  },
+                  {
+                    label: "Bukti Pemotongan Bulanan Pegawai Tetap",
+                    links: `/praktikum/${id}/sistem/${akun}/bupot/bpbpt`
+                  },
+                  {
+                    label: "Unggah Dokumen Yang Dipersamakan dengan Bukti Pemotongan/Pemungutan",
+                    links: `/praktikum/${id}/sistem/${akun}/bupot/dsbp`
+                  },
                 ],
               },
               {

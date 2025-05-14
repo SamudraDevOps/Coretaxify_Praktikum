@@ -147,6 +147,10 @@ import { useParams } from "react-router";
 import { RoutesApi } from "@/Routes";
 import EditFakturKeluaran from "./components/PraktikumPage/Badan/EFaktur/EditFakturKeluaran";
 
+// BUPOT PRAKTIKUM
+import BUPOTWrapper from "./components/PraktikumPage/Badan/BUPOT/BUPOTWrapper";
+import BUPOTCreateWrapper from "./components/PraktikumPage/Badan/BUPOT/BUPOTCreateWrapper";
+
 const Main = () => {
   const [loading, setLoading] = useState(true);
   const [cookies, setCookie] = useCookies(["token, role"]);
@@ -237,7 +241,10 @@ const Main = () => {
           <Route path="/admin/edit-dosen" element={<EditDosen />} />
           <Route path="/admin/upload-soal" element={<UploadSoal />} />
           <Route path="/admin/praktikum" element={<AdminPraktikum />} />
-          <Route path="/admin/praktikum/:assignmentId/members" element={<AdminPraktikumMember />} />
+          <Route
+            path="/admin/praktikum/:assignmentId/members"
+            element={<AdminPraktikumMember />}
+          />
           <Route
             path="/admin/coretaxify/coretaxify-send"
             element={<CoretaxifySendDetail />}
@@ -254,17 +261,36 @@ const Main = () => {
         </Route>
 
         {/* DOSEN ROUTE */}
-        <Route element={ <RoleProtectedRoutes allowedRoles={["dosen"]} layout="admin" /> } >
+        <Route
+          element={
+            <RoleProtectedRoutes allowedRoles={["dosen"]} layout="admin" />
+          }
+        >
           <Route path="/dosen" element={<DashboardDosen />} />
           <Route path="/dosen/kelas" element={<DosenKelas />} />
-          <Route path="/dosen/kelas/praktikum/:id" element={<DosenPraktikumKelas />} />
-          <Route path="/dosen/kelas/:id/praktikum/:idpraktikum" element={<DosenPraktikumKelasMember />} />
+          <Route
+            path="/dosen/kelas/praktikum/:id"
+            element={<DosenPraktikumKelas />}
+          />
+          <Route
+            path="/dosen/kelas/:id/praktikum/:idpraktikum"
+            element={<DosenPraktikumKelasMember />}
+          />
           <Route path="/dosen/praktikum" element={<Praktikum />} />
           <Route path="/dosen/penilaian" element={<PenilaianDosen />} />
-          <Route path="/dosen/penilaian/detail-tugas" element={<DetailTugasPenilaianDosen />} />
-          <Route path="/dosen/penilaian/detail-tugas/detail-penilaian" element={<DetailPenilaian />} />
+          <Route
+            path="/dosen/penilaian/detail-tugas"
+            element={<DetailTugasPenilaianDosen />}
+          />
+          <Route
+            path="/dosen/penilaian/detail-tugas/detail-penilaian"
+            element={<DetailPenilaian />}
+          />
           <Route path="/dosen/ujian" element={<UjianDosen />} />
-          <Route path="/dosen/ujian/:examId/members" element={<UjianDosenMember />} />
+          <Route
+            path="/dosen/ujian/:examId/members"
+            element={<UjianDosenMember />}
+          />
         </Route>
 
         {/* MAHASISWA ROUTE */}
@@ -795,6 +821,52 @@ const Main = () => {
                 Badan={PajakMasukan}
                 query={"edit-info"}
               ></RoleBasedRenderer>
+            </>
+          }
+        />
+
+        <Route
+          path="/praktikum/:id/sistem/:akun/bupot/:type"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/bupot`}
+                OrangPribadi={null}
+                Badan={BUPOTWrapper}
+                intent={"dynamic"}
+                query={"bupot"}
+              ></RoleBasedRenderer>
+            </>
+          }
+        />
+
+        <Route
+          path="/praktikum/:id/sistem/:akun/bupot/:type/:status"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/bupot`}
+                OrangPribadi={null}
+                Badan={BUPOTWrapper}
+                intent={"dynamic"}
+                query={"bupot"}
+              />
+            </>
+          }
+        />
+
+        {/* BUPOT Creation Routes */}
+        <Route
+          path="/praktikum/:id/sistem/:akun/bupot/:type/create"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/bupot`}
+                OrangPribadi={null}
+                Badan={BUPOTCreateWrapper}
+                intent={"dynamic"}
+                query={"bupot-create"}
+              />
             </>
           }
         />
