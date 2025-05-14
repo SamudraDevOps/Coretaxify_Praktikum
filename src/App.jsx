@@ -128,6 +128,9 @@ import CreateBppu from "./components/PraktikumPage/Badan/BUPOT/BPPU/CreateBppu";
 import BppuTelahTerbit from "./components/PraktikumPage/Badan/BUPOT/BPPU/BppuTelahTerbit";
 import BppuTidakValid from "./components/PraktikumPage/Badan/BUPOT/BPPU/BppuTidakValid";
 import BpnrBelumTerbit from "./components/PraktikumPage/Badan/BUPOT/BPNR/BpnrBelumTerbit";
+import CreateBpnr from "./components/PraktikumPage/Badan/BUPOT/BPNR/CreateBpnr";
+import BpnrTelahTerbit from "./components/PraktikumPage/Badan/BUPOT/BPNR/BpnrTelahTerbit";
+import BpnrTidakValid from "./components/PraktikumPage/Badan/BUPOT/BPNR/BpnrTidakValid";
 // Route Badan
 
 import ProtectedRoutes from "./components/Dashboard/Auth/ProtectedRoutes";
@@ -1101,6 +1104,33 @@ const Main = () => {
             <>
               <Header />
               <BpnrBelumTerbit />
+            </>
+          }
+        />
+        <Route
+          path="/admin/praktikum/2/bpnr/tambah-bpnr"
+          element={
+            <>
+              <Header />
+              <CreateBpnr />
+            </>
+          }
+        />
+        <Route
+          path="/admin/praktikum/2/bpnr/telah-terbit"
+          element={
+            <>
+              <Header />
+              <BpnrTelahTerbit />
+            </>
+          }
+        />
+        <Route
+          path="/admin/praktikum/2/bpnr/tidak-valid"
+          element={
+            <>
+              <Header />
+              <BpnrTidakValid />
             </>
           }
         />
