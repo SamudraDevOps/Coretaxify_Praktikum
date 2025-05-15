@@ -831,7 +831,7 @@ const Main = () => {
             <>
               <RoleBasedRenderer
                 url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/bupot`}
-                OrangPribadi={null}
+                OrangPribadi={BUPOTWrapper}
                 Badan={BUPOTWrapper}
                 intent={"dynamic"}
                 query={"bupot"}
@@ -846,7 +846,7 @@ const Main = () => {
             <>
               <RoleBasedRenderer
                 url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/bupot`}
-                OrangPribadi={null}
+                OrangPribadi={BUPOTWrapper}
                 Badan={BUPOTWrapper}
                 intent={"dynamic"}
                 query={"bupot"}
@@ -862,7 +862,7 @@ const Main = () => {
             <>
               <RoleBasedRenderer
                 url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/bupot`}
-                OrangPribadi={null}
+                OrangPribadi={BUPOTCreateWrapper}
                 Badan={BUPOTCreateWrapper}
                 intent={"dynamic"}
                 query={"bupot-create"}
