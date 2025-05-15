@@ -6,8 +6,8 @@ const BUPOTActionBar = ({ type, status, title, showCreateButton = true }) => {
 
   // Map types to their creation routes
   const createPaths = {
-    bppu: `/praktikum/${id}/sistem/${akun}/bppu/tambah-bppu`,
-    bpnr: `/praktikum/${id}/sistem/${akun}/bpnr/tambah-bpnr`,
+    bppu: `/praktikum/${id}/sistem/${akun}/bupot/bppu/create`,
+    bpnr: `/praktikum/${id}/sistem/${akun}/bupot/bpnr/create`,
     "bukti-pemotongan-bulanan-pegawai-tetap": `/praktikum/${id}/sistem/${akun}/bukti-pemotongan-bulanan-pegawai-tetap/tambah-bukti-pemotongan-bulanan-pegawai-tetap`,
   };
 
