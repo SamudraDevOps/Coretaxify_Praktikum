@@ -414,7 +414,7 @@ const Header = () => {
                     links: `/praktikum/${id}/sistem/${akun}/bupot/bpa1`
                   },
                   {
-                    label: "BP A2 - Bukti Pemotongan A1 Masa Pajak Terakhir",
+                    label: "BP A2 - Bukti Pemotongan A2 Masa Pajak Terakhir",
                     links: `/praktikum/${id}/sistem/${akun}/bupot/bpa2`
                   },
                   {
