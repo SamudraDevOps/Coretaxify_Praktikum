@@ -26,9 +26,9 @@ const BUPOTRenderer = ({
 
   // Determine which status we're viewing
   const getStatus = () => {
-    if (location.pathname.includes("/telah-terbit")) return "telahTerbit";
-    if (location.pathname.includes("/tidak-valid")) return "tidakValid";
-    return "belumTerbit";
+    if (location.pathname.includes("/telah-terbit")) return "published";
+    if (location.pathname.includes("/tidak-valid")) return "invalid";
+    return "draft";
   };
 
   const currentStatus = getStatus();
