@@ -10,6 +10,8 @@ import { getCsrf } from "@/service/getCsrf";
 import { RoutesApi } from "@/Routes";
 import { useCookies } from "react-cookie";
 import { useUserType } from "@/components/context/userTypeContext";
+import { useNavigate } from "react-router-dom";
+import { useNavigateWithParams } from "@/hooks/useNavigateWithParams";
 
 const PajakKeluaran = ({
   data,
@@ -26,6 +28,7 @@ const PajakKeluaran = ({
   // return axios.post(
   //   `${RoutesApiReal.url}api/student/assignments/${id}/sistem/${accountId}/faktur`,
   //   data,
+  const navigate = useNavigateWithParams();
 
   const deleteFaktur = useMutation({
     mutationFn: async (fakturId) => {
@@ -211,11 +214,16 @@ const PajakKeluaran = ({
             {/* {item && ( */}
             <button
               className="flex items-center bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded text-sm"
-              onClick={
-                () =>
-                  (window.location.href = `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran/tambah-faktur-keluaran`)
-                // (window.location.href =
-                //   "/admin/praktikum/2/e-faktur/pajak-keluaran/tambah-faktur-keluaran")
+              // onClick={
+              //   () =>
+              //     (window.location.href = `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran/tambah-faktur-keluaran`)
+              //   // (window.location.href =
+              //   //   "/admin/praktikum/2/e-faktur/pajak-keluaran/tambah-faktur-keluaran")
+              // }
+              onClick={() =>
+                navigate(
+                  `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran/tambah-faktur-keluaran`
+                )
               }
             >
               Tambah
