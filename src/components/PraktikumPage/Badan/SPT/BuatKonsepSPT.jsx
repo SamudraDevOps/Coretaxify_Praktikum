@@ -20,7 +20,7 @@ const BuatKonsepSPT = () => {
         { label: "PPn", value: "ppn" },
         { label: "PPh Pasal 21/26", value: "pasal" },
         { label: "PPh Unifikasi", value: "unifikasi" },
-        { label: "PPh Badan", value: "Badan" },
+        { label: "PPh Badan", value: "badan" },
     ];
 
     const handleNext = () => {
@@ -46,120 +46,119 @@ const BuatKonsepSPT = () => {
     };
 
     const getSelectedPeriod = () => {
-        if (selectedType === "ppn" && selectedMonth && selectedYear) {
+        if (["ppn", "pasal", "unifikasi"].includes(selectedType) && selectedMonth && selectedYear) {
             return `${selectedMonth}-${selectedYear}`;
+        }
+        if (selectedType === "badan" && selectedYear) {
+            return selectedYear;
         }
         return null;
     };
 
+    const renderMonthYearForm = (label) => (
+        <>
+            <label className="block text-normal font-medium text-gray-700">
+                {label} <span className="text-red-500">*</span>
+            </label>
+            <div className="flex gap-2">
+                <div className='w-40'>
+                    <label className="block text-normal font-medium text-gray-700">
+                        Bulan <span className="text-red-500">*</span>
+                    </label>
+                    <select
+                        value={selectedMonth}
+                        onChange={(e) => setSelectedMonth(e.target.value)}
+                        className="w-40 border rounded px-4 py-2 focus:outline-none focus:ring-1 focus:ring-yellow-500 border-gray-300 "
+                    >
+                        <option value="">Pilih Bulan</option>
+                        <option value="01">Januari</option>
+                        <option value="02">Februari</option>
+                        <option value="03">Maret</option>
+                        <option value="04">April</option>
+                        <option value="05">Mei</option>
+                        <option value="06">Juni</option>
+                        <option value="07">Juli</option>
+                        <option value="08">Agustus</option>
+                        <option value="09">September</option>
+                        <option value="10">Oktober</option>
+                        <option value="11">November</option>
+                        <option value="12">Desember</option>
+                    </select>
+                </div>
+                <div className='w-40'>
+                    <label className="block text-normal font-medium text-gray-700">
+                        Tahun <span className="text-red-500">*</span>
+                    </label>
+                    <Popover>
+                        <PopoverTrigger asChild>
+                            <Button className="w-40 bg-white hover:bg-white text-black border rounded px-4 py-2 focus:outline-none focus:ring-1 focus:ring-yellow-500 border-gray-300">
+                                {selectedYear || "Pilih Tahun"}
+                            </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-48">
+                            <DatePicker
+                                selected={selectedYear ? new Date(parseInt(selectedYear), 0) : null}
+                                onChange={(date) => setSelectedYear(date.getFullYear().toString())}
+                                showYearPicker
+                                dateFormat="yyyy"
+                                className="w-full"
+                            />
+                        </PopoverContent>
+                    </Popover>
+                </div>
+            </div>
+        </>
+    );
+
     const renderStep2Form = () => {
         switch (selectedType) {
             case "ppn":
-                return (
-                    <>
-                        <label className="block text-normal font-medium text-gray-700">
-                            Periode dan Tahun Pajak <span className="text-red-500">*</span>
-                        </label>
-                        <div className="flex gap-2">
-                            <div className='w-40'>
-                                <label className="block text-normal font-medium text-gray-700">
-                                    Bulan <span className="text-red-500">*</span>
-                                </label>
-                                <select
-                                    value={selectedMonth}
-                                    onChange={(e) => setSelectedMonth(e.target.value)}
-                                    className="w-40 border rounded px-4 py-2 focus:outline-none focus:ring-1 focus:ring-yellow-500 border-gray-300 "
-                                >
-                                    <option value="">Pilih Bulan</option>
-                                    <option value="01">Januari</option>
-                                    <option value="02">Februari</option>
-                                    <option value="03">Maret</option>
-                                    <option value="04">April</option>
-                                    <option value="05">Mei</option>
-                                    <option value="06">Juni</option>
-                                    <option value="07">Juli</option>
-                                    <option value="08">Agustus</option>
-                                    <option value="09">September</option>
-                                    <option value="10">Oktober</option>
-                                    <option value="11">November</option>
-                                    <option value="12">Desember</option>
-                                </select>
-                            </div>
-                            <div className='w-40'>
-                                <label className="block text-normal font-medium text-gray-700">
-                                    Tahun <span className="text-red-500">*</span>
-                                </label>
-                                <Popover>
-                                    <PopoverTrigger asChild>
-                                        <Button className="w-40 bg-white hover:bg-white text-black border rounded px-4 py-2 focus:outline-none focus:ring-1 focus:ring-yellow-500 border-gray-300">
-                                            {selectedYear || "Pilih Tahun"}
-                                        </Button>
-                                    </PopoverTrigger>
-                                    <PopoverContent className="w-48">
-                                        <DatePicker
-                                            selected={selectedYear ? new Date(parseInt(selectedYear), 0) : null}
-                                            onChange={(date) => setSelectedYear(date.getFullYear().toString())}
-                                            showYearPicker
-                                            dateFormat="yyyy"
-                                            className="w-full"
-                                        />
-                                    </PopoverContent>
-                                </Popover>
-                            </div>
-                        </div>
-                    </>
-                );
+                return renderMonthYearForm("Periode dan Tahun Pajak");
             case "pasal":
-                return (
-                    <>
-                        <label className="block text-sm font-medium text-gray-700">
-                            Masa Pajak PPh Pasal 21/26
-                        </label>
-                        <select
-                            value={getSelectedPeriod()}
-                            onChange={(e) => setSelectedMonth(e.target.value)}
-                            className="w-full border rounded px-4 py-2 border-gray-300"
-                        >
-                            <option value="">Pilih Masa Pajak</option>
-                            <option value="jan-2025">Januari 2025</option>
-                        </select>
-                    </>
-                );
+                return renderMonthYearForm("Masa Pajak PPh Pasal 21/26");
             case "unifikasi":
+                return renderMonthYearForm("Periode Unifikasi Pajak");
+            case "badan":
                 return (
                     <>
                         <label className="block text-sm font-medium text-gray-700">
-                            Periode Unifikasi Pajak
+                            Tahun Pajak untuk PPh Badan <span className="text-red-500">*</span>
                         </label>
-                        <select
-                            value={getSelectedPeriod()}
-                            onChange={(e) => setSelectedMonth(e.target.value)}
-                            className="w-full border rounded px-4 py-2 border-gray-300"
-                        >
-                            <option value="">Pilih Periode</option>
-                            <option value="2025-Q1">Q1 2025</option>
-                        </select>
-                    </>
-                );
-            case "Badan":
-                return (
-                    <>
-                        <label className="block text-sm font-medium text-gray-700">
-                            Tahun Pajak untuk PPh Badan
-                        </label>
-                        <select
-                            value={getSelectedPeriod()}
-                            onChange={(e) => setSelectedMonth(e.target.value)}
-                            className="w-full border rounded px-4 py-2 border-gray-300"
-                        >
-                            <option value="">Pilih Tahun</option>
-                            <option value="2024">2024</option>
-                            <option value="2023">2023</option>
-                        </select>
+                        <Popover>
+                            <PopoverTrigger asChild>
+                                <Button className="w-40 bg-white hover:bg-white text-black border rounded px-4 py-2 focus:outline-none focus:ring-1 focus:ring-yellow-500 border-gray-300">
+                                    {selectedYear || "Pilih Tahun"}
+                                </Button>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-48">
+                                <DatePicker
+                                    selected={selectedYear ? new Date(parseInt(selectedYear), 0) : null}
+                                    onChange={(date) => setSelectedYear(date.getFullYear().toString())}
+                                    showYearPicker
+                                    dateFormat="yyyy"
+                                    className="w-full"
+                                />
+                            </PopoverContent>
+                        </Popover>
                     </>
                 );
             default:
                 return null;
+        }
+    };
+
+    const getRedirectUrl = () => {
+        switch (selectedType) {
+            case "ppn":
+                return "/admin/praktikum/2/surat-pemberitahuan-(spt)/tambah-konsep-spt";
+            case "pasal":
+                return "/admin/praktikum/2/surat-pemberitahuan-(spt)/tambah-konsep-spt-pasal";
+            case "unifikasi":
+                return "/admin/praktikum/2/surat-pemberitahuan-(spt)/tambah-konsep-spt-unifikasi";
+            case "badan":
+                return "/admin/praktikum/2/surat-pemberitahuan-(spt)/tambah-konsep-spt-badan";
+            default:
+                return "/admin/praktikum/2/surat-pemberitahuan-(spt)/tambah-konsep-spt";
         }
     };
 
@@ -322,7 +321,7 @@ const BuatKonsepSPT = () => {
                                 <Button
                                     disabled={!selectedModelSPT}
                                     className={cn("w-full md:w-auto", selectedModelSPT ? "bg-yellow-400 hover:bg-yellow-500" : "bg-gray-300 text-white cursor-not-allowed text-normal")}
-                                    onClick={() => window.location.href = '/admin/praktikum/2/surat-pemberitahuan-(spt)/tambah-konsep-spt'}
+                                    onClick={() => window.location.href = getRedirectUrl()}
                                 >
                                     Buat Konsep SPT
                                 </Button>

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FaCalendarAlt, FaFilter, FaSearch, FaTimes, FaChevronDown, FaChevronUp } from "react-icons/fa";
 
-
 const CreateKonsepSPT = () => {
     const [activeTab, setActiveTab] = useState("induk");
     const [showHeaderInduk, setShowHeaderInduk] = useState(false);

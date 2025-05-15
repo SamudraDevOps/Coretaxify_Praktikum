@@ -119,6 +119,7 @@ import PajakMasukan from "./components/PraktikumPage/Badan/EFaktur/PajakMasukan"
 import KonsepSPT from "./components/PraktikumPage/Badan/SPT/KonsepSPT";
 import BuatKonsepSPT from "./components/PraktikumPage/Badan/SPT/BuatKonsepSPT";
 import CreateKonsepSPT from "./components/PraktikumPage/Badan/SPT/CreateKonsepSPT";
+import CreateKonsepPasal from "./components/PraktikumPage/Badan/SPT/CreateKonsepPasal";
 import BupotBulananPegawaiTetap from "./components/PraktikumPage/Badan/BUPOT/BupotBulananPegawaiTetap";
 import BupotBulananPegawaiTetapTelahTerbit from "./components/PraktikumPage/Badan/BUPOT/BupotBulananPegawaiTetapTelahTerbit";
 import BupotBulananPegawaiTetapTidakValid from "./components/PraktikumPage/Badan/BUPOT/BupotBulananPegawaiTetapTidakValid";
@@ -1062,6 +1063,15 @@ const Main = () => {
             </>
           }
         />
+          <Route
+            path="admin/praktikum/2/surat-pemberitahuan-(spt)/tambah-konsep-spt-pasal"
+            element={
+              <>
+                <Header />
+                <CreateKonsepPasal />
+              </>
+            }
+          />
         <Route
           path="/admin/praktikum/2/bppu"
           element={
