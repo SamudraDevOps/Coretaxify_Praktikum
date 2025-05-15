@@ -26,7 +26,67 @@ const typeConfigs = {
     intent: "api.bupot.bpnr",
     showIntent: "api.bupot.bpnr.show",
   },
-  "bukti-pemotongan-bulanan-pegawai-tetap": {
+  ps: {
+    titles: {
+      belumTerbit: "EBUPOT SP NOT ISSUED",
+      telahTerbit: "EBUPOT SP ISSUED",
+      tidakValid: "EBUPOT SP INVALID",
+      sidebar: "Penyetoran Sendiri",
+    },
+    intent: "api.bupot.ps",
+    showIntent: "api.bupot.ps.show",
+  },
+  psd: {
+    titles: {
+      belumTerbit: "EBUPOT CY NOT ISSUED",
+      telahTerbit: "EBUPOT CY ISSUED",
+      tidakValid: "EBUPOT CY INVALID",
+      sidebar: "Pemotongan Secara Digunggung",
+    },
+    intent: "api.bupot.psd",
+    showIntent: "api.bupot.psd.show",
+  },
+  bp21: {
+    titles: {
+      belumTerbit: "EBUPOT BP21 NOT ISSUED",
+      telahTerbit: "EBUPOT BP21 ISSUED",
+      tidakValid: "EBUPOT BP21 INVALID",
+      sidebar: "BP 21 - Bukti Pemotongan Selain Pegawai Tetap",
+    },
+    intent: "api.bupot.bp21",
+    showIntent: "api.bupot.bp21.show",
+  },
+  bp26: {
+    titles: {
+      belumTerbit: "EBUPOT BP26 NOT ISSUED",
+      telahTerbit: "EBUPOT BP26 ISSUED",
+      tidakValid: "EBUPOT BP26 INVALID",
+      sidebar: "BP 26 - Bukti Pemotongan Wajib Pajak Luar Negeri",
+    },
+    intent: "api.bupot.bp26",
+    showIntent: "api.bupot.bp26.show",
+  },
+  bpa1: {
+    titles: {
+      belumTerbit: "EBUPOT BPA1 NOT ISSUED",
+      telahTerbit: "EBUPOT BPA1 ISSUED",
+      tidakValid: "EBUPOT BPA1 INVALID",
+      sidebar: "BP A1 - Bukti Pemotongan A1 Masa Pajak Terakhir",
+    },
+    intent: "api.bupot.bpa1",
+    showIntent: "api.bupot.bpa1.show",
+  },
+  bpa2: {
+    titles: {
+      belumTerbit: "EBUPOT BPA2 NOT ISSUED",
+      telahTerbit: "EBUPOT BPA2 ISSUED",
+      tidakValid: "EBUPOT BPA2 INVALID",
+      sidebar: "BP A2 - Bukti Pemotongan A2 Masa Pajak Terakhir",
+    },
+    intent: "api.bupot.bpa2",
+    showIntent: "api.bupot.bpa2.show",
+  },
+  bpbpt: {
     titles: {
       belumTerbit: "EBUPOT MP NOT ISSUED",
       telahTerbit: "EBUPOT MP ISSUED",
