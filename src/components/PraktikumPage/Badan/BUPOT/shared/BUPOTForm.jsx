@@ -9,6 +9,7 @@ import {
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Button } from "@/components/ui/button";
+import BUPOTSidebar from "./BUPOTSidebar"; // Assuming you have a sidebar component
 
 const BUPOTForm = ({
   type,
@@ -56,6 +57,13 @@ const BUPOTForm = ({
 
   return (
     <div className="flex h-screen bg-gray-100">
+      {/* Include Sidebar */}
+      <BUPOTSidebar
+        type={type}
+        title={sidebarTitle || `${type.toUpperCase()}`}
+        activePath="create" // Mark create as active
+      />
+
       <div className="flex-auto p-3 bg-white rounded-md h-full">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-3xl font-light text-yellow-500 mt-4">
