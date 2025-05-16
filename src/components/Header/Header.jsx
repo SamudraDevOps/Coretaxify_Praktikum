@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Bell,
   UserCircle,
@@ -43,7 +43,28 @@ const Header = () => {
     removeCookie("role", { path: "/" });
     window.location.href = "/login";
   };
+  const buttonRefs = useRef([]);
+  const dropdownRefs = useRef([]);
 
+  useEffect(() => {
+    function handleClickOutside(event) {
+      const isClickInsideAnyButton = buttonRefs.current.some(
+        (ref) => ref && ref.contains(event.target)
+      );
+
+      const isClickInsideAnyDropdown = dropdownRefs.current.some(
+        (ref) => ref && ref.contains(event.target)
+      );
+
+      // If clicked outside all buttons and dropdowns, close all
+      if (!isClickInsideAnyButton && !isClickInsideAnyDropdown) {
+        setDropdownOpen(null);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
   const { isLoading, isError, data, error, refetch } = useQuery({
     queryKey: ["getaccount", id],
     queryFn: async () => {
@@ -436,6 +457,7 @@ const Header = () => {
               <li key={index} className="relative">
                 {item.submenu.length > 0 ? (
                   <button
+                    ref={(el) => (buttonRefs.current[index] = el)}
                     className="px-4 py-2 flex items-center hover:bg-yellow-500 hover:text-white rounded-md"
                     onClick={() => toggleDropdown(item.label)}
                   >
@@ -450,7 +472,10 @@ const Header = () => {
                   </button>
                 )}
                 {item.submenu.length > 0 && dropdownOpen === item.label && (
-                  <ul className="absolute left-0 mt-3 min-w-max bg-blue-900 text-white shadow-md rounded-md">
+                  <ul
+                    ref={(el) => (dropdownRefs.current[index] = el)}
+                    className="absolute left-0 mt-3 min-w-max bg-blue-900 text-white shadow-md rounded-md"
+                  >
                     {item.submenu.map((sub, subIndex) => (
                       <li
                         key={subIndex}
