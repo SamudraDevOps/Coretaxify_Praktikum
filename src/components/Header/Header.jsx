@@ -200,6 +200,7 @@ const Header = () => {
       </div>
     );
   }
+  console.log(data);
 
   return (
     <div className="w-full">
@@ -280,20 +281,47 @@ const Header = () => {
             {/* Dropdown menu */}
             {isDropdownOpen && (
               <ul className="absolute right-14 top-14 mt-2 w-64 bg-white border rounded-md shadow-lg py-1 px-2">
-                {data.map((item) => (
-                  <li
-                    key={item.id}
-                    className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
-                    onClick={() => {
-                      // When switching accounts, remove viewAs parameter and navigate
-                      const newPath = `/praktikum/${id}/sistem/${item.id}/profil-saya`;
-                      navigate(newPath);
-                      setIsDropdownOpen(false);
-                    }}
-                  >
-                    {item.nama_akun}
-                  </li>
-                ))}
+                <li className="px-4 py-1 mt-2 text-gray-500 text-sm font-semibold border-b">
+                  Orang Pribadi
+                </li>
+                {data
+                  .filter((item) => item.tipe_akun !== "Badan")
+                  .map((item) => (
+                    <li
+                      key={item.id}
+                      className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
+                      onClick={() => {
+                        // When switching accounts, remove viewAs parameter and navigate
+                        const newPath = `/praktikum/${id}/sistem/${item.id}/profil-saya`;
+                        navigate(newPath);
+                        setIsDropdownOpen(false);
+                      }}
+                    >
+                      {item.nama_akun}
+                    </li>
+                  ))}
+                {/* Badan accounts section */}
+                <li className="px-4 py-1 text-gray-500 text-sm font-semibold border-b">
+                  Badan
+                </li>
+                {data
+                  .filter((item) => item.tipe_akun === "Badan")
+                  .map((item) => (
+                    <li
+                      key={item.id}
+                      className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
+                      onClick={() => {
+                        // When switching accounts, remove viewAs parameter and navigate
+                        const newPath = `/praktikum/${id}/sistem/${item.id}/profil-saya`;
+                        navigate(newPath);
+                        setIsDropdownOpen(false);
+                      }}
+                    >
+                      {item.nama_akun}
+                    </li>
+                  ))}
+
+                {/* Non-Badan accounts section */}
               </ul>
             )}
           </div>
