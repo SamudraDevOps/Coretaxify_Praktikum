@@ -387,43 +387,44 @@ const Header = () => {
                 submenu: [
                   {
                     label: "BPPU",
-                    links: `/praktikum/${id}/sistem/${akun}/bupot/bppu`
+                    links: `/praktikum/${id}/sistem/${akun}/bupot/bppu`,
                   },
                   {
                     label: "BPNR",
-                    links: `/praktikum/${id}/sistem/${akun}/bupot/bpnr`
+                    links: `/praktikum/${id}/sistem/${akun}/bupot/bpnr`,
                   },
                   {
                     label: "Penyetoran Sendiri",
-                    links: `/praktikum/${id}/sistem/${akun}/bupot/ps`
+                    links: `/praktikum/${id}/sistem/${akun}/bupot/ps`,
                   },
                   {
                     label: "Pemotongan Secara Digunggung",
-                    links: `/praktikum/${id}/sistem/${akun}/bupot/psd`
+                    links: `/praktikum/${id}/sistem/${akun}/bupot/psd`,
                   },
                   {
                     label: "BP 21 - Bukti Pemotongan Selain Pegawai Tetap",
-                    links: `/praktikum/${id}/sistem/${akun}/bupot/bp21`
+                    links: `/praktikum/${id}/sistem/${akun}/bupot/bp21`,
                   },
                   {
                     label: "BP 26 - Bukti Pemotongan Wajib Pajak Luar Negeri",
-                    links: `/praktikum/${id}/sistem/${akun}/bupot/bp26`
+                    links: `/praktikum/${id}/sistem/${akun}/bupot/bp26`,
                   },
                   {
                     label: "BP A1 - Bukti Pemotongan A1 Masa Pajak Terakhir",
-                    links: `/praktikum/${id}/sistem/${akun}/bupot/bpa1`
+                    links: `/praktikum/${id}/sistem/${akun}/bupot/bpa1`,
                   },
                   {
                     label: "BP A2 - Bukti Pemotongan A2 Masa Pajak Terakhir",
-                    links: `/praktikum/${id}/sistem/${akun}/bupot/bpa2`
+                    links: `/praktikum/${id}/sistem/${akun}/bupot/bpa2`,
                   },
                   {
                     label: "Bukti Pemotongan Bulanan Pegawai Tetap",
-                    links: `/praktikum/${id}/sistem/${akun}/bupot/bpbpt`
+                    links: `/praktikum/${id}/sistem/${akun}/bupot/bpbpt`,
                   },
                   {
-                    label: "Unggah Dokumen Yang Dipersamakan dengan Bukti Pemotongan/Pemungutan",
-                    links: `/praktikum/${id}/sistem/${akun}/bupot/dsbp`
+                    label:
+                      "Unggah Dokumen Yang Dipersamakan dengan Bukti Pemotongan/Pemungutan",
+                    links: `/praktikum/${id}/sistem/${akun}/bupot/dsbp`,
                   },
                 ],
               },
@@ -450,12 +451,13 @@ const Header = () => {
               },
               { label: "Buku Besar", submenu: [] },
             ].map((item, index) => (
-              <li key={index} className="relative">
+              <li
+                key={index}
+                className="relative"
+                onClick={() => toggleDropdown(item.label)}
+              >
                 {item.submenu.length > 0 ? (
-                  <button
-                    className="px-4 py-2 flex items-center hover:bg-yellow-500 hover:text-white rounded-md"
-                    onClick={() => toggleDropdown(item.label)}
-                  >
+                  <button className="px-4 py-2 flex items-center hover:bg-yellow-500 hover:text-white rounded-md">
                     {item.label} <ChevronDown className="w-4 h-4 ml-2" />
                   </button>
                 ) : (
@@ -472,23 +474,19 @@ const Header = () => {
                       <li
                         key={subIndex}
                         className="relative px-4 py-4 hover:bg-yellow-500 cursor-pointer whitespace-nowrap"
+                        onClick={() => {
+                          const newPath = sub.links;
+                          if (viewAsCompanyId) {
+                            navigate(`${newPath}?viewAs=${viewAsCompanyId}`);
+                          } else {
+                            navigate(newPath);
+                          }
+                        }}
                       >
                         {typeof sub === "string" ? (
                           <button onClick={() => navigateTo(sub)}>{sub}</button>
                         ) : sub.links ? (
-                          <button
-                            className="w-full text-left"
-                            onClick={() => {
-                              const newPath = sub.links;
-                              if (viewAsCompanyId) {
-                                navigate(
-                                  `${newPath}?viewAs=${viewAsCompanyId}`
-                                );
-                              } else {
-                                navigate(newPath);
-                              }
-                            }}
-                          >
+                          <button className="w-full text-left">
                             {sub.label}
                           </button>
                         ) : (
