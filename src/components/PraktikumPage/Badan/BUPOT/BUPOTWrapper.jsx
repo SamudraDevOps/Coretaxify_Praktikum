@@ -8,9 +8,9 @@ import { Cookies } from "react-cookie";
 const typeConfigs = {
   bppu: {
     titles: {
-      belumTerbit: "EBUPOT BPU NOT ISSUED",
-      telahTerbit: "EBUPOT BPU ISSUED",
-      tidakValid: "EBUPOT BPU INVALID",
+      draft: "EBUPOT BPU NOT ISSUED",
+      published: "EBUPOT BPU ISSUED",
+      invalid: "EBUPOT BPU INVALID",
       sidebar: "BPPU",
     },
     intent: "api.bupot.bppu",
@@ -18,9 +18,9 @@ const typeConfigs = {
   },
   bpnr: {
     titles: {
-      belumTerbit: "EBUPOT BPNR NOT ISSUED",
-      telahTerbit: "EBUPOT BPNR ISSUED",
-      tidakValid: "EBUPOT BPNR INVALID",
+      draft: "EBUPOT BPNR NOT ISSUED",
+      published: "EBUPOT BPNR ISSUED",
+      invalid: "EBUPOT BPNR INVALID",
       sidebar: "BPNR",
     },
     intent: "api.bupot.bpnr",
@@ -28,9 +28,9 @@ const typeConfigs = {
   },
   ps: {
     titles: {
-      belumTerbit: "EBUPOT SP NOT ISSUED",
-      telahTerbit: "EBUPOT SP ISSUED",
-      tidakValid: "EBUPOT SP INVALID",
+      draft: "EBUPOT SP NOT ISSUED",
+      published: "EBUPOT SP ISSUED",
+      invalid: "EBUPOT SP INVALID",
       sidebar: "Penyetoran Sendiri",
     },
     intent: "api.bupot.ps",
@@ -38,9 +38,9 @@ const typeConfigs = {
   },
   psd: {
     titles: {
-      belumTerbit: "EBUPOT CY NOT ISSUED",
-      telahTerbit: "EBUPOT CY ISSUED",
-      tidakValid: "EBUPOT CY INVALID",
+      draft: "EBUPOT CY NOT ISSUED",
+      published: "EBUPOT CY ISSUED",
+      invalid: "EBUPOT CY INVALID",
       sidebar: "Pemotongan Secara Digunggung",
     },
     intent: "api.bupot.psd",
@@ -48,9 +48,9 @@ const typeConfigs = {
   },
   bp21: {
     titles: {
-      belumTerbit: "EBUPOT BP21 NOT ISSUED",
-      telahTerbit: "EBUPOT BP21 ISSUED",
-      tidakValid: "EBUPOT BP21 INVALID",
+      draft: "EBUPOT BP21 NOT ISSUED",
+      published: "EBUPOT BP21 ISSUED",
+      invalid: "EBUPOT BP21 INVALID",
       sidebar: "BP 21 - Bukti Pemotongan Selain Pegawai Tetap",
     },
     intent: "api.bupot.bp21",
@@ -58,9 +58,9 @@ const typeConfigs = {
   },
   bp26: {
     titles: {
-      belumTerbit: "EBUPOT BP26 NOT ISSUED",
-      telahTerbit: "EBUPOT BP26 ISSUED",
-      tidakValid: "EBUPOT BP26 INVALID",
+      draft: "EBUPOT BP26 NOT ISSUED",
+      published: "EBUPOT BP26 ISSUED",
+      invalid: "EBUPOT BP26 INVALID",
       sidebar: "BP 26 - Bukti Pemotongan Wajib Pajak Luar Negeri",
     },
     intent: "api.bupot.bp26",
@@ -68,9 +68,9 @@ const typeConfigs = {
   },
   bpa1: {
     titles: {
-      belumTerbit: "EBUPOT BPA1 NOT ISSUED",
-      telahTerbit: "EBUPOT BPA1 ISSUED",
-      tidakValid: "EBUPOT BPA1 INVALID",
+      draft: "EBUPOT BPA1 NOT ISSUED",
+      published: "EBUPOT BPA1 ISSUED",
+      invalid: "EBUPOT BPA1 INVALID",
       sidebar: "BP A1 - Bukti Pemotongan A1 Masa Pajak Terakhir",
     },
     intent: "api.bupot.bpa1",
@@ -78,9 +78,9 @@ const typeConfigs = {
   },
   bpa2: {
     titles: {
-      belumTerbit: "EBUPOT BPA2 NOT ISSUED",
-      telahTerbit: "EBUPOT BPA2 ISSUED",
-      tidakValid: "EBUPOT BPA2 INVALID",
+      draft: "EBUPOT BPA2 NOT ISSUED",
+      published: "EBUPOT BPA2 ISSUED",
+      invalid: "EBUPOT BPA2 INVALID",
       sidebar: "BP A2 - Bukti Pemotongan A2 Masa Pajak Terakhir",
     },
     intent: "api.bupot.bpa2",
@@ -88,9 +88,9 @@ const typeConfigs = {
   },
   bpbpt: {
     titles: {
-      belumTerbit: "EBUPOT MP NOT ISSUED",
-      telahTerbit: "EBUPOT MP ISSUED",
-      tidakValid: "EBUPOT MP INVALID",
+      draft: "EBUPOT MP NOT ISSUED",
+      published: "EBUPOT MP ISSUED",
+      invalid: "EBUPOT MP INVALID",
       sidebar: "Bukti Pemotongan Bulanan Pegawai Tetap",
     },
     intent: "api.bupot.bpbpt",
@@ -141,8 +141,8 @@ const BUPOTWrapper = (props) => {
       fetchData={fetchData} // Optional custom data fetching function
       
       // You can pass custom components when needed
-      // BelumTerbit={CustomBelumTerbitComponent}
-      // TelahTerbit={CustomTelahTerbitComponent}
+      // draft={CustomdraftComponent}
+      // published={published}
       // TidakValid={CustomTidakValidComponent}
     />
   );
