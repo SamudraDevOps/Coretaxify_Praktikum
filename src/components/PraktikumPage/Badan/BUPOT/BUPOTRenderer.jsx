@@ -91,7 +91,7 @@ const BUPOTRenderer = ({
   // Determine which component to render based on status
   const renderContent = () => {
     switch (currentStatus) {
-      case "telahTerbit":
+      case "published":
         return TelahTerbit ? (
           <TelahTerbit data={bupotData?.data || []} />
         ) : (
@@ -100,12 +100,12 @@ const BUPOTRenderer = ({
             status={currentStatus}
             data={bupotData?.data || []}
             tableTitle={
-              titles.telahTerbit || `EBUPOT ${type.toUpperCase()} ISSUED`
+              titles.published || `EBUPOT ${type.toUpperCase()} ISSUED`
             }
             sidebarTitle={titles.sidebar || type.toUpperCase()}
           />
         );
-      case "tidakValid":
+      case "invalid":
         return TidakValid ? (
           <TidakValid data={bupotData?.data || []} />
         ) : (
@@ -114,7 +114,7 @@ const BUPOTRenderer = ({
             status={currentStatus}
             data={bupotData?.data || []}
             tableTitle={
-              titles.tidakValid || `EBUPOT ${type.toUpperCase()} INVALID`
+              titles.invalid || `EBUPOT ${type.toUpperCase()} INVALID`
             }
             sidebarTitle={titles.sidebar || type.toUpperCase()}
           />
