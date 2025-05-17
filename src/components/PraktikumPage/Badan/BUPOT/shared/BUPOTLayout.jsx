@@ -5,7 +5,7 @@ import BUPOTTable from "./BUPOTTable";
 
 const BUPOTLayout = ({
   type,
-  status = "belumTerbit",
+  status = "draft",
   title,
   tableTitle,
   sidebarTitle,
