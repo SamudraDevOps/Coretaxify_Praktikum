@@ -9,8 +9,13 @@ const BUPOTSidebar = ({ type, title }) => {
   const typeToPath = {
     bppu: "bppu",
     bpnr: "bpnr",
-    "bukti-pemotongan-bulanan-pegawai-tetap":
-      "bukti-pemotongan-bulanan-pegawai-tetap",
+    ps: "ps",
+    psd: "psd",
+    bp21: "bp21",
+    bp26: "bp26",
+    bpa1: "bpa1",
+    bpa2: "bpa2",
+    bpbpt: "bpbpt",
   };
 
   // Get the base path for this BUPOT type
