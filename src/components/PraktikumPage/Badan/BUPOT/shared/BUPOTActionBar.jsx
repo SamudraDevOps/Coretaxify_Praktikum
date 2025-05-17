@@ -8,11 +8,17 @@ const BUPOTActionBar = ({ type, status, title, showCreateButton = true }) => {
   const createPaths = {
     bppu: `/praktikum/${id}/sistem/${akun}/bupot/bppu/create`,
     bpnr: `/praktikum/${id}/sistem/${akun}/bupot/bpnr/create`,
-    "bukti-pemotongan-bulanan-pegawai-tetap": `/praktikum/${id}/sistem/${akun}/bukti-pemotongan-bulanan-pegawai-tetap/tambah-bukti-pemotongan-bulanan-pegawai-tetap`,
+    ps: `/praktikum/${id}/sistem/${akun}/bupot/ps/create`,
+    psd: `/praktikum/${id}/sistem/${akun}/bupot/psd/create`,
+    bp21: `/praktikum/${id}/sistem/${akun}/bupot/bp21/create`,
+    bp26: `/praktikum/${id}/sistem/${akun}/bupot/bp26/create`,
+    bpa1: `/praktikum/${id}/sistem/${akun}/bupot/bpa1/create`,
+    bpa2: `/praktikum/${id}/sistem/${akun}/bupot/bpa2/create`,
+    bpbpt: `/praktikum/${id}/sistem/${akun}/bupot/bpbpt/create`,
   };
 
   // Button config based on status
-  const showActionButtons = status === "belumTerbit";
+  const showActionButtons = status === "draft";
 
   return (
     <div className="flex justify-between items-center mb-4">
