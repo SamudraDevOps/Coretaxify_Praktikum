@@ -31,6 +31,22 @@ const BUPOTForm = ({
     perhitunganPph: false,
   });
 
+  const getBupot = () => {
+    if (location.pathname.includes("/bppu")) return "bppu";
+    if (location.pathname.includes("/bpnr")) return "bpnr";
+    if (location.pathname.includes("/ps")) return "ps";
+    if (location.pathname.includes("/psd")) return "psd";
+    if (location.pathname.includes("/bp21")) return "bp21";
+    if (location.pathname.includes("/bp26")) return "bp26";
+    if (location.pathname.includes("/bpa1")) return "bpa1";
+    if (location.pathname.includes("/bpa2")) return "bpa2";
+    if (location.pathname.includes("/bpbpt")) return "bpbpt";
+    // if (location.pathname.includes("/dsbp")) return "dsbp";
+    return "dsbp";
+  };
+
+  const currentBupot = getBupot();
+
   // Form data state
   const [formData, setFormData] = useState(initialData);
 
@@ -178,24 +194,26 @@ const BUPOTForm = ({
                 </div>
 
                 {/* NPWP */}
-                <div className="mt-4 flex justify-between gap-4">
-                  <label className="w-64 flex-none block text-sm font-medium text-gray-700">
-                    NPWP
-                    <span className="text-red-500">*</span>
-                  </label>
-                  <select
-                    className="w-64 flex-auto border p-2 rounded appearance-none"
-                    value={formData.npwp_akun || ""}
-                    onChange={(e) =>
-                      updateFormData("npwp_akun", e.target.value)
-                    }
-                    placehoder="Please Select"
-                  >
-                    <option value="">Please Select</option>
-                    <option value="NITKU1">NITKU1</option>
-                    <option value="NITKU2">NITKU2</option>
-                  </select>
-                </div>
+                {currentBupot === "bppu" || currentBupot === "bp21" && (
+                  <div className="mt-4 flex justify-between gap-4">
+                    <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                      NPWP
+                      <span className="text-red-500">*</span>
+                    </label>
+                    <select
+                      className="w-64 flex-auto border p-2 rounded appearance-none"
+                      value={formData.npwp_akun || ""}
+                      onChange={(e) =>
+                        updateFormData("npwp_akun", e.target.value)
+                      }
+                      placehoder="Please Select"
+                    >
+                      <option value="">Please Select</option>
+                      <option value="NITKU1">NITKU1</option>
+                      <option value="NITKU2">NITKU2</option>
+                    </select>
+                  </div>
+                )}
 
                 {/* Nama */}
                 <div className="mt-4 flex justify-between gap-4">
