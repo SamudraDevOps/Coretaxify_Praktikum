@@ -138,7 +138,7 @@ const BUPOTForm = ({
                 {/* Form fields for Informasi Umum */}
                 {/* Masa Awal Pajak / Masa Pajak */}
                 <div className="mt-4 flex justify-between gap-4">
-                  <label className="w-32 flex-none block text-sm font-medium text-gray-700">
+                  <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                     Masa Pajak
                     <span className="text-red-500">*</span>
                   </label>
@@ -161,7 +161,7 @@ const BUPOTForm = ({
 
                 {/* STATUS */}
                 <div className="mt-4 flex justify-between gap-4">
-                  <label className="w-32 flex-none block text-sm font-medium text-gray-700">
+                  <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                     Status
                     <span className="text-red-500">*</span>
                   </label>
@@ -181,7 +181,7 @@ const BUPOTForm = ({
 
                 {/* NPWP */}
                 <div className="mt-4 flex justify-between gap-4">
-                  <label className="w-32 flex-none block text-sm font-medium text-gray-700">
+                  <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                     NPWP
                     <span className="text-red-500">*</span>
                   </label>
@@ -201,7 +201,7 @@ const BUPOTForm = ({
 
                 {/* Nama */}
                 <div className="mt-4 flex justify-between gap-4">
-                  <label className="w-32 flex-none block text-sm font-medium text-gray-700">
+                  <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                     Nama
                     <span className="text-red-500">*</span>
                   </label>
@@ -219,7 +219,7 @@ const BUPOTForm = ({
 
                 {/* NITKU */}
                 <div className="mt-4 flex justify-between gap-4">
-                  <label className="w-32 flex-none block text-sm font-medium text-gray-700">
+                  <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                     NITKU
                     <span className="text-red-500">*</span>
                   </label>
@@ -266,7 +266,7 @@ const BUPOTForm = ({
 
                 {/* Fasilitas Pajak Yang Dimiliki oleh Penerima Penghasilan */}
                 <div className="mt-4 flex justify-between gap-4">
-                  <label className="w-32 flex-none block text-sm font-medium text-gray-700">
+                  <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                     Fasilitas Pajak Yang Dimiliki oleh Penerima Penghasilan
                     <span className="text-red-500">*</span>
                   </label>
@@ -287,7 +287,7 @@ const BUPOTForm = ({
 
                 {/* Nama Objek Pajak */}
                 <div className="mt-4 flex justify-between gap-4">
-                  <label className="w-32 flex-none block text-sm font-medium text-gray-700">
+                  <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                     Nama Objek Pajak (Under Construction)
                     <span className="text-red-500">*</span>
                   </label>
@@ -308,7 +308,7 @@ const BUPOTForm = ({
 
                 {/* Jenis Pajak */}
                 <div className="mt-4 flex justify-between gap-4">
-                  <label className="w-32 flex-none block text-sm font-medium text-gray-700">
+                  <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                     Jenis Pajak
                     <span className="text-red-500">*</span>
                   </label>
@@ -325,7 +325,7 @@ const BUPOTForm = ({
 
                 {/* Kode Objek Pajak */}
                 <div className="mt-4 flex justify-between gap-4">
-                  <label className="w-32 flex-none block text-sm font-medium text-gray-700">
+                  <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                     Kode Objek Pajak
                     <span className="text-red-500">*</span>
                   </label>
@@ -342,7 +342,7 @@ const BUPOTForm = ({
 
                 {/* Sifat Pajak Penghasilan */}
                 <div className="mt-4 flex justify-between gap-4">
-                  <label className="w-32 flex-none block text-sm font-medium text-gray-700">
+                  <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                     Sifat Pajak Penghasilan
                     <span className="text-red-500">*</span>
                   </label>
@@ -359,7 +359,7 @@ const BUPOTForm = ({
 
                 {/* Dasar Pengenaan Pajak */}
                 <div className="mt-4 flex justify-between gap-4">
-                  <label className="w-32 flex-none block text-sm font-medium text-gray-700">
+                  <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                     Dasar Pengenaan Pajak
                     <span className="text-red-500">*</span>
                   </label>
@@ -376,7 +376,7 @@ const BUPOTForm = ({
 
                 {/* Tarif (%) */}
                 <div className="mt-4 flex justify-between gap-4">
-                  <label className="w-32 flex-none block text-sm font-medium text-gray-700">
+                  <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                     Tarif (%)
                     <span className="text-red-500">*</span>
                   </label>
@@ -393,7 +393,7 @@ const BUPOTForm = ({
 
                 {/* Pajak Penghasilan (Rp) */}
                 <div className="mt-4 flex justify-between gap-4">
-                  <label className="w-32 flex-none block text-sm font-medium text-gray-700">
+                  <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                     Pajak Penghasilan (Rp)
                     <span className="text-red-500">*</span>
                   </label>
@@ -410,7 +410,7 @@ const BUPOTForm = ({
 
                 {/* KAP */}
                 <div className="mt-4 flex justify-between gap-4">
-                  <label className="w-32 flex-none block text-sm font-medium text-gray-700">
+                  <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                     KAP
                     <span className="text-red-500">*</span>
                   </label>
