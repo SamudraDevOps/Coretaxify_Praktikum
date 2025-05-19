@@ -750,7 +750,7 @@ const Main = () => {
                 url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/faktur`}
                 intent={"api.get.faktur.pengirim"}
                 OrangPribadi={PajakKeluaranOP}
-                Badan={PajakKeluaran}
+                Badan={PajakKeluaranOP}
                 query={"edit-info"}
               ></RoleBasedRenderer>
             </>
