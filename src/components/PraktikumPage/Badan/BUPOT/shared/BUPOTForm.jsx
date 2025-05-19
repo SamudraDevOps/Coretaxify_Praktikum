@@ -157,9 +157,6 @@ const BUPOTForm = ({
                       </option>
                     ))}
                   </select>
-                  <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-                    <FaChevronDown className="text-gray-400" />
-                  </div>
                 </div>
 
                 {/* STATUS */}
@@ -180,9 +177,6 @@ const BUPOTForm = ({
                     <option value="normal">Normal</option>
                     <option value="pembetulan">Pembetulan</option>
                   </select>
-                  <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-                    <FaChevronDown className="text-gray-400" />
-                  </div>
                 </div>
 
                 {/* NPWP */}
@@ -203,9 +197,6 @@ const BUPOTForm = ({
                     <option value="NITKU1">NITKU1</option>
                     <option value="NITKU2">NITKU2</option>
                   </select>
-                  <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-                    <FaChevronDown className="text-gray-400" />
-                  </div>
                 </div>
 
                 {/* Nama */}
@@ -220,7 +211,6 @@ const BUPOTForm = ({
                     placeholder="Nama"
                     value={formData.nama_akun || ""}
                     onChange={(e) => {
-                      const rawValue = e.target.value.replace(/[^\d]/g, "");
                       updateFormData("nama_akun", e.target.value);
                     }}
                     readOnly={true}
@@ -245,9 +235,6 @@ const BUPOTForm = ({
                     <option value="NITKU1">NITKU1</option>
                     <option value="NITKU2">NITKU2</option>
                   </select>
-                  <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-                    <FaChevronDown className="text-gray-400" />
-                  </div>
                 </div>
 
                 {/* Other Informasi Umum fields */}
@@ -276,6 +263,168 @@ const BUPOTForm = ({
                 {/* Common Information Section */}
                 {/* Form fields for Informasi Umum */}
                 {/* ... */}
+
+                {/* Fasilitas Pajak Yang Dimiliki oleh Penerima Penghasilan */}
+                <div className="mt-4 flex justify-between gap-4">
+                  <label className="w-32 flex-none block text-sm font-medium text-gray-700">
+                    Fasilitas Pajak Yang Dimiliki oleh Penerima Penghasilan
+                    <span className="text-red-500">*</span>
+                  </label>
+                  <select
+                    className="w-64 flex-auto border p-2 rounded appearance-none"
+                    value={formData.fasilitas_pajak || ""}
+                    onChange={(e) =>
+                      updateFormData("fasilitas_pajak", e.target.value)
+                    }
+                    placehoder="Please Select"
+                  >
+                    <option value="">Please Select</option>
+                    <option value="fasilitas_lainnya">Fasilitas Lainnya</option>
+                    <option value="pph_ditanggung_pemerintah">Pph Ditanggung Pemerintah (DTP)</option>
+                    <option value="tanpa_fasilitas">Tanpa Fasilitas</option>
+                  </select>
+                </div>
+
+                {/* Nama Objek Pajak */}
+                <div className="mt-4 flex justify-between gap-4">
+                  <label className="w-32 flex-none block text-sm font-medium text-gray-700">
+                    Nama Objek Pajak (Under Construction)
+                    <span className="text-red-500">*</span>
+                  </label>
+                  <select
+                    className="w-64 flex-auto border p-2 rounded appearance-none"
+                    value={formData.nama_objek_pajak || ""}
+                    onChange={(e) =>
+                      updateFormData("nama_objek_pajak", e.target.value)
+                    }
+                    placehoder="Please Select"
+                  >
+                    <option value="">Please Select</option>
+                    <option value="objek1">objek1</option>
+                    <option value="objek2">objek2</option>
+                    <option value="objek3">objek3</option>
+                  </select>
+                </div>
+
+                {/* Jenis Pajak */}
+                <div className="mt-4 flex justify-between gap-4">
+                  <label className="w-32 flex-none block text-sm font-medium text-gray-700">
+                    Jenis Pajak
+                    <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="w-64 flex-auto border p-2 rounded"
+                    placeholder="Jenis Pajak"
+                    value={formData.jenis_pajak || ""}
+                    onChange={(e) => {
+                      updateFormData("jenis_pajak", e.target.value);
+                    }}
+                  />
+                </div>
+
+                {/* Kode Objek Pajak */}
+                <div className="mt-4 flex justify-between gap-4">
+                  <label className="w-32 flex-none block text-sm font-medium text-gray-700">
+                    Kode Objek Pajak
+                    <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="w-64 flex-auto border p-2 rounded"
+                    placeholder="Kode Objek Pajak"
+                    value={formData.kode_objek_pajak || ""}
+                    onChange={(e) => {
+                      updateFormData("kode_objek_pajak", e.target.value);
+                    }}
+                  />
+                </div>
+
+                {/* Sifat Pajak Penghasilan */}
+                <div className="mt-4 flex justify-between gap-4">
+                  <label className="w-32 flex-none block text-sm font-medium text-gray-700">
+                    Sifat Pajak Penghasilan
+                    <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="w-64 flex-auto border p-2 rounded"
+                    placeholder="Sifat Pajak Penghasilan"
+                    value={formData.sifat_pajak_penghasilan || ""}
+                    onChange={(e) => {
+                      updateFormData("sifat_pajak_penghasilan", e.target.value);
+                    }}
+                  />
+                </div>
+
+                {/* Dasar Pengenaan Pajak */}
+                <div className="mt-4 flex justify-between gap-4">
+                  <label className="w-32 flex-none block text-sm font-medium text-gray-700">
+                    Dasar Pengenaan Pajak
+                    <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="w-64 flex-auto border p-2 rounded"
+                    placeholder="Dasar Pengenaan Pajak"
+                    value={formData.dasar_pengenaan_pajak || ""}
+                    onChange={(e) => {
+                      updateFormData("dasar_pengenaan_pajak", e.target.value);
+                    }}
+                  />
+                </div>
+
+                {/* Tarif (%) */}
+                <div className="mt-4 flex justify-between gap-4">
+                  <label className="w-32 flex-none block text-sm font-medium text-gray-700">
+                    Tarif (%)
+                    <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="w-64 flex-auto border p-2 rounded"
+                    placeholder="Tarif (%)"
+                    value={formData.tarif_pajak || ""}
+                    onChange={(e) => {
+                      updateFormData("tarif_pajak", e.target.value);
+                    }}
+                  />
+                </div>
+
+                {/* Pajak Penghasilan (Rp) */}
+                <div className="mt-4 flex justify-between gap-4">
+                  <label className="w-32 flex-none block text-sm font-medium text-gray-700">
+                    Pajak Penghasilan (Rp)
+                    <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="w-64 flex-auto border p-2 rounded"
+                    placeholder="Pajak Penghasilan (Rp)"
+                    value={formData.pajak_penghasilan || ""}
+                    onChange={(e) => {
+                      updateFormData("pajak_penghasilan", e.target.value);
+                    }}
+                  />
+                </div>
+
+                {/* KAP */}
+                <div className="mt-4 flex justify-between gap-4">
+                  <label className="w-32 flex-none block text-sm font-medium text-gray-700">
+                    KAP
+                    <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="w-64 flex-auto border p-2 rounded"
+                    placeholder="KAP"
+                    value={formData.kap || ""}
+                    onChange={(e) => {
+                      updateFormData("kap", e.target.value);
+                    }}
+                  />
+                </div>
+                
               </div>
             )}
           </>
