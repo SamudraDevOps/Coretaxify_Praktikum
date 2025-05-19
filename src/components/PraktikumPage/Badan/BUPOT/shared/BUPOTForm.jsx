@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import Select from "react-select";
 import {
@@ -16,17 +16,67 @@ const BUPOTForm = ({
   title,
   sections = ["informasiUmum", "fasilitasPerpajakan", "dokumenReferensi"],
   onSubmit,
+  sidebarTitle,
   initialData = {},
 }) => {
   // State for accordion sections
   const [openSections, setOpenSections] = useState({
     informasiUmum: true,
+    pajakPenghasilan: false,
+    perhitunganPajakPenghasilan: false,
     fasilitasPerpajakan: false,
     dokumenReferensi: false,
+    labaKotor: false,
+    pengurang: false,
+    perhitunganPph: false,
   });
 
   // Form data state
   const [formData, setFormData] = useState(initialData);
+
+  // State for month options
+  const [monthOption, setMonthOption] = useState([]);
+
+  // Generate month option for the past 5 years
+  useEffect(() => {
+    const options = [];
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth();
+    const currentYear = currentDate.getFullYear();
+
+    // generate option for 5 years (60 months)
+    for (let i = 0; i < 60; i++) {
+      const targetMonth = currentMonth - i;
+
+      // calculate the correct year and month
+      const yearOffset = Math.floor(Math.abs(targetMonth) / 12);
+      const adjustedYear = targetMonth < 0
+        ? currentYear - yearOffset - 1
+        : currentYear - Math.floor(i / 12);
+      const adjustedMonth = targetMonth < 0
+      ? 12 + (targetMonth % 12)
+      : (currentMonth - (i % 12) + 12) % 12; 
+
+      // create date object for the first day of the month
+      const date = new Date(adjustedYear, adjustedMonth, 1);
+
+      // format display : "MONTH - YEAR"
+      const monthName = date.toLocaleString('default', { month: 'long' });
+      const displayValue = `${monthName} ${adjustedYear}`;
+
+      // format for value
+      const month = String(adjustedMonth + 1).padStart(2, '0');
+      const valueDate = `${adjustedYear}-${month}-01`;
+
+      options.push({
+        value: valueDate,
+        label: displayValue,
+      });
+    }
+
+    setMonthOption(options);
+  }, []); 
+
 
   // Helper to toggle sections
   const toggleSection = (section) => {
@@ -83,6 +133,235 @@ const BUPOTForm = ({
             </div>
 
             {openSections.informasiUmum && (
+              <div className="border rounded-md p-4 mb-2 bg-white">
+                {/* Common Information Section */}
+                {/* Form fields for Informasi Umum */}
+                {/* Masa Awal Pajak / Masa Pajak */}
+                <div className="mt-4 flex justify-between gap-4">
+                  <label className="w-32 flex-none block text-sm font-medium text-gray-700">
+                    Masa Pajak
+                    <span className="text-red-500">*</span>
+                  </label>
+                  <select
+                    className="w-64 flex-auto border p-2 rounded appearance-none"
+                    value={formData.masa_awal || ""}
+                    onChange={(e) =>
+                      updateFormData("masa_awal", e.target.value)
+                    }
+                    placehoder="Please Select"
+                  >
+                    <option value="">Please Select</option>
+                    {monthOption.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                    <FaChevronDown className="text-gray-400" />
+                  </div>
+                </div>
+
+                {/* STATUS */}
+                <div className="mt-4 flex justify-between gap-4">
+                  <label className="w-32 flex-none block text-sm font-medium text-gray-700">
+                    Status
+                    <span className="text-red-500">*</span>
+                  </label>
+                  <select
+                    className="w-64 flex-auto border p-2 rounded appearance-none"
+                    value={formData.status || ""}
+                    onChange={(e) =>
+                      updateFormData("status", e.target.value)
+                    }
+                    placehoder="Please Select"
+                  >
+                    <option value="">Please Select</option>
+                    <option value="normal">Normal</option>
+                    <option value="pembetulan">Pembetulan</option>
+                  </select>
+                  <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                    <FaChevronDown className="text-gray-400" />
+                  </div>
+                </div>
+
+                {/* NPWP */}
+                <div className="mt-4 flex justify-between gap-4">
+                  <label className="w-32 flex-none block text-sm font-medium text-gray-700">
+                    NPWP
+                    <span className="text-red-500">*</span>
+                  </label>
+                  <select
+                    className="w-64 flex-auto border p-2 rounded appearance-none"
+                    value={formData.npwp_akun || ""}
+                    onChange={(e) =>
+                      updateFormData("npwp_akun", e.target.value)
+                    }
+                    placehoder="Please Select"
+                  >
+                    <option value="">Please Select</option>
+                    <option value="NITKU1">NITKU1</option>
+                    <option value="NITKU2">NITKU2</option>
+                  </select>
+                  <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                    <FaChevronDown className="text-gray-400" />
+                  </div>
+                </div>
+
+                {/* Nama */}
+                <div className="mt-4 flex justify-between gap-4">
+                  <label className="w-32 flex-none block text-sm font-medium text-gray-700">
+                    Nama
+                    <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="w-64 flex-auto border p-2 rounded"
+                    placeholder="Nama"
+                    value={formData.nama_akun || ""}
+                    onChange={(e) => {
+                      const rawValue = e.target.value.replace(/[^\d]/g, "");
+                      updateFormData("nama_akun", e.target.value);
+                    }}
+                    readOnly={true}
+                  />
+                </div>
+
+                {/* NITKU */}
+                <div className="mt-4 flex justify-between gap-4">
+                  <label className="w-32 flex-none block text-sm font-medium text-gray-700">
+                    NITKU
+                    <span className="text-red-500">*</span>
+                  </label>
+                  <select
+                    className="w-64 flex-auto border p-2 rounded appearance-none"
+                    value={formData.nitku || ""}
+                    onChange={(e) =>
+                      updateFormData("nitku", e.target.value)
+                    }
+                    placehoder="Please Select"
+                  >
+                    <option value="">Please Select</option>
+                    <option value="NITKU1">NITKU1</option>
+                    <option value="NITKU2">NITKU2</option>
+                  </select>
+                  <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                    <FaChevronDown className="text-gray-400" />
+                  </div>
+                </div>
+
+                {/* Other Informasi Umum fields */}
+                {/* ... */}
+              </div>
+            )}
+          </>
+        )}
+
+        {sections.includes("pajakPenghasilan") && (
+          <>
+            <div
+              className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
+              onClick={() => toggleSection("pajakPenghasilan")}
+            >
+              <h3 className="text-lg font-semibold">Pajak Penghasilan</h3>
+              {openSections.pajakPenghasilan ? (
+                <FaChevronUp />
+              ) : (
+                <FaChevronDown />
+              )}
+            </div>
+
+            {openSections.pajakPenghasilan && (
+              <div className="border rounded-md p-4 mb-2 bg-white">
+                {/* Common Information Section */}
+                {/* Form fields for Informasi Umum */}
+                {/* ... */}
+              </div>
+            )}
+          </>
+        )}
+
+        {sections.includes("perhitunganPajakPenghasilan") && (
+          <>
+            <div
+              className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
+              onClick={() => toggleSection("perhitunganPajakPenghasilan")}
+            >
+              <h3 className="text-lg font-semibold">
+                Perhitungan Pajak Penghasilan
+              </h3>
+              {openSections.perhitunganPajakPenghasilan ? (
+                <FaChevronUp />
+              ) : (
+                <FaChevronDown />
+              )}
+            </div>
+
+            {openSections.perhitunganPajakPenghasilan && (
+              <div className="border rounded-md p-4 mb-2 bg-white">
+                {/* Common Information Section */}
+                {/* Form fields for Informasi Umum */}
+                {/* ... */}
+              </div>
+            )}
+          </>
+        )}
+
+        {sections.includes("labaKotor") && (
+          <>
+            <div
+              className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
+              onClick={() => toggleSection("labaKotor")}
+            >
+              <h3 className="text-lg font-semibold">Laba Kotor</h3>
+              {openSections.labaKotor ? <FaChevronUp /> : <FaChevronDown />}
+            </div>
+
+            {openSections.labaKotor && (
+              <div className="border rounded-md p-4 mb-2 bg-white">
+                {/* Common Information Section */}
+                {/* Form fields for Informasi Umum */}
+                {/* ... */}
+              </div>
+            )}
+          </>
+        )}
+
+        {sections.includes("pengurang") && (
+          <>
+            <div
+              className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
+              onClick={() => toggleSection("pengurang")}
+            >
+              <h3 className="text-lg font-semibold">Pengurang</h3>
+              {openSections.pengurang ? <FaChevronUp /> : <FaChevronDown />}
+            </div>
+
+            {openSections.pengurang && (
+              <div className="border rounded-md p-4 mb-2 bg-white">
+                {/* Common Information Section */}
+                {/* Form fields for Informasi Umum */}
+                {/* ... */}
+              </div>
+            )}
+          </>
+        )}
+
+        {sections.includes("perhitunganPph") && (
+          <>
+            <div
+              className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
+              onClick={() => toggleSection("perhitunganPph")}
+            >
+              <h3 className="text-lg font-semibold">Perhitungan PPH</h3>
+              {openSections.perhitunganPph ? (
+                <FaChevronUp />
+              ) : (
+                <FaChevronDown />
+              )}
+            </div>
+
+            {openSections.perhitunganPph && (
               <div className="border rounded-md p-4 mb-2 bg-white">
                 {/* Common Information Section */}
                 {/* Form fields for Informasi Umum */}
