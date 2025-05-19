@@ -11,17 +11,56 @@ import BUPOTForm from "./shared/BUPOTForm";
 const formConfigs = {
   bppu: {
     title: "EBUPOT BPU",
-    sections: ["informasiUmum", "fasilitasPerpajakan", "dokumenReferensi"],
+    sections: ["informasiUmum", "pajakPenghasilan", "dokumenReferensi"],
+    sidebarTitle: "BPPU",
     // Any BPPU-specific form config
   },
   bpnr: {
     title: "EBUPOT BPNR",
-    sections: ["informasiUmum", "fasilitasPerpajakan"],
+    sections: ["informasiUmum", "perhitunganPajakPenghasilan", "dokumenReferensi"],
+    sidebarTitle: "BPNR",
     // Any BPNR-specific form config
   },
-  "bukti-pemotongan-bulanan-pegawai-tetap": {
+  ps: {
+    title: "EBUPOT SP",
+    sections: ["informasiUmum", "pajakPenghasilan", "dokumenReferensi"],
+    sidebarTitle: "Penyetoran Sendiri",
+    // Any SP-specific form config
+  },
+  psd: {
+    title: "EBUPOT CY",
+    sections: ["informasiUmum", "pajakPenghasilan", "dokumenReferensi"],
+    sidebarTitle: "Pemotongan Secara Digunggung",
+    // Any CY-specific form config
+  },
+  bp21: {
+    title: "EBUPOT BP21",
+    sections: ["informasiUmum", "pajakPenghasilan", "dokumenReferensi"],
+    sidebarTitle: "BP 21 - Bukti Pemotongan Selain Pegawai Tetap",
+    // Any BP21-specific form config
+  },
+  bp26: {
+    title: "EBUPOT BP26",
+    sections: ["informasiUmum", "perhitunganPajakPenghasilan", "dokumenReferensi"],
+    sidebarTitle: "BP 26 - Bukti Pemotongan Wajib Pajak Luar Negeri",
+    // Any BP26-specific form config
+  },
+  bpa1: {
+    title: "EBUPOT BPA1",
+    sections: ["informasiUmum", "labaKotor", "pengurang", "perhitunganPph"],
+    sidebarTitle: "BP A1 - Bukti Pemotongan A1 Masa Pajak Terakhir",
+    // Any BPA1-specific form config
+  },
+  bpa2: {
+    title: "EBUPOT BPA2",
+    sections: ["informasiUmum", "labaKotor", "pengurang", "perhitunganPph"],
+    sidebarTitle: "BP A2 - Bukti Pemotongan A2 Masa Pajak Terakhir",
+    // Any BPA2-specific form config
+  },
+  bpbpt: {
     title: "EBUPOT MP",
     sections: ["informasiUmum", "fasilitasPerpajakan"],
+    sidebarTitle: "Bukti Pemotongan Bulanan Pegawai Tetap",
     // Any MP-specific form config
   },
 };
@@ -44,6 +83,7 @@ const BUPOTCreateWrapper = (props) => {
           headers: {
             Authorization: `Bearer ${cookies.token}`,
             "Content-Type": "application/json",
+            intent: `api.bupot.${type}`,
           },
         }
       );
@@ -72,10 +112,11 @@ const BUPOTCreateWrapper = (props) => {
 
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       <BUPOTForm
         type={type}
         title={config.title}
+        sidebarTitle={config.sidebarTitle}
         sections={config.sections}
         onSubmit={handleSubmit}
         initialData={props.data?.formData || {}} // Use data from RoleBasedRenderer if available
