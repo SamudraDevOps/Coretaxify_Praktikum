@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
-import Select from "react-select";
+// import Select from "react-select";
 import {
   Popover,
   PopoverTrigger,
@@ -168,9 +168,7 @@ const BUPOTForm = ({
                   <select
                     className="w-64 flex-auto border p-2 rounded appearance-none"
                     value={formData.status || ""}
-                    onChange={(e) =>
-                      updateFormData("status", e.target.value)
-                    }
+                    onChange={(e) => updateFormData("status", e.target.value)}
                     placehoder="Please Select"
                   >
                     <option value="">Please Select</option>
@@ -226,9 +224,7 @@ const BUPOTForm = ({
                   <select
                     className="w-64 flex-auto border p-2 rounded appearance-none"
                     value={formData.nitku || ""}
-                    onChange={(e) =>
-                      updateFormData("nitku", e.target.value)
-                    }
+                    onChange={(e) => updateFormData("nitku", e.target.value)}
                     placehoder="Please Select"
                   >
                     <option value="">Please Select</option>
@@ -280,7 +276,9 @@ const BUPOTForm = ({
                   >
                     <option value="">Please Select</option>
                     <option value="fasilitas_lainnya">Fasilitas Lainnya</option>
-                    <option value="pph_ditanggung_pemerintah">Pph Ditanggung Pemerintah (DTP)</option>
+                    <option value="pph_ditanggung_pemerintah">
+                      Pph Ditanggung Pemerintah (DTP)
+                    </option>
                     <option value="tanpa_fasilitas">Tanpa Fasilitas</option>
                   </select>
                 </div>
@@ -424,7 +422,6 @@ const BUPOTForm = ({
                     }}
                   />
                 </div>
-                
               </div>
             )}
           </>
@@ -559,7 +556,7 @@ const BUPOTForm = ({
                 </div>
 
                 {/* Other Fasilitas Perpajakan fields */}
-                <div className="mt-4">
+                <div className="mt-4 flex justify-between gap-4">
                   <label className="block text-sm font-medium text-gray-700">
                     Penghasilan Bruto (RP)
                     <span className="text-red-500">*</span>
@@ -603,11 +600,12 @@ const BUPOTForm = ({
 
             {openSections.dokumenReferensi && (
               <div className="border rounded-md p-4 mb-2 bg-white">
-                <div className="mt-4">
-                  <label className="block text-sm font-medium text-gray-700">
+                {/* Jenis Dokumen */}
+                <div className="mt-4 flex justify-between gap-4">
+                  <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                     Jenis Dokumen <span className="text-red-500">*</span>
                   </label>
-                  <Select
+                  {/* <Select
                     placeholder="Pilih Jenis Dokumen"
                     className="w-full"
                     value={formData.jenisDokumen}
@@ -620,6 +618,89 @@ const BUPOTForm = ({
                       { value: "Dokumen Lainnya", label: "Dokumen Lainnya" },
                       // Additional options...
                     ]}
+                  /> */}
+                  <select
+                    className="w-64 flex-auto border p-2 rounded appearance-none"
+                    value={formData.jenis_dokumen || ""}
+                    onChange={(e) =>
+                      updateFormData("jenis_dokumen", e.target.value)
+                    }
+                    placehoder="Please Select"
+                  >
+                    <option value="">Please Select</option>
+                    <option value="Akta Perjanjian">Akta Perjanjian</option>
+                    <option value="Rapat Umum Pemegang Saham">
+                      Rapat Umum Pemegang Saham
+                    </option>
+                    <option value="Bukti Pembayaran">Bukti Pembayaran</option>
+                    <option value="Dokumen Ketentuan Peraturan Perpajakan">
+                      Dokumen Ketentuan Peraturan Perpajakan
+                    </option>
+                    <option value="Dokumen Lainnya">Dokumen Lainnya</option>
+                    <option value="Dokumen Pemberi Fasilitas Lainnya">
+                      Dokumen Pemberi Fasilitas Lainnya
+                    </option>
+                    <option value="Faktur Pajak">Faktur Pajak</option>
+                    <option value="Jasa Giro">Jasa Giro</option>
+                    <option value="Kontrak">Kontrak</option>
+                    <option value="Pengumuman">Pengumuman</option>
+                    <option value="Surat Keputusan">Surat Keputusan</option>
+                    <option value="Surat Pernyataan">Surat Pernyataan</option>
+                    <option value="Surat Tagihan">Surat Tagihan</option>
+                    <option value="Trade Confirmation">
+                      Trade Confirmation
+                    </option>
+                  </select>
+                </div>
+
+                {/* Nomor Dokumen */}
+                <div className="mt-4 flex justify-between gap-4">
+                  <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                    Nomor Dokumen
+                    <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="w-64 flex-auto border p-2 rounded"
+                    placeholder="Nomor Dokumen"
+                    value={formData.nomor_dokumen || ""}
+                    onChange={(e) => {
+                      updateFormData("nomor_dokumen", e.target.value);
+                    }}
+                  />
+                </div>
+
+                {/* Tanggal Dokumen */}
+                <div className="mt-4 flex justify-between gap-4">
+                  <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                    Tanggal Dokumen
+                    <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="date"
+                    className="w-64 flex-auto border p-2 rounded"
+                    placeholder="Tanggal Dokumen"
+                    value={formData.tanggal_dokumen || ""}
+                    onChange={(e) => {
+                      updateFormData("tanggal_dokumen", e.target.value);
+                    }}
+                  />
+                </div>
+
+                {/* NITKU/Nomor Identitas Sub Unit Organisasi */}
+                <div className="mt-4 flex justify-between gap-4">
+                  <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                    NITKU/Nomor Identitas Sub Unit Organisasi
+                    <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="w-64 flex-auto border p-2 rounded"
+                    placeholder="NITKU Dokumen"
+                    value={formData.nitku_dokumen || ""}
+                    onChange={(e) => {
+                      updateFormData("nitku_dokumen", e.target.value);
+                    }}
                   />
                 </div>
 
