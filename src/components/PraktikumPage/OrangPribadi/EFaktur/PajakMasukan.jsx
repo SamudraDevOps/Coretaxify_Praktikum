@@ -171,6 +171,22 @@ const PajakMasukanOP = ({
                       {item.masa_pajak || "-"}
                     </td>
                     <td className="px-4 py-2 border">{item.tahun || "-"}</td>
+                    <td className="px-4 py-2 border">{"-"}</td>
+                    <td className="px-4 py-2 border">{"-"}</td>
+                    <td className="px-4 py-2 border">{item.status || "-"}</td>
+                    <td className="px-4 py-2 border">{item.dpp || "-"}</td>
+                    <td className="px-4 py-2 border">{item.dpp_lain || "-"}</td>
+                    <td className="px-4 py-2 border">{item.ppn || "-"}</td>
+                    <td className="px-4 py-2 border">{item.ppnbm || "-"}</td>
+                    <td className="px-4 py-2 border">{"-"}</td>
+                    <td className="px-4 py-2 border">{"-"}</td>
+                    <td className="px-4 py-2 border">{"-"}</td>
+                    <td className="px-4 py-2 border">
+                      {item.dilaporkan_penjual == 1 ? "Ya" : "Tidak"}
+                    </td>
+                    <td className="px-4 py-2 border">
+                      {item.dilaporkan_pemungut == 1 ? "Ya" : "Tidak"}
+                    </td>
                   </tr>
                 ))
               ) : (
