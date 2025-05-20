@@ -580,7 +580,7 @@ const BUPOTForm = ({
                     />
                   </div>
                 )}
-                
+
                 {/* Jenis Pemotongan */}
                 {(currentBupot === "bpa1" || currentBupot === "bpa2") && (
                   <div className="mt-4 flex justify-between gap-4">
@@ -591,12 +591,18 @@ const BUPOTForm = ({
                     <select
                       className="w-64 flex-auto border p-2 rounded appearance-none"
                       value={formData.jenis_pemotongan || ""}
-                      onChange={(e) => updateFormData("jenis_pemotongan", e.target.value)}
+                      onChange={(e) =>
+                        updateFormData("jenis_pemotongan", e.target.value)
+                      }
                       placehoder="Please Select"
                     >
                       <option value="">Please Select</option>
-                      <option value="Kurang dari Setahun">Kurang dari Setahun</option>
-                      <option value="Kurang dari Setahun yang Penghasilannya Disetahunkan">Kurang dari Setahun yang Penghasilannya Disetahunkan</option>
+                      <option value="Kurang dari Setahun">
+                        Kurang dari Setahun
+                      </option>
+                      <option value="Kurang dari Setahun yang Penghasilannya Disetahunkan">
+                        Kurang dari Setahun yang Penghasilannya Disetahunkan
+                      </option>
                       <option value="Setahun Penuh">Setahun Penuh</option>
                     </select>
                   </div>
@@ -1273,7 +1279,365 @@ const BUPOTForm = ({
             {openSections.labaKotor && (
               <div className="border rounded-md p-4 mb-2 bg-white">
                 {/* Common Information Section */}
-                {/* Form fields for Informasi Umum */}
+                {/* Form fields for Laba Kotor */}
+
+                {/* Gaji Pokok Pensiun */}
+                <div className="mt-4 flex justify-between gap-4">
+                  <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                    Gaji Pokok Pensiun
+                    <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="w-64 flex-auto border p-2 rounded"
+                    placeholder="Gaji Pokok Pensiun"
+                    value={formatRupiah(formData.gaji_pokok_pensiun) || ""}
+                    onChange={(e) => {
+                      const rawValue = e.target.value.replace(/[^\d]/g, "");
+                      updateFormData("gaji_pokok_pensiun", rawValue);
+                      // updateFormData("penghasilan_bruto_raw", Number(rawValue));
+                    }}
+                    onWheel={(e) => e.target.blur()}
+                  />
+                </div>
+
+                {/* Pembulatan Kotor */}
+                {currentBupot === "bpa1" && (
+                  <div className="mt-4 flex justify-between gap-4">
+                    <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                      Pembulatan Kotor
+                      <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      className="w-64 flex-auto border p-2 rounded"
+                      placeholder="Pembulatan Kotor"
+                      value={formatRupiah(formData.pembulatan_kotor) || ""}
+                      onChange={(e) => {
+                        const rawValue = e.target.value.replace(/[^\d]/g, "");
+                        updateFormData("pembulatan_kotor", rawValue);
+                        // updateFormData("penghasilan_bruto_raw", Number(rawValue));
+                      }}
+                      onWheel={(e) => e.target.blur()}
+                    />
+                  </div>
+                )}
+
+                {/* Tunjangan PPH */}
+                {currentBupot === "bpa1" && (
+                  <div className="mt-4 flex justify-between gap-4">
+                    <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                      Tunjangan PPH
+                      <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      className="w-64 flex-auto border p-2 rounded"
+                      placeholder="Tunjangan PPH"
+                      value={formatRupiah(formData.tunjangan_pph) || ""}
+                      onChange={(e) => {
+                        const rawValue = e.target.value.replace(/[^\d]/g, "");
+                        updateFormData("tunjangan_pph", rawValue);
+                        // updateFormData("penghasilan_bruto_raw", Number(rawValue));
+                      }}
+                      onWheel={(e) => e.target.blur()}
+                    />
+                  </div>
+                )}
+
+                {/* Tunjangan Istri */}
+                {currentBupot === "bpa2" && (
+                  <div className="mt-4 flex justify-between gap-4">
+                    <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                      Tunjangan Istri
+                      <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      className="w-64 flex-auto border p-2 rounded"
+                      placeholder="Tunjangan Istri"
+                      value={formatRupiah(formData.tunjangan_istri) || ""}
+                      onChange={(e) => {
+                        const rawValue = e.target.value.replace(/[^\d]/g, "");
+                        updateFormData("tunjangan_istri", rawValue);
+                        // updateFormData("penghasilan_bruto_raw", Number(rawValue));
+                      }}
+                      onWheel={(e) => e.target.blur()}
+                    />
+                  </div>
+                )}
+
+                {/* Tunjangan Anak */}
+                {currentBupot === "bpa2" && (
+                  <div className="mt-4 flex justify-between gap-4">
+                    <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                      Tunjangan Anak
+                      <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      className="w-64 flex-auto border p-2 rounded"
+                      placeholder="Tunjangan Anak"
+                      value={formatRupiah(formData.tunjangan_anak) || ""}
+                      onChange={(e) => {
+                        const rawValue = e.target.value.replace(/[^\d]/g, "");
+                        updateFormData("tunjangan_anak", rawValue);
+                        // updateFormData("penghasilan_bruto_raw", Number(rawValue));
+                      }}
+                      onWheel={(e) => e.target.blur()}
+                    />
+                  </div>
+                )}
+
+                {/* Tunjangan Perbaikan Penghasilan */}
+                {currentBupot === "bpa2" && (
+                  <div className="mt-4 flex justify-between gap-4">
+                    <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                      Tunjangan Perbaikan Penghasilan
+                      <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      className="w-64 flex-auto border p-2 rounded"
+                      placeholder="Tunjangan Perbaikan Penghasilan"
+                      value={
+                        formatRupiah(
+                          formData.tunjangan_perbaikan_penghasilan
+                        ) || ""
+                      }
+                      onChange={(e) => {
+                        const rawValue = e.target.value.replace(/[^\d]/g, "");
+                        updateFormData(
+                          "tunjangan_perbaikan_penghasilan",
+                          rawValue
+                        );
+                        // updateFormData("penghasilan_bruto_raw", Number(rawValue));
+                      }}
+                      onWheel={(e) => e.target.blur()}
+                    />
+                  </div>
+                )}
+
+                {/* Tunjangan Struktural/Fungsional */}
+                {currentBupot === "bpa2" && (
+                  <div className="mt-4 flex justify-between gap-4">
+                    <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                      Tunjangan Struktural/Fungsional
+                      <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      className="w-64 flex-auto border p-2 rounded"
+                      placeholder="Tunjangan Struktural/Fungsional"
+                      value={
+                        formatRupiah(
+                          formData.tunjungan_struktural_fungsional
+                        ) || ""
+                      }
+                      onChange={(e) => {
+                        const rawValue = e.target.value.replace(/[^\d]/g, "");
+                        updateFormData(
+                          "tunjungan_struktural_fungsional",
+                          rawValue
+                        );
+                        // updateFormData("penghasilan_bruto_raw", Number(rawValue));
+                      }}
+                      onWheel={(e) => e.target.blur()}
+                    />
+                  </div>
+                )}
+
+                {/* Tunjangan Beras */}
+                {currentBupot === "bpa2" && (
+                  <div className="mt-4 flex justify-between gap-4">
+                    <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                      Tunjangan Beras
+                      <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      className="w-64 flex-auto border p-2 rounded"
+                      placeholder="Tunjangan Beras"
+                      value={formatRupiah(formData.tunjangan_beras) || ""}
+                      onChange={(e) => {
+                        const rawValue = e.target.value.replace(/[^\d]/g, "");
+                        updateFormData("tunjangan_beras", rawValue);
+                        // updateFormData("penghasilan_bruto_raw", Number(rawValue));
+                      }}
+                      onWheel={(e) => e.target.blur()}
+                    />
+                  </div>
+                )}
+
+                {/* Tunjangan Lainnya, Uang Lembur, dan Sebagainya */}
+                <div className="mt-4 flex justify-between gap-4">
+                  <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                    Tunjangan Lainnya, Uang Lembur, dan Sebagainya
+                    <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="w-64 flex-auto border p-2 rounded"
+                    placeholder="Tunjangan Lainnya, Uang Lembur, dan Sebagainya"
+                    value={formatRupiah(formData.tunjangan_lainnya) || ""}
+                    onChange={(e) => {
+                      const rawValue = e.target.value.replace(/[^\d]/g, "");
+                      updateFormData("tunjangan_lainnya", rawValue);
+                      // updateFormData("penghasilan_bruto_raw", Number(rawValue));
+                    }}
+                    onWheel={(e) => e.target.blur()}
+                  />
+                </div>
+
+                {/* Penghasilan Tetap dan Teratur Lainnya yang Pembayarannya Terpisah dari Pembayaran Gaji */}
+                {currentBupot === "bpa2" && (
+                  <div className="mt-4 flex justify-between gap-4">
+                    <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                      Penghasilan Tetap dan Teratur Lainnya yang Pembayarannya
+                      Terpisah dari Pembayaran Gaji
+                      <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      className="w-64 flex-auto border p-2 rounded"
+                      placeholder="Wajib Diisi"
+                      value={
+                        formatRupiah(formData.penghasilan_tetap_lainnya) || ""
+                      }
+                      onChange={(e) => {
+                        const rawValue = e.target.value.replace(/[^\d]/g, "");
+                        updateFormData("penghasilan_tetap_lainnya", rawValue);
+                        // updateFormData("penghasilan_bruto_raw", Number(rawValue));
+                      }}
+                      onWheel={(e) => e.target.blur()}
+                    />
+                  </div>
+                )}
+
+                {/* Honorarium dan Imbalan Lain Sejenisnya */}
+                {currentBupot === "bpa1" && (
+                  <div className="mt-4 flex justify-between gap-4">
+                    <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                      Honorarium dan Imbalan Lain Sejenisnya
+                      <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      className="w-64 flex-auto border p-2 rounded"
+                      placeholder="Honorarium dan Imbalan Lain Sejenisnya"
+                      value={
+                        formatRupiah(formData.honorarium_imbalan_lainnya) || ""
+                      }
+                      onChange={(e) => {
+                        const rawValue = e.target.value.replace(/[^\d]/g, "");
+                        updateFormData("honorarium_imbalan_lainnya", rawValue);
+                        // updateFormData("penghasilan_bruto_raw", Number(rawValue));
+                      }}
+                      onWheel={(e) => e.target.blur()}
+                    />
+                  </div>
+                )}
+
+                {/* Premi Asuransi yang Dibayar Pemberi Kerja */}
+                {currentBupot === "bpa1" && (
+                  <div className="mt-4 flex justify-between gap-4">
+                    <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                      Premi Asuransi yang Dibayar Pemberi Kerja
+                      <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      className="w-64 flex-auto border p-2 rounded"
+                      placeholder="Premi Asuransi yang Dibayar Pemberi Kerja"
+                      value={
+                        formatRupiah(formData.premi_asuransi_pemberi_kerja) ||
+                        ""
+                      }
+                      onChange={(e) => {
+                        const rawValue = e.target.value.replace(/[^\d]/g, "");
+                        updateFormData(
+                          "premi_asuransi_pemberi_kerja",
+                          rawValue
+                        );
+                        // updateFormData("penghasilan_bruto_raw", Number(rawValue));
+                      }}
+                      onWheel={(e) => e.target.blur()}
+                    />
+                  </div>
+                )}
+
+                {/* Penerimaan Dalam Bentuk Natura dan Kenikmatan Lainnya yang Dikenakan Pemotongan PPh Pasal 21 */}
+                {currentBupot === "bpa1" && (
+                  <div className="mt-4 flex justify-between gap-4">
+                    <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                      Penerimaan Dalam Bentuk Natura dan Kenikmatan Lainnya yang
+                      Dikenakan Pemotongan PPh Pasal 21
+                      <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      className="w-64 flex-auto border p-2 rounded"
+                      placeholder="Wajib Diisi"
+                      value={formatRupiah(formData.natura_pph_pasal_21) || ""}
+                      onChange={(e) => {
+                        const rawValue = e.target.value.replace(/[^\d]/g, "");
+                        updateFormData("natura_pph_pasal_21", rawValue);
+                        // updateFormData("penghasilan_bruto_raw", Number(rawValue));
+                      }}
+                      onWheel={(e) => e.target.blur()}
+                    />
+                  </div>
+                )}
+
+                {/* Tantiem, Bonus, Gratifikasi, Jasa Produksi, dan THR */}
+                {currentBupot === "bpa1" && (
+                  <div className="mt-4 flex justify-between gap-4">
+                    <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                      Tantiem, Bonus, Gratifikasi, Jasa Produksi, dan THR
+                      <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      className="w-64 flex-auto border p-2 rounded"
+                      placeholder="Wajib Diisi"
+                      value={
+                        formatRupiah(
+                          formData.tantiem_bonus_gratifikasi_jasa_thr
+                        ) || ""
+                      }
+                      onChange={(e) => {
+                        const rawValue = e.target.value.replace(/[^\d]/g, "");
+                        updateFormData(
+                          "tantiem_bonus_gratifikasi_jasa_thr",
+                          rawValue
+                        );
+                        // updateFormData("penghasilan_bruto_raw", Number(rawValue));
+                      }}
+                      onWheel={(e) => e.target.blur()}
+                    />
+                  </div>
+                )}
+
+                {/* Jumlah Penghasilan Bruto (RP) */}
+                <div className="mt-4 flex justify-between gap-4">
+                  <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                    Jumlah Penghasilan Bruto (RP)
+                    <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="w-64 flex-auto border p-2 rounded"
+                    placeholder="Masukkan Jumlah Penghasilan Bruto"
+                    value={formatRupiah(formData.dasar_pengenaan_pajak) || ""}
+                    onChange={(e) => {
+                      const rawValue = e.target.value.replace(/[^\d]/g, "");
+                      updateFormData("dasar_pengenaan_pajak", rawValue);
+                      // updateFormData("penghasilan_bruto_raw", Number(rawValue));
+                    }}
+                    onWheel={(e) => e.target.blur()}
+                  />
+                </div>
+
                 {/* ... */}
               </div>
             )}
@@ -1293,7 +1657,96 @@ const BUPOTForm = ({
             {openSections.pengurang && (
               <div className="border rounded-md p-4 mb-2 bg-white">
                 {/* Common Information Section */}
-                {/* Form fields for Informasi Umum */}
+                {/* Form fields for Pengurang */}
+
+                {/* Biaya Jabatan / Biaya Pensiun */}
+                <div className="mt-4 flex justify-between gap-4">
+                  <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                    Biaya Jabatan / Biaya Pensiun
+                    <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="w-64 flex-auto border p-2 rounded"
+                    placeholder="Biaya Jabatan / Biaya Pensiun"
+                    value={formatRupiah(formData.biaya_jabatan) || ""}
+                    onChange={(e) => {
+                      const rawValue = e.target.value.replace(/[^\d]/g, "");
+                      updateFormData("biaya_jabatan", rawValue);
+                      // updateFormData("penghasilan_bruto_raw", Number(rawValue));
+                    }}
+                    onWheel={(e) => e.target.blur()}
+                  />
+                </div>
+
+                {/* Iuran Terkait Pensiun atau Hari Tua */}
+                <div className="mt-4 flex justify-between gap-4">
+                  <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                    Iuran Terkait Pensiun atau Hari Tua
+                    <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="w-64 flex-auto border p-2 rounded"
+                    placeholder="Iuran Terkait Pensiun atau Hari Tua"
+                    value={formatRupiah(formData.iuran_pensiun) || ""}
+                    onChange={(e) => {
+                      const rawValue = e.target.value.replace(/[^\d]/g, "");
+                      updateFormData("iuran_pensiun", rawValue);
+                      // updateFormData("penghasilan_bruto_raw", Number(rawValue));
+                    }}
+                    onWheel={(e) => e.target.blur()}
+                  />
+                </div>
+
+                {/* Zakat atau Sumbangan Keagamaan yang Bersifat Wajib yang Dibayarkan Melalui Pemberi Kerja */}
+                <div className="mt-4 flex justify-between gap-4">
+                  <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                    Zakat atau Sumbangan Keagamaan yang Bersifat Wajib yang
+                    Dibayarkan Melalui Pemberi Kerja
+                    <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="w-64 flex-auto border p-2 rounded"
+                    placeholder="Wajib Diisi"
+                    value={
+                      formatRupiah(
+                        formData.sumbangan_keagamaan_pemberi_kerja
+                      ) || ""
+                    }
+                    onChange={(e) => {
+                      const rawValue = e.target.value.replace(/[^\d]/g, "");
+                      updateFormData(
+                        "sumbangan_keagamaan_pemberi_kerja",
+                        rawValue
+                      );
+                      // updateFormData("penghasilan_bruto_raw", Number(rawValue));
+                    }}
+                    onWheel={(e) => e.target.blur()}
+                  />
+                </div>
+
+                {/* Jumlah Pengurangan */}
+                <div className="mt-4 flex justify-between gap-4">
+                  <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                    Jumlah Pengurangan
+                    <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="w-64 flex-auto border p-2 rounded"
+                    placeholder="Jumlah Pengurangan"
+                    value={formatRupiah(formData.jumlah_pengurangan) || ""}
+                    onChange={(e) => {
+                      const rawValue = e.target.value.replace(/[^\d]/g, "");
+                      updateFormData("jumlah_pengurangan", rawValue);
+                      // updateFormData("penghasilan_bruto_raw", Number(rawValue));
+                    }}
+                    onWheel={(e) => e.target.blur()}
+                  />
+                </div>
+
                 {/* ... */}
               </div>
             )}
@@ -1317,7 +1770,306 @@ const BUPOTForm = ({
             {openSections.perhitunganPph && (
               <div className="border rounded-md p-4 mb-2 bg-white">
                 {/* Common Information Section */}
-                {/* Form fields for Informasi Umum */}
+                {/* Form fields for Perhitungan PPH */}
+
+                {/* Jumlah Penghasilan Neto */}
+                <div className="mt-4 flex justify-between gap-4">
+                  <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                    Jumlah Penghasilan Neto
+                    <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="w-64 flex-auto border p-2 rounded"
+                    placeholder="Jumlah Penghasilan Neto"
+                    value={formatRupiah(formData.jumlah_penghasilan_neto) || ""}
+                    onChange={(e) => {
+                      const rawValue = e.target.value.replace(/[^\d]/g, "");
+                      updateFormData("jumlah_penghasilan_neto", rawValue);
+                      // updateFormData("penghasilan_bruto_raw", Number(rawValue));
+                    }}
+                    onWheel={(e) => e.target.blur()}
+                  />
+                </div>
+
+                {/* Nomor Bukti Pemotongan BPA1 dan Pemberi Kerja Sebelumnya (Apabila Ada) */}
+                <div className="mt-4 flex justify-between gap-4">
+                  <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                    Nomor Bukti Pemotongan BPA1 dan Pemberi Kerja Sebelumnya
+                    (Apabila Ada)
+                    <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="w-64 flex-auto border p-2 rounded"
+                    placeholder="Bupot A1 Sebelumnya"
+                    value={formData.nomor_bpa1_sebelumnya || ""}
+                    onChange={(e) => {
+                      updateFormData("nomor_bpa1_sebelumnya", e.target.value);
+                    }}
+                    readOnly={true}
+                  />
+                </div>
+
+                {/* Penghasilan Neto dari Pemotongan Sebelumnya */}
+                <div className="mt-4 flex justify-between gap-4">
+                  <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                    Penghasilan Neto dari Pemotongan Sebelumnya
+                    <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="w-64 flex-auto border p-2 rounded"
+                    placeholder="Wajib Diisi"
+                    value={formatRupiah(formData.penghasilan_neto_sebelumnya) || ""}
+                    onChange={(e) => {
+                      const rawValue = e.target.value.replace(/[^\d]/g, "");
+                      updateFormData("penghasilan_neto_sebelumnya", rawValue);
+                      // updateFormData("penghasilan_bruto_raw", Number(rawValue));
+                    }}
+                    onWheel={(e) => e.target.blur()}
+                  />
+                </div>
+
+                {/* Jumlah Penghasilan Neto Untuk Perhitungan PPh Pasal 21 (Setahun/Disetahunkan) */}
+                <div className="mt-4 flex justify-between gap-4">
+                  <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                    Jumlah Penghasilan Neto Untuk Perhitungan PPh Pasal 21 (Setahun/Disetahunkan)
+                    <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="w-64 flex-auto border p-2 rounded"
+                    placeholder="Wajib Diisi"
+                    value={formatRupiah(formData.penghasilan_neto_pph_pasal_21) || ""}
+                    onChange={(e) => {
+                      const rawValue = e.target.value.replace(/[^\d]/g, "");
+                      updateFormData("penghasilan_neto_pph_pasal_21", rawValue);
+                      // updateFormData("penghasilan_bruto_raw", Number(rawValue));
+                    }}
+                    onWheel={(e) => e.target.blur()}
+                  />
+                </div>
+
+                {/* Penghasilan Tidak Kena Pajak */}
+                <div className="mt-4 flex justify-between gap-4">
+                  <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                    Penghasilan Tidak Kena Pajak
+                    <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="w-64 flex-auto border p-2 rounded"
+                    placeholder="Wajib Diisi"
+                    value={formatRupiah(formData.penghasilan_tidak_kena_pajak) || ""}
+                    onChange={(e) => {
+                      const rawValue = e.target.value.replace(/[^\d]/g, "");
+                      updateFormData("penghasilan_tidak_kena_pajak", rawValue);
+                      // updateFormData("penghasilan_bruto_raw", Number(rawValue));
+                    }}
+                    onWheel={(e) => e.target.blur()}
+                  />
+                </div>
+
+                {/* Penghasilan Kena Pajak Setahun / Disetahunkan */}
+                <div className="mt-4 flex justify-between gap-4">
+                  <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                    Penghasilan Kena Pajak Setahun / Disetahunkan
+                    <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="w-64 flex-auto border p-2 rounded"
+                    placeholder="Wajib Diisi"
+                    value={formatRupiah(formData.penghasilan_kena_pajak) || ""}
+                    onChange={(e) => {
+                      const rawValue = e.target.value.replace(/[^\d]/g, "");
+                      updateFormData("penghasilan_kena_pajak", rawValue);
+                      // updateFormData("penghasilan_bruto_raw", Number(rawValue));
+                    }}
+                    onWheel={(e) => e.target.blur()}
+                  />
+                </div>
+
+                {/* PPh Pasal 21 atas Penghasilan Kena Pajak Setahun/Disetahunkan */}
+                <div className="mt-4 flex justify-between gap-4">
+                  <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                    PPh Pasal 21 atas Penghasilan Kena Pajak Setahun/Disetahunkan
+                    <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="w-64 flex-auto border p-2 rounded"
+                    placeholder="Wajib Diisi"
+                    value={formatRupiah(formData.pph_pasal_21_penghasilan_kena_pajak) || ""}
+                    onChange={(e) => {
+                      const rawValue = e.target.value.replace(/[^\d]/g, "");
+                      updateFormData("pph_pasal_21_penghasilan_kena_pajak", rawValue);
+                      // updateFormData("penghasilan_bruto_raw", Number(rawValue));
+                    }}
+                    onWheel={(e) => e.target.blur()}
+                  />
+                </div>
+
+                {/* PPh Pasal 21 Terutang */}
+                <div className="mt-4 flex justify-between gap-4">
+                  <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                    PPh Pasal 21 Terutang
+                    <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="w-64 flex-auto border p-2 rounded"
+                    placeholder="Wajib Diisi"
+                    value={formatRupiah(formData.pph_pasal_21_terutang) || ""}
+                    onChange={(e) => {
+                      const rawValue = e.target.value.replace(/[^\d]/g, "");
+                      updateFormData("pph_pasal_21_terutang", rawValue);
+                      // updateFormData("penghasilan_bruto_raw", Number(rawValue));
+                    }}
+                    onWheel={(e) => e.target.blur()}
+                  />
+                </div>
+
+                {/* PPh Pasal 21 Dipotong Dari Bukti Pemotongan Sebelumnya */}
+                <div className="mt-4 flex justify-between gap-4">
+                  <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                    PPh Pasal 21 Dipotong Dari Bukti Pemotongan Sebelumnya
+                    <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="w-64 flex-auto border p-2 rounded"
+                    placeholder="Wajib Diisi"
+                    value={formatRupiah(formData.pph_pasal_21_potongan_bpa1_sebelumnya) || ""}
+                    onChange={(e) => {
+                      const rawValue = e.target.value.replace(/[^\d]/g, "");
+                      updateFormData("pph_pasal_21_potongan_bpa1_sebelumnya", rawValue);
+                      // updateFormData("penghasilan_bruto_raw", Number(rawValue));
+                    }}
+                    onWheel={(e) => e.target.blur()}
+                  />
+                </div>
+
+                {/* PPh Pasal 21 Terutang pada Bukti Pemotongan Ini (Dapat Dikreditkan Pada SPT Tahunan) */}
+                <div className="mt-4 flex justify-between gap-4">
+                  <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                    PPh Pasal 21 Terutang pada Bukti Pemotongan Ini (Dapat Dikreditkan Pada SPT Tahunan)
+                    <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="w-64 flex-auto border p-2 rounded"
+                    placeholder="Wajib Diisi"
+                    value={formatRupiah(formData.pph_pasal_21_terutang_bupot_ini) || ""}
+                    onChange={(e) => {
+                      const rawValue = e.target.value.replace(/[^\d]/g, "");
+                      updateFormData("pph_pasal_21_terutang_bupot_ini", rawValue);
+                      // updateFormData("penghasilan_bruto_raw", Number(rawValue));
+                    }}
+                    onWheel={(e) => e.target.blur()}
+                  />
+                </div>
+
+                {/* PPh Pasal 21 yang Dipotong/Ditanggung Pemerintah */}
+                <div className="mt-4 flex justify-between gap-4">
+                  <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                    PPh Pasal 21 yang Dipotong/Ditanggung Pemerintah
+                    <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="w-64 flex-auto border p-2 rounded"
+                    placeholder="Wajib Diisi"
+                    value={formatRupiah(formData.pph_pasal_21_ditanggung_pemerintah) || ""}
+                    onChange={(e) => {
+                      const rawValue = e.target.value.replace(/[^\d]/g, "");
+                      updateFormData("pph_pasal_21_ditanggung_pemerintah", rawValue);
+                      // updateFormData("penghasilan_bruto_raw", Number(rawValue));
+                    }}
+                    onWheel={(e) => e.target.blur()}
+                  />
+                </div>
+
+                {/* PPh Pasal 21 Kurang (Lebih) Dipotong pada Masa Pajak Desember / Masa Pajak Terakhir */}
+                <div className="mt-4 flex justify-between gap-4">
+                  <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                    PPh Pasal 21 Kurang (Lebih) Dipotong pada Masa Pajak Desember / Masa Pajak Terakhir
+                    <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="w-64 flex-auto border p-2 rounded"
+                    placeholder="Wajib Diisi"
+                    value={formatRupiah(formData.pph_pasal_21_masa_pajak_terakhir) || ""}
+                    onChange={(e) => {
+                      const rawValue = e.target.value.replace(/[^\d]/g, "");
+                      updateFormData("pph_pasal_21_masa_pajak_terakhir", rawValue);
+                      // updateFormData("penghasilan_bruto_raw", Number(rawValue));
+                    }}
+                    onWheel={(e) => e.target.blur()}
+                  />
+                </div>
+                
+                {/* Jenis Fasilitas pada Masa Pajak Desember / Masa Pajak Terakhir */}
+                <div className="mt-4 flex justify-between gap-4">
+                  <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                    Jenis Fasilitas pada Masa Pajak Desember / Masa Pajak Terakhir
+                    <span className="text-red-500">*</span>
+                  </label>
+                  <select
+                    className="w-64 flex-auto border p-2 rounded"
+                    value={formData.fasilitas_pajak || ""}
+                    onChange={(e) =>
+                      updateFormData("fasilitas_pajak", e.target.value)
+                    }
+                  >
+                    <option value="">Please Select</option>
+                    <option value="fasilitas_lainnya">Fasilitas Lainnya</option>
+                    <option value="pph_ditanggung_pemerintah">
+                      Pph Ditanggung Pemerintah (DTP)
+                    </option>
+                    <option value="tanpa_fasilitas">Tanpa Fasilitas</option>
+                  </select>
+                </div>
+
+                {/* KAP */}
+                <div className="mt-4 flex justify-between gap-4">
+                  <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                    KAP
+                    <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="w-64 flex-auto border p-2 rounded"
+                    placeholder="KAP"
+                    value={formData.kap || ""}
+                    onChange={(e) => {
+                      updateFormData("kap", e.target.value);
+                    }}
+                  />
+                </div>
+
+                {/* NITKU */}
+                {(currentBupot === "bppu" || currentBupot === "bp21") && (
+                  <div className="mt-4 flex justify-between gap-4">
+                    <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                      NITKU
+                      <span className="text-red-500">*</span>
+                    </label>
+                    <select
+                      className="w-64 flex-auto border p-2 rounded appearance-none"
+                      value={formData.nitku || ""}
+                      onChange={(e) => updateFormData("nitku", e.target.value)}
+                      placehoder="Please Select"
+                    >
+                      <option value="">Please Select</option>
+                      <option value="NITKU1">NITKU1</option>
+                      <option value="NITKU2">NITKU2</option>
+                    </select>
+                  </div>
+                )}
+
                 {/* ... */}
               </div>
             )}
@@ -1348,9 +2100,9 @@ const BUPOTForm = ({
                   </label>
                   <select
                     className="w-64 flex-auto border p-2 rounded"
-                    value={formData.fasilitasPajak || ""}
+                    value={formData.fasilitas_pajak || ""}
                     onChange={(e) =>
-                      updateFormData("fasilitasPajak", e.target.value)
+                      updateFormData("fasilitas_pajak", e.target.value)
                     }
                   >
                     <option value="">Please Select</option>
