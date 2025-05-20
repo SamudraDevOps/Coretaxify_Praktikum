@@ -217,41 +217,44 @@ const BUPOTForm = ({
                 )}
 
                 {/* Nama */}
-                <div className="mt-4 flex justify-between gap-4">
-                  <label className="w-64 flex-none block text-sm font-medium text-gray-700">
-                    Nama
-                    <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    className="w-64 flex-auto border p-2 rounded"
-                    placeholder="Nama"
-                    value={formData.nama_akun || ""}
-                    onChange={(e) => {
-                      updateFormData("nama_akun", e.target.value);
-                    }}
-                    readOnly={true}
-                  />
-                </div>
+                {(currentBupot === "bppu" || currentBupot === "bp21") && (
+                  <div className="mt-4 flex justify-between gap-4">
+                    <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                      Nama
+                      <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      className="w-64 flex-auto border p-2 rounded"
+                      placeholder="Nama"
+                      value={formData.nama_akun || ""}
+                      onChange={(e) => {
+                        updateFormData("nama_akun", e.target.value);
+                      }}
+                      readOnly={true}
+                    />
+                  </div>
+                )}
 
                 {/* NITKU */}
-                <div className="mt-4 flex justify-between gap-4">
-                  <label className="w-64 flex-none block text-sm font-medium text-gray-700">
-                    NITKU
-                    <span className="text-red-500">*</span>
-                  </label>
-                  <select
-                    className="w-64 flex-auto border p-2 rounded appearance-none"
-                    value={formData.nitku || ""}
-                    onChange={(e) => updateFormData("nitku", e.target.value)}
-                    placehoder="Please Select"
-                  >
-                    <option value="">Please Select</option>
-                    <option value="NITKU1">NITKU1</option>
-                    <option value="NITKU2">NITKU2</option>
-                  </select>
-                </div>
-
+                {(currentBupot === "bppu" || currentBupot === "bp21") && (
+                  <div className="mt-4 flex justify-between gap-4">
+                    <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                      NITKU
+                      <span className="text-red-500">*</span>
+                    </label>
+                    <select
+                      className="w-64 flex-auto border p-2 rounded appearance-none"
+                      value={formData.nitku || ""}
+                      onChange={(e) => updateFormData("nitku", e.target.value)}
+                      placehoder="Please Select"
+                    >
+                      <option value="">Please Select</option>
+                      <option value="NITKU1">NITKU1</option>
+                      <option value="NITKU2">NITKU2</option>
+                    </select>
+                  </div>
+                )}
                 {/* Other Informasi Umum fields */}
                 {/* ... */}
               </div>
@@ -712,7 +715,7 @@ const BUPOTForm = ({
                     }}
                   />
                 </div>
-                
+
                 {/* Tingkat Penghasilan Neto yang Dianggap (%) */}
                 <div className="mt-4 flex justify-between gap-4">
                   <label className="w-64 flex-none block text-sm font-medium text-gray-700">
@@ -725,7 +728,10 @@ const BUPOTForm = ({
                     placeholder="Tingkat Penghasilan Neto yang Dianggap (%)"
                     value={formData.persentase_penghasilan_bersih || ""}
                     onChange={(e) => {
-                      updateFormData("persentase_penghasilan_bersih", e.target.value);
+                      updateFormData(
+                        "persentase_penghasilan_bersih",
+                        e.target.value
+                      );
                     }}
                   />
                 </div>
