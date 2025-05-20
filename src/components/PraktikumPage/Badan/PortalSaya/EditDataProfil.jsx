@@ -19,7 +19,7 @@ import {
   AlertDialogAction,
   AlertDialogCancel,
 } from "@/components/ui/alert-dialog";
-import { useParams } from "react-router";
+import { useParams, useSearchParams } from "react-router";
 import axios from "axios";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { getCsrf } from "@/service/getCsrf";
@@ -35,7 +35,10 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
   // const { toast } = useToast();
   console.log(data);
 
+  const [searchParams, setSearchParams] = useSearchParams();
+  const viewAsCompanyId = searchParams.get("viewAs");
   const { id, akun } = useParams();
+
   const [isPerwakilan, setIsPerwakilan] = useState(false);
   const [showInformasiUmum, setShowInformasiUmum] = useState(false);
   const [showDataEkonomi, setShowDataEkonomi] = useState(false);
@@ -128,8 +131,9 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
   const updateDataEkonomi = useMutation({
     mutationFn: async () => {
       const csrf = await getCsrf();
+      const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
       return axios.put(
-        `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/data-ekonomi/${akun}`,
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${accountId}/data-ekonomi/${accountId}`,
         dataEkonomiFormData,
         {
           headers: {
@@ -164,8 +168,9 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
   } = useQuery({
     queryKey: ["orang_terkait"],
     queryFn: async () => {
+      const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
       const data = await axios.get(
-        RoutesApi.apiUrl + `student/assignments/${id}/sistem/${akun}`,
+        RoutesApi.apiUrl + `student/assignments/${id}/sistem/${accountId}`,
         {
           headers: {
             Authorization: `Bearer ${cookies.token}`,
@@ -202,8 +207,9 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
   const createPihakTerkait = useMutation({
     mutationFn: async (data) => {
       const csrf = await getCsrf();
+      const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
       return axios.post(
-        `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/pihak-terkait`,
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${accountId}/pihak-terkait`,
         formOrangTerkait,
         {
           headers: {
@@ -236,8 +242,9 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
   const deleteOrangTerkait = useMutation({
     mutationFn: async (user_id) => {
       const csrf = await getCsrf();
+      const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
       return axios.delete(
-        `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/pihak-terkait/${user_id}`,
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${accountId}/pihak-terkait/${user_id}`,
         {
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",
@@ -282,8 +289,9 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
   const createTku = useMutation({
     mutationFn: async () => {
       const csrf = await getCsrf();
+      const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
       return axios.post(
-        `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/tempat-kegiatan-usaha`,
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${accountId}/tempat-kegiatan-usaha`,
         tkuFormData,
         {
           headers: {
@@ -315,8 +323,9 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
   const updateTku = useMutation({
     mutationFn: async (idTku) => {
       const csrf = await getCsrf();
+      const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
       return axios.put(
-        `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/tempat-kegiatan-usaha/${idTku}`,
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${accountId}/tempat-kegiatan-usaha/${idTku}`,
         tkuFormData,
         {
           headers: {
@@ -348,8 +357,9 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
   const deleteTku = useMutation({
     mutationFn: async (idTku) => {
       const csrf = await getCsrf();
+      const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
       return axios.delete(
-        `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/tempat-kegiatan-usaha/${idTku}`,
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${accountId}/tempat-kegiatan-usaha/${idTku}`,
         {
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",
@@ -397,8 +407,10 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
   const createBankDetail = useMutation({
     mutationFn: async () => {
       const csrf = await getCsrf();
+      const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
+
       return axios.post(
-        `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/detail-bank`,
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${accountId}/detail-bank`,
         bankFormData,
         {
           headers: {
@@ -430,8 +442,9 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
   const updateDetailBank = useMutation({
     mutationFn: async (bank_id) => {
       const csrf = await getCsrf();
+      const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
       return axios.put(
-        `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/detail-bank/${bank_id}`,
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${accountId}/detail-bank/${bank_id}`,
         bankFormData,
         {
           headers: {
@@ -463,8 +476,9 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
   const deleteDetailBank = useMutation({
     mutationFn: async (bank_id) => {
       const csrf = await getCsrf();
+      const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
       return axios.delete(
-        `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/detail-bank/${bank_id}`,
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${accountId}/detail-bank/${bank_id}`,
         {
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",
@@ -501,8 +515,9 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
   const updateInformasiUmum = useMutation({
     mutationFn: async (data) => {
       const csrf = await getCsrf();
+      const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
       return axios.put(
-        `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/informasi-umum/${akun}`,
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${accountId}/informasi-umum/${accountId}`,
         informasiUmumData,
         {
           headers: {
@@ -553,8 +568,9 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
   const createContact = useMutation({
     mutationFn: async () => {
       const csrf = await getCsrf();
+      const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
       return axios.post(
-        `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/detail-kontak`,
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${accountId}/detail-kontak`,
         contactFormData,
         {
           headers: {
@@ -587,8 +603,9 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
     mutationFn: async (contact_id) => {
       const csrf = await getCsrf();
 
+      const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
       return axios.put(
-        `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/detail-kontak/${contact_id}`,
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${accountId}/detail-kontak/${contact_id}`,
         contactFormData,
         {
           headers: {
@@ -620,8 +637,9 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
   const deleteContact = useMutation({
     mutationFn: async (contact_id) => {
       const csrf = await getCsrf();
+      const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
       return axios.delete(
-        `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/detail-kontak/${contact_id}`,
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${accountId}/detail-kontak/${contact_id}`,
         {
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",

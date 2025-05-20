@@ -20,7 +20,7 @@ import {
   AlertDialogCancel,
 } from "@/components/ui/alert-dialog";
 
-import { useParams } from "react-router";
+import { useParams, useSearchParams } from "react-router";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { getCookieToken } from "@/service";
 import axios from "axios";
@@ -56,6 +56,9 @@ const EditDataProfil = ({ data, sidebar }) => {
     useState("");
   const [selectedRelatedPersonType, setSelectedRelatedPersonType] =
     useState("");
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const viewAsCompanyId = searchParams.get("viewAs");
 
   const { id, akun } = useParams();
   const token = getCookieToken();
@@ -180,8 +183,9 @@ const EditDataProfil = ({ data, sidebar }) => {
   const createPihakTerkait = useMutation({
     mutationFn: async (data) => {
       const csrf = await getCsrf();
+      const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
       return axios.post(
-        `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/pihak-terkait`,
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${accountId}/pihak-terkait`,
         formOrangTerkait,
         {
           headers: {
@@ -214,8 +218,9 @@ const EditDataProfil = ({ data, sidebar }) => {
   const deleteOrangTerkait = useMutation({
     mutationFn: async (user_id) => {
       const csrf = await getCsrf();
+      const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
       return axios.delete(
-        `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/pihak-terkait/${user_id}`,
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${accountId}/pihak-terkait/${user_id}`,
         {
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",
@@ -260,8 +265,9 @@ const EditDataProfil = ({ data, sidebar }) => {
   const createTku = useMutation({
     mutationFn: async () => {
       const csrf = await getCsrf();
+      const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
       return axios.post(
-        `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/tempat-kegiatan-usaha`,
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${accountId}/tempat-kegiatan-usaha`,
         tkuFormData,
         {
           headers: {
@@ -293,8 +299,9 @@ const EditDataProfil = ({ data, sidebar }) => {
   const updateTku = useMutation({
     mutationFn: async (idTku) => {
       const csrf = await getCsrf();
+      const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
       return axios.put(
-        `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/tempat-kegiatan-usaha/${idTku}`,
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${accountId}/tempat-kegiatan-usaha/${idTku}`,
         tkuFormData,
         {
           headers: {
@@ -326,8 +333,9 @@ const EditDataProfil = ({ data, sidebar }) => {
   const deleteTku = useMutation({
     mutationFn: async (idTku) => {
       const csrf = await getCsrf();
+      const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
       return axios.delete(
-        `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/tempat-kegiatan-usaha/${idTku}`,
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${accountId}/tempat-kegiatan-usaha/${idTku}`,
         {
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",
@@ -375,8 +383,9 @@ const EditDataProfil = ({ data, sidebar }) => {
   const createBankDetail = useMutation({
     mutationFn: async () => {
       const csrf = await getCsrf();
+      const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
       return axios.post(
-        `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/detail-bank`,
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${accountId}/detail-bank`,
         bankFormData,
         {
           headers: {
@@ -408,8 +417,9 @@ const EditDataProfil = ({ data, sidebar }) => {
   const updateDetailBank = useMutation({
     mutationFn: async (bank_id) => {
       const csrf = await getCsrf();
+      const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
       return axios.put(
-        `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/detail-bank/${bank_id}`,
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${accountId}/detail-bank/${bank_id}`,
         bankFormData,
         {
           headers: {
@@ -441,8 +451,9 @@ const EditDataProfil = ({ data, sidebar }) => {
   const deleteDetailBank = useMutation({
     mutationFn: async (bank_id) => {
       const csrf = await getCsrf();
+      const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
       return axios.delete(
-        `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/detail-bank/${bank_id}`,
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${accountId}/detail-bank/${bank_id}`,
         {
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",
@@ -479,8 +490,10 @@ const EditDataProfil = ({ data, sidebar }) => {
   const updateInformasiUmum = useMutation({
     mutationFn: async () => {
       const csrf = await getCsrf();
+      const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
+      alert(accountId);
       return axios.put(
-        `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/informasi-umum/${akun}`,
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${accountId}/informasi-umum/${akun}`,
         formData,
         {
           headers: {
@@ -531,8 +544,9 @@ const EditDataProfil = ({ data, sidebar }) => {
   const createContact = useMutation({
     mutationFn: async () => {
       const csrf = await getCsrf();
+      const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
       return axios.post(
-        `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/detail-kontak`,
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${accountId}/detail-kontak`,
         contactFormData,
         {
           headers: {
@@ -565,8 +579,9 @@ const EditDataProfil = ({ data, sidebar }) => {
     mutationFn: async (contact_id) => {
       const csrf = await getCsrf();
 
+      const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
       return axios.put(
-        `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/detail-kontak/${contact_id}`,
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${accountId}/detail-kontak/${contact_id}`,
         contactFormData,
         {
           headers: {
@@ -598,8 +613,9 @@ const EditDataProfil = ({ data, sidebar }) => {
   const deleteContact = useMutation({
     mutationFn: async (contact_id) => {
       const csrf = await getCsrf();
+      const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
       return axios.delete(
-        `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/detail-kontak/${contact_id}`,
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${accountId}/detail-kontak/${contact_id}`,
         {
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",
