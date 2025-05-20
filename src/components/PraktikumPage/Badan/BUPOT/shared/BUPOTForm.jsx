@@ -194,11 +194,37 @@ const BUPOTForm = ({
                   </select>
                 </div>
 
+                {/* Pegawai Asing */}
+                {(currentBupot === "bpbpt" || currentBupot === "bpa1") && (
+                  <>
+                    <div className="mt-4 flex justify-between gap-4">
+                      <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                        Pegawai Asing
+                        <span className="text-red-500">*</span>
+                      </label>
+                      <select
+                        className="w-64 flex-auto border p-2 rounded appearance-none"
+                        value={formData.pegawai_asing || ""}
+                        onChange={(e) =>
+                          updateFormData("pegawai_asing", e.target.value)
+                        }
+                        placehoder="Please Select"
+                      >
+                        <option value="">Please Select</option>
+                        <option value="true">Ya</option>
+                        <option value="false">Tidak</option>
+                      </select>
+                    </div>
+                  </>
+                )}
+
                 {/* NPWP */}
-                {(currentBupot === "bppu" || currentBupot === "bp21") && (
+                {(currentBupot === "bppu" ||
+                  currentBupot === "bp21" ||
+                  currentBupot === "bpbpt") && (
                   <div className="mt-4 flex justify-between gap-4">
                     <label className="w-64 flex-none block text-sm font-medium text-gray-700">
-                      NPWP
+                      NPWP (Under Construction)
                       <span className="text-red-500">*</span>
                     </label>
                     <select
@@ -217,7 +243,9 @@ const BUPOTForm = ({
                 )}
 
                 {/* Nama */}
-                {(currentBupot === "bppu" || currentBupot === "bp21") && (
+                {(currentBupot === "bppu" ||
+                  currentBupot === "bp21" ||
+                  currentBupot === "bpbpt") && (
                   <div className="mt-4 flex justify-between gap-4">
                     <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                       Nama
@@ -230,6 +258,123 @@ const BUPOTForm = ({
                       value={formData.nama_akun || ""}
                       onChange={(e) => {
                         updateFormData("nama_akun", e.target.value);
+                      }}
+                      readOnly={true}
+                    />
+                  </div>
+                )}
+
+                {/* Alamat */}
+                {currentBupot === "bpbpt" && (
+                  <div className="mt-4 flex justify-between gap-4">
+                    <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                      Alamat
+                      <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      className="w-64 flex-auto border p-2 rounded"
+                      placeholder="Alamat"
+                      value={formData.alamat_akun || ""}
+                      onChange={(e) => {
+                        updateFormData("alamat_akun", e.target.value);
+                      }}
+                      readOnly={true}
+                    />
+                  </div>
+                )}
+
+                {/* Nomor Paspor */}
+                {(currentBupot === "bpbpt" || currentBupot === "bpa1") && (
+                  <div className="mt-4 flex justify-between gap-4">
+                    <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                      Nomor Paspor
+                      <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      className="w-64 flex-auto border p-2 rounded"
+                      placeholder="Nomor Paspor"
+                      value={
+                        formData.pegawai_asing === "true"
+                          ? formData.nomor_paspor_akun || ""
+                          : ""
+                      }
+                      onChange={(e) => {
+                        updateFormData("nomor_paspor_akun", e.target.value);
+                      }}
+                      readOnly={
+                        formData.pegawai_asing === "true" ? false : true
+                      }
+                    />
+                  </div>
+                )}
+
+                {/* Negara */}
+                {currentBupot === "bpbpt" && (
+                  <div className="mt-4 flex justify-between gap-4">
+                    <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                      Negara
+                      <span className="text-red-500">*</span>
+                    </label>
+                    <select
+                      className="w-64 flex-auto border p-2 rounded appearance-none"
+                      value={formData.negara_akun || ""}
+                      onChange={(e) =>
+                        updateFormData("negara_akun", e.target.value)
+                      }
+                      placehoder="Please Select"
+                    >
+                      <option value="">Please Select</option>
+                      <option value="negara1">negara1</option>
+                      <option value="negara2">negara2</option>
+                      <option value="negara3">negara3</option>
+                    </select>
+                  </div>
+                )}
+
+                {/* Status PTKP */}
+                {currentBupot === "bpbpt" && (
+                  <div className="mt-4 flex justify-between gap-4">
+                    <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                      Status PTKP
+                      <span className="text-red-500">*</span>
+                    </label>
+                    <select
+                      className="w-64 flex-auto border p-2 rounded appearance-none"
+                      value={formData.ptkp_akun || ""}
+                      onChange={(e) =>
+                        updateFormData("ptkp_akun", e.target.value)
+                      }
+                      placehoder="Please Select"
+                    >
+                      <option value="">Please Select</option>
+                      <option value="K/0">K/0</option>
+                      <option value="K/1">K/1</option>
+                      <option value="K/2">K/2</option>
+                      <option value="K/3">K/3</option>
+                      <option value="TK/0">TK/0</option>
+                      <option value="TK/1">TK/1</option>
+                      <option value="TK/2">TK/2</option>
+                      <option value="TK/3">TK/3</option>
+                    </select>
+                  </div>
+                )}
+
+                {/* Posisi */}
+                {currentBupot === "bpbpt" && (
+                  <div className="mt-4 flex justify-between gap-4">
+                    <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                      Posisi
+                      <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      className="w-64 flex-auto border p-2 rounded"
+                      placeholder="Posisi"
+                      value={formData.posisi_akun || ""}
+                      onChange={(e) => {
+                        updateFormData("posisi_akun", e.target.value);
                       }}
                       readOnly={true}
                     />
@@ -410,10 +555,10 @@ const BUPOTForm = ({
                   formData.kode_objek_pajak === "21-401-02") && (
                   <>
                     <div className="mt-4 flex justify-between gap-4">
-                        Pendapatan Bruto yang Telah Dibayar Sebelumnya (Khusus
-                        untuk Kode Objek Pajak 21-401-01 dan 21-401-02) jika
-                        terdapat pembayaran lebih dari sekali dalam periode 2
-                        tahun
+                      Pendapatan Bruto yang Telah Dibayar Sebelumnya (Khusus
+                      untuk Kode Objek Pajak 21-401-01 dan 21-401-02) jika
+                      terdapat pembayaran lebih dari sekali dalam periode 2
+                      tahun
                     </div>
                     <div className="mt-4 flex justify-between gap-4">
                       <label className="w-64 flex-none block text-sm font-medium text-gray-700">
@@ -426,10 +571,7 @@ const BUPOTForm = ({
                         placeholder="Jumlah"
                         value={formData.bruto_2_tahun || ""}
                         onChange={(e) => {
-                          updateFormData(
-                            "bruto_2_tahun",
-                            e.target.value
-                          );
+                          updateFormData("bruto_2_tahun", e.target.value);
                         }}
                       />
                     </div>
@@ -439,7 +581,9 @@ const BUPOTForm = ({
                 {/* Penghasilan Bruto / Dasar Pengenaan Pajak */}
                 <div className="mt-4 flex justify-between gap-4">
                   <label className="w-64 flex-none block text-sm font-medium text-gray-700">
-                    {currentBupot === "bp21" ? "Penghasilan Bruto (Rp)" : "Dasar Pengenaan Pajak"}
+                    {currentBupot === "bp21"
+                      ? "Penghasilan Bruto (Rp)"
+                      : "Dasar Pengenaan Pajak"}
                     <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -466,7 +610,10 @@ const BUPOTForm = ({
                       placeholder="DPP (%)"
                       value={formData.persentase_penghasilan_bersih || ""}
                       onChange={(e) => {
-                        updateFormData("persentase_penghasilan_bersih", e.target.value);
+                        updateFormData(
+                          "persentase_penghasilan_bersih",
+                          e.target.value
+                        );
                       }}
                     />
                   </div>
@@ -592,8 +739,8 @@ const BUPOTForm = ({
                     placehoder="Please Select"
                   >
                     <option value="">Please Select</option>
-                    <option value="NITKU1">NITKU1</option>
-                    <option value="NITKU2">NITKU2</option>
+                    <option value="NPWP1">NPWP1</option>
+                    <option value="NPWP2">NPWP2</option>
                   </select>
                 </div>
 
@@ -631,6 +778,27 @@ const BUPOTForm = ({
                     }}
                     readOnly={true}
                   />
+                </div>
+
+                {/* Negara */}
+                <div className="mt-4 flex justify-between gap-4">
+                  <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                    Negara
+                    <span className="text-red-500">*</span>
+                  </label>
+                  <select
+                    className="w-64 flex-auto border p-2 rounded appearance-none"
+                    value={formData.negara_akun || ""}
+                    onChange={(e) =>
+                      updateFormData("negara_akun", e.target.value)
+                    }
+                    placehoder="Please Select"
+                  >
+                    <option value="">Please Select</option>
+                    <option value="negara1">negara1</option>
+                    <option value="negara2">negara2</option>
+                    <option value="negara3">negara3</option>
+                  </select>
                 </div>
 
                 {/* Tanggal Lahir */}
@@ -698,9 +866,9 @@ const BUPOTForm = ({
                     type="text"
                     className="w-64 flex-auto border p-2 rounded"
                     placeholder="Nomor KITAS / KITAP"
-                    value={formData.nomor_paspor_akun || ""}
+                    value={formData.nomor_kitas_kitap_akun || ""}
                     onChange={(e) => {
-                      updateFormData("nomor_paspor_akun", e.target.value);
+                      updateFormData("nomor_kitas_kitap_akun", e.target.value);
                     }}
                   />
                 </div>
@@ -952,49 +1120,141 @@ const BUPOTForm = ({
             {openSections.fasilitasPerpajakan && (
               <div className="border rounded-md p-4 mb-2 bg-white">
                 {/* Fasilitas Perpajakan Fields */}
-                <div className="space-y-4">
-                  <label className="block text-sm font-medium text-gray-700">
+                <div className="mt-4 flex justify-between gap-4">
+                  <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                     Fasilitas Pajak yang dimiliki penyetor
                     <span className="text-red-500">*</span>
                   </label>
                   <select
-                    className="w-full border p-2 rounded"
+                    className="w-64 flex-auto border p-2 rounded"
                     value={formData.fasilitasPajak || ""}
                     onChange={(e) =>
                       updateFormData("fasilitasPajak", e.target.value)
                     }
                   >
                     <option value="">Please Select</option>
-                    <option value="Fasilitas Lainnya">Fasilitas Lainnya</option>
-                    <option value="Ditanggung Pemerintah">
-                      PPh Ditanggung Pemerintah (DTP)
+                    <option value="fasilitas_lainnya">Fasilitas Lainnya</option>
+                    <option value="pph_ditanggung_pemerintah">
+                      Pph Ditanggung Pemerintah (DTP)
                     </option>
-                    <option value="Tanpa Fasilitas">Tanpa Fasilitas</option>
+                    <option value="tanpa_fasilitas">Tanpa Fasilitas</option>
                   </select>
                 </div>
 
-                {/* Other Fasilitas Perpajakan fields */}
+                {/* Nama Objek Pajak */}
                 <div className="mt-4 flex justify-between gap-4">
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                    Nama Objek Pajak (Under Construction)
+                    <span className="text-red-500">*</span>
+                  </label>
+                  <select
+                    className="w-64 flex-auto border p-2 rounded appearance-none"
+                    value={formData.nama_objek_pajak || ""}
+                    onChange={(e) =>
+                      updateFormData("nama_objek_pajak", e.target.value)
+                    }
+                    placehoder="Please Select"
+                  >
+                    <option value="">Please Select</option>
+                    <option value="objek1">objek1</option>
+                    <option value="objek2">objek2</option>
+                    <option value="objek3">objek3</option>
+                  </select>
+                </div>
+
+                {/* Jenis Pajak */}
+                <div className="mt-4 flex justify-between gap-4">
+                  <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                    Jenis Pajak
+                    <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="w-64 flex-auto border p-2 rounded"
+                    placeholder="Jenis Pajak"
+                    value={formData.jenis_pajak || ""}
+                    onChange={(e) => {
+                      updateFormData("jenis_pajak", e.target.value);
+                    }}
+                  />
+                </div>
+
+                {/* Kode Objek Pajak */}
+                <div className="mt-4 flex justify-between gap-4">
+                  <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                    Kode Objek Pajak
+                    <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="w-64 flex-auto border p-2 rounded"
+                    placeholder="Kode Objek Pajak"
+                    value={formData.kode_objek_pajak || ""}
+                    onChange={(e) => {
+                      updateFormData("kode_objek_pajak", e.target.value);
+                    }}
+                  />
+                </div>
+
+                {/* Penghasilan Bruto (RP) */}
+                <div className="mt-4 flex justify-between gap-4">
+                  <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                     Penghasilan Bruto (RP)
                     <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
-                    className="w-full border p-2 rounded"
+                    className="w-64 flex-auto border p-2 rounded"
                     placeholder="Masukkan Penghasilan Bruto"
-                    value={formData.penghasilanBruto || ""}
+                    value={formatRupiah(formData.dasar_pengenaan_pajak) || ""}
                     onChange={(e) => {
                       const rawValue = e.target.value.replace(/[^\d]/g, "");
                       updateFormData(
-                        "penghasilanBruto",
-                        formatRupiah(rawValue)
+                        "dasar_pengenaan_pajak",
+                        rawValue
                       );
-                      updateFormData("penghasilanBrutoRaw", Number(rawValue));
+                      // updateFormData("penghasilan_bruto_raw", Number(rawValue));
                     }}
                     onWheel={(e) => e.target.blur()}
                   />
                 </div>
+
+                {/* KAP */}
+                <div className="mt-4 flex justify-between gap-4">
+                  <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                    KAP
+                    <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="w-64 flex-auto border p-2 rounded"
+                    placeholder="KAP"
+                    value={formData.kap || ""}
+                    onChange={(e) => {
+                      updateFormData("kap", e.target.value);
+                    }}
+                  />
+                </div>
+
+                {/* NITKU */}
+                {(currentBupot === "bppu" || currentBupot === "bp21") && (
+                  <div className="mt-4 flex justify-between gap-4">
+                    <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                      NITKU
+                      <span className="text-red-500">*</span>
+                    </label>
+                    <select
+                      className="w-64 flex-auto border p-2 rounded appearance-none"
+                      value={formData.nitku || ""}
+                      onChange={(e) => updateFormData("nitku", e.target.value)}
+                      placehoder="Please Select"
+                    >
+                      <option value="">Please Select</option>
+                      <option value="NITKU1">NITKU1</option>
+                      <option value="NITKU2">NITKU2</option>
+                    </select>
+                  </div>
+                )}
 
                 {/* More fields as needed */}
               </div>
@@ -1047,12 +1307,12 @@ const BUPOTForm = ({
                   >
                     <option value="">Please Select</option>
                     <option value="Akta Perjanjian">Akta Perjanjian</option>
-                    {(currentBupot === "bp21" || currentBupot === "bp26") ? (
+                    {currentBupot === "bp21" || currentBupot === "bp26" ? (
                       ""
                     ) : (
-                    <option value="Rapat Umum Pemegang Saham">
-                      Rapat Umum Pemegang Saham
-                    </option>
+                      <option value="Rapat Umum Pemegang Saham">
+                        Rapat Umum Pemegang Saham
+                      </option>
                     )}
                     <option value="Bukti Pembayaran">Bukti Pembayaran</option>
                     <option value="Dokumen Ketentuan Peraturan Perpajakan">
