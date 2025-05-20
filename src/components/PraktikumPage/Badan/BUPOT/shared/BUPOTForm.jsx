@@ -282,6 +282,34 @@ const BUPOTForm = ({
                 {/* Form fields for Informasi Umum */}
                 {/* ... */}
 
+                {/* Status PTKP */}
+                {currentBupot === "bp21" && (
+                  <div className="mt-4 flex justify-between gap-4">
+                    <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                      Status PTKP
+                      <span className="text-red-500">*</span>
+                    </label>
+                    <select
+                      className="w-64 flex-auto border p-2 rounded appearance-none"
+                      value={formData.ptkp_akun || ""}
+                      onChange={(e) =>
+                        updateFormData("ptkp_akun", e.target.value)
+                      }
+                      placehoder="Please Select"
+                    >
+                      <option value="">Please Select</option>
+                      <option value="K/0">K/0</option>
+                      <option value="K/1">K/1</option>
+                      <option value="K/2">K/2</option>
+                      <option value="K/3">K/3</option>
+                      <option value="TK/0">TK/0</option>
+                      <option value="TK/1">TK/1</option>
+                      <option value="TK/2">TK/2</option>
+                      <option value="TK/3">TK/3</option>
+                    </select>
+                  </div>
+                )}
+
                 {/* Fasilitas Pajak Yang Dimiliki oleh Penerima Penghasilan */}
                 <div className="mt-4 flex justify-between gap-4">
                   <label className="w-64 flex-none block text-sm font-medium text-gray-700">
@@ -377,10 +405,41 @@ const BUPOTForm = ({
                   />
                 </div>
 
-                {/* Dasar Pengenaan Pajak */}
+                {/* Untuk 21-401-0 dan 21-401-02 */}
+                {(formData.kode_objek_pajak === "21-401-01" ||
+                  formData.kode_objek_pajak === "21-401-02") && (
+                  <>
+                    <div className="mt-4 flex justify-between gap-4">
+                        Pendapatan Bruto yang Telah Dibayar Sebelumnya (Khusus
+                        untuk Kode Objek Pajak 21-401-01 dan 21-401-02) jika
+                        terdapat pembayaran lebih dari sekali dalam periode 2
+                        tahun
+                    </div>
+                    <div className="mt-4 flex justify-between gap-4">
+                      <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                        Jumlah
+                        <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        className="w-64 flex-auto border p-2 rounded"
+                        placeholder="Jumlah"
+                        value={formData.bruto_2_tahun || ""}
+                        onChange={(e) => {
+                          updateFormData(
+                            "bruto_2_tahun",
+                            e.target.value
+                          );
+                        }}
+                      />
+                    </div>
+                  </>
+                )}
+
+                {/* Penghasilan Bruto / Dasar Pengenaan Pajak */}
                 <div className="mt-4 flex justify-between gap-4">
                   <label className="w-64 flex-none block text-sm font-medium text-gray-700">
-                    Dasar Pengenaan Pajak
+                    {currentBupot === "bp21" ? "Penghasilan Bruto (Rp)" : "Dasar Pengenaan Pajak"}
                     <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -393,6 +452,25 @@ const BUPOTForm = ({
                     }}
                   />
                 </div>
+
+                {/* DPP (%) Khusus BP21 */}
+                {currentBupot === "bp21" && (
+                  <div className="mt-4 flex justify-between gap-4">
+                    <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                      DPP (%)
+                      <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      className="w-64 flex-auto border p-2 rounded"
+                      placeholder="DPP (%)"
+                      value={formData.persentase_penghasilan_bersih || ""}
+                      onChange={(e) => {
+                        updateFormData("persentase_penghasilan_bersih", e.target.value);
+                      }}
+                    />
+                  </div>
+                )}
 
                 {/* Tarif (%) */}
                 <div className="mt-4 flex justify-between gap-4">
@@ -969,9 +1047,13 @@ const BUPOTForm = ({
                   >
                     <option value="">Please Select</option>
                     <option value="Akta Perjanjian">Akta Perjanjian</option>
+                    {(currentBupot === "bp21" || currentBupot === "bp26") ? (
+                      ""
+                    ) : (
                     <option value="Rapat Umum Pemegang Saham">
                       Rapat Umum Pemegang Saham
                     </option>
+                    )}
                     <option value="Bukti Pembayaran">Bukti Pembayaran</option>
                     <option value="Dokumen Ketentuan Peraturan Perpajakan">
                       Dokumen Ketentuan Peraturan Perpajakan
