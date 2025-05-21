@@ -6,6 +6,7 @@ import { useCookies } from "react-cookie";
 import { RoutesApi } from "@/Routes";
 import Header from "@/components/Header/Header";
 import BUPOTForm from "./shared/BUPOTForm";
+import Swal from "sweetalert2";
 
 // Form configurations for different BUPOT types
 const formConfigs = {
@@ -76,13 +77,25 @@ const BUPOTCreateWrapper = (props) => {
   // Mutation for submitting the form
   const { mutate, isLoading } = useMutation({
     mutationFn: async (data) => {
-      return axios.post(
-        `${RoutesApi.apiUrl}student/assignments/${id}/sistem/${akun}/bupot/${type}`,
+      const response = await axios.get(`${RoutesApi.url}api/csrf-token`, {
+        // withCredentials: true,
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+          Accept: "application/json",
+        },
+      });
+      axios.defaults.headers.common["X-CSRF-TOKEN"] = response.data.token;
+      return await axios.post(
+        `${RoutesApi.apiUrl}student/assignments/${id}/sistem/${akun}/bupot`,
         data,
         {
           headers: {
             Authorization: `Bearer ${cookies.token}`,
             "Content-Type": "application/json",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": response.data.token,
+          },
+          params: {
             intent: `api.bupot.${type}`,
           },
         }
@@ -91,6 +104,14 @@ const BUPOTCreateWrapper = (props) => {
     onSuccess: () => {
       // Redirect back to the list page on success
       navigate(`/praktikum/${id}/sistem/${akun}/bupot/${type}`);
+    },
+    onError: (error) => {
+      console.log(error);
+      if (error.response === undefined) {
+        Swal.fire("Gagal !", error.message, "error");
+        return;
+      }
+      Swal.fire("Gagal !", error.response.data.message, "error");
     },
   });
 
@@ -103,8 +124,7 @@ const BUPOTCreateWrapper = (props) => {
 
     // Add any necessary transformations to the form data
     const submitData = {
-      ...formData,
-      isDraft: action === "draft",
+      ...formData
     };
 
     mutate(submitData);

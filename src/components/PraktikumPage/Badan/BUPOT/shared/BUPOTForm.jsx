@@ -32,17 +32,17 @@ const BUPOTForm = ({
   });
 
   const getBupot = () => {
-    if (location.pathname.includes("/bppu")) return "bppu";
-    if (location.pathname.includes("/bpnr")) return "bpnr";
-    if (location.pathname.includes("/ps")) return "ps";
-    if (location.pathname.includes("/psd")) return "psd";
-    if (location.pathname.includes("/bp21")) return "bp21";
-    if (location.pathname.includes("/bp26")) return "bp26";
-    if (location.pathname.includes("/bpa1")) return "bpa1";
-    if (location.pathname.includes("/bpa2")) return "bpa2";
-    if (location.pathname.includes("/bpbpt")) return "bpbpt";
-    // if (location.pathname.includes("/dsbp")) return "dsbp";
-    return "dsbp";
+    if (location.pathname.includes("/bppu")) return "BPPU";
+    if (location.pathname.includes("/bpnr")) return "BPNR";
+    if (location.pathname.includes("/ps")) return "Penyetoran Sendiri";
+    if (location.pathname.includes("/psd")) return "Pemotongan Secara Digunggung";
+    if (location.pathname.includes("/bp21")) return "BP 21";
+    if (location.pathname.includes("/bp26")) return "BP 26";
+    if (location.pathname.includes("/bpa1")) return "BP A1";
+    if (location.pathname.includes("/bpa2")) return "BP A2";
+    if (location.pathname.includes("/bpbpt")) return "BPBPT";
+    // if (location.pathname.includes("/dsbp")) return "DSBP";
+    return "DSBP";
   };
 
   const currentBupot = getBupot();
@@ -95,6 +95,26 @@ const BUPOTForm = ({
     setMonthOption(options);
   }, []);
 
+  // get url id for pembuat
+  const getIdFromUrl = () => {
+    // First check for viewAs parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const viewAsParam = urlParams.get("viewAs");
+
+    if (viewAsParam) {
+      return viewAsParam;
+    }
+
+    // If no viewAs parameter, extract the akun value from the URL path
+    // URL pattern: /praktikum/:id/sistem/:akun/bupot/:type
+    const pathMatch = window.location.pathname.match(/\/sistem\/([^/]+)/);
+    if (pathMatch && pathMatch[1]) {
+      return pathMatch[1];
+    }
+
+    return null;
+  };
+
   // Helper to toggle sections
   const toggleSection = (section) => {
     setOpenSections({
@@ -113,8 +133,33 @@ const BUPOTForm = ({
 
   // Handle submitting the form
   const handleSubmit = (action) => {
-    onSubmit(formData, action);
+    if (action === "save") {
+      const updatedFormData = {
+        ...formData,
+        ["tipe_bupot"]: currentBupot,
+        ["pembuat_id"]: getIdFromUrl(),
+        ["status_penerbitan"]: "draft",
+        ["status"]: "valid",
+      };
+      setFormData(updatedFormData); // Update the state for future renders
+      console.log(updatedFormData); // Log the updated data
+      onSubmit(updatedFormData, action); // Send the updated data
+    }
+
+    if (action === "draft") {
+      const updatedFormData = {
+        ...formData,
+        ["tipe_bupot"]: currentBupot,
+        ["pembuat_id"]: getIdFromUrl(),
+        ["status_penerbitan"]: "draft",
+        ["status"]: "invalid",
+      };
+      setFormData(updatedFormData);
+      console.log(updatedFormData);
+      onSubmit(updatedFormData, action);
+    }
   };
+
 
   // Format rupiah helper
   const formatRupiah = (value) => {
@@ -155,7 +200,7 @@ const BUPOTForm = ({
                 {/* Form fields for Informasi Umum */}
 
                 {/* Bekerja di Lebih dari Satu Pemberi Kerja */}
-                {(currentBupot === "bpbpt" || currentBupot === "bpa1") && (
+                {(currentBupot === "BPBPT" || currentBupot === "BP A1") && (
                   <>
                     <div className="mt-4 flex justify-between gap-4">
                       <label className="w-64 flex-none block text-sm font-medium text-gray-700">
@@ -187,12 +232,12 @@ const BUPOTForm = ({
                 {/* Masa Awal Pajak / Masa Pajak */}
                 <div className="mt-4 flex justify-between gap-4">
                   <label className="w-64 flex-none block text-sm font-medium text-gray-700">
-                    {/* {currentBupot === "bpa1" || currentBupot === "bpa2"
+                    {/* {currentBupot === "BP A1" || currentBupot === "BP A2"
                       ? "Masa Awal Pajak"
                       : "Masa Pajak"} */}
-                    {currentBupot === "bpa1"
+                    {currentBupot === "BP A1"
                       ? "Masa Awal Periode Penghasilan"
-                      : currentBupot === "bpa2"
+                      : currentBupot === "BP A2"
                       ? "Masa Pajak Awal"
                       : "Masa Pajak"}
                     <span className="text-red-500">*</span>
@@ -218,10 +263,12 @@ const BUPOTForm = ({
                 </div>
 
                 {/* Masa Akhir Pajak */}
-                {(currentBupot === "bpa1" || currentBupot === "bpa2") && (
+                {(currentBupot === "BP A1" || currentBupot === "BP A2") && (
                   <div className="mt-4 flex justify-between gap-4">
                     <label className="w-64 flex-none block text-sm font-medium text-gray-700">
-                      {currentBupot === "bpa1" ? "Masa Akhir Periode Penghasilan" : "Masa Pajak Akhir"}
+                      {currentBupot === "BP A1"
+                        ? "Masa Akhir Periode Penghasilan"
+                        : "Masa Pajak Akhir"}
                       <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -264,7 +311,7 @@ const BUPOTForm = ({
                 </div>
 
                 {/* Pegawai Asing */}
-                {(currentBupot === "bpbpt" || currentBupot === "bpa1") && (
+                {(currentBupot === "BPBPT" || currentBupot === "BP A1") && (
                   <>
                     <div className="mt-4 flex justify-between gap-4">
                       <label className="w-64 flex-none block text-sm font-medium text-gray-700">
@@ -288,11 +335,11 @@ const BUPOTForm = ({
                 )}
 
                 {/* NPWP */}
-                {(currentBupot === "bppu" ||
-                  currentBupot === "bp21" ||
-                  currentBupot === "bpa1" ||
-                  currentBupot === "bpa2" ||
-                  currentBupot === "bpbpt") && (
+                {(currentBupot === "BPPU" ||
+                  currentBupot === "BP 21" ||
+                  currentBupot === "BP A1" ||
+                  currentBupot === "BP A2" ||
+                  currentBupot === "BPBPT") && (
                   <div className="mt-4 flex justify-between gap-4">
                     <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                       NPWP (Under Construction)
@@ -314,11 +361,11 @@ const BUPOTForm = ({
                 )}
 
                 {/* Nama */}
-                {(currentBupot === "bppu" ||
-                  currentBupot === "bp21" ||
-                  currentBupot === "bpa1" ||
-                  currentBupot === "bpa2" ||
-                  currentBupot === "bpbpt") && (
+                {(currentBupot === "BPPU" ||
+                  currentBupot === "BP 21" ||
+                  currentBupot === "BP A1" ||
+                  currentBupot === "BP A2" ||
+                  currentBupot === "BPBPT") && (
                   <div className="mt-4 flex justify-between gap-4">
                     <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                       Nama
@@ -332,15 +379,15 @@ const BUPOTForm = ({
                       onChange={(e) => {
                         updateFormData("nama_akun", e.target.value);
                       }}
-                      readOnly={true}
+                      // readOnly={true}
                     />
                   </div>
                 )}
 
                 {/* Alamat */}
-                {(currentBupot === "bpbpt" ||
-                  currentBupot === "bpa1" ||
-                  currentBupot === "bpa2") && (
+                {(currentBupot === "BPBPT" ||
+                  currentBupot === "BP A1" ||
+                  currentBupot === "BP A2") && (
                   <div className="mt-4 flex justify-between gap-4">
                     <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                       Alamat
@@ -360,7 +407,7 @@ const BUPOTForm = ({
                 )}
 
                 {/* Nomor Paspor */}
-                {(currentBupot === "bpbpt" || currentBupot === "bpa1") && (
+                {(currentBupot === "BPBPT" || currentBupot === "BP A1") && (
                   <div className="mt-4 flex justify-between gap-4">
                     <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                       Nomor Paspor
@@ -386,7 +433,7 @@ const BUPOTForm = ({
                 )}
 
                 {/* Negara */}
-                {(currentBupot === "bpbpt" || currentBupot === "bpa1") && (
+                {(currentBupot === "BPBPT" || currentBupot === "BP A1") && (
                   <div className="mt-4 flex justify-between gap-4">
                     <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                       Negara
@@ -416,7 +463,7 @@ const BUPOTForm = ({
                 )}
 
                 {/* NIP/NRP */}
-                {currentBupot === "bpa2" && (
+                {currentBupot === "BP A2" && (
                   <div className="mt-4 flex justify-between gap-4">
                     <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                       NIP/NRP
@@ -436,7 +483,7 @@ const BUPOTForm = ({
                 )}
 
                 {/* Jenis Kelamin */}
-                {(currentBupot === "bpa1" || currentBupot === "bpa2") && (
+                {(currentBupot === "BP A1" || currentBupot === "BP A2") && (
                   <>
                     <div className="mt-4 flex justify-between gap-4">
                       <label className="w-64 flex-none block text-sm font-medium text-gray-700">
@@ -461,7 +508,7 @@ const BUPOTForm = ({
                 )}
 
                 {/* Pangkat/Golongan */}
-                {currentBupot === "bpa2" && (
+                {currentBupot === "BP A2" && (
                   <div className="mt-4 flex justify-between gap-4">
                     <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                       Pangkat/Golongan
@@ -481,9 +528,9 @@ const BUPOTForm = ({
                 )}
 
                 {/* Status PTKP */}
-                {(currentBupot === "bpbpt" ||
-                  currentBupot === "bpa1" ||
-                  currentBupot === "bpa2") && (
+                {(currentBupot === "BPBPT" ||
+                  currentBupot === "BP A1" ||
+                  currentBupot === "BP A2") && (
                   <div className="mt-4 flex justify-between gap-4">
                     <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                       Status PTKP
@@ -511,9 +558,9 @@ const BUPOTForm = ({
                 )}
 
                 {/* Posisi */}
-                {(currentBupot === "bpbpt" ||
-                  currentBupot === "bpa1" ||
-                  currentBupot === "bpa2") && (
+                {(currentBupot === "BPBPT" ||
+                  currentBupot === "BP A1" ||
+                  currentBupot === "BP A2") && (
                   <div className="mt-4 flex justify-between gap-4">
                     <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                       Posisi
@@ -533,7 +580,7 @@ const BUPOTForm = ({
                 )}
 
                 {/* Nama Objek Pajak */}
-                {(currentBupot === "bpa1" || currentBupot === "bpa2") && (
+                {(currentBupot === "BP A1" || currentBupot === "BP A2") && (
                   <div className="mt-4 flex justify-between gap-4">
                     <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                       Nama Objek Pajak (Under Construction)
@@ -556,7 +603,7 @@ const BUPOTForm = ({
                 )}
 
                 {/* Jenis Pajak */}
-                {(currentBupot === "bpa1" || currentBupot === "bpa2") && (
+                {(currentBupot === "BP A1" || currentBupot === "BP A2") && (
                   <div className="mt-4 flex justify-between gap-4">
                     <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                       Jenis Pajak
@@ -575,7 +622,7 @@ const BUPOTForm = ({
                 )}
 
                 {/* Kode Objek Pajak */}
-                {(currentBupot === "bpa1" || currentBupot === "bpa2") && (
+                {(currentBupot === "BP A1" || currentBupot === "BP A2") && (
                   <div className="mt-4 flex justify-between gap-4">
                     <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                       Kode Objek Pajak
@@ -594,7 +641,7 @@ const BUPOTForm = ({
                 )}
 
                 {/* Jenis Pemotongan */}
-                {(currentBupot === "bpa1" || currentBupot === "bpa2") && (
+                {(currentBupot === "BP A1" || currentBupot === "BP A2") && (
                   <div className="mt-4 flex justify-between gap-4">
                     <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                       Jenis Pemotongan
@@ -621,7 +668,7 @@ const BUPOTForm = ({
                 )}
 
                 {/* NITKU */}
-                {(currentBupot === "bppu" || currentBupot === "bp21") && (
+                {(currentBupot === "BPPU" || currentBupot === "BP 21") && (
                   <div className="mt-4 flex justify-between gap-4">
                     <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                       NITKU
@@ -667,7 +714,7 @@ const BUPOTForm = ({
                 {/* ... */}
 
                 {/* Status PTKP */}
-                {currentBupot === "bp21" && (
+                {currentBupot === "BP 21" && (
                   <div className="mt-4 flex justify-between gap-4">
                     <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                       Status PTKP
@@ -820,7 +867,7 @@ const BUPOTForm = ({
                 {/* Penghasilan Bruto / Dasar Pengenaan Pajak */}
                 <div className="mt-4 flex justify-between gap-4">
                   <label className="w-64 flex-none block text-sm font-medium text-gray-700">
-                    {currentBupot === "bp21"
+                    {currentBupot === "BP 21"
                       ? "Penghasilan Bruto (Rp)"
                       : "Dasar Pengenaan Pajak"}
                     <span className="text-red-500">*</span>
@@ -837,7 +884,7 @@ const BUPOTForm = ({
                 </div>
 
                 {/* DPP (%) Khusus BP21 */}
-                {currentBupot === "bp21" && (
+                {currentBupot === "BP 21" && (
                   <div className="mt-4 flex justify-between gap-4">
                     <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                       DPP (%)
@@ -951,7 +998,7 @@ const BUPOTForm = ({
                   >
                     <option value="">Please Select</option>
                     <option value="fasilitas_lainnya">Fasilitas Lainnya</option>
-                    {currentBupot === "bp26" && (
+                    {currentBupot === "BP 26" && (
                       <option value="pph_ditanggung_pemerintah">
                         Pph Ditanggung Pemerintah (DTP)
                       </option>
@@ -1314,7 +1361,7 @@ const BUPOTForm = ({
                 </div>
 
                 {/* Pembulatan Kotor */}
-                {currentBupot === "bpa1" && (
+                {currentBupot === "BP A1" && (
                   <div className="mt-4 flex justify-between gap-4">
                     <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                       Pembulatan Kotor
@@ -1336,7 +1383,7 @@ const BUPOTForm = ({
                 )}
 
                 {/* Tunjangan PPH */}
-                {currentBupot === "bpa1" && (
+                {currentBupot === "BP A1" && (
                   <div className="mt-4 flex justify-between gap-4">
                     <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                       Tunjangan PPH
@@ -1358,7 +1405,7 @@ const BUPOTForm = ({
                 )}
 
                 {/* Tunjangan Istri */}
-                {currentBupot === "bpa2" && (
+                {currentBupot === "BP A2" && (
                   <div className="mt-4 flex justify-between gap-4">
                     <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                       Tunjangan Istri
@@ -1380,7 +1427,7 @@ const BUPOTForm = ({
                 )}
 
                 {/* Tunjangan Anak */}
-                {currentBupot === "bpa2" && (
+                {currentBupot === "BP A2" && (
                   <div className="mt-4 flex justify-between gap-4">
                     <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                       Tunjangan Anak
@@ -1402,7 +1449,7 @@ const BUPOTForm = ({
                 )}
 
                 {/* Tunjangan Perbaikan Penghasilan */}
-                {currentBupot === "bpa2" && (
+                {currentBupot === "BP A2" && (
                   <div className="mt-4 flex justify-between gap-4">
                     <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                       Tunjangan Perbaikan Penghasilan
@@ -1431,7 +1478,7 @@ const BUPOTForm = ({
                 )}
 
                 {/* Tunjangan Struktural/Fungsional */}
-                {currentBupot === "bpa2" && (
+                {currentBupot === "BP A2" && (
                   <div className="mt-4 flex justify-between gap-4">
                     <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                       Tunjangan Struktural/Fungsional
@@ -1460,7 +1507,7 @@ const BUPOTForm = ({
                 )}
 
                 {/* Tunjangan Beras */}
-                {currentBupot === "bpa2" && (
+                {currentBupot === "BP A2" && (
                   <div className="mt-4 flex justify-between gap-4">
                     <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                       Tunjangan Beras
@@ -1502,7 +1549,7 @@ const BUPOTForm = ({
                 </div>
 
                 {/* Penghasilan Tetap dan Teratur Lainnya yang Pembayarannya Terpisah dari Pembayaran Gaji */}
-                {currentBupot === "bpa2" && (
+                {currentBupot === "BP A2" && (
                   <div className="mt-4 flex justify-between gap-4">
                     <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                       Penghasilan Tetap dan Teratur Lainnya yang Pembayarannya
@@ -1527,7 +1574,7 @@ const BUPOTForm = ({
                 )}
 
                 {/* Honorarium dan Imbalan Lain Sejenisnya */}
-                {currentBupot === "bpa1" && (
+                {currentBupot === "BP A1" && (
                   <div className="mt-4 flex justify-between gap-4">
                     <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                       Honorarium dan Imbalan Lain Sejenisnya
@@ -1551,7 +1598,7 @@ const BUPOTForm = ({
                 )}
 
                 {/* Premi Asuransi yang Dibayar Pemberi Kerja */}
-                {currentBupot === "bpa1" && (
+                {currentBupot === "BP A1" && (
                   <div className="mt-4 flex justify-between gap-4">
                     <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                       Premi Asuransi yang Dibayar Pemberi Kerja
@@ -1579,7 +1626,7 @@ const BUPOTForm = ({
                 )}
 
                 {/* Penerimaan Dalam Bentuk Natura dan Kenikmatan Lainnya yang Dikenakan Pemotongan PPh Pasal 21 */}
-                {currentBupot === "bpa1" && (
+                {currentBupot === "BP A1" && (
                   <div className="mt-4 flex justify-between gap-4">
                     <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                       Penerimaan Dalam Bentuk Natura dan Kenikmatan Lainnya yang
@@ -1602,7 +1649,7 @@ const BUPOTForm = ({
                 )}
 
                 {/* Tantiem, Bonus, Gratifikasi, Jasa Produksi, dan THR */}
-                {currentBupot === "bpa1" && (
+                {currentBupot === "BP A1" && (
                   <div className="mt-4 flex justify-between gap-4">
                     <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                       Tantiem, Bonus, Gratifikasi, Jasa Produksi, dan THR
@@ -2107,7 +2154,7 @@ const BUPOTForm = ({
                 </div>
 
                 {/* NITKU */}
-                {(currentBupot === "bppu" || currentBupot === "bp21") && (
+                {(currentBupot === "BPPU" || currentBupot === "BP 21") && (
                   <div className="mt-4 flex justify-between gap-4">
                     <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                       NITKU
@@ -2263,7 +2310,7 @@ const BUPOTForm = ({
                 </div>
 
                 {/* NITKU */}
-                {(currentBupot === "bppu" || currentBupot === "bp21") && (
+                {(currentBupot === "BPPU" || currentBupot === "BP 21") && (
                   <div className="mt-4 flex justify-between gap-4">
                     <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                       NITKU
@@ -2333,7 +2380,7 @@ const BUPOTForm = ({
                   >
                     <option value="">Please Select</option>
                     <option value="Akta Perjanjian">Akta Perjanjian</option>
-                    {currentBupot === "bp21" || currentBupot === "bp26" ? (
+                    {currentBupot === "BP 21" || currentBupot === "BP 26" ? (
                       ""
                     ) : (
                       <option value="Rapat Umum Pemegang Saham">
@@ -2420,18 +2467,24 @@ const BUPOTForm = ({
 
         {/* Action buttons */}
         <div className="flex justify-end mt-4">
-          <button
-            className="bg-blue-500 text-white px-4 py-2 rounded-md mr-2"
-            onClick={() => handleSubmit("save")}
-          >
-            Simpan
-          </button>
-          <button
-            className="bg-blue-500 text-white px-4 py-2 rounded-md mr-2"
-            onClick={() => handleSubmit("draft")}
-          >
-            Simpan Draft
-          </button>
+          {location.pathname.includes("/create") && (
+            <>
+              <button
+                className="bg-blue-500 text-white px-4 py-2 rounded-md mr-2"
+                onClick={() => handleSubmit("save")}
+              >
+                Simpan
+              </button>
+              <button
+                className="bg-blue-500 text-white px-4 py-2 rounded-md mr-2"
+                onClick={() => {
+                  handleSubmit("draft");
+                }}
+              >
+                Simpan Draft
+              </button>
+            </>
+          )}
           <button
             className="bg-gray-300 text-gray-700 px-4 py-2 rounded-md"
             onClick={() => handleSubmit("cancel")}
