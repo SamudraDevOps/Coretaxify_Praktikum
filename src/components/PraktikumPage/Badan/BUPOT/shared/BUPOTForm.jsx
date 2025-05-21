@@ -192,21 +192,24 @@ const BUPOTForm = ({
                       : "Masa Pajak"}
                     <span className="text-red-500">*</span>
                   </label>
-                  <select
-                    className="w-64 flex-auto border p-2 rounded appearance-none"
-                    value={formData.masa_awal || ""}
-                    onChange={(e) =>
-                      updateFormData("masa_awal", e.target.value)
+                  <input
+                    type="month"
+                    value={
+                      formData.masa_awal
+                        ? formData.masa_awal.substring(0, 7)
+                        : ""
                     }
-                    placehoder="Please Select"
-                  >
-                    <option value="">Please Select</option>
-                    {monthOption.map((option) => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
+                    className="w-64 flex-auto border p-2 rounded appearance-none"
+                    placeholder="Tanggal Lahir"
+                    onChange={(e) => {
+                      // Append "-01" to make it a valid date in YYYY-MM-DD format
+                      const selectedMonth = e.target.value;
+                      const formattedDate = selectedMonth
+                        ? `${selectedMonth}-01`
+                        : "";
+                      updateFormData("masa_awal", formattedDate);
+                    }}
+                  />
                 </div>
 
                 {/* Masa Akhir Pajak */}
@@ -216,21 +219,24 @@ const BUPOTForm = ({
                     Masa Akhir Pajak
                     <span className="text-red-500">*</span>
                   </label>
-                  <select
-                    className="w-64 flex-auto border p-2 rounded appearance-none"
-                    value={formData.masa_akhir || ""}
-                    onChange={(e) =>
-                      updateFormData("masa_akhir", e.target.value)
+                  <input
+                    type="month"
+                    value={
+                      formData.masa_akhir
+                        ? formData.masa_akhir.substring(0, 7)
+                        : ""
                     }
-                    placehoder="Please Select"
-                  >
-                    <option value="">Please Select</option>
-                    {monthOption.map((option) => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
+                    className="w-64 flex-auto border p-2 rounded appearance-none"
+                    placeholder="Tanggal Lahir"
+                    onChange={(e) => {
+                      // Append "-01" to make it a valid date in YYYY-MM-DD format
+                      const selectedMonth = e.target.value;
+                      const formattedDate = selectedMonth
+                        ? `${selectedMonth}-01`
+                        : "";
+                      updateFormData("masa_akhir", formattedDate);
+                    }}
+                  />
                 </div>
 
                 {/* STATUS */}
@@ -1821,7 +1827,9 @@ const BUPOTForm = ({
                     type="text"
                     className="w-64 flex-auto border p-2 rounded"
                     placeholder="Wajib Diisi"
-                    value={formatRupiah(formData.penghasilan_neto_sebelumnya) || ""}
+                    value={
+                      formatRupiah(formData.penghasilan_neto_sebelumnya) || ""
+                    }
                     onChange={(e) => {
                       const rawValue = e.target.value.replace(/[^\d]/g, "");
                       updateFormData("penghasilan_neto_sebelumnya", rawValue);
@@ -1834,14 +1842,17 @@ const BUPOTForm = ({
                 {/* Jumlah Penghasilan Neto Untuk Perhitungan PPh Pasal 21 (Setahun/Disetahunkan) */}
                 <div className="mt-4 flex justify-between gap-4">
                   <label className="w-64 flex-none block text-sm font-medium text-gray-700">
-                    Jumlah Penghasilan Neto Untuk Perhitungan PPh Pasal 21 (Setahun/Disetahunkan)
+                    Jumlah Penghasilan Neto Untuk Perhitungan PPh Pasal 21
+                    (Setahun/Disetahunkan)
                     <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
                     className="w-64 flex-auto border p-2 rounded"
                     placeholder="Wajib Diisi"
-                    value={formatRupiah(formData.penghasilan_neto_pph_pasal_21) || ""}
+                    value={
+                      formatRupiah(formData.penghasilan_neto_pph_pasal_21) || ""
+                    }
                     onChange={(e) => {
                       const rawValue = e.target.value.replace(/[^\d]/g, "");
                       updateFormData("penghasilan_neto_pph_pasal_21", rawValue);
@@ -1861,7 +1872,9 @@ const BUPOTForm = ({
                     type="text"
                     className="w-64 flex-auto border p-2 rounded"
                     placeholder="Wajib Diisi"
-                    value={formatRupiah(formData.penghasilan_tidak_kena_pajak) || ""}
+                    value={
+                      formatRupiah(formData.penghasilan_tidak_kena_pajak) || ""
+                    }
                     onChange={(e) => {
                       const rawValue = e.target.value.replace(/[^\d]/g, "");
                       updateFormData("penghasilan_tidak_kena_pajak", rawValue);
@@ -1894,17 +1907,25 @@ const BUPOTForm = ({
                 {/* PPh Pasal 21 atas Penghasilan Kena Pajak Setahun/Disetahunkan */}
                 <div className="mt-4 flex justify-between gap-4">
                   <label className="w-64 flex-none block text-sm font-medium text-gray-700">
-                    PPh Pasal 21 atas Penghasilan Kena Pajak Setahun/Disetahunkan
+                    PPh Pasal 21 atas Penghasilan Kena Pajak
+                    Setahun/Disetahunkan
                     <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
                     className="w-64 flex-auto border p-2 rounded"
                     placeholder="Wajib Diisi"
-                    value={formatRupiah(formData.pph_pasal_21_penghasilan_kena_pajak) || ""}
+                    value={
+                      formatRupiah(
+                        formData.pph_pasal_21_penghasilan_kena_pajak
+                      ) || ""
+                    }
                     onChange={(e) => {
                       const rawValue = e.target.value.replace(/[^\d]/g, "");
-                      updateFormData("pph_pasal_21_penghasilan_kena_pajak", rawValue);
+                      updateFormData(
+                        "pph_pasal_21_penghasilan_kena_pajak",
+                        rawValue
+                      );
                       // updateFormData("penghasilan_bruto_raw", Number(rawValue));
                     }}
                     onWheel={(e) => e.target.blur()}
@@ -1941,10 +1962,17 @@ const BUPOTForm = ({
                     type="text"
                     className="w-64 flex-auto border p-2 rounded"
                     placeholder="Wajib Diisi"
-                    value={formatRupiah(formData.pph_pasal_21_potongan_bpa1_sebelumnya) || ""}
+                    value={
+                      formatRupiah(
+                        formData.pph_pasal_21_potongan_bpa1_sebelumnya
+                      ) || ""
+                    }
                     onChange={(e) => {
                       const rawValue = e.target.value.replace(/[^\d]/g, "");
-                      updateFormData("pph_pasal_21_potongan_bpa1_sebelumnya", rawValue);
+                      updateFormData(
+                        "pph_pasal_21_potongan_bpa1_sebelumnya",
+                        rawValue
+                      );
                       // updateFormData("penghasilan_bruto_raw", Number(rawValue));
                     }}
                     onWheel={(e) => e.target.blur()}
@@ -1954,17 +1982,24 @@ const BUPOTForm = ({
                 {/* PPh Pasal 21 Terutang pada Bukti Pemotongan Ini (Dapat Dikreditkan Pada SPT Tahunan) */}
                 <div className="mt-4 flex justify-between gap-4">
                   <label className="w-64 flex-none block text-sm font-medium text-gray-700">
-                    PPh Pasal 21 Terutang pada Bukti Pemotongan Ini (Dapat Dikreditkan Pada SPT Tahunan)
+                    PPh Pasal 21 Terutang pada Bukti Pemotongan Ini (Dapat
+                    Dikreditkan Pada SPT Tahunan)
                     <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
                     className="w-64 flex-auto border p-2 rounded"
                     placeholder="Wajib Diisi"
-                    value={formatRupiah(formData.pph_pasal_21_terutang_bupot_ini) || ""}
+                    value={
+                      formatRupiah(formData.pph_pasal_21_terutang_bupot_ini) ||
+                      ""
+                    }
                     onChange={(e) => {
                       const rawValue = e.target.value.replace(/[^\d]/g, "");
-                      updateFormData("pph_pasal_21_terutang_bupot_ini", rawValue);
+                      updateFormData(
+                        "pph_pasal_21_terutang_bupot_ini",
+                        rawValue
+                      );
                       // updateFormData("penghasilan_bruto_raw", Number(rawValue));
                     }}
                     onWheel={(e) => e.target.blur()}
@@ -1981,10 +2016,17 @@ const BUPOTForm = ({
                     type="text"
                     className="w-64 flex-auto border p-2 rounded"
                     placeholder="Wajib Diisi"
-                    value={formatRupiah(formData.pph_pasal_21_ditanggung_pemerintah) || ""}
+                    value={
+                      formatRupiah(
+                        formData.pph_pasal_21_ditanggung_pemerintah
+                      ) || ""
+                    }
                     onChange={(e) => {
                       const rawValue = e.target.value.replace(/[^\d]/g, "");
-                      updateFormData("pph_pasal_21_ditanggung_pemerintah", rawValue);
+                      updateFormData(
+                        "pph_pasal_21_ditanggung_pemerintah",
+                        rawValue
+                      );
                       // updateFormData("penghasilan_bruto_raw", Number(rawValue));
                     }}
                     onWheel={(e) => e.target.blur()}
@@ -1994,27 +2036,35 @@ const BUPOTForm = ({
                 {/* PPh Pasal 21 Kurang (Lebih) Dipotong pada Masa Pajak Desember / Masa Pajak Terakhir */}
                 <div className="mt-4 flex justify-between gap-4">
                   <label className="w-64 flex-none block text-sm font-medium text-gray-700">
-                    PPh Pasal 21 Kurang (Lebih) Dipotong pada Masa Pajak Desember / Masa Pajak Terakhir
+                    PPh Pasal 21 Kurang (Lebih) Dipotong pada Masa Pajak
+                    Desember / Masa Pajak Terakhir
                     <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
                     className="w-64 flex-auto border p-2 rounded"
                     placeholder="Wajib Diisi"
-                    value={formatRupiah(formData.pph_pasal_21_masa_pajak_terakhir) || ""}
+                    value={
+                      formatRupiah(formData.pph_pasal_21_masa_pajak_terakhir) ||
+                      ""
+                    }
                     onChange={(e) => {
                       const rawValue = e.target.value.replace(/[^\d]/g, "");
-                      updateFormData("pph_pasal_21_masa_pajak_terakhir", rawValue);
+                      updateFormData(
+                        "pph_pasal_21_masa_pajak_terakhir",
+                        rawValue
+                      );
                       // updateFormData("penghasilan_bruto_raw", Number(rawValue));
                     }}
                     onWheel={(e) => e.target.blur()}
                   />
                 </div>
-                
+
                 {/* Jenis Fasilitas pada Masa Pajak Desember / Masa Pajak Terakhir */}
                 <div className="mt-4 flex justify-between gap-4">
                   <label className="w-64 flex-none block text-sm font-medium text-gray-700">
-                    Jenis Fasilitas pada Masa Pajak Desember / Masa Pajak Terakhir
+                    Jenis Fasilitas pada Masa Pajak Desember / Masa Pajak
+                    Terakhir
                     <span className="text-red-500">*</span>
                   </label>
                   <select
