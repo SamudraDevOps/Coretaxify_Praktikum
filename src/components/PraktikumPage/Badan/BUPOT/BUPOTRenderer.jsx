@@ -24,6 +24,22 @@ const BUPOTRenderer = ({
   const [cookies] = useCookies(["token"]);
   const location = useLocation();
 
+  const getBupot = () => {
+    if (location.pathname.includes("/bppu")) return "BPPU";
+    if (location.pathname.includes("/bpnr")) return "BPNR";
+    if (location.pathname.includes("/ps")) return "Penyetoran Sendiri";
+    if (location.pathname.includes("/psd")) return "Pemotongan Secara Digunggung";
+    if (location.pathname.includes("/bp21")) return "BP 21";
+    if (location.pathname.includes("/bp26")) return "BP 26";
+    if (location.pathname.includes("/bpa1")) return "BP A1";
+    if (location.pathname.includes("/bpa2")) return "BP A2";
+    if (location.pathname.includes("/bpbpt")) return "BPBPT";
+    // if (location.pathname.includes("/dsbp")) return "DSBP";
+    return "DSBP";
+  };
+
+  const currentBupot = getBupot();
+
   // Determine which status we're viewing
   const getStatus = () => {
     if (location.pathname.includes("/telah-terbit")) return "published";
@@ -41,30 +57,30 @@ const BUPOTRenderer = ({
   } = useQuery({
     queryKey: [queryKey || `bupot-${type}`, id, akun, currentStatus],
     queryFn: async () => {
-      const url = `${
-        RoutesApi.apiUrl
-      }student/assignments/${id}/sistem/${akun}/${
-        apiEndpoint || `bupot/${type}`
-      }`;
+      const url = `${RoutesApi.apiUrl}student/assignments/${id}/sistem/${akun}/bupot`;
       const { data } = await axios.get(url, {
         headers: {
           Authorization: `Bearer ${cookies.token}`,
-          Accept: "application/json",
         },
         params: {
-          status: currentStatus,
+          intent: `api.bupot.${type}`,
+          column_filters: {
+            status_penerbitan: currentStatus,
+            bupot_tipe: currentBupot,
+          },
         },
       });
+      console.log("BUPOT Response:", data);
       return data;
     },
     // Skip the query if data is provided directly
-    enabled: !data,
+    // enabled: !data,
   });
 
   // Use provided data or fetched data
-  const bupotData = data || fetchedData;
+  const bupotData = fetchedData;
 
-  if (isLoading && !data) {
+  if (isLoading && !fetchedData) {
     return (
       <>
         {/* <Header /> */}
@@ -76,7 +92,7 @@ const BUPOTRenderer = ({
     );
   }
 
-  if (error && !data) {
+  if (error && !fetchedData) {
     return (
       <>
         {/* <Header /> */}
