@@ -2310,7 +2310,6 @@ const BUPOTForm = ({
                 </div>
 
                 {/* NITKU */}
-                {(currentBupot === "BPPU" || currentBupot === "BP 21") && (
                   <div className="mt-4 flex justify-between gap-4">
                     <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                       NITKU
@@ -2327,7 +2326,6 @@ const BUPOTForm = ({
                       <option value="NITKU2">NITKU2</option>
                     </select>
                   </div>
-                )}
 
                 {/* More fields as needed */}
               </div>
