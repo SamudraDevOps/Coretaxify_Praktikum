@@ -187,8 +187,13 @@ const BUPOTForm = ({
                 {/* Masa Awal Pajak / Masa Pajak */}
                 <div className="mt-4 flex justify-between gap-4">
                   <label className="w-64 flex-none block text-sm font-medium text-gray-700">
-                    {currentBupot === "bpa1" || currentBupot === "bpa2"
+                    {/* {currentBupot === "bpa1" || currentBupot === "bpa2"
                       ? "Masa Awal Pajak"
+                      : "Masa Pajak"} */}
+                    {currentBupot === "bpa1"
+                      ? "Masa Awal Periode Penghasilan"
+                      : currentBupot === "bpa2"
+                      ? "Masa Pajak Awal"
                       : "Masa Pajak"}
                     <span className="text-red-500">*</span>
                   </label>
@@ -213,31 +218,32 @@ const BUPOTForm = ({
                 </div>
 
                 {/* Masa Akhir Pajak */}
-                {currentBupot === "bpa1" || currentBupot === "bpa2"}
-                <div className="mt-4 flex justify-between gap-4">
-                  <label className="w-64 flex-none block text-sm font-medium text-gray-700">
-                    Masa Akhir Pajak
-                    <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="month"
-                    value={
-                      formData.masa_akhir
-                        ? formData.masa_akhir.substring(0, 7)
-                        : ""
-                    }
-                    className="w-64 flex-auto border p-2 rounded appearance-none"
-                    placeholder="Tanggal Lahir"
-                    onChange={(e) => {
-                      // Append "-01" to make it a valid date in YYYY-MM-DD format
-                      const selectedMonth = e.target.value;
-                      const formattedDate = selectedMonth
-                        ? `${selectedMonth}-01`
-                        : "";
-                      updateFormData("masa_akhir", formattedDate);
-                    }}
-                  />
-                </div>
+                {(currentBupot === "bpa1" || currentBupot === "bpa2") && (
+                  <div className="mt-4 flex justify-between gap-4">
+                    <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                      {currentBupot === "bpa1" ? "Masa Akhir Periode Penghasilan" : "Masa Pajak Akhir"}
+                      <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="month"
+                      value={
+                        formData.masa_akhir
+                          ? formData.masa_akhir.substring(0, 7)
+                          : ""
+                      }
+                      className="w-64 flex-auto border p-2 rounded appearance-none"
+                      placeholder="Tanggal Lahir"
+                      onChange={(e) => {
+                        // Append "-01" to make it a valid date in YYYY-MM-DD format
+                        const selectedMonth = e.target.value;
+                        const formattedDate = selectedMonth
+                          ? `${selectedMonth}-01`
+                          : "";
+                        updateFormData("masa_akhir", formattedDate);
+                      }}
+                    />
+                  </div>
+                )}
 
                 {/* STATUS */}
                 <div className="mt-4 flex justify-between gap-4">
