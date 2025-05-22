@@ -133,6 +133,7 @@ import CreateBpnr from "./components/PraktikumPage/Badan/BUPOT/BPNR/CreateBpnr";
 import BpnrTelahTerbit from "./components/PraktikumPage/Badan/BUPOT/BPNR/BpnrTelahTerbit";
 import BpnrTidakValid from "./components/PraktikumPage/Badan/BUPOT/BPNR/BpnrTidakValid";
 import SelfBilling from "./components/PraktikumPage/Badan/Pembayaran/SelfBilling";
+import DaftarKodeBilingBelumBayar from "./components/PraktikumPage/Badan/Pembayaran/DaftarKodeBilingBelumBayar";
 // Route Badan
 
 import ProtectedRoutes from "./components/Dashboard/Auth/ProtectedRoutes";
@@ -1146,11 +1147,20 @@ const Main = () => {
           }
         />
         <Route
-            path="/admin/praktikum/2/layanan-mandiri-kode-billing"
+          path="/admin/praktikum/2/layanan-mandiri-kode-billing"
           element={
             <>
               <Header />
               <SelfBilling />
+            </>
+          }
+        />
+        <Route
+            path="/admin/praktikum/2/daftar-kode-billing-belum-dibayar"
+          element={
+            <>
+              <Header />
+              <DaftarKodeBilingBelumBayar />
             </>
           }
         />
