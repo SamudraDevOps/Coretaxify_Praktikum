@@ -2,10 +2,112 @@ import React, { useState } from "react";
 import SidebarProfilSaya from "./SidebarProfilSaya";
 import { BsFiletypeXls } from "react-icons/bs";
 import { IoDocumentTextOutline } from "react-icons/io5";
-import { useParams } from "react-router";
+import { useParams, useSearchParams } from "react-router";
+import {
+  AlertDialog,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogFooter,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogAction,
+  AlertDialogCancel,
+} from "@/components/ui/alert-dialog";
+import axios from "axios";
+import { RoutesApi } from "@/Routes";
+import { getCsrf } from "@/service/getCsrf";
+import { useMutation } from "@tanstack/react-query";
+import { useCookies } from "react-cookie";
+import Swal from "sweetalert2";
 
 const DetailBank = ({ data, sidebar }) => {
   const { id, akun } = useParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const viewAsCompanyId = searchParams.get("viewAs");
+  const [cookies] = useCookies(["token"]);
+  const [bankFormData, setBankFormData] = useState({
+    nama_bank: "",
+    nomor_rekening_bank: "",
+    jenis_rekening_bank: "akun-bisnis",
+    nama_pemilik_bank: "",
+    tanggal_mulai: "",
+    tanggal_berakhir: "",
+  });
+  const handleBankChange = (e) => {
+    const { name, value } = e.target;
+    setBankFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+  const updateDetailBank = useMutation({
+    mutationFn: async (bank_id) => {
+      const csrf = await getCsrf();
+      const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
+      return axios.put(
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${accountId}/detail-bank/${bank_id}`,
+        bankFormData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": csrf,
+            Authorization: `Bearer ${cookies.token}`,
+          },
+        }
+      );
+    },
+    onSuccess: (data) => {
+      console.log(data);
+      Swal.fire(
+        "Berhasil!",
+        "Data detail bank berhasil disimpan!",
+        "success"
+      ).then((result) => {
+        if (result.isConfirmed) {
+          window.location.reload();
+        }
+      });
+    },
+    onError: (error) => {
+      console.error("Error saving data:", error);
+      Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
+    },
+  });
+  const deleteDetailBank = useMutation({
+    mutationFn: async (bank_id) => {
+      const csrf = await getCsrf();
+      const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
+      return axios.delete(
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${accountId}/detail-bank/${bank_id}`,
+        {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": csrf,
+            Authorization: `Bearer ${cookies.token}`,
+          },
+        }
+      );
+    },
+    onSuccess: (data) => {
+      console.log(data);
+      Swal.fire(
+        "Berhasil!",
+        "Data bank terkait berhasil dihapus!",
+        "success"
+      ).then((result) => {
+        if (result.isConfirmed) {
+          window.location.reload();
+        }
+      });
+    },
+    onError: (error) => {
+      console.error("Error saving data:", error);
+      Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
+    },
+  });
   return (
     <div className="flex h-screen bg-gray-100">
       <SidebarProfilSaya
@@ -38,6 +140,9 @@ const DetailBank = ({ data, sidebar }) => {
                 </th>
                 <th className="border border-gray-300 px-4 py-2">
                   Jenis Rekening Bank
+                </th>
+                <th className="border border-gray-300 px-4 py-2">
+                  Nama Rekening Bank
                 </th>
                 <th className="border border-gray-300 px-4 py-2">
                   Tanggal Mulai
@@ -77,70 +182,76 @@ const DetailBank = ({ data, sidebar }) => {
                                 onChange={handleBankChange}
                               >
                                 <option value="">Pilih Bank</option>
-                                <option value="mandiri">
+                                <option value="PT BANK MANDIRI (PERSERO) Tbk">
                                   PT BANK MANDIRI (PERSERO) Tbk
                                 </option>
-                                <option value="bca">
+                                <option value="PT BANK CENTRAL ASIA Tbk">
                                   PT BANK CENTRAL ASIA Tbk
                                 </option>
-                                <option value="bri">
+                                <option value="PT BANK RAKYAT INDONESIA (PERSERO) Tbk">
                                   PT BANK RAKYAT INDONESIA (PERSERO) Tbk
                                 </option>
-                                <option value="bni">
+                                <option value="PT BANK NEGARA INDONESIA (PERSERO) Tbk">
                                   PT BANK NEGARA INDONESIA (PERSERO) Tbk
                                 </option>
-                                <option value="bukopin">
+                                <option value="PT BANK BUKOPIN Tbk">
                                   PT BANK BUKOPIN Tbk
                                 </option>
-                                <option value="btpn">PT BANK BTPN Tbk</option>
-                                <option value="cimb">
+                                <option value="PT BANK BTPN Tbk">
+                                  PT BANK BTPN Tbk
+                                </option>
+                                <option value="PT BANK CIMB NIAGA Tbk">
                                   PT BANK CIMB NIAGA Tbk
                                 </option>
-                                <option value="danamon">
+                                <option value="PT BANK DANAMON Tbk">
                                   PT BANK DANAMON Tbk
                                 </option>
-                                <option value="maybank">
+                                <option value="PT BANK MAYBANK Tbk">
                                   PT BANK MAYBANK Tbk
                                 </option>
-                                <option value="mega">PT BANK MEGA Tbk</option>
-                                <option value="permata">
+                                <option value="PT BANK MEGA Tbk">
+                                  PT BANK MEGA Tbk
+                                </option>
+                                <option value="PT BANK PERMATA Tbk">
                                   PT BANK PERMATA Tbk
                                 </option>
-                                <option value="panin">PT BANK PANIN Tbk</option>
-                                <option value="panin_syariah">
+                                <option value="PT BANK PANIN Tbk">
+                                  PT BANK PANIN Tbk
+                                </option>
+                                <option value="PT BANK PANIN SYARIAH Tbk">
                                   PT BANK PANIN SYARIAH Tbk
                                 </option>
-                                <option value="maybank_syariah">
+                                <option value="PT BANK MAYBANK SYARIAH Tbk">
                                   PT BANK MAYBANK SYARIAH Tbk
                                 </option>
-                                <option value="bsi">
+                                <option value="PT BANK SYARIAH INDONESIA Tbk">
                                   PT BANK SYARIAH INDONESIA Tbk
                                 </option>
-                                <option value="bsi_syariah">
+                                <option value="PT BANK SYARIAH INDONESIA SYARIAH Tbk">
                                   PT BANK SYARIAH INDONESIA SYARIAH Tbk
                                 </option>
-                                <option value="bca_syariah">
+                                <option value="PT BANK CENTRAL ASIA SYARIAH Tbk">
                                   PT BANK CENTRAL ASIA SYARIAH Tbk
                                 </option>
-                                <option value="bri_syariah">
+                                <option value="PT BANK RAKYAT INDONESIA SYARIAH Tbk">
                                   PT BANK RAKYAT INDONESIA SYARIAH Tbk
                                 </option>
-                                <option value="bni_syariah">
+                                <option value="PT BANK NEGARA INDONESIA SYARIAH Tbk">
                                   PT BANK NEGARA INDONESIA SYARIAH Tbk
                                 </option>
-                                <option value="bukopin_syariah">
+                                <option value="PT BANK BUKOPIN SYARIAH Tbk">
                                   PT BANK BUKOPIN SYARIAH Tbk
                                 </option>
-                                <option value="btpn_syariah">
+                                <option value="PT BANK BTPN SYARIAH Tbk">
                                   PT BANK BTPN SYARIAH Tbk
                                 </option>
-                                <option value="cimb_syariah">
+                                <option value="PT BANK CIMB NIAGA SYARIAH Tbk">
                                   PT BANK CIMB NIAGA SYARIAH Tbk
                                 </option>
-                                <option value="danamon_syariah">
+                                <option value="PT BANK DANAMON SYARIAH Tbk">
                                   PT BANK DANAMON SYARIAH Tbk
                                 </option>
-                                <option value="maybank_syariah">
+                                <option value="PT BANK MAYBANK SYARIAH Tbk">
                                   PT BANK MAYBANK SYARIAH Tbk
                                 </option>
                               </select>
