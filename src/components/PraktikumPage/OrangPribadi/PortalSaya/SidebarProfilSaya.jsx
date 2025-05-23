@@ -53,7 +53,7 @@ const SidebarProfilSaya = ({ nama_akun, npwp_akun, akun }) => {
     },
     {
       label: "Detail Bank",
-      link: `/detail-bank${
+      link: `/praktikum/${akun.id}/sistem/${akun.akun}/detail-bank${
         viewAsCompanyId ? `?viewAs=${viewAsCompanyId}` : ""
       }`,
     },
@@ -112,7 +112,6 @@ const SidebarProfilSaya = ({ nama_akun, npwp_akun, akun }) => {
       }`,
     },
   ];
-
 
   return (
     <aside className="w-1/6 text-blue-900 px-5 py-5 h-screen bg-white">

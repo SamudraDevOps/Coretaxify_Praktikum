@@ -695,6 +695,20 @@ const Main = () => {
           }
         />
         <Route
+          path="/praktikum/:id/sistem/:akun/detail-bank"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/detail-bank`}
+                intent={""}
+                OrangPribadi={DetailBank}
+                Badan={DetailBankBadan}
+                query={""}
+              ></RoleBasedRenderer>
+            </>
+          }
+        />
+        <Route
           path="/praktikum/:id/sistem/:akun/informasi-umum"
           // path="/admin/praktikum/1/profil-saya/informasi-umum"
           element={
@@ -823,15 +837,6 @@ const Main = () => {
             <>
               <Header />
               <PihakTerkait />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/1/profil-saya/detail-bank"
-          element={
-            <>
-              <Header />
-              <DetailBank />
             </>
           }
         />
