@@ -765,7 +765,56 @@ const EditDataProfil = ({ data, sidebar }) => {
       Swal.fire("Gagal!", "Terjadi kesalahan saat menghapus data.", "error");
     },
   });
+  const [extIdFormData, setExtIdFormData] = useState({
+    tanggal_mulai:
+      data.field_edit_informasi.nomor_identifikasi_eksternal.tanggal_mulai ||
+      "",
+    tanggal_berakhir:
+      data.field_edit_informasi.nomor_identifikasi_eksternal.tanggal_berakhir ||
+      "",
+  });
+  const handleExtIdChange = (e) => {
+    const { name, value } = e.target;
+    setExtIdFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
+  const updateExternalId = useMutation({
+    mutationFn: async () => {
+      const csrf = await getCsrf();
+      const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
+      return axios.put(
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${accountId}/nomor-identifikasi-eksternal/${accountId}`,
+        extIdFormData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": csrf,
+            Authorization: `Bearer ${cookies.token}`,
+          },
+        }
+      );
+    },
+    onSuccess: (data) => {
+      console.log(data);
+      Swal.fire(
+        "Berhasil!",
+        "Nomor identifikasi eksternal berhasil disimpan!",
+        "success"
+      ).then((result) => {
+        if (result.isConfirmed) {
+          window.location.reload();
+        }
+      });
+    },
+    onError: (error) => {
+      console.error("Error saving data:", error);
+      Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
+    },
+  });
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(formData);
@@ -2905,110 +2954,167 @@ const EditDataProfil = ({ data, sidebar }) => {
         </div>
         {showNomorIdentifikasiEksternal && (
           <div className="border rounded-md p-4 mb-4">
-            <div className="flex justify-between items-center mb-4">
-              <AlertDialog>
-                <AlertDialogTrigger className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md">
-                  + Tambah
-                </AlertDialogTrigger>
-                <AlertDialogContent className="bg-white !min-w-[1000px] rounded-lg shadow-lg ">
-                  <AlertDialogHeader>
-                    <AlertDialogTitle className="text-xl font-bold">
-                      Tambah nomor identifikasi eksternal
-                    </AlertDialogTitle>
-                  </AlertDialogHeader>
-                  <div className="grid gap-4 overflow-auto h-96">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">
-                        Jenis Nomor Identifikasi
-                      </label>
-                      <input
-                        type="text"
-                        className="w-full p-2 border rounded-md bg-gray-100 mt-1 cursor-not-allowed"
-                        disabled
-                        placeholder="Auto NPWP"
-                      />
-                      {/*  */}
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">
-                        Nomor Identifikasi *
-                      </label>
-                      <input
-                        type="text"
-                        className="w-full p-2 border rounded bg-gray-100 mt-1 cursor-not-allowed"
-                        disabled
-                        placeholder="Auto NPWP"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">
-                        Tanggal Mulai
-                      </label>
-                      <input
-                        type="date"
-                        className="w-full p-2 border rounded"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">
-                        Tanggal Berakhir
-                      </label>
-                      <input
-                        type="date"
-                        className="w-full p-2 border rounded"
-                      />
-                    </div>
-                  </div>
-                  <AlertDialogFooter className="flex justify-end mt-6 space-x-2">
-                    <AlertDialogCancel className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600">
-                      Batal
-                    </AlertDialogCancel>
-                    <AlertDialogAction className="bg-blue-900 text-white px-4 py-2 rounded-md hover:bg-blue-950">
-                      Simpan
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
-            </div>
-            <div className=" w-[1050px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden ">
-              <table className="table-auto border border-gray-300 overflow-hidden">
-                <thead>
-                  <tr>
-                    <th className="border border-gray-300 px-1 py-2">Aksi</th>
-                    <th className="border border-gray-300 px-4 py-2">Tipe</th>
-                    <th className="border border-gray-300 px-4 py-2">
-                      Nomor Identfikasi
-                    </th>
-                    <th className="border border-gray-300 px-4 py-2">
-                      Tanggal Mulai
-                    </th>
-                    <th className="border border-gray-300 px-4 py-2">
-                      Tanggal Berakhir
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="text-gray-600">
-                  <tr className="bg-gray-100">
-                    <td className="px-1 py-4 border">
-                      <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-2 rounded">
-                        Edit
-                      </button>
-                      <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-2 rounded ml-2">
-                        Lihat
-                      </button>
-                      <button className="bg-red-500 hover:bg-red-600 text-white py-2 px-2 rounded ml-2">
-                        Hapus
-                      </button>
-                    </td>
-                    <td className="px-4 py-4 border">NPWP 15 Digit</td>
-                    <td className="px-4 py-4 border">98018308108202131</td>
-                    <td className="px-4 py-4 border">09-03-2024</td>
-                    <td className="px-4 py-4 border"></td>
-                  </tr>
-                </tbody>
-              </table>
+            <div className="spcae-y-2 h-full">
+              <h1 className="text-lg font-semibold">
+                Nomor Identifikasi Eksternal
+              </h1>
+              <div className="mt-2 flex gap-2 w-1/2">
+                <p>
+                  Nomor Identifikasi Eksternal :{" "}
+                  {
+                    data.field_edit_informasi.nomor_identifikasi_eksternal
+                      .nomor_identifikasi
+                  }
+                </p>
+
+                {/* <input
+                  type="text"
+                  name="nomor_identifikasi"
+                  value={extIdFormData.nomor_identifikasi}
+                  onChange={handleExtIdChange}
+                  className="flex-grow p-2 border rounded-md bg-white text-gray-600 min-w-2"
+                /> */}
+              </div>
+              <div className="flex gap-2 items-center mt-2 w-1/2">
+                <p className="min-w-[200px]">Tanggal Mulai:</p>
+                <input
+                  type="date"
+                  name="tanggal_mulai"
+                  value={extIdFormData.tanggal_mulai || ""}
+                  onChange={handleExtIdChange}
+                  className="flex-grow p-2 border rounded-md bg-white text-gray-600"
+                />
+              </div>
+              <div className="flex gap-2 items-center mt-2 w-1/2">
+                <p className="min-w-[200px]">Tanggal Berakhir:</p>
+                <input
+                  type="date"
+                  name="tanggal_berakhir"
+                  value={extIdFormData.tanggal_berakhir || ""}
+                  onChange={handleExtIdChange}
+                  className="flex-grow p-2 border rounded-md bg-white text-gray-600"
+                />
+              </div>
+              <div className="flex justify-end">
+                <button
+                  className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                  onClick={() => updateExternalId.mutate()}
+                >
+                  {updateExternalId.isLoading ? (
+                    <ClipLoader size={20} color="#ffffff" />
+                  ) : (
+                    "Simpan Perubahan"
+                  )}
+                </button>
+              </div>
             </div>
           </div>
+
+          // <div className="border rounded-md p-4 mb-4">
+          //   <div className="flex justify-between items-center mb-4">
+          //     <AlertDialog>
+          //       <AlertDialogTrigger className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md">
+          //         + Tambah
+          //       </AlertDialogTrigger>
+          //       <AlertDialogContent className="bg-white !min-w-[1000px] rounded-lg shadow-lg ">
+          //         <AlertDialogHeader>
+          //           <AlertDialogTitle className="text-xl font-bold">
+          //             Tambah nomor identifikasi eksternal
+          //           </AlertDialogTitle>
+          //         </AlertDialogHeader>
+          //         <div className="grid gap-4 overflow-auto h-96">
+          //           <div>
+          //             <label className="block text-sm font-medium text-gray-700">
+          //               Jenis Nomor Identifikasi
+          //             </label>
+          //             <input
+          //               type="text"
+          //               className="w-full p-2 border rounded-md bg-gray-100 mt-1 cursor-not-allowed"
+          //               disabled
+          //               placeholder="Auto NPWP"
+          //             />
+          //             {/*  */}
+          //           </div>
+          //           <div>
+          //             <label className="block text-sm font-medium text-gray-700">
+          //               Nomor Identifikasi *
+          //             </label>
+          //             <input
+          //               type="text"
+          //               className="w-full p-2 border rounded bg-gray-100 mt-1 cursor-not-allowed"
+          //               disabled
+          //               placeholder="Auto NPWP"
+          //             />
+          //           </div>
+          //           <div>
+          //             <label className="block text-sm font-medium text-gray-700">
+          //               Tanggal Mulai
+          //             </label>
+          //             <input
+          //               type="date"
+          //               className="w-full p-2 border rounded"
+          //             />
+          //           </div>
+          //           <div>
+          //             <label className="block text-sm font-medium text-gray-700">
+          //               Tanggal Berakhir
+          //             </label>
+          //             <input
+          //               type="date"
+          //               className="w-full p-2 border rounded"
+          //             />
+          //           </div>
+          //         </div>
+          //         <AlertDialogFooter className="flex justify-end mt-6 space-x-2">
+          //           <AlertDialogCancel className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600">
+          //             Batal
+          //           </AlertDialogCancel>
+          //           <AlertDialogAction className="bg-blue-900 text-white px-4 py-2 rounded-md hover:bg-blue-950">
+          //             Simpan
+          //           </AlertDialogAction>
+          //         </AlertDialogFooter>
+          //       </AlertDialogContent>
+          //     </AlertDialog>
+          //   </div>
+          //   <div className=" w-[1050px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden ">
+          //     <table className="table-auto border border-gray-300 overflow-hidden">
+          //       <thead>
+          //         <tr>
+          //           <th className="border border-gray-300 px-1 py-2">Aksi</th>
+          //           <th className="border border-gray-300 px-4 py-2">Tipe</th>
+          //           <th className="border border-gray-300 px-4 py-2">
+          //             Nomor Identfikasi
+          //           </th>
+          //           <th className="border border-gray-300 px-4 py-2">
+          //             Tanggal Mulai
+          //           </th>
+          //           <th className="border border-gray-300 px-4 py-2">
+          //             Tanggal Berakhir
+          //           </th>
+          //         </tr>
+          //       </thead>
+          //       <tbody className="text-gray-600">
+          //         <tr className="bg-gray-100">
+          //           <td className="px-1 py-4 border">
+          //             <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-2 rounded">
+          //               Edit
+          //             </button>
+          //             <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-2 rounded ml-2">
+          //               Lihat
+          //             </button>
+          //             <button className="bg-red-500 hover:bg-red-600 text-white py-2 px-2 rounded ml-2">
+          //               Hapus
+          //             </button>
+          //           </td>
+          //           <td className="px-4 py-4 border">NPWP 15 Digit</td>
+          //           <td className="px-4 py-4 border">98018308108202131</td>
+          //           <td className="px-4 py-4 border">09-03-2024</td>
+          //           <td className="px-4 py-4 border"></td>
+          //         </tr>
+          //       </tbody>
+          //     </table>
+          //   </div>
+          // </div>
         )}
         <div
           className="border rounded-md p-4 mb-2 bg-gray-100 cursor-pointer flex justify-between items-center"
