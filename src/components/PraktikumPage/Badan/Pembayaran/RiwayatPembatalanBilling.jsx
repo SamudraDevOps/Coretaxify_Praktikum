@@ -1,13 +1,13 @@
-import React from 'react';
+import React from 'react'
 import { IoDocumentTextOutline } from 'react-icons/io5';
 
-const DaftarKodeBilingBelumBayar = () => {
+const RiwayatPembatalanBilling = () => {
     return (
         <div className='m-4 rounded-md'>
             {/* Header */}
             <div className='flex items-center mb-2 pb-3 '>
                 <IoDocumentTextOutline className='text-4xl text-blue-900' />
-                <h1 className='text-lg font-bold text-blue-900 ml-2'>Daftar Kode Billing Belum Bayar</h1>
+                <h1 className='text-lg font-bold text-blue-900 ml-2'>Riwayat Pembatalan</h1>
             </div>
 
             {/* Table Headers */}
@@ -16,10 +16,10 @@ const DaftarKodeBilingBelumBayar = () => {
                 <div className="font-semibold mr-2">-</div>
                 <div className="font-normal">Putri Nuril Wulan</div>
             </div>
-            <div className="flex flex-col items-end mt-3 p-3 border-t ml-auto w-fit">
-                <p>Total Pembayaran untuk Penagihan Aktif</p>
-                <p className="font-semibold mt-1">Rp 10.000.000</p>
-            </div>
+            {/* <div className="flex flex-col items-end mt-3 p-3 border-t ml-auto w-fit">
+                  <p>Total Pembayaran untuk Penagihan Aktif</p>
+                  <p className="font-semibold mt-1">Rp 10.000.000</p>
+              </div> */}
             <div className="overflow-x-auto mt-4">
                 <table className="min-w-full bg-white border border-gray-300 rounded-md shadow-md">
                     <thead className="bg-yellow-400 text-white">
@@ -31,7 +31,7 @@ const DaftarKodeBilingBelumBayar = () => {
                             <th className="py-2 px-4 border-b text-center">Mata Uang</th>
                             <th className="py-2 px-4 border-b text-center">Jumlah Total</th>
                             <th className="py-2 px-4 border-b text-center">Masa Aktif</th>
-                            <th className="py-2 px-4 border-b text-center">Aksi</th>
+                            {/* <th className="py-2 px-4 border-b text-center">Aksi</th> */}
                         </tr>
                     </thead>
                     <tbody>
@@ -43,14 +43,14 @@ const DaftarKodeBilingBelumBayar = () => {
                             <td className="py-4 px-4 border-b">IDR</td>
                             <td className="py-4 px-4 border-b">Rp 10.000.000</td>
                             <td className="py-4 px-4 border-b">25 Apr 2025 - 25 Mei 2025</td>
-                            <td className="py-4 px-4 border-b space-x-2">
+                            {/* <td className="py-4 px-4 border-b space-x-2">
                                 <button className="bg-blue-100 text-blue-600 hover:bg-blue-200 hover:underline rounded px-3 py-1">
                                     Lihat
                                 </button>
                                 <button className="bg-red-100 text-red-600 hover:bg-red-200 hover:underline rounded px-3 py-1">
                                     Bayar
                                 </button>
-                            </td>
+                            </td> */}
                         </tr>
                     </tbody>
                 </table>
@@ -59,4 +59,4 @@ const DaftarKodeBilingBelumBayar = () => {
     );
 }
 
-export default DaftarKodeBilingBelumBayar;
+export default RiwayatPembatalanBilling

@@ -134,6 +134,8 @@ import BpnrTelahTerbit from "./components/PraktikumPage/Badan/BUPOT/BPNR/BpnrTel
 import BpnrTidakValid from "./components/PraktikumPage/Badan/BUPOT/BPNR/BpnrTidakValid";
 import SelfBilling from "./components/PraktikumPage/Badan/Pembayaran/SelfBilling";
 import DaftarKodeBilingBelumBayar from "./components/PraktikumPage/Badan/Pembayaran/DaftarKodeBilingBelumBayar";
+import RiwayatBilling from "./components/PraktikumPage/Badan/Pembayaran/RiwayatBilling";
+import RiwayatPembatalanBilling from "./components/PraktikumPage/Badan/Pembayaran/RiwayatPembatalanBilling";
 // Route Badan
 
 import ProtectedRoutes from "./components/Dashboard/Auth/ProtectedRoutes";
@@ -1156,11 +1158,29 @@ const Main = () => {
           }
         />
         <Route
-            path="/admin/praktikum/2/daftar-kode-billing-belum-dibayar"
+          path="/admin/praktikum/2/daftar-kode-billing-belum-dibayar"
           element={
             <>
               <Header />
               <DaftarKodeBilingBelumBayar />
+            </>
+          }
+        />
+        <Route
+          path="/admin/praktikum/2/riwayat-pembayaran"
+          element={
+            <>
+              <Header />
+              <RiwayatBilling />
+            </>
+          }
+        />
+        <Route
+          path="/admin/praktikum/2/riwayat-pembatalan"
+          element={
+            <>
+              <Header />
+              <RiwayatPembatalanBilling />
             </>
           }
         />
