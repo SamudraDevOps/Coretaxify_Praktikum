@@ -59,7 +59,7 @@ const SidebarProfilSaya = ({ nama_akun, npwp_akun, akun }) => {
     },
     {
       label: "Data Unit Keluarga",
-      link: `/data-unit-keluarga${
+      link: `/praktikum/${akun.id}/sistem/${akun.akun}/data-unit-keluarga${
         viewAsCompanyId ? `?viewAs=${viewAsCompanyId}` : ""
       }`,
     },

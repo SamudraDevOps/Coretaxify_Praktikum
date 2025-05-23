@@ -53,13 +53,13 @@ const SidebarProfilSayaBadan = ({ nama_akun, npwp_akun, akun }) => {
     },
     {
       label: "Detail Bank",
-      link: `/detail-bank${
+      link: `/praktikum/${akun.id}/sistem/${akun.akun}/detail-bank${
         viewAsCompanyId ? `?viewAs=${viewAsCompanyId}` : ""
       }`,
     },
     {
       label: "Data Unit Keluarga",
-      link: `/data-unit-keluarga${
+      link: `/praktikum/${akun.id}/sistem/${akun.akun}/data-unit-keluarga${
         viewAsCompanyId ? `?viewAs=${viewAsCompanyId}` : ""
       }`,
     },
