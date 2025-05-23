@@ -1,7 +1,37 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { IoDocumentTextOutline } from 'react-icons/io5';
+import {
+    AlertDialog,
+    AlertDialogContent,
+    AlertDialogHeader,
+    AlertDialogFooter,
+    AlertDialogTitle,
+    AlertDialogDescription,
+    AlertDialogAction,
+} from '@/components/ui/alert-dialog';
+
+const generateNTPN = () => {
+    // 16 digit random number
+    return Array.from({ length: 16 }, () => Math.floor(Math.random() * 10)).join('');
+};
 
 const RiwayatBilling = () => {
+    const [openNTPN, setOpenNTPN] = useState(false);
+    const [ntpn, setNtpn] = useState('');
+    const [copied, setCopied] = useState(false);
+
+    const handleLihatClick = () => {
+        const ntpnBaru = generateNTPN();
+        setNtpn(ntpnBaru);
+        setOpenNTPN(true);
+    };
+
+    const handleCopy = () => {
+        navigator.clipboard.writeText(ntpn);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+    };
+
     return (
         <div className='m-4 rounded-md'>
             {/* Header */}
@@ -31,7 +61,7 @@ const RiwayatBilling = () => {
                             <th className="py-2 px-4 border-b text-center">Mata Uang</th>
                             <th className="py-2 px-4 border-b text-center">Jumlah Total</th>
                             <th className="py-2 px-4 border-b text-center">Masa Aktif</th>
-                            {/* <th className="py-2 px-4 border-b text-center">Aksi</th> */}
+                            <th className="py-2 px-4 border-b text-center">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -43,18 +73,50 @@ const RiwayatBilling = () => {
                             <td className="py-4 px-4 border-b">IDR</td>
                             <td className="py-4 px-4 border-b">Rp 10.000.000</td>
                             <td className="py-4 px-4 border-b">25 Apr 2025 - 25 Mei 2025</td>
-                            {/* <td className="py-4 px-4 border-b space-x-2">
-                                <button className="bg-blue-100 text-blue-600 hover:bg-blue-200 hover:underline rounded px-3 py-1">
+                            <td className="py-4 px-4 border-b space-x-2">
+                                <button
+                                    className="bg-blue-100 text-blue-600 hover:bg-blue-200 hover:underline rounded px-3 py-1"
+                                    onClick={handleLihatClick}
+                                >
                                     Lihat
                                 </button>
-                                <button className="bg-red-100 text-red-600 hover:bg-red-200 hover:underline rounded px-3 py-1">
+                                {/* <button className="bg-red-100 text-red-600 hover:bg-red-200 hover:underline rounded px-3 py-1">
                                     Bayar
-                                </button>
-                            </td> */}
+                                </button> */}
+                            </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
+
+            {/* AlertDialog NTPN */}
+            <AlertDialog open={openNTPN} onOpenChange={setOpenNTPN}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Kode NTPN</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            Berikut adalah kode NTPN pembayaran Anda:
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <div className="flex items-center justify-between bg-gray-100 rounded px-3 py-2 my-4">
+                        <span className="font-mono text-lg">{ntpn}</span>
+                        <button
+                            className="ml-4 px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+                            onClick={handleCopy}
+                        >
+                            Copy
+                        </button>
+                    </div>
+                    {copied && (
+                        <div className="text-green-600 text-sm text-center mb-2">
+                            kode NTPN berhasil di copy
+                        </div>
+                    )}
+                    <AlertDialogFooter>
+                        <AlertDialogAction onClick={() => setOpenNTPN(false)}>Tutup</AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </div>
     );
 }

@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { useNavigate } from 'react-router-dom';
 
 // Fungsi konversi angka ke terbilang (versi sederhana, bisa dikembangkan)
 function numberToTerbilang(n) {
@@ -42,6 +43,7 @@ const SelfBilling = () => {
     const [nilaiAsli, setNilaiAsli] = useState('');
     const [terbilang, setTerbilang] = useState('');
     const [keterangan, setKeterangan] = useState('');
+    const navigate = useNavigate();
 
     const steps = [
         {
@@ -337,7 +339,13 @@ const SelfBilling = () => {
                         </Button>
                     ) : null}
                     <Button
-                        onClick={handleNext}
+                        onClick={() => {
+                            if (step === steps.length) {
+                                navigate('/admin/praktikum/2/daftar-kode-billing-belum-dibayar');
+                            } else {
+                                handleNext();
+                            }
+                        }}
                         className={cn(
                             "bg-blue-600 hover:bg-blue-700 text-white",
                             step === steps.length && "bg-green-600 hover:bg-green-700"
