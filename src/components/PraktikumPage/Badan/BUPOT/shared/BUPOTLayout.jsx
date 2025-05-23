@@ -18,17 +18,17 @@ const BUPOTLayout = ({
   // Common columns for all BUPOT types
   const defaultColumns = [
     { key: "no", label: "No" },
-    { key: "masaPajak", label: "Masa Pajak" },
-    { key: "nomorPemotongan", label: "Nomor Pemotongan" },
+    { key: "masa_awal", label: "Masa Pajak" },
+    { key: "nomor_pemotongan", label: "Nomor Pemotongan" },
     { key: "status", label: "Status" },
     { key: "nitku", label: "NITKU/Nomor Identitas Sub Unit Organisasi" },
-    { key: "jenisPajak", label: "Jenis Pajak" },
-    { key: "kodePajak", label: "Kode Pajak" },
-    { key: "npwp", label: "NPWP" },
-    { key: "nama", label: "Nama" },
-    { key: "dasarPengenaan", label: "Dasar Pengenaan Pajak (RP)" },
-    { key: "pajakPenghasilan", label: "Pajak Penghasilan" },
-    { key: "fasilitasPajak", label: "Fasilitas Pajak" },
+    { key: "jenis_pajak", label: "Jenis Pajak" },
+    { key: "kode_objek_pajak", label: "Kode Pajak" },
+    { key: "npwp_akun", label: "NPWP" },
+    { key: "nama_akun", label: "Nama" },
+    { key: "dasar_pengenaan_pajak", label: "Dasar Pengenaan Pajak (RP)" },
+    { key: "pajak_penghasilan", label: "Pajak Penghasilan" },
+    { key: "fasilitas_pajak", label: "Fasilitas Pajak" },
   ];
 
   return (

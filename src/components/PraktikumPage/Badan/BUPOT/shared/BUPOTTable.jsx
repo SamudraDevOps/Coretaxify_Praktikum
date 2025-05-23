@@ -40,7 +40,7 @@ const BUPOTTable = ({
               <tr key={rowIndex}>
                 {tableColumns.map((column, colIndex) => (
                   <td key={colIndex} className="px-4 py-2 border">
-                    {row[column.key]}
+                    {column.key === "no" ? (rowIndex + 1) : row[column.key]}
                   </td>
                 ))}
               </tr>
