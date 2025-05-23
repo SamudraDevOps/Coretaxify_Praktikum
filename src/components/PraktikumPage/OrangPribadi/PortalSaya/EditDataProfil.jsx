@@ -643,6 +643,129 @@ const EditDataProfil = ({ data, sidebar }) => {
       Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
     },
   });
+  const [familyUnitFormData, setFamilyUnitFormData] = useState({
+    nik_anggota_keluarga: "",
+    jenis_kelamin: "Pria",
+    tempat_lahir: "",
+    nomor_kartu_keluarga: "",
+    nama_anggota_keluarga: "",
+    tanggal_lahir: "",
+    status_hubungan_keluarga: "",
+    pekerjaan: "",
+    status_unit_perpajakan: "tanggungan",
+    status_ptkp: "K/0",
+    tanggal_mulai: "",
+    tanggal_berakhir: "",
+  });
+  const handleFamilyUnitChange = (e) => {
+    const { name, value } = e.target;
+    setFamilyUnitFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+  const createFamilyUnit = useMutation({
+    mutationFn: async () => {
+      const csrf = await getCsrf();
+      const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
+      return axios.post(
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${accountId}/unit-pajak-keluarga`,
+        familyUnitFormData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": csrf,
+            Authorization: `Bearer ${cookies.token}`,
+          },
+        }
+      );
+    },
+    onSuccess: (data) => {
+      console.log(data);
+      Swal.fire(
+        "Berhasil!",
+        "Data unit pajak keluarga berhasil disimpan!",
+        "success"
+      ).then((result) => {
+        if (result.isConfirmed) {
+          window.location.reload();
+        }
+      });
+    },
+    onError: (error) => {
+      console.error("Error saving data:", error);
+      Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
+    },
+  });
+
+  const updateFamilyUnit = useMutation({
+    mutationFn: async (familyId) => {
+      const csrf = await getCsrf();
+      const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
+      return axios.put(
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${accountId}/unit-pajak-keluarga/${familyId}`,
+        familyUnitFormData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": csrf,
+            Authorization: `Bearer ${cookies.token}`,
+          },
+        }
+      );
+    },
+    onSuccess: (data) => {
+      console.log(data);
+      Swal.fire(
+        "Berhasil!",
+        "Data unit pajak keluarga berhasil diperbarui!",
+        "success"
+      ).then((result) => {
+        if (result.isConfirmed) {
+          window.location.reload();
+        }
+      });
+    },
+    onError: (error) => {
+      console.error("Error updating data:", error);
+      Swal.fire("Gagal!", "Terjadi kesalahan saat memperbarui data.", "error");
+    },
+  });
+
+  const deleteFamilyUnit = useMutation({
+    mutationFn: async (familyId) => {
+      const csrf = await getCsrf();
+      const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
+      return axios.delete(
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${accountId}/unit-pajak-keluarga/${familyId}`,
+        {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": csrf,
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+    },
+    onSuccess: (data) => {
+      console.log(data);
+      Swal.fire("Berhasil!", "Data keluarga berhasil dihapus!", "success").then(
+        (result) => {
+          if (result.isConfirmed) {
+            window.location.reload();
+          }
+        }
+      );
+    },
+    onError: (error) => {
+      console.error("Error deleting data:", error);
+      Swal.fire("Gagal!", "Terjadi kesalahan saat menghapus data.", "error");
+    },
+  });
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(formData);
@@ -2907,6 +3030,7 @@ const EditDataProfil = ({ data, sidebar }) => {
                       Tambah Data Unit Keluarga Baru
                     </AlertDialogTitle>
                   </AlertDialogHeader>
+
                   <div className="grid gap-4 overflow-auto h-96">
                     <div>
                       <label className="block text-sm font-medium text-gray-700">
@@ -2914,15 +3038,22 @@ const EditDataProfil = ({ data, sidebar }) => {
                       </label>
                       <input
                         type="text"
+                        name="nik_anggota_keluarga"
+                        value={familyUnitFormData.nik_anggota_keluarga}
+                        onChange={handleFamilyUnitChange}
                         className="w-full p-2 border rounded-md mt-1"
                       />
-                      {/*  */}
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700">
                         Jenis Kelamin
                       </label>
-                      <select className="w-full p-2 border rounded">
+                      <select
+                        name="jenis_kelamin"
+                        value={familyUnitFormData.jenis_kelamin}
+                        onChange={handleFamilyUnitChange}
+                        className="w-full p-2 border rounded"
+                      >
                         <option value="Pria">Pria</option>
                         <option value="Wanita">Wanita</option>
                       </select>
@@ -2933,6 +3064,9 @@ const EditDataProfil = ({ data, sidebar }) => {
                       </label>
                       <input
                         type="text"
+                        name="tempat_lahir"
+                        value={familyUnitFormData.tempat_lahir}
+                        onChange={handleFamilyUnitChange}
                         className="w-full p-2 border rounded"
                       />
                     </div>
@@ -2942,6 +3076,9 @@ const EditDataProfil = ({ data, sidebar }) => {
                       </label>
                       <input
                         type="text"
+                        name="nomor_kartu_keluarga"
+                        value={familyUnitFormData.nomor_kartu_keluarga}
+                        onChange={handleFamilyUnitChange}
                         className="w-full p-2 border rounded"
                       />
                     </div>
@@ -2951,6 +3088,9 @@ const EditDataProfil = ({ data, sidebar }) => {
                       </label>
                       <input
                         type="text"
+                        name="nama_anggota_keluarga"
+                        value={familyUnitFormData.nama_anggota_keluarga}
+                        onChange={handleFamilyUnitChange}
                         className="w-full p-2 border rounded"
                       />
                     </div>
@@ -2960,6 +3100,9 @@ const EditDataProfil = ({ data, sidebar }) => {
                       </label>
                       <input
                         type="date"
+                        name="tanggal_lahir"
+                        value={familyUnitFormData.tanggal_lahir}
+                        onChange={handleFamilyUnitChange}
                         className="w-full p-2 border rounded"
                       />
                     </div>
@@ -2969,6 +3112,9 @@ const EditDataProfil = ({ data, sidebar }) => {
                       </label>
                       <input
                         type="text"
+                        name="status_hubungan_keluarga"
+                        value={familyUnitFormData.status_hubungan_keluarga}
+                        onChange={handleFamilyUnitChange}
                         className="w-full p-2 border rounded"
                       />
                     </div>
@@ -2978,6 +3124,9 @@ const EditDataProfil = ({ data, sidebar }) => {
                       </label>
                       <input
                         type="text"
+                        name="pekerjaan"
+                        value={familyUnitFormData.pekerjaan}
+                        onChange={handleFamilyUnitChange}
                         className="w-full p-2 border rounded"
                       />
                     </div>
@@ -2985,7 +3134,12 @@ const EditDataProfil = ({ data, sidebar }) => {
                       <label className="block text-sm font-medium text-gray-700">
                         Status Unit Perpajakan
                       </label>
-                      <select className="w-full p-2 border rounded">
+                      <select
+                        name="status_unit_perpajakan"
+                        value={familyUnitFormData.status_unit_perpajakan}
+                        onChange={handleFamilyUnitChange}
+                        className="w-full p-2 border rounded"
+                      >
                         <option value="tanggungan">Tanggungan</option>
                         <option value="kepala unit kepala keluarga lain HB">
                           Kepala Unit Keluarga Lain (HB)
@@ -3011,7 +3165,12 @@ const EditDataProfil = ({ data, sidebar }) => {
                       <label className="block text-sm font-medium text-gray-700">
                         Status PTKP
                       </label>
-                      <select className="w-full p-2 border rounded">
+                      <select
+                        name="status_ptkp"
+                        value={familyUnitFormData.status_ptkp}
+                        onChange={handleFamilyUnitChange}
+                        className="w-full p-2 border rounded"
+                      >
                         <option value="K/0">K/0</option>
                         <option value="K/1">K/1</option>
                         <option value="K/2">K/2</option>
@@ -3028,6 +3187,9 @@ const EditDataProfil = ({ data, sidebar }) => {
                       </label>
                       <input
                         type="date"
+                        name="tanggal_mulai"
+                        value={familyUnitFormData.tanggal_mulai}
+                        onChange={handleFamilyUnitChange}
                         className="w-full p-2 border rounded"
                       />
                     </div>
@@ -3037,15 +3199,22 @@ const EditDataProfil = ({ data, sidebar }) => {
                       </label>
                       <input
                         type="date"
+                        name="tanggal_berakhir"
+                        value={familyUnitFormData.tanggal_berakhir}
+                        onChange={handleFamilyUnitChange}
                         className="w-full p-2 border rounded"
                       />
                     </div>
                   </div>
+
                   <AlertDialogFooter className="flex justify-end mt-6 space-x-2">
                     <AlertDialogCancel className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600">
                       Batal
                     </AlertDialogCancel>
-                    <AlertDialogAction className="bg-blue-900 text-white px-4 py-2 rounded-md hover:bg-blue-950">
+                    <AlertDialogAction
+                      onClick={() => createFamilyUnit.mutate()}
+                      className="bg-blue-900 text-white px-4 py-2 rounded-md hover:bg-blue-950"
+                    >
                       Simpan
                     </AlertDialogAction>
                   </AlertDialogFooter>
@@ -3090,18 +3259,284 @@ const EditDataProfil = ({ data, sidebar }) => {
                   </tr>
                 </thead>
                 <tbody className="text-gray-600">
-                  <tr className="bg-gray-100">
-                    <td className="px-1 py-4 border"></td>
-                    {/* <td className="px-1 py-4 border">
-                                            <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-2 rounded">Edit</button>
-                                            <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-2 rounded ml-2">Lihat</button>
-                                            <button className="bg-red-500 hover:bg-red-600 text-white py-2 px-2 rounded ml-2">Hapus</button>
-                                        </td>
-                                        <td className="px-4 py-4 border">NPWP 15 Digit</td>
-                                        <td className="px-4 py-4 border">98018308108202131</td>
-                                        <td className="px-4 py-4 border">09-03-2024</td>
-                                        <td className="px-4 py-4 border"></td> */}
-                  </tr>
+                  {data.field_edit_informasi.unit_pajak_keluarga &&
+                  data.field_edit_informasi.unit_pajak_keluarga.length > 0 ? (
+                    data.field_edit_informasi.unit_pajak_keluarga.map(
+                      (family, index) => (
+                        <tr key={index} className="bg-gray-100">
+                          <td className="px-1 py-4 border">
+                            <AlertDialog>
+                              <AlertDialogTrigger
+                                onClick={() => setFamilyUnitFormData(family)}
+                                className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"
+                              >
+                                Edit
+                              </AlertDialogTrigger>
+                              <AlertDialogContent className="bg-white !min-w-[1000px] rounded-lg shadow-lg">
+                                <div className="grid gap-4 overflow-auto h-96">
+                                  <div>
+                                    <label className="block text-sm font-medium text-gray-700">
+                                      NIK Anggota Keluarga
+                                    </label>
+                                    <input
+                                      type="text"
+                                      name="nik_anggota_keluarga"
+                                      value={
+                                        familyUnitFormData.nik_anggota_keluarga
+                                      }
+                                      onChange={handleFamilyUnitChange}
+                                      className="w-full p-2 border rounded-md mt-1"
+                                    />
+                                  </div>
+                                  <div>
+                                    <label className="block text-sm font-medium text-gray-700">
+                                      Jenis Kelamin
+                                    </label>
+                                    <select
+                                      name="jenis_kelamin"
+                                      value={familyUnitFormData.jenis_kelamin}
+                                      onChange={handleFamilyUnitChange}
+                                      className="w-full p-2 border rounded"
+                                    >
+                                      <option value="Pria">Pria</option>
+                                      <option value="Wanita">Wanita</option>
+                                    </select>
+                                  </div>
+                                  <div>
+                                    <label className="block text-sm font-medium text-gray-700">
+                                      Tempat Lahir
+                                    </label>
+                                    <input
+                                      type="text"
+                                      name="tempat_lahir"
+                                      value={familyUnitFormData.tempat_lahir}
+                                      onChange={handleFamilyUnitChange}
+                                      className="w-full p-2 border rounded"
+                                    />
+                                  </div>
+                                  <div>
+                                    <label className="block text-sm font-medium text-gray-700">
+                                      Nomor Kartu Keluarga
+                                    </label>
+                                    <input
+                                      type="text"
+                                      name="nomor_kartu_keluarga"
+                                      value={
+                                        familyUnitFormData.nomor_kartu_keluarga
+                                      }
+                                      onChange={handleFamilyUnitChange}
+                                      className="w-full p-2 border rounded"
+                                    />
+                                  </div>
+                                  <div>
+                                    <label className="block text-sm font-medium text-gray-700">
+                                      Nama Anggota Keluarga
+                                    </label>
+                                    <input
+                                      type="text"
+                                      name="nama_anggota_keluarga"
+                                      value={
+                                        familyUnitFormData.nama_anggota_keluarga
+                                      }
+                                      onChange={handleFamilyUnitChange}
+                                      className="w-full p-2 border rounded"
+                                    />
+                                  </div>
+                                  <div>
+                                    <label className="block text-sm font-medium text-gray-700">
+                                      Tanggal Lahir
+                                    </label>
+                                    <input
+                                      type="date"
+                                      name="tanggal_lahir"
+                                      value={familyUnitFormData.tanggal_lahir}
+                                      onChange={handleFamilyUnitChange}
+                                      className="w-full p-2 border rounded"
+                                    />
+                                  </div>
+                                  <div>
+                                    <label className="block text-sm font-medium text-gray-700">
+                                      Status Hubungan
+                                    </label>
+                                    <input
+                                      type="text"
+                                      name="status_hubungan_keluarga"
+                                      value={
+                                        familyUnitFormData.status_hubungan_keluarga
+                                      }
+                                      onChange={handleFamilyUnitChange}
+                                      className="w-full p-2 border rounded"
+                                    />
+                                  </div>
+                                  <div>
+                                    <label className="block text-sm font-medium text-gray-700">
+                                      Pekerjaan
+                                    </label>
+                                    <input
+                                      type="text"
+                                      name="pekerjaan"
+                                      value={familyUnitFormData.pekerjaan}
+                                      onChange={handleFamilyUnitChange}
+                                      className="w-full p-2 border rounded"
+                                    />
+                                  </div>
+                                  <div>
+                                    <label className="block text-sm font-medium text-gray-700">
+                                      Status Unit Perpajakan
+                                    </label>
+                                    <select
+                                      name="status_unit_perpajakan"
+                                      value={
+                                        familyUnitFormData.status_unit_perpajakan
+                                      }
+                                      onChange={handleFamilyUnitChange}
+                                      className="w-full p-2 border rounded"
+                                    >
+                                      <option value="tanggungan">
+                                        Tanggungan
+                                      </option>
+                                      <option value="kepala unit kepala keluarga lain HB">
+                                        Kepala Unit Keluarga Lain (HB)
+                                      </option>
+                                      <option value="kepala unit kepala keluarga lain OP">
+                                        Kepala Unit Keluarga Lain (OP)
+                                      </option>
+                                      <option value="kepala unit keluarga">
+                                        Kepala Unit Keluarga
+                                      </option>
+                                      <option value="kepala unit keluarga lain MT">
+                                        Kepala Unit Kepala Lain (MT)
+                                      </option>
+                                      <option value="bukan tanggungan">
+                                        Bukan Tanggungan
+                                      </option>
+                                      <option value="kepala unit keluarga lain PH">
+                                        Kepala Unit Keluarga Lain (PH)
+                                      </option>
+                                    </select>
+                                  </div>
+                                  <div>
+                                    <label className="block text-sm font-medium text-gray-700">
+                                      Status PTKP
+                                    </label>
+                                    <select
+                                      name="status_ptkp"
+                                      value={familyUnitFormData.status_ptkp}
+                                      onChange={handleFamilyUnitChange}
+                                      className="w-full p-2 border rounded"
+                                    >
+                                      <option value="K/0">K/0</option>
+                                      <option value="K/1">K/1</option>
+                                      <option value="K/2">K/2</option>
+                                      <option value="K/3">K/3</option>
+                                      <option value="TK/0">TK/0</option>
+                                      <option value="TK/1">TK/1</option>
+                                      <option value="TK/2">TK/2</option>
+                                      <option value="TK/3">TK/3</option>
+                                    </select>
+                                  </div>
+                                  <div>
+                                    <label className="block text-sm font-medium text-gray-700">
+                                      Tanggal Mulai
+                                    </label>
+                                    <input
+                                      type="date"
+                                      name="tanggal_mulai"
+                                      value={familyUnitFormData.tanggal_mulai}
+                                      onChange={handleFamilyUnitChange}
+                                      className="w-full p-2 border rounded"
+                                    />
+                                  </div>
+                                  <div>
+                                    <label className="block text-sm font-medium text-gray-700">
+                                      Tanggal Selesai
+                                    </label>
+                                    <input
+                                      type="date"
+                                      name="tanggal_berakhir"
+                                      value={
+                                        familyUnitFormData.tanggal_berakhir
+                                      }
+                                      onChange={handleFamilyUnitChange}
+                                      className="w-full p-2 border rounded"
+                                    />
+                                  </div>
+                                </div>
+                                <AlertDialogFooter>
+                                  <AlertDialogCancel className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600">
+                                    Batal
+                                  </AlertDialogCancel>
+                                  <AlertDialogAction
+                                    onClick={() =>
+                                      updateFamilyUnit.mutate(family.id)
+                                    }
+                                    className="bg-blue-900 text-white px-4 py-2 rounded-md hover:bg-blue-950"
+                                  >
+                                    Simpan
+                                  </AlertDialogAction>
+                                </AlertDialogFooter>
+                              </AlertDialogContent>
+                            </AlertDialog>
+                            <button
+                              onClick={() => {
+                                Swal.fire({
+                                  title: "Hapus data keluarga?",
+                                  text: "Data akan dihapus secara permanen!",
+                                  icon: "warning",
+                                  showCancelButton: true,
+                                  confirmButtonText: "Ya, hapus!",
+                                  cancelButtonText: "Batal",
+                                }).then((result) => {
+                                  if (result.isConfirmed) {
+                                    deleteFamilyUnit.mutate(family.id);
+                                  }
+                                });
+                              }}
+                              className="bg-red-500 hover:bg-red-600 text-white py-2 px-2 rounded ml-2"
+                            >
+                              Hapus
+                            </button>
+                          </td>
+                          <td className="px-4 py-4 border">
+                            {family.nik_anggota_keluarga}
+                          </td>
+                          <td className="px-4 py-4 border">
+                            {family.nomor_kartu_keluarga}
+                          </td>
+                          <td className="px-4 py-4 border">
+                            {family.nama_anggota_keluarga}
+                          </td>
+                          <td className="px-4 py-4 border">
+                            {family.tanggal_lahir}
+                          </td>
+                          <td className="px-4 py-4 border">
+                            {family.status_hubungan_keluarga}
+                          </td>
+                          <td className="px-4 py-4 border">
+                            {family.pekerjaan}
+                          </td>
+                          <td className="px-4 py-4 border">
+                            {family.status_unit_perpajakan}
+                          </td>
+                          <td className="px-4 py-4 border">
+                            {family.status_ptkp}
+                          </td>
+                          <td className="px-4 py-4 border">
+                            {family.tanggal_mulai}
+                          </td>
+                          <td className="px-4 py-4 border">
+                            {family.tanggal_berakhir}
+                          </td>
+                        </tr>
+                      )
+                    )
+                  ) : (
+                    <tr>
+                      <td colSpan="11" className="text-center p-4 border">
+                        Belum ada data unit pajak keluarga
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </div>
