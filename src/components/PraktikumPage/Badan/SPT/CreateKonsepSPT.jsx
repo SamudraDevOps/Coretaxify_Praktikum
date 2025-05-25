@@ -650,7 +650,21 @@ const CreateKonsepSPT = () => {
                                                     <td className="p-2 flex items-center gap-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
+                                                            defaultValue="0"
+                                                            disabled
+                                                        />
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr className="border-b">
+                                                    <td className="p-2 whitespace-normal break-words text-sm">
+                                                        B. Penyerahan Barang dan Jasa yang tidak terutang PPN
+                                                    </td>
+                                                    <td className="p-2 flex items-center gap-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
                                                         />
@@ -658,6 +672,7 @@ const CreateKonsepSPT = () => {
                                                     <td className="p2"></td>
                                                     <td className="p2"></td>
                                                     <td className="p-2 flex items-center gap-2">
+
                                                         <AlertDialog open={openPenyerahan} onOpenChange={setOpenPenyerahan}>
                                                             <AlertDialogTrigger asChild>
                                                                 <button
@@ -686,6 +701,19 @@ const CreateKonsepSPT = () => {
                                                                 </AlertDialogFooter>
                                                             </AlertDialogContent>
                                                         </AlertDialog>
+                                                    </td>
+                                                </tr>
+                                                <tr className="border-b">
+                                                    <td className="p-2 whitespace-normal break-words text-sm">
+                                                        C. Jumlah Seluruh penyerahan barang dan Jasa (I.A + I.B)
+                                                    </td>
+                                                    <td className="p-2 flex items-center gap-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
+                                                            defaultValue="0"
+                                                            disabled
+                                                        />
                                                     </td>
                                                 </tr>
                                             </tbody>

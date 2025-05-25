@@ -87,7 +87,7 @@ export default function DynamicUploadTable({
               <td className="py-2 px-3 text-right">Total</td>
               {columns.map((col) => (
                 <td key={col.key} className="py-2 px-3 text-right">
-                  {col.type === "number" ? total(col.key) : ""}
+                  {col.type === "number" ? (total(col.key) ?? 0) : ""}
                 </td>
               ))}
               <td></td>
