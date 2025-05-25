@@ -1,6 +1,41 @@
 import React, { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FaCalendarAlt, FaFilter, FaSearch, FaTimes, FaChevronDown, FaChevronUp } from "react-icons/fa";
+import {
+    AlertDialog,
+    AlertDialogTrigger,
+    AlertDialogContent,
+    AlertDialogHeader,
+    AlertDialogFooter,
+    AlertDialogTitle,
+    AlertDialogDescription,
+    AlertDialogAction,
+    AlertDialogCancel,
+} from "@/components/ui/alert-dialog";
+import { FaTrash } from "react-icons/fa";
+import DynamicUploadTable from "@/components/common/DynamicUploadTable";
+import { useDynamicTableRows } from "@/hooks/useDynamicTableRows";
+
+const columnsUpload = [
+    { key: "file", label: "File Excel", type: "file", accept: ".xlsx,.xls,.csv" },
+    { key: "hargaJual", label: "Harga Jual", type: "number" },
+    { key: "dppLain", label: "DPP Lain", type: "number" },
+    { key: "ppn", label: "PPN", type: "number" },
+    { key: "ppnbm", label: "PPnBM", type: "number" },
+];
+const initialRowUpload = {
+    file: null,
+    hargaJual: "",
+    dppLain: "",
+    ppn: "",
+    ppnbm: "",
+};
+
+
+// const formatNumber = (val) => {
+//     if (!val) return 0;
+//     return Number(val);
+// };
 
 const CreateKonsepSPT = () => {
     const [activeTab, setActiveTab] = useState("induk");
@@ -24,6 +59,9 @@ const CreateKonsepSPT = () => {
     const [showHeaderc, setShowHeaderc] = useState(false);
 
     const [showScrollTop, setShowScrollTop] = useState(false);
+    const [openUpload, setOpenUpload] = useState(false);
+    const [openLampiran, setOpenLampiran] = useState(false);
+    const [openPenyerahan, setOpenPenyerahan] = useState(false);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -44,6 +82,11 @@ const CreateKonsepSPT = () => {
     //     ppn: (i === 1 && "11.605.000") || (i === 5 && "71.623.128") || (i === 8 && "83.228.128") || "0",
     //     ppnbm: "0",
     // });
+    const unggahXmlTable = useDynamicTableRows(initialRowUpload);
+    const lampiranDokumenTable = useDynamicTableRows(initialRowUpload);
+    const penyerahanBarangJasaTable = useDynamicTableRows(initialRowUpload);
+    const [rows, setRows] = useState([{ ...initialRowUpload }]);
+
 
     return (
         <div className="flex h-screen bg-gray-100">
@@ -184,6 +227,27 @@ const CreateKonsepSPT = () => {
                                                 </tr>
                                             </thead>
                                             <tbody>
+                                                <tr className="border-b">
+                                                    <td className="p-2 whitespace-normal break-words text-sm">
+                                                        A. Penyerahan BKP/JKP yang terutang PPN
+                                                    </td>
+                                                    {/* <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100 "
+                                                            defaultValue="0"
+                                                            disabled
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100 "
+                                                            defaultValue="0"
+                                                            disabled
+                                                        />
+                                                    </td> */}
+                                                </tr>
                                                 {/* Row 1 */}
                                                 <tr className="border-b">
                                                     <td className="p-2 whitespace-normal break-words text-sm">
@@ -192,11 +256,12 @@ const CreateKonsepSPT = () => {
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100 "
                                                             defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
-                                                    <td className="p-2">
+                                                    {/* <td className="p-2">
                                                         <input
                                                             type="text"
                                                             className="w-full p-1 border rounded-md text-right text-sm"
@@ -216,7 +281,7 @@ const CreateKonsepSPT = () => {
                                                             className="w-full p-1 border rounded-md text-right text-sm"
                                                             defaultValue="0"
                                                         />
-                                                    </td>
+                                                    </td> */}
                                                 </tr>
 
                                                 {/* Row 2 */}
@@ -227,7 +292,7 @@ const CreateKonsepSPT = () => {
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="105.500.000"
                                                             disabled
                                                         />
@@ -235,7 +300,7 @@ const CreateKonsepSPT = () => {
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="96.708.334"
                                                             disabled
                                                         />
@@ -243,7 +308,7 @@ const CreateKonsepSPT = () => {
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="11.605.000"
                                                             disabled
                                                         />
@@ -251,8 +316,9 @@ const CreateKonsepSPT = () => {
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                 </tr>
@@ -265,29 +331,33 @@ const CreateKonsepSPT = () => {
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                 </tr>
@@ -300,28 +370,24 @@ const CreateKonsepSPT = () => {
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
+                                                        />
+                                                    </td>
+                                                    <td className="p-2"></td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
+                                                            defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
-                                                    </td>
-                                                    <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
-                                                    </td>
-                                                    <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                         />
                                                     </td>
@@ -335,33 +401,62 @@ const CreateKonsepSPT = () => {
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                     <td className="p-2 flex items-center gap-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
                                                         />
-                                                        <button className="bg-blue-700 text-white text-xs px-2 py-1 rounded-md whitespace-nowrap">
-                                                            Unggah XML
-                                                        </button>
+                                                        <AlertDialog open={openUpload} onOpenChange={setOpenUpload}>
+                                                            <AlertDialogTrigger asChild>
+                                                                <button
+                                                                    className="bg-blue-700 text-white text-xs px-2 py-1 rounded-md whitespace-nowrap"
+                                                                    type="button"
+                                                                >
+                                                                    Unggah XML
+                                                                </button>
+                                                            </AlertDialogTrigger>
+                                                            <AlertDialogContent className="max-w-4xl">
+                                                                <AlertDialogHeader>
+                                                                    <AlertDialogTitle>Unggah Data Excel</AlertDialogTitle>
+                                                                    <AlertDialogDescription>
+                                                                        Silakan unggah file Excel dan lengkapi data berikut.
+                                                                    </AlertDialogDescription>
+                                                                </AlertDialogHeader>
+                                                                <DynamicUploadTable
+                                                                    {...unggahXmlTable}
+                                                                    columns={columnsUpload}
+                                                                />
+                                                                <AlertDialogFooter>
+                                                                    <AlertDialogCancel>Batal</AlertDialogCancel>
+                                                                    <AlertDialogAction onClick={() => setOpenUpload(false)}>
+                                                                        Simpan
+                                                                    </AlertDialogAction>
+                                                                </AlertDialogFooter>
+                                                            </AlertDialogContent>
+                                                        </AlertDialog>
                                                     </td>
                                                 </tr>
 
@@ -373,7 +468,7 @@ const CreateKonsepSPT = () => {
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="651.119.260"
                                                             disabled
                                                         />
@@ -397,8 +492,9 @@ const CreateKonsepSPT = () => {
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                 </tr>
@@ -411,29 +507,33 @@ const CreateKonsepSPT = () => {
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                 </tr>
@@ -446,29 +546,33 @@ const CreateKonsepSPT = () => {
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                 </tr>
@@ -489,14 +593,15 @@ const CreateKonsepSPT = () => {
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="83.228.128"
                                                             disabled
                                                         />
@@ -506,10 +611,81 @@ const CreateKonsepSPT = () => {
                                                             type="text"
                                                             className="w-full p-1 border rounded-md text-right text-sm"
                                                             defaultValue="0"
+                                                            disabled
                                                         />
-                                                        <button className="bg-blue-700 text-white text-xs px-2 py-1 rounded-md whitespace-nowrap">
-                                                            Unggah XML
-                                                        </button>
+                                                        <AlertDialog open={openLampiran} onOpenChange={setOpenLampiran}>
+                                                            <AlertDialogTrigger asChild>
+                                                                <button
+                                                                    className="bg-green-700 text-white text-xs px-2 py-1 rounded-md whitespace-nowrap"
+                                                                    type="button"
+                                                                >
+                                                                    Lampiran Dokumen
+                                                                </button>
+                                                            </AlertDialogTrigger>
+                                                            <AlertDialogContent className="max-w-3xl">
+                                                                <AlertDialogHeader>
+                                                                    <AlertDialogTitle>Unggah Lampiran Dokumen</AlertDialogTitle>
+                                                                    <AlertDialogDescription>
+                                                                        Silakan unggah file Excel dan lengkapi data berikut.
+                                                                    </AlertDialogDescription>
+                                                                </AlertDialogHeader>
+                                                                <DynamicUploadTable
+                                                                    {...lampiranDokumenTable}
+                                                                    columns={columnsUpload}
+                                                                />
+                                                                <AlertDialogFooter>
+                                                                    <AlertDialogCancel>Batal</AlertDialogCancel>
+                                                                    <AlertDialogAction onClick={() => setOpenLampiran(false)} className="bg-blue-600 text-white">
+                                                                        Simpan
+                                                                    </AlertDialogAction>
+                                                                </AlertDialogFooter>
+                                                            </AlertDialogContent>
+                                                        </AlertDialog>
+                                                    </td>
+                                                </tr>
+                                                <tr className="border-b">
+                                                    <td className="p-2 whitespace-normal break-words text-sm">
+                                                        Jumlah (I.A.1 + I.A.2 + I.A.3 + I.A.4 + I.A.5 + I.A.6 + I.A.7 + I.A.8 + I.A.9)
+                                                    </td>
+                                                    <td className="p-2 flex items-center gap-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            defaultValue="0"
+                                                            disabled
+                                                        />
+                                                    </td>
+                                                    <td className="p2"></td>
+                                                    <td className="p2"></td>
+                                                    <td className="p-2 flex items-center gap-2">
+                                                        <AlertDialog open={openPenyerahan} onOpenChange={setOpenPenyerahan}>
+                                                            <AlertDialogTrigger asChild>
+                                                                <button
+                                                                    className="bg-blue-700 text-white text-xs px-2 py-1 rounded-md whitespace-nowrap"
+                                                                    type="button"
+                                                                >
+                                                                    Upload XML
+                                                                </button>
+                                                            </AlertDialogTrigger>
+                                                            <AlertDialogContent className="max-w-4xl">
+                                                                <AlertDialogHeader>
+                                                                    <AlertDialogTitle>Unggah Lampiran Dokumen</AlertDialogTitle>
+                                                                    <AlertDialogDescription>
+                                                                        Silakan unggah file Excel dan lengkapi data berikut.
+                                                                    </AlertDialogDescription>
+                                                                </AlertDialogHeader>
+                                                                <DynamicUploadTable
+                                                                    {...penyerahanBarangJasaTable}
+                                                                    columns={columnsUpload}
+                                                                />
+                                                                <AlertDialogFooter>
+                                                                    <AlertDialogCancel>Batal</AlertDialogCancel>
+                                                                    <AlertDialogAction onClick={() => setOpenPenyerahan(false)} className="bg-blue-600 text-white">
+                                                                        Simpan
+                                                                    </AlertDialogAction>
+                                                                </AlertDialogFooter>
+                                                            </AlertDialogContent>
+                                                        </AlertDialog>
                                                     </td>
                                                 </tr>
                                             </tbody>
