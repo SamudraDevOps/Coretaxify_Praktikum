@@ -35,7 +35,11 @@ const styles = StyleSheet.create({
     marginBottom: 2,
   },
   fieldLabel: {
-    width: "35%",
+    width: "33%",
+    fontWeight: "bold",
+  },
+  fieldColon: {
+    width: "2%",
     fontWeight: "bold",
   },
   fieldValue: {
@@ -81,35 +85,43 @@ const BpeSptPdf = () => (
       {/* Taxpayer Info */}
       <View style={styles.section}>
         <View style={styles.fieldRow}>
-          <Text style={styles.fieldLabel}>NPWP:</Text>
+          <Text style={styles.fieldLabel}>NPWP</Text>
+          <Text style={styles.fieldColon}>:</Text>
           <Text style={styles.fieldValue}>0127905768623000</Text>
         </View>
         <View style={styles.fieldRow}>
-          <Text style={styles.fieldLabel}>Nama Wajib Pajak:</Text>
+          <Text style={styles.fieldLabel}>Nama Wajib Pajak</Text>
+          <Text style={styles.fieldColon}>:</Text>
           <Text style={styles.fieldValue}>SAMUDRA EDUKASI TEKNOLOGI</Text>
         </View>
         <View style={styles.fieldRow}>
-          <Text style={styles.fieldLabel}>Jenis SPT:</Text>
+          <Text style={styles.fieldLabel}>Jenis SPT</Text>
+          <Text style={styles.fieldColon}>:</Text>
           <Text style={styles.fieldValue}>SPT Masa PPh Pasal 21/26</Text>
         </View>
         <View style={styles.fieldRow}>
-          <Text style={styles.fieldLabel}>Tahun Pajak:</Text>
+          <Text style={styles.fieldLabel}>Tahun Pajak</Text>
+          <Text style={styles.fieldColon}>:</Text>
           <Text style={styles.fieldValue}>2025</Text>
         </View>
         <View style={styles.fieldRow}>
-          <Text style={styles.fieldLabel}>Masa Pajak:</Text>
+          <Text style={styles.fieldLabel}>Masa Pajak</Text>
+          <Text style={styles.fieldColon}>:</Text>
           <Text style={styles.fieldValue}>April 2025</Text>
         </View>
         <View style={styles.fieldRow}>
-          <Text style={styles.fieldLabel}>Status SPT:</Text>
+          <Text style={styles.fieldLabel}>Status SPT</Text>
+          <Text style={styles.fieldColon}>:</Text>
           <Text style={styles.fieldValue}>Normal</Text>
         </View>
         <View style={styles.fieldRow}>
-          <Text style={styles.fieldLabel}>Saluran:</Text>
+          <Text style={styles.fieldLabel}>Saluran</Text>
+          <Text style={styles.fieldColon}>:</Text>
           <Text style={styles.fieldValue}>Portal Wajib Pajak</Text>
         </View>
         <View style={styles.fieldRow}>
-          <Text style={styles.fieldLabel}>Tanggal Terima SPT:</Text>
+          <Text style={styles.fieldLabel}>Tanggal Terima SPT</Text>
+          <Text style={styles.fieldColon}>:</Text>
           <Text style={styles.fieldValue}>08 Mei 2025</Text>
         </View>
       </View>
