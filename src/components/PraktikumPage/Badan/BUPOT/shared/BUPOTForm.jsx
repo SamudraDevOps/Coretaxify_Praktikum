@@ -10,6 +10,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Button } from "@/components/ui/button";
 import BUPOTSidebar from "./BUPOTSidebar"; // Assuming you have a sidebar component
+import { useObjekPajak } from '@/hooks/bupot/useObjekPajak';
 
 const BUPOTForm = ({
   type,
@@ -46,6 +47,16 @@ const BUPOTForm = ({
   };
 
   const currentBupot = getBupot();
+
+  const { objekPajak, loading: loadingObjekPajak } = useObjekPajak(currentBupot);
+
+  // Helper to update multiple form fields
+  const updateMultipleFields = (updates) => {
+    setFormData(prevData => ({
+      ...prevData,
+      ...updates,
+    }));
+  };
 
   // Form data state
   const [formData, setFormData] = useState(initialData);
@@ -773,15 +784,31 @@ const BUPOTForm = ({
                   <select
                     className="w-64 flex-auto border p-2 rounded appearance-none"
                     value={formData.nama_objek_pajak || ""}
-                    onChange={(e) =>
-                      updateFormData("nama_objek_pajak", e.target.value)
-                    }
-                    placehoder="Please Select"
+                    onChange={(e) => {
+                      const selectedValue = e.target.value;
+
+                      const selectedObject = objekPajak.find(obj => obj.nama_objek_pajak === selectedValue);
+
+                      if (selectedObject) {
+                        updateMultipleFields({
+                          nama_objek_pajak: selectedObject.nama_objek_pajak,
+                          jenis_pajak: selectedObject.jenis_pajak,
+                          kode_objek_pajak: selectedObject.kode_objek_pajak,
+                          tarif_pajak: selectedObject.tarif_pajak,
+                          sifat_pajak_penghasilan: selectedObject.sifat_pajak_penghasilan
+                        })
+                      } else {
+                        updateFormData("nama_objek_pajak", e.target.value)
+                      }
+                    }}
+                    disabled={loadingObjekPajak}
                   >
                     <option value="">Please Select</option>
-                    <option value="objek1">objek1</option>
-                    <option value="objek2">objek2</option>
-                    <option value="objek3">objek3</option>
+                    {objekPajak.map((obj) => (
+                      <option key={obj.id} value={obj.nama_objek_pajak}>
+                        {obj.nama_objek_pajak}
+                      </option>
+                    ))}
                   </select>
                 </div>
 
