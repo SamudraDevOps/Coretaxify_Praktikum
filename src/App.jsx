@@ -136,6 +136,8 @@ import { RoutesApi } from "@/Routes";
 import EditFakturKeluaran from "./components/PraktikumPage/Badan/EFaktur/EditFakturKeluaran";
 import { ViewerPDF } from "./components/PraktikumPage/PDFTemplate/PDFViewer";
 import { PDFFakturKeluaran } from "./components/PraktikumPage/PDFTemplate/FakturKeluaran";
+import BpeSptPdf from "./components/PraktikumPage/PDFTemplate/BPESPTTemplate";
+import BillingCodePdf from "./components/PraktikumPage/PDFTemplate/BillingCodeTemplate";
 
 const Main = () => {
   const [loading, setLoading] = useState(true);
@@ -834,6 +836,26 @@ const Main = () => {
             <>
               <div className="w-full h-screen">
                 <ViewerPDF document={<PDFFakturKeluaran />} />
+              </div>
+            </>
+          }
+        />
+        <Route
+          path="/pdf/bpespt"
+          element={
+            <>
+              <div className="w-full h-screen">
+                <ViewerPDF document={<BpeSptPdf />} />
+              </div>
+            </>
+          }
+        />
+        <Route
+          path="/pdf/billing-code"
+          element={
+            <>
+              <div className="w-full h-screen">
+                <ViewerPDF document={<BillingCodePdf />} />
               </div>
             </>
           }
