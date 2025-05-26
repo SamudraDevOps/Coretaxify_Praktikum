@@ -616,10 +616,10 @@ const CreateKonsepSPT = () => {
                                                         <AlertDialog open={openLampiran} onOpenChange={setOpenLampiran}>
                                                             <AlertDialogTrigger asChild>
                                                                 <button
-                                                                    className="bg-green-700 text-white text-xs px-2 py-1 rounded-md whitespace-nowrap"
+                                                                    className="bg-blue-700 text-white text-xs px-2 py-1 rounded-md whitespace-nowrap"
                                                                     type="button"
                                                                 >
-                                                                    Lampiran Dokumen
+                                                                    Unggah XML
                                                                 </button>
                                                             </AlertDialogTrigger>
                                                             <AlertDialogContent className="max-w-3xl">
@@ -655,7 +655,7 @@ const CreateKonsepSPT = () => {
                                                             disabled
                                                         />
                                                     </td>
-                                                    
+
                                                 </tr>
                                                 <tr className="border-b">
                                                     <td className="p-2 whitespace-normal break-words text-sm">
@@ -746,29 +746,28 @@ const CreateKonsepSPT = () => {
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
+                                                            defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
-                                                        />
-                                                    </td>
-                                                    <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
-                                                    </td>
-                                                    <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                 </tr>
@@ -781,29 +780,33 @@ const CreateKonsepSPT = () => {
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                 </tr>
@@ -816,29 +819,28 @@ const CreateKonsepSPT = () => {
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
+                                                            defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
-                                                        />
-                                                    </td>
-                                                    <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
-                                                    </td>
-                                                    <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                 </tr>
@@ -851,29 +853,33 @@ const CreateKonsepSPT = () => {
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                 </tr>
@@ -884,35 +890,21 @@ const CreateKonsepSPT = () => {
                                                         E. Kompensasi kelebihan Pajak Masukan
                                                     </td>
                                                     <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
+
+                                                    </td>
+                                                    <td className="p-2">
+
                                                     </td>
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
-                                                    <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
-                                                    </td>
-                                                    <td className="p-2 flex items-center gap-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
-                                                        <button className="bg-blue-700 text-white text-xs px-2 py-1 rounded-md whitespace-nowrap">
-                                                            Unggah XML
-                                                        </button>
+                                                    <td className="p-2 ">
+
                                                     </td>
                                                 </tr>
 
@@ -922,11 +914,10 @@ const CreateKonsepSPT = () => {
                                                         F. Hasil penghitungan kembali Pajak Masukan yang telah dikreditkan
                                                     </td>
                                                     <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
+
+                                                    </td>
+                                                    <td className="p-2">
+
                                                     </td>
                                                     <td className="p-2">
                                                         <input
@@ -936,18 +927,7 @@ const CreateKonsepSPT = () => {
                                                         />
                                                     </td>
                                                     <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
-                                                    </td>
-                                                    <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
+
                                                     </td>
                                                 </tr>
 
@@ -959,30 +939,24 @@ const CreateKonsepSPT = () => {
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
                                                         />
+                                                    </td>
+                                                    <td className="p-2">
+
                                                     </td>
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                     <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
-                                                    </td>
-                                                    <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
+
                                                     </td>
                                                 </tr>
 
@@ -994,29 +968,33 @@ const CreateKonsepSPT = () => {
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                 </tr>
@@ -1034,28 +1012,13 @@ const CreateKonsepSPT = () => {
                                                         />
                                                     </td>
                                                     <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
+
                                                     </td>
                                                     <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
+
                                                     </td>
                                                     <td className="p-2 flex items-center gap-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
-                                                        <button className="bg-blue-700 text-white text-xs px-2 py-1 rounded-md whitespace-nowrap">
-                                                            Unggah XML
-                                                        </button>
+
                                                     </td>
                                                 </tr>
 
@@ -1067,31 +1030,12 @@ const CreateKonsepSPT = () => {
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
-                                                    <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
-                                                    </td>
-                                                    <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
-                                                    </td>
-                                                    <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
-                                                    </td>
+
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -1108,10 +1052,10 @@ const CreateKonsepSPT = () => {
                                             <thead className="bg-purple-700 text-white text-center">
                                                 <tr>
                                                     <th className="p-2 min-w-[300px]"></th>
-                                                    <th className="p-2 min-w-[150px]">Harga Jual/Penggantian/ <br />Nilai Ekspor/DPP</th>
-                                                    <th className="p-2 min-w-[150px]">DPP Nilai Lain/ DPP</th>
-                                                    <th className="p-2 min-w-[150px]">PPN</th>
-                                                    <th className="p-2 min-w-[150px]">PPnBM</th>
+                                                    <th className="p-2 min-w-[150px]"></th>
+                                                    <th className="p-2 min-w-[150px]"></th>
+                                                    <th className="p-2 min-w-[150px]">PPN(Rupiah)</th>
+                                                    <th className="p-2 min-w-[150px]"></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -1121,32 +1065,21 @@ const CreateKonsepSPT = () => {
                                                         A. Pajak Keluaran yang harus dipungut sendiri (I.A.2 + I.A.3 + I.A.4 + I.A.5)
                                                     </td>
                                                     <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
+
+                                                    </td>
+                                                    <td className="p-2">
+
                                                     </td>
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                     <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
-                                                    </td>
-                                                    <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
+
                                                     </td>
                                                 </tr>
 
@@ -1156,32 +1089,21 @@ const CreateKonsepSPT = () => {
                                                         B. PPN Disetor di muka dalam masa pajak yang sama
                                                     </td>
                                                     <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
+
+                                                    </td>
+                                                    <td className="p-2">
+
                                                     </td>
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                     <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
-                                                    </td>
-                                                    <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
+
                                                     </td>
                                                 </tr>
 
@@ -1191,32 +1113,21 @@ const CreateKonsepSPT = () => {
                                                         C. Pajak Masukan yang dapat diperhitungkan (II.G)
                                                     </td>
                                                     <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
+
+                                                    </td>
+                                                    <td className="p-2">
+
                                                     </td>
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                     <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
-                                                    </td>
-                                                    <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
+
                                                     </td>
                                                 </tr>
 
@@ -1226,32 +1137,21 @@ const CreateKonsepSPT = () => {
                                                         D. Kelebihan pemungutan PPN oleh Pemungutan PPN
                                                     </td>
                                                     <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
+
+                                                    </td>
+                                                    <td className="p-2">
+
                                                     </td>
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                     <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
-                                                    </td>
-                                                    <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
+
                                                     </td>
                                                 </tr>
 
@@ -1261,35 +1161,21 @@ const CreateKonsepSPT = () => {
                                                         E. PPN kurang atau (lebih) bayar (III.A - III.B - III.C - III.D)
                                                     </td>
                                                     <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
+
+                                                    </td>
+                                                    <td className="p-2">
+
                                                     </td>
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
-                                                        />
-                                                    </td>
-                                                    <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                     <td className="p-2 flex items-center gap-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
-                                                        <button className="bg-blue-700 text-white text-xs px-2 py-1 rounded-md whitespace-nowrap">
-                                                            Unggah XML
-                                                        </button>
+
                                                     </td>
                                                 </tr>
 
@@ -1299,32 +1185,21 @@ const CreateKonsepSPT = () => {
                                                         F. PPN Kurang atau (lebih) bayar pada SPT yang dibetulkan sebelumnya
                                                     </td>
                                                     <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
+
+                                                    </td>
+                                                    <td className="p-2">
+
                                                     </td>
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                     <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
-                                                    </td>
-                                                    <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
+
                                                     </td>
                                                 </tr>
 
@@ -1334,34 +1209,98 @@ const CreateKonsepSPT = () => {
                                                         G. PPN kurang atau (lebih) bayar karena pembetulan SPT (III.E - III.F)
                                                     </td>
                                                     <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
+
+                                                    </td>
+                                                    <td className="p-2">
+
                                                     </td>
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                     <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
-                                                    </td>
-                                                    <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
+
                                                     </td>
                                                 </tr>
+                                                <tr className="border-b align-top">
+                                                    <td className="p-2 whitespace-normal break-words text-sm w-1/3 align-top">
+                                                        H. Diminta Untuk
+                                                    </td>
+                                                    <td className="p-2 align-top">
+                                                        <div className="flex flex-col items-start gap-2 w-full">
+                                                            <label className="flex items-center w-full">
+                                                                <input
+                                                                    type="radio"
+                                                                    name="diminta_untuk"
+                                                                    value="dikompresikan"
+                                                                    className="form-radio"
+                                                                />
+                                                                <span className="ml-2">1. Dikompresikan</span>
+                                                            </label>
+                                                            <label className="flex items-center w-full">
+                                                                <input
+                                                                    type="radio"
+                                                                    name="diminta_untuk"
+                                                                    value="dikembalikan_pendahuluan"
+                                                                    className="form-radio"
+                                                                />
+                                                                <span className="ml-2">2. Dikembalikan melalui pengembalian pendahuluan</span>
+                                                            </label>
+                                                            <label className="flex items-center w-full">
+                                                                <input
+                                                                    type="radio"
+                                                                    name="diminta_untuk"
+                                                                    value="dikembalikan_pemeriksaan"
+                                                                    className="form-radio"
+                                                                />
+                                                                <span className="ml-2">3. Dikembalikan untuk pemeriksaan</span>
+                                                            </label>
+                                                        </div>
+                                                    </td>
+                                                    <td className="p-2 align-top">
+                                                        <div className="flex flex-col gap-2">
+                                                            <label className="block text-sm">
+                                                                Pilih rekening bank
+                                                                <input
+                                                                    type="text"
+                                                                    name="rekening_bank"
+                                                                    className="w-full p-1 border rounded-md text-sm bg-gray-100 ml-3 mt-1"
+                                                                    disabled
+                                                                />
+                                                            </label>
+                                                            <label className="block text-sm">
+                                                                Nomor Rekening
+                                                                <input
+                                                                    type="text"
+                                                                    name="nomor_rekening"
+                                                                    className="w-full p-1 border rounded-md text-sm ml-7 mt-1"
+                                                                />
+                                                            </label>
+                                                            <label className="block text-sm">
+                                                                Nama Bank
+                                                                <input
+                                                                    type="text"
+                                                                    name="nama_bank"
+                                                                    className="w-full p-1 border rounded-md text-sm ml-16 mt-1"
+                                                                />
+                                                            </label>
+                                                            <label className="block text-sm">
+                                                                Nama Pemilik Bank
+                                                                <input
+                                                                    type="text"
+                                                                    name="nama_pemilik_bank"
+                                                                    className="w-full p-1 border rounded-md text-sm ml-3 mt-1"
+                                                                />
+                                                            </label>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+
+
                                             </tbody>
                                         </table>
 
@@ -1377,10 +1316,10 @@ const CreateKonsepSPT = () => {
                                             <thead className="bg-purple-700 text-white text-center">
                                                 <tr>
                                                     <th className="p-2 min-w-[300px]"></th>
-                                                    <th className="p-2 min-w-[150px]">Harga Jual/Penggantian/ <br />Nilai Ekspor/DPP</th>
-                                                    <th className="p-2 min-w-[150px]">DPP Nilai Lain/ DPP</th>
-                                                    <th className="p-2 min-w-[150px]">PPN</th>
-                                                    <th className="p-2 min-w-[150px]">PPnBM</th>
+                                                    <th className="p-2 min-w-[150px]"></th>
+                                                    <th className="p-2 min-w-[150px]">DPP (Rupiah)</th>
+                                                    <th className="p-2 min-w-[150px]">PPN (Rupiah)</th>
+                                                    <th className="p-2 min-w-[150px]"></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -1389,11 +1328,7 @@ const CreateKonsepSPT = () => {
                                                         PPN Terutang
                                                     </td>
                                                     <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
+                                                        
                                                     </td>
                                                     <td className="p-2">
                                                         <input
@@ -1405,16 +1340,13 @@ const CreateKonsepSPT = () => {
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                     <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
+                                                       
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -1432,10 +1364,10 @@ const CreateKonsepSPT = () => {
                                             <thead className="bg-purple-700 text-white text-center">
                                                 <tr>
                                                     <th className="p-2 min-w-[300px]"></th>
-                                                    <th className="p-2 min-w-[150px]">Harga Jual/Penggantian/ <br />Nilai Ekspor/DPP</th>
-                                                    <th className="p-2 min-w-[150px]">DPP Nilai Lain/ DPP</th>
-                                                    <th className="p-2 min-w-[150px]">PPN</th>
-                                                    <th className="p-2 min-w-[150px]">PPnBM</th>
+                                                    <th className="p-2 min-w-[150px]"></th>
+                                                    <th className="p-2 min-w-[150px]"></th>
+                                                    <th className="p-2 min-w-[150px]">PPN (Rupiah)</th>
+                                                    <th className="p-2 min-w-[150px]"></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -1444,32 +1376,21 @@ const CreateKonsepSPT = () => {
                                                         Pajak yang wajib dibayarkan kembali
                                                     </td>
                                                     <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
+                                                        
+                                                    </td>
+                                                    <td className="p-2">
+                                                        
                                                     </td>
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                     <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
-                                                    </td>
-                                                    <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
+                                                        
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -1486,9 +1407,9 @@ const CreateKonsepSPT = () => {
                                             <thead className="bg-purple-700 text-white text-center">
                                                 <tr>
                                                     <th className="p-2 min-w-[300px]"></th>
-                                                    <th className="p-2 min-w-[150px]">Harga Jual/Penggantian/ <br />Nilai Ekspor/DPP</th>
-                                                    <th className="p-2 min-w-[150px]">DPP Nilai Lain/ DPP</th>
-                                                    <th className="p-2 min-w-[150px]">PPN</th>
+                                                    <th className="p-2 min-w-[150px]"></th>
+                                                    <th className="p-2 min-w-[150px]"></th>
+                                                    <th className="p-2 min-w-[150px]"></th>
                                                     <th className="p-2 min-w-[150px]">PPnBM</th>
                                                 </tr>
                                             </thead>
@@ -1499,31 +1420,20 @@ const CreateKonsepSPT = () => {
                                                         A. PPnMB yang harus dipungut sendiri (I.A.2 + I.A.3 + I.A.4 + I.A.5)
                                                     </td>
                                                     <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
+                                                        
+                                                    </td>
+                                                    <td className="p-2">
+                                                        
+                                                    </td>
+                                                    <td className="p-2">
+                                                        
                                                     </td>
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
-                                                        />
-                                                    </td>
-                                                    <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
-                                                    </td>
-                                                    <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                 </tr>
@@ -1533,25 +1443,13 @@ const CreateKonsepSPT = () => {
                                                         B. Kelebihan pemungutan PPnMB oleh Pemungut PPN
                                                     </td>
                                                     <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
+                                                        
                                                     </td>
                                                     <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
+                                                        
                                                     </td>
                                                     <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
+                                                        
                                                     </td>
                                                     <td className="p-2">
                                                         <input
@@ -1567,31 +1465,20 @@ const CreateKonsepSPT = () => {
                                                         C. PPnMB kurang atau (lebih) bayar (VI.A - VI.B)
                                                     </td>
                                                     <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
+                                                        
+                                                    </td>
+                                                    <td className="p-2">
+                                                        
+                                                    </td>
+                                                    <td className="p-2">
+                                                        
                                                     </td>
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
-                                                        />
-                                                    </td>
-                                                    <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
-                                                    </td>
-                                                    <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                 </tr>
@@ -1601,25 +1488,13 @@ const CreateKonsepSPT = () => {
                                                         D. PPnMB kurang atau (lebih) pada SPT yang dibetulkan sebelumnya
                                                     </td>
                                                     <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
+                                                        
                                                     </td>
                                                     <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
+                                                        
                                                     </td>
                                                     <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
+                                                        
                                                     </td>
                                                     <td className="p-2">
                                                         <input
@@ -1635,31 +1510,20 @@ const CreateKonsepSPT = () => {
                                                         E. PPnMB kurang atau (lebih) karena pembetulan SPT (VI.C - VI.D)
                                                     </td>
                                                     <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
+                                                        
+                                                    </td>
+                                                    <td className="p-2">
+                                                        
+                                                    </td>
+                                                    <td className="p-2">
+                                                        
                                                     </td>
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm BG-gray-100"
                                                             defaultValue="0"
-                                                        />
-                                                    </td>
-                                                    <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
-                                                    </td>
-                                                    <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                 </tr>
@@ -1667,36 +1531,9 @@ const CreateKonsepSPT = () => {
                                                 <tr className="border-b">
                                                     <td className="p-2 whitespace-normal break-words text-sm">
 
-                                                        D. <input type="checkbox" className="ml-2 top-2" /> PPnMB kurang atau (lebih) pada SPT yang dibetulkan sebelumnya
+                                                        F. <input type="checkbox" className="ml-2 top-2" /> PPnMB kurang atau (lebih) pada SPT yang dibetulkan sebelumnya
                                                     </td>
-                                                    <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
-                                                    </td>
-                                                    <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
-                                                    </td>
-                                                    <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
-                                                    </td>
-                                                    <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
-                                                    </td>
+                                                    
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -1795,29 +1632,33 @@ const CreateKonsepSPT = () => {
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                 </tr>
@@ -1826,34 +1667,7 @@ const CreateKonsepSPT = () => {
                                                     <td className="p-2 whitespace-normal break-words text-sm font-bold">
                                                         Setiap kelebihan pemungutan dari bagian ini akan menjadi pengurang pada bagian III.D untuk PPN dan VI.B untuk PPNmB
                                                     </td>
-                                                    <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
-                                                    </td>
-                                                    <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
-                                                    </td>
-                                                    <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
-                                                    </td>
-                                                    <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
-                                                    </td>
+                                                    
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -1884,22 +1698,25 @@ const CreateKonsepSPT = () => {
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                     <td className="p-2">
@@ -1918,22 +1735,25 @@ const CreateKonsepSPT = () => {
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                     <td className="p-2">
@@ -1952,29 +1772,33 @@ const CreateKonsepSPT = () => {
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                 </tr>
@@ -1986,29 +1810,33 @@ const CreateKonsepSPT = () => {
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                     <td className="p-2">
                                                         <input
                                                             type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
+                                                            disabled
                                                         />
                                                     </td>
                                                 </tr>
@@ -2038,68 +1866,14 @@ const CreateKonsepSPT = () => {
                                                     <td className="p-2 whitespace-normal break-words text-sm">
                                                         A. <input type="checkbox" className="" /> Daftar Rincian Kendaraan Bermotor
                                                     </td>
-                                                    <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
-                                                    </td>
-                                                    <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
-                                                    </td>
-                                                    <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
-                                                    </td>
-                                                    <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
-                                                    </td>
+                                                    
                                                 </tr>
                                                 {/* row 2 */}
                                                 <tr className="border-b">
                                                     <td className="p-2 whitespace-normal break-words text-sm">
                                                         B. <input type="checkbox" className="" /> Hasil penghitungan kembali Pajak Masukan yang telah dikreditkan sebagai penambah (pengurang) Pajak Masukan
                                                     </td>
-                                                    <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
-                                                    </td>
-                                                    <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
-                                                    </td>
-                                                    <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
-                                                    </td>
-                                                    <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm"
-                                                            defaultValue="0"
-                                                        />
-                                                    </td>
+                                                    
                                                 </tr>
                                             </tbody>
                                         </table>
