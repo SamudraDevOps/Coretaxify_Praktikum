@@ -65,6 +65,86 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontStyle: "italic",
   },
+  rightAlignedSection: {
+    flexDirection: "column",
+    alignItems: "flex-end",
+    alignSelf: "flex-end",
+    marginBottom: 15,
+  },
+  colon: {
+    width: "2%",
+    textAlign: "center",
+  },
+  label: {
+    width: "28%",
+    fontWeight: "bold",
+  },
+  table: {
+    display: "flex",
+    width: "100%",
+    borderStyle: "solid",
+    borderWidth: 1,
+    borderColor: "#000",
+    marginBottom: 10,
+  },
+  tableRow: {
+    flexDirection: "row",
+    borderBottomWidth: 1,
+    borderBottomColor: "#000",
+    borderBottomStyle: "solid",
+    minHeight: 20,
+    alignItems: "center",
+  },
+  tableHeader: {
+    flexDirection: "row",
+    borderBottomWidth: 1,
+    borderBottomColor: "#000",
+    borderBottomStyle: "solid",
+    backgroundColor: "#f0f0f0",
+    minHeight: 22,
+    fontWeight: "bold",
+    alignItems: "center",
+  },
+  tableHeaderCell: {
+    flex: 1,
+    padding: 4,
+    textAlign: "center",
+    fontWeight: "bold",
+    borderRightWidth: 1,
+    borderRightColor: "#000",
+    borderRightStyle: "solid",
+  },
+  tableCell: {
+    flex: 1,
+    padding: 4,
+    textAlign: "center",
+    borderRightWidth: 1,
+    borderRightColor: "#000",
+    borderRightStyle: "solid",
+  },
+  lastCell: {
+    borderRightWidth: 0,
+  },
+  totalRow: {
+    flexDirection: "row",
+    borderBottomWidth: 1,
+    borderBottomColor: "#000",
+    borderBottomStyle: "solid",
+    padding: 4,
+    fontWeight: "bold",
+  },
+  footer: {
+    marginTop: 15,
+    fontSize: 9,
+    textAlign: "center",
+    fontStyle: "italic",
+  },
+  rightAlignedSection: {
+    flexDirection: "column",
+    alignItems: "flex-end",
+    alignSelf: "flex-end",
+    marginBottom: 15,
+  },
 });
 
 const BillingCodePdf = () => (
@@ -75,10 +155,12 @@ const BillingCodePdf = () => (
       <Text style={styles.subHeader}>DIREKTORAT JENDERAL PAJAK</Text>
 
       {/* Billing Code */}
-      <Text style={{ ...styles.subHeader, fontWeight: "bold" }}>
-        K O D E &nbsp; B I L L I N G
-      </Text>
-      <Text style={styles.billingCode}>040827178527006</Text>
+      <View style={styles.rightAlignedSection}>
+        <Text style={{ fontWeight: "bold", fontSize: 11 }}>
+          K O D E &nbsp; B I L L I N G
+        </Text>
+        <Text style={styles.billingCode}>040827178527006</Text>
+      </View>
 
       {/* Taxpayer Info */}
       <View style={styles.section}>
@@ -109,6 +191,55 @@ const BillingCodePdf = () => (
           <Text style={styles.label}>JUMLAH DETAIL:</Text>
           <Text style={styles.value}>1</Text>
         </View>
+      </View>
+      <View style={styles.section}>
+        <Text style={{ fontWeight: "bold", marginBottom: 4 }}>
+          DETAIL BILLING:
+        </Text>
+
+        <View style={styles.table}>
+          {/* Table Header */}
+          <View style={styles.tableHeader}>
+            <Text style={{ ...styles.tableHeaderCell, flex: 1.5 }}>
+              KAP-KJS
+            </Text>
+            <Text style={styles.tableHeaderCell}>MASA PAJAK</Text>
+            <Text style={styles.tableHeaderCell}>REF</Text>
+            <Text style={styles.tableHeaderCell}>TAGIHAN</Text>
+            <Text style={styles.tableHeaderCell}>NOP</Text>
+            <Text style={{ ...styles.tableHeaderCell, ...styles.lastCell }}>
+              NOMINAL
+            </Text>
+          </View>
+
+          {/* Table Row */}
+          <View style={styles.tableRow}>
+            <Text style={{ ...styles.tableCell, flex: 1.5 }}>411618-100</Text>
+            <Text style={styles.tableCell}>01122025</Text>
+            <Text style={styles.tableCell}>-</Text>
+            <Text style={styles.tableCell}>-</Text>
+            <Text style={styles.tableCell}>-</Text>
+            <Text style={{ ...styles.tableCell, ...styles.lastCell }}>
+              Rp20.000,00
+            </Text>
+          </View>
+        </View>
+
+        {/* Total Row - outside the table but aligned with it */}
+        <View style={{ flexDirection: "row", marginTop: 5, marginBottom: 5 }}>
+          <View style={{ width: "75%" }}>
+            <Text style={{ fontWeight: "bold", textAlign: "right" }}>
+              TOTAL:
+            </Text>
+          </View>
+          <View style={{ width: "25%" }}>
+            <Text style={{ fontWeight: "bold", textAlign: "right" }}>
+              Rp20.000,00
+            </Text>
+          </View>
+        </View>
+
+        <Text style={{ marginTop: 5 }}>Terbilang: Dua Puluh Ribu Rupiah</Text>
       </View>
 
       {/* Detail Billing */}
