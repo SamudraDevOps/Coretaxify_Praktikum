@@ -655,7 +655,25 @@ const CreateKonsepSPT = () => {
                                                             disabled
                                                         />
                                                     </td>
+                                                    <td className="p-2">
 
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
+                                                            defaultValue="0"
+                                                            disabled
+                                                        />
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <input
+                                                            type="text"
+                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
+                                                            defaultValue="0"
+                                                            disabled
+                                                        />
+                                                    </td>
                                                 </tr>
                                                 <tr className="border-b">
                                                     <td className="p-2 whitespace-normal break-words text-sm">
@@ -1328,7 +1346,7 @@ const CreateKonsepSPT = () => {
                                                         PPN Terutang
                                                     </td>
                                                     <td className="p-2">
-                                                        
+
                                                     </td>
                                                     <td className="p-2">
                                                         <input
@@ -1346,7 +1364,7 @@ const CreateKonsepSPT = () => {
                                                         />
                                                     </td>
                                                     <td className="p-2">
-                                                       
+
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -1376,10 +1394,10 @@ const CreateKonsepSPT = () => {
                                                         Pajak yang wajib dibayarkan kembali
                                                     </td>
                                                     <td className="p-2">
-                                                        
+
                                                     </td>
                                                     <td className="p-2">
-                                                        
+
                                                     </td>
                                                     <td className="p-2">
                                                         <input
@@ -1390,7 +1408,7 @@ const CreateKonsepSPT = () => {
                                                         />
                                                     </td>
                                                     <td className="p-2">
-                                                        
+
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -1420,13 +1438,13 @@ const CreateKonsepSPT = () => {
                                                         A. PPnMB yang harus dipungut sendiri (I.A.2 + I.A.3 + I.A.4 + I.A.5)
                                                     </td>
                                                     <td className="p-2">
-                                                        
+
                                                     </td>
                                                     <td className="p-2">
-                                                        
+
                                                     </td>
                                                     <td className="p-2">
-                                                        
+
                                                     </td>
                                                     <td className="p-2">
                                                         <input
@@ -1443,13 +1461,13 @@ const CreateKonsepSPT = () => {
                                                         B. Kelebihan pemungutan PPnMB oleh Pemungut PPN
                                                     </td>
                                                     <td className="p-2">
-                                                        
+
                                                     </td>
                                                     <td className="p-2">
-                                                        
+
                                                     </td>
                                                     <td className="p-2">
-                                                        
+
                                                     </td>
                                                     <td className="p-2">
                                                         <input
@@ -1465,13 +1483,13 @@ const CreateKonsepSPT = () => {
                                                         C. PPnMB kurang atau (lebih) bayar (VI.A - VI.B)
                                                     </td>
                                                     <td className="p-2">
-                                                        
+
                                                     </td>
                                                     <td className="p-2">
-                                                        
+
                                                     </td>
                                                     <td className="p-2">
-                                                        
+
                                                     </td>
                                                     <td className="p-2">
                                                         <input
@@ -1488,13 +1506,13 @@ const CreateKonsepSPT = () => {
                                                         D. PPnMB kurang atau (lebih) pada SPT yang dibetulkan sebelumnya
                                                     </td>
                                                     <td className="p-2">
-                                                        
+
                                                     </td>
                                                     <td className="p-2">
-                                                        
+
                                                     </td>
                                                     <td className="p-2">
-                                                        
+
                                                     </td>
                                                     <td className="p-2">
                                                         <input
@@ -1510,13 +1528,13 @@ const CreateKonsepSPT = () => {
                                                         E. PPnMB kurang atau (lebih) karena pembetulan SPT (VI.C - VI.D)
                                                     </td>
                                                     <td className="p-2">
-                                                        
+
                                                     </td>
                                                     <td className="p-2">
-                                                        
+
                                                     </td>
                                                     <td className="p-2">
-                                                        
+
                                                     </td>
                                                     <td className="p-2">
                                                         <input
@@ -1533,7 +1551,7 @@ const CreateKonsepSPT = () => {
 
                                                         F. <input type="checkbox" className="ml-2 top-2" /> PPnMB kurang atau (lebih) pada SPT yang dibetulkan sebelumnya
                                                     </td>
-                                                    
+
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -1667,7 +1685,7 @@ const CreateKonsepSPT = () => {
                                                     <td className="p-2 whitespace-normal break-words text-sm font-bold">
                                                         Setiap kelebihan pemungutan dari bagian ini akan menjadi pengurang pada bagian III.D untuk PPN dan VI.B untuk PPNmB
                                                     </td>
-                                                    
+
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -1866,14 +1884,14 @@ const CreateKonsepSPT = () => {
                                                     <td className="p-2 whitespace-normal break-words text-sm">
                                                         A. <input type="checkbox" className="" /> Daftar Rincian Kendaraan Bermotor
                                                     </td>
-                                                    
+
                                                 </tr>
                                                 {/* row 2 */}
                                                 <tr className="border-b">
                                                     <td className="p-2 whitespace-normal break-words text-sm">
                                                         B. <input type="checkbox" className="" /> Hasil penghitungan kembali Pajak Masukan yang telah dikreditkan sebagai penambah (pengurang) Pajak Masukan
                                                     </td>
-                                                    
+
                                                 </tr>
                                             </tbody>
                                         </table>
