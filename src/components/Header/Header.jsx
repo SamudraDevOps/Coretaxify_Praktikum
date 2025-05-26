@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Bell,
   UserCircle,
@@ -43,7 +43,28 @@ const Header = () => {
     removeCookie("role", { path: "/" });
     window.location.href = "/login";
   };
+  const buttonRefs = useRef([]);
+  const dropdownRefs = useRef([]);
 
+  useEffect(() => {
+    function handleClickOutside(event) {
+      const isClickInsideAnyButton = buttonRefs.current.some(
+        (ref) => ref && ref.contains(event.target)
+      );
+
+      const isClickInsideAnyDropdown = dropdownRefs.current.some(
+        (ref) => ref && ref.contains(event.target)
+      );
+
+      // If clicked outside all buttons and dropdowns, close all
+      if (!isClickInsideAnyButton && !isClickInsideAnyDropdown) {
+        setDropdownOpen(null);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
   const { isLoading, isError, data, error, refetch } = useQuery({
     queryKey: ["getaccount", id],
     queryFn: async () => {
@@ -200,6 +221,7 @@ const Header = () => {
       </div>
     );
   }
+  console.log(data);
 
   return (
     <div className="w-full">
@@ -280,20 +302,47 @@ const Header = () => {
             {/* Dropdown menu */}
             {isDropdownOpen && (
               <ul className="absolute right-14 top-14 mt-2 w-64 bg-white border rounded-md shadow-lg py-1 px-2">
-                {data.map((item) => (
-                  <li
-                    key={item.id}
-                    className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
-                    onClick={() => {
-                      // When switching accounts, remove viewAs parameter and navigate
-                      const newPath = `/praktikum/${id}/sistem/${item.id}/profil-saya`;
-                      navigate(newPath);
-                      setIsDropdownOpen(false);
-                    }}
-                  >
-                    {item.nama_akun}
-                  </li>
-                ))}
+                <li className="px-4 py-1 mt-2 text-gray-500 text-sm font-semibold border-b">
+                  Orang Pribadi
+                </li>
+                {data
+                  .filter((item) => item.tipe_akun !== "Badan")
+                  .map((item) => (
+                    <li
+                      key={item.id}
+                      className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
+                      onClick={() => {
+                        // When switching accounts, remove viewAs parameter and navigate
+                        const newPath = `/praktikum/${id}/sistem/${item.id}/profil-saya`;
+                        navigate(newPath);
+                        setIsDropdownOpen(false);
+                      }}
+                    >
+                      {item.nama_akun}
+                    </li>
+                  ))}
+                {/* Badan accounts section */}
+                <li className="px-4 py-1 text-gray-500 text-sm font-semibold border-b">
+                  Badan
+                </li>
+                {data
+                  .filter((item) => item.tipe_akun === "Badan")
+                  .map((item) => (
+                    <li
+                      key={item.id}
+                      className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
+                      onClick={() => {
+                        // When switching accounts, remove viewAs parameter and navigate
+                        const newPath = `/praktikum/${id}/sistem/${item.id}/profil-saya`;
+                        navigate(newPath);
+                        setIsDropdownOpen(false);
+                      }}
+                    >
+                      {item.nama_akun}
+                    </li>
+                  ))}
+
+                {/* Non-Badan accounts section */}
               </ul>
             )}
           </div>
@@ -457,7 +506,11 @@ const Header = () => {
                 onClick={() => toggleDropdown(item.label)}
               >
                 {item.submenu.length > 0 ? (
-                  <button className="px-4 py-2 flex items-center hover:bg-yellow-500 hover:text-white rounded-md">
+                  <button
+                    ref={(el) => (buttonRefs.current[index] = el)}
+                    className="px-4 py-2 flex items-center hover:bg-yellow-500 hover:text-white rounded-md"
+                    onClick={() => toggleDropdown(item.label)}
+                  >
                     {item.label} <ChevronDown className="w-4 h-4 ml-2" />
                   </button>
                 ) : (
@@ -469,7 +522,10 @@ const Header = () => {
                   </button>
                 )}
                 {item.submenu.length > 0 && dropdownOpen === item.label && (
-                  <ul className="absolute left-0 mt-3 min-w-max bg-blue-900 text-white shadow-md rounded-md">
+                  <ul
+                    ref={(el) => (dropdownRefs.current[index] = el)}
+                    className="absolute left-0 mt-3 min-w-max bg-blue-900 text-white shadow-md rounded-md"
+                  >
                     {item.submenu.map((sub, subIndex) => (
                       <li
                         key={subIndex}

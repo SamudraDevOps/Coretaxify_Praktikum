@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import SideBarEFaktur from "./SideBarEFaktur";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { FaChevronDown, FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import { useParams } from "react-router";
+import { useParams, useSearchParams } from "react-router";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import Swal from "sweetalert2";
 import axios from "axios";
@@ -10,6 +10,8 @@ import { getCsrf } from "@/service/getCsrf";
 import { RoutesApi } from "@/Routes";
 import { useCookies } from "react-cookie";
 import { useUserType } from "@/components/context/userTypeContext";
+import { useNavigate } from "react-router-dom";
+import { useNavigateWithParams } from "@/hooks/useNavigateWithParams";
 
 const PajakKeluaran = ({
   data,
@@ -19,13 +21,20 @@ const PajakKeluaran = ({
   currentPage = 1,
 }) => {
   const { id, akun } = useParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const viewAsCompanyId = searchParams.get("viewAs");
   const [cookies] = useCookies(["token"]);
+  const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
+  // return axios.post(
+  //   `${RoutesApiReal.url}api/student/assignments/${id}/sistem/${accountId}/faktur`,
+  //   data,
+  const navigate = useNavigateWithParams();
 
   const deleteFaktur = useMutation({
     mutationFn: async (fakturId) => {
       const csrf = await getCsrf();
       return axios.delete(
-        `${RoutesApi.apiUrl}student/assignments/${id}/sistem/${akun}/faktur/${fakturId}`,
+        `${RoutesApi.apiUrl}student/assignments/${id}/sistem/${accountId}/faktur/${fakturId}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -55,8 +64,9 @@ const PajakKeluaran = ({
   const approveMultipleFaktur = useMutation({
     mutationFn: async () => {
       const csrf = await getCsrf();
+      const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
       return axios.post(
-        `${RoutesApi.apiUrl}student/assignments/${id}/sistem/${akun}/faktur/approve-multiple`,
+        `${RoutesApi.apiUrl}student/assignments/${id}/sistem/${accountId}/faktur/approve-multiple`,
         {
           faktur_ids: selectedFakturIds,
         },
@@ -178,7 +188,6 @@ const PajakKeluaran = ({
           <div className="flex items-center gap-3">
             {item && (
               <div className="flex  text-left text-sm" ref={dropdownRef}>
-                aowkoeko
                 <button
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                   className="flex items-center bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-2 rounded"
@@ -205,11 +214,16 @@ const PajakKeluaran = ({
             {/* {item && ( */}
             <button
               className="flex items-center bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded text-sm"
-              onClick={
-                () =>
-                  (window.location.href = `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran/tambah-faktur-keluaran`)
-                // (window.location.href =
-                //   "/admin/praktikum/2/e-faktur/pajak-keluaran/tambah-faktur-keluaran")
+              // onClick={
+              //   () =>
+              //     (window.location.href = `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran/tambah-faktur-keluaran`)
+              //   // (window.location.href =
+              //   //   "/admin/praktikum/2/e-faktur/pajak-keluaran/tambah-faktur-keluaran")
+              // }
+              onClick={() =>
+                navigate(
+                  `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran/tambah-faktur-keluaran`
+                )
               }
             >
               Tambah

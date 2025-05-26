@@ -33,7 +33,7 @@ import {
 import { getCsrf } from "@/service/getCsrf";
 import { useCookies } from "react-cookie";
 import { RoutesApi as RoutesApiReal } from "@/Routes";
-import { useParams } from "react-router";
+import { useParams, useSearchParams } from "react-router";
 import { ClipLoader } from "react-spinners";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import Swal from "sweetalert2";
@@ -74,6 +74,8 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
   const [isCustomPPnBM, setIsCustomPPnBM] = useState(false);
 
   const { id, akun } = useParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const viewAsCompanyId = searchParams.get("viewAs");
   const [cookies] = useCookies(["token"]);
 
   const RoutesApi = {
@@ -558,11 +560,13 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
     }));
   };
 
+  // alert(viewAsCompanyId);
   const createFaktur = useMutation({
     mutationFn: async ({ data, isDraft }) => {
       const csrf = await getCsrf();
+      const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
       return axios.post(
-        `${RoutesApiReal.url}api/student/assignments/${id}/sistem/${akun}/faktur`,
+        `${RoutesApiReal.url}api/student/assignments/${id}/sistem/${accountId}/faktur`,
         data,
         {
           headers: {
