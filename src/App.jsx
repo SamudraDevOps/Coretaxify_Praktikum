@@ -135,7 +135,7 @@ import { useParams } from "react-router";
 import { RoutesApi } from "@/Routes";
 import EditFakturKeluaran from "./components/PraktikumPage/Badan/EFaktur/EditFakturKeluaran";
 import { ViewerPDF } from "./components/PraktikumPage/PDFTemplate/PDFViewer";
-import { PDFFakturKeluaran } from "./components/PraktikumPage/PDFTemplate/FakturKeluaran";
+import FakturPajakKeluaranPdf from "./components/PraktikumPage/PDFTemplate/FakturKeluaran";
 import BpeSptPdf from "./components/PraktikumPage/PDFTemplate/BPESPTTemplate";
 import BillingCodePdf from "./components/PraktikumPage/PDFTemplate/BillingCodeTemplate";
 
@@ -835,7 +835,7 @@ const Main = () => {
           element={
             <>
               <div className="w-full h-screen">
-                <ViewerPDF document={<PDFFakturKeluaran />} />
+                <ViewerPDF document={<FakturPajakKeluaranPdf />} />
               </div>
             </>
           }
