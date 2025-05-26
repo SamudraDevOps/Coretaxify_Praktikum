@@ -138,6 +138,7 @@ import { ViewerPDF } from "./components/PraktikumPage/PDFTemplate/PDFViewer";
 import FakturPajakKeluaranPdf from "./components/PraktikumPage/PDFTemplate/FakturKeluaran";
 import BpeSptPdf from "./components/PraktikumPage/PDFTemplate/BPESPTTemplate";
 import BillingCodePdf from "./components/PraktikumPage/PDFTemplate/BillingCodeTemplate";
+import SptMasaPph21Pdf from "./components/PraktikumPage/PDFTemplate/SPTMasaPPH";
 
 const Main = () => {
   const [loading, setLoading] = useState(true);
@@ -856,6 +857,16 @@ const Main = () => {
             <>
               <div className="w-full h-screen">
                 <ViewerPDF document={<BillingCodePdf />} />
+              </div>
+            </>
+          }
+        />
+        <Route
+          path="/pdf/sptmasa"
+          element={
+            <>
+              <div className="w-full h-screen">
+                <ViewerPDF document={<SptMasaPph21Pdf />} />
               </div>
             </>
           }
