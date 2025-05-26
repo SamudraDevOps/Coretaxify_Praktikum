@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+import { useParams } from "react-router";
 // import Select from "react-select";
 import {
   Popover,
@@ -11,6 +12,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { Button } from "@/components/ui/button";
 import BUPOTSidebar from "./BUPOTSidebar"; // Assuming you have a sidebar component
 import { useObjekPajak } from '@/hooks/bupot/useObjekPajak';
+import { useNpwp } from '@/hooks/bupot/useNpwp';
 
 const BUPOTForm = ({
   type,
@@ -49,6 +51,8 @@ const BUPOTForm = ({
   const currentBupot = getBupot();
 
   const { objekPajak, loading: loadingObjekPajak } = useObjekPajak(currentBupot);
+  
+  const { npwp, loading: loadingNpwp } = useNpwp();
 
   // Helper to update multiple form fields
   const updateMultipleFields = (updates) => {
@@ -177,6 +181,22 @@ const BUPOTForm = ({
     const numberString = value?.replace(/[^\d]/g, "") || "";
     return new Intl.NumberFormat("id-ID").format(numberString);
   };
+
+  const { id, akun, faktur } = useParams();
+  
+  // set nitku_dokumen to current
+  useEffect(() => {
+    const currentAkun = npwp.find(obj => obj.id = akun);
+    updateFormData("nitku_dokumen", currentAkun?.npwp_akun + '000000 - ' + currentAkun?.nama_akun);
+  }, [formData.jenis_dokumen]);
+
+  if (currentBupot === "BPPU") {
+    useEffect(() => {
+      const calculatedPajakPenghasilan = formData.dasar_pengenaan_pajak * (formData.tarif_pajak / 100);
+
+      updateFormData("pajak_penghasilan", calculatedPajakPenghasilan);
+    }, [formData.dasar_pengenaan_pajak]);
+  }
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -359,14 +379,29 @@ const BUPOTForm = ({
                     <select
                       className="w-64 flex-auto border p-2 rounded appearance-none"
                       value={formData.npwp_akun || ""}
-                      onChange={(e) =>
-                        updateFormData("npwp_akun", e.target.value)
-                      }
-                      placehoder="Please Select"
+                      onChange={(e) => {
+                        const selectedValue = e.target.value;
+
+                        const selectedObject = npwp.find(obj => obj.npwp_akun === selectedValue);
+
+                        if (selectedObject) {
+                          updateMultipleFields({
+                            npwp_akun: selectedObject.npwp_akun,
+                            nama_akun: selectedObject.nama_akun,
+                            nitku: selectedObject.npwp_akun + '000000 - ' + selectedObject.nama_akun
+                          })
+                        } else {
+                          updateFormData("npwp_akun", e.target.value)
+                        }
+                      }}
+                      disabled={loadingNpwp}
                     >
                       <option value="">Please Select</option>
-                      <option value="NITKU1">NITKU1</option>
-                      <option value="NITKU2">NITKU2</option>
+                      {npwp.map((obj) => (
+                        <option key={obj.id} value={obj.npwp_akun}>
+                          {obj.npwp_akun}
+                        </option>
+                      ))}
                     </select>
                   </div>
                 )}
@@ -390,7 +425,7 @@ const BUPOTForm = ({
                       onChange={(e) => {
                         updateFormData("nama_akun", e.target.value);
                       }}
-                      // readOnly={true}
+                      readOnly={true}
                     />
                   </div>
                 )}
@@ -685,16 +720,16 @@ const BUPOTForm = ({
                       NITKU
                       <span className="text-red-500">*</span>
                     </label>
-                    <select
-                      className="w-64 flex-auto border p-2 rounded appearance-none"
+                    <input
+                      type="text"
+                      className="w-64 flex-auto border p-2 rounded"
+                      placeholder="Nama"
                       value={formData.nitku || ""}
-                      onChange={(e) => updateFormData("nitku", e.target.value)}
-                      placehoder="Please Select"
-                    >
-                      <option value="">Please Select</option>
-                      <option value="NITKU1">NITKU1</option>
-                      <option value="NITKU2">NITKU2</option>
-                    </select>
+                      onChange={(e) => {
+                        updateFormData("nitku", e.target.value);
+                      }}
+                      readOnly={true}
+                    />
                   </div>
                 )}
                 {/* Other Informasi Umum fields */}
@@ -963,6 +998,7 @@ const BUPOTForm = ({
                     onChange={(e) => {
                       updateFormData("pajak_penghasilan", e.target.value);
                     }}
+                    readOnly={true}
                   />
                 </div>
 
@@ -2481,6 +2517,7 @@ const BUPOTForm = ({
                     onChange={(e) => {
                       updateFormData("nitku_dokumen", e.target.value);
                     }}
+                    readOnly={true}
                   />
                 </div>
 
