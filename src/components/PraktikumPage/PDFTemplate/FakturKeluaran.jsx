@@ -51,9 +51,11 @@ const styles = StyleSheet.create({
   table: {
     display: "flex",
     width: "100%",
-    borderWidth: 1,
+    borderLeftWidth: 1,
+    borderRightWidth: 1,
+    borderBottomWidth: 1,
     borderColor: "#000",
-    marginTop: 10,
+    // marginTop: 10,
     marginBottom: 10,
   },
   tableHeader: {
@@ -101,21 +103,27 @@ const FakturPajakKeluaranPdf = () => (
       <Text style={styles.title}>Faktur Pajak</Text>
 
       {/* Penjual */}
-      <View style={styles.section}>
-        <Text style={styles.label}>Nama:</Text>
-        <Text style={styles.value}>
-          KANTOR AKUNTAN PUBLIK MOH WILDAN DAN ADI DARMAWAN
-        </Text>
-        <Text style={styles.label}>Alamat:</Text>
-        <Text style={styles.value}>
-          PERUMAHAN PONDOK BLIMBING INDAH F4 NO.46, KOTA MALANG
-        </Text>
-        <Text style={styles.label}>Nomor:</Text>
-        <Text style={styles.value}>#0934274002429000000001</Text>
-      </View>
-
-      {/* Faktur Code */}
+      {/* <View style={styles.section}> */}
       <View style={styles.boxContainer}>
+        <View style={styles.boxRow}>
+          <Text style={styles.label}>Nama:</Text>
+          <Text style={styles.value}>
+            KANTOR AKUNTAN PUBLIK MOH WILDAN DAN ADI DARMAWAN
+          </Text>
+        </View>
+        <View style={styles.boxRow}>
+          <Text style={styles.label}>Alamat:</Text>
+          <Text style={styles.value}>
+            PERUMAHAN PONDOK BLIMBING INDAH F4 NO.46, KOTA MALANG
+          </Text>
+        </View>
+        <View style={styles.boxRow}>
+          <Text style={styles.label}>Nomor:</Text>
+          <Text style={styles.value}>#0934274002429000000001</Text>
+        </View>
+        {/* </View> */}
+
+        {/* Faktur Code */}
         <View style={styles.boxRow}>
           <Text>Kode dan Nomor Seri Faktur Pajak: 04002500110910510</Text>
         </View>
