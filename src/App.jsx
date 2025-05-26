@@ -134,6 +134,8 @@ import RoleBasedRenderer from "./components/PraktikumPage/RoleBaseRenderer";
 import { useParams } from "react-router";
 import { RoutesApi } from "@/Routes";
 import EditFakturKeluaran from "./components/PraktikumPage/Badan/EFaktur/EditFakturKeluaran";
+import { ViewerPDF } from "./components/PraktikumPage/PDFTemplate/PDFViewer";
+import { PDFFakturKeluaran } from "./components/PraktikumPage/PDFTemplate/FakturKeluaran";
 
 const Main = () => {
   const [loading, setLoading] = useState(true);
@@ -823,6 +825,16 @@ const Main = () => {
                 Badan={PajakMasukan}
                 query={"edit-info"}
               ></RoleBasedRenderer>
+            </>
+          }
+        />
+        <Route
+          path="/pdf/faktur-keluaran"
+          element={
+            <>
+              <div className="w-full h-screen">
+                <ViewerPDF document={<PDFFakturKeluaran />} />
+              </div>
             </>
           }
         />
