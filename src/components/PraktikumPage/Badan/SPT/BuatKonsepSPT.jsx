@@ -101,9 +101,9 @@ const BuatKonsepSPT = () => {
 
       Swal.fire("Berhasil!", "Konsep SPT berhasil dibuat.", "success").then(
         (result) => {
-          // if (result.isConfirmed) {
-          //   window.location.href = `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran`;
-          // }
+          if (result.isConfirmed) {
+            window.location.href = `/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt`;
+          }
         }
       );
     },

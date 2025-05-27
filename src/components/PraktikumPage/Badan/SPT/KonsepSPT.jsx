@@ -20,6 +20,7 @@ const KonsepSPT = ({ data, sidebar }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  console.log(data);
   return (
     <div className="flex h-screen bg-gray-100">
       <SideBarSPT
@@ -93,11 +94,79 @@ const KonsepSPT = ({ data, sidebar }) => {
               </tr>
             </thead>
             <tbody className="text-gray-600">
-              <tr>
-                <td colSpan="12" className="text-center p-4 border">
-                  Belum ada data
-                </td>
-              </tr>
+              {data && data.length > 0 ? (
+                data.map((item, index) => (
+                  <tr key={item.id} className="hover:bg-gray-50">
+                    <td className="px-6 py-2 border text-center">
+                      {index + 1}
+                    </td>
+                    <td className="px-4 py-2 border">
+                      <div className="flex gap-2 justify-center">
+                        {/* <button
+                          className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs"
+                          onClick={() =>
+                            (window.location.href = `/praktikum/${id}/sistem/${akun}/detail-spt/${item.id}`)
+                          }
+                        >
+                          Detail
+                        </button> */}
+                        <button
+                          className="bg-green-500 hover:bg-green-600 text-white px-2 py-1 rounded text-xs"
+                          onClick={() =>
+                            (window.location.href = `/praktikum/${id}/sistem/${akun}/buat-konsep-spt/${item.id}`)
+                          }
+                        >
+                          Edit
+                        </button>
+                      </div>
+                    </td>
+                    <td className="px-8 py-2 border">
+                      {item.jenis_pajak || "-"}
+                    </td>
+                    <td className="px-4 py-2 border">
+                      {item.model === "NORMAL"
+                        ? "SPT Normal"
+                        : "SPT Pembetulan"}
+                    </td>
+                    <td className="px-4 py-2 border">
+                      {item.masa_bulan} {item.masa_tahun}
+                    </td>
+                    <td className="px-4 py-2 border">{item.npwp || "-"}</td>
+                    <td className="px-4 py-2 border">
+                      {item.nama_pengusaha || "-"}
+                    </td>
+                    <td className="px-4 py-2 border">{item.model || "-"}</td>
+                    <td className="px-4 py-2 border">
+                      {item.tanggal_jatuh_tempo || "-"}
+                    </td>
+                    <td className="px-4 py-2 border">
+                      {item.tanggal_dibuat || "-"}
+                    </td>
+                    <td className="px-4 py-2 border">
+                      <span
+                        className={`px-2 py-1 rounded text-xs font-medium ${
+                          item.status === "KONSEP"
+                            ? "bg-yellow-100 text-yellow-800"
+                            : item.status === "SIAP LAPOR"
+                            ? "bg-blue-100 text-blue-800"
+                            : item.status === "SUDAH LAPOR"
+                            ? "bg-green-100 text-green-800"
+                            : "bg-gray-100 text-gray-800"
+                        }`}
+                      >
+                        {item.status || "-"}
+                      </span>
+                    </td>
+                    <td className="px-4 py-2 border">-</td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="12" className="text-center p-4 border">
+                    Belum ada data
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
