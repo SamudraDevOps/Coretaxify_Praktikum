@@ -205,8 +205,9 @@ const CreateKonsepSPT = () => {
                                                 Posting SPT
                                             </button>
                                             <p className="text-sm text-gray-500">
-                                                Last prefiling Returnsheet is on <strong>12 April 2025 23:24:46</strong>
+                                                Last prefiling Returnsheet is on <strong>{new Date().toLocaleString('id-ID', { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' })}</strong>
                                             </p>
+
                                         </div>
                                     </div>
                                 )}
@@ -255,7 +256,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100 "
                                                             defaultValue="0"
                                                             disabled
@@ -263,21 +264,21 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     {/* <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm"
                                                             defaultValue="0"
                                                         />
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm"
                                                             defaultValue="0"
                                                         />
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm"
                                                             defaultValue="0"
                                                         />
@@ -291,7 +292,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="105.500.000"
                                                             disabled
@@ -299,7 +300,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="96.708.334"
                                                             disabled
@@ -307,7 +308,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="11.605.000"
                                                             disabled
@@ -315,7 +316,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -330,7 +331,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -338,7 +339,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -346,7 +347,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -354,7 +355,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -369,7 +370,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -378,7 +379,7 @@ const CreateKonsepSPT = () => {
                                                     <td className="p-2"></td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -386,7 +387,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                         />
@@ -400,7 +401,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -408,7 +409,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -416,7 +417,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -424,7 +425,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2 flex items-center gap-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -467,7 +468,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="651.119.260"
                                                             disabled
@@ -475,7 +476,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm"
                                                             defaultValue="596.859.332"
                                                             disabled
@@ -483,7 +484,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm"
                                                             defaultValue="71.623.128"
                                                             disabled
@@ -491,7 +492,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -506,7 +507,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -514,7 +515,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -522,7 +523,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -530,7 +531,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -545,7 +546,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -553,7 +554,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -561,7 +562,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -569,7 +570,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -584,7 +585,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm"
                                                             defaultValue="756.619.260"
                                                             disabled
@@ -592,7 +593,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -600,7 +601,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="83.228.128"
                                                             disabled
@@ -608,7 +609,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2 flex items-center gap-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm"
                                                             defaultValue="0"
                                                             disabled
@@ -649,7 +650,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2 flex items-center gap-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -660,7 +661,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -668,7 +669,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -681,7 +682,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2 flex items-center gap-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -727,7 +728,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2 flex items-center gap-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -763,7 +764,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -774,7 +775,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -782,7 +783,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -797,7 +798,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -805,7 +806,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -813,7 +814,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -821,7 +822,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -836,7 +837,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -847,7 +848,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -855,7 +856,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -870,7 +871,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -878,7 +879,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -886,7 +887,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -894,7 +895,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -915,7 +916,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -939,7 +940,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm"
                                                             defaultValue="0"
                                                         />
@@ -956,7 +957,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -967,7 +968,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -985,7 +986,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -993,7 +994,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -1001,7 +1002,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -1009,7 +1010,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -1024,7 +1025,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm"
                                                             defaultValue="0"
                                                         />
@@ -1047,7 +1048,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -1090,7 +1091,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -1114,7 +1115,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -1138,7 +1139,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -1162,7 +1163,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -1186,7 +1187,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -1210,7 +1211,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -1234,7 +1235,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -1350,14 +1351,14 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm"
                                                             defaultValue="0"
                                                         />
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -1401,7 +1402,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -1448,7 +1449,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -1471,7 +1472,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm"
                                                             defaultValue="0"
                                                         />
@@ -1493,7 +1494,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -1516,7 +1517,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm"
                                                             defaultValue="0"
                                                         />
@@ -1538,7 +1539,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm BG-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -1581,28 +1582,28 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm"
                                                             defaultValue="0"
                                                         />
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm"
                                                             defaultValue="0"
                                                         />
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm"
                                                             defaultValue="0"
                                                         />
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm"
                                                             defaultValue="0"
                                                         />
@@ -1615,28 +1616,28 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm"
                                                             defaultValue="0"
                                                         />
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm"
                                                             defaultValue="0"
                                                         />
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm"
                                                             defaultValue="0"
                                                         />
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm"
                                                             defaultValue="0"
                                                         />
@@ -1649,7 +1650,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -1657,7 +1658,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -1665,7 +1666,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -1673,7 +1674,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -1715,7 +1716,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -1723,7 +1724,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -1731,7 +1732,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -1739,7 +1740,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm"
                                                             defaultValue="0"
                                                         />
@@ -1752,7 +1753,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -1760,7 +1761,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -1768,7 +1769,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -1776,7 +1777,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm"
                                                             defaultValue="0"
                                                         />
@@ -1789,7 +1790,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -1797,7 +1798,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -1805,7 +1806,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -1813,7 +1814,7 @@ const CreateKonsepSPT = () => {
                                                     </td>
                                                     <td className="p-2">
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                                                             defaultValue="0"
                                                             disabled
@@ -1825,38 +1826,7 @@ const CreateKonsepSPT = () => {
                                                     <td className="p-2 whitespace-normal break-words text-sm ">
                                                         D. <input type="checkbox" className="" /> diminta pengembalian pajak yang tidak seharusnya terutang
                                                     </td>
-                                                    <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                                                            defaultValue="0"
-                                                            disabled
-                                                        />
-                                                    </td>
-                                                    <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                                                            defaultValue="0"
-                                                            disabled
-                                                        />
-                                                    </td>
-                                                    <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                                                            defaultValue="0"
-                                                            disabled
-                                                        />
-                                                    </td>
-                                                    <td className="p-2">
-                                                        <input
-                                                            type="text"
-                                                            className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                                                            defaultValue="0"
-                                                            disabled
-                                                        />
-                                                    </td>
+
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -1911,11 +1881,25 @@ const CreateKonsepSPT = () => {
                                             <div className="grid grid-cols-2 gap-4">
                                                 <label className="block text-sm font-medium text-gray-700 col-span-1">DITANDATANGANI OLEH</label>
                                                 <div className="flex items-center space-x-2">
-                                                    <input type="radio" id="test1" name="ditandatangani" className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded" disabled />
+                                                    <input
+                                                        type="radio"
+                                                        id="PKP"
+                                                        name="ditandatangani"
+                                                        className="focus:ring-blue-700 h-4 w-4 text-blue-600 border-blue-700 rounded"
+                                                        checked
+                                                        disabled
+                                                    />
                                                     <label htmlFor="PKP" className="text-gray-700 text-sm">PKP</label>
-                                                    <input type="radio" id="test2" name="ditandatangani" className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded" onClick={(e) => e.target.parentElement.previousElementSibling.click()} />
+                                                    <input
+                                                        type="radio"
+                                                        id="KuasaWajibPajak"
+                                                        name="ditandatangani"
+                                                        className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-blue-700 rounded"
+                                                        disabled
+                                                    />
                                                     <label htmlFor="KuasaWajibPajak" className="text-gray-700 text-sm">Kuasa Wajib Pajak</label>
                                                 </div>
+
                                             </div>
                                         </div>
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">

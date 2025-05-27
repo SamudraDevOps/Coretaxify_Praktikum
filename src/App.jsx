@@ -116,6 +116,7 @@ import DashboardEFaktur from "./components/PraktikumPage/Badan/EFaktur/Dashboard
 import PajakKeluaran from "./components/PraktikumPage/Badan/EFaktur/PajakKeluaran";
 import TambahFakturKeluaran from "./components/PraktikumPage/Badan/EFaktur/TambahFakturKeluaran";
 import PajakMasukan from "./components/PraktikumPage/Badan/EFaktur/PajakMasukan";
+import PajakKeluaranDokumenLain from "./components/PraktikumPage/Badan/EFaktur/PajakKeluaranDokumenLain";
 import KonsepSPT from "./components/PraktikumPage/Badan/SPT/KonsepSPT";
 import BuatKonsepSPT from "./components/PraktikumPage/Badan/SPT/BuatKonsepSPT";
 import CreateKonsepSPT from "./components/PraktikumPage/Badan/SPT/CreateKonsepSPT";
@@ -986,6 +987,15 @@ const Main = () => {
             </>
           }
         />
+          <Route
+            path="/admin/praktikum/2/e-faktur/dokumen-lain/pajak-keluaran"
+            element={
+              <>
+                <Header />
+                <PajakKeluaranDokumenLain />
+              </>
+            }
+          />
         <Route
           path="/admin/praktikum/2/e-faktur/pajak-keluaran/tambah-faktur-keluaran"
           element={
