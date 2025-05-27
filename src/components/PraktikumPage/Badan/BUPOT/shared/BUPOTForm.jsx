@@ -21,11 +21,7 @@ const BUPOTForm = ({
   sections = ["informasiUmum", "fasilitasPerpajakan", "dokumenReferensi"],
   onSubmit,
   sidebarTitle,
-  initialData = {
-    status: {
-      ...(location.pathname.includes("/create") ? "normal" : "pembetulan"),
-    },
-  },
+  initialData = {},
 }) => {
   // State for accordion sections
   const [openSections, setOpenSections] = useState({
@@ -212,6 +208,14 @@ const BUPOTForm = ({
     }, [formData.dasar_pengenaan_pajak]);
   }
 
+  // set status
+  useEffect(() => {
+    updateFormData(
+      "status",
+      location.pathname.includes("/create") ? "normal" : "pembetulan"
+    );
+  }, formData.masa_awal);
+
   return (
     <div className="flex h-screen bg-gray-100">
       {/* Include Sidebar */}
@@ -347,7 +351,7 @@ const BUPOTForm = ({
                     className="w-64 flex-auto border p-2 rounded appearance-none"
                     value={formData.status || ""}
                     onChange={(e) => updateFormData("status", e.target.value)}
-                    placehoder="Please Select"
+                    // placehoder="Please Select"
                     disabled={true}
                   >
                     <option value="">Please Select</option>
