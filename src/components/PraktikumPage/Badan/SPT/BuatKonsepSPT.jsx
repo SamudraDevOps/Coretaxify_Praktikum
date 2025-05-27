@@ -16,7 +16,9 @@ import axios from "axios";
 import { RoutesApi } from "@/Routes";
 import { useCookies } from "react-cookie";
 import { ClipLoader } from "react-spinners";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import Swal from "sweetalert2";
+import { getCsrf } from "@/service/getCsrf";
 
 const BuatKonsepSPT = () => {
   const { id, akun } = useParams();
@@ -34,7 +36,7 @@ const BuatKonsepSPT = () => {
       jenis_pajak: selectedType.toUpperCase(),
       masa_bulan: selectedMonth,
       masa_tahun: selectedYear,
-      pic_id: id,
+      pic_id: akun,
     };
 
     setQueryData(query);
@@ -56,11 +58,59 @@ const BuatKonsepSPT = () => {
           params: queryData,
         }
       );
-      console.log("mamamiia");
+      // console.log("mamamiia");
       console.log(data.data);
       return data;
     },
     enabled: Object.keys(queryData).length > 0,
+  });
+  useEffect(() => {
+    if (data && data.data) {
+      console.log("Updating queryData with:", {
+        model: data.data.model,
+      });
+
+      setQueryData((prevData) => ({
+        ...prevData,
+        model: data.data.model,
+      }));
+    }
+  }, [data]);
+  const createSpt = useMutation({
+    mutationFn: async () => {
+      const csrf = await getCsrf();
+      console.log(queryData);
+      return axios.post(
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/spt`,
+        queryData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": csrf,
+            Authorization: `Bearer ${cookies.token}`,
+          },
+        }
+      );
+    },
+    onSuccess: (data, variables) => {
+      // console.log(data);
+      // const successMessage = variables.isDraft
+      //   ? "Draft Faktur berhasil dibuat"
+      //   : "Faktur berhasil diupload";
+
+      Swal.fire("Berhasil!", "Konsep SPT berhasil dibuat.", "success").then(
+        (result) => {
+          // if (result.isConfirmed) {
+          //   window.location.href = `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran`;
+          // }
+        }
+      );
+    },
+    onError: (error) => {
+      console.error("Error saving data:", error);
+      Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
+    },
   });
 
   const showFormData = () => {
@@ -425,90 +475,91 @@ const BuatKonsepSPT = () => {
                 <strong>Langkah 3.</strong> Pilih Jenis SPT
               </p>
 
-              {data && data.data ? (
-                <>
-                  <div className="mb-4 text-normal space-y-2">
-                    <div>
-                      Jenis Surat Pemberitahuan Pajak :{" "}
-                      <strong>
-                        {selectedType === "ppn"
-                          ? "SPT Masa PPN"
-                          : "Jenis Pajak Lainnya"}
-                      </strong>
-                    </div>
-                    <div>
-                      Periode dan Tahun Pajak :{" "}
-                      <strong>
-                        {selectedType === "ppn" && selectedMonth && selectedYear
-                          ? `${new Date(
-                              `${selectedYear}-${selectedMonth}-01`
-                            ).toLocaleString("id-ID", {
-                              month: "long",
-                            })} ${selectedYear}`
-                          : "Belum dipilih"}
-                      </strong>
-                    </div>
-                  </div>
-
+              {/* {data && data.data ? ( */}
+              <>
+                <div className="mb-4 text-normal space-y-2">
                   <div>
-                    <label className="block text-normal font-medium text-gray-700 mb-1">
-                      Model SPT <span className="text-red-500">*</span>
-                    </label>
-                    <select
-                      value={selectedModelSPT}
-                      onChange={(e) => {
-                        setSelectedModelSPT(e.target.value);
-                        setModelTouched(true);
-                      }}
-                      className={cn(
-                        "w-52 border rounded px-4 py-2",
-                        !selectedModelSPT && modelTouched
-                          ? "border-red-500 bg-red-50"
-                          : "border-gray-300"
-                      )}
-                    >
-                      <option value="">Pilih Jenis SPT</option>
-                      {modelSPTOptions.map((option) => (
-                        <option key={option.value} value={option.value}>
-                          {option.label}
-                        </option>
-                      ))}
-                    </select>
-                    {!selectedModelSPT && modelTouched && (
-                      <p className="text-sm text-red-600 mt-1">
-                        Kolom ini wajib diisi!
-                      </p>
-                    )}
+                    Jenis Surat Pemberitahuan Pajak :{" "}
+                    <strong>
+                      {selectedType === "ppn"
+                        ? "SPT Masa PPN"
+                        : "Jenis Pajak Lainnya"}
+                    </strong>
                   </div>
+                  <div>
+                    Periode dan Tahun Pajak :{" "}
+                    <strong>
+                      {selectedType === "ppn" && selectedMonth && selectedYear
+                        ? `${new Date(
+                            `${selectedYear}-${selectedMonth}-01`
+                          ).toLocaleString("id-ID", {
+                            month: "long",
+                          })} ${selectedYear}`
+                        : "Belum dipilih"}
+                    </strong>
+                  </div>
+                </div>
 
-                  <div className="mt-6 flex justify-between text-normal">
-                    <Button
-                      variant="outline"
-                      onClick={handleBack}
-                      className="w-full md:w-auto text-normal"
-                    >
-                      Kembali
-                    </Button>
-                    <Button
-                      disabled={!selectedModelSPT}
-                      className={cn(
-                        "w-full md:w-auto",
-                        selectedModelSPT
-                          ? "bg-yellow-400 hover:bg-yellow-500"
-                          : "bg-gray-300 text-white cursor-not-allowed text-normal"
-                      )}
-                      onClick={() => (window.location.href = getRedirectUrl())}
-                    >
-                      Buat Konsep SPT
-                    </Button>
-                    {/* <button onClick={showFormData}>form data test</button> */}
-                  </div>
-                </>
-              ) : (
+                <div>
+                  <label className="block text-normal font-medium text-gray-700 mb-1">
+                    Model SPT <span className="text-red-500">*</span>
+                  </label>
+                  <select
+                    value={selectedModelSPT}
+                    onChange={(e) => {
+                      setSelectedModelSPT(e.target.value);
+                      setModelTouched(true);
+                    }}
+                    className={cn(
+                      "w-52 border rounded px-4 py-2",
+                      !selectedModelSPT && modelTouched
+                        ? "border-red-500 bg-red-50"
+                        : "border-gray-300"
+                    )}
+                  >
+                    <option value="">Pilih Jenis SPT</option>
+                    {modelSPTOptions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                  {!selectedModelSPT && modelTouched && (
+                    <p className="text-sm text-red-600 mt-1">
+                      Kolom ini wajib diisi!
+                    </p>
+                  )}
+                </div>
+
+                <div className="mt-6 flex justify-between text-normal">
+                  <Button
+                    variant="outline"
+                    onClick={handleBack}
+                    className="w-full md:w-auto text-normal"
+                  >
+                    Kembali
+                  </Button>
+                  <Button
+                    disabled={!selectedModelSPT}
+                    className={cn(
+                      "w-full md:w-auto",
+                      selectedModelSPT
+                        ? "bg-yellow-400 hover:bg-yellow-500"
+                        : "bg-gray-300 text-white cursor-not-allowed text-normal"
+                    )}
+                    // onClick={() => (window.location.href = getRedirectUrl())}
+                    onClick={() => createSpt.mutate()}
+                  >
+                    Buat Konsep SPT
+                  </Button>
+                  {/* <button onClick={showFormData}>form data test</button> */}
+                </div>
+              </>
+              {/* ) : (
                 <div className="text-center py-8 text-red-500 font-medium">
                   Data faktur tidak ditemukan
                 </div>
-              )}
+              )} */}
             </div>
           )}
         </div>

@@ -889,6 +889,26 @@ const Main = () => {
           }
         />
         <Route
+          path="/praktikum/:id/sistem/:akun/buat-konsep-spt/:idSpt"
+          // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/spt/:idSpt`}
+                intent={""}
+                OrangPribadi={CreateKonsepSPT}
+                Badan={CreateKonsepSPT}
+                query={""}
+              ></RoleBasedRenderer>
+            </>
+            // <>
+            //   <Header />
+            //   <KonsepSPT />
+            // </>
+          }
+        />
+        {/* <CreateKonsepSPT /> */}
+        <Route
           path="/pdf/faktur-keluaran"
           element={
             <>
