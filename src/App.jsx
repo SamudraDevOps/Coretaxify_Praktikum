@@ -870,6 +870,25 @@ const Main = () => {
           }
         />
         <Route
+          path="/praktikum/:id/sistem/:akun/buat-konsep-spt"
+          // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={``}
+                intent={""}
+                OrangPribadi={BuatKonsepSPT}
+                Badan={BuatKonsepSPT}
+                query={""}
+              ></RoleBasedRenderer>
+            </>
+            // <>
+            //   <Header />
+            //   <KonsepSPT />
+            // </>
+          }
+        />
+        <Route
           path="/pdf/faktur-keluaran"
           element={
             <>

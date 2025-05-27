@@ -26,6 +26,7 @@ export default function RoleBasedRenderer({
   const effectiveCompanyId = viewAsCompanyId || params.akun;
 
   function fillPath(template, params) {
+    if (!template) return "";
     return template.replace(/:([a-zA-Z0-9_]+)/g, (_, key) => {
       // Special handling for 'akun' to use the effective company ID
       if (key === "akun") {
@@ -36,12 +37,17 @@ export default function RoleBasedRenderer({
   }
 
   // Update the path using the effective company ID
-  const path = fillPath(url, params);
-  console.log("Path after processing:", path);
-  console.log("View as company ID:", viewAsCompanyId);
-  console.log("Effective company ID:", effectiveCompanyId);
+  const path = url ? fillPath(url, params) : "";
+  const hasValidUrl = !!url && !!path;
+
+  if (hasValidUrl) {
+    console.log("Path after processing:", path);
+    console.log("View as company ID:", viewAsCompanyId);
+    console.log("Effective company ID:", effectiveCompanyId);
+  }
 
   // First query - get user data (always for the actual user, not the viewed company)
+  // This should run regardless of URL to determine user type
   const {
     data: userData,
     isLoading: userLoading,
@@ -64,6 +70,7 @@ export default function RoleBasedRenderer({
       );
       return data;
     },
+    enabled: !!params.id && !!params.akun && !!cookies.token,
   });
 
   // Query to get represented companies this user can act as
@@ -89,7 +96,7 @@ export default function RoleBasedRenderer({
     enabled: !!params.id && !!params.akun && !!cookies.token,
   });
 
-  // Content data query using the effective company ID
+  // Content data query using the effective company ID - only if URL is provided
   const {
     data: contentData,
     isLoading: contentLoading,
@@ -111,6 +118,7 @@ export default function RoleBasedRenderer({
       console.log("Response data:", data);
       return data;
     },
+    enabled: hasValidUrl, // Only run this query if URL is provided and path is valid
   });
 
   // Function to handle switching between companies
@@ -131,8 +139,8 @@ export default function RoleBasedRenderer({
     setCurrentPage(newPage);
   };
 
-  // Show loading state
-  if (userLoading || contentLoading || companiesLoading) {
+  // Show loading state - only if URL is valid and content is loading
+  if ((hasValidUrl && contentLoading) || userLoading || companiesLoading) {
     return (
       <div className="loading flex items-center justify-center h-screen">
         <ClipLoader color="#7502B5" size={50} />
@@ -141,8 +149,8 @@ export default function RoleBasedRenderer({
     );
   }
 
-  // Show error state
-  if (isUserError || contentError) {
+  // Show error state - only check content error if URL was provided
+  if (isUserError || (hasValidUrl && contentError)) {
     const errorMessage = isUserError
       ? userError?.message || "Error loading user data"
       : contentErrorDetails?.message || "Error loading content data";
@@ -155,15 +163,34 @@ export default function RoleBasedRenderer({
     );
   }
 
-  // Ensure data exists
-  if (!userData?.data || !contentData?.data) {
+  // Ensure user data exists
+  if (!userData?.data) {
     return (
       <div className="loading flex items-center justify-center h-screen">
         <ClipLoader color="#7502B5" size={50} />
-        <p className="ml-3">Data not available</p>
+        <p className="ml-3">User data not available</p>
       </div>
     );
   }
+
+  // Also check content data, but only if URL was provided
+  if (hasValidUrl && !contentData?.data) {
+    return (
+      <div className="loading flex items-center justify-center h-screen">
+        <ClipLoader color="#7502B5" size={50} />
+        <p className="ml-3">Content data not available</p>
+      </div>
+    );
+  }
+
+  // Create empty placeholder data when URL is not provided
+  const emptyContentData = {
+    data: {},
+    meta: {
+      current_page: 1,
+      last_page: 1,
+    },
+  };
 
   // Determine which component to render based on the type of account being viewed
   const isViewingOrangPribadi = viewAsCompanyId
@@ -175,9 +202,9 @@ export default function RoleBasedRenderer({
       <Header />
       {isViewingOrangPribadi ? (
         <OrangPribadi
-          data={contentData.data}
+          data={hasValidUrl ? contentData.data : {}}
           sidebar={userData.data}
-          pagination={contentData}
+          pagination={hasValidUrl ? contentData : emptyContentData}
           onPageChange={handlePageChange}
           currentPage={currentPage}
           onCompanyChange={handleCompanyChange}
@@ -185,9 +212,9 @@ export default function RoleBasedRenderer({
         />
       ) : (
         <Badan
-          data={contentData.data}
-          sidebar={userData.data} 
-          pagination={contentData}
+          data={hasValidUrl ? contentData.data : {}}
+          sidebar={userData.data}
+          pagination={hasValidUrl ? contentData : emptyContentData}
           onPageChange={handlePageChange}
           currentPage={currentPage}
           onCompanyChange={handleCompanyChange}
