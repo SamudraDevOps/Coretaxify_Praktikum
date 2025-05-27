@@ -65,9 +65,9 @@ const Home = () => {
     };
 
     return (
-        <div className="w-full h-screen flex flex-col items-center justify-center bg-white relative overflow-hidden">
+        <div className="w-full h-full flex flex-col items-center justify-center bg-white overflow-hidden">
             {/* Arrows */}
-            <button
+            {/* <button
                 onClick={handlePrev}
                 className="absolute left-4 top-1/2 -translate-y-1/2 bg-white bg-opacity-70 hover:bg-blue-800 hover:bg-opacity-100 rounded-full shadow p-2 z-10 group"
                 aria-label="Previous"
@@ -98,7 +98,7 @@ const Home = () => {
                         className="transition-colors duration-200 group-hover:stroke-white"
                     />
                 </svg>
-            </button>
+            </button> */}
             {/* Image */}
             <img
                 src={images[current]}
