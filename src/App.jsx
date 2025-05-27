@@ -848,6 +848,27 @@ const Main = () => {
             </>
           }
         />
+        {/* SPT */}
+
+        <Route
+          path="/praktikum/:id/sistem/:akun/surat-pemberitahuan-spt"
+          // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/spt`}
+                intent={""}
+                OrangPribadi={KonsepSPT}
+                Badan={KonsepSPT}
+                query={""}
+              ></RoleBasedRenderer>
+            </>
+            // <>
+            //   <Header />
+            //   <KonsepSPT />
+            // </>
+          }
+        />
         <Route
           path="/pdf/faktur-keluaran"
           element={

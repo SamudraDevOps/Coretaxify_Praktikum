@@ -434,7 +434,10 @@ const Header = () => {
               {
                 label: "Surat Pemberitahuan(SPT)",
                 submenu: [
-                  "Surat Pemberitahuan (SPT)",
+                  {
+                    label: "Surat Pemberitahuan (SPT)",
+                    links: `/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt`,
+                  },
                   "Pencatatan",
                   "Dasbor Kompensasi",
                   "Pengungkapan Ketidakbenaran SPT",
