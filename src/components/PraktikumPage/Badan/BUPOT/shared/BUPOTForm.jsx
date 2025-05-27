@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { useParams } from "react-router";
+import countryData from "../../../../../../src/all.json";
 // import Select from "react-select";
 import {
   Popover,
@@ -11,8 +12,8 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Button } from "@/components/ui/button";
 import BUPOTSidebar from "./BUPOTSidebar"; // Assuming you have a sidebar component
-import { useObjekPajak } from '@/hooks/bupot/useObjekPajak';
-import { useNpwp } from '@/hooks/bupot/useNpwp';
+import { useObjekPajak } from "@/hooks/bupot/useObjekPajak";
+import { useNpwp } from "@/hooks/bupot/useNpwp";
 
 const BUPOTForm = ({
   type,
@@ -20,7 +21,11 @@ const BUPOTForm = ({
   sections = ["informasiUmum", "fasilitasPerpajakan", "dokumenReferensi"],
   onSubmit,
   sidebarTitle,
-  initialData = {},
+  initialData = {
+    status: {
+      ...(location.pathname.includes("/create") ? "normal" : "pembetulan"),
+    },
+  },
 }) => {
   // State for accordion sections
   const [openSections, setOpenSections] = useState({
@@ -34,11 +39,16 @@ const BUPOTForm = ({
     perhitunganPph: true,
   });
 
+  const [countries, setCountries] = useState(
+    countryData.sort((a, b) => a.name.common.localeCompare(b.name.common))
+  );
+
   const getBupot = () => {
     if (location.pathname.includes("/bppu")) return "BPPU";
     if (location.pathname.includes("/bpnr")) return "BPNR";
     if (location.pathname.includes("/ps")) return "Penyetoran Sendiri";
-    if (location.pathname.includes("/psd")) return "Pemotongan Secara Digunggung";
+    if (location.pathname.includes("/psd"))
+      return "Pemotongan Secara Digunggung";
     if (location.pathname.includes("/bp21")) return "BP 21";
     if (location.pathname.includes("/bp26")) return "BP 26";
     if (location.pathname.includes("/bpa1")) return "BP A1";
@@ -50,13 +60,14 @@ const BUPOTForm = ({
 
   const currentBupot = getBupot();
 
-  const { objekPajak, loading: loadingObjekPajak } = useObjekPajak(currentBupot);
-  
+  const { objekPajak, loading: loadingObjekPajak } =
+    useObjekPajak(currentBupot);
+
   const { npwp, loading: loadingNpwp } = useNpwp();
 
   // Helper to update multiple form fields
   const updateMultipleFields = (updates) => {
-    setFormData(prevData => ({
+    setFormData((prevData) => ({
       ...prevData,
       ...updates,
     }));
@@ -175,7 +186,6 @@ const BUPOTForm = ({
     }
   };
 
-
   // Format rupiah helper
   const formatRupiah = (value) => {
     const numberString = value?.replace(/[^\d]/g, "") || "";
@@ -183,16 +193,20 @@ const BUPOTForm = ({
   };
 
   const { id, akun, faktur } = useParams();
-  
+
   // set nitku_dokumen to current
   useEffect(() => {
-    const currentAkun = npwp.find(obj => obj.id = akun);
-    updateFormData("nitku_dokumen", currentAkun?.npwp_akun + '000000 - ' + currentAkun?.nama_akun);
+    const currentAkun = npwp.find((obj) => (obj.id = akun));
+    updateFormData(
+      "nitku_dokumen",
+      currentAkun?.npwp_akun + "000000 - " + currentAkun?.nama_akun
+    );
   }, [formData.jenis_dokumen]);
 
   if (currentBupot === "BPPU") {
     useEffect(() => {
-      const calculatedPajakPenghasilan = formData.dasar_pengenaan_pajak * (formData.tarif_pajak / 100);
+      const calculatedPajakPenghasilan =
+        formData.dasar_pengenaan_pajak * (formData.tarif_pajak / 100);
 
       updateFormData("pajak_penghasilan", calculatedPajakPenghasilan);
     }, [formData.dasar_pengenaan_pajak]);
@@ -334,6 +348,7 @@ const BUPOTForm = ({
                     value={formData.status || ""}
                     onChange={(e) => updateFormData("status", e.target.value)}
                     placehoder="Please Select"
+                    disabled={true}
                   >
                     <option value="">Please Select</option>
                     <option value="normal">Normal</option>
@@ -373,7 +388,7 @@ const BUPOTForm = ({
                   currentBupot === "BPBPT") && (
                   <div className="mt-4 flex justify-between gap-4">
                     <label className="w-64 flex-none block text-sm font-medium text-gray-700">
-                      NPWP (Under Construction)
+                      NPWP
                       <span className="text-red-500">*</span>
                     </label>
                     <select
@@ -382,16 +397,21 @@ const BUPOTForm = ({
                       onChange={(e) => {
                         const selectedValue = e.target.value;
 
-                        const selectedObject = npwp.find(obj => obj.npwp_akun === selectedValue);
+                        const selectedObject = npwp.find(
+                          (obj) => obj.npwp_akun === selectedValue
+                        );
 
                         if (selectedObject) {
                           updateMultipleFields({
                             npwp_akun: selectedObject.npwp_akun,
                             nama_akun: selectedObject.nama_akun,
-                            nitku: selectedObject.npwp_akun + '000000 - ' + selectedObject.nama_akun
-                          })
+                            nitku:
+                              selectedObject.npwp_akun +
+                              "000000 - " +
+                              selectedObject.nama_akun,
+                          });
                         } else {
-                          updateFormData("npwp_akun", e.target.value)
+                          updateFormData("npwp_akun", e.target.value);
                         }
                       }}
                       disabled={loadingNpwp}
@@ -443,9 +463,9 @@ const BUPOTForm = ({
                       type="text"
                       className="w-64 flex-auto border p-2 rounded"
                       placeholder="Alamat"
-                      value={formData.alamat_akun || ""}
+                      value={formData.alamat_utama_akun || ""}
                       onChange={(e) => {
-                        updateFormData("alamat_akun", e.target.value);
+                        updateFormData("alamat_utama_akun", e.target.value);
                       }}
                       readOnly={true}
                     />
@@ -501,9 +521,11 @@ const BUPOTForm = ({
                       }
                     >
                       <option value="">Please Select</option>
-                      <option value="negara1">negara1</option>
-                      <option value="negara2">negara2</option>
-                      <option value="negara3">negara3</option>
+                      {countries.map((country) => (
+                        <option key={country.cca3} value={country.name.common}>
+                          {country.name.common}
+                        </option>
+                      ))}
                     </select>
                   </div>
                 )}
@@ -822,7 +844,9 @@ const BUPOTForm = ({
                     onChange={(e) => {
                       const selectedValue = e.target.value;
 
-                      const selectedObject = objekPajak.find(obj => obj.nama_objek_pajak === selectedValue);
+                      const selectedObject = objekPajak.find(
+                        (obj) => obj.nama_objek_pajak === selectedValue
+                      );
 
                       if (selectedObject) {
                         updateMultipleFields({
@@ -830,10 +854,11 @@ const BUPOTForm = ({
                           jenis_pajak: selectedObject.jenis_pajak,
                           kode_objek_pajak: selectedObject.kode_objek_pajak,
                           tarif_pajak: selectedObject.tarif_pajak,
-                          sifat_pajak_penghasilan: selectedObject.sifat_pajak_penghasilan
-                        })
+                          sifat_pajak_penghasilan:
+                            selectedObject.sifat_pajak_penghasilan,
+                        });
                       } else {
-                        updateFormData("nama_objek_pajak", e.target.value)
+                        updateFormData("nama_objek_pajak", e.target.value);
                       }
                     }}
                     disabled={loadingObjekPajak}
@@ -1082,14 +1107,35 @@ const BUPOTForm = ({
                   <select
                     className="w-64 flex-auto border p-2 rounded appearance-none"
                     value={formData.npwp_akun || ""}
-                    onChange={(e) =>
-                      updateFormData("npwp_akun", e.target.value)
-                    }
-                    placehoder="Please Select"
+                    onChange={(e) => {
+                      const selectedValue = e.target.value;
+
+                      const selectedObject = npwp.find(
+                        (obj) => obj.npwp_akun === selectedValue
+                      );
+
+                      if (selectedObject) {
+                        updateMultipleFields({
+                          npwp_akun: selectedObject.npwp_akun,
+                          nama_akun: selectedObject.nama_akun,
+                          alamat_utama_akun: selectedObject.alamat_utama_akun,
+                          nitku:
+                            selectedObject.npwp_akun +
+                            "000000 - " +
+                            selectedObject.nama_akun,
+                        });
+                      } else {
+                        updateFormData("npwp_akun", e.target.value);
+                      }
+                    }}
+                    disabled={loadingNpwp}
                   >
                     <option value="">Please Select</option>
-                    <option value="NPWP1">NPWP1</option>
-                    <option value="NPWP2">NPWP2</option>
+                    {npwp.map((obj) => (
+                      <option key={obj.id} value={obj.npwp_akun}>
+                        {obj.npwp_akun}
+                      </option>
+                    ))}
                   </select>
                 </div>
 
@@ -1121,9 +1167,9 @@ const BUPOTForm = ({
                     type="text"
                     className="w-64 flex-auto border p-2 rounded"
                     placeholder="Alamat"
-                    value={formData.alamat_akun || ""}
+                    value={formData.alamat_utama_akun || ""}
                     onChange={(e) => {
-                      updateFormData("alamat_akun", e.target.value);
+                      updateFormData("alamat_utama_akun", e.target.value);
                     }}
                     readOnly={true}
                   />
@@ -1144,9 +1190,11 @@ const BUPOTForm = ({
                     placehoder="Please Select"
                   >
                     <option value="">Please Select</option>
-                    <option value="negara1">negara1</option>
-                    <option value="negara2">negara2</option>
-                    <option value="negara3">negara3</option>
+                    {countries.map((country) => (
+                      <option key={country.cca3} value={country.name.common}>
+                        {country.name.common}
+                      </option>
+                    ))}
                   </select>
                 </div>
 
@@ -2373,22 +2421,22 @@ const BUPOTForm = ({
                 </div>
 
                 {/* NITKU */}
-                  <div className="mt-4 flex justify-between gap-4">
-                    <label className="w-64 flex-none block text-sm font-medium text-gray-700">
-                      NITKU
-                      <span className="text-red-500">*</span>
-                    </label>
-                    <select
-                      className="w-64 flex-auto border p-2 rounded appearance-none"
-                      value={formData.nitku || ""}
-                      onChange={(e) => updateFormData("nitku", e.target.value)}
-                      placehoder="Please Select"
-                    >
-                      <option value="">Please Select</option>
-                      <option value="NITKU1">NITKU1</option>
-                      <option value="NITKU2">NITKU2</option>
-                    </select>
-                  </div>
+                <div className="mt-4 flex justify-between gap-4">
+                  <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                    NITKU
+                    <span className="text-red-500">*</span>
+                  </label>
+                  <select
+                    className="w-64 flex-auto border p-2 rounded appearance-none"
+                    value={formData.nitku || ""}
+                    onChange={(e) => updateFormData("nitku", e.target.value)}
+                    placehoder="Please Select"
+                  >
+                    <option value="">Please Select</option>
+                    <option value="NITKU1">NITKU1</option>
+                    <option value="NITKU2">NITKU2</option>
+                  </select>
+                </div>
 
                 {/* More fields as needed */}
               </div>
