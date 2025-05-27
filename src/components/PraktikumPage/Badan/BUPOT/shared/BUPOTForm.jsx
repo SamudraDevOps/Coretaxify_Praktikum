@@ -214,7 +214,7 @@ const BUPOTForm = ({
       "status",
       location.pathname.includes("/create") ? "normal" : "pembetulan"
     );
-  }, formData.masa_awal);
+  }, [formData.masa_awal]);
 
   return (
     <div className="flex h-screen bg-gray-100">
