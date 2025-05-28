@@ -22,6 +22,13 @@ import {
 import { FaTrash } from "react-icons/fa";
 import DynamicUploadTable from "@/components/common/DynamicUploadTable";
 import { useDynamicTableRows } from "@/hooks/useDynamicTableRows";
+import axios from "axios";
+import { getCsrf } from "@/service/getCsrf";
+import Swal from "sweetalert2";
+import { useParams } from "react-router";
+import { useMutation } from "@tanstack/react-query";
+import { RoutesApi } from "@/Routes";
+import { useCookies } from "react-cookie";
 
 const columnsUpload = [
   { key: "file", label: "File Excel", type: "file", accept: ".xlsx,.xls,.csv" },
@@ -44,6 +51,7 @@ const initialRowUpload = {
 // };
 
 const CreateKonsepSPT = ({ data }) => {
+  const { id, akun, idSpt } = useParams();
   const [activeTab, setActiveTab] = useState("induk");
   const [showHeaderInduk, setShowHeaderInduk] = useState(false);
   const [showPenyerahanBarangJasa, setShowPenyerahanBarangJasa] =
@@ -88,6 +96,7 @@ const CreateKonsepSPT = ({ data }) => {
   const [openLampiran, setOpenLampiran] = useState(false);
   const [openPenyerahan, setOpenPenyerahan] = useState(false);
 
+  const [cookies] = useCookies(["token"]);
   const [formData, setFormData] = useState({
     cl_1a1_dpp: "0",
     cl_1a_jumlah_dpp: "0",
@@ -115,6 +124,7 @@ const CreateKonsepSPT = ({ data }) => {
     cl_2h_ppnbm: "0",
     cl_2i_dpp: "0",
     cl_2j_dpp: "0",
+    cl_3f_ppnb: "0",
   });
 
   const handleChange = (e) => {
@@ -150,6 +160,42 @@ const CreateKonsepSPT = ({ data }) => {
   const lampiranDokumenTable = useDynamicTableRows(initialRowUpload);
   const penyerahanBarangJasaTable = useDynamicTableRows(initialRowUpload);
   const [rows, setRows] = useState([{ ...initialRowUpload }]);
+
+  const calculateSpt = useMutation({
+    mutationFn: async () => {
+      const csrf = await getCsrf();
+      return axios.put(
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/spt/${idSpt}/calculate-spt`,
+        formData.cl_3f_ppnb,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": csrf,
+            Authorization: `Bearer ${cookies.token}`,
+          },
+        }
+      );
+    },
+    onSuccess: (data, variables) => {
+      console.log(data);
+      // const successMessage = variables.isDraft
+      //   ? "Draft Faktur berhasil dibuat"
+      //   : "Faktur berhasil diupload";
+
+      Swal.fire("Berhasil!", "Konsep SPT berhasil dihitung.", "success").then(
+        (result) => {
+          // if (result.isConfirmed) {
+          //   window.location.href = `/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt`;
+          // }
+        }
+      );
+    },
+    onError: (error) => {
+      console.error("Error saving data:", error);
+      Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
+    },
+  });
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -293,7 +339,10 @@ const CreateKonsepSPT = ({ data }) => {
                     </div>
 
                     <div className="mt-4 flex items-center gap-4">
-                      <button className="bg-yellow-500 text-white px-4 py-2 rounded-md shadow-sm hover:bg-yellow-600 transition">
+                      <button
+                        onClick={() => calculateSpt.mutate()}
+                        className="bg-yellow-500 text-white px-4 py-2 rounded-md shadow-sm hover:bg-yellow-600 transition"
+                      >
                         Posting SPT
                       </button>
                       <p className="text-sm text-gray-500">
@@ -1365,10 +1414,10 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2">
                             <input
                               type="text"
-                              className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              defaultValue="0"
-                              disabled
-                              name="cl_3e_ppnbm"
+                              className="w-full p-1 border rounded-md  text-right text-sm bg-gray-100"
+                              defaultValue={formData.cl_3f_ppnb}
+                              name="cl_3e_ppnb"
+                              onChange={handleChange}
                             />
                           </td>
                           <td className="p-2 flex items-center gap-2"></td>
@@ -1388,7 +1437,7 @@ const CreateKonsepSPT = ({ data }) => {
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               defaultValue="0"
                               disabled
-                              name="cl_3f_ppnbm"
+                              name="cl_3f_ppnb"
                             />
                           </td>
                           <td className="p-2"></td>
