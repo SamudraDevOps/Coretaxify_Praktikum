@@ -214,7 +214,7 @@ const BUPOTForm = ({
 
       updateFormData("pajak_penghasilan", calculatedPajakPenghasilan);
     }, [formData.dasar_pengenaan_pajak, formData.tarif_pajak]);
-  }
+  };
 
   // RUMUS BUPOT BPNR
   if (currentBupot === "BPNR") {
@@ -224,7 +224,17 @@ const BUPOTForm = ({
 
       updateFormData("pajak_penghasilan", calculatedPajakPenghasilan);
     }, [[formData.dasar_pengenaan_pajak, formData.persentase_penghasilan_bersih, formData.tarif_pajak]]);
-  }
+  };
+
+  // RUMUS BUPOT PENYETORAN SENDIRI
+  if (currentBupot === "Penyetoran Sendiri") {
+    useEffect(() => {
+      const calculatedPajakPenghasilan =
+        formData.dasar_pengenaan_pajak * (formData.tarif_pajak / 100);
+
+      updateFormData("pajak_penghasilan", calculatedPajakPenghasilan);
+    }, [formData.dasar_pengenaan_pajak, formData.tarif_pajak]);
+  };
 
   // set status
   useEffect(() => {
@@ -841,7 +851,14 @@ const BUPOTForm = ({
                     className="w-64 flex-auto border p-2 rounded appearance-none"
                     value={formData.fasilitas_pajak || ""}
                     onChange={(e) =>
-                      updateFormData("fasilitas_pajak", e.target.value)
+                      updateMultipleFields({
+                          fasilitas_pajak: e.target.value,
+                          nama_objek_pajak: "",
+                          jenis_pajak: "",
+                          kode_objek_pajak: "",
+                          tarif_pajak: "",
+                          sifat_pajak_penghasilan: "",
+                      })
                     }
                     placehoder="Please Select"
                   >
@@ -878,6 +895,7 @@ const BUPOTForm = ({
                           tarif_pajak: selectedObject.tarif_pajak,
                           sifat_pajak_penghasilan:
                             selectedObject.sifat_pajak_penghasilan,
+                          kap: selectedObject.kap,
                         });
                       } else {
                         updateFormData("nama_objek_pajak", e.target.value);
@@ -1022,14 +1040,14 @@ const BUPOTForm = ({
                     <span className="text-red-500">*</span>
                   </label>
                   <input
-                    type="text"
+                    type="number"
                     className="w-64 flex-auto border p-2 rounded"
                     placeholder="Tarif (%)"
                     value={formData.tarif_pajak || ""}
                     onChange={(e) => {
                       updateFormData("tarif_pajak", e.target.value);
                     }}
-                    readOnly={true}
+                    readOnly={formData.fasilitas_pajak === "fasilitas_lainnya" ? false : true}
                   />
                 </div>
 
@@ -1433,7 +1451,7 @@ const BUPOTForm = ({
                     <span className="text-red-500">*</span>
                   </label>
                   <input
-                    type="text"
+                    type="number"
                     className="w-64 flex-auto border p-2 rounded"
                     placeholder="Tax Rate (%)"
                     value={formData.tarif_pajak || ""}
