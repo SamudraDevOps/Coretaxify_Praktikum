@@ -161,6 +161,32 @@ const CreateKonsepSPT = ({ data }) => {
   const penyerahanBarangJasaTable = useDynamicTableRows(initialRowUpload);
   const [rows, setRows] = useState([{ ...initialRowUpload }]);
 
+  // const {
+  //   data,
+  //   isLoading,
+  //   isError,
+  //   error,
+  // } = useQuery({
+  //   queryKey: ["calculate_spt"],
+  //   queryFn: async () => {
+  //     const data = await axios.get(
+  //       // RoutesApiReal.apiUrl + `student/assignments/${id}/sistem/${akun}`,
+  //       RoutesApi.apiUrl +
+  //         `student/assignments/${id}/sistem/${akun}/getAkun`,
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${cookies.token}`,
+  //         },
+  //         // params: {
+  //         //   intent: "api.sistem.get.akun.orang.pibadi",
+  //         // },
+  //       }
+  //     );
+  //     console.log(data.data);
+  //     return data.data;
+  //   },
+  // });
+
   const calculateSpt = useMutation({
     mutationFn: async () => {
       const csrf = await getCsrf();
@@ -490,10 +516,11 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2">
                             <input
                               type="text"
-                              name="cl_1a3_ppnbm"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_1a3_ppnbm}
-                              readOnly
+                              defaultValue="0"
+                              disabled
+                              name="cl_3a_ppnbm"
+                              value={data.detail_spt.cl_3a_ppnbm}
                             />
                           </td>
                         </tr>
@@ -844,7 +871,7 @@ const CreateKonsepSPT = ({ data }) => {
                               name="cl_1a_jumlah_dpp"
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={formData.cl_1a_jumlah_dpp}
+                              value={data.detail_spt.cl_1a_jumlah_dpp}
                               onChange={handleChange}
                             />
                           </td>
@@ -854,7 +881,7 @@ const CreateKonsepSPT = ({ data }) => {
                               name="cl_1a_jumlah_ppn"
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={formData.cl_1a_jumlah_ppn}
+                              value={data.detail_spt.cl_1a_jumlah_ppn}
                               onChange={handleChange}
                             />
                           </td>
@@ -863,7 +890,7 @@ const CreateKonsepSPT = ({ data }) => {
                               name="cl_1a_jumlah_ppnbm"
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={formData.cl_1a_jumlah_ppnbm}
+                              value={data.detail_spt.cl_1a_jumlah_ppnbm}
                               onChange={handleChange}
                             />
                           </td>
@@ -935,7 +962,7 @@ const CreateKonsepSPT = ({ data }) => {
                             <input
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={formData.cl_1c_dpp}
+                              value={data.detail_spt.cl_1c_dpp}
                               onChange={handleChange}
                               name="cl_1c_jumlah_dpp"
                             />
@@ -1192,7 +1219,7 @@ const CreateKonsepSPT = ({ data }) => {
                             <input
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={formData.cl_2g_dpp}
+                              value={data.detail_spt.cl_2g_dpp}
                               onChange={handleChange}
                               name="cl_2g_dpp"
                             />
@@ -1202,7 +1229,7 @@ const CreateKonsepSPT = ({ data }) => {
                             <input
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={formData.cl_2g_ppn}
+                              value={data.detail_spt.cl_2g_ppn}
                               onChange={handleChange}
                               name="cl_2g_ppn"
                             />
@@ -1286,7 +1313,7 @@ const CreateKonsepSPT = ({ data }) => {
                             <input
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={formData.cl_2j_dpp}
+                              value={data.detail_spt.cl_2j_dpp}
                               onChange={handleChange}
                               name="cl_2j_dpp"
                             />
@@ -1414,8 +1441,8 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2">
                             <input
                               type="text"
-                              className="w-full p-1 border rounded-md  text-right text-sm bg-gray-100"
-                              defaultValue={formData.cl_3f_ppnb}
+                              className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
+                              value={data.detail_spt.cl_3e_ppnb}
                               name="cl_3e_ppnb"
                               onChange={handleChange}
                             />
@@ -1455,7 +1482,7 @@ const CreateKonsepSPT = ({ data }) => {
                             <input
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              defaultValue="0"
+                              value={data.detail_spt.cl_3g_ppnbm}
                               disabled
                               name="cl_3g_ppnbm"
                             />
@@ -1591,7 +1618,7 @@ const CreateKonsepSPT = ({ data }) => {
                             <input
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              defaultValue="0"
+                              value={data.detail_spt.cl_4_ppn_terutang}
                               disabled
                               name="cl_4_ppn_terutang"
                             />
@@ -1697,7 +1724,7 @@ const CreateKonsepSPT = ({ data }) => {
                             <input
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              defaultValue="0"
+                              value={data.detail_spt.cl_6a_ppnbm}
                               disabled
                               name="cl_6a_ppnbm"
                             />
@@ -1732,7 +1759,7 @@ const CreateKonsepSPT = ({ data }) => {
                             <input
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              defaultValue="0"
+                              value={data.detail_spt.cl_6c_ppnbm}
                               disabled
                               name="cl_6c_ppnbm"
                             />
@@ -1769,7 +1796,7 @@ const CreateKonsepSPT = ({ data }) => {
                             <input
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm BG-gray-100"
-                              defaultValue="0"
+                              value={data.detail_spt.cl_6e_ppnbm}
                               disabled
                               name="cl_6e_ppnbm"
                             />
@@ -1912,7 +1939,7 @@ const CreateKonsepSPT = ({ data }) => {
                               name="cl_7c_dpp"
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              defaultValue="0"
+                              value={data.detail_spt.cl_7c_dpp}
                               disabled
                             />
                           </td>
@@ -1921,7 +1948,7 @@ const CreateKonsepSPT = ({ data }) => {
                               name="cl_7c_dpp_lain"
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              defaultValue="0"
+                              value={data.detail_spt.cl_7c_dpp_lain}
                               disabled
                             />
                           </td>
@@ -1930,7 +1957,7 @@ const CreateKonsepSPT = ({ data }) => {
                               name="cl_7c_ppn"
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              defaultValue="0"
+                              value={data.detail_spt.cl_7c_ppn}
                               disabled
                             />
                           </td>
@@ -1939,7 +1966,7 @@ const CreateKonsepSPT = ({ data }) => {
                               name="cl_7c_ppnbm"
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              defaultValue="0"
+                              value={data.detail_spt.cl_7c_ppnbm}
                               disabled
                             />
                           </td>
@@ -2088,7 +2115,7 @@ const CreateKonsepSPT = ({ data }) => {
                               type="text"
                               name="cl_8c_dpp"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              defaultValue="0"
+                              value={data.detail_spt.cl_8c_dpp}
                               disabled
                             />
                           </td>
@@ -2097,7 +2124,7 @@ const CreateKonsepSPT = ({ data }) => {
                               type="text"
                               name="cl_8c_dpp_lain"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              defaultValue="0"
+                              value={data.detail_spt.cl_8c_dpp_lain}
                               disabled
                             />
                           </td>
@@ -2106,7 +2133,7 @@ const CreateKonsepSPT = ({ data }) => {
                               type="text"
                               name="cl_8c_ppn"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              defaultValue="0"
+                              value={data.detail_spt.cl_8c_ppn}
                               disabled
                             />
                           </td>
@@ -2115,7 +2142,7 @@ const CreateKonsepSPT = ({ data }) => {
                               type="text"
                               name="cl_8c_ppnbm"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              defaultValue="0"
+                              value={data.detail_spt.cl_8c_ppnbm}
                               disabled
                             />
                           </td>
