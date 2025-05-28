@@ -107,7 +107,7 @@ const Home = () => {
                 style={{ maxWidth: '100vw' }}
             />
             {/* Pagination */}
-            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-2">
+            <div className=" bottom-8 left-1/2 -translate-x-1/2 flex gap-2">
                 {images.map((_, idx) => (
                     <button
                         key={idx}
