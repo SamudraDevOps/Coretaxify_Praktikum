@@ -1291,6 +1291,7 @@ const CreateKonsepSPT = ({ data }) => {
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               defaultValue="0"
                               disabled
+                              name="cl_3a_ppnbm"
                             />
                           </td>
                           <td className="p-2"></td>
@@ -1309,6 +1310,7 @@ const CreateKonsepSPT = ({ data }) => {
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               defaultValue="0"
                               disabled
+                              name="cl_3b_ppnbm"
                             />
                           </td>
                           <td className="p-2"></td>
@@ -1327,6 +1329,7 @@ const CreateKonsepSPT = ({ data }) => {
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               defaultValue="0"
                               disabled
+                              name="cl_3c_ppnbm"
                             />
                           </td>
                           <td className="p-2"></td>
@@ -1345,6 +1348,7 @@ const CreateKonsepSPT = ({ data }) => {
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               defaultValue="0"
                               disabled
+                              name="cl_3d_ppnbm"
                             />
                           </td>
                           <td className="p-2"></td>
@@ -1364,6 +1368,7 @@ const CreateKonsepSPT = ({ data }) => {
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               defaultValue="0"
                               disabled
+                              name="cl_3e_ppnbm"
                             />
                           </td>
                           <td className="p-2 flex items-center gap-2"></td>
@@ -1383,6 +1388,7 @@ const CreateKonsepSPT = ({ data }) => {
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               defaultValue="0"
                               disabled
+                              name="cl_3f_ppnbm"
                             />
                           </td>
                           <td className="p-2"></td>
@@ -1402,6 +1408,7 @@ const CreateKonsepSPT = ({ data }) => {
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               defaultValue="0"
                               disabled
+                              name="cl_3g_ppnbm"
                             />
                           </td>
                           <td className="p-2"></td>
@@ -1415,8 +1422,8 @@ const CreateKonsepSPT = ({ data }) => {
                               <label className="flex items-center w-full">
                                 <input
                                   type="radio"
-                                  name="diminta_untuk"
-                                  value="dikompresikan"
+                                  name="cl_3h_diminta"
+                                  value="1"
                                   className="form-radio"
                                 />
                                 <span className="ml-2">1. Dikompresikan</span>
@@ -1424,8 +1431,8 @@ const CreateKonsepSPT = ({ data }) => {
                               <label className="flex items-center w-full">
                                 <input
                                   type="radio"
-                                  name="diminta_untuk"
-                                  value="dikembalikan_pendahuluan"
+                                  name="cl_3h_diminta"
+                                  value="2"
                                   className="form-radio"
                                 />
                                 <span className="ml-2">
@@ -1436,8 +1443,8 @@ const CreateKonsepSPT = ({ data }) => {
                               <label className="flex items-center w-full">
                                 <input
                                   type="radio"
-                                  name="diminta_untuk"
-                                  value="dikembalikan_pemeriksaan"
+                                  name="cl_3h_diminta"
+                                  value="3"
                                   className="form-radio"
                                 />
                                 <span className="ml-2">
@@ -1528,6 +1535,7 @@ const CreateKonsepSPT = ({ data }) => {
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm"
                               defaultValue="0"
+                              name="cl_3a_ppnbm"
                             />
                           </td>
                           <td className="p-2">
@@ -1536,6 +1544,7 @@ const CreateKonsepSPT = ({ data }) => {
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               defaultValue="0"
                               disabled
+                              name="cl_4_ppn_terutang"
                             />
                           </td>
                           <td className="p-2"></td>
@@ -1641,6 +1650,7 @@ const CreateKonsepSPT = ({ data }) => {
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               defaultValue="0"
                               disabled
+                              name="cl_6a_ppnbm"
                             />
                           </td>
                         </tr>
@@ -1657,6 +1667,7 @@ const CreateKonsepSPT = ({ data }) => {
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm"
                               defaultValue="0"
+                              name="cl_6b_ppnbm"
                             />
                           </td>
                         </tr>
@@ -1674,6 +1685,7 @@ const CreateKonsepSPT = ({ data }) => {
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               defaultValue="0"
                               disabled
+                              name="cl_6c_ppnbm"
                             />
                           </td>
                         </tr>
@@ -1691,6 +1703,7 @@ const CreateKonsepSPT = ({ data }) => {
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm"
                               defaultValue="0"
+                              name="cl_6d_ppnbm"
                             />
                           </td>
                         </tr>
@@ -1709,6 +1722,7 @@ const CreateKonsepSPT = ({ data }) => {
                               className="w-full p-1 border rounded-md text-right text-sm BG-gray-100"
                               defaultValue="0"
                               disabled
+                              name="cl_6e_ppnbm"
                             />
                           </td>
                         </tr>
@@ -1766,6 +1780,7 @@ const CreateKonsepSPT = ({ data }) => {
                           </td>
                           <td className="p-2">
                             <input
+                              name="cl_7a_dpp"
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm"
                               defaultValue="0"
@@ -1773,6 +1788,7 @@ const CreateKonsepSPT = ({ data }) => {
                           </td>
                           <td className="p-2">
                             <input
+                              name="cl_7a_dpp_lain"
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm"
                               defaultValue="0"
@@ -1780,6 +1796,7 @@ const CreateKonsepSPT = ({ data }) => {
                           </td>
                           <td className="p-2">
                             <input
+                              name="cl_7a_ppn"
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm"
                               defaultValue="0"
@@ -1787,12 +1804,14 @@ const CreateKonsepSPT = ({ data }) => {
                           </td>
                           <td className="p-2">
                             <input
+                              name="cl_7a_ppnbm"
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm"
                               defaultValue="0"
                             />
                           </td>
                         </tr>
+
                         {/* row 2 */}
                         <tr className="border-b">
                           <td className="p-2 whitespace-normal break-words text-sm">
@@ -1801,6 +1820,7 @@ const CreateKonsepSPT = ({ data }) => {
                           </td>
                           <td className="p-2">
                             <input
+                              name="cl_7b_dpp"
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm"
                               defaultValue="0"
@@ -1808,6 +1828,7 @@ const CreateKonsepSPT = ({ data }) => {
                           </td>
                           <td className="p-2">
                             <input
+                              name="cl_7b_dpp_lain"
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm"
                               defaultValue="0"
@@ -1815,6 +1836,7 @@ const CreateKonsepSPT = ({ data }) => {
                           </td>
                           <td className="p-2">
                             <input
+                              name="cl_7b_ppn"
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm"
                               defaultValue="0"
@@ -1822,12 +1844,14 @@ const CreateKonsepSPT = ({ data }) => {
                           </td>
                           <td className="p-2">
                             <input
+                              name="cl_7b_ppnbm"
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm"
                               defaultValue="0"
                             />
                           </td>
                         </tr>
+
                         {/* row 3 */}
                         <tr className="border-b">
                           <td className="p-2 whitespace-normal break-words text-sm">
@@ -1836,6 +1860,7 @@ const CreateKonsepSPT = ({ data }) => {
                           </td>
                           <td className="p-2">
                             <input
+                              name="cl_7c_dpp"
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               defaultValue="0"
@@ -1844,6 +1869,7 @@ const CreateKonsepSPT = ({ data }) => {
                           </td>
                           <td className="p-2">
                             <input
+                              name="cl_7c_dpp_lain"
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               defaultValue="0"
@@ -1852,6 +1878,7 @@ const CreateKonsepSPT = ({ data }) => {
                           </td>
                           <td className="p-2">
                             <input
+                              name="cl_7c_ppn"
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               defaultValue="0"
@@ -1860,6 +1887,7 @@ const CreateKonsepSPT = ({ data }) => {
                           </td>
                           <td className="p-2">
                             <input
+                              name="cl_7c_ppnbm"
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               defaultValue="0"
@@ -1867,6 +1895,7 @@ const CreateKonsepSPT = ({ data }) => {
                             />
                           </td>
                         </tr>
+
                         {/* row 1 */}
                         <tr className="border-b">
                           <td className="p-2 whitespace-normal break-words text-sm font-bold">
@@ -1921,6 +1950,7 @@ const CreateKonsepSPT = ({ data }) => {
                           </td>
                           <td className="p-2">
                             <input
+                              name="cl_8a_dpp"
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               defaultValue="0"
@@ -1929,6 +1959,7 @@ const CreateKonsepSPT = ({ data }) => {
                           </td>
                           <td className="p-2">
                             <input
+                              name="cl_8a_dpp_lain"
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               defaultValue="0"
@@ -1937,6 +1968,7 @@ const CreateKonsepSPT = ({ data }) => {
                           </td>
                           <td className="p-2">
                             <input
+                              name="cl_8a_ppn"
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               defaultValue="0"
@@ -1945,12 +1977,14 @@ const CreateKonsepSPT = ({ data }) => {
                           </td>
                           <td className="p-2">
                             <input
+                              name="cl_8a_ppnbm"
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm"
                               defaultValue="0"
                             />
                           </td>
                         </tr>
+
                         {/* row 2 */}
                         <tr className="border-b">
                           <td className="p-2 whitespace-normal break-words text-sm">
@@ -1960,6 +1994,7 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2">
                             <input
                               type="text"
+                              name="cl_8b_dpp"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               defaultValue="0"
                               disabled
@@ -1968,6 +2003,7 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2">
                             <input
                               type="text"
+                              name="cl_8b_dpp_lain"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               defaultValue="0"
                               disabled
@@ -1976,6 +2012,7 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2">
                             <input
                               type="text"
+                              name="cl_8b_ppn"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               defaultValue="0"
                               disabled
@@ -1984,11 +2021,13 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2">
                             <input
                               type="text"
+                              name="cl_8b_ppnbm"
                               className="w-full p-1 border rounded-md text-right text-sm"
                               defaultValue="0"
                             />
                           </td>
                         </tr>
+
                         {/* row 3 */}
                         <tr className="border-b">
                           <td className="p-2 whitespace-normal break-words text-sm">
@@ -1998,6 +2037,7 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2">
                             <input
                               type="text"
+                              name="cl_8c_dpp"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               defaultValue="0"
                               disabled
@@ -2006,6 +2046,7 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2">
                             <input
                               type="text"
+                              name="cl_8c_dpp_lain"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               defaultValue="0"
                               disabled
@@ -2014,6 +2055,7 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2">
                             <input
                               type="text"
+                              name="cl_8c_ppn"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               defaultValue="0"
                               disabled
@@ -2022,12 +2064,14 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2">
                             <input
                               type="text"
+                              name="cl_8c_ppnbm"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               defaultValue="0"
                               disabled
                             />
                           </td>
                         </tr>
+
                         {/* row 1 */}
                         <tr className="border-b">
                           <td className="p-2 whitespace-normal break-words text-sm ">
@@ -2099,15 +2143,25 @@ const CreateKonsepSPT = ({ data }) => {
                         {/* row 1 */}
                         <tr className="border-b">
                           <td className="p-2 whitespace-normal break-words text-sm">
-                            A. <input type="checkbox" className="" /> Daftar
-                            Rincian Kendaraan Bermotor
+                            A.{" "}
+                            <input
+                              type="checkbox"
+                              className=""
+                              name="cl_9a_daftar"
+                            />{" "}
+                            Daftar Rincian Kendaraan Bermotor
                           </td>
                         </tr>
                         {/* row 2 */}
                         <tr className="border-b">
                           <td className="p-2 whitespace-normal break-words text-sm">
-                            B. <input type="checkbox" className="" /> Hasil
-                            penghitungan kembali Pajak Masukan yang telah
+                            B.{" "}
+                            <input
+                              type="checkbox"
+                              className=""
+                              name="cl_9a_hasil_perhitungan"
+                            />{" "}
+                            Hasil penghitungan kembali Pajak Masukan yang telah
                             dikreditkan sebagai penambah (pengurang) Pajak
                             Masukan
                           </td>
@@ -2176,6 +2230,7 @@ const CreateKonsepSPT = ({ data }) => {
                         </label>
                         <div className="flex items-center space-x-2 w-full">
                           <input
+                            name="kota_badan"
                             type="text"
                             className="rounded w-full bg-gray-300 border-black text-sm p-2 flex-1"
                             disabled
@@ -2191,6 +2246,7 @@ const CreateKonsepSPT = ({ data }) => {
                         <div className="flex items-center space-x-2 w-full">
                           <input
                             type="text"
+                            name="nama_pic"
                             className="rounded w-full bg-gray-300 border-black text-sm p-2 flex-1"
                             disabled
                           />
@@ -2205,6 +2261,7 @@ const CreateKonsepSPT = ({ data }) => {
                         <div className="flex items-center space-x-2 w-full">
                           <input
                             type="text"
+                            // name="auto value pic"
                             className="rounded w-full bg-gray-300 border-black text-sm p-2 flex-1"
                             disabled
                           />
@@ -2218,6 +2275,7 @@ const CreateKonsepSPT = ({ data }) => {
                         </label>
                         <div className="flex items-center space-x-2 w-full">
                           <input
+                            name="cl_10_batas_waktu"
                             type="date"
                             className="rounded w-full bg-white border-grey-300 border text-sm p-2 flex-1"
                           />
