@@ -184,7 +184,14 @@ const BUPOTForm = ({
 
   // Format rupiah helper
   const formatRupiah = (value) => {
-    const numberString = value?.replace(/[^\d]/g, "") || "";
+    // Handle both string and number inputs
+    if (value === null || value === undefined || value === "") {
+      return "";
+    }
+
+    // Convert to string first, then extract numbers
+    const stringValue = String(value);
+    const numberString = stringValue?.replace(/[^\d]/g, "") || "";
     return new Intl.NumberFormat("id-ID").format(numberString);
   };
 
@@ -199,13 +206,24 @@ const BUPOTForm = ({
     );
   }, [formData.jenis_dokumen]);
 
+  // RUMUS BUPOT BPPU
   if (currentBupot === "BPPU") {
     useEffect(() => {
       const calculatedPajakPenghasilan =
         formData.dasar_pengenaan_pajak * (formData.tarif_pajak / 100);
 
       updateFormData("pajak_penghasilan", calculatedPajakPenghasilan);
-    }, [formData.dasar_pengenaan_pajak]);
+    }, [formData.dasar_pengenaan_pajak, formData.tarif_pajak]);
+  }
+
+  // RUMUS BUPOT BPNR
+  if (currentBupot === "BPNR") {
+    useEffect(() => {
+      const taxedRevenue = formData.dasar_pengenaan_pajak * (formData.persentase_penghasilan_bersih / 100);
+      const calculatedPajakPenghasilan = taxedRevenue * (formData.tarif_pajak / 100);
+
+      updateFormData("pajak_penghasilan", calculatedPajakPenghasilan);
+    }, [[formData.dasar_pengenaan_pajak, formData.persentase_penghasilan_bersih, formData.tarif_pajak]]);
   }
 
   // set status
@@ -967,9 +985,10 @@ const BUPOTForm = ({
                     type="text"
                     className="w-64 flex-auto border p-2 rounded"
                     placeholder="Dasar Pengenaan Pajak"
-                    value={formData.dasar_pengenaan_pajak || ""}
+                    value={formatRupiah(formData.dasar_pengenaan_pajak) || ""}
                     onChange={(e) => {
-                      updateFormData("dasar_pengenaan_pajak", e.target.value);
+                      const rawValue = e.target.value.replace(/[^\d]/g, "");
+                      updateFormData("dasar_pengenaan_pajak", rawValue);
                     }}
                   />
                 </div>
@@ -1010,6 +1029,7 @@ const BUPOTForm = ({
                     onChange={(e) => {
                       updateFormData("tarif_pajak", e.target.value);
                     }}
+                    readOnly={true}
                   />
                 </div>
 
@@ -1023,9 +1043,10 @@ const BUPOTForm = ({
                     type="text"
                     className="w-64 flex-auto border p-2 rounded"
                     placeholder="Pajak Penghasilan (Rp)"
-                    value={formData.pajak_penghasilan || ""}
+                    value={formatRupiah(formData.pajak_penghasilan) || ""}
                     onChange={(e) => {
-                      updateFormData("pajak_penghasilan", e.target.value);
+                      const rawValue = e.target.value.replace(/[^\d]/g, "");
+                      updateFormData("pajak_penghasilan", rawValue);
                     }}
                     readOnly={true}
                   />
@@ -1222,22 +1243,18 @@ const BUPOTForm = ({
                 {/* Tempat Lahir */}
                 <div className="mt-4 flex justify-between gap-4">
                   <label className="w-64 flex-none block text-sm font-medium text-gray-700">
-                    Tempat Lahir (Under Construction)
+                    Tempat Lahir
                     <span className="text-red-500">*</span>
                   </label>
-                  <select
-                    className="w-64 flex-auto border p-2 rounded appearance-none"
+                  <input
+                    type="text" 
+                    className="w-64 flex-auto border p-2 rounded"
+                    placeholder="Tempat Lahir"
                     value={formData.tempat_lahir_akun || ""}
                     onChange={(e) =>
                       updateFormData("tempat_lahir_akun", e.target.value)
                     }
-                    placehoder="Please Select"
-                  >
-                    <option value="">Please Select</option>
-                    <option value="negara1">negara1</option>
-                    <option value="negara2">negara2</option>
-                    <option value="negara3">negara3</option>
-                  </select>
+                  />
                 </div>
 
                 {/* Nomor Paspor */}
@@ -1283,15 +1300,36 @@ const BUPOTForm = ({
                   <select
                     className="w-64 flex-auto border p-2 rounded appearance-none"
                     value={formData.nama_objek_pajak || ""}
-                    onChange={(e) =>
-                      updateFormData("nama_objek_pajak", e.target.value)
-                    }
-                    placehoder="Please Select"
+                    onChange={(e) => {
+                      const selectedValue = e.target.value;
+
+                      const selectedObject = objekPajak.find(
+                        (obj) => obj.nama_objek_pajak === selectedValue
+                      );
+
+                      if (selectedObject) {
+                        updateMultipleFields({
+                          nama_objek_pajak: selectedObject.nama_objek_pajak,
+                          jenis_pajak: selectedObject.jenis_pajak,
+                          kode_objek_pajak: selectedObject.kode_objek_pajak,
+                          tarif_pajak: selectedObject.tarif_pajak,
+                          sifat_pajak_penghasilan:
+                            selectedObject.sifat_pajak_penghasilan,
+                          persentase_penghasilan_bersih: selectedObject.persentase_penghasilan_bersih,
+                          kap: selectedObject.kap,
+                        });
+                      } else {
+                        updateFormData("nama_objek_pajak", e.target.value);
+                      }
+                    }}
+                    disabled={loadingObjekPajak}
                   >
                     <option value="">Please Select</option>
-                    <option value="objek1">objek1</option>
-                    <option value="objek2">objek2</option>
-                    <option value="objek3">objek3</option>
+                    {objekPajak.map((obj) => (
+                      <option key={obj.id} value={obj.nama_objek_pajak}>
+                        {obj.nama_objek_pajak}
+                      </option>
+                    ))}
                   </select>
                 </div>
 
@@ -1309,6 +1347,7 @@ const BUPOTForm = ({
                     onChange={(e) => {
                       updateFormData("jenis_pajak", e.target.value);
                     }}
+                    readOnly={true}
                   />
                 </div>
 
@@ -1326,6 +1365,7 @@ const BUPOTForm = ({
                     onChange={(e) => {
                       updateFormData("kode_objek_pajak", e.target.value);
                     }}
+                    readOnly={true}
                   />
                 </div>
 
@@ -1343,6 +1383,7 @@ const BUPOTForm = ({
                     onChange={(e) => {
                       updateFormData("sifat_pajak_penghasilan", e.target.value);
                     }}
+                    readOnly={true}
                   />
                 </div>
 
@@ -1356,9 +1397,10 @@ const BUPOTForm = ({
                     type="text"
                     className="w-64 flex-auto border p-2 rounded"
                     placeholder="Penghasilan Bruto (Rp)"
-                    value={formData.dasar_pengenaan_pajak || ""}
+                    value={formatRupiah(formData.dasar_pengenaan_pajak) || ""}
                     onChange={(e) => {
-                      updateFormData("dasar_pengenaan_pajak", e.target.value);
+                      const rawValue = e.target.value.replace(/[^\d]/g, "");
+                      updateFormData("dasar_pengenaan_pajak", rawValue);
                     }}
                   />
                 </div>
@@ -1380,6 +1422,7 @@ const BUPOTForm = ({
                         e.target.value
                       );
                     }}
+                    readOnly={true}
                   />
                 </div>
 
@@ -1397,6 +1440,7 @@ const BUPOTForm = ({
                     onChange={(e) => {
                       updateFormData("tarif_pajak", e.target.value);
                     }}
+                    readOnly={true}
                   />
                 </div>
 
@@ -1410,10 +1454,12 @@ const BUPOTForm = ({
                     type="text"
                     className="w-64 flex-auto border p-2 rounded"
                     placeholder="Pajak Penghasilan (Rp)"
-                    value={formData.pajak_penghasilan || ""}
+                    value={formatRupiah(formData.pajak_penghasilan) || ""}
                     onChange={(e) => {
-                      updateFormData("pajak_penghasilan", e.target.value);
+                      const rawValue = e.target.value.replace(/[^\d]/g, "");
+                      updateFormData("pajak_penghasilan", rawValue);
                     }}
+                    readOnly={true}
                   />
                 </div>
 
@@ -1431,6 +1477,7 @@ const BUPOTForm = ({
                     onChange={(e) => {
                       updateFormData("kap", e.target.value);
                     }}
+                    readOnly={true}
                   />
                 </div>
 
