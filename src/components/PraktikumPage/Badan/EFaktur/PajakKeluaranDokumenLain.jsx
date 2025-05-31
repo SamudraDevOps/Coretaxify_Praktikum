@@ -136,7 +136,7 @@ const PajakKeluaranDokumenLain = () => {
 
                         <button
                             className="flex items-center bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded text-sm"
-                            onClick={() => window.location.href = "/admin/praktikum/2/e-faktur/pajak-keluaran/tambah-faktur-keluaran"}
+                            onClick={() => window.location.href = "/admin/praktikum/2/e-faktur/dokumen-lain/pajak-keluaran/tambah-faktur-keluaran"}
                         >
                             + Buat Faktur
                         </button>

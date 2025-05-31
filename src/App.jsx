@@ -115,6 +115,7 @@ import PermohonanTertundaBadan from "./components/PraktikumPage/Badan/PortalSaya
 import DashboardEFaktur from "./components/PraktikumPage/Badan/EFaktur/DashboardEFaktur";
 import PajakKeluaran from "./components/PraktikumPage/Badan/EFaktur/PajakKeluaran";
 import TambahFakturKeluaran from "./components/PraktikumPage/Badan/EFaktur/TambahFakturKeluaran";
+import TambahFakturKeluaranDokumenLain from "./components/PraktikumPage/Badan/EFaktur/TambahFakturKeluaranDokumenLain";
 import PajakMasukan from "./components/PraktikumPage/Badan/EFaktur/PajakMasukan";
 import PajakKeluaranDokumenLain from "./components/PraktikumPage/Badan/EFaktur/PajakKeluaranDokumenLain";
 import KonsepSPT from "./components/PraktikumPage/Badan/SPT/KonsepSPT";
@@ -1005,6 +1006,15 @@ const Main = () => {
             </>
           }
         />
+          <Route
+            path="/admin/praktikum/2/e-faktur/dokumen-lain/pajak-keluaran/tambah-faktur-keluaran"
+            element={
+              <>
+                <Header />
+                <TambahFakturKeluaranDokumenLain />
+              </>
+            }
+          />
         <Route
           path="/admin/praktikum/2/e-faktur/pajak-masukan"
           element={
