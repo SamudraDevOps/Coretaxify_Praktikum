@@ -272,6 +272,42 @@ const CreateKonsepSPT = ({ data }) => {
     },
   });
 
+  const saveConcept = useMutation({
+    mutationFn: async () => {
+      const csrf = await getCsrf();
+      return axios.put(
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/spt/${idSpt}`,
+        {},
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": csrf,
+            Authorization: `Bearer ${cookies.token}`,
+          },
+        }
+      );
+    },
+    onSuccess: (data, variables) => {
+      // console.log(data);
+      // const successMessage = variables.isDraft
+      //   ? "Draft Faktur berhasil dibuat"
+      //   : "Faktur berhasil diupload";
+
+      Swal.fire("Berhasil!", "Konsep SPT berhasil disimpan.", "success").then(
+        (result) => {
+          if (result.isConfirmed) {
+            window.location.href = `/praktikum/${id}/sistem/${akun}/buat-konsep-spt/${idSpt}`;
+          }
+        }
+      );
+    },
+    onError: (error) => {
+      console.error("Error saving data:", error);
+      Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
+    },
+  });
+
   return (
     <div className="flex h-screen bg-gray-100">
       <div className="flex-auto p-3 bg-white rounded-md h-full">
@@ -2450,7 +2486,8 @@ const CreateKonsepSPT = ({ data }) => {
                 )}
                 <div className="flex justify-start mt-4 gap-2">
                   <button
-                    type="submit"
+                    onClick={() => saveConcept.mutate()}
+                    // type="submit"
                     className="bg-blue-700 text-white py-2 px-4 rounded-md shadow-sm hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-sm"
                   >
                     Simpan Konsep
