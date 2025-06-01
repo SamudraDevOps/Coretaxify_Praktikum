@@ -913,7 +913,8 @@ const Main = () => {
           element={
             <>
               <RoleBasedRenderer
-                url={``}
+                // url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/spt`}
+                url={`${RoutesApi.apiUrl}kap-kjs`}
                 intent={""}
                 OrangPribadi={SelfBilling}
                 Badan={SelfBilling}
