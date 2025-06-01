@@ -44,7 +44,6 @@ const initialRowUpload = {
   ppn: "",
   ppnbm: "",
 };
-
 // const formatNumber = (val) => {
 //     if (!val) return 0;
 //     return Number(val);
@@ -95,6 +94,56 @@ const CreateKonsepSPT = ({ data }) => {
   const [openUpload, setOpenUpload] = useState(false);
   const [openLampiran, setOpenLampiran] = useState(false);
   const [openPenyerahan, setOpenPenyerahan] = useState(false);
+
+  // Add this function to calculate totals from the table
+  const calculateTableTotals = (tableRows, columns) => {
+    const totals = {};
+
+    columns.forEach((col) => {
+      if (col.type === "number") {
+        totals[col.key] = tableRows.reduce((sum, row) => {
+          const value = parseFloat(row[col.key]) || 0;
+          return sum + value;
+        }, 0);
+      }
+    });
+
+    return totals;
+  };
+
+  // Function to apply totals to form based on dialog type
+  const applyTotalsToForm = (dialogType, tableRows, columns) => {
+    const totals = calculateTableTotals(tableRows, columns);
+
+    setFormData((prevData) => {
+      const newData = { ...prevData };
+
+      switch (dialogType) {
+        case "upload": // Row 5 (cl_1a5_*)
+          newData.cl_1a5_dpp = totals.hargaJual?.toString() || "0";
+          newData.cl_1a5_dpp_lain = totals.dppLain?.toString() || "0";
+          newData.cl_1a5_ppn = totals.ppn?.toString() || "0";
+          newData.cl_1a5_ppnbm = totals.ppnbm?.toString() || "0";
+          break;
+
+        case "lampiran": // Row 9 (cl_1a9_*)
+          newData.cl_1a9_dpp = totals.hargaJual?.toString() || "0";
+          newData.cl_1a9_dpp_lain = totals.dppLain?.toString() || "0";
+          newData.cl_1a9_ppn = totals.ppn?.toString() || "0";
+          newData.cl_1a9_ppnbm = totals.ppnbm?.toString() || "0";
+          break;
+
+        case "penyerahan": // Row B (cl_1b_*)
+          newData.cl_1b_dpp = totals.hargaJual?.toString() || "0";
+          break;
+
+        default:
+          break;
+      }
+
+      return newData;
+    });
+  };
 
   const [cookies] = useCookies(["token"]);
   const [formData, setFormData] = useState({
@@ -635,10 +684,23 @@ const CreateKonsepSPT = ({ data }) => {
                                 <AlertDialogFooter>
                                   <AlertDialogCancel>Batal</AlertDialogCancel>
                                   <AlertDialogAction
-                                    onClick={() => setOpenUpload(false)}
+                                    onClick={() => {
+                                      applyTotalsToForm(
+                                        "upload",
+                                        unggahXmlTable.rows,
+                                        columnsUpload
+                                      );
+                                      setOpenUpload(false);
+                                    }}
                                   >
                                     Simpan
                                   </AlertDialogAction>
+
+                                  {/* <AlertDialogAction
+                                    onClick={() => setOpenUpload(false)}
+                                  >
+                                    Simpan
+                                  </AlertDialogAction> */}
                                 </AlertDialogFooter>
                               </AlertDialogContent>
                             </AlertDialog>
@@ -849,11 +911,24 @@ const CreateKonsepSPT = ({ data }) => {
                                 <AlertDialogFooter>
                                   <AlertDialogCancel>Batal</AlertDialogCancel>
                                   <AlertDialogAction
-                                    onClick={() => setOpenLampiran(false)}
+                                    onClick={() => {
+                                      applyTotalsToForm(
+                                        "lampiran",
+                                        lampiranDokumenTable.rows,
+                                        columnsUpload
+                                      );
+                                      setOpenLampiran(false);
+                                    }}
                                     className="bg-blue-600 text-white"
                                   >
                                     Simpan
                                   </AlertDialogAction>
+                                  {/* <AlertDialogAction
+                                    onClick={() => setOpenLampiran(false)}
+                                    className="bg-blue-600 text-white"
+                                  >
+                                    Simpan
+                                  </AlertDialogAction> */}
                                 </AlertDialogFooter>
                               </AlertDialogContent>
                             </AlertDialog>
@@ -942,11 +1017,24 @@ const CreateKonsepSPT = ({ data }) => {
                                 <AlertDialogFooter>
                                   <AlertDialogCancel>Batal</AlertDialogCancel>
                                   <AlertDialogAction
-                                    onClick={() => setOpenPenyerahan(false)}
+                                    onClick={() => {
+                                      applyTotalsToForm(
+                                        "penyerahan",
+                                        penyerahanBarangJasaTable.rows,
+                                        columnsUpload
+                                      );
+                                      setOpenPenyerahan(false);
+                                    }}
                                     className="bg-blue-600 text-white"
                                   >
                                     Simpan
                                   </AlertDialogAction>
+                                  {/* <AlertDialogAction
+                                    onClick={() => setOpenPenyerahan(false)}
+                                    className="bg-blue-600 text-white"
+                                  >
+                                    Simpan
+                                  </AlertDialogAction> */}
                                 </AlertDialogFooter>
                               </AlertDialogContent>
                             </AlertDialog>
