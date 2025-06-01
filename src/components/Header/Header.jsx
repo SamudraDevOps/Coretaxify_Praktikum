@@ -447,9 +447,16 @@ const Header = () => {
                 label: "Pembayaran",
                 submenu: [
                   "Permohonan Pemindahbukuan",
-                  "Layanan Mandiri Kode Billing",
+                  {
+                    label: "Layanan Mandiri Kode Billing",
+                    links: `/praktikum/${id}/sistem/${akun}/layanan-mandiri-kode-billing`,
+                  },
+                  // "Daftar Kode Billing Belum Dibayar",
                   "Pembuatan Kode Billing atas Tagihan Pajak",
-                  "Daftar Kode Billing Belum Dibayar",
+                  {
+                    label: "Daftar Kode Billing Belum Dibayar",
+                    links: `/praktikum/${id}/sistem/${akun}/daftar-kode-billing-belum-dibayar`,
+                  },
                   "Formulir Restitusi Pajak",
                   "Permohonan Pemberian Imbalan Bunga",
                   "Permohonan PPh DTP atas Penghasilan PDAM",

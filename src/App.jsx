@@ -907,7 +907,44 @@ const Main = () => {
             // </>
           }
         />
-        {/* <CreateKonsepSPT /> */}
+        <Route
+          path="/praktikum/:id/sistem/:akun/layanan-mandiri-kode-billing"
+          // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={``}
+                intent={""}
+                OrangPribadi={SelfBilling}
+                Badan={SelfBilling}
+                query={""}
+              ></RoleBasedRenderer>
+            </>
+            // <>
+            //   <Header />
+            //   <KonsepSPT />
+            // </>
+          }
+        />
+        <Route
+          path="/praktikum/:id/sistem/:akun/daftar-kode-billing-belum-dibayar"
+          // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/pembayaran`}
+                intent={""}
+                OrangPribadi={DaftarKodeBilingBelumBayar}
+                Badan={DaftarKodeBilingBelumBayar}
+                query={""}
+              ></RoleBasedRenderer>
+            </>
+            // <>
+            //   <Header />
+            //   <KonsepSPT />
+            // </>
+          }
+        />
         <Route
           path="/pdf/faktur-keluaran"
           element={
