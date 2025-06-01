@@ -294,13 +294,93 @@ const CreateKonsepSPT = ({ data }) => {
       //   ? "Draft Faktur berhasil dibuat"
       //   : "Faktur berhasil diupload";
 
-      Swal.fire("Berhasil!", "Konsep SPT berhasil disimpan.", "success").then(
+      Swal.fire("Berhasil!", "Konsep SPT berhasil dibuat.", "success").then(
         (result) => {
           if (result.isConfirmed) {
             window.location.href = `/praktikum/${id}/sistem/${akun}/buat-konsep-spt/${idSpt}`;
           }
         }
       );
+    },
+    onError: (error) => {
+      console.error("Error saving data:", error);
+      Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
+    },
+  });
+  const payDeposit = useMutation({
+    mutationFn: async () => {
+      const csrf = await getCsrf();
+      return axios.put(
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/spt/${idSpt}`,
+        {},
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": csrf,
+            Authorization: `Bearer ${cookies.token}`,
+          },
+          params: {
+            intent: "api.update.spt.ppn.bayar.deposit",
+            pic_id: akun,
+          },
+        }
+      );
+    },
+    onSuccess: (data, variables) => {
+      // console.log(data);
+      // const successMessage = variables.isDraft
+      //   ? "Draft Faktur berhasil dibuat"
+      //   : "Faktur berhasil diupload";
+
+      Swal.fire("Berhasil!", "SPT berhasil dibayar.", "success").then(
+        (result) => {
+          if (result.isConfirmed) {
+            window.location.href = `/praktikum/${id}/sistem/${akun}/buat-konsep-spt/${idSpt}`;
+          }
+        }
+      );
+    },
+    onError: (error) => {
+      console.error("Error saving data:", error);
+      Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
+    },
+  });
+  const payBilling = useMutation({
+    mutationFn: async () => {
+      const csrf = await getCsrf();
+      return axios.put(
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/spt/${idSpt}`,
+        {},
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": csrf,
+            Authorization: `Bearer ${cookies.token}`,
+          },
+          params: {
+            intent: "api.update.spt.ppn.bayar.kode.billing",
+            pic_id: akun,
+          },
+        }
+      );
+    },
+    onSuccess: (data, variables) => {
+      // console.log(data);
+      // const successMessage = variables.isDraft
+      //   ? "Draft Faktur berhasil dibuat"
+      //   : "Faktur berhasil diupload";
+
+      Swal.fire(
+        "Berhasil!",
+        "Kode Billing SPT berhasil dibuat.",
+        "success"
+      ).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = `/praktikum/${id}/sistem/${akun}/buat-konsep-spt/${idSpt}`;
+        }
+      });
     },
     onError: (error) => {
       console.error("Error saving data:", error);
@@ -2492,12 +2572,46 @@ const CreateKonsepSPT = ({ data }) => {
                   >
                     Simpan Konsep
                   </button>
-                  <button
-                    type="submit"
-                    className="bg-blue-700 text-white py-2 px-4 rounded-md shadow-sm hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-sm"
-                  >
-                    Bayar dan Lapor
-                  </button>
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <button
+                        type="button"
+                        className="bg-blue-700 text-white py-2 px-4 rounded-md shadow-sm hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-sm"
+                      >
+                        Bayar dan Lapor
+                      </button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent className="max-w-xl">
+                      <AlertDialogHeader>
+                        <AlertDialogTitle className="text-lg font-semibold ">
+                          Pilih Cara Pembayaran
+                        </AlertDialogTitle>
+                        <AlertDialogDescription className=" text-gray-600">
+                          Silakan pilih metode pembayaran yang akan digunakan
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <div className="flex gap-3 py-4 justify-end">
+                        
+                        <AlertDialogAction
+                          onClick={() => payDeposit.mutate()}
+                          className=" bg-blue-500 text-white py-3 px-4 rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 text-sm font-medium transition-colors"
+                        >
+                          Pemindahan Deposit
+                        </AlertDialogAction>
+                        <AlertDialogAction
+                          onClick={() => payBilling.mutate()}
+                          className=" bg-blue-500 text-white py-3 px-4 rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 text-sm font-medium transition-colors"
+                        >
+                          Buat Kode Billing
+                        </AlertDialogAction>
+                      </div>
+                      <AlertDialogFooter>
+                        {/* <AlertDialogCancel className="w-full">
+                          Batal
+                        </AlertDialogCancel> */}
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                 </div>
                 {showScrollTop && (
                   <button
