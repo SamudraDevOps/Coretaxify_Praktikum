@@ -178,13 +178,25 @@ const BuatKonsepSPT = () => {
     { label: "Pembetulan", value: "pembetulan" },
   ];
 
+  // useEffect(() => {
+  //   if (data && data.data && data.data.model) {
+  //     // Convert model value to lowercase and set it
+  //     setSelectedModelSPT(data.data.model.toLowerCase());
+  //     setModelTouched(true);
+  //   }
+  // }, [data]);
   useEffect(() => {
-    if (data && data.data && data.data.model) {
-      // Convert model value to lowercase and set it
-      setSelectedModelSPT(data.data.model.toLowerCase());
+    if (data && data.data) {
+      if (data.data.code === 101) {
+        setSelectedModelSPT(null);
+      } else if (data.data.model) {
+        // Convert model value to lowercase and set it
+        setSelectedModelSPT(data.data.model.toLowerCase());
+      }
       setModelTouched(true);
     }
   }, [data]);
+
   const handleBack = () => {
     if (step > 1) setStep(step - 1);
   };
@@ -504,7 +516,29 @@ const BuatKonsepSPT = () => {
                   <label className="block text-normal font-medium text-gray-700 mb-1">
                     Model SPT <span className="text-red-500">*</span>
                   </label>
-                  <select
+                  {selectedModelSPT !== null && (
+                    <p
+                      className={cn(
+                        "w-52 border rounded px-4 py-2",
+                        !selectedModelSPT && modelTouched
+                          ? "border-red-500 bg-red-50"
+                          : "border-gray-300"
+                      )}
+                    >
+                      {selectedModelSPT}
+                    </p>
+                  )}
+                  {/* <p
+                    className={cn(
+                      "w-52 border rounded px-4 py-2",
+                      !selectedModelSPT && modelTouched
+                        ? "border-red-500 bg-red-50"
+                        : "border-gray-300"
+                    )}
+                  >
+                    {selectedModelSPT}
+                  </p> */}
+                  {/* <select
                     value={selectedModelSPT}
                     onChange={(e) => {
                       setSelectedModelSPT(e.target.value);
@@ -523,12 +557,12 @@ const BuatKonsepSPT = () => {
                         {option.label}
                       </option>
                     ))}
-                  </select>
-                  {!selectedModelSPT && modelTouched && (
+                  </select> */}
+                  {/* {!selectedModelSPT && modelTouched && (
                     <p className="text-sm text-red-600 mt-1">
                       Kolom ini wajib diisi!
                     </p>
-                  )}
+                  )} */}
                 </div>
 
                 <div className="mt-6 flex justify-between text-normal">
@@ -539,7 +573,7 @@ const BuatKonsepSPT = () => {
                   >
                     Kembali
                   </Button>
-                  <Button
+                  {/* <Button
                     disabled={!selectedModelSPT}
                     className={cn(
                       "w-full md:w-auto",
@@ -551,7 +585,26 @@ const BuatKonsepSPT = () => {
                     onClick={() => createSpt.mutate()}
                   >
                     Buat Konsep SPT
+                  </Button> */}
+                  {selectedModelSPT == null && (
+                    <p className="text-sm text-red-600 mt-1">
+                      SPT Sudah menjadi Konsep
+                    </p>
+                  )}
+                  <Button
+                    disabled={selectedModelSPT === null || !selectedModelSPT}
+                    className={cn(
+                      "w-full md:w-auto",
+                      selectedModelSPT
+                        ? "bg-yellow-400 hover:bg-yellow-500"
+                        : "bg-gray-300 text-white cursor-not-allowed text-normal"
+                    )}
+                    // onClick={() => (window.location.href = getRedirectUrl())}
+                    onClick={() => createSpt.mutate()}
+                  >
+                    Buat Konsep SPT
                   </Button>
+
                   {/* <button onClick={showFormData}>form data test</button> */}
                 </div>
               </>
