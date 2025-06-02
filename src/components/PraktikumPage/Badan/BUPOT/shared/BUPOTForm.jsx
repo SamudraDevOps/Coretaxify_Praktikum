@@ -242,8 +242,7 @@ const BUPOTForm = ({
           const dppIndo = parseFloat(supportingFormData.dpp_indo) || 0;
           const dppLn = parseFloat(supportingFormData.dpp_ln) || 0;
           const dpp = dppIndo + dppLn;
-          updateFormData("dasar_pengenaan_pajak", dpp);
-
+          
           const penghasilanIndo = parseFloat(supportingFormData.penghasilan_indo) || 0;
           const penghasilanLn = parseFloat(supportingFormData.penghasilan_ln) || 0;
           const penghasilan = penghasilanIndo + penghasilanLn;
@@ -251,10 +250,13 @@ const BUPOTForm = ({
           const penghasilanKredit = parseFloat(supportingFormData.penghasilan_kredit) || 0;
           const penghasilanDipotong = parseFloat(supportingFormData.penghasilan_dipotong) || 0;
           const pengurangan = penghasilanKredit + penghasilanDipotong;
-
+          
           const total = penghasilan - pengurangan;
-
-          updateFormData("pajak_penghasilan", total);
+          
+          updateMultipleFields({
+            dasar_pengenaan_pajak: dpp,
+            pajak_penghasilan: total,
+          })
           updateSupportingFormData("penghasilan_dibayar", total);
         }
         break;
