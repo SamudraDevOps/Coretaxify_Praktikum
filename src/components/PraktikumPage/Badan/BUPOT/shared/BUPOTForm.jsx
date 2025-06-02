@@ -40,19 +40,24 @@ const BUPOTForm = ({
   );
 
   const getBupot = () => {
-    if (location.pathname.includes("/bppu")) return "BPPU";
-    if (location.pathname.includes("/bpnr")) return "BPNR";
-    if (location.pathname.includes("/ps")) return "Penyetoran Sendiri";
-    if (location.pathname.includes("/psd"))
-      return "Pemotongan Secara Digunggung";
-    if (location.pathname.includes("/bp21")) return "BP 21";
-    if (location.pathname.includes("/bp26")) return "BP 26";
-    if (location.pathname.includes("/bpa1")) return "BP A1";
-    if (location.pathname.includes("/bpa2")) return "BP A2";
-    if (location.pathname.includes("/bpbpt")) return "BPBPT";
-    // if (location.pathname.includes("/dsbp")) return "DSBP";
-    return "DSBP";
-  };
+  const pathSegments = location.pathname.split('/');
+  const bupotType = pathSegments.find(segment => 
+    ['bppu', 'bpnr', 'ps', 'psd', 'bp21', 'bp26', 'bpa1', 'bpa2', 'bpbpt', 'dsbp'].includes(segment)
+  );
+  
+  switch (bupotType) {
+    case 'bppu': return "BPPU";
+    case 'bpnr': return "BPNR";
+    case 'ps': return "Penyetoran Sendiri";
+    case 'psd': return "Pemotongan Secara Digunggung";
+    case 'bp21': return "BP 21";
+    case 'bp26': return "BP 26";
+    case 'bpa1': return "BP A1";
+    case 'bpa2': return "BP A2";
+    case 'bpbpt': return "BPBPT";
+    default: return "DSBP";
+  }
+};
 
   const currentBupot = getBupot();
 
@@ -261,7 +266,9 @@ const BUPOTForm = ({
         break;
 
       case "Pemotongan Secara Digunggung":
-        
+        const psdCalculation =
+          formData.dasar_pengenaan_pajak * (formData.tarif_pajak / 100);
+        updateFormData("pajak_penghasilan", psdCalculation);
         break;
       
       default:
@@ -913,6 +920,11 @@ const BUPOTForm = ({
                     <option value="pph_ditanggung_pemerintah">
                       Pph Ditanggung Pemerintah (DTP)
                     </option>
+                    {currentBupot === "Pemotongan Secara Digunggung" && (
+                      <option value="surat_keterangan_bebas_pemotongan">
+                        Surat Keterangan Bebas (SKB) Pemotongan PPh atas Bunga atas Deposito Berjangka dan Tabungan
+                      </option>
+                    )}
                     <option value="tanpa_fasilitas">Tanpa Fasilitas</option>
                   </select>
                 </div>
@@ -938,7 +950,7 @@ const BUPOTForm = ({
                           nama_objek_pajak: selectedObject.nama_objek_pajak,
                           jenis_pajak: selectedObject.jenis_pajak,
                           kode_objek_pajak: selectedObject.kode_objek_pajak,
-                          tarif_pajak: selectedObject.tarif_pajak,
+                          tarif_pajak: formData.fasilitas_pajak === "surat_keterangan_bebas_pemotongan" ? 0 : selectedObject.tarif_pajak,
                           sifat_pajak_penghasilan:
                             selectedObject.sifat_pajak_penghasilan,
                           kap: selectedObject.kap,
