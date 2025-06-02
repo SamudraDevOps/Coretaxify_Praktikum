@@ -105,22 +105,35 @@ export default function RoleBasedRenderer({
   } = useQuery({
     queryKey: [query, params.id, effectiveCompanyId, path, currentPage],
     queryFn: async () => {
-      const { data } = await axios.get(path, {
-        headers: {
-          Authorization: `Bearer ${cookies.token}`,
-          Accept: "application/json",
-        },
-        params: {
-          intent: intent,
-          page: currentPage,
-        },
-      });
-      console.log("Response data:", data);
-      return data;
+      try {
+        const { data } = await axios.get(path, {
+          headers: {
+            Authorization: `Bearer ${cookies.token}`,
+            Accept: "application/json",
+          },
+          params: {
+            intent: intent,
+            page: currentPage,
+          },
+        });
+        console.log("Response data:", data);
+        return data;
+      } catch (error) {
+        console.error("Error fetching content data:", error.message);
+        console.error("Request path:", path);
+        console.error("Request params:", { intent, page: currentPage });
+        if (error.response) {
+          console.error(
+            "Server response:",
+            error.response.status,
+            error.response.data
+          );
+        }
+        throw error; // Re-throw to let React Query handle the error state
+      }
     },
     enabled: hasValidUrl, // Only run this query if URL is provided and path is valid
   });
-
   // Function to handle switching between companies
   const handleCompanyChange = (companyId) => {
     if (companyId === params.akun) {
