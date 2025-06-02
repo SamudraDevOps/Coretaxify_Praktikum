@@ -72,6 +72,9 @@ const BUPOTForm = ({
   // Form data state
   const [formData, setFormData] = useState(initialData);
 
+  // 2nd Form data state
+  const [supportingFormData, setSupportingFormData] = useState({});
+
   // State for month options
   const [monthOption, setMonthOption] = useState([]);
 
@@ -153,6 +156,13 @@ const BUPOTForm = ({
     });
   };
 
+  const updateSupportingFormData = (field, value) => {
+    setSupportingFormData({
+      ...supportingFormData,
+      [field]: value,
+    });
+  };
+
   // Handle submitting the form
   const handleSubmit = (action) => {
     if (action === "save") {
@@ -206,35 +216,66 @@ const BUPOTForm = ({
     );
   }, [formData.jenis_dokumen]);
 
-  // RUMUS BUPOT BPPU
-  if (currentBupot === "BPPU") {
-    useEffect(() => {
-      const calculatedPajakPenghasilan =
-        formData.dasar_pengenaan_pajak * (formData.tarif_pajak / 100);
+  // ✅ Alternative: Single useEffect with switch
+  useEffect(() => {
+    switch (currentBupot) {
+      case "BPPU":
+        const bppuCalculation =
+          formData.dasar_pengenaan_pajak * (formData.tarif_pajak / 100);
+        updateFormData("pajak_penghasilan", bppuCalculation);
+        break;
 
-      updateFormData("pajak_penghasilan", calculatedPajakPenghasilan);
-    }, [formData.dasar_pengenaan_pajak, formData.tarif_pajak]);
-  };
+      case "BPNR":
+        const taxedRevenue =
+          formData.dasar_pengenaan_pajak *
+          (formData.persentase_penghasilan_bersih / 100);
+        const bpnrCalculation = taxedRevenue * (formData.tarif_pajak / 100);
+        updateFormData("pajak_penghasilan", bpnrCalculation);
+        break;
 
-  // RUMUS BUPOT BPNR
-  if (currentBupot === "BPNR") {
-    useEffect(() => {
-      const taxedRevenue = formData.dasar_pengenaan_pajak * (formData.persentase_penghasilan_bersih / 100);
-      const calculatedPajakPenghasilan = taxedRevenue * (formData.tarif_pajak / 100);
+      case "Penyetoran Sendiri":
+        if (formData.kode_objek_pajak !== "28-411-01") {
+          const psCalculation =
+            formData.dasar_pengenaan_pajak * (formData.tarif_pajak / 100);
+          updateFormData("pajak_penghasilan", psCalculation);
+        } else {
+          const dppIndo = parseFloat(supportingFormData.dpp_indo) || 0;
+          const dppLn = parseFloat(supportingFormData.dpp_ln) || 0;
+          const dpp = dppIndo + dppLn;
+          updateFormData("dasar_pengenaan_pajak", dpp);
 
-      updateFormData("pajak_penghasilan", calculatedPajakPenghasilan);
-    }, [[formData.dasar_pengenaan_pajak, formData.persentase_penghasilan_bersih, formData.tarif_pajak]]);
-  };
+          const penghasilanIndo = parseFloat(supportingFormData.penghasilan_indo) || 0;
+          const penghasilanLn = parseFloat(supportingFormData.penghasilan_ln) || 0;
+          const penghasilan = penghasilanIndo + penghasilanLn;
+          
+          const penghasilanKredit = parseFloat(supportingFormData.penghasilan_kredit) || 0;
+          const penghasilanDipotong = parseFloat(supportingFormData.penghasilan_dipotong) || 0;
+          const pengurangan = penghasilanKredit + penghasilanDipotong;
 
-  // RUMUS BUPOT PENYETORAN SENDIRI
-  if (currentBupot === "Penyetoran Sendiri") {
-    useEffect(() => {
-      const calculatedPajakPenghasilan =
-        formData.dasar_pengenaan_pajak * (formData.tarif_pajak / 100);
+          const total = penghasilan - pengurangan;
 
-      updateFormData("pajak_penghasilan", calculatedPajakPenghasilan);
-    }, [formData.dasar_pengenaan_pajak, formData.tarif_pajak]);
-  };
+          updateFormData("pajak_penghasilan", total);
+          updateSupportingFormData("penghasilan_dibayar", total);
+        }
+        break;
+
+      default:
+        // Handle other BUPOT types or do nothing
+        break;
+    }
+  }, [
+    currentBupot,
+    formData.dasar_pengenaan_pajak,
+    formData.tarif_pajak,
+    formData.persentase_penghasilan_bersih,
+    formData.kode_objek_pajak,
+    supportingFormData.dpp_indo,
+    supportingFormData.dpp_ln,
+    supportingFormData.penghasilan_indo,
+    supportingFormData.penghasilan_ln,
+    supportingFormData.penghasilan_kredit,
+    supportingFormData.penghasilan_dipotong,
+  ]);
 
   // set status
   useEffect(() => {
@@ -852,12 +893,12 @@ const BUPOTForm = ({
                     value={formData.fasilitas_pajak || ""}
                     onChange={(e) =>
                       updateMultipleFields({
-                          fasilitas_pajak: e.target.value,
-                          nama_objek_pajak: "",
-                          jenis_pajak: "",
-                          kode_objek_pajak: "",
-                          tarif_pajak: "",
-                          sifat_pajak_penghasilan: "",
+                        fasilitas_pajak: e.target.value,
+                        nama_objek_pajak: "",
+                        jenis_pajak: "",
+                        kode_objek_pajak: "",
+                        tarif_pajak: "",
+                        sifat_pajak_penghasilan: "",
                       })
                     }
                     placehoder="Please Select"
@@ -991,6 +1032,192 @@ const BUPOTForm = ({
                   </>
                 )}
 
+                {currentBupot === "Penyetoran Sendiri" &&
+                  formData.kode_objek_pajak === "28-411-01" && (
+                    <>
+                      {/* ROW 1 */}
+                      <div className="mt-4 flex justify-end gap-4">
+                        <div className="w-64 flex-none block text-sm font-medium text-gray-700"></div>
+                        <label className="w-64 flex-auto text-right">
+                          Dasar Pengenaan Pajak
+                        </label>
+                        <label className="w-64 flex-auto text-right">
+                          Pajak Penghasilan (Rp)
+                        </label>
+                      </div>
+
+                      {/* ROW 2 */}
+                      <div className="mt-4 flex justify-between gap-4">
+                        <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                          Penghasilan Dari Indonesia
+                          <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          className="w-64 flex-auto border p-2 rounded"
+                          placeholder="Dasar Pengenaan Pajak Indonesia"
+                          value={
+                            formatRupiah(supportingFormData.dpp_indo) || ""
+                          }
+                          onChange={(e) => {
+                            const rawValue = e.target.value.replace(
+                              /[^\d]/g,
+                              ""
+                            );
+                            updateSupportingFormData("dpp_indo", rawValue);
+                          }}
+                        />
+                        <input
+                          type="text"
+                          className="w-64 flex-auto border p-2 rounded"
+                          placeholder="Pajak Penghasilan Indonesia"
+                          value={
+                            formatRupiah(supportingFormData.penghasilan_indo) ||
+                            ""
+                          }
+                          onChange={(e) => {
+                            const rawValue = e.target.value.replace(
+                              /[^\d]/g,
+                              ""
+                            );
+                            updateSupportingFormData(
+                              "penghasilan_indo",
+                              rawValue
+                            );
+                          }}
+                        />
+                      </div>
+
+                      {/* ROW 3 */}
+                      <div className="mt-4 flex justify-between gap-4">
+                        <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                          Penghasilan Dari Luar Negeri
+                          <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          className="w-64 flex-auto border p-2 rounded"
+                          placeholder="Dasar Pengenaan Pajak Luar Negeri"
+                          value={formatRupiah(supportingFormData.dpp_ln) || ""}
+                          onChange={(e) => {
+                            const rawValue = e.target.value.replace(
+                              /[^\d]/g,
+                              ""
+                            );
+                            updateSupportingFormData("dpp_ln", rawValue);
+                          }}
+                        />
+                        <input
+                          type="text"
+                          className="w-64 flex-auto border p-2 rounded"
+                          placeholder="Pajak Penghasilan Luar NEgeri"
+                          value={
+                            formatRupiah(supportingFormData.penghasilan_ln) ||
+                            ""
+                          }
+                          onChange={(e) => {
+                            const rawValue = e.target.value.replace(
+                              /[^\d]/g,
+                              ""
+                            );
+                            updateSupportingFormData(
+                              "penghasilan_ln",
+                              rawValue
+                            );
+                          }}
+                        />
+                      </div>
+
+                      {/* ROW 4 */}
+                      <div className="mt-4 flex justify-between gap-4">
+                        <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                          Pajak Penghasilan Pasal 24 yang dapat dikreditkan
+                          <span className="text-red-500">*</span>
+                        </label>
+                        <div className="w-64 flex-auto"></div>
+                        <input
+                          type="text"
+                          className="w-64 flex-auto border p-2 rounded"
+                          placeholder="Pajak Penghasilan Pasal 24 yang dapat dikreditkan"
+                          value={
+                            formatRupiah(
+                              supportingFormData.penghasilan_kredit
+                            ) || ""
+                          }
+                          onChange={(e) => {
+                            const rawValue = e.target.value.replace(
+                              /[^\d]/g,
+                              ""
+                            );
+                            updateSupportingFormData(
+                              "penghasilan_kredit",
+                              rawValue
+                            );
+                          }}
+                        />
+                      </div>
+
+                      {/* ROW 5 */}
+                      <div className="mt-4 flex justify-between gap-4">
+                        <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                          Pajak Penghasilan yang Dipotong oleh Pihak Lain
+                          <span className="text-red-500">*</span>
+                        </label>
+                        <div className="w-64 flex-auto"></div>
+                        <input
+                          type="text"
+                          className="w-64 flex-auto border p-2 rounded"
+                          placeholder="Pajak Penghasilan yang Dipotong oleh Pihak Lain"
+                          value={
+                            formatRupiah(
+                              supportingFormData.penghasilan_dipotong
+                            ) || ""
+                          }
+                          onChange={(e) => {
+                            const rawValue = e.target.value.replace(
+                              /[^\d]/g,
+                              ""
+                            );
+                            updateSupportingFormData(
+                              "penghasilan_dipotong",
+                              rawValue
+                            );
+                          }}
+                        />
+                      </div>
+
+                      {/* ROW 6 */}
+                      <div className="mt-4 flex justify-between gap-4">
+                        <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                          Pajak Penghasilan yang dibayar sendiri
+                          <span className="text-red-500">*</span>
+                        </label>
+                        <div className="w-64 flex-auto"></div>
+                        <input
+                          type="text"
+                          className="w-64 flex-auto border p-2 rounded"
+                          placeholder="Pajak Penghasilan yang dibayar sendiri"
+                          value={
+                            formatRupiah(
+                              supportingFormData.penghasilan_dibayar
+                            ) || ""
+                          }
+                          onChange={(e) => {
+                            const rawValue = e.target.value.replace(
+                              /[^\d]/g,
+                              ""
+                            );
+                            updateSupportingFormData(
+                              "penghasilan_dibayar",
+                              rawValue
+                            );
+                          }}
+                          readOnly={true}
+                        />
+                      </div>
+                    </>
+                  )}
+
                 {/* Penghasilan Bruto / Dasar Pengenaan Pajak */}
                 <div className="mt-4 flex justify-between gap-4">
                   <label className="w-64 flex-none block text-sm font-medium text-gray-700">
@@ -1008,6 +1235,9 @@ const BUPOTForm = ({
                       const rawValue = e.target.value.replace(/[^\d]/g, "");
                       updateFormData("dasar_pengenaan_pajak", rawValue);
                     }}
+                    readOnly={
+                      formData.kode_objek_pajak === "28-411-01" ? true : false
+                    }
                   />
                 </div>
 
@@ -1047,7 +1277,11 @@ const BUPOTForm = ({
                     onChange={(e) => {
                       updateFormData("tarif_pajak", e.target.value);
                     }}
-                    readOnly={formData.fasilitas_pajak === "fasilitas_lainnya" ? false : true}
+                    readOnly={
+                      formData.fasilitas_pajak === "fasilitas_lainnya"
+                        ? false
+                        : true
+                    }
                   />
                 </div>
 
@@ -1123,7 +1357,14 @@ const BUPOTForm = ({
                     className="w-64 flex-auto border p-2 rounded appearance-none"
                     value={formData.fasilitas_pajak || ""}
                     onChange={(e) =>
-                      updateFormData("fasilitas_pajak", e.target.value)
+                      updateMultipleFields({
+                        fasilitas_pajak: e.target.value,
+                        nama_objek_pajak: "",
+                        jenis_pajak: "",
+                        kode_objek_pajak: "",
+                        tarif_pajak: "",
+                        sifat_pajak_penghasilan: "",
+                      })
                     }
                     placehoder="Please Select"
                   >
@@ -1265,7 +1506,7 @@ const BUPOTForm = ({
                     <span className="text-red-500">*</span>
                   </label>
                   <input
-                    type="text" 
+                    type="text"
                     className="w-64 flex-auto border p-2 rounded"
                     placeholder="Tempat Lahir"
                     value={formData.tempat_lahir_akun || ""}
@@ -1333,7 +1574,8 @@ const BUPOTForm = ({
                           tarif_pajak: selectedObject.tarif_pajak,
                           sifat_pajak_penghasilan:
                             selectedObject.sifat_pajak_penghasilan,
-                          persentase_penghasilan_bersih: selectedObject.persentase_penghasilan_bersih,
+                          persentase_penghasilan_bersih:
+                            selectedObject.persentase_penghasilan_bersih,
                           kap: selectedObject.kap,
                         });
                       } else {
