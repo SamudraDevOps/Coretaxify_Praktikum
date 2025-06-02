@@ -40,6 +40,8 @@ const BUPOTRenderer = ({
 
   const currentBupot = getBupot();
 
+  console.log("Current BUPOT:", currentBupot);
+
   // Determine which status we're viewing
   const getStatus = () => {
     if (location.pathname.includes("/telah-terbit")) return "published";
@@ -66,7 +68,7 @@ const BUPOTRenderer = ({
           intent: `api.bupot.${type}`,
           column_filters: {
             status_penerbitan: currentStatus,
-            bupot_tipe: currentBupot,
+            tipe_bupot: currentBupot,
           },
         },
       });
