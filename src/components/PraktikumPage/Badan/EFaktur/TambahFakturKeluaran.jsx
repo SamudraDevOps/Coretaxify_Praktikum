@@ -591,7 +591,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
 
       Swal.fire("Berhasil!", successMessage, "success").then((result) => {
         if (result.isConfirmed) {
-          window.location.href = `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran`;
+          window.location.href = `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran?viewAs=${viewAsCompanyId}`;
         }
       });
     },
@@ -2115,7 +2115,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
           <div className="flex justify-end mt-4 gap-3">
             <button
               onClick={() =>
-                (window.location.href = `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran`)
+                (window.location.href = `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran?viewAs=${viewAsCompanyId}`)
               }
               className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded"
             >
