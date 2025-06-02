@@ -252,7 +252,6 @@ const BUPOTForm = ({
           const pengurangan = penghasilanKredit + penghasilanDipotong;
           
           const total = penghasilan - pengurangan;
-          
           updateMultipleFields({
             dasar_pengenaan_pajak: dpp,
             pajak_penghasilan: total,
@@ -261,6 +260,10 @@ const BUPOTForm = ({
         }
         break;
 
+      case "Pemotongan Secara Digunggung":
+        
+        break;
+      
       default:
         // Handle other BUPOT types or do nothing
         break;
@@ -1366,6 +1369,7 @@ const BUPOTForm = ({
                         kode_objek_pajak: "",
                         tarif_pajak: "",
                         sifat_pajak_penghasilan: "",
+                        recipient_number: "",
                       })
                     }
                     placehoder="Please Select"
@@ -1383,6 +1387,25 @@ const BUPOTForm = ({
                     <option value="tanpa_fasilitas">Tanpa Fasilitas</option>
                   </select>
                 </div>
+
+                {/* Recipient Number only if fasilitas_pajak = skd */}
+                {(currentBupot === "BPNR" && formData.fasilitas_pajak === "surat_keterangan_domisili") && (
+                  <div className="mt-4 flex justify-between gap-4">
+                    <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                      Recipient Number
+                      <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      className="w-64 flex-auto border p-2 rounded"
+                      placeholder="Recipient Number"
+                      value={formData.recipient_number || ""}
+                      onChange={(e) => {
+                        updateFormData("recipient_number", e.target.value);
+                      }}
+                    />
+                  </div>
+                )}
 
                 {/* NPWP */}
                 <div className="mt-4 flex justify-between gap-4">
