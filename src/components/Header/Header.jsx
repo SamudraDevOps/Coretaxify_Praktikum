@@ -7,7 +7,6 @@ const Header = () => {
     const [dropdownOpen, setDropdownOpen] = useState(null);
     const [subDropdownOpen, setSubDropdownOpen] = useState(null);
     const { userType, setUserType } = useUserType();
-
     console.log("User Type Context (Saat Render):", userType);
 
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -24,6 +23,7 @@ const Header = () => {
         const userTypeId = userType === "Orang Pribadi" ? 1 : 2;
         window.location.href = `/admin/praktikum/${userTypeId}/${path.replace(/\s+/g, "-").toLowerCase()}`;
     };
+
     return (
         <div className="w-full">
             <header className="bg-slate-100 text-blue-900 flex justify-between items-center px-4 md:px-8 lg:px-12 xl:px-16 py-3 shadow-md w-full overflow-x-auto">
@@ -43,7 +43,6 @@ const Header = () => {
                             <span className="hidden md:inline">{userType}</span>
                             <ChevronDown className="w-5 h-5" />
                         </button>
-
                         {/* Dropdown menu */}
                         {isDropdownOpen && (
                             <ul className="absolute right-14 top-14 mt-2 w-64 bg-white border rounded-md shadow-lg py-1 px-2">
@@ -51,7 +50,6 @@ const Header = () => {
                                     className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
                                     onClick={() => {
                                         setUserType("Orang Pribadi");
-
                                         console.log("User Type Berubah ke:", "Orang Pribadi");
                                         setIsDropdownOpen(false);
                                         window.location.href = "/admin/praktikum/1/prak1";
@@ -76,10 +74,9 @@ const Header = () => {
                     <LogOut className="w-6 h-6 cursor-pointer text-red-600 font-bold" />
                 </div>
             </header>
-
             <div className="w-full bg-purple-900 pt-1">
                 <nav className="w-full bg-purple-900 pb-2 px-4">
-                    <ul className="flex space-x-6 text-white">
+                    <ul className="flex space-x-6 text-white flex-wrap">
                         {[
                             { label: "Portal Saya", submenu: ["Dokumen Saya", "Notifikasi Saya", "Kasus Saya", "Kasus Berjalan Saya", "Profil Saya", "Pengukuhan PKP", "Pendaftaran Objek Pajak PBB P5L", { label: "Perubahan Data", submenu: ["Perubahan Data", "Pengukuhan PKP", "Pendaftaran Objek Pajak PBB P5L"] }, { label: "Perubahan Status", submenu: ["Penetapan Wajib Pajak Nonaktif", "Pengaktifan Kembali Wajib Pajak Nonaktif", "Penunjuk Pemungut PMSE Dalam Negeri", "Penetapan Pemungut Bea Materai", "Pencabutan Pemungut Bea Materai", "Penunjukan Pemotong atau Pemungut PPh/PPN", "Pencabutan Pemotong atau Pemungut PPh/PPN", "Pencabutan Pemungut PPN PMSE", "Lembaga Keuangan Pelapor - Penetapan", "Lembaga Keuangan Pelapor - Pencabutan", "Lembaga Keuangan Pelapor - Perubahan Data"] }, "Pengahpusan & Pencabutan", "Profil Institusi Finansial"] },
                             { label: "E-Faktur", submenu: [] },
@@ -132,7 +129,6 @@ const Header = () => {
                                             </li>
                                         ))}
                                     </ul>
-
                                 )}
                             </li>
                         ))}
