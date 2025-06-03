@@ -127,15 +127,15 @@ const CreateKonsepSPT = ({ data }) => {
 
       switch (dialogType) {
         case "upload": // Row 5 (cl_1a5_*)
-          newData.cl_1a5_dpp = totals.hargaJual?.toString() || "0";
-          newData.cl_1a5_dpp_lain = totals.dppLain?.toString() || "0";
+          newData.cl_1a5_dpp = totals.dppHargaJual?.toString() || "0";
+          newData.cl_1a5_dpp_lain = totals.dppNilaiLain?.toString() || "0";
           newData.cl_1a5_ppn = totals.ppn?.toString() || "0";
           newData.cl_1a5_ppnbm = totals.ppnbm?.toString() || "0";
           break;
 
         case "lampiran": // Row 9 (cl_1a9_*)
-          newData.cl_1a9_dpp = totals.hargaJual?.toString() || "0";
-          newData.cl_1a9_dpp_lain = totals.dppLain?.toString() || "0";
+          newData.cl_1a9_dpp = totals.dppHargaJual?.toString() || "0";
+          newData.cl_1a9_dpp_lain = totals.dppNilaiLain?.toString() || "0";
           newData.cl_1a9_ppn = totals.ppn?.toString() || "0";
           newData.cl_1a9_ppnbm = totals.ppnbm?.toString() || "0";
           break;
