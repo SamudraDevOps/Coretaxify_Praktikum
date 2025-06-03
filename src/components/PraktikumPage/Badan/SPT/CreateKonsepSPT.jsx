@@ -30,10 +30,17 @@ import { useMutation } from "@tanstack/react-query";
 import { RoutesApi } from "@/Routes";
 import { useCookies } from "react-cookie";
 
+// const columnsUpload = [
+//   { key: "file", label: "File Excel", type: "file", accept: ".xlsx,.xls,.csv" },
+//   { key: "DPP Nilai Lain", label: "DPP Lain", type: "number" },
+//   { key: "DPP Nilai Lain Lain", label: "DPP Lain Lain", type: "number" },
+//   { key: "PPN", label: "PPN", type: "number" },
+//   { key: "PPnBM", label: "PPnBM", type: "number" },
+// ];
 const columnsUpload = [
-  { key: "file", label: "File Excel", type: "file", accept: ".xlsx,.xls,.csv" },
-  { key: "hargaJual", label: "Harga Jual", type: "number" },
-  { key: "dppLain", label: "DPP Lain", type: "number" },
+  { key: "file", label: "Upload File", type: "file" },
+  { key: "dppHargaJual", label: "DPP/Harga Jual", type: "number" },
+  { key: "dppNilaiLain", label: "DPP Nilai Lain", type: "number" },
   { key: "ppn", label: "PPN", type: "number" },
   { key: "ppnbm", label: "PPnBM", type: "number" },
 ];
@@ -2591,7 +2598,6 @@ const CreateKonsepSPT = ({ data }) => {
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <div className="flex gap-3 py-4 justify-end">
-                        
                         <AlertDialogAction
                           onClick={() => payDeposit.mutate()}
                           className=" bg-blue-500 text-white py-3 px-4 rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 text-sm font-medium transition-colors"
