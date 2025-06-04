@@ -282,10 +282,13 @@ const SelfBilling = ({ data: propData }) => {
       //   ? "Draft Faktur berhasil dibuat"
       //   : "Faktur berhasil diupload";
 
-      Swal.fire("Berhasil!", "Konsep SPT berhasil dibuat.", "success").then(
+      Swal.fire("Berhasil!", "Data Berhasil disimpan.", "success").then(
         (result) => {
           if (result.isConfirmed) {
-            window.location.href = `/praktikum/${id}/sistem/${akun}/daftar-kode-billing-belum-dibayar`;
+            // window.location.href = `/praktikum/${id}/sistem/${akun}/daftar-kode-billing-belum-dibayar`;
+            navigate(
+              `/praktikum/${id}/sistem/${akun}/daftar-kode-billing-belum-dibayar`
+            );
           }
         }
       );

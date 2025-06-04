@@ -29,6 +29,7 @@ import { useParams, useSearchParams } from "react-router";
 import { useMutation } from "@tanstack/react-query";
 import { RoutesApi } from "@/Routes";
 import { useCookies } from "react-cookie";
+import { useNavigateWithParams } from "@/hooks/useNavigateWithParams";
 
 // const columnsUpload = [
 //   { key: "file", label: "File Excel", type: "file", accept: ".xlsx,.xls,.csv" },
@@ -157,69 +158,74 @@ const CreateKonsepSPT = ({ data }) => {
 
   const [cookies] = useCookies(["token"]);
   const [formData, setFormData] = useState({
-    // cl_1a1_dpp: "0",
-    cl_1b_jumlah_dpp: "0",
-    // cl_1b_dpp: "0",
-    // cl_1c_dpp: "0",
-    cl_1a5_dpp: "0",
-    cl_1a5_dpp_lain: "0",
-    cl_1a5_ppn: "0",
-    cl_1a5_ppnbm: "0",
-    cl_1a9_dpp: "0",
-    cl_1a9_dpp_lain: "0",
-    cl_1a9_ppn: "0",
-    cl_1a9_ppnbm: "0",
-    // cl_1a_jumlah_ppn: "0",
-    // cl_1a_jumlah_ppnbm: "0",
-    // cl_2a_dpp: "0",
-    // cl_2a_ppn: "0",
-    // cl_2a_ppnbm: "0",
-    // cl_2g_dpp: "0",
-    // cl_2h_dpp_lain: "0",
-    cl_2e_ppn: "0",
-    cl_2f_ppn: "0",
-    // cl_2g_ppn: "0",
-    // cl_2h_ppn: "0",
-    // cl_2h_ppnbm: "0",
-    cl_2i_dpp: "0",
-    // cl_2j_dpp: "0",
-    cl_3b_ppnb: "0",
-    cl_3d_ppnb: "0",
-    cl_3f_ppnb: "0",
+    // cl_1a1_dpp: data?.detailspt?.cl_1a1_dpp || "0",
+    cl_1b_jumlah_dpp: data?.detailspt?.cl_1b_jumlah_dpp || "0",
+    // cl_1b_dpp: data?.detailspt?.cl_1b_dpp || "0",
+    // cl_1c_dpp: data?.detailspt?.cl_1c_dpp || "0",
+    cl_1a5_dpp: data?.detailspt?.cl_1a5_dpp || "0",
+    cl_1a5_dpp_lain: data?.detailspt?.cl_1a5_dpp_lain || "0",
+    cl_1a5_ppn: data?.detailspt?.cl_1a5_ppn || "0",
+    cl_1a5_ppnbm: data?.detailspt?.cl_1a5_ppnbm || "0",
+    cl_1a9_dpp: data?.detailspt?.cl_1a9_dpp || "0",
+    cl_1a9_dpp_lain: data?.detailspt?.cl_1a9_dpp_lain || "0",
+    cl_1a9_ppn: data?.detailspt?.cl_1a9_ppn || "0",
+    cl_1a9_ppnbm: data?.detailspt?.cl_1a9_ppnbm || "0",
+    // cl_1a_jumlah_ppn: data?.detailspt?.cl_1a_jumlah_ppn || "0",
+    // cl_1a_jumlah_ppnbm: data?.detailspt?.cl_1a_jumlah_ppnbm || "0",
+    // cl_2a_dpp: data?.detailspt?.cl_2a_dpp || "0",
+    // cl_2a_ppn: data?.detailspt?.cl_2a_ppn || "0",
+    // cl_2a_ppnbm: data?.detailspt?.cl_2a_ppnbm || "0",
+    // cl_2g_dpp: data?.detailspt?.cl_2g_dpp || "0",
+    // cl_2h_dpp_lain: data?.detailspt?.cl_2h_dpp_lain || "0",
+    cl_2e_ppn: data?.detailspt?.cl_2e_ppn || "0",
+    cl_2f_ppn: data?.detailspt?.cl_2f_ppn || "0",
+    // cl_2g_ppn: data?.detailspt?.cl_2g_ppn || "0",
+    // cl_2h_ppn: data?.detailspt?.cl_2h_ppn || "0",
+    // cl_2h_ppnbm: data?.detailspt?.cl_2h_ppnbm || "0",
+    cl_2i_dpp: data?.detailspt?.cl_2i_dpp || "0",
+    // cl_2j_dpp: data?.detailspt?.cl_2j_dpp || "0",
+    cl_3b_ppnb: data?.detailspt?.cl_3b_ppnb || "0",
+    cl_3d_ppnb: data?.detailspt?.cl_3d_ppnb || "0",
+    cl_3f_ppnb: data?.detailspt?.cl_3f_ppnb || "0",
 
-    cl_3h_diminta: "",
-    cl_3h_nomor_rekening: "",
-    cl_3h_nama_bank: "",
-    cl_3h_nama_pemilik_bank: "",
-    // cl_4_ppn_terutang_dppp:''
-    // cl_3f_ppnb: "0",
-    cl_4_ppn_terutang_dpp: "0",
-    cl_5_ppn_wajib: "0",
-    cl_6b_ppnbm: "0",
-    cl_6d_ppnbm: "0",
-    cl_6f_diminta_pengembalian: "0",
-    cl_7a_dpp: "0",
-    cl_7a_dpp_lain: "0",
-    cl_7a_ppn: "0",
-    cl_7a_ppnbm: "0",
-    cl_7b_dpp: "0",
-    cl_7b_dpp_lain: "0",
-    cl_7b_ppn: "0",
-    cl_7b_ppnbm: "0",
-    cl_8a_dpp: "0",
-    cl_8a_dpplain: "0",
-    cl_8a_ppn: "0",
-    cl_8a_ppnbm: "0",
-    cl_8b_dpp: "0",
-    cl_8b_dpp_lain: "0",
-    cl_8b_ppn: "0",
-    cl_8b_ppnbm: "0",
-    cl_8d_diminta_pengembalian: "0",
-    cl_9a_daftar: "0",
-    cl_9a_hasil_perhitungan: "0",
-    cl_10_batas_waktu: "0",
-    klasifikasi_lapangan_usaha: "0",
+    cl_3h_diminta: data?.detailspt?.cl_3h_diminta || "",
+    cl_3h_nomor_rekening: data?.detailspt?.cl_3h_nomor_rekening || "",
+    cl_3h_nama_bank: data?.detailspt?.cl_3h_nama_bank || "",
+    cl_3h_nama_pemilik_bank: data?.detailspt?.cl_3h_nama_pemilik_bank || "",
+    // cl_4_ppn_terutang_dppp: data?.detailspt?.cl_4_ppn_terutang_dppp || ""
+    // cl_3f_ppnb: data?.detailspt?.cl_3f_ppnb || "0",
+    cl_4_ppn_terutang_dpp: data?.detailspt?.cl_4_ppn_terutang_dpp || "0",
+    cl_5_ppn_wajib: data?.detailspt?.cl_5_ppn_wajib || "0",
+    cl_6b_ppnbm: data?.detailspt?.cl_6b_ppnbm || "0",
+    cl_6d_ppnbm: data?.detailspt?.cl_6d_ppnbm || "0",
+    cl_6f_diminta_pengembalian:
+      data?.detailspt?.cl_6f_diminta_pengembalian || "0",
+    cl_7a_dpp: data?.detailspt?.cl_7a_dpp || "0",
+    cl_7a_dpp_lain: data?.detailspt?.cl_7a_dpp_lain || "0",
+    cl_7a_ppn: data?.detailspt?.cl_7a_ppn || "0",
+    cl_7a_ppnbm: data?.detailspt?.cl_7a_ppnbm || "0",
+    cl_7b_dpp: data?.detailspt?.cl_7b_dpp || "0",
+    cl_7b_dpp_lain: data?.detailspt?.cl_7b_dpp_lain || "0",
+    cl_7b_ppn: data?.detailspt?.cl_7b_ppn || "0",
+    cl_7b_ppnbm: data?.detailspt?.cl_7b_ppnbm || "0",
+    cl_8a_dpp: data?.detailspt?.cl_8a_dpp || "0",
+    cl_8a_dpplain: data?.detailspt?.cl_8a_dpplain || "0",
+    cl_8a_ppn: data?.detailspt?.cl_8a_ppn || "0",
+    cl_8a_ppnbm: data?.detailspt?.cl_8a_ppnbm || "0",
+    cl_8b_dpp: data?.detailspt?.cl_8b_dpp || "0",
+    cl_8b_dpp_lain: data?.detailspt?.cl_8b_dpp_lain || "0",
+    cl_8b_ppn: data?.detailspt?.cl_8b_ppn || "0",
+    cl_8b_ppnbm: data?.detailspt?.cl_8b_ppnbm || "0",
+    cl_8d_diminta_pengembalian:
+      data?.detailspt?.cl_8d_diminta_pengembalian || "0",
+    cl_9a_daftar: data?.detailspt?.cl_9a_daftar || "0",
+    cl_9a_hasil_perhitungan: data?.detailspt?.cl_9a_hasil_perhitungan || "0",
+    cl_10_batas_waktu: data?.detailspt?.cl_10_batas_waktu || "0",
+    klasifikasi_lapangan_usaha:
+      data?.detailspt?.klasifikasi_lapangan_usaha || "0",
   });
+
+  const navigate = useNavigateWithParams();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -308,9 +314,9 @@ const CreateKonsepSPT = ({ data }) => {
         cl_2e_ppn: toNumber(formData.cl_2e_ppn),
         cl_2f_ppn: toNumber(formData.cl_2f_ppn),
         cl_2i_dpp: toNumber(formData.cl_2i_dpp),
-        cl_3b_ppnbm: toNumber(formData.cl_3b_ppnbm),
-        cl_3d_ppnbm: toNumber(formData.cl_3d_ppnbm),
-        cl_3f_ppnbm: toNumber(formData.cl_3f_ppnbm),
+        cl_3b_ppnbm: toNumber(formData.cl_3b_ppnb),
+        cl_3d_ppnbm: toNumber(formData.cl_3d_ppnb),
+        cl_3f_ppnbm: toNumber(formData.cl_3f_ppnb),
         cl_3h_diminta: toNumber(formData.cl_3h_diminta),
         cl_3h_nomor_rekening: formData.cl_3h_nomor_rekening, // Keep as string
         cl_3h_nama_bank: formData.cl_3h_nama_bank, // Keep as string
@@ -370,6 +376,7 @@ const CreateKonsepSPT = ({ data }) => {
           // if (result.isConfirmed) {
           //   window.location.href = `/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt`;
           // }
+          navigate(`/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt`);
         }
       );
     },
@@ -404,7 +411,7 @@ const CreateKonsepSPT = ({ data }) => {
       Swal.fire("Berhasil!", "Konsep SPT berhasil dibuat.", "success").then(
         (result) => {
           if (result.isConfirmed) {
-            window.location.href = `/praktikum/${id}/sistem/${akun}/buat-konsep-spt/${idSpt}`;
+            // window.location.href = `/praktikum/${id}/sistem/${akun}/buat-konsep-spt/${idSpt}`;
           }
         }
       );
@@ -443,7 +450,7 @@ const CreateKonsepSPT = ({ data }) => {
       Swal.fire("Berhasil!", "SPT berhasil dibayar.", "success").then(
         (result) => {
           if (result.isConfirmed) {
-            window.location.href = `/praktikum/${id}/sistem/${akun}/buat-konsep-spt/${idSpt}`;
+            navigate(`/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt`);
           }
         }
       );
@@ -485,7 +492,8 @@ const CreateKonsepSPT = ({ data }) => {
         "success"
       ).then((result) => {
         if (result.isConfirmed) {
-          window.location.href = `/praktikum/${id}/sistem/${akun}/buat-konsep-spt/${idSpt}`;
+          // window.location.href = `/praktikum/${id}/sistem/${akun}/buat-konsep-spt/${idSpt}`;
+          navigate(`/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt`);
         }
       });
     },
@@ -705,6 +713,7 @@ const CreateKonsepSPT = ({ data }) => {
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={data.detail_spt.cl_1a1_dpp}
                               onChange={handleChange}
+                              readOnly
                             />
                           </td>
                         </tr>
