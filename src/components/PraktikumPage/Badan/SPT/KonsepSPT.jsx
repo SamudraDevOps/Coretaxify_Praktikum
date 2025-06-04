@@ -3,6 +3,7 @@ import SideBarSPT from "./SideBarSPT";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { FaChevronDown } from "react-icons/fa";
 import { useParams } from "react-router";
+import { useNavigateWithParams } from "@/hooks/useNavigateWithParams";
 
 const KonsepSPT = ({ data, sidebar }) => {
   const { id, akun } = useParams();
@@ -19,6 +20,7 @@ const KonsepSPT = ({ data, sidebar }) => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+  const navigate = useNavigateWithParams();
 
   console.log(data);
   return (
@@ -112,8 +114,13 @@ const KonsepSPT = ({ data, sidebar }) => {
                         </button> */}
                         <button
                           className="bg-green-500 hover:bg-green-600 text-white px-2 py-1 rounded text-xs"
+                          // onClick={() =>
+                          //   (window.location.href = `/praktikum/${id}/sistem/${akun}/buat-konsep-spt/${item.id}`)
+                          // }
                           onClick={() =>
-                            (window.location.href = `/praktikum/${id}/sistem/${akun}/buat-konsep-spt/${item.id}`)
+                            navigate(
+                              `/praktikum/${id}/sistem/${akun}/buat-konsep-spt/${item.id}`
+                            )
                           }
                         >
                           Edit

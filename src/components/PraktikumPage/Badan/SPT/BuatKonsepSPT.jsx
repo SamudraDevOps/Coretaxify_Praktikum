@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/popover";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { useParams } from "react-router";
+import { useNavigate, useParams, useSearchParams } from "react-router";
 import axios from "axios";
 import { RoutesApi } from "@/Routes";
 import { useCookies } from "react-cookie";
@@ -19,6 +19,7 @@ import { ClipLoader } from "react-spinners";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import Swal from "sweetalert2";
 import { getCsrf } from "@/service/getCsrf";
+import { useNavigateWithParams } from "@/hooks/useNavigateWithParams";
 
 const BuatKonsepSPT = () => {
   const { id, akun } = useParams();
@@ -31,6 +32,11 @@ const BuatKonsepSPT = () => {
   const [selectedModelSPT, setSelectedModelSPT] = useState("");
   const [modelTouched, setModelTouched] = useState(false);
   const [queryData, setQueryData] = useState({});
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigateWithParams();
+
+  const viewAsCompanyId = searchParams.get("viewAs");
   const generateQuery = () => {
     const query = {
       jenis_pajak: selectedType.toUpperCase(),
@@ -80,8 +86,9 @@ const BuatKonsepSPT = () => {
     mutationFn: async () => {
       const csrf = await getCsrf();
       console.log(queryData);
+      const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
       return axios.post(
-        `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/spt`,
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${accountId}/spt`,
         queryData,
         {
           headers: {
@@ -102,7 +109,8 @@ const BuatKonsepSPT = () => {
       Swal.fire("Berhasil!", "Konsep SPT berhasil dibuat.", "success").then(
         (result) => {
           if (result.isConfirmed) {
-            window.location.href = `/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt`;
+            navigate(`/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt`);
+            // window.location.href = `/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt`;
           }
         }
       );
