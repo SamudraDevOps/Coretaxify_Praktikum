@@ -6,6 +6,7 @@ import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover
 import DatePicker from "react-datepicker";
 import { Button } from "@/components/ui/button";
 import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogFooter, AlertDialogTitle, AlertDialogDescription, AlertDialogAction, AlertDialogCancel } from "@/components/ui/alert-dialog";
+import Select from "react-select";
 
 
 // Data dummy untuk tabel transaksi
@@ -53,11 +54,32 @@ const listSatuan = [
 
 const defaultTarifPPN = "12%";
 
+const kodeTransaksiOptions = [
+    { value: "1", label: "1 - Kepada selain pemungut PPN" },
+    { value: "2", label: "2 - Kepada Pemungut PPN instansi Pemerintahan" },
+    { value: "3", label: "3 - Kepada Pemungut PPN selain Instansi Pemerintahan" },
+    { value: "4", label: "4 - DPP Nilai lain" },
+    { value: "5", label: "5 - Besaran tertentu" },
+    { value: "6", label: "6 - Kepada Orang Pribadi Pemegang Paspor Luar Negeri ( 16E UU PPN)" },
+    { value: "7", label: "7 - penyerahan dengan fasilitas PPN atau PPN dan PPnBM tidak" },
+    { value: "8", label: "8 - penyerahan dengan fasilitas dibebaskan PPN atau PPN dan PPnBM" },
+    { value: "9", label: "9 - penyerahan aktiva yang menurut tujuan semula tidak diperjualbelikan (16D UU PPN)" },
+    { value: "10", label: "10 - penyerahan lainnya" },
+];
+
+const eksporOptions = [
+    { value: "1", label: "1 - ekspor BKP Berwujud" },
+    { value: "2", label: "2 - ekspor BKP tidak berwujud" },
+    { value: "3", label: "3 - ekspor JKP" },
+];
+
 const TambahFakturKeluaranDokumenLain = () => {
     const [showDokumenTransaksiDokumenLain, setShowDokumenTransaksiDokumenLain] = useState(false);
     const [showInformasiPembeliDokumenLain, setShowInformasiPembeliDokumenLain] = useState(false);
     const [showDetailTransaksiDokumenLain, setShowDetailTransaksiDokumenLain] = useState(false);
     const [selectedYear, setSelectedYear] = useState(new Date());
+    const [jenisTransaksi, setJenisTransaksi] = useState("");
+    const [detilTransaksi, setDetilTransaksi] = useState(null);
 
     // State untuk AlertDialog Transaksi
     const [tipe, setTipe] = useState("");
@@ -86,6 +108,7 @@ const TambahFakturKeluaranDokumenLain = () => {
     const resetForm = () => {
         setTipe("");
         setSelectedKode("");
+        setSelectedDokumenTransaksiDokumenLain("");
         setSelectedSatuan("");
         setNamaBarang("");
         setHarga("");
@@ -173,6 +196,38 @@ const TambahFakturKeluaranDokumenLain = () => {
         alert("Transaksi berhasil disimpan!");
         resetForm();
     };
+    
+    // Tentukan opsi detil transaksi berdasarkan jenis transaksi
+    const detilTransaksiOptions =
+        jenisTransaksi === "ekspor"
+            ? eksporOptions
+            : jenisTransaksi === "penyerahan dengan menggunakan dokumen tertentu"
+            ? kodeTransaksiOptions
+            : [];
+
+    // Tentukan opsi dokumen transaksi berdasarkan jenis transaksi dan detil transaksi
+    let dokumenTransaksiOptions = [];
+    if (jenisTransaksi === "ekspor") {
+        if (detilTransaksi?.value === "1") {
+            dokumenTransaksiOptions = [
+                { value: "peb", label: "Pemberitahuan Ekspor Barang" }
+            ];
+        } else if (detilTransaksi?.value === "2") {
+            dokumenTransaksiOptions = [
+                { value: "peb_bkp_jkp", label: "Pemberitahuan Ekspor BKP berwujud/pemberitahuan ekspor JKP" }
+            ];
+        } else if (detilTransaksi?.value === "3") {
+            dokumenTransaksiOptions = [
+                { value: "peb_bkp_tidak_berwujud_jkp", label: "Pemberitahuan Ekspor BKP Tidak berwujud/pemberitahuan ekspor JKP" }
+            ];
+        }
+    } else if (jenisTransaksi === "penyerahan dengan menggunakan dokumen tertentu") {
+        dokumenTransaksiOptions = [
+            { value: "1", label: "1 - Dokumen Tertentu yang kedudukannya Dipersamakan dengan Faktur Pajak" },
+            { value: "2", label: "2 - Dokumen Cukai CK1" },
+            { value: "3", label: "3 - Dokumen Kawasan Berikat" },
+        ];
+    }
 
     // Untuk kodeTransaksi (agar disable DPP Nilai Lain jika kode 01)
     useEffect(() => {
@@ -196,30 +251,53 @@ const TambahFakturKeluaranDokumenLain = () => {
                 {showDokumenTransaksiDokumenLain && (
                     <div className=' border rounded-md p-4 mb-2 mr-3 grid grid-cols-3 gap-4 w-auto'>
                         <div className="space-y-2">
-                            <label className="text-sm font-medium text-gray-900">Jenis Transaksi <span className="text-red-500">*</span></label>
-                            <select className="p-2 border rounded w-full">
+                            <label className="text-sm font-medium text-gray-900">
+                                Jenis Transaksi <span className="text-red-500">*</span>
+                            </label>
+                            <select
+                                className="p-2 border rounded w-full"
+                                value={jenisTransaksi}
+                                onChange={e => {
+                                    setJenisTransaksi(e.target.value);
+                                    setDetilTransaksi(null); // reset detil transaksi jika jenis berubah
+                                }}
+                            >
                                 <option value="">Pilih Jenis Transaksi</option>
                                 <option value="ekspor">Ekspor</option>
-                                <option value="penyerahan dengan menggunakan dokumen tertentu">Penyerahan dengan Menggunakan Dokumen Tertentu</option>
+                                <option value="penyerahan dengan menggunakan dokumen tertentu">
+                                    Penyerahan dengan Menggunakan Dokumen Tertentu
+                                </option>
                             </select>
                         </div>
-                        <div className="space-y-2" >
-                            <label className="text-sm font-medium text-gray-900">Jenis Dokumen <span className="text-red-500">*</span></label>
+                        <div className="space-y-2">
+                            <label className="text-sm font-medium text-gray-900">
+                                Jenis Dokumen <span className="text-red-500">*</span>
+                            </label>
                             <select className="p-2 border rounded w-full bg-gray-100" disabled>
                                 <option value="normal">Normal</option>
                             </select>
                         </div>
-                        <div className="space-y-2">
-                            <label className="text-sm font-medium text-gray-900">Detil Transaksi <span className="text-red-500">*</span></label>
-                            <select className="p-2 border rounded w-full">
-                                <option value="">Pilih Kode Transaksi</option>
-                            </select>
+                        <div className='space-y-2'>
+                            <label className="block text-sm font-medium">Detil Transaksi</label>
+                            <Select
+                                className="w-full max-w-full"
+                                options={detilTransaksiOptions}
+                                value={detilTransaksi}
+                                onChange={option => setDetilTransaksi(option)}
+                                placeholder="Pilih Kode Transaksi"
+                                isClearable
+                            />
                         </div>
                         <div className="space-y-2">
-                            <label className="text-sm font-medium text-gray-900">Dokumen Transaksi <span className="text-red-500">*</span></label>
-                            <select className="p-2 border rounded w-full">
-                                <option value="">Pilih Dokumen Transaksi</option>
-                            </select>
+                            <label className="text-sm font-medium text-gray-900">
+                                Dokumen Transaksi <span className="text-red-500">*</span>
+                            </label>
+                            <Select
+                                className='w-full max-w-full'
+                                options={dokumenTransaksiOptions}
+                                placeholder="Pilih Dokumen Transaksi"
+                                isClearable
+                            />
                         </div>
                         <div className="space-y-2">
                             <label className="text-sm font-medium text-gray-900">Nomor Dokumen <span className="text-red-500">*</span></label>
