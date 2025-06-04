@@ -426,7 +426,7 @@ const BUPOTForm = ({
         // get tarif dulu
         const bp21Tarif = formData.fasilitas_pajak === "fasilitas_lainnya" ? formData.tarif_pajak : getTarif();
         const bp21EffectiveIncome = formData.dasar_pengenaan_pajak * (formData.persentase_penghasilan_bersih / 100);
-        const bp21Calculation = bp21Ps17Calculation(bp21Tarif, bp21EffectiveIncome);
+        const bp21Calculation = parseInt(bp21Ps17Calculation(bp21Tarif, bp21EffectiveIncome));
         // const bp21Calculation = bp21EffectiveIncome * (bp21Tarif / 100);
         updateMultipleFields({
             tarif_pajak: bp21Tarif,
@@ -435,7 +435,10 @@ const BUPOTForm = ({
         break;
       
       case "BP 26":
-
+          const bp26Tarif = formData.tarif_pajak;
+          const bp26EffectiveIncome = formData.dasar_pengenaan_pajak * (formData.persentase_penghasilan_bersih / 100);
+          const bp26Calculation = bp26EffectiveIncome * (bp26Tarif / 100);
+          updateFormData("pajak_penghasilan", bp26Calculation);
         break;
 
       case "BP A1":
@@ -1277,6 +1280,7 @@ const BUPOTForm = ({
                     onChange={(e) => {
                       updateFormData("jenis_pajak", e.target.value);
                     }}
+                    readOnly={true}
                   />
                 </div>
 
@@ -1294,6 +1298,7 @@ const BUPOTForm = ({
                     onChange={(e) => {
                       updateFormData("kode_objek_pajak", e.target.value);
                     }}
+                    readOnly={true}
                   />
                 </div>
 
@@ -1311,6 +1316,7 @@ const BUPOTForm = ({
                     onChange={(e) => {
                       updateFormData("sifat_pajak_penghasilan", e.target.value);
                     }}
+                    readOnly={true}
                   />
                 </div>
 
@@ -1645,6 +1651,7 @@ const BUPOTForm = ({
                     onChange={(e) => {
                       updateFormData("kap", e.target.value);
                     }}
+                    readOnly={true}
                   />
                 </div>
               </div>
@@ -1900,7 +1907,7 @@ const BUPOTForm = ({
                 {/* Nama Objek Pajak */}
                 <div className="mt-4 flex justify-between gap-4">
                   <label className="w-64 flex-none block text-sm font-medium text-gray-700">
-                    Nama Objek Pajak (Under Construction)
+                    Nama Objek Pajak
                     <span className="text-red-500">*</span>
                   </label>
                   <select
@@ -2919,6 +2926,7 @@ const BUPOTForm = ({
                     onChange={(e) => {
                       updateFormData("kap", e.target.value);
                     }}
+                    readOnly={true}
                   />
                 </div>
 
@@ -3075,6 +3083,7 @@ const BUPOTForm = ({
                     onChange={(e) => {
                       updateFormData("kap", e.target.value);
                     }}
+                    readOnly={true}
                   />
                 </div>
 
