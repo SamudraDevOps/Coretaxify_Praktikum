@@ -25,7 +25,7 @@ import { useDynamicTableRows } from "@/hooks/useDynamicTableRows";
 import axios from "axios";
 import { getCsrf } from "@/service/getCsrf";
 import Swal from "sweetalert2";
-import { useParams } from "react-router";
+import { useParams, useSearchParams } from "react-router";
 import { useMutation } from "@tanstack/react-query";
 import { RoutesApi } from "@/Routes";
 import { useCookies } from "react-cookie";
@@ -102,6 +102,9 @@ const CreateKonsepSPT = ({ data }) => {
   const [openLampiran, setOpenLampiran] = useState(false);
   const [openPenyerahan, setOpenPenyerahan] = useState(false);
 
+  const [searchParams, setSearchParams] = useSearchParams();
+  const viewAsCompanyId = searchParams.get("viewAs");
+
   // Add this function to calculate totals from the table
   const calculateTableTotals = (tableRows, columns) => {
     const totals = {};
@@ -157,7 +160,7 @@ const CreateKonsepSPT = ({ data }) => {
     // cl_1a1_dpp: "0",
     cl_1b_jumlah_dpp: "0",
     // cl_1b_dpp: "0",
-    cl_1c_dpp: "0",
+    // cl_1c_dpp: "0",
     cl_1a5_dpp: "0",
     cl_1a5_dpp_lain: "0",
     cl_1a5_ppn: "0",
@@ -166,8 +169,8 @@ const CreateKonsepSPT = ({ data }) => {
     cl_1a9_dpp_lain: "0",
     cl_1a9_ppn: "0",
     cl_1a9_ppnbm: "0",
-    cl_1a_jumlah_ppn: "0",
-    cl_1a_jumlah_ppnbm: "0",
+    // cl_1a_jumlah_ppn: "0",
+    // cl_1a_jumlah_ppnbm: "0",
     // cl_2a_dpp: "0",
     // cl_2a_ppn: "0",
     // cl_2a_ppnbm: "0",
@@ -180,9 +183,9 @@ const CreateKonsepSPT = ({ data }) => {
     // cl_2h_ppnbm: "0",
     cl_2i_dpp: "0",
     // cl_2j_dpp: "0",
-    cl_3b_ppnbm: "0",
-    cl_3d_ppnbm: "0",
-    cl_3f_ppnbm: "0",
+    cl_3b_ppnb: "0",
+    cl_3d_ppnb: "0",
+    cl_3f_ppnb: "0",
 
     cl_3h_diminta: "",
     cl_3h_nomor_rekening: "",
@@ -282,49 +285,70 @@ const CreateKonsepSPT = ({ data }) => {
     mutationFn: async () => {
       const csrf = await getCsrf();
 
-      // Create an object with all the required fields from formData
-      const sptData = {
-        cl_1a9_dpp: formData.cl_1a9_dpp,
-        cl_1a9_ppn: formData.cl_1a9_ppn,
-        cl_1a9_ppnbm: formData.cl_1a9_ppnbm,
-        cl_1b_jumlah_dpp: formData.cl_1b_jumlah_dpp,
-        cl_2e_ppn: formData.cl_2e_ppn,
-        cl_2f_ppn: formData.cl_2f_ppn,
-        cl_2i_dpp: formData.cl_2i_dpp,
-        cl_3b_ppnbm: formData.cl_3b_ppnbm,
-        cl_3d_ppnbm: formData.cl_3d_ppnbm,
-        cl_3f_ppnbm: formData.cl_3f_ppnbm,
-        cl_3h_diminta: formData.cl_3h_diminta,
-        cl_3h_nomor_rekening: formData.cl_3h_nomor_rekening,
-        cl_3h_nama_bank: formData.cl_3h_nama_bank,
-        cl_3h_nama_pemilik_bank: formData.cl_3h_nama_pemilik_bank,
-        cl_4_ppn_terutang_dpp: formData.cl_4_ppn_terutang_dpp,
-        cl_5_ppn_wajib: formData.cl_5_ppn_wajib,
-        cl_6b_ppnbm: formData.cl_6b_ppnbm,
-        cl_6d_ppnbm: formData.cl_6d_ppnbm,
-        cl_6f_diminta_pengembalian: formData.cl_6f_diminta_pengembalian,
-        cl_7a_dpp: formData.cl_7a_dpp,
-        cl_7a_dpp_lain: formData.cl_7a_dpp_lain,
-        cl_7a_ppn: formData.cl_7a_ppn,
-        cl_7a_ppnbm: formData.cl_7a_ppnbm,
-        cl_7b_dpp: formData.cl_7b_dpp,
-        cl_7b_dpp_lain: formData.cl_7b_dpp_lain,
-        cl_7b_ppn: formData.cl_7b_ppn,
-        cl_7b_ppnbm: formData.cl_7b_ppnbm,
-        cl_8a_dpp: formData.cl_8a_dpp,
-        cl_8a_dpplain: formData.cl_8a_dpplain,
-        cl_8a_ppn: formData.cl_8a_ppn,
-        cl_8a_ppnbm: formData.cl_8a_ppnbm,
-        cl_8b_dpp: formData.cl_8b_dpp,
-        cl_8b_dpp_lain: formData.cl_8b_dpp_lain,
-        cl_8b_ppn: formData.cl_8b_ppn,
-        cl_8b_ppnbm: formData.cl_8b_ppnbm,
-        cl_8d_diminta_pengembalian: formData.cl_8d_diminta_pengembalian,
-        cl_9a_daftar: formData.cl_9a_daftar,
-        cl_9a_hasil_perhitungan: formData.cl_9a_hasil_perhitungan,
-        cl_10_batas_waktu: formData.cl_10_batas_waktu,
-        klasifikasi_lapangan_usaha: formData.klasifikasi_lapangan_usaha,
+      // Check if viewAsCompanyId exists
+      if (!viewAsCompanyId) {
+        throw new Error("Company ID is not defined");
+      }
+
+      // Helper function to convert string to number, return 0 if empty/null/undefined
+      const toNumber = (value) => {
+        if (value === null || value === undefined || value === "") {
+          return 0;
+        }
+        const num = parseFloat(value);
+        return isNaN(num) ? 0 : num;
       };
+
+      // Create an object with all the required fields from formData, converting to numbers
+      const sptData = {
+        cl_1a9_dpp: toNumber(formData.cl_1a9_dpp),
+        cl_1a9_ppn: toNumber(formData.cl_1a9_ppn),
+        cl_1a9_ppnbm: toNumber(formData.cl_1a9_ppnbm),
+        cl_1b_jumlah_dpp: toNumber(formData.cl_1b_jumlah_dpp),
+        cl_2e_ppn: toNumber(formData.cl_2e_ppn),
+        cl_2f_ppn: toNumber(formData.cl_2f_ppn),
+        cl_2i_dpp: toNumber(formData.cl_2i_dpp),
+        cl_3b_ppnbm: toNumber(formData.cl_3b_ppnbm),
+        cl_3d_ppnbm: toNumber(formData.cl_3d_ppnbm),
+        cl_3f_ppnbm: toNumber(formData.cl_3f_ppnbm),
+        cl_3h_diminta: toNumber(formData.cl_3h_diminta),
+        cl_3h_nomor_rekening: formData.cl_3h_nomor_rekening, // Keep as string
+        cl_3h_nama_bank: formData.cl_3h_nama_bank, // Keep as string
+        cl_3h_nama_pemilik_bank: formData.cl_3h_nama_pemilik_bank, // Keep as string
+        cl_4_ppn_terutang_dpp: toNumber(formData.cl_4_ppn_terutang_dpp),
+        cl_5_ppn_wajib: toNumber(formData.cl_5_ppn_wajib),
+        cl_6b_ppnbm: toNumber(formData.cl_6b_ppnbm),
+        cl_6d_ppnbm: toNumber(formData.cl_6d_ppnbm),
+        cl_6f_diminta_pengembalian: toNumber(
+          formData.cl_6f_diminta_pengembalian
+        ),
+        cl_7a_dpp: toNumber(formData.cl_7a_dpp),
+        cl_7a_dpp_lain: toNumber(formData.cl_7a_dpp_lain),
+        cl_7a_ppn: toNumber(formData.cl_7a_ppn),
+        cl_7a_ppnbm: toNumber(formData.cl_7a_ppnbm),
+        cl_7b_dpp: toNumber(formData.cl_7b_dpp),
+        cl_7b_dpp_lain: toNumber(formData.cl_7b_dpp_lain),
+        cl_7b_ppn: toNumber(formData.cl_7b_ppn),
+        cl_7b_ppnbm: toNumber(formData.cl_7b_ppnbm),
+        cl_8a_dpp: toNumber(formData.cl_8a_dpp),
+        cl_8a_dpplain: toNumber(formData.cl_8a_dpplain),
+        cl_8a_ppn: toNumber(formData.cl_8a_ppn),
+        cl_8a_ppnbm: toNumber(formData.cl_8a_ppnbm),
+        cl_8b_dpp: toNumber(formData.cl_8b_dpp),
+        cl_8b_dpp_lain: toNumber(formData.cl_8b_dpp_lain),
+        cl_8b_ppn: toNumber(formData.cl_8b_ppn),
+        cl_8b_ppnbm: toNumber(formData.cl_8b_ppnbm),
+        cl_8d_diminta_pengembalian: toNumber(
+          formData.cl_8d_diminta_pengembalian
+        ),
+        cl_9a_daftar: toNumber(formData.cl_9a_daftar),
+        cl_9a_hasil_perhitungan: toNumber(formData.cl_9a_hasil_perhitungan),
+        cl_10_batas_waktu: formData.cl_10_batas_waktu, // Keep as string (likely a date)
+        klasifikasi_lapangan_usaha: formData.klasifikasi_lapangan_usaha, // Keep as string
+        badan_id: viewAsCompanyId,
+      };
+
+      console.log("Sending SPT data:", sptData); // Debug what's being sent
 
       return axios.put(
         `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/spt/${idSpt}/calculate-spt`,
@@ -545,6 +569,8 @@ const CreateKonsepSPT = ({ data }) => {
                         <input
                           type="text"
                           readOnly
+                          name="klasifikasi_lapangan_usaha"
+                          onChange={handleChange}
                           value="AKTIVITAS AKUNTANSI, PEMBUKUAN DAN PEMERIKSA"
                           className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
                         />
@@ -767,8 +793,8 @@ const CreateKonsepSPT = ({ data }) => {
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               defaultValue="0"
                               disabled
-                              name="cl_3a_ppnbm"
-                              value={data.detail_spt.cl_3a_ppnbm}
+                              name="cl_3a_ppnb"
+                              value={data.detail_spt.cl_3a_ppnb}
                             />
                           </td>
                         </tr>
@@ -1653,8 +1679,9 @@ const CreateKonsepSPT = ({ data }) => {
                               type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               defaultValue="0"
+                              name="cl_3a_ppnb"
+                              value={data.detail_spt.cl_3a_ppnb}
                               disabled
-                              name="cl_3a_ppnbm"
                             />
                           </td>
                           <td className="p-2"></td>
@@ -1671,9 +1698,9 @@ const CreateKonsepSPT = ({ data }) => {
                             <input
                               type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              defaultValue="0"
-                              disabled
-                              name="cl_3b_ppnbm"
+                              name="cl_3b_ppnb"
+                              value={formData.cl_3b_ppnb}
+                              onChange={handleChange}
                             />
                           </td>
                           <td className="p-2"></td>
@@ -1692,7 +1719,8 @@ const CreateKonsepSPT = ({ data }) => {
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               defaultValue="0"
                               disabled
-                              name="cl_3c_ppnbm"
+                              name="cl_3c_ppnb"
+                              value={data.detail_spt.cl_3c_ppnb}
                             />
                           </td>
                           <td className="p-2"></td>
@@ -1710,8 +1738,9 @@ const CreateKonsepSPT = ({ data }) => {
                               type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               defaultValue="0"
-                              disabled
-                              name="cl_3d_ppnbm"
+                              name="cl_3d_ppnb"
+                              value={formData.cl_3d_ppnb}
+                              onChange={handleChange}
                             />
                           </td>
                           <td className="p-2"></td>
@@ -1731,7 +1760,8 @@ const CreateKonsepSPT = ({ data }) => {
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={data.detail_spt.cl_3e_ppnb}
                               name="cl_3e_ppnb"
-                              onChange={handleChange}
+                              readOnly
+                              // onChange={handleChange}
                             />
                           </td>
                           <td className="p-2 flex items-center gap-2"></td>
@@ -1750,8 +1780,9 @@ const CreateKonsepSPT = ({ data }) => {
                               type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               defaultValue="0"
-                              disabled
                               name="cl_3f_ppnb"
+                              value={formData.cl_3f_ppnb}
+                              onChange={handleChange}
                             />
                           </td>
                           <td className="p-2"></td>
@@ -1769,9 +1800,9 @@ const CreateKonsepSPT = ({ data }) => {
                             <input
                               type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_3g_ppnbm}
+                              value={data.detail_spt.cl_3g_ppnb}
                               disabled
-                              name="cl_3g_ppnbm"
+                              name="cl_3g_ppnb"
                             />
                           </td>
                           <td className="p-2"></td>
@@ -1787,6 +1818,8 @@ const CreateKonsepSPT = ({ data }) => {
                                   type="radio"
                                   name="cl_3h_diminta"
                                   value="1"
+                                  checked={formData.cl_3h_diminta === "1"}
+                                  onChange={handleChange}
                                   className="form-radio"
                                 />
                                 <span className="ml-2">1. Dikompresikan</span>
@@ -1796,6 +1829,8 @@ const CreateKonsepSPT = ({ data }) => {
                                   type="radio"
                                   name="cl_3h_diminta"
                                   value="2"
+                                  checked={formData.cl_3h_diminta === "2"}
+                                  onChange={handleChange}
                                   className="form-radio"
                                 />
                                 <span className="ml-2">
@@ -1808,6 +1843,8 @@ const CreateKonsepSPT = ({ data }) => {
                                   type="radio"
                                   name="cl_3h_diminta"
                                   value="3"
+                                  checked={formData.cl_3h_diminta === "3"}
+                                  onChange={handleChange}
                                   className="form-radio"
                                 />
                                 <span className="ml-2">
@@ -1833,6 +1870,8 @@ const CreateKonsepSPT = ({ data }) => {
                                   type="text"
                                   name="nomor_rekening"
                                   className="w-full p-1 border rounded-md text-sm ml-7 mt-1"
+                                  value={formData.cl_3h_nomor_rekening}
+                                  onChange={handleChange}
                                 />
                               </label>
                               <label className="block text-sm">
@@ -1841,6 +1880,8 @@ const CreateKonsepSPT = ({ data }) => {
                                   type="text"
                                   name="nama_bank"
                                   className="w-full p-1 border rounded-md text-sm ml-16 mt-1"
+                                  value={formData.cl_3h_nama_bank}
+                                  onChange={handleChange}
                                 />
                               </label>
                               <label className="block text-sm">
@@ -1849,6 +1890,8 @@ const CreateKonsepSPT = ({ data }) => {
                                   type="text"
                                   name="nama_pemilik_bank"
                                   className="w-full p-1 border rounded-md text-sm ml-3 mt-1"
+                                  value={formData.cl_3h_nama_pemilik_bank}
+                                  onChange={handleChange}
                                 />
                               </label>
                             </div>
@@ -1898,7 +1941,9 @@ const CreateKonsepSPT = ({ data }) => {
                               type="number"
                               className="w-full p-1 border rounded-md text-right text-sm"
                               defaultValue="0"
-                              name="cl_3a_ppnbm"
+                              value={formData.cl_4_ppn_terutang_dpp}
+                              onChange={handleChange}
+                              name="cl_4_ppn_terutang_dpp"
                             />
                           </td>
                           <td className="p-2">
@@ -1958,8 +2003,9 @@ const CreateKonsepSPT = ({ data }) => {
                             <input
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              defaultValue="0"
-                              disabled
+                              name="cl_5_ppn_wajib"
+                              value={formData.cl_5_ppn_wajib}
+                              onChange={handleChange}
                             />
                           </td>
                           <td className="p-2"></td>
@@ -2031,6 +2077,8 @@ const CreateKonsepSPT = ({ data }) => {
                               className="w-full p-1 border rounded-md text-right text-sm"
                               defaultValue="0"
                               name="cl_6b_ppnbm"
+                              value={formData.cl_6b_ppnbm}
+                              onChange={handleChange}
                             />
                           </td>
                         </tr>
@@ -2067,6 +2115,8 @@ const CreateKonsepSPT = ({ data }) => {
                               className="w-full p-1 border rounded-md text-right text-sm"
                               defaultValue="0"
                               name="cl_6d_ppnbm"
+                              value={formData.cl_6d_ppnbm}
+                              onChange={handleChange}
                             />
                           </td>
                         </tr>
@@ -2096,6 +2146,15 @@ const CreateKonsepSPT = ({ data }) => {
                             PPnMB kurang atau (lebih) pada SPT yang dibetulkan
                             sebelumnya
                           </td>
+
+                          <input
+                            type="number"
+                            className="w-full p-1 border rounded-md text-right text-sm BG-gray-100"
+                            value={formData.cl_6f_diminta_pengembalian}
+                            disabled={data.detail_spt.cl_6e_ppnbm > 0}
+                            name="cl_6f_diminta_pengembalian"
+                            onChange={handleChange}
+                          />
                         </tr>
                       </tbody>
                     </table>
@@ -2146,7 +2205,8 @@ const CreateKonsepSPT = ({ data }) => {
                               name="cl_7a_dpp"
                               type="number"
                               className="w-full p-1 border rounded-md text-right text-sm"
-                              defaultValue="0"
+                              value={formData.cl_7a_dpp}
+                              onChange={handleChange}
                             />
                           </td>
                           <td className="p-2">
@@ -2154,7 +2214,8 @@ const CreateKonsepSPT = ({ data }) => {
                               name="cl_7a_dpp_lain"
                               type="number"
                               className="w-full p-1 border rounded-md text-right text-sm"
-                              defaultValue="0"
+                              value={formData.cl_7a_dpp_lain}
+                              onChange={handleChange}
                             />
                           </td>
                           <td className="p-2">
@@ -2162,7 +2223,8 @@ const CreateKonsepSPT = ({ data }) => {
                               name="cl_7a_ppn"
                               type="number"
                               className="w-full p-1 border rounded-md text-right text-sm"
-                              defaultValue="0"
+                              value={formData.cl_7a_ppn}
+                              onChange={handleChange}
                             />
                           </td>
                           <td className="p-2">
@@ -2170,7 +2232,8 @@ const CreateKonsepSPT = ({ data }) => {
                               name="cl_7a_ppnbm"
                               type="number"
                               className="w-full p-1 border rounded-md text-right text-sm"
-                              defaultValue="0"
+                              value={formData.cl_7a_ppnbm}
+                              onChange={handleChange}
                             />
                           </td>
                         </tr>
@@ -2186,7 +2249,8 @@ const CreateKonsepSPT = ({ data }) => {
                               name="cl_7b_dpp"
                               type="number"
                               className="w-full p-1 border rounded-md text-right text-sm"
-                              defaultValue="0"
+                              value={formData.cl_7b_dpp}
+                              onChange={handleChange}
                             />
                           </td>
                           <td className="p-2">
@@ -2194,7 +2258,8 @@ const CreateKonsepSPT = ({ data }) => {
                               name="cl_7b_dpp_lain"
                               type="number"
                               className="w-full p-1 border rounded-md text-right text-sm"
-                              defaultValue="0"
+                              value={formData.cl_7b_dpp_lain}
+                              onChange={handleChange}
                             />
                           </td>
                           <td className="p-2">
@@ -2202,7 +2267,8 @@ const CreateKonsepSPT = ({ data }) => {
                               name="cl_7b_ppn"
                               type="number"
                               className="w-full p-1 border rounded-md text-right text-sm"
-                              defaultValue="0"
+                              value={formData.cl_7b_ppn}
+                              onChange={handleChange}
                             />
                           </td>
                           <td className="p-2">
@@ -2210,7 +2276,8 @@ const CreateKonsepSPT = ({ data }) => {
                               name="cl_7b_ppnbm"
                               type="number"
                               className="w-full p-1 border rounded-md text-right text-sm"
-                              defaultValue="0"
+                              value={formData.cl_7b_ppnbm}
+                              onChange={handleChange}
                             />
                           </td>
                         </tr>
@@ -2316,8 +2383,8 @@ const CreateKonsepSPT = ({ data }) => {
                               name="cl_8a_dpp"
                               type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              defaultValue="0"
-                              disabled
+                              value={formData.cl_8a_dpp}
+                              onChange={handleChange}
                             />
                           </td>
                           <td className="p-2">
@@ -2325,8 +2392,10 @@ const CreateKonsepSPT = ({ data }) => {
                               name="cl_8a_dpp_lain"
                               type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              defaultValue="0"
-                              disabled
+                              value={
+                                formData.cl_8a_dpplain
+                              } /* Note: there's a name mismatch in formData */
+                              onChange={handleChange}
                             />
                           </td>
                           <td className="p-2">
@@ -2334,8 +2403,8 @@ const CreateKonsepSPT = ({ data }) => {
                               name="cl_8a_ppn"
                               type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              defaultValue="0"
-                              disabled
+                              value={formData.cl_8a_ppn}
+                              onChange={handleChange}
                             />
                           </td>
                           <td className="p-2">
@@ -2343,7 +2412,8 @@ const CreateKonsepSPT = ({ data }) => {
                               name="cl_8a_ppnbm"
                               type="number"
                               className="w-full p-1 border rounded-md text-right text-sm"
-                              defaultValue="0"
+                              value={formData.cl_8a_ppnbm}
+                              onChange={handleChange}
                             />
                           </td>
                         </tr>
@@ -2359,8 +2429,8 @@ const CreateKonsepSPT = ({ data }) => {
                               type="text"
                               name="cl_8b_dpp"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              defaultValue="0"
-                              disabled
+                              value={formData.cl_8b_dpp}
+                              onChange={handleChange}
                             />
                           </td>
                           <td className="p-2">
@@ -2368,8 +2438,8 @@ const CreateKonsepSPT = ({ data }) => {
                               type="text"
                               name="cl_8b_dpp_lain"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              defaultValue="0"
-                              disabled
+                              value={formData.cl_8b_dpp_lain}
+                              onChange={handleChange}
                             />
                           </td>
                           <td className="p-2">
@@ -2377,8 +2447,8 @@ const CreateKonsepSPT = ({ data }) => {
                               type="text"
                               name="cl_8b_ppn"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              defaultValue="0"
-                              disabled
+                              value={formData.cl_8b_ppn}
+                              onChange={handleChange}
                             />
                           </td>
                           <td className="p-2">
@@ -2386,7 +2456,8 @@ const CreateKonsepSPT = ({ data }) => {
                               type="text"
                               name="cl_8b_ppnbm"
                               className="w-full p-1 border rounded-md text-right text-sm"
-                              defaultValue="0"
+                              value={formData.cl_8b_ppnbm}
+                              onChange={handleChange}
                             />
                           </td>
                         </tr>
@@ -2435,7 +2506,7 @@ const CreateKonsepSPT = ({ data }) => {
                           </td>
                         </tr>
 
-                        {/* row 1 */}
+                        {/* row 4 */}
                         <tr className="border-b">
                           <td className="p-2 whitespace-normal break-words text-sm ">
                             D. <input type="checkbox" className="" /> diminta
@@ -2443,34 +2514,26 @@ const CreateKonsepSPT = ({ data }) => {
                           </td>
                           <td className="p-2">
                             <input
-                              type="text"
-                              className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              defaultValue="0"
-                              disabled
-                            />
-                          </td>
-                          <td className="p-2">
-                            <input
-                              type="text"
-                              className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              defaultValue="0"
-                              disabled
-                            />
-                          </td>
-                          <td className="p-2">
-                            <input
-                              type="text"
-                              className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              defaultValue="0"
-                              disabled
-                            />
-                          </td>
-                          <td className="p-2">
-                            <input
-                              type="text"
-                              className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              defaultValue="0"
-                              disabled
+                              type="checkbox"
+                              name="cl_8c_dpp"
+                              className="p-1 border rounded-md bg-gray-100"
+                              // checked={
+                              //   data.detail_spt.cl_8d_diminta_pengembalian !==
+                              //     "0" &&
+                              //   data.detail_spt.cl_8d_diminta_pengembalian !==
+                              //     undefined &&
+                              //   data.detail_spt.cl_8d_diminta_pengembalian !==
+                              //     ""
+                              // }
+                              onChange={(e) => {
+                                const newValue = e.target.checked ? "1" : "0";
+                                handleChange({
+                                  target: {
+                                    name: "cl_8d_diminta_pengembalian",
+                                    value: newValue,
+                                  },
+                                });
+                              }}
                             />
                           </td>
                         </tr>
@@ -2507,26 +2570,74 @@ const CreateKonsepSPT = ({ data }) => {
                         <tr className="border-b">
                           <td className="p-2 whitespace-normal break-words text-sm">
                             A.{" "}
-                            <input
+                            {/* <input
                               type="checkbox"
                               className=""
                               name="cl_9a_daftar"
-                            />{" "}
+                            />{" "} */}
                             Daftar Rincian Kendaraan Bermotor
+                          </td>
+                          <td className="p-2">
+                            <input
+                              type="checkbox"
+                              name="cl_9a_daftar"
+                              className="p-1 border rounded-md bg-gray-100"
+                              // checked={
+                              //   data.detail_spt.cl_8d_diminta_pengembalian !==
+                              //     "0" &&
+                              //   data.detail_spt.cl_8d_diminta_pengembalian !==
+                              //     undefined &&
+                              //   data.detail_spt.cl_8d_diminta_pengembalian !==
+                              //     ""
+                              // }
+                              onChange={(e) => {
+                                const newValue = e.target.checked ? "1" : "0";
+                                handleChange({
+                                  target: {
+                                    name: "cl_9a_daftar",
+                                    value: newValue,
+                                  },
+                                });
+                              }}
+                            />
                           </td>
                         </tr>
                         {/* row 2 */}
                         <tr className="border-b">
                           <td className="p-2 whitespace-normal break-words text-sm">
                             B.{" "}
-                            <input
+                            {/* <input
                               type="checkbox"
                               className=""
-                              name="cl_9a_hasil_perhitungan"
-                            />{" "}
+                              name="cl_9a_daftar"
+                            />{" "} */}
                             Hasil penghitungan kembali Pajak Masukan yang telah
                             dikreditkan sebagai penambah (pengurang) Pajak
                             Masukan
+                          </td>
+                          <td className="p-2">
+                            <input
+                              type="checkbox"
+                              name="cl_9a_hasil_perhitungan"
+                              className="p-1 border rounded-md bg-gray-100"
+                              // checked={
+                              //   data.detail_spt.cl_8d_diminta_pengembalian !==
+                              //     "0" &&
+                              //   data.detail_spt.cl_8d_diminta_pengembalian !==
+                              //     undefined &&
+                              //   data.detail_spt.cl_8d_diminta_pengembalian !==
+                              //     ""
+                              // }
+                              onChange={(e) => {
+                                const newValue = e.target.checked ? "1" : "0";
+                                handleChange({
+                                  target: {
+                                    name: "cl_9a_hasil_perhitungan",
+                                    value: newValue,
+                                  },
+                                });
+                              }}
+                            />
                           </td>
                         </tr>
                       </tbody>
@@ -2561,6 +2672,7 @@ const CreateKonsepSPT = ({ data }) => {
                             name="ditandatangani"
                             className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
                             disabled
+                            // value={}
                           />
                           <label
                             htmlFor="PKP"
@@ -2641,6 +2753,8 @@ const CreateKonsepSPT = ({ data }) => {
                             name="cl_10_batas_waktu"
                             type="date"
                             className="rounded w-full bg-white border-grey-300 border text-sm p-2 flex-1"
+                            onChange={handleChange}
+                            value={formData.cl_10_batas_waktu}
                           />
                         </div>
                       </div>
