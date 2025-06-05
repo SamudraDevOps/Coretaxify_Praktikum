@@ -36,24 +36,31 @@ const BUPOTForm = ({
   });
 
   const TER_DATA = {
-    'TK/0': 'A', 'TK/1': 'A', 'TK/2': 'B', 'TK/3': 'B', 'K/0': 'A', 'K/1': 'B', 'K/2': 'B', 'K/3': 'C'
+    "TK/0": "A",
+    "TK/1": "A",
+    "TK/2": "B",
+    "TK/3": "B",
+    "K/0": "A",
+    "K/1": "B",
+    "K/2": "B",
+    "K/3": "C",
   };
 
   const TER_BRACKETS = {
-    'A': [
+    A: [
       { min: 0, max: 5400000, rate: 0 },
       { min: 5400000, max: 5650000, rate: 0.25 },
-      { min: 5650000, max: 5950000, rate: 0.50 },
+      { min: 5650000, max: 5950000, rate: 0.5 },
       { min: 5950000, max: 6300000, rate: 0.75 },
       { min: 6300000, max: 6750000, rate: 1 },
       { min: 6750000, max: 7500000, rate: 1.25 },
-      { min: 7500000, max: 8550000, rate: 1.50 },
+      { min: 7500000, max: 8550000, rate: 1.5 },
       { min: 8550000, max: 9650000, rate: 1.75 },
       { min: 9650000, max: 10050000, rate: 2 },
       { min: 10050000, max: 10350000, rate: 2.25 },
-      { min: 10350000, max: 10700000, rate: 2.50 },
+      { min: 10350000, max: 10700000, rate: 2.5 },
       { min: 10700000, max: 11050000, rate: 3 },
-      { min: 11050000, max: 11600000, rate: 3.50 },
+      { min: 11050000, max: 11600000, rate: 3.5 },
       { min: 11600000, max: 12500000, rate: 4 },
       { min: 12500000, max: 13750000, rate: 5 },
       { min: 13750000, max: 15100000, rate: 6 },
@@ -84,17 +91,17 @@ const BUPOTForm = ({
       { min: 550000000, max: 695000000, rate: 31 },
       { min: 695000000, max: 910000000, rate: 32 },
       { min: 910000000, max: 1400000000, rate: 33 },
-      { min: 1400000000, max: Infinity, rate: 34 }
+      { min: 1400000000, max: Infinity, rate: 34 },
     ],
-    'B': [
+    B: [
       { min: 0, max: 6200000, rate: 0 },
       { min: 6200000, max: 6500000, rate: 0.25 },
-      { min: 6500000, max: 6850000, rate: 0.50 },
+      { min: 6500000, max: 6850000, rate: 0.5 },
       { min: 6850000, max: 7300000, rate: 0.75 },
       { min: 7300000, max: 9200000, rate: 1 },
-      { min: 9200000, max: 10750000, rate: 1.50 },
+      { min: 9200000, max: 10750000, rate: 1.5 },
       { min: 10750000, max: 11250000, rate: 2 },
-      { min: 11250000, max: 11600000, rate: 2.50 },
+      { min: 11250000, max: 11600000, rate: 2.5 },
       { min: 11600000, max: 12600000, rate: 3 },
       { min: 12600000, max: 13600000, rate: 4 },
       { min: 13600000, max: 14950000, rate: 5 },
@@ -126,16 +133,16 @@ const BUPOTForm = ({
       { min: 555000000, max: 704000000, rate: 31 },
       { min: 704000000, max: 957000000, rate: 32 },
       { min: 957000000, max: 1405000000, rate: 33 },
-      { min: 1405000000, max: Infinity, rate: 34 }
+      { min: 1405000000, max: Infinity, rate: 34 },
     ],
-    'C': [
+    C: [
       { min: 0, max: 6600000, rate: 0 },
       { min: 6600000, max: 6950000, rate: 0.25 },
-      { min: 6950000, max: 7350000, rate: 0.50 },
+      { min: 6950000, max: 7350000, rate: 0.5 },
       { min: 7350000, max: 7800000, rate: 0.75 },
       { min: 7800000, max: 8850000, rate: 1 },
       { min: 8850000, max: 9800000, rate: 1.25 },
-      { min: 9800000, max: 10950000, rate: 1.50 },
+      { min: 9800000, max: 10950000, rate: 1.5 },
       { min: 10950000, max: 11200000, rate: 1.75 },
       { min: 11200000, max: 12050000, rate: 2 },
       { min: 12050000, max: 12950000, rate: 3 },
@@ -169,13 +176,13 @@ const BUPOTForm = ({
       { min: 561000000, max: 709000000, rate: 31 },
       { min: 709000000, max: 965000000, rate: 32 },
       { min: 965000000, max: 1419000000, rate: 33 },
-      { min: 1419000000, max: Infinity, rate: 34 }
+      { min: 1419000000, max: Infinity, rate: 34 },
     ],
   };
 
   const TEH = [
-    { min: 0, max: 450000, rate: 0},
-    { min: 450000, max: 2500000, rate: 0.5},
+    { min: 0, max: 450000, rate: 0 },
+    { min: 450000, max: 2500000, rate: 0.5 },
   ];
 
   const ps17 = [
@@ -183,7 +190,7 @@ const BUPOTForm = ({
     { min: 60000000, max: 310000000, rate: 15 },
     { min: 310000000, max: 810000000, rate: 25 },
     { min: 810000000, max: 5810000000, rate: 30 },
-    { min: 5810000000, max: Infinity, rate: 35 }
+    { min: 5810000000, max: Infinity, rate: 35 },
   ];
 
   const [countries, setCountries] = useState(
@@ -191,24 +198,45 @@ const BUPOTForm = ({
   );
 
   const getBupot = () => {
-  const pathSegments = location.pathname.split('/');
-  const bupotType = pathSegments.find(segment => 
-    ['bppu', 'bpnr', 'ps', 'psd', 'bp21', 'bp26', 'bpa1', 'bpa2', 'bpbpt', 'dsbp'].includes(segment)
-  );
-  
-  switch (bupotType) {
-    case 'bppu': return "BPPU";
-    case 'bpnr': return "BPNR";
-    case 'ps': return "Penyetoran Sendiri";
-    case 'psd': return "Pemotongan Secara Digunggung";
-    case 'bp21': return "BP 21";
-    case 'bp26': return "BP 26";
-    case 'bpa1': return "BP A1";
-    case 'bpa2': return "BP A2";
-    case 'bpbpt': return "Bukti Pemotongan Bulanan Pegawai Tetap";
-    default: return "DSBP";
-  }
-};
+    const pathSegments = location.pathname.split("/");
+    const bupotType = pathSegments.find((segment) =>
+      [
+        "bppu",
+        "bpnr",
+        "ps",
+        "psd",
+        "bp21",
+        "bp26",
+        "bpa1",
+        "bpa2",
+        "bpbpt",
+        "dsbp",
+      ].includes(segment)
+    );
+
+    switch (bupotType) {
+      case "bppu":
+        return "BPPU";
+      case "bpnr":
+        return "BPNR";
+      case "ps":
+        return "Penyetoran Sendiri";
+      case "psd":
+        return "Pemotongan Secara Digunggung";
+      case "bp21":
+        return "BP 21";
+      case "bp26":
+        return "BP 26";
+      case "bpa1":
+        return "BP A1";
+      case "bpa2":
+        return "BP A2";
+      case "bpbpt":
+        return "Bukti Pemotongan Bulanan Pegawai Tetap";
+      default:
+        return "DSBP";
+    }
+  };
 
   const currentBupot = getBupot();
 
@@ -376,8 +404,9 @@ const BUPOTForm = ({
   useEffect(() => {
     switch (currentBupot) {
       case "BPPU":
-        const bppuCalculation =
-          Math.round(formData.dasar_pengenaan_pajak * (formData.tarif_pajak / 100));
+        const bppuCalculation = Math.round(
+          formData.dasar_pengenaan_pajak * (formData.tarif_pajak / 100)
+        );
         updateFormData("pajak_penghasilan", bppuCalculation);
         break;
 
@@ -385,78 +414,97 @@ const BUPOTForm = ({
         const taxedRevenue =
           formData.dasar_pengenaan_pajak *
           (formData.persentase_penghasilan_bersih / 100);
-        const bpnrCalculation = Math.round(taxedRevenue * (formData.tarif_pajak / 100));
+        const bpnrCalculation = Math.round(
+          taxedRevenue * (formData.tarif_pajak / 100)
+        );
         updateFormData("pajak_penghasilan", bpnrCalculation);
         break;
 
       case "Penyetoran Sendiri":
         if (formData.kode_objek_pajak !== "28-411-01") {
-          const psCalculation =
-            Math.round(formData.dasar_pengenaan_pajak * (formData.tarif_pajak / 100));
+          const psCalculation = Math.round(
+            formData.dasar_pengenaan_pajak * (formData.tarif_pajak / 100)
+          );
           updateFormData("pajak_penghasilan", psCalculation);
         } else {
           const dppIndo = parseFloat(supportingFormData.dpp_indo) || 0;
           const dppLn = parseFloat(supportingFormData.dpp_ln) || 0;
           const dpp = dppIndo + dppLn;
-          
-          const penghasilanIndo = parseFloat(supportingFormData.penghasilan_indo) || 0;
-          const penghasilanLn = parseFloat(supportingFormData.penghasilan_ln) || 0;
+
+          const penghasilanIndo =
+            parseFloat(supportingFormData.penghasilan_indo) || 0;
+          const penghasilanLn =
+            parseFloat(supportingFormData.penghasilan_ln) || 0;
           const penghasilan = penghasilanIndo + penghasilanLn;
-          
-          const penghasilanKredit = parseFloat(supportingFormData.penghasilan_kredit) || 0;
-          const penghasilanDipotong = parseFloat(supportingFormData.penghasilan_dipotong) || 0;
+
+          const penghasilanKredit =
+            parseFloat(supportingFormData.penghasilan_kredit) || 0;
+          const penghasilanDipotong =
+            parseFloat(supportingFormData.penghasilan_dipotong) || 0;
           const pengurangan = penghasilanKredit + penghasilanDipotong;
-          
+
           const total = Math.round(penghasilan - pengurangan);
           updateMultipleFields({
             dasar_pengenaan_pajak: dpp,
             pajak_penghasilan: total,
-          })
+          });
           updateSupportingFormData("penghasilan_dibayar", total);
         }
         break;
 
       case "Pemotongan Secara Digunggung":
-        const psdCalculation =
-          Math.round(formData.dasar_pengenaan_pajak * (formData.tarif_pajak / 100));
+        const psdCalculation = Math.round(
+          formData.dasar_pengenaan_pajak * (formData.tarif_pajak / 100)
+        );
         updateFormData("pajak_penghasilan", psdCalculation);
         break;
-      
+
       case "BP 21":
         // get tarif dulu
-        const bp21Tarif = formData.fasilitas_pajak === "fasilitas_lainnya" ? formData.tarif_pajak : getTarif();
-        const bp21EffectiveIncome = formData.dasar_pengenaan_pajak * (formData.persentase_penghasilan_bersih / 100);
-        const bp21Calculation = Math.round(bp21Ps17Calculation(bp21Tarif, bp21EffectiveIncome));
+        const bp21Tarif =
+          formData.fasilitas_pajak === "fasilitas_lainnya"
+            ? formData.tarif_pajak
+            : getTarif();
+        const bp21EffectiveIncome =
+          formData.dasar_pengenaan_pajak *
+          (formData.persentase_penghasilan_bersih / 100);
+        const bp21Calculation = Math.round(
+          bp21Ps17Calculation(bp21Tarif, bp21EffectiveIncome)
+        );
         // const bp21Calculation = bp21EffectiveIncome * (bp21Tarif / 100);
         updateMultipleFields({
-            tarif_pajak: bp21Tarif,
-            pajak_penghasilan: bp21Calculation,
-          });
+          tarif_pajak: bp21Tarif,
+          pajak_penghasilan: bp21Calculation,
+        });
         break;
-      
+
       case "BP 26":
-          const bp26Tarif = formData.tarif_pajak;
-          const bp26EffectiveIncome = formData.dasar_pengenaan_pajak * (formData.persentase_penghasilan_bersih / 100);
-          const bp26Calculation = Math.round(bp26EffectiveIncome * (bp26Tarif / 100));
-          updateFormData("pajak_penghasilan", bp26Calculation);
+        const bp26Tarif = formData.tarif_pajak;
+        const bp26EffectiveIncome =
+          formData.dasar_pengenaan_pajak *
+          (formData.persentase_penghasilan_bersih / 100);
+        const bp26Calculation = Math.round(
+          bp26EffectiveIncome * (bp26Tarif / 100)
+        );
+        updateFormData("pajak_penghasilan", bp26Calculation);
         break;
 
       case "BP A1":
-
         break;
 
       case "BP A2":
-
         break;
 
       case "Bukti Pemotongan Bulanan Pegawai Tetap":
-          const bpbptTarif = bpbptGetTarif();
-          const bpbptCalculation = Math.round(formData.dasar_pengenaan_pajak * (bpbptTarif / 100));
-          console.log(bpbptTarif);
-          updateMultipleFields({
-            tarif_pajak: bpbptTarif,
-            pajak_penghasilan: bpbptCalculation,
-          });
+        const bpbptTarif = bpbptGetTarif();
+        const bpbptCalculation = Math.round(
+          formData.dasar_pengenaan_pajak * (bpbptTarif / 100)
+        );
+        console.log(bpbptTarif);
+        updateMultipleFields({
+          tarif_pajak: bpbptTarif,
+          pajak_penghasilan: bpbptCalculation,
+        });
         break;
 
       default:
@@ -478,24 +526,24 @@ const BUPOTForm = ({
     supportingFormData.penghasilan_dipotong,
   ]);
 
-  // Helper untuk BP 21 -> get cara perhitungan, get status TER, 
+  // Helper untuk BP 21 -> get cara perhitungan, get status TER,
   // Helper function to get TER category based on PTKP
   const getTer = (ptkpStatus) => {
-    return TER_DATA[ptkpStatus] || 'A';
+    return TER_DATA[ptkpStatus] || "A";
   };
 
   const getTarifByGolonganTer = (terCategory, penghasilanBruto) => {
     const brackets = TER_BRACKETS[terCategory];
     if (!brackets) return 0;
-    
+
     const income = parseFloat(penghasilanBruto) || 0;
-    
+
     for (const bracket of brackets) {
       if (income > bracket.min && income <= bracket.max) {
         return bracket.rate;
       }
     }
-    
+
     return 0;
   };
 
@@ -520,22 +568,36 @@ const BUPOTForm = ({
         return bracket.rate;
       }
     }
-  }
+  };
 
   const getTarif = () => {
     // Implement logic to get tarif based on currentBupot
     // Update formData accordingly
-    if ((formData.kode_objek_pajak === "21-100-35" || formData.kode_objek_pajak === "21-100-10" || formData.kode_objek_pajak === "21-100-27" || formData.kode_objek_pajak === "21-100-37") && formData.fasilitas_pajak !== "fasilitas_lainnya") {
+    if (
+      (formData.kode_objek_pajak === "21-100-35" ||
+        formData.kode_objek_pajak === "21-100-10" ||
+        formData.kode_objek_pajak === "21-100-27" ||
+        formData.kode_objek_pajak === "21-100-37") &&
+      formData.fasilitas_pajak !== "fasilitas_lainnya"
+    ) {
       const golonganTer = getTer(formData.ptkp_akun);
-      const tarifByGolonganTer = getTarifByGolonganTer(golonganTer, formData.dasar_pengenaan_pajak);
-      
+      const tarifByGolonganTer = getTarifByGolonganTer(
+        golonganTer,
+        formData.dasar_pengenaan_pajak
+      );
+
       return tarifByGolonganTer;
-    } else if (formData.kode_objek_pajak === "21-100-24" || formData.kode_objek_pajak === "21-100-29") {
+    } else if (
+      formData.kode_objek_pajak === "21-100-24" ||
+      formData.kode_objek_pajak === "21-100-29"
+    ) {
       const teh = getTeh(formData.dasar_pengenaan_pajak);
 
       return teh;
     } else {
-      const effectiveIncome = formData.dasar_pengenaan_pajak * (formData.persentase_penghasilan_bersih / 100);
+      const effectiveIncome =
+        formData.dasar_pengenaan_pajak *
+        (formData.persentase_penghasilan_bersih / 100);
       const ps17Rate = getPs17(effectiveIncome);
 
       return ps17Rate;
@@ -546,7 +608,14 @@ const BUPOTForm = ({
 
   // Helper BP21 calculation
   const bp21Ps17Calculation = (tarif, effectiveIncome) => {
-    if (formData.kode_objek_pajak === "21-100-35" || formData.kode_objek_pajak === "21-100-10" || formData.kode_objek_pajak === "21-100-27" || formData.kode_objek_pajak === "21-100-37" || formData.kode_objek_pajak === "21-100-24" || formData.kode_objek_pajak === "21-100-29") {
+    if (
+      formData.kode_objek_pajak === "21-100-35" ||
+      formData.kode_objek_pajak === "21-100-10" ||
+      formData.kode_objek_pajak === "21-100-27" ||
+      formData.kode_objek_pajak === "21-100-37" ||
+      formData.kode_objek_pajak === "21-100-24" ||
+      formData.kode_objek_pajak === "21-100-29"
+    ) {
       return effectiveIncome * (tarif / 100);
     } else {
       if (effectiveIncome > 0 && effectiveIncome <= 60000000) {
@@ -582,14 +651,19 @@ const BUPOTForm = ({
   // Helper Bupot Pegawai Tetap
   const bpbptGetTarif = () => {
     const golTerMP = getTer(formData.ptkp_akun);
-    const tarifByGolonganTerMP = getTarifByGolonganTer(golTerMP, formData.dasar_pengenaan_pajak);
+    const tarifByGolonganTerMP = getTarifByGolonganTer(
+      golTerMP,
+      formData.dasar_pengenaan_pajak
+    );
 
     return tarifByGolonganTerMP || 0;
-  }
+  };
 
   // set status
   useEffect(() => {
-    const newStatus = location.pathname.includes("/create") ? "normal" : "pembetulan";
+    const newStatus = location.pathname.includes("/create")
+      ? "normal"
+      : "pembetulan";
     if (formData.status !== newStatus) {
       updateFormData("status", newStatus);
     }
@@ -740,7 +814,8 @@ const BUPOTForm = ({
                 </div>
 
                 {/* Pegawai Asing */}
-                {(currentBupot === "Bukti Pemotongan Bulanan Pegawai Tetap" || currentBupot === "BP A1") && (
+                {(currentBupot === "Bukti Pemotongan Bulanan Pegawai Tetap" ||
+                  currentBupot === "BP A1") && (
                   <>
                     <div className="mt-4 flex justify-between gap-4">
                       <label className="w-64 flex-none block text-sm font-medium text-gray-700">
@@ -768,7 +843,8 @@ const BUPOTForm = ({
                   currentBupot === "BP 21" ||
                   currentBupot === "BP A1" ||
                   currentBupot === "BP A2" ||
-                  currentBupot === "Bukti Pemotongan Bulanan Pegawai Tetap") && (
+                  currentBupot ===
+                    "Bukti Pemotongan Bulanan Pegawai Tetap") && (
                   <div className="mt-4 flex justify-between gap-4">
                     <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                       NPWP
@@ -815,7 +891,8 @@ const BUPOTForm = ({
                   currentBupot === "BP 21" ||
                   currentBupot === "BP A1" ||
                   currentBupot === "BP A2" ||
-                  currentBupot === "Bukti Pemotongan Bulanan Pegawai Tetap") && (
+                  currentBupot ===
+                    "Bukti Pemotongan Bulanan Pegawai Tetap") && (
                   <div className="mt-4 flex justify-between gap-4">
                     <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                       Nama
@@ -857,7 +934,8 @@ const BUPOTForm = ({
                 )}
 
                 {/* Nomor Paspor */}
-                {(currentBupot === "Bukti Pemotongan Bulanan Pegawai Tetap" || currentBupot === "BP A1") && (
+                {(currentBupot === "Bukti Pemotongan Bulanan Pegawai Tetap" ||
+                  currentBupot === "BP A1") && (
                   <div className="mt-4 flex justify-between gap-4">
                     <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                       Nomor Paspor
@@ -883,7 +961,8 @@ const BUPOTForm = ({
                 )}
 
                 {/* Negara */}
-                {(currentBupot === "Bukti Pemotongan Bulanan Pegawai Tetap" || currentBupot === "BP A1") && (
+                {(currentBupot === "Bukti Pemotongan Bulanan Pegawai Tetap" ||
+                  currentBupot === "BP A1") && (
                   <div className="mt-4 flex justify-between gap-4">
                     <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                       Negara
@@ -1222,7 +1301,8 @@ const BUPOTForm = ({
                     </option>
                     {currentBupot === "Pemotongan Secara Digunggung" && (
                       <option value="surat_keterangan_bebas_pemotongan">
-                        Surat Keterangan Bebas (SKB) Pemotongan PPh atas Bunga atas Deposito Berjangka dan Tabungan
+                        Surat Keterangan Bebas (SKB) Pemotongan PPh atas Bunga
+                        atas Deposito Berjangka dan Tabungan
                       </option>
                     )}
                     <option value="tanpa_fasilitas">Tanpa Fasilitas</option>
@@ -1250,15 +1330,21 @@ const BUPOTForm = ({
                           nama_objek_pajak: selectedObject.nama_objek_pajak,
                           jenis_pajak: selectedObject.jenis_pajak,
                           kode_objek_pajak: selectedObject.kode_objek_pajak,
-                          tarif_pajak: formData.fasilitas_pajak === "surat_keterangan_bebas_pemotongan" ? 0 : selectedObject.tarif_pajak,
-                          sifat_pajak_penghasilan: selectedObject.sifat_pajak_penghasilan,
+                          tarif_pajak:
+                            formData.fasilitas_pajak ===
+                            "surat_keterangan_bebas_pemotongan"
+                              ? 0
+                              : selectedObject.tarif_pajak,
+                          sifat_pajak_penghasilan:
+                            selectedObject.sifat_pajak_penghasilan,
                           kap: selectedObject.kap,
                           dasar_pengenaan_pajak: 0,
                         };
 
                         // Only update persentase_penghasilan_bersih if current BUPOT is BP 21
                         if (currentBupot === "BP 21") {
-                          updates.persentase_penghasilan_bersih = selectedObject.persentase_penghasilan_bersih;
+                          updates.persentase_penghasilan_bersih =
+                            selectedObject.persentase_penghasilan_bersih;
                         }
 
                         updateMultipleFields(updates);
@@ -1556,17 +1642,21 @@ const BUPOTForm = ({
                   <input
                     type="text"
                     className="w-64 flex-auto border p-2 rounded"
-                    placeholder={currentBupot === "BP 21"
-                      ? "Penghasilan Bruto (Rp)"
-                      : "Dasar Pengenaan Pajak"}
+                    placeholder={
+                      currentBupot === "BP 21"
+                        ? "Penghasilan Bruto (Rp)"
+                        : "Dasar Pengenaan Pajak"
+                    }
                     value={formatRupiah(formData.dasar_pengenaan_pajak) || ""}
                     onChange={(e) => {
                       const rawValue = e.target.value.replace(/[^\d]/g, "");
                       const numericValue = parseFloat(rawValue) || 0;
                       // Check if it's one of the restricted object codes
-                      if ((formData.kode_objek_pajak === "21-100-24" || 
-                          formData.kode_objek_pajak === "21-100-29") && 
-                          numericValue > 2500000) {
+                      if (
+                        (formData.kode_objek_pajak === "21-100-24" ||
+                          formData.kode_objek_pajak === "21-100-29") &&
+                        numericValue > 2500000
+                      ) {
                         // Don't update if value exceeds maximum
                         return;
                       }
@@ -1576,12 +1666,13 @@ const BUPOTForm = ({
                       formData.kode_objek_pajak === "28-411-01" ? true : false
                     }
                   />
-                  {(formData.kode_objek_pajak === "21-100-24" || 
-                    formData.kode_objek_pajak === "21-100-29") && parseFloat(formData.dasar_pengenaan_pajak) > 2500000 && (
-                    <div className="text-sm text-gray-500 mt-1">
-                      Maksimal: Rp 2.500.000
-                    </div>
-                  )}
+                  {(formData.kode_objek_pajak === "21-100-24" ||
+                    formData.kode_objek_pajak === "21-100-29") &&
+                    parseFloat(formData.dasar_pengenaan_pajak) > 2500000 && (
+                      <div className="text-sm text-gray-500 mt-1">
+                        Maksimal: Rp 2.500.000
+                      </div>
+                    )}
                 </div>
 
                 {/* DPP (%) Khusus BP21 */}
@@ -1729,23 +1820,25 @@ const BUPOTForm = ({
                 </div>
 
                 {/* Recipient Number only if fasilitas_pajak = skd */}
-                {((currentBupot === "BPNR" && currentBupot === "BP 26") && formData.fasilitas_pajak === "surat_keterangan_domisili") && (
-                  <div className="mt-4 flex justify-between gap-4">
-                    <label className="w-64 flex-none block text-sm font-medium text-gray-700">
-                      Recipient Number
-                      <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      className="w-64 flex-auto border p-2 rounded"
-                      placeholder="Recipient Number"
-                      value={formData.recipient_number || ""}
-                      onChange={(e) => {
-                        updateFormData("recipient_number", e.target.value);
-                      }}
-                    />
-                  </div>
-                )}
+                {currentBupot === "BPNR" &&
+                  currentBupot === "BP 26" &&
+                  formData.fasilitas_pajak === "surat_keterangan_domisili" && (
+                    <div className="mt-4 flex justify-between gap-4">
+                      <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                        Recipient Number
+                        <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        className="w-64 flex-auto border p-2 rounded"
+                        placeholder="Recipient Number"
+                        value={formData.recipient_number || ""}
+                        onChange={(e) => {
+                          updateFormData("recipient_number", e.target.value);
+                        }}
+                      />
+                    </div>
+                  )}
 
                 {/* NPWP */}
                 <div className="mt-4 flex justify-between gap-4">
@@ -3026,15 +3119,21 @@ const BUPOTForm = ({
                           nama_objek_pajak: selectedObject.nama_objek_pajak,
                           jenis_pajak: selectedObject.jenis_pajak,
                           kode_objek_pajak: selectedObject.kode_objek_pajak,
-                          tarif_pajak: formData.fasilitas_pajak === "surat_keterangan_bebas_pemotongan" ? 0 : selectedObject.tarif_pajak,
-                          sifat_pajak_penghasilan: selectedObject.sifat_pajak_penghasilan,
+                          tarif_pajak:
+                            formData.fasilitas_pajak ===
+                            "surat_keterangan_bebas_pemotongan"
+                              ? 0
+                              : selectedObject.tarif_pajak,
+                          sifat_pajak_penghasilan:
+                            selectedObject.sifat_pajak_penghasilan,
                           kap: selectedObject.kap,
                           dasar_pengenaan_pajak: 0,
                         };
 
                         // Only update persentase_penghasilan_bersih if current BUPOT is BP 21
                         if (currentBupot === "BP 21") {
-                          updates.persentase_penghasilan_bersih = selectedObject.persentase_penghasilan_bersih;
+                          updates.persentase_penghasilan_bersih =
+                            selectedObject.persentase_penghasilan_bersih;
                         }
 
                         updateMultipleFields(updates);
@@ -3163,22 +3262,22 @@ const BUPOTForm = ({
                 </div>
 
                 {/* NITKU */}
-                  <div className="mt-4 flex justify-between gap-4">
-                    <label className="w-64 flex-none block text-sm font-medium text-gray-700">
-                      NITKU
-                      <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      className="w-64 flex-auto border p-2 rounded"
-                      placeholder="Nama"
-                      value={formData.nitku || ""}
-                      onChange={(e) => {
-                        updateFormData("nitku", e.target.value);
-                      }}
-                      readOnly={true}
-                    />
-                  </div>
+                <div className="mt-4 flex justify-between gap-4">
+                  <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                    NITKU
+                    <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="w-64 flex-auto border p-2 rounded"
+                    placeholder="Nama"
+                    value={formData.nitku || ""}
+                    onChange={(e) => {
+                      updateFormData("nitku", e.target.value);
+                    }}
+                    readOnly={true}
+                  />
+                </div>
 
                 {/* More fields as needed */}
               </div>

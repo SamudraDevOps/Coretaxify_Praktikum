@@ -25,17 +25,44 @@ const BUPOTRenderer = ({
   const location = useLocation();
 
   const getBupot = () => {
-    if (location.pathname.includes("/bppu")) return "BPPU";
-    if (location.pathname.includes("/bpnr")) return "BPNR";
-    if (location.pathname.includes("/ps")) return "Penyetoran Sendiri";
-    if (location.pathname.includes("/psd")) return "Pemotongan Secara Digunggung";
-    if (location.pathname.includes("/bp21")) return "BP 21";
-    if (location.pathname.includes("/bp26")) return "BP 26";
-    if (location.pathname.includes("/bpa1")) return "BP A1";
-    if (location.pathname.includes("/bpa2")) return "BP A2";
-    if (location.pathname.includes("/bpbpt")) return "BPBPT";
-    // if (location.pathname.includes("/dsbp")) return "DSBP";
-    return "DSBP";
+    const pathSegments = location.pathname.split("/");
+    const bupotType = pathSegments.find((segment) =>
+      [
+        "bppu",
+        "bpnr",
+        "ps",
+        "psd",
+        "bp21",
+        "bp26",
+        "bpa1",
+        "bpa2",
+        "bpbpt",
+        "dsbp",
+      ].includes(segment)
+    );
+
+    switch (bupotType) {
+      case "bppu":
+        return "BPPU";
+      case "bpnr":
+        return "BPNR";
+      case "ps":
+        return "Penyetoran Sendiri";
+      case "psd":
+        return "Pemotongan Secara Digunggung";
+      case "bp21":
+        return "BP 21";
+      case "bp26":
+        return "BP 26";
+      case "bpa1":
+        return "BP A1";
+      case "bpa2":
+        return "BP A2";
+      case "bpbpt":
+        return "Bukti Pemotongan Bulanan Pegawai Tetap";
+      default:
+        return "DSBP";
+    }
   };
 
   const currentBupot = getBupot();
