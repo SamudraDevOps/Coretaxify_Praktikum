@@ -50,6 +50,7 @@ const BuatKonsepSPT = () => {
     // console.log(queryData);
     return query;
   };
+
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["konsep_spt", queryData],
     queryFn: async () => {
@@ -120,6 +121,34 @@ const BuatKonsepSPT = () => {
       Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
     },
   });
+
+  const getMonthNumber = (monthName) => {
+    const months = {
+      Januari: "01",
+      Februari: "02",
+      Maret: "03",
+      April: "04",
+      Mei: "05",
+      Juni: "06",
+      Juli: "07",
+      Agustus: "08",
+      September: "09",
+      Oktober: "10",
+      November: "11",
+      Desember: "12",
+    };
+    return months[monthName] || "01";
+  };
+  const formatPeriodDisplay = () => {
+    if (selectedType === "ppn" && selectedMonth && selectedYear) {
+      const monthNumber = getMonthNumber(selectedMonth);
+      const date = new Date(`${selectedYear}-${monthNumber}-01`);
+      return `${date.toLocaleString("id-ID", {
+        month: "long",
+      })} ${selectedYear}`;
+    }
+    return "Belum dipilih";
+  };
 
   const showFormData = () => {
     const formData = {
@@ -508,7 +537,7 @@ const BuatKonsepSPT = () => {
                   </div>
                   <div>
                     Periode dan Tahun Pajak :{" "}
-                    <strong>
+                    {/* <strong>
                       {selectedType === "ppn" && selectedMonth && selectedYear
                         ? `${new Date(
                             `${selectedYear}-${selectedMonth}-01`
@@ -516,7 +545,8 @@ const BuatKonsepSPT = () => {
                             month: "long",
                           })} ${selectedYear}`
                         : "Belum dipilih"}
-                    </strong>
+                    </strong> */}
+                    <strong>{formatPeriodDisplay()}</strong>
                   </div>
                 </div>
 
@@ -600,17 +630,21 @@ const BuatKonsepSPT = () => {
                     </p>
                   )}
                   <Button
-                    disabled={selectedModelSPT === null || !selectedModelSPT}
+                    disabled={
+                      selectedModelSPT === null ||
+                      !selectedModelSPT ||
+                      createSpt.isPending
+                    }
                     className={cn(
                       "w-full md:w-auto",
-                      selectedModelSPT
+                      selectedModelSPT && !createSpt.isPending
                         ? "bg-yellow-400 hover:bg-yellow-500"
                         : "bg-gray-300 text-white cursor-not-allowed text-normal"
                     )}
                     // onClick={() => (window.location.href = getRedirectUrl())}
                     onClick={() => createSpt.mutate()}
                   >
-                    Buat Konsep SPT
+                    {createSpt.isPending ? "Membuat..." : "Buat Konsep SPT"}
                   </Button>
 
                   {/* <button onClick={showFormData}>form data test</button> */}

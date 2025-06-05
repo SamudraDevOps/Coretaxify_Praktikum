@@ -42,9 +42,10 @@ const KonsepSPT = ({ data, sidebar }) => {
           <div className="flex items-center gap-3">
             <button
               className="flex items-center bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-4 rounded"
-              onClick={() =>
-                (window.location.href = `/praktikum/${id}/sistem/${akun}/buat-konsep-spt`)
-              }
+              // onClick={() =>
+              //   (window.location.href = `/praktikum/${id}/sistem/${akun}/buat-konsep-spt`)
+              // }
+              onClick={() => navigate(`/praktikum/${id}/sistem/${akun}/buat-konsep-spt`)}
             >
               Buat Konsep SPT
             </button>
