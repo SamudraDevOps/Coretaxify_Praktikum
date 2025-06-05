@@ -947,6 +947,25 @@ const Main = () => {
           }
         />
         <Route
+          path="/praktikum/:id/sistem/:akun/riwayat-pembayaran"
+          // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/pembayaran`}
+                intent={"api.get.sudah.pembayaran"}
+                OrangPribadi={RiwayatBilling}
+                Badan={RiwayatBilling}
+                query={""}
+              ></RoleBasedRenderer>
+            </>
+            // <>
+            //   <Header />
+            //   <KonsepSPT />
+            // </>
+          }
+        />
+        <Route
           path="/pdf/faktur-keluaran"
           element={
             <>
