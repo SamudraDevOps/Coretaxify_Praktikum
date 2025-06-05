@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import BUPOTSidebar from "./BUPOTSidebar";
 import BUPOTActionBar from "./BUPOTActionBar";
 import BUPOTTable from "./BUPOTTable";
@@ -14,7 +14,10 @@ const BUPOTLayout = ({
   children,
   customTable,
   customActionBar,
+  onDataRefresh,
 }) => {
+  const [selectedItems, setSelectedItems] = useState([]);
+
   // Common columns for all BUPOT types
   const defaultColumns = [
     { key: "no", label: "No" },
@@ -31,13 +34,18 @@ const BUPOTLayout = ({
     { key: "fasilitas_pajak", label: "Fasilitas Pajak" },
   ];
 
+  const handleActionComplete = () => {
+    setSelectedItems([]);
+    onDataRefresh?.();
+  };
+
   return (
     <div className="flex">
       <BUPOTSidebar type={type} title={sidebarTitle} />
 
       <div className="w-full p-6 bg-gray-50 min-h-screen">
         {customActionBar || (
-          <BUPOTActionBar type={type} status={status} title={tableTitle} />
+          <BUPOTActionBar type={type} status={status} title={tableTitle} selectedItems={selectedItems} onActionComplete={handleActionComplete} />
         )}
 
         {customTable || (
@@ -45,6 +53,8 @@ const BUPOTLayout = ({
             columns={columns || defaultColumns}
             data={data}
             status={status}
+            selectedItems={selectedItems}
+            onSelectionChange={setSelectedItems}
           />
         )}
 

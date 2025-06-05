@@ -1,6 +1,6 @@
 import React from "react";
 import { useParams, useLocation } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 import { ClipLoader } from "react-spinners";
@@ -23,6 +23,7 @@ const BUPOTRenderer = ({
   const { id, akun, status } = useParams();
   const [cookies] = useCookies(["token"]);
   const location = useLocation();
+  const queryClient = useQueryClient();
 
   const getBupot = () => {
     const pathSegments = location.pathname.split("/");
@@ -83,6 +84,7 @@ const BUPOTRenderer = ({
     data: fetchedData,
     isLoading,
     error,
+    refetch,
   } = useQuery({
     queryKey: [queryKey || `bupot-${type}`, id, akun, currentStatus],
     queryFn: async () => {
@@ -108,6 +110,11 @@ const BUPOTRenderer = ({
 
   // Use provided data or fetched data
   const bupotData = fetchedData;
+
+  // Function to refresh data after actions
+  const handleDataRefresh = () => {
+    refetch();
+  };
 
   if (isLoading && !fetchedData) {
     return (
@@ -148,6 +155,7 @@ const BUPOTRenderer = ({
               titles.published || `EBUPOT ${type.toUpperCase()} ISSUED`
             }
             sidebarTitle={titles.sidebar || type.toUpperCase()}
+            onDataRefresh={handleDataRefresh}
           />
         );
       case "invalid":
@@ -162,6 +170,7 @@ const BUPOTRenderer = ({
               titles.invalid || `EBUPOT ${type.toUpperCase()} INVALID`
             }
             sidebarTitle={titles.sidebar || type.toUpperCase()}
+            onDataRefresh={handleDataRefresh}
           />
         );
       default:
@@ -176,6 +185,7 @@ const BUPOTRenderer = ({
               titles.belumTerbit || `EBUPOT ${type.toUpperCase()} NOT ISSUED`
             }
             sidebarTitle={titles.sidebar || type.toUpperCase()}
+            onDataRefresh={handleDataRefresh}
           />
         );
     }

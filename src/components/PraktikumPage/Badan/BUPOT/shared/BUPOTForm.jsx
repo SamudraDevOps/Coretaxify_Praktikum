@@ -355,7 +355,6 @@ const BUPOTForm = ({
         ["tipe_bupot"]: currentBupot,
         ["pembuat_id"]: getIdFromUrl(),
         ["status_penerbitan"]: "draft",
-        ["status"]: "valid",
       };
       setFormData(updatedFormData); // Update the state for future renders
       console.log(updatedFormData); // Log the updated data

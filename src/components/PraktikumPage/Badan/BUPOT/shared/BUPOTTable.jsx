@@ -5,18 +5,49 @@ const BUPOTTable = ({
   data = [],
   status = "belumTerbit",
   emptyMessage = "Tidak ada data yang ditemukan.",
+  selectedItems = [],
+  onSelectionChange,
 }) => {
+  // handle select all
+  const handleSelectAll = (e) => {
+    if (e.target.checked) {
+      const allIds = data.map(item => item.id);
+      onSelectionChange(allIds);
+    } else {
+      onSelectionChange([]);
+    }
+  };
+
+  const handleSelectItem = (itemId, checked) => {
+    if (checked) {
+      onSelectionChange([...selectedItems, itemId]);
+    } else {
+      onSelectionChange(selectedItems.filter(id => id !== itemId));
+    }
+  };
+
   // Different columns for "Telah Terbit" status
   const getColumns = () => {
-    if (status === "telahTerbit") {
+    const baseColumns = [
+      { key: "checkbox", label: (
+        <input
+          type="checkbox"
+          checked={selectedItems.length === data.length && data.length > 0}
+          onChange={handleSelectAll}
+        />
+      ) },
+      ...columns,
+    ];
+
+    if (status === "published") {
       return [
-        ...columns,
+        ...baseColumns,
         { key: "dilaporkanSPT", label: "Dilaporkan Dalam SPT" },
         { key: "sptTelahDiperiksa", label: "SPT telah/sedang diperiksa" },
         { key: "sptPenegakanHukum", label: "SPT Dalam penegakan hukum" },
       ];
     }
-    return columns;
+    return baseColumns;
   };
 
   const tableColumns = getColumns();
@@ -40,7 +71,17 @@ const BUPOTTable = ({
               <tr key={rowIndex}>
                 {tableColumns.map((column, colIndex) => (
                   <td key={colIndex} className="px-4 py-2 border">
-                    {column.key === "no" ? (rowIndex + 1) : row[column.key]}
+                    {column.key === "checkbox" ? (
+                      <input
+                        type="checkbox"
+                        checked={selectedItems.includes(row.id)}
+                        onChange={(e) => handleSelectItem(row.id, e.target.checked)}
+                      />
+                    ) : column.key === "no" ? (
+                      rowIndex + 1
+                    ) : (
+                      row[column.key]
+                    )}
                   </td>
                 ))}
               </tr>
