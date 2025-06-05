@@ -18,6 +18,8 @@ import { RoutesApi } from "@/Routes";
 import { useCookies } from "react-cookie";
 import { useParams } from "react-router";
 import Swal from "sweetalert2";
+import { PDFViewer } from "@react-pdf/renderer";
+import BillingCodePdf from "../../PDFTemplate/BillingCodeTemplate";
 
 const generateNTPN = () => {
   // 16 digit random number
@@ -26,7 +28,7 @@ const generateNTPN = () => {
   );
 };
 
-const DaftarKodeBilingBelumBayar = ({ data }) => {
+const DaftarKodeBilingBelumBayar = ({ data, sidebar }) => {
   const { id, akun } = useParams();
   const [openConfirm, setOpenConfirm] = useState(false);
   const [openNTPN, setOpenNTPN] = useState(false);
@@ -86,6 +88,18 @@ const DaftarKodeBilingBelumBayar = ({ data }) => {
       Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
     },
   });
+  const totalPembayaran =
+    data && data.length > 0
+      ? data.reduce((total, item) => total + (parseFloat(item.nilai) || 0), 0)
+      : 0;
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(amount);
+  };
 
   return (
     <div className="m-4 rounded-md">
@@ -99,13 +113,13 @@ const DaftarKodeBilingBelumBayar = ({ data }) => {
 
       {/* Table Headers */}
       <div className="flex flex-row mt-4 border-b p-3">
-        <div className="font-semibold mr-2">3812837197237812</div>
+        <div className="font-semibold mr-2">{sidebar.npwp_akun}</div>
         <div className="font-semibold mr-2">-</div>
-        <div className="font-normal">Putri Nuril Wulan</div>
+        <div className="font-normal">{sidebar.nama_akun}</div>
       </div>
       <div className="flex flex-col items-end mt-3 p-3 border-t ml-auto w-fit">
         <p>Total Pembayaran untuk Penagihan Aktif</p>
-        <p className="font-semibold mt-1">Rp 10.000.000</p>
+        <p className="font-semibold mt-1">{formatCurrency(totalPembayaran)}</p>
       </div>
       <div className="overflow-x-auto mt-4">
         <table className="min-w-full bg-white border border-gray-300 rounded-md shadow-md">
@@ -143,9 +157,48 @@ const DaftarKodeBilingBelumBayar = ({ data }) => {
                       {item.masa_bulan} {item.masa_tahun}
                     </td>
                     <td className="py-4 px-4 border-b space-x-2">
-                      <button className="bg-blue-100 text-blue-600 hover:bg-blue-200 hover:underline rounded px-3 py-1">
+                      {/* <button className="bg-blue-100 text-blue-600 hover:bg-blue-200 hover:underline rounded px-3 py-1">
                         Lihat
-                      </button>
+                      </button> */}
+                      <AlertDialog>
+                        <AlertDialogTrigger>
+                          <button className="bg-blue-100 text-blue-600 hover:bg-blue-200 hover:underline rounded px-3 py-1">
+                            Lihat PDF
+                          </button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent className="max-w-4xl max-h-[90vh] overflow-auto">
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>
+                              Preview Dokumen -{" "}
+                              {item.kode_billing || "Kode Billing"}
+                            </AlertDialogTitle>
+                            <AlertDialogDescription>
+                              Detail dokumen untuk NPWP: {item.npwp}
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+
+                          <div className="flex flex-col items-center space-y-4">
+                            <PDFViewer
+                              style={{
+                                width: "100%",
+                                height: "50vh",
+                                border: "none",
+                                backgroundColor: "hsl(var(--background))",
+                              }}
+                            >
+                              <BillingCodePdf data={item}></BillingCodePdf>
+                            </PDFViewer>
+                          </div>
+
+                          <AlertDialogFooter>
+                            <AlertDialogCancel
+                            // onClick={() => setOpenPdfPreview(false)}
+                            >
+                              Tutup
+                            </AlertDialogCancel>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
                       <AlertDialog>
                         <AlertDialogTrigger>
                           <button className="bg-red-100 text-red-600 hover:bg-red-200 hover:underline rounded px-3 py-1">
@@ -164,12 +217,12 @@ const DaftarKodeBilingBelumBayar = ({ data }) => {
                           </AlertDialogHeader>
                           <AlertDialogFooter>
                             <AlertDialogCancel
-                              onClick={() => setOpenConfirm(false)}
+                            // onClick={() => setOpenConfirm(false)}
                             >
                               Batal
                             </AlertDialogCancel>
                             <AlertDialogAction
-                              onClick={() => paySpt.mutate(item.id)}
+                            // onClick={() => paySpt.mutate(item.id)}
                             >
                               Setuju
                             </AlertDialogAction>

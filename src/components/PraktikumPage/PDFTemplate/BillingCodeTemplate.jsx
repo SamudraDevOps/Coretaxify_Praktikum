@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const BillingCodePdf = () => (
+const BillingCodePdf = ({ data }) => (
   <Document>
     <Page size="A4" style={styles.page}>
       {/* Header */}
@@ -159,25 +159,22 @@ const BillingCodePdf = () => (
         <Text style={{ fontWeight: "bold", fontSize: 11 }}>
           K O D E &nbsp; B I L L I N G
         </Text>
-        <Text style={styles.billingCode}>040827178527006</Text>
+        <Text style={styles.billingCode}>{data.kode_billing}</Text>
       </View>
 
       {/* Taxpayer Info */}
       <View style={styles.section}>
         <View style={styles.row}>
           <Text style={styles.label}>NPWP:</Text>
-          <Text style={styles.value}>0127905768623000</Text>
+          <Text style={styles.value}>{data.npwp}</Text>
         </View>
         <View style={styles.row}>
           <Text style={styles.label}>NAMA:</Text>
-          <Text style={styles.value}>SAMUDRA EDUKASI TEKNOLOGI</Text>
+          <Text style={styles.value}>{data.nama}</Text>
         </View>
         <View style={styles.row}>
           <Text style={styles.label}>ALAMAT:</Text>
-          <Text style={styles.value}>
-            BUKIT CEMARA TIDAR K1-14, KARANGBESUKI, SUKUN, KOTA MALANG, JAWA
-            TIMUR 65146
-          </Text>
+          <Text style={styles.value}>{data.alamat}</Text>
         </View>
         <View style={styles.row}>
           <Text style={styles.label}>MATA UANG:</Text>
@@ -185,7 +182,7 @@ const BillingCodePdf = () => (
         </View>
         <View style={styles.row}>
           <Text style={styles.label}>NOMINAL:</Text>
-          <Text style={styles.value}>Rp20.000,00</Text>
+          <Text style={styles.value}>{data.nilai}</Text>
         </View>
         <View style={styles.row}>
           <Text style={styles.label}>JUMLAH DETAIL:</Text>
@@ -214,13 +211,15 @@ const BillingCodePdf = () => (
 
           {/* Table Row */}
           <View style={styles.tableRow}>
-            <Text style={{ ...styles.tableCell, flex: 1.5 }}>411618-100</Text>
+            <Text style={{ ...styles.tableCell, flex: 1.5 }}>
+              {data.kapKjs}
+            </Text>
             <Text style={styles.tableCell}>01122025</Text>
             <Text style={styles.tableCell}>-</Text>
             <Text style={styles.tableCell}>-</Text>
             <Text style={styles.tableCell}>-</Text>
             <Text style={{ ...styles.tableCell, ...styles.lastCell }}>
-              Rp20.000,00
+              Rp{data.nilai}
             </Text>
           </View>
         </View>
@@ -234,7 +233,7 @@ const BillingCodePdf = () => (
           </View>
           <View style={{ width: "25%" }}>
             <Text style={{ fontWeight: "bold", textAlign: "right" }}>
-              Rp20.000,00
+              Rp{data.nilai}
             </Text>
           </View>
         </View>
@@ -257,7 +256,7 @@ const BillingCodePdf = () => (
         </View>
         <View style={styles.tableRow}>
           <Text style={{ ...styles.cell, flex: 1.5 }}>411618-100</Text>
-          <Text style={styles.cell}>01122025</Text>
+          <Text style={styles.cell}>{data.masa_pajak}</Text>
           <Text style={styles.cell}>-</Text>
           <Text style={styles.cell}>-</Text>
           <Text style={styles.cell}>-</Text>
@@ -265,7 +264,7 @@ const BillingCodePdf = () => (
         </View>
         <View style={styles.row}>
           <Text style={{ fontWeight: "bold" }}>TOTAL:</Text>
-          <Text style={{ marginLeft: 5 }}>Rp20.000,00</Text>
+          <Text style={{ marginLeft: 5 }}>Rp{data.nilai}</Text>
         </View>
         <Text>Terbilang: Dua Puluh Ribu Rupiah</Text>
       </View>
@@ -277,10 +276,10 @@ const BillingCodePdf = () => (
       {/* Highlight Billing Code Box */}
       <View style={styles.box}>
         <Text>KODE BILLING</Text>
-        <Text style={{ marginTop: 5 }}>{"040827178527006"}</Text>
+        <Text style={{ marginTop: 5 }}>{data.kode_billing}</Text>
       </View>
 
-      <Text style={styles.row}>MASA AKTIF: 24/05/2025 13:45:23</Text>
+      {/* <Text style={styles.row}>MASA AKTIF: 24/05/2025 13:45:23</Text> */}
 
       {/* Footer */}
       <Text style={styles.footer}>
