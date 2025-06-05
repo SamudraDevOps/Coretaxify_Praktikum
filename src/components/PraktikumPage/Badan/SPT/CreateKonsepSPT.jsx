@@ -356,8 +356,13 @@ const CreateKonsepSPT = ({ data }) => {
 
       console.log("Sending SPT data:", sptData); // Debug what's being sent
 
+      const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
+      // return axios.put(
+      //   `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/spt/${idSpt}/calculate-spt`,
+      //   sptData,
+
       return axios.put(
-        `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/spt/${idSpt}/calculate-spt`,
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${accountId}/spt/${idSpt}/calculate-spt`,
         sptData,
         {
           headers: {
@@ -424,8 +429,9 @@ const CreateKonsepSPT = ({ data }) => {
   const payDeposit = useMutation({
     mutationFn: async () => {
       const csrf = await getCsrf();
+      const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
       return axios.put(
-        `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/spt/${idSpt}`,
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${accountId}/spt/${idSpt}`,
         {},
         {
           headers: {
@@ -463,8 +469,9 @@ const CreateKonsepSPT = ({ data }) => {
   const payBilling = useMutation({
     mutationFn: async () => {
       const csrf = await getCsrf();
+      const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
       return axios.put(
-        `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/spt/${idSpt}`,
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${accountId}/spt/${idSpt}`,
         {},
         {
           headers: {
