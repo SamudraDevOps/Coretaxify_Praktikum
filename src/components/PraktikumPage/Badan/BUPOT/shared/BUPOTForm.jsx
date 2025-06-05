@@ -589,10 +589,10 @@ const BUPOTForm = ({
 
   // set status
   useEffect(() => {
-    updateFormData(
-      "status",
-      location.pathname.includes("/create") ? "normal" : "pembetulan"
-    );
+    const newStatus = location.pathname.includes("/create") ? "normal" : "pembetulan";
+    if (formData.status !== newStatus) {
+      updateFormData("status", newStatus);
+    }
   }, [formData]);
 
   return (
