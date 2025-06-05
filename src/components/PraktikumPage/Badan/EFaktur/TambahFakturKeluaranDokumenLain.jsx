@@ -55,15 +55,15 @@ const listSatuan = [
 const defaultTarifPPN = "12%";
 
 const kodeTransaksiOptions = [
-    { value: "1", label: "1 - Kepada selain pemungut PPN" },
-    { value: "2", label: "2 - Kepada Pemungut PPN instansi Pemerintahan" },
-    { value: "3", label: "3 - Kepada Pemungut PPN selain Instansi Pemerintahan" },
-    { value: "4", label: "4 - DPP Nilai lain" },
-    { value: "5", label: "5 - Besaran tertentu" },
-    { value: "6", label: "6 - Kepada Orang Pribadi Pemegang Paspor Luar Negeri ( 16E UU PPN)" },
-    { value: "7", label: "7 - penyerahan dengan fasilitas PPN atau PPN dan PPnBM tidak" },
-    { value: "8", label: "8 - penyerahan dengan fasilitas dibebaskan PPN atau PPN dan PPnBM" },
-    { value: "9", label: "9 - penyerahan aktiva yang menurut tujuan semula tidak diperjualbelikan (16D UU PPN)" },
+    { value: "01", label: "1 - Kepada selain pemungut PPN" },
+    { value: "02", label: "2 - Kepada Pemungut PPN instansi Pemerintahan" },
+    { value: "03", label: "3 - Kepada Pemungut PPN selain Instansi Pemerintahan" },
+    { value: "04", label: "4 - DPP Nilai lain" },
+    { value: "05", label: "5 - Besaran tertentu" },
+    { value: "06", label: "6 - Kepada Orang Pribadi Pemegang Paspor Luar Negeri ( 16E UU PPN)" },
+    { value: "07", label: "7 - penyerahan dengan fasilitas PPN atau PPN dan PPnBM tidak" },
+    { value: "08", label: "8 - penyerahan dengan fasilitas dibebaskan PPN atau PPN dan PPnBM" },
+    { value: "09", label: "9 - penyerahan aktiva yang menurut tujuan semula tidak diperjualbelikan (16D UU PPN)" },
     { value: "10", label: "10 - penyerahan lainnya" },
 ];
 
@@ -299,6 +299,24 @@ const TambahFakturKeluaranDokumenLain = () => {
                                 isClearable
                             />
                         </div>
+                        {(detilTransaksi?.value === "2" || detilTransaksi?.value === "3") && (
+                            <div className="space-y-2">
+                                <label className="text-sm font-medium text-gray-900">Kode</label>
+                                <input
+                                    type="text"
+                                    className="p-2 border rounded w-full bg-gray-100"
+                                    value={
+                                        detilTransaksi?.value === "2"
+                                            ? "EBPKPTB untuk ekspor BKP tidak berwujud"
+                                            : detilTransaksi?.value === "3"
+                                                ? "EJKP untuk ekspor JKP"
+                                                : ""
+                                    }
+                                    disabled
+                                    readOnly
+                                />
+                            </div>
+                        )}
                         <div className="space-y-2">
                             <label className="text-sm font-medium text-gray-900">Nomor Dokumen <span className="text-red-500">*</span></label>
                             <input type="text" className="p-2 border rounded w-full" />
@@ -373,312 +391,319 @@ const TambahFakturKeluaranDokumenLain = () => {
                 </div>
                 {showDetailTransaksiDokumenLain && (
                     <div className="border rounded-md p-4 mb-2 mr-3">
-                        <div className="border rounded-md p-4 mb-2 mr-3 grid grid-cols-3 gap-4 w-auto">
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium text-gray-900">DPP <span className="text-red-500">*</span></label>
-                                <input type="text" className="p-2 border rounded w-full" />
+                        {detilTransaksi?.value === "1" && (
+                            <div className="border rounded-md p-4 mb-2 mr-3 grid grid-cols-3 gap-4 w-auto">
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-gray-900">DPP <span className="text-red-500">*</span></label>
+                                    <input type="text" className="p-2 border rounded w-full" />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-gray-900">PPN <span className="text-red-500">*</span></label>
+                                    <input type="text" className="p-2 border rounded w-full" />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-gray-900">PPnBM <span className="text-red-500">*</span></label>
+                                    <input type="text" className="p-2 border rounded w-full" />
+                                </div>
                             </div>
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium text-gray-900">PPN <span className="text-red-500">*</span></label>
-                                <input type="text" className="p-2 border rounded w-full" />
-                            </div>
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium text-gray-900">PPnBM <span className="text-red-500">*</span></label>
-                                <input type="text" className="p-2 border rounded w-full" />
-                            </div>
-                        </div>
-                        {/* Tabel Transaksi */}
-                        <div className="mt-8">
-                            <div className="flex gap-2 mb-4">
-                                <AlertDialog>
-                                    <AlertDialogTrigger asChild>
-                                        <button className="flex items-center bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded">
-                                            Tambah
-                                        </button>
-                                    </AlertDialogTrigger>
-                                    <AlertDialogContent className="bg-white rounded-md shadow-md p-4 !min-w-[1000px]">
-                                        <AlertDialogHeader className="text-lg font-semibold ">
-                                            <AlertDialogTitle className="text-lg font-semibold border-b pb-2 w-full">
-                                                Tambah Transaksi
-                                            </AlertDialogTitle>
-                                        </AlertDialogHeader>
-                                        <div className="grid grid-cols-2 gap-6 w-full overflow-auto h-96">
-                                            {/* Kolom Kiri */}
-                                            <div className="space-y-4 h-full">
-                                                <div className="space-y-2">
-                                                    <label className="block text-sm font-medium">Tipe</label>
-                                                    <div className="grid grid-cols-2 gap-3">
-                                                        <div className="flex items-center gap-2">
-                                                            <label className="flex items-center gap-2">
-                                                                <input
-                                                                    type="radio"
-                                                                    name="tipe"
-                                                                    value="Barang"
-                                                                    checked={tipe === "Barang"}
-                                                                    onChange={handleTipeChange}
-                                                                />
-                                                                Barang
-                                                            </label>
+                        )}
+
+                        {(detilTransaksi?.value === "2" || detilTransaksi?.value === "3") && (
+                            <div className="border rounded-md p-4 mb-2 mr-3">
+                                {/* AlertDialog & Tabel Transaksi */}
+                                <div className="mt-8">
+                                    <div className="flex gap-2 mb-4">
+                                        <AlertDialog>
+                                            <AlertDialogTrigger asChild>
+                                                <button className="flex items-center bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded">
+                                                    Tambah
+                                                </button>
+                                            </AlertDialogTrigger>
+                                            <AlertDialogContent className="bg-white rounded-md shadow-md p-4 !min-w-[1000px]">
+                                                <AlertDialogHeader className="text-lg font-semibold ">
+                                                    <AlertDialogTitle className="text-lg font-semibold border-b pb-2 w-full">
+                                                        Tambah Transaksi
+                                                    </AlertDialogTitle>
+                                                </AlertDialogHeader>
+                                                <div className="grid grid-cols-2 gap-6 w-full overflow-auto h-96">
+                                                    {/* Kolom Kiri */}
+                                                    <div className="space-y-4 h-full">
+                                                        <div className="space-y-2">
+                                                            <label className="block text-sm font-medium">Tipe</label>
+                                                            <div className="grid grid-cols-2 gap-3">
+                                                                <div className="flex items-center gap-2">
+                                                                    <label className="flex items-center gap-2">
+                                                                        <input
+                                                                            type="radio"
+                                                                            name="tipe"
+                                                                            value="Barang"
+                                                                            checked={tipe === "Barang"}
+                                                                            onChange={handleTipeChange}
+                                                                        />
+                                                                        Barang
+                                                                    </label>
+                                                                </div>
+                                                                <div className="flex items-center gap-2">
+                                                                    <label className="flex items-center gap-2">
+                                                                        <input
+                                                                            type="radio"
+                                                                            name="tipe"
+                                                                            value="Jasa"
+                                                                            checked={tipe === "Jasa"}
+                                                                            onChange={handleTipeChange}
+                                                                        />
+                                                                        Jasa
+                                                                    </label>
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                        <div className="flex items-center gap-2">
-                                                            <label className="flex items-center gap-2">
-                                                                <input
-                                                                    type="radio"
-                                                                    name="tipe"
-                                                                    value="Jasa"
-                                                                    checked={tipe === "Jasa"}
-                                                                    onChange={handleTipeChange}
-                                                                />
-                                                                Jasa
-                                                            </label>
+                                                        {tipe && (
+                                                            <div>
+                                                                <label className="block text-sm font-medium">Kode Transaksi</label>
+                                                                <select
+                                                                    className="p-2 border rounded w-[250px] max-w-full"
+                                                                    value={selectedKode}
+                                                                    onChange={(e) => setSelectedKode(e.target.value)}
+                                                                >
+                                                                    <option value="">Pilih Kode Transaksi</option>
+                                                                    {listKode.map(item => (
+                                                                        <option key={item.id} value={item.kode}>
+                                                                            {item.kode} - {item.nama_transaksi}
+                                                                        </option>
+                                                                    ))}
+                                                                </select>
+                                                            </div>
+                                                        )}
+
+                                                        <div className="space-y-2">
+                                                            <label className="block text-sm font-medium">Nama </label>
+                                                            <input
+                                                                type="text"
+                                                                className="p-2 border rounded w-full"
+                                                                value={namaBarang}
+                                                                onChange={(e) => setNamaBarang(e.target.value)}
+                                                                placeholder="Masukkan nama barang/jasa"
+                                                            />
                                                         </div>
-                                                    </div>
-                                                </div>
-                                                {tipe && (
-                                                    <div>
-                                                        <label className="block text-sm font-medium">Kode Transaksi</label>
-                                                        <select
-                                                            className="p-2 border rounded w-[250px] max-w-full"
-                                                            value={selectedKode}
-                                                            onChange={(e) => setSelectedKode(e.target.value)}
-                                                        >
-                                                            <option value="">Pilih Kode Transaksi</option>
-                                                            {listKode.map(item => (
-                                                                <option key={item.id} value={item.kode}>
-                                                                    {item.kode} - {item.nama_transaksi}
-                                                                </option>
-                                                            ))}
-                                                        </select>
-                                                    </div>
-                                                )}
+                                                        {tipe && (
+                                                            <div className='space-y-2'>
+                                                                <label className='block text-sm font-medium'>Satuan</label>
+                                                                <select
+                                                                    className="p-2 border rounded w-[250px] max-w-full"
+                                                                    value={selectedSatuan}
+                                                                    onChange={(e) => setSelectedSatuan(e.target.value)}
+                                                                >
+                                                                    <option value="">Pilih Satuan</option>
+                                                                    {listSatuan.map(item => (
+                                                                        <option key={item.id} value={item.satuan}>
+                                                                            {item.satuan}
+                                                                        </option>
+                                                                    ))}
+                                                                </select>
+                                                            </div>
+                                                        )}
+                                                        <div className="space-y-2">
+                                                            <label className="block text-sm font-medium">Harga Satuan</label>
+                                                            <input
+                                                                type="text"
+                                                                className="p-2 border rounded w-full"
+                                                                value={harga}
+                                                                onChange={handleHargaChange}
+                                                                placeholder="Rp 0"
+                                                            />
+                                                        </div>
+                                                        <div className="space-y-2">
+                                                            <label className="block text-sm font-medium">Kuantitas</label>
+                                                            <input
+                                                                type="number"
+                                                                className="p-2 border rounded w-full"
+                                                                min="0"
+                                                                step="1"
+                                                                value={kuantitas === 0 ? '' : kuantitas}
+                                                                onChange={handleKuantitasChange}
+                                                                placeholder="0"
+                                                            />
+                                                        </div>
+                                                        <div className="space-y-2">
+                                                            <label className="block text-sm font-medium">Total Harga</label>
+                                                            <input
+                                                                type="text"
+                                                                className="p-2 border rounded w-full bg-gray-100"
+                                                                value={totalHarga}
+                                                                readOnly
+                                                                placeholder="Rp 0"
+                                                            />
+                                                        </div>
+                                                        <div className="space-y-2">
+                                                            <label className="block text-sm font-medium">Potongan Harga</label>
+                                                            <input
+                                                                type="text"
+                                                                className="p-2 border rounded w-full"
+                                                                value={potonganHarga}
+                                                                onChange={handlePotonganHargaChange}
+                                                                placeholder="Rp 0"
+                                                            />
+                                                        </div>
 
-                                                <div className="space-y-2">
-                                                    <label className="block text-sm font-medium">Nama </label>
-                                                    <input
-                                                        type="text"
-                                                        className="p-2 border rounded w-full"
-                                                        value={namaBarang}
-                                                        onChange={(e) => setNamaBarang(e.target.value)}
-                                                        placeholder="Masukkan nama barang/jasa"
-                                                    />
-                                                </div>
-                                                {tipe && (
-                                                    <div className='space-y-2'>
-                                                        <label className='block text-sm font-medium'>Satuan</label>
-                                                        <select
-                                                            className="p-2 border rounded w-[250px] max-w-full"
-                                                            value={selectedSatuan}
-                                                            onChange={(e) => setSelectedSatuan(e.target.value)}
-                                                        >
-                                                            <option value="">Pilih Satuan</option>
-                                                            {listSatuan.map(item => (
-                                                                <option key={item.id} value={item.satuan}>
-                                                                    {item.satuan}
-                                                                </option>
-                                                            ))}
-                                                        </select>
-                                                    </div>
-                                                )}
-                                                <div className="space-y-2">
-                                                    <label className="block text-sm font-medium">Harga Satuan</label>
-                                                    <input
-                                                        type="text"
-                                                        className="p-2 border rounded w-full"
-                                                        value={harga}
-                                                        onChange={handleHargaChange}
-                                                        placeholder="Rp 0"
-                                                    />
-                                                </div>
-                                                <div className="space-y-2">
-                                                    <label className="block text-sm font-medium">Kuantitas</label>
-                                                    <input
-                                                        type="number"
-                                                        className="p-2 border rounded w-full"
-                                                        min="0"
-                                                        step="1"
-                                                        value={kuantitas === 0 ? '' : kuantitas}
-                                                        onChange={handleKuantitasChange}
-                                                        placeholder="0"
-                                                    />
-                                                </div>
-                                                <div className="space-y-2">
-                                                    <label className="block text-sm font-medium">Total Harga</label>
-                                                    <input
-                                                        type="text"
-                                                        className="p-2 border rounded w-full bg-gray-100"
-                                                        value={totalHarga}
-                                                        readOnly
-                                                        placeholder="Rp 0"
-                                                    />
-                                                </div>
-                                                <div className="space-y-2">
-                                                    <label className="block text-sm font-medium">Potongan Harga</label>
-                                                    <input
-                                                        type="text"
-                                                        className="p-2 border rounded w-full"
-                                                        value={potonganHarga}
-                                                        onChange={handlePotonganHargaChange}
-                                                        placeholder="Rp 0"
-                                                    />
-                                                </div>
-
-                                            </div>
-
-                                            {/* Kolom Kanan */}
-                                            <div className="space-y-4 h-full ">
-                                                <div className="space-y-2">
-                                                    <label className="block text-sm font-medium">DPP</label>
-                                                    <input
-                                                        type="text"
-                                                        className="p-2 border rounded w-full bg-gray-100"
-                                                        value={dpp}
-                                                        onChange={handleDppChange}
-                                                        readOnly
-                                                        placeholder="Rp 0"
-                                                    />
-                                                </div>
-                                                <div className="space-y-2">
-                                                    <div className="flex items-center gap-2 ">
-                                                        <input
-                                                            type="checkbox"
-                                                            className="justify-start p-3 border rounded"
-                                                            checked={isChecked}
-                                                            onChange={handleCheckboxChange}
-                                                            disabled={kodeTransaksi === "01"}
-                                                        />
-                                                        <label className="block text-sm font-medium">
-                                                            DPP Nilai Lain / DPP
-                                                        </label>
                                                     </div>
 
-                                                    <div className="space-y-2">
-                                                        <label className="block text-sm font-medium"></label>
-                                                        <input
-                                                            type="text"
-                                                            className={`
+                                                    {/* Kolom Kanan */}
+                                                    <div className="space-y-4 h-full ">
+                                                        <div className="space-y-2">
+                                                            <label className="block text-sm font-medium">DPP</label>
+                                                            <input
+                                                                type="text"
+                                                                className="p-2 border rounded w-full bg-gray-100"
+                                                                value={dpp}
+                                                                onChange={handleDppChange}
+                                                                readOnly
+                                                                placeholder="Rp 0"
+                                                            />
+                                                        </div>
+                                                        <div className="space-y-2">
+                                                            <div className="flex items-center gap-2 ">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    className="justify-start p-3 border rounded"
+                                                                    checked={isChecked}
+                                                                    onChange={handleCheckboxChange}
+                                                                    disabled={kodeTransaksi === "01"}
+                                                                />
+                                                                <label className="block text-sm font-medium">
+                                                                    DPP Nilai Lain / DPP
+                                                                </label>
+                                                            </div>
+
+                                                            <div className="space-y-2">
+                                                                <label className="block text-sm font-medium"></label>
+                                                                <input
+                                                                    type="text"
+                                                                    className={`
                                                                                             p-2 border rounded w-full
                                                                                             ${isChecked ? '' : 'bg-gray-100'}
                                                                                         `}
-                                                            value={jumlah}
-                                                            onChange={handleJumlahChange}
-                                                            disabled={!isChecked}
-                                                            placeholder="Rp 0"
-                                                        />
-                                                    </div>
-                                                    <div className="space-y-2">
-                                                        <label className="block text-sm font-medium">PPN</label>
-                                                        <input
-                                                            type="text"
-                                                            className="p-2 border rounded w-full bg-gray-100"
-                                                            value="12%"
-                                                            readOnly
-                                                        />
-                                                    </div>
-                                                    <div className="space-y-2">
-                                                        <label className="block text-sm font-medium">Tarif PPN</label>
-                                                        <input
-                                                            type="text"
-                                                            className="p-2 border rounded w-full bg-gray-100"
-                                                            value={tarifPPN}
-                                                            readOnly
-                                                            placeholder="Rp 0"
-                                                        />
-                                                    </div>
-                                                    <div className="space-y-2">
-                                                        <label className="block text-sm font-medium">Tarif PPnBM (%)</label>
-                                                        <input
-                                                            type="text"
-                                                            className="p-2 border rounded w-full"
-                                                            value={tarifPPnBM}
-                                                            onChange={handleTarifPPnBMChange}
-                                                            placeholder="Masukkan persen"
-                                                        />
-                                                    </div>
-                                                    <div className="space-y-2">
-                                                        <label className="block text-sm font-medium">PPnBM</label>
-                                                        <input
-                                                            type="text"
-                                                            className="p-2 border rounded w-full"
-                                                            value={ppnBM}
-                                                            onChange={handlePPnBMChange}
-                                                            placeholder="Rp 0"
-                                                        />
+                                                                    value={jumlah}
+                                                                    onChange={handleJumlahChange}
+                                                                    disabled={!isChecked}
+                                                                    placeholder="Rp 0"
+                                                                />
+                                                            </div>
+                                                            <div className="space-y-2">
+                                                                <label className="block text-sm font-medium">PPN</label>
+                                                                <input
+                                                                    type="text"
+                                                                    className="p-2 border rounded w-full bg-gray-100"
+                                                                    value="12%"
+                                                                    readOnly
+                                                                />
+                                                            </div>
+                                                            <div className="space-y-2">
+                                                                <label className="block text-sm font-medium">Tarif PPN</label>
+                                                                <input
+                                                                    type="text"
+                                                                    className="p-2 border rounded w-full bg-gray-100"
+                                                                    value={tarifPPN}
+                                                                    readOnly
+                                                                    placeholder="Rp 0"
+                                                                />
+                                                            </div>
+                                                            <div className="space-y-2">
+                                                                <label className="block text-sm font-medium">Tarif PPnBM (%)</label>
+                                                                <input
+                                                                    type="text"
+                                                                    className="p-2 border rounded w-full"
+                                                                    value={tarifPPnBM}
+                                                                    onChange={handleTarifPPnBMChange}
+                                                                    placeholder="Masukkan persen"
+                                                                />
+                                                            </div>
+                                                            <div className="space-y-2">
+                                                                <label className="block text-sm font-medium">PPnBM</label>
+                                                                <input
+                                                                    type="text"
+                                                                    className="p-2 border rounded w-full"
+                                                                    value={ppnBM}
+                                                                    onChange={handlePPnBMChange}
+                                                                    placeholder="Rp 0"
+                                                                />
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <AlertDialogFooter className="flex justify-end mt-6 space-x-2">
-                                            <AlertDialogCancel
-                                                className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600"
-                                                onClick={resetForm}
-                                            >
-                                                Batal
-                                            </AlertDialogCancel>
-                                            <AlertDialogAction
-                                                className="bg-blue-900 text-white px-4 py-2 rounded-md hover:bg-blue-950"
-                                                onClick={handleSimpanTransaksi}
-                                            >
-                                                Simpan
-                                            </AlertDialogAction>
-                                        </AlertDialogFooter>
-                                    </AlertDialogContent>
-                                </AlertDialog>
-                                <button
-                                    type="button"
-                                    className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-                                    disabled
-                                >
-                                    Hapus Transaksi
-                                </button>
+                                                <AlertDialogFooter className="flex justify-end mt-6 space-x-2">
+                                                    <AlertDialogCancel
+                                                        className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600"
+                                                        onClick={resetForm}
+                                                    >
+                                                        Batal
+                                                    </AlertDialogCancel>
+                                                    <AlertDialogAction
+                                                        className="bg-blue-900 text-white px-4 py-2 rounded-md hover:bg-blue-950"
+                                                        onClick={handleSimpanTransaksi}
+                                                    >
+                                                        Simpan
+                                                    </AlertDialogAction>
+                                                </AlertDialogFooter>
+                                            </AlertDialogContent>
+                                        </AlertDialog>
+                                        <button
+                                            type="button"
+                                            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+                                            disabled
+                                        >
+                                            Hapus Transaksi
+                                        </button>
+                                    </div>
+                                    <div className="overflow-x-auto">
+                                        <table className="min-w-full border border-gray-300 rounded text-sm">
+                                            <thead className="bg-gray-200">
+                                                <tr>
+                                                    <th className="p-2 border">Tipe</th>
+                                                    <th className="p-2 border">Nama</th>
+                                                    <th className="p-2 border">Kuantitas</th>
+                                                    <th className="p-2 border">Satuan</th>
+                                                    <th className="p-2 border">Harga Satuan</th>
+                                                    <th className="p-2 border">Total Harga</th>
+                                                    <th className="p-2 border">Potongan Harga</th>
+                                                    <th className="p-2 border">Tarif PPN</th>
+                                                    <th className="p-2 border">DPP</th>
+                                                    <th className="p-2 border">PPN</th>
+                                                    <th className="p-2 border">PPnBM</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {dummyRows.map((row, idx) => (
+                                                    <tr key={idx} className="even:bg-gray-50">
+                                                        <td className="p-2 border">{row.tipe}</td>
+                                                        <td className="p-2 border">{row.nama}</td>
+                                                        <td className="p-2 border">{row.kuantitas}</td>
+                                                        <td className="p-2 border">{row.satuan}</td>
+                                                        <td className="p-2 border">{row.hargaSatuan.toLocaleString('id-ID')}</td>
+                                                        <td className="p-2 border">{row.totalHarga.toLocaleString('id-ID')}</td>
+                                                        <td className="p-2 border">{row.potonganHarga.toLocaleString('id-ID')}</td>
+                                                        <td className="p-2 border">{row.tarifPPN}</td>
+                                                        <td className="p-2 border">{row.DPP.toLocaleString('id-ID')}</td>
+                                                        <td className="p-2 border">{row.PPN.toLocaleString('id-ID')}</td>
+                                                        <td className="p-2 border">{row.PPnBM.toLocaleString('id-ID')}</td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                            <tfoot>
+                                                <tr className="font-semibold bg-gray-100">
+                                                    <td className="p-2 border text-right" colSpan={5}>Jumlah</td>
+                                                    <td className="p-2 border">{totalTotalHarga.toLocaleString('id-ID')}</td>
+                                                    <td className="p-2 border">{totalPotonganHarga.toLocaleString('id-ID')}</td>
+                                                    <td className="p-2 border"></td>
+                                                    <td className="p-2 border">{totalDPP.toLocaleString('id-ID')}</td>
+                                                    <td className="p-2 border">{totalPPN.toLocaleString('id-ID')}</td>
+                                                    <td className="p-2 border"></td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
-                            <div className="overflow-x-auto">
-                                <table className="min-w-full border border-gray-300 rounded text-sm">
-                                    <thead className="bg-gray-200">
-                                        <tr>
-                                            <th className="p-2 border">Tipe</th>
-                                            <th className="p-2 border">Nama</th>
-                                            <th className="p-2 border">Kuantitas</th>
-                                            <th className="p-2 border">Satuan</th>
-                                            <th className="p-2 border">Harga Satuan</th>
-                                            <th className="p-2 border">Total Harga</th>
-                                            <th className="p-2 border">Potongan Harga</th>
-                                            <th className="p-2 border">Tarif PPN</th>
-                                            <th className="p-2 border">DPP</th>
-                                            <th className="p-2 border">PPN</th>
-                                            <th className="p-2 border">PPnBM</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {dummyRows.map((row, idx) => (
-                                            <tr key={idx} className="even:bg-gray-50">
-                                                <td className="p-2 border">{row.tipe}</td>
-                                                <td className="p-2 border">{row.nama}</td>
-                                                <td className="p-2 border">{row.kuantitas}</td>
-                                                <td className="p-2 border">{row.satuan}</td>
-                                                <td className="p-2 border">{row.hargaSatuan.toLocaleString('id-ID')}</td>
-                                                <td className="p-2 border">{row.totalHarga.toLocaleString('id-ID')}</td>
-                                                <td className="p-2 border">{row.potonganHarga.toLocaleString('id-ID')}</td>
-                                                <td className="p-2 border">{row.tarifPPN}</td>
-                                                <td className="p-2 border">{row.DPP.toLocaleString('id-ID')}</td>
-                                                <td className="p-2 border">{row.PPN.toLocaleString('id-ID')}</td>
-                                                <td className="p-2 border">{row.PPnBM.toLocaleString('id-ID')}</td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                    <tfoot>
-                                        <tr className="font-semibold bg-gray-100">
-                                            <td className="p-2 border text-right" colSpan={5}>Jumlah</td>
-                                            <td className="p-2 border">{totalTotalHarga.toLocaleString('id-ID')}</td>
-                                            <td className="p-2 border">{totalPotonganHarga.toLocaleString('id-ID')}</td>
-                                            <td className="p-2 border"></td>
-                                            <td className="p-2 border">{totalDPP.toLocaleString('id-ID')}</td>
-                                            <td className="p-2 border">{totalPPN.toLocaleString('id-ID')}</td>
-                                            <td className="p-2 border"></td>
-                                        </tr>
-                                    </tfoot>
-                                </table>
-                            </div>
-                        </div>
+                        )}
                     </div>
                 )}
             </div>
