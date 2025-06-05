@@ -205,7 +205,7 @@ const BUPOTForm = ({
     case 'bp26': return "BP 26";
     case 'bpa1': return "BP A1";
     case 'bpa2': return "BP A2";
-    case 'bpbpt': return "BPBPT";
+    case 'bpbpt': return "Bukti Pemotongan Bulanan Pegawai Tetap";
     default: return "DSBP";
   }
 };
@@ -377,7 +377,7 @@ const BUPOTForm = ({
     switch (currentBupot) {
       case "BPPU":
         const bppuCalculation =
-          formData.dasar_pengenaan_pajak * (formData.tarif_pajak / 100);
+          Math.round(formData.dasar_pengenaan_pajak * (formData.tarif_pajak / 100));
         updateFormData("pajak_penghasilan", bppuCalculation);
         break;
 
@@ -385,14 +385,14 @@ const BUPOTForm = ({
         const taxedRevenue =
           formData.dasar_pengenaan_pajak *
           (formData.persentase_penghasilan_bersih / 100);
-        const bpnrCalculation = taxedRevenue * (formData.tarif_pajak / 100);
+        const bpnrCalculation = Math.round(taxedRevenue * (formData.tarif_pajak / 100));
         updateFormData("pajak_penghasilan", bpnrCalculation);
         break;
 
       case "Penyetoran Sendiri":
         if (formData.kode_objek_pajak !== "28-411-01") {
           const psCalculation =
-            formData.dasar_pengenaan_pajak * (formData.tarif_pajak / 100);
+            Math.round(formData.dasar_pengenaan_pajak * (formData.tarif_pajak / 100));
           updateFormData("pajak_penghasilan", psCalculation);
         } else {
           const dppIndo = parseFloat(supportingFormData.dpp_indo) || 0;
@@ -407,7 +407,7 @@ const BUPOTForm = ({
           const penghasilanDipotong = parseFloat(supportingFormData.penghasilan_dipotong) || 0;
           const pengurangan = penghasilanKredit + penghasilanDipotong;
           
-          const total = penghasilan - pengurangan;
+          const total = Math.round(penghasilan - pengurangan);
           updateMultipleFields({
             dasar_pengenaan_pajak: dpp,
             pajak_penghasilan: total,
@@ -418,7 +418,7 @@ const BUPOTForm = ({
 
       case "Pemotongan Secara Digunggung":
         const psdCalculation =
-          formData.dasar_pengenaan_pajak * (formData.tarif_pajak / 100);
+          Math.round(formData.dasar_pengenaan_pajak * (formData.tarif_pajak / 100));
         updateFormData("pajak_penghasilan", psdCalculation);
         break;
       
@@ -426,7 +426,7 @@ const BUPOTForm = ({
         // get tarif dulu
         const bp21Tarif = formData.fasilitas_pajak === "fasilitas_lainnya" ? formData.tarif_pajak : getTarif();
         const bp21EffectiveIncome = formData.dasar_pengenaan_pajak * (formData.persentase_penghasilan_bersih / 100);
-        const bp21Calculation = parseInt(bp21Ps17Calculation(bp21Tarif, bp21EffectiveIncome));
+        const bp21Calculation = Math.round(bp21Ps17Calculation(bp21Tarif, bp21EffectiveIncome));
         // const bp21Calculation = bp21EffectiveIncome * (bp21Tarif / 100);
         updateMultipleFields({
             tarif_pajak: bp21Tarif,
@@ -437,7 +437,7 @@ const BUPOTForm = ({
       case "BP 26":
           const bp26Tarif = formData.tarif_pajak;
           const bp26EffectiveIncome = formData.dasar_pengenaan_pajak * (formData.persentase_penghasilan_bersih / 100);
-          const bp26Calculation = bp26EffectiveIncome * (bp26Tarif / 100);
+          const bp26Calculation = Math.round(bp26EffectiveIncome * (bp26Tarif / 100));
           updateFormData("pajak_penghasilan", bp26Calculation);
         break;
 
@@ -449,8 +449,14 @@ const BUPOTForm = ({
 
         break;
 
-      case "BPBPT":
-
+      case "Bukti Pemotongan Bulanan Pegawai Tetap":
+          const bpbptTarif = bpbptGetTarif();
+          const bpbptCalculation = Math.round(formData.dasar_pengenaan_pajak * (bpbptTarif / 100));
+          console.log(bpbptTarif);
+          updateMultipleFields({
+            tarif_pajak: bpbptTarif,
+            pajak_penghasilan: bpbptCalculation,
+          });
         break;
 
       default:
@@ -571,10 +577,15 @@ const BUPOTForm = ({
         return total;
       }
     }
-  
-    
-    
   };
+
+  // Helper Bupot Pegawai Tetap
+  const bpbptGetTarif = () => {
+    const golTerMP = getTer(formData.ptkp_akun);
+    const tarifByGolonganTerMP = getTarifByGolonganTer(golTerMP, formData.dasar_pengenaan_pajak);
+
+    return tarifByGolonganTerMP || 0;
+  }
 
   // set status
   useEffect(() => {
@@ -582,7 +593,7 @@ const BUPOTForm = ({
       "status",
       location.pathname.includes("/create") ? "normal" : "pembetulan"
     );
-  }, [formData.masa_awal]);
+  }, [formData]);
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -617,7 +628,7 @@ const BUPOTForm = ({
                 {/* Form fields for Informasi Umum */}
 
                 {/* Bekerja di Lebih dari Satu Pemberi Kerja */}
-                {(currentBupot === "BPBPT" || currentBupot === "BP A1") && (
+                {(currentBupot === "BP A2" || currentBupot === "BP A1") && (
                   <>
                     <div className="mt-4 flex justify-between gap-4">
                       <label className="w-64 flex-none block text-sm font-medium text-gray-700">
@@ -729,7 +740,7 @@ const BUPOTForm = ({
                 </div>
 
                 {/* Pegawai Asing */}
-                {(currentBupot === "BPBPT" || currentBupot === "BP A1") && (
+                {(currentBupot === "Bukti Pemotongan Bulanan Pegawai Tetap" || currentBupot === "BP A1") && (
                   <>
                     <div className="mt-4 flex justify-between gap-4">
                       <label className="w-64 flex-none block text-sm font-medium text-gray-700">
@@ -757,7 +768,7 @@ const BUPOTForm = ({
                   currentBupot === "BP 21" ||
                   currentBupot === "BP A1" ||
                   currentBupot === "BP A2" ||
-                  currentBupot === "BPBPT") && (
+                  currentBupot === "Bukti Pemotongan Bulanan Pegawai Tetap") && (
                   <div className="mt-4 flex justify-between gap-4">
                     <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                       NPWP
@@ -777,6 +788,7 @@ const BUPOTForm = ({
                           updateMultipleFields({
                             npwp_akun: selectedObject.npwp_akun,
                             nama_akun: selectedObject.nama_akun,
+                            alamat_utama_akun: selectedObject.alamat_utama_akun,
                             nitku:
                               selectedObject.npwp_akun +
                               "000000 - " +
@@ -803,7 +815,7 @@ const BUPOTForm = ({
                   currentBupot === "BP 21" ||
                   currentBupot === "BP A1" ||
                   currentBupot === "BP A2" ||
-                  currentBupot === "BPBPT") && (
+                  currentBupot === "Bukti Pemotongan Bulanan Pegawai Tetap") && (
                   <div className="mt-4 flex justify-between gap-4">
                     <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                       Nama
@@ -823,7 +835,7 @@ const BUPOTForm = ({
                 )}
 
                 {/* Alamat */}
-                {(currentBupot === "BPBPT" ||
+                {(currentBupot === "Bukti Pemotongan Bulanan Pegawai Tetap" ||
                   currentBupot === "BP A1" ||
                   currentBupot === "BP A2") && (
                   <div className="mt-4 flex justify-between gap-4">
@@ -845,7 +857,7 @@ const BUPOTForm = ({
                 )}
 
                 {/* Nomor Paspor */}
-                {(currentBupot === "BPBPT" || currentBupot === "BP A1") && (
+                {(currentBupot === "Bukti Pemotongan Bulanan Pegawai Tetap" || currentBupot === "BP A1") && (
                   <div className="mt-4 flex justify-between gap-4">
                     <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                       Nomor Paspor
@@ -871,7 +883,7 @@ const BUPOTForm = ({
                 )}
 
                 {/* Negara */}
-                {(currentBupot === "BPBPT" || currentBupot === "BP A1") && (
+                {(currentBupot === "Bukti Pemotongan Bulanan Pegawai Tetap" || currentBupot === "BP A1") && (
                   <div className="mt-4 flex justify-between gap-4">
                     <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                       Negara
@@ -968,7 +980,7 @@ const BUPOTForm = ({
                 )}
 
                 {/* Status PTKP */}
-                {(currentBupot === "BPBPT" ||
+                {(currentBupot === "Bukti Pemotongan Bulanan Pegawai Tetap" ||
                   currentBupot === "BP A1" ||
                   currentBupot === "BP A2") && (
                   <div className="mt-4 flex justify-between gap-4">
@@ -998,7 +1010,7 @@ const BUPOTForm = ({
                 )}
 
                 {/* Posisi */}
-                {(currentBupot === "BPBPT" ||
+                {(currentBupot === "Bukti Pemotongan Bulanan Pegawai Tetap" ||
                   currentBupot === "BP A1" ||
                   currentBupot === "BP A2") && (
                   <div className="mt-4 flex justify-between gap-4">
@@ -1014,7 +1026,6 @@ const BUPOTForm = ({
                       onChange={(e) => {
                         updateFormData("posisi_akun", e.target.value);
                       }}
-                      readOnly={true}
                     />
                   </div>
                 )}
@@ -1221,7 +1232,7 @@ const BUPOTForm = ({
                 {/* Nama Objek Pajak */}
                 <div className="mt-4 flex justify-between gap-4">
                   <label className="w-64 flex-none block text-sm font-medium text-gray-700">
-                    Nama Objek Pajak (Under Construction)
+                    Nama Objek Pajak
                     <span className="text-red-500">*</span>
                   </label>
                   <select
@@ -1718,7 +1729,7 @@ const BUPOTForm = ({
                 </div>
 
                 {/* Recipient Number only if fasilitas_pajak = skd */}
-                {(currentBupot === "BPNR" && formData.fasilitas_pajak === "surat_keterangan_domisili") && (
+                {((currentBupot === "BPNR" && currentBupot === "BP 26") && formData.fasilitas_pajak === "surat_keterangan_domisili") && (
                   <div className="mt-4 flex justify-between gap-4">
                     <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                       Recipient Number
@@ -2997,21 +3008,48 @@ const BUPOTForm = ({
                 {/* Nama Objek Pajak */}
                 <div className="mt-4 flex justify-between gap-4">
                   <label className="w-64 flex-none block text-sm font-medium text-gray-700">
-                    Nama Objek Pajak (Under Construction)
+                    Nama Objek Pajak
                     <span className="text-red-500">*</span>
                   </label>
                   <select
                     className="w-64 flex-auto border p-2 rounded appearance-none"
                     value={formData.nama_objek_pajak || ""}
-                    onChange={(e) =>
-                      updateFormData("nama_objek_pajak", e.target.value)
-                    }
-                    placehoder="Please Select"
+                    onChange={(e) => {
+                      const selectedValue = e.target.value;
+
+                      const selectedObject = objekPajak.find(
+                        (obj) => obj.nama_objek_pajak === selectedValue
+                      );
+
+                      if (selectedObject) {
+                        const updates = {
+                          nama_objek_pajak: selectedObject.nama_objek_pajak,
+                          jenis_pajak: selectedObject.jenis_pajak,
+                          kode_objek_pajak: selectedObject.kode_objek_pajak,
+                          tarif_pajak: formData.fasilitas_pajak === "surat_keterangan_bebas_pemotongan" ? 0 : selectedObject.tarif_pajak,
+                          sifat_pajak_penghasilan: selectedObject.sifat_pajak_penghasilan,
+                          kap: selectedObject.kap,
+                          dasar_pengenaan_pajak: 0,
+                        };
+
+                        // Only update persentase_penghasilan_bersih if current BUPOT is BP 21
+                        if (currentBupot === "BP 21") {
+                          updates.persentase_penghasilan_bersih = selectedObject.persentase_penghasilan_bersih;
+                        }
+
+                        updateMultipleFields(updates);
+                      } else {
+                        updateFormData("nama_objek_pajak", e.target.value);
+                      }
+                    }}
+                    disabled={loadingObjekPajak}
                   >
                     <option value="">Please Select</option>
-                    <option value="objek1">objek1</option>
-                    <option value="objek2">objek2</option>
-                    <option value="objek3">objek3</option>
+                    {objekPajak.map((obj) => (
+                      <option key={obj.id} value={obj.nama_objek_pajak}>
+                        {obj.nama_objek_pajak}
+                      </option>
+                    ))}
                   </select>
                 </div>
 
@@ -3069,6 +3107,43 @@ const BUPOTForm = ({
                   />
                 </div>
 
+                {/* Tax Rate (%) */}
+                <div className="mt-4 flex justify-between gap-4">
+                  <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                    Tax Rate (%)
+                    <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="number"
+                    className="w-64 flex-auto border p-2 rounded"
+                    placeholder="Tax Rate (%)"
+                    value={formData.tarif_pajak || ""}
+                    onChange={(e) => {
+                      updateFormData("tarif_pajak", e.target.value);
+                    }}
+                    readOnly={true}
+                  />
+                </div>
+
+                {/* Pajak Penghasilan (Rp) */}
+                <div className="mt-4 flex justify-between gap-4">
+                  <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                    Pajak Penghasilan (Rp)
+                    <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="w-64 flex-auto border p-2 rounded"
+                    placeholder="Pajak Penghasilan (Rp)"
+                    value={formatRupiah(formData.pajak_penghasilan) || ""}
+                    onChange={(e) => {
+                      const rawValue = e.target.value.replace(/[^\d]/g, "");
+                      updateFormData("pajak_penghasilan", rawValue);
+                    }}
+                    readOnly={true}
+                  />
+                </div>
+
                 {/* KAP */}
                 <div className="mt-4 flex justify-between gap-4">
                   <label className="w-64 flex-none block text-sm font-medium text-gray-700">
@@ -3088,22 +3163,22 @@ const BUPOTForm = ({
                 </div>
 
                 {/* NITKU */}
-                <div className="mt-4 flex justify-between gap-4">
-                  <label className="w-64 flex-none block text-sm font-medium text-gray-700">
-                    NITKU
-                    <span className="text-red-500">*</span>
-                  </label>
-                  <select
-                    className="w-64 flex-auto border p-2 rounded appearance-none"
-                    value={formData.nitku || ""}
-                    onChange={(e) => updateFormData("nitku", e.target.value)}
-                    placehoder="Please Select"
-                  >
-                    <option value="">Please Select</option>
-                    <option value="NITKU1">NITKU1</option>
-                    <option value="NITKU2">NITKU2</option>
-                  </select>
-                </div>
+                  <div className="mt-4 flex justify-between gap-4">
+                    <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                      NITKU
+                      <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      className="w-64 flex-auto border p-2 rounded"
+                      placeholder="Nama"
+                      value={formData.nitku || ""}
+                      onChange={(e) => {
+                        updateFormData("nitku", e.target.value);
+                      }}
+                      readOnly={true}
+                    />
+                  </div>
 
                 {/* More fields as needed */}
               </div>
