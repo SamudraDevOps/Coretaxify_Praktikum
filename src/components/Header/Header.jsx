@@ -579,6 +579,10 @@ const Header = () => {
                   "Formulir Restitusi Pajak",
                   "Permohonan Pemberian Imbalan Bunga",
                   "Permohonan PPh DTP atas Penghasilan PDAM",
+                  {
+                    label: "Riwayat Pembayaran",
+                    links: `/praktikum/${id}/sistem/${akun}/riwayat-pembayaran`,
+                  },
                 ],
               },
               { label: "Buku Besar", submenu: [] },
