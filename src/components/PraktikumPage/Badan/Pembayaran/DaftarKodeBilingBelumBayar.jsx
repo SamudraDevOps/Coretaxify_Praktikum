@@ -70,12 +70,12 @@ const DaftarKodeBilingBelumBayar = ({ data, sidebar }) => {
       );
     },
     onSuccess: (data, variables) => {
-      // console.log(data);
+      console.log("success data", data);
       // const successMessage = variables.isDraft
       //   ? "Draft Faktur berhasil dibuat"
       //   : "Faktur berhasil diupload";
 
-      Swal.fire("Berhasil!", "Pembayaran SPT berhasil .", "success").then(
+      Swal.fire("Berhasil!", `Pembayaran SPT berhasil .\n\n Berikut kode NTPN anda "${data.data.ntpn}"`, "success").then(
         (result) => {
           if (result.isConfirmed) {
             window.location.reload();
@@ -222,7 +222,7 @@ const DaftarKodeBilingBelumBayar = ({ data, sidebar }) => {
                               Batal
                             </AlertDialogCancel>
                             <AlertDialogAction
-                            // onClick={() => paySpt.mutate(item.id)}
+                              onClick={() => paySpt.mutate(item.id)}
                             >
                               Setuju
                             </AlertDialogAction>
