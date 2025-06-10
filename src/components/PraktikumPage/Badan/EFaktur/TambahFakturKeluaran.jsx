@@ -591,7 +591,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
 
       Swal.fire("Berhasil!", successMessage, "success").then((result) => {
         if (result.isConfirmed) {
-          window.location.href = `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran`;
+          window.location.href = `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran?viewAs=${viewAsCompanyId}`;
         }
       });
     },
@@ -600,15 +600,231 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
       Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
     },
   });
+  useEffect(() => {
+    const formattedDPP = formatRupiah(dpp.toString());
+    setJumlah(formattedDPP);
+    updateTarifPPN(dpp.toString());
+  }, [dpp]);
+  // const [formData, setFormData] = useState({
+  //   uangMuka: false,
+  //   pelunasan: false,
+  //   nomorFaktur: "",
+  //   kodeTransaksi: "",
+  //   tanggalFaktur: "",
+  //   jenisFaktur: "Normal",
+  //   masaPajak: "",
+  //   tahun: new Date().getFullYear(),
+  //   informasiTambahan: "",
+  //   capFasilitas: "",
+  //   nomorPendukung: "",
+  //   referensi: "",
+  //   alamat: "",
+  //   idtku: "000000",
+  //   npwp: "",
+  //   identification: "",
+  //   negara: "",
+  //   nomorDokumen: "",
+  //   nama: "",
+  //   email: "",
+  //   detailTransaksi: [],
+  // });
 
+  // const [namaBarang, setNamaBarang] = useState("");
   const handleSubmit = (e, isDraft = true) => {
     e.preventDefault();
 
     // Validasi apakah ada detail transaksi
+
+    const handlePPnBMChange = (e) => {
+      setIsCustomPPnBM(true); // Tandai bahwa user mengedit manual
+      setPPnBM(formatRupiah(e.target.value));
+
+      // Jika nilai PPnBM dikosongkan, hitung ulang berdasarkan tarif PPnBM
+      if (e.target.value === "" || e.target.value === "Rp 0") {
+        setIsCustomPPnBM(false); // Reset custom edit jika dikosongkan
+        const numericJumlah = parseInt(jumlah.replace(/\D/g, ""), 10) || 0;
+        const numericPPnBM = parseInt(tarifPPnBM.replace(/\D/g, ""), 10) || 0;
+        setPPnBM(
+          formatRupiah(((numericJumlah * numericPPnBM) / 100).toString())
+        );
+      }
+    };
+
+    const handleDppChange = (e) => {
+      const value = e.target.value;
+      setDpp(value);
+      if (!isChecked) {
+        setJumlah(value); // Jika checkbox tidak dicentang, jumlah selalu mengikuti DPP
+      }
+    };
+
+    const resetForm = () => {
+      setHarga("Rp 0");
+      setKuantitas(0);
+      setTotalHarga("Rp 0");
+      setPotonganHarga("Rp 0");
+      setDpp("Rp 0");
+      setJumlah("Rp 0");
+      setTarifPPN("Rp 0");
+      setTarifPPnBM("");
+      setPPnBM("Rp 0");
+      setIsChecked(false);
+    };
+
     if (!formData.detail_transaksi || formData.detail_transaksi.length === 0) {
       alert("Mohon tambahkan minimal satu detail transaksi");
       return;
+      // Hitung ulang PPnBM jika PPnBM tidak diedit manual
+      if (!isCustomPPnBM) {
+        const numericJumlah = parseInt(jumlah.replace(/\D/g, ""), 10) || 0;
+        const numericPPnBM =
+          parseInt(formattedTarif.replace(/\D/g, ""), 10) || 0;
+        setPPnBM(
+          formatRupiah(((numericJumlah * numericPPnBM) / 100).toString())
+        );
+      }
     }
+
+    const handleSimpanTransaksi = () => {
+      // Validate required fields
+      if (
+        !tipe ||
+        !selectedKode ||
+        !selectedSatuan ||
+        !namaBarang ||
+        !harga ||
+        kuantitas <= 0
+      ) {
+        alert("Mohon lengkapi semua data transaksi");
+        return;
+      }
+
+      const newTransaksi = {
+        id: Date.now(),
+        tipe,
+        nama: namaBarang,
+        kode: selectedKode,
+        satuan: selectedSatuan,
+        harga,
+        kuantitas,
+        totalHarga,
+        potonganHarga,
+        dpp,
+        jumlah,
+        tarifPPN: "12%",
+        ppnNominal: tarifPPN,
+        tarifPPnBM,
+        ppnBM,
+      };
+
+      const updatedTransaksi = savedTransaksi
+        ? [...savedTransaksi, newTransaksi]
+        : [newTransaksi];
+      setSavedTransaksi(updatedTransaksi);
+
+      setFormData((prev) => ({
+        ...prev,
+        detailTransaksi: updatedTransaksi,
+      }));
+
+      setTipe("");
+      setNamaBarang("");
+      setSelectedKode("");
+      setSelectedSatuan("");
+      setHarga("Rp 0");
+      setKuantitas(0);
+      setTotalHarga("Rp 0");
+      setPotonganHarga("Rp 0");
+      setDPP("Rp 0");
+      setJumlah("Rp 0");
+      setTarifPPN("Rp 0");
+      setTarifPPnBM("");
+      setPPnBM("Rp 0");
+      setIsChecked(false);
+      setIsCustomPPnBM(false);
+    };
+
+    const handleHapusTransaksi = (id) => {
+      const updatedTransaksi = savedTransaksi.filter((item) => item.id !== id);
+
+      setSavedTransaksi(updatedTransaksi);
+      setFormData((prev) => ({
+        ...prev,
+        detailTransaksi: updatedTransaksi,
+      }));
+    };
+
+    const handleEditTransaksi = (id) => {
+      const transaksiToEdit = savedTransaksi.find((item) => item.id === id);
+
+      if (transaksiToEdit) {
+        setTipe(transaksiToEdit.tipe);
+        setNamaBarang(transaksiToEdit.nama);
+        setSelectedKode(transaksiToEdit.kode);
+        setSelectedSatuan(transaksiToEdit.satuan);
+        setHarga(transaksiToEdit.harga);
+        setKuantitas(transaksiToEdit.kuantitas);
+        setTotalHarga(transaksiToEdit.totalHarga);
+        setPotonganHarga(transaksiToEdit.potonganHarga);
+        setDPP(transaksiToEdit.dpp);
+        setJumlah(transaksiToEdit.jumlah);
+        setTarifPPnBM(transaksiToEdit.tarifPPnBM);
+        setPPnBM(transaksiToEdit.ppnBM);
+
+        handleHapusTransaksi(id);
+      }
+    };
+
+    const handleChange = (e) => {
+      const { name, value, type, checked } = e.target;
+      setFormData((prev) => ({
+        ...prev,
+        [name]: type === "checkbox" ? checked : value,
+      }));
+    };
+    const handleSubmit = (e) => {
+      e.preventDefault();
+
+      // Validasi apakah ada detail transaksi
+      if (!formData.detailTransaksi || formData.detailTransaksi.length === 0) {
+        alert("Mohon tambahkan minimal satu detail transaksi");
+        return;
+      }
+
+      // Hitung total DPP, PPN, dan PPnBM dari semua transaksi
+      const totalDPP = formData.detailTransaksi.reduce((sum, item) => {
+        return sum + (parseInt(item.dpp.replace(/\D/g, ""), 10) || 0);
+      }, 0);
+
+      const totalPPN = formData.detailTransaksi.reduce((sum, item) => {
+        return sum + (parseInt(item.ppnNominal.replace(/\D/g, ""), 10) || 0);
+      }, 0);
+
+      const totalPPnBM = formData.detailTransaksi.reduce((sum, item) => {
+        return sum + (parseInt(item.ppnBM.replace(/\D/g, ""), 10) || 0);
+      }, 0);
+
+      // Tambahkan total ke formData
+      const finalFormData = {
+        ...formData,
+        totalDPP: formatRupiah(totalDPP.toString()),
+        totalPPN: formatRupiah(totalPPN.toString()),
+        totalPPnBM: formatRupiah(totalPPnBM.toString()),
+        totalTagihan: formatRupiah(
+          (totalDPP + totalPPN + totalPPnBM).toString()
+        ),
+      };
+
+      console.log(finalFormData);
+    };
+
+    const handleSimpan = () => {
+      const data = {
+        dokumenTransaksi: {
+          uangMuka,
+        },
+      };
+    };
 
     // Hitung total DPP, PPN, dan PPnBM dari semua transaksi
     const totalDPP = formData.detail_transaksi.reduce((sum, item) => {
@@ -633,6 +849,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
       cap_fasilitas: cap_fasilitas,
       akun_penerima_id:
         formData.akun_penerima_id?.id || formData.akun_penerima_id,
+      pic_id: akun,
     };
 
     console.log(finalFormData);
@@ -1898,7 +2115,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
           <div className="flex justify-end mt-4 gap-3">
             <button
               onClick={() =>
-                (window.location.href = `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran`)
+                (window.location.href = `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran?viewAs=${viewAsCompanyId}`)
               }
               className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded"
             >

@@ -119,10 +119,13 @@ import PermohonanTertundaBadan from "./components/PraktikumPage/Badan/PortalSaya
 import DashboardEFaktur from "./components/PraktikumPage/Badan/EFaktur/DashboardEFaktur";
 import PajakKeluaran from "./components/PraktikumPage/Badan/EFaktur/PajakKeluaran";
 import TambahFakturKeluaran from "./components/PraktikumPage/Badan/EFaktur/TambahFakturKeluaran";
+import TambahFakturKeluaranDokumenLain from "./components/PraktikumPage/Badan/EFaktur/TambahFakturKeluaranDokumenLain";
 import PajakMasukan from "./components/PraktikumPage/Badan/EFaktur/PajakMasukan";
+import PajakKeluaranDokumenLain from "./components/PraktikumPage/Badan/EFaktur/PajakKeluaranDokumenLain";
 import KonsepSPT from "./components/PraktikumPage/Badan/SPT/KonsepSPT";
 import BuatKonsepSPT from "./components/PraktikumPage/Badan/SPT/BuatKonsepSPT";
 import CreateKonsepSPT from "./components/PraktikumPage/Badan/SPT/CreateKonsepSPT";
+import CreateKonsepPasal from "./components/PraktikumPage/Badan/SPT/CreateKonsepPasal";
 import BupotBulananPegawaiTetap from "./components/PraktikumPage/Badan/BUPOT/BupotBulananPegawaiTetap";
 import BupotBulananPegawaiTetapTelahTerbit from "./components/PraktikumPage/Badan/BUPOT/BupotBulananPegawaiTetapTelahTerbit";
 import BupotBulananPegawaiTetapTidakValid from "./components/PraktikumPage/Badan/BUPOT/BupotBulananPegawaiTetapTidakValid";
@@ -132,6 +135,13 @@ import CreateBppu from "./components/PraktikumPage/Badan/BUPOT/BPPU/CreateBppu";
 import BppuTelahTerbit from "./components/PraktikumPage/Badan/BUPOT/BPPU/BppuTelahTerbit";
 import BppuTidakValid from "./components/PraktikumPage/Badan/BUPOT/BPPU/BppuTidakValid";
 import BpnrBelumTerbit from "./components/PraktikumPage/Badan/BUPOT/BPNR/BpnrBelumTerbit";
+import CreateBpnr from "./components/PraktikumPage/Badan/BUPOT/BPNR/CreateBpnr";
+import BpnrTelahTerbit from "./components/PraktikumPage/Badan/BUPOT/BPNR/BpnrTelahTerbit";
+import BpnrTidakValid from "./components/PraktikumPage/Badan/BUPOT/BPNR/BpnrTidakValid";
+import SelfBilling from "./components/PraktikumPage/Badan/Pembayaran/SelfBilling";
+import DaftarKodeBilingBelumBayar from "./components/PraktikumPage/Badan/Pembayaran/DaftarKodeBilingBelumBayar";
+import RiwayatBilling from "./components/PraktikumPage/Badan/Pembayaran/RiwayatBilling";
+import RiwayatPembatalanBilling from "./components/PraktikumPage/Badan/Pembayaran/RiwayatPembatalanBilling";
 // Route Badan
 
 import ProtectedRoutes from "./components/Dashboard/Auth/ProtectedRoutes";
@@ -146,6 +156,11 @@ import RoleBasedRenderer from "./components/PraktikumPage/RoleBaseRenderer";
 import { useParams } from "react-router";
 import { RoutesApi } from "@/Routes";
 import EditFakturKeluaran from "./components/PraktikumPage/Badan/EFaktur/EditFakturKeluaran";
+import { ViewerPDF } from "./components/PraktikumPage/PDFTemplate/PDFViewer";
+import FakturPajakKeluaranPdf from "./components/PraktikumPage/PDFTemplate/FakturKeluaran";
+import BpeSptPdf from "./components/PraktikumPage/PDFTemplate/BPESPTTemplate";
+import BillingCodePdf from "./components/PraktikumPage/PDFTemplate/BillingCodeTemplate";
+import SptMasaPph21Pdf from "./components/PraktikumPage/PDFTemplate/SPTMasaPPH";
 
 // BUPOT PRAKTIKUM
 import BUPOTWrapper from "./components/PraktikumPage/Badan/BUPOT/BUPOTWrapper";
@@ -721,6 +736,34 @@ const Main = () => {
           }
         />
         <Route
+          path="/praktikum/:id/sistem/:akun/detail-bank"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/detail-bank`}
+                intent={""}
+                OrangPribadi={DetailBank}
+                Badan={DetailBankBadan}
+                query={""}
+              ></RoleBasedRenderer>
+            </>
+          }
+        />
+        <Route
+          path="/praktikum/:id/sistem/:akun/data-unit-keluarga"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/unit-pajak-keluarga`}
+                intent={""}
+                OrangPribadi={DataUnitKeluarga}
+                Badan={DataUnitKeluargaBadan}
+                query={""}
+              ></RoleBasedRenderer>
+            </>
+          }
+        />
+        <Route
           path="/praktikum/:id/sistem/:akun/informasi-umum"
           // path="/admin/praktikum/1/profil-saya/informasi-umum"
           element={
@@ -824,6 +867,163 @@ const Main = () => {
             </>
           }
         />
+        {/* SPT */}
+
+        <Route
+          path="/praktikum/:id/sistem/:akun/surat-pemberitahuan-spt"
+          // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/spt`}
+                intent={""}
+                OrangPribadi={KonsepSPT}
+                Badan={KonsepSPT}
+                query={""}
+              ></RoleBasedRenderer>
+            </>
+            // <>
+            //   <Header />
+            //   <KonsepSPT />
+            // </>
+          }
+        />
+        <Route
+          path="/praktikum/:id/sistem/:akun/buat-konsep-spt"
+          // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={``}
+                intent={""}
+                OrangPribadi={BuatKonsepSPT}
+                Badan={BuatKonsepSPT}
+                query={""}
+              ></RoleBasedRenderer>
+            </>
+            // <>
+            //   <Header />
+            //   <KonsepSPT />
+            // </>
+          }
+        />
+        <Route
+          path="/praktikum/:id/sistem/:akun/buat-konsep-spt/:idSpt"
+          // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/spt/:idSpt`}
+                intent={""}
+                OrangPribadi={CreateKonsepSPT}
+                Badan={CreateKonsepSPT}
+                query={""}
+              ></RoleBasedRenderer>
+            </>
+            // <>
+            //   <Header />
+            //   <KonsepSPT />
+            // </>
+          }
+        />
+        <Route
+          path="/praktikum/:id/sistem/:akun/layanan-mandiri-kode-billing"
+          // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
+          element={
+            <>
+              <RoleBasedRenderer
+                // url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/spt`}
+                url={`${RoutesApi.apiUrl}kap-kjs`}
+                intent={""}
+                OrangPribadi={SelfBilling}
+                Badan={SelfBilling}
+                query={""}
+              ></RoleBasedRenderer>
+            </>
+            // <>
+            //   <Header />
+            //   <KonsepSPT />
+            // </>
+          }
+        />
+        <Route
+          path="/praktikum/:id/sistem/:akun/daftar-kode-billing-belum-dibayar"
+          // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/pembayaran`}
+                intent={""}
+                OrangPribadi={DaftarKodeBilingBelumBayar}
+                Badan={DaftarKodeBilingBelumBayar}
+                query={""}
+              ></RoleBasedRenderer>
+            </>
+            // <>
+            //   <Header />
+            //   <KonsepSPT />
+            // </>
+          }
+        />
+        <Route
+          path="/praktikum/:id/sistem/:akun/riwayat-pembayaran"
+          // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/pembayaran`}
+                intent={"api.get.sudah.pembayaran"}
+                OrangPribadi={RiwayatBilling}
+                Badan={RiwayatBilling}
+                query={""}
+              ></RoleBasedRenderer>
+            </>
+            // <>
+            //   <Header />
+            //   <KonsepSPT />
+            // </>
+          }
+        />
+        <Route
+          path="/pdf/faktur-keluaran"
+          element={
+            <>
+              <div className="w-full h-screen">
+                <ViewerPDF document={<FakturPajakKeluaranPdf />} />
+              </div>
+            </>
+          }
+        />
+        <Route
+          path="/pdf/bpespt"
+          element={
+            <>
+              <div className="w-full h-screen">
+                <ViewerPDF document={<BpeSptPdf />} />
+              </div>
+            </>
+          }
+        />
+        <Route
+          path="/pdf/billing-code"
+          element={
+            <>
+              <div className="w-full h-screen">
+                <ViewerPDF document={<BillingCodePdf />} />
+              </div>
+            </>
+          }
+        />
+        <Route
+          path="/pdf/sptmasa"
+          element={
+            <>
+              <div className="w-full h-screen">
+                <ViewerPDF document={<SptMasaPph21Pdf />} />
+              </div>
+            </>
+          }
+        />
 
         <Route
           path="/praktikum/:id/sistem/:akun/bupot/:type"
@@ -895,15 +1095,6 @@ const Main = () => {
             <>
               <Header />
               <PihakTerkait />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/1/profil-saya/detail-bank"
-          element={
-            <>
-              <Header />
-              <DetailBank />
             </>
           }
         />
@@ -1034,7 +1225,6 @@ const Main = () => {
           }
         />
         {/* Praktikum Orang Pribadi*/}
-
         {/* Praktikum  Orang Badan*/}
         <Route
           path="/admin/praktikum/2/prak1"
@@ -1255,7 +1445,6 @@ const Main = () => {
           }
         />
         {/* Praktikum Orang Pribadi*/}
-
         <Route
           path="/admin/praktikum/2/e-faktur"
           element={
@@ -1274,6 +1463,15 @@ const Main = () => {
             </>
           }
         />
+          <Route
+            path="/admin/praktikum/2/e-faktur/dokumen-lain/pajak-keluaran"
+            element={
+              <>
+                <Header />
+                <PajakKeluaranDokumenLain />
+              </>
+            }
+          />
         <Route
           path="/admin/praktikum/2/e-faktur/pajak-keluaran/tambah-faktur-keluaran"
           element={
@@ -1283,6 +1481,15 @@ const Main = () => {
             </>
           }
         />
+          <Route
+            path="/admin/praktikum/2/e-faktur/dokumen-lain/pajak-keluaran/tambah-faktur-keluaran"
+            element={
+              <>
+                <Header />
+                <TambahFakturKeluaranDokumenLain />
+              </>
+            }
+          />
         <Route
           path="/admin/praktikum/2/e-faktur/pajak-masukan"
           element={
@@ -1356,6 +1563,15 @@ const Main = () => {
           }
         />
         <Route
+          path="admin/praktikum/2/surat-pemberitahuan-(spt)/tambah-konsep-spt-pasal"
+          element={
+            <>
+              <Header />
+              <CreateKonsepPasal />
+            </>
+          }
+        />
+        <Route
           path="/admin/praktikum/2/bppu"
           element={
             <>
@@ -1397,6 +1613,69 @@ const Main = () => {
             <>
               <Header />
               <BpnrBelumTerbit />
+            </>
+          }
+        />
+        <Route
+          path="/admin/praktikum/2/bpnr/tambah-bpnr"
+          element={
+            <>
+              <Header />
+              <CreateBpnr />
+            </>
+          }
+        />
+        <Route
+          path="/admin/praktikum/2/bpnr/telah-terbit"
+          element={
+            <>
+              <Header />
+              <BpnrTelahTerbit />
+            </>
+          }
+        />
+        <Route
+          path="/admin/praktikum/2/bpnr/tidak-valid"
+          element={
+            <>
+              <Header />
+              <BpnrTidakValid />
+            </>
+          }
+        />
+        <Route
+          path="/admin/praktikum/2/layanan-mandiri-kode-billing"
+          element={
+            <>
+              <Header />
+              <SelfBilling />
+            </>
+          }
+        />
+        <Route
+          path="/admin/praktikum/2/daftar-kode-billing-belum-dibayar"
+          element={
+            <>
+              <Header />
+              <DaftarKodeBilingBelumBayar />
+            </>
+          }
+        />
+        <Route
+          path="/admin/praktikum/2/riwayat-pembayaran"
+          element={
+            <>
+              <Header />
+              <RiwayatBilling />
+            </>
+          }
+        />
+        <Route
+          path="/admin/praktikum/2/riwayat-pembatalan"
+          element={
+            <>
+              <Header />
+              <RiwayatPembatalanBilling />
             </>
           }
         />

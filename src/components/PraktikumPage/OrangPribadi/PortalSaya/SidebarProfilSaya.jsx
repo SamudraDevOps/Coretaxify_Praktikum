@@ -1,57 +1,116 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { useUserType } from "../../../context/UserTypeContext";
 
 const SidebarProfilSaya = ({ nama_akun, npwp_akun, akun }) => {
   const { userType } = useUserType();
   const userTypeId = userType === "Orang Pribadi" ? 1 : 2;
+  const [searchParams, setSearchParams] = useSearchParams();
+  const viewAsCompanyId = searchParams.get("viewAs");
 
   const menuItems = [
     {
       label: "Ikhtisar Profil Wajib Pajak",
-      link: `/praktikum/${akun.id}/sistem/${akun.akun}/profil-saya`,
+      link: `/praktikum/${akun.id}/sistem/${akun.akun}/profil-saya${
+        viewAsCompanyId ? `?viewAs=${viewAsCompanyId}` : ""
+      }`,
     },
     {
       label: "Informasi Umum",
-      link: `/praktikum/${akun.id}/sistem/${akun.akun}/informasi-umum`,
+      link: `/praktikum/${akun.id}/sistem/${akun.akun}/informasi-umum${
+        viewAsCompanyId ? `?viewAs=${viewAsCompanyId}` : ""
+      }`,
     },
     {
       label: "Alamat",
-
-      link: `/praktikum/${akun.id}/sistem/${akun.akun}/alamat`,
+      link: `/praktikum/${akun.id}/sistem/${akun.akun}/alamat${
+        viewAsCompanyId ? `?viewAs=${viewAsCompanyId}` : ""
+      }`,
     },
     {
       label: "Detail Kontak",
-      link: `/praktikum/${akun.id}/sistem/${akun.akun}/detail-kontak`,
+      link: `/praktikum/${akun.id}/sistem/${akun.akun}/detail-kontak${
+        viewAsCompanyId ? `?viewAs=${viewAsCompanyId}` : ""
+      }`,
     },
     {
       label: "Pihak Terkait",
-      link: `/praktikum/${akun.id}/sistem/${akun.akun}/pihak-terkait`,
+      link: `/praktikum/${akun.id}/sistem/${akun.akun}/pihak-terkait${
+        viewAsCompanyId ? `?viewAs=${viewAsCompanyId}` : ""
+      }`,
     },
     {
       label: "Objek Pajak Bumi dan Bangunan (PBB)",
-      link: "/objek-pajak-bumi-dan-bangunan-pbb",
+      link: `/objek-pajak-bumi-dan-bangunan-pbb${
+        viewAsCompanyId ? `?viewAs=${viewAsCompanyId}` : ""
+      }`,
     },
     {
       label: "Klasifikasi Lapangan Usaha (KLU)",
-      link: "/klasifikasi-lapangan-usaha-klu",
+      link: `/klasifikasi-lapangan-usaha-klu${
+        viewAsCompanyId ? `?viewAs=${viewAsCompanyId}` : ""
+      }`,
     },
-    { label: "Detail Bank", link: "/detail-bank" },
-    { label: "Data Unit Keluarga", link: "/data-unit-keluarga" },
+    {
+      label: "Detail Bank",
+      link: `/praktikum/${akun.id}/sistem/${akun.akun}/detail-bank${
+        viewAsCompanyId ? `?viewAs=${viewAsCompanyId}` : ""
+      }`,
+    },
+    {
+      label: "Data Unit Keluarga",
+      link: `/praktikum/${akun.id}/sistem/${akun.akun}/data-unit-keluarga${
+        viewAsCompanyId ? `?viewAs=${viewAsCompanyId}` : ""
+      }`,
+    },
     {
       label: "Tempat Kegiatan Usaha/Sub Unit",
-      link: "/tempat-kegiatan-usaha-sub-unit",
+      link: `/tempat-kegiatan-usaha-sub-unit${
+        viewAsCompanyId ? `?viewAs=${viewAsCompanyId}` : ""
+      }`,
     },
     {
       label: "Nomor Identifikasi Eksternal",
-      link: "/nomor-identifikasi-eksternal",
+      link: `/nomor-identifikasi-eksternal${
+        viewAsCompanyId ? `?viewAs=${viewAsCompanyId}` : ""
+      }`,
     },
-    { label: "Jenis Pajak", link: "/jenis-pajak" },
-    { label: "Wakil Kuasa Saya", link: "/wakil-kuasa-saya" },
-    { label: "Wajib Pajak yang Diwakili", link: "/wajib-pajak-yang-diwakili" },
-    { label: "Verifikasi Dua Langkah", link: "/verifikasi-dua-langkah" },
-    { label: "Permohonan Tertunda", link: "/permohonan-tertunda" },
-    { label: "Semua Permohonan", link: "/semua-permohonan" },
+    {
+      label: "Jenis Pajak",
+      link: `/jenis-pajak${
+        viewAsCompanyId ? `?viewAs=${viewAsCompanyId}` : ""
+      }`,
+    },
+    {
+      label: "Wakil Kuasa Saya",
+      link: `/wakil-kuasa-saya${
+        viewAsCompanyId ? `?viewAs=${viewAsCompanyId}` : ""
+      }`,
+    },
+    {
+      label: "Wajib Pajak yang Diwakili",
+      link: `/wajib-pajak-yang-diwakili${
+        viewAsCompanyId ? `?viewAs=${viewAsCompanyId}` : ""
+      }`,
+    },
+    {
+      label: "Verifikasi Dua Langkah",
+      link: `/verifikasi-dua-langkah${
+        viewAsCompanyId ? `?viewAs=${viewAsCompanyId}` : ""
+      }`,
+    },
+    {
+      label: "Permohonan Tertunda",
+      link: `/permohonan-tertunda${
+        viewAsCompanyId ? `?viewAs=${viewAsCompanyId}` : ""
+      }`,
+    },
+    {
+      label: "Semua Permohonan",
+      link: `/semua-permohonan${
+        viewAsCompanyId ? `?viewAs=${viewAsCompanyId}` : ""
+      }`,
+    },
   ];
 
   return (
