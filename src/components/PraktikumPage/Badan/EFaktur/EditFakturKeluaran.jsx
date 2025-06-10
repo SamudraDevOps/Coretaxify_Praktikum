@@ -74,7 +74,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
   const [ppnbm, setPPnBM] = useState("Rp 0");
   const [isCustomPPnBM, setIsCustomPPnBM] = useState(false);
 
-  const { id, akun } = useParams();
+  const { id, akun, faktur } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const viewAsCompanyId = searchParams.get("viewAs");
   const [cookies] = useCookies(["token"]);
@@ -148,15 +148,187 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
           },
         }
       );
-      return data.data;
+      return data;
     },
   });
+  useEffect(() => {
+    if (fakturData && !fakturLoading && !fakturError) {
+      console.log("Setting formData from fakturData:", fakturData);
+
+      setFormData({
+        uangMuka: fakturData.data.uangMuka || false,
+        pelunasan: fakturData.data.pelunasan || false,
+        nomorFaktur: fakturData.data.nomor_faktur_pajak || "",
+        kode_transaksi: fakturData.data.kode_transaksi || "",
+        tanggal_faktur_pajak: fakturData.data.tanggal_faktur_pajak || "",
+        jenisFaktur: fakturData.data.jenisFaktur || "Normal",
+        esign_status: fakturData.data.esign_status || "Belum Ditandatangani",
+        masa_pajak: fakturData.data.masa_pajak || "",
+        tahun: fakturData.data.tahun || new Date().getFullYear().toString(),
+        informasi_tambahan: fakturData.data.informasi_tambahan || "",
+        cap_fasilitas: fakturData.data.cap_fasilitas || "",
+        nomorPendukung: fakturData.data.nomorPendukung || "",
+        referensi: fakturData.data.referensi || "",
+        alamat:
+          fakturData.data.akun_penerima_id?.alamat_utama_akun ||
+          fakturData.data.alamat ||
+          "",
+        idtku: fakturData.data.idtku || "000000",
+        akun_penerima_id: fakturData.data.akun_penerima_id || "",
+        identification: fakturData.data.identification || "",
+        negara:
+          fakturData.data.akun_penerima_id?.negara_asal ||
+          fakturData.data.negara ||
+          "",
+        nomorDokumen: fakturData.data.nomorDokumen || "",
+        nama:
+          fakturData.data.akun_penerima_id?.nama_akun ||
+          fakturData.data.nama ||
+          "",
+        email:
+          fakturData.data.akun_penerima_id?.email_akun ||
+          fakturData.data.email ||
+          "",
+        detail_transaksi: fakturData.data.detail_transaksi || [],
+      });
+
+      // Set other related state variables
+      if (
+        fakturData.data.detail_transaksi &&
+        fakturData.data.detail_transaksi.length > 0
+      ) {
+        setSavedTransaksi(fakturData.data.detail_transaksi);
+      }
+
+      // Set form control states
+      setInformasiTambahan(fakturData.data.informasi_tambahan || "");
+      setCapFasilitas(fakturData.data.cap_fasilitas || "");
+      setNomorPendukung(fakturData.data.nomorPendukung || "");
+      setKodeTransaksi(fakturData.data.kode_transaksi || "");
+
+      // Set year picker
+      if (fakturData.data.tahun) {
+        const year = parseInt(fakturData.data.tahun);
+        if (!isNaN(year)) {
+          setSelectedYear(new Date(year, 0));
+          setTahunString(fakturData.data.tahun);
+        }
+      }
+
+      // Set DPP, PPN, PPnBM values
+      if (fakturData.data.dpp) {
+        setDPP(parseFloat(fakturData.data.dpp));
+      }
+      if (fakturData.data.ppn) {
+        setTarifPPN(parseFloat(fakturData.data.ppn));
+      }
+      if (fakturData.data.ppnbm) {
+        setPPnBM(parseFloat(fakturData.data.ppnbm));
+      }
+    }
+  }, [fakturData, fakturLoading, fakturError]);
+
+  // console.log(fakturData);
+
+  useEffect(() => {
+    if (fakturData && !fakturLoading && !fakturError) {
+      console.log("Setting formData from fakturData:", fakturData);
+
+      setFormData({
+        uangMuka: fakturData.data.uangMuka || false,
+        pelunasan: fakturData.data.pelunasan || false,
+        nomorFaktur: fakturData.data.nomor_faktur_pajak || "",
+        kode_transaksi: fakturData.data.kode_transaksi || "",
+        tanggal_faktur_pajak: fakturData.data.tanggal_faktur_pajak || "",
+        jenisFaktur: fakturData.data.jenisFaktur || "Normal",
+        esign_status: fakturData.data.esign_status || "Belum Ditandatangani",
+        masa_pajak: fakturData.data.masa_pajak || "",
+        tahun: fakturData.data.tahun || new Date().getFullYear().toString(),
+        informasi_tambahan: fakturData.data.informasi_tambahan || "",
+        cap_fasilitas: fakturData.data.cap_fasilitas || "",
+        nomorPendukung: fakturData.data.nomorPendukung || "",
+        referensi: fakturData.data.referensi || "",
+        alamat:
+          fakturData.data.akun_penerima_id?.alamat_utama_akun ||
+          fakturData.data.alamat ||
+          "",
+        idtku: fakturData.data.idtku || "000000",
+        akun_penerima_id: fakturData.data.akun_penerima_id || "",
+        identification: fakturData.data.identification || "",
+        negara:
+          fakturData.data.akun_penerima_id?.negara_asal ||
+          fakturData.data.negara ||
+          "",
+        nomorDokumen: fakturData.data.nomorDokumen || "",
+        nama:
+          fakturData.data.akun_penerima_id?.nama_akun ||
+          fakturData.data.nama ||
+          "",
+        email:
+          fakturData.data.akun_penerima_id?.email_akun ||
+          fakturData.data.email ||
+          "",
+        detail_transaksi: fakturData.data.detail_transaksi || [],
+      });
+
+      // Set other related state variables
+      if (
+        fakturData.data.detail_transaksi &&
+        fakturData.data.detail_transaksi.length > 0
+      ) {
+        setSavedTransaksi(fakturData.data.detail_transaksi);
+      }
+
+      // Set form control states
+      setInformasiTambahan(fakturData.data.informasi_tambahan || "");
+      setCapFasilitas(fakturData.data.cap_fasilitas || "");
+      setNomorPendukung(fakturData.data.nomorPendukung || "");
+      setKodeTransaksi(fakturData.data.kode_transaksi || "");
+
+      // Set year picker
+      if (fakturData.data.tahun) {
+        const year = parseInt(fakturData.data.tahun);
+        if (!isNaN(year)) {
+          setSelectedYear(new Date(year, 0));
+          setTahunString(fakturData.data.tahun);
+        }
+      }
+
+      // Set DPP, PPN, PPnBM values
+      if (fakturData.data.dpp) {
+        setDPP(parseFloat(fakturData.data.dpp));
+      }
+      if (fakturData.data.ppn) {
+        setTarifPPN(parseFloat(fakturData.data.ppn));
+      }
+      if (fakturData.data.ppnbm) {
+        setPPnBM(parseFloat(fakturData.data.ppnbm));
+      }
+    }
+  }, [fakturData, fakturLoading, fakturError]);
 
   const handleTipeChange = (e) => {
     const value = e.target.value;
     setTipe(value);
     fetchKodeByJenis(value);
   };
+
+  const stripCurrencyFormat = (value) => {
+    if (typeof value === "string") {
+      return parseFloat(value.replace(/[^\d.-]/g, "")) || 0;
+    }
+    return parseFloat(value) || 0;
+  };
+
+  const formatCurrencyForDB = (value) => {
+    return stripCurrencyFormat(value);
+  };
+
+  //  {
+  //     const value = e.target.value;
+  //     setTipe(value);
+  //     fetchKodeByJenis(value);
+  //   };
 
   function formatRupiah(value) {
     const numberString = value.replace(/[^0-9]/g, ""); // Hanya angka
@@ -450,21 +622,20 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
     }
 
     const transactionData = {
-      id: editMode ? editingTransaksiId : Date.now(),
+      // id: editMode ? editingTransaksiId : Date.now(),
       tipe,
       nama: namaBarang,
       kode: selectedKode,
-      satuan: selectedSatuan,
-      harga_satuan,
       kuantitas: kuantitas.toString(),
-      total_harga,
-      pemotongan_harga,
-      dpp,
-      jumlah,
-      ppn: parseInt("12%".replace(/\D/g, ""), 10) || 0,
-      ppnNominal: ppn,
+      satuan: selectedSatuan,
+      harga_satuan: formatCurrencyForDB(harga_satuan),
+      total_harga: formatCurrencyForDB(total_harga),
+      pemotongan_harga: formatCurrencyForDB(pemotongan_harga),
+      dpp: formatCurrencyForDB(dpp),
+      ppn: formatCurrencyForDB(ppn), // Changed from ppnNominal to ppn
+      dpp_lain: isChecked ? formatCurrencyForDB(jumlah) : 0, // Changed from jumlah to dpp_lain
+      ppnbm: formatCurrencyForDB(ppnbm),
       tarif_ppnbm: parseInt(tarif_ppnbm.replace(/\D/g, ""), 10) || 0,
-      ppnbm,
     };
 
     let updatedTransaksi;
@@ -545,16 +716,21 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
       setTotalHarga(transaksiToEdit.total_harga);
       setPotonganHarga(transaksiToEdit.pemotongan_harga);
       setDPP(transaksiToEdit.dpp);
-      setJumlah(transaksiToEdit.jumlah);
+      setJumlah(transaksiToEdit.dpp_lain || 0); // Changed from jumlah to dpp_lain
+      setTarifPPN(transaksiToEdit.ppn); // Changed from ppnNominal to ppn
       setTarifPPnBM(
         transaksiToEdit.tarif_ppnbm ? `${transaksiToEdit.tarif_ppnbm}%` : ""
       );
       setPPnBM(transaksiToEdit.ppnbm);
 
-      // Show modal or alert dialog
+      // Set checkbox state based on dpp_lain value
+      setIsChecked(transaksiToEdit.dpp_lain > 0);
+
+      // Show modal
       document.querySelector(".AlertDialogTrigger").click();
     }
   };
+
   const handleCancelEdit = () => {
     setEditMode(false);
     setEditingTransaksiId(null);
@@ -586,12 +762,12 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
   };
 
   // alert(viewAsCompanyId);
-  const createFaktur = useMutation({
+  const updateFaktur = useMutation({
     mutationFn: async ({ data, isDraft }) => {
       const csrf = await getCsrf();
       const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
-      return axios.post(
-        `${RoutesApiReal.url}api/student/assignments/${id}/sistem/${accountId}/faktur`,
+      return axios.put(
+        `${RoutesApiReal.url}api/student/assignments/${id}/sistem/${accountId}/faktur/${faktur}`,
         data,
         {
           headers: {
@@ -658,213 +834,25 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
   const handleSubmit = (e, isDraft = true) => {
     e.preventDefault();
 
-    // Validasi apakah ada detail transaksi
-
-    const handlePPnBMChange = (e) => {
-      setIsCustomPPnBM(true); // Tandai bahwa user mengedit manual
-      setPPnBM(formatRupiah(e.target.value));
-
-      // Jika nilai PPnBM dikosongkan, hitung ulang berdasarkan tarif PPnBM
-      if (e.target.value === "" || e.target.value === "Rp 0") {
-        setIsCustomPPnBM(false); // Reset custom edit jika dikosongkan
-        const numericJumlah = parseInt(jumlah.replace(/\D/g, ""), 10) || 0;
-        const numericPPnBM = parseInt(tarifPPnBM.replace(/\D/g, ""), 10) || 0;
-        setPPnBM(
-          formatRupiah(((numericJumlah * numericPPnBM) / 100).toString())
-        );
-      }
-    };
-
-    const handleDppChange = (e) => {
-      const value = e.target.value;
-      setDpp(value);
-      if (!isChecked) {
-        setJumlah(value); // Jika checkbox tidak dicentang, jumlah selalu mengikuti DPP
-      }
-    };
-
-    const resetForm = () => {
-      setHarga("Rp 0");
-      setKuantitas(0);
-      setTotalHarga("Rp 0");
-      setPotonganHarga("Rp 0");
-      setDpp("Rp 0");
-      setJumlah("Rp 0");
-      setTarifPPN("Rp 0");
-      setTarifPPnBM("");
-      setPPnBM("Rp 0");
-      setIsChecked(false);
-    };
-
     if (!formData.detail_transaksi || formData.detail_transaksi.length === 0) {
       alert("Mohon tambahkan minimal satu detail transaksi");
       return;
-      // Hitung ulang PPnBM jika PPnBM tidak diedit manual
-      if (!isCustomPPnBM) {
-        const numericJumlah = parseInt(jumlah.replace(/\D/g, ""), 10) || 0;
-        const numericPPnBM =
-          parseInt(formattedTarif.replace(/\D/g, ""), 10) || 0;
-        setPPnBM(
-          formatRupiah(((numericJumlah * numericPPnBM) / 100).toString())
-        );
-      }
     }
 
-    const handleSimpanTransaksi = () => {
-      // Validate required fields
-      if (
-        !tipe ||
-        !selectedKode ||
-        !selectedSatuan ||
-        !namaBarang ||
-        !harga ||
-        kuantitas <= 0
-      ) {
-        alert("Mohon lengkapi semua data transaksi");
-        return;
-      }
-
-      const newTransaksi = {
-        id: Date.now(),
-        tipe,
-        nama: namaBarang,
-        kode: selectedKode,
-        satuan: selectedSatuan,
-        harga,
-        kuantitas,
-        totalHarga,
-        potonganHarga,
-        dpp,
-        jumlah,
-        tarifPPN: "12%",
-        ppnNominal: tarifPPN,
-        tarifPPnBM,
-        ppnBM,
-      };
-
-      const updatedTransaksi = savedTransaksi
-        ? [...savedTransaksi, newTransaksi]
-        : [newTransaksi];
-      setSavedTransaksi(updatedTransaksi);
-
-      setFormData((prev) => ({
-        ...prev,
-        detailTransaksi: updatedTransaksi,
-      }));
-
-      setTipe("");
-      setNamaBarang("");
-      setSelectedKode("");
-      setSelectedSatuan("");
-      setHarga("Rp 0");
-      setKuantitas(0);
-      setTotalHarga("Rp 0");
-      setPotonganHarga("Rp 0");
-      setDPP("Rp 0");
-      setJumlah("Rp 0");
-      setTarifPPN("Rp 0");
-      setTarifPPnBM("");
-      setPPnBM("Rp 0");
-      setIsChecked(false);
-      setIsCustomPPnBM(false);
-    };
-
-    const handleHapusTransaksi = (id) => {
-      const updatedTransaksi = savedTransaksi.filter((item) => item.id !== id);
-
-      setSavedTransaksi(updatedTransaksi);
-      setFormData((prev) => ({
-        ...prev,
-        detailTransaksi: updatedTransaksi,
-      }));
-    };
-
-    const handleEditTransaksi = (id) => {
-      const transaksiToEdit = savedTransaksi.find((item) => item.id === id);
-
-      if (transaksiToEdit) {
-        setTipe(transaksiToEdit.tipe);
-        setNamaBarang(transaksiToEdit.nama);
-        setSelectedKode(transaksiToEdit.kode);
-        setSelectedSatuan(transaksiToEdit.satuan);
-        setHarga(transaksiToEdit.harga);
-        setKuantitas(transaksiToEdit.kuantitas);
-        setTotalHarga(transaksiToEdit.totalHarga);
-        setPotonganHarga(transaksiToEdit.potonganHarga);
-        setDPP(transaksiToEdit.dpp);
-        setJumlah(transaksiToEdit.jumlah);
-        setTarifPPnBM(transaksiToEdit.tarifPPnBM);
-        setPPnBM(transaksiToEdit.ppnBM);
-
-        handleHapusTransaksi(id);
-      }
-    };
-
-    const handleChange = (e) => {
-      const { name, value, type, checked } = e.target;
-      setFormData((prev) => ({
-        ...prev,
-        [name]: type === "checkbox" ? checked : value,
-      }));
-    };
-    const handleSubmit = (e) => {
-      e.preventDefault();
-
-      // Validasi apakah ada detail transaksi
-      if (!formData.detailTransaksi || formData.detailTransaksi.length === 0) {
-        alert("Mohon tambahkan minimal satu detail transaksi");
-        return;
-      }
-
-      // Hitung total DPP, PPN, dan PPnBM dari semua transaksi
-      const totalDPP = formData.detailTransaksi.reduce((sum, item) => {
-        return sum + (parseInt(item.dpp.replace(/\D/g, ""), 10) || 0);
-      }, 0);
-
-      const totalPPN = formData.detailTransaksi.reduce((sum, item) => {
-        return sum + (parseInt(item.ppnNominal.replace(/\D/g, ""), 10) || 0);
-      }, 0);
-
-      const totalPPnBM = formData.detailTransaksi.reduce((sum, item) => {
-        return sum + (parseInt(item.ppnBM.replace(/\D/g, ""), 10) || 0);
-      }, 0);
-
-      // Tambahkan total ke formData
-      const finalFormData = {
-        ...formData,
-        totalDPP: formatRupiah(totalDPP.toString()),
-        totalPPN: formatRupiah(totalPPN.toString()),
-        totalPPnBM: formatRupiah(totalPPnBM.toString()),
-        totalTagihan: formatRupiah(
-          (totalDPP + totalPPN + totalPPnBM).toString()
-        ),
-      };
-
-      console.log(finalFormData);
-    };
-
-    const handleSimpan = () => {
-      const data = {
-        dokumenTransaksi: {
-          uangMuka,
-        },
-      };
-    };
-
-    // Hitung total DPP, PPN, dan PPnBM dari semua transaksi
+    // Calculate totals with proper numeric formatting
     const totalDPP = formData.detail_transaksi.reduce((sum, item) => {
-      return sum + item.dpp;
+      return sum + formatCurrencyForDB(item.dpp);
     }, 0);
 
     const totalPPN = formData.detail_transaksi.reduce((sum, item) => {
-      return sum + item.ppnNominal;
+      return sum + formatCurrencyForDB(item.ppn); // Changed from ppnNominal to ppn
     }, 0);
 
     const totalPPnBM = formData.detail_transaksi.reduce((sum, item) => {
-      return sum + item.ppnbm;
+      return sum + formatCurrencyForDB(item.ppnbm);
     }, 0);
 
-    // Tambahkan total ke formData
+    // Format the final form data with proper structure
     const finalFormData = {
       ...formData,
       dpp: totalDPP,
@@ -875,10 +863,27 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
       akun_penerima_id:
         formData.akun_penerima_id?.id || formData.akun_penerima_id,
       pic_id: akun,
+      // Ensure detail_transaksi matches the required structure
+      detail_transaksi: formData.detail_transaksi.map((item) => ({
+        id: item.id,
+        tipe: item.tipe,
+        nama: item.nama,
+        kode: item.kode,
+        kuantitas: item.kuantitas,
+        satuan: item.satuan,
+        harga_satuan: formatCurrencyForDB(item.harga_satuan),
+        total_harga: formatCurrencyForDB(item.total_harga),
+        pemotongan_harga: formatCurrencyForDB(item.pemotongan_harga),
+        dpp: formatCurrencyForDB(item.dpp),
+        ppn: formatCurrencyForDB(item.ppn), // Changed from ppnNominal
+        dpp_lain: formatCurrencyForDB(item.dpp_lain || 0), // Changed from jumlah
+        ppnbm: formatCurrencyForDB(item.ppnbm),
+        tarif_ppnbm: parseInt(item.tarif_ppnbm) || 0,
+      })),
     };
 
     console.log(finalFormData);
-    createFaktur.mutate({ data: finalFormData, isDraft });
+    updateFaktur.mutate({ data: finalFormData, isDraft });
   };
 
   const handleSimpan = () => {
@@ -1045,8 +1050,21 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
       // <div className="h-full w-full text-2xl italic font-bold text-center flex items-center justify-center">Loading...</div>
     );
   }
+  if (fakturLoading) {
+    return (
+      <div className="loading">
+        <ClipLoader color="#7502B5" size={50} />
+      </div>
+      // <div className="h-full w-full text-2xl italic font-bold text-center flex items-center justify-center">Loading...</div>
+    );
+  }
 
   console.log(npwp_faktur);
+  console.log(fakturData);
+  // console.log(
+  //   `${RoutesApiReal.apiUrl}student/assignments/${id}/sistem/${vie}/faktur/${faktur}`
+  // );
+  console.log(viewAsCompanyId);
 
   return (
     console.log(""),

@@ -584,6 +584,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
       );
     },
     onSuccess: (data, variables) => {
+      console.log(viewAsCompanyId ? viewAsCompanyId : akun);
       console.log(data);
       const successMessage = variables.isDraft
         ? "Draft Faktur berhasil dibuat"
