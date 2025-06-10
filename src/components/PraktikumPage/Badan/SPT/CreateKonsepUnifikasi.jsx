@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FaCalendarAlt, FaFilter, FaSearch, FaTimes, FaChevronDown, FaChevronUp } from "react-icons/fa";
 
-
-const CreateKonsepPasal = () => {
+const CreateKonsepUnifikasi = () => {
     const [activeTab, setActiveTab] = useState("induk");
     const [showHeaderInduk, setShowHeaderInduk] = useState(false);
     const [showIdentitasPemotong, setShowIdentitasPemotong] = useState(false);
@@ -32,12 +31,11 @@ const CreateKonsepPasal = () => {
         window.scrollTo({ top: 0, behavior: "smooth" });
     };
 
-
     return (
         <div className="flex h-screen bg-gray-100">
             <div className="flex-auto p-3 bg-white rounded-md h-full">
                 <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-3xl font-light text-yellow-500 mt-4">PEMOTONGAN PPH PASAL 21 DAN ATAU PASAL 26</h2>
+                    <h2 className="text-3xl font-light text-yellow-500 mt-4">SPT MASA PPH UNIFIKASI</h2>
                 </div>
                 <div className="w-full p-2 ml-0 border-t text-lg">
                     <Tabs defaultValue='induk' onValueChange={(val) => setActiveTab(val)} >
@@ -322,7 +320,7 @@ const CreateKonsepPasal = () => {
                                                     <td className='p-2 whitespace-normal break-words text-sm text-center'>
                                                         1
                                                     </td>
-                                                    <td className='p-2 whitespace-normal break-words text-sm text-left justify-start'>
+                                                    <td className='p-2 whitespace-normal break-words text-sm text-center'>
                                                         Pajak Penghasilan Pasal 26 Yang dilakukan Pemotongan
                                                     </td>
                                                     <td className='p-2 whitespace-normal break-words text-sm text-center'>
@@ -341,7 +339,7 @@ const CreateKonsepPasal = () => {
                                                     <td className='p-2 whitespace-normal break-words text-sm text-center'>
                                                         2
                                                     </td>
-                                                    <td className='p-2 whitespace-normal break-words text-sm text-left justify-start'>
+                                                    <td className='p-2 whitespace-normal break-words text-sm text-center'>
                                                         Penyerahan Kelebihan Pembayaran Pajak Penghasilan <br /> Pasal 26 dari Periode Sebelumnya
                                                     </td>
                                                     <td className='p-2 whitespace-normal break-words text-sm text-center'>
@@ -693,22 +691,22 @@ const CreateKonsepPasal = () => {
                                                 </tr>
                                             </tbody>
                                             {/* <tfoot className="text-gray-800 font-semibold bg-gray-100">
-                                                <tr>
-                                                    <td className="p-2 text-right min-w-[150px]" colSpan={11}>Jumlah Pendapatan Kotor dan Pajak Penghasilan Yang Ditanggung Oleh Pemerintah</td>
-                                                    <td className="p-2 text-center">0</td>
-                                                    <td className="p-2"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td className="p-2 text-right min-w-[150px]" colSpan={11}>Jumlah Pendapatan Kotor dan Pajak Penghasilan Yang Dipotong</td>
-                                                    <td className="p-2 text-center">0</td>
-                                                    <td className="p-2"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td className="p-2 text-right min-w-[150px]" colSpan={11}>Jumlah Total Pendapatan Kotor Dan Pajak Penghasilan Yang Ditanggung Oleh Pemerintah <br /> serta Pajak penghasilan Yang Dipotong</td>
-                                                    <td className="p-2 text-center">0</td>
-                                                    <td className="p-2"></td>
-                                                </tr>
-                                            </tfoot> */}
+                                                   <tr>
+                                                       <td className="p-2 text-right min-w-[150px]" colSpan={11}>Jumlah Pendapatan Kotor dan Pajak Penghasilan Yang Ditanggung Oleh Pemerintah</td>
+                                                       <td className="p-2 text-center">0</td>
+                                                       <td className="p-2"></td>
+                                                   </tr>
+                                                   <tr>
+                                                       <td className="p-2 text-right min-w-[150px]" colSpan={11}>Jumlah Pendapatan Kotor dan Pajak Penghasilan Yang Dipotong</td>
+                                                       <td className="p-2 text-center">0</td>
+                                                       <td className="p-2"></td>
+                                                   </tr>
+                                                   <tr>
+                                                       <td className="p-2 text-right min-w-[150px]" colSpan={11}>Jumlah Total Pendapatan Kotor Dan Pajak Penghasilan Yang Ditanggung Oleh Pemerintah <br /> serta Pajak penghasilan Yang Dipotong</td>
+                                                       <td className="p-2 text-center">0</td>
+                                                       <td className="p-2"></td>
+                                                   </tr>
+                                               </tfoot> */}
                                         </table>
                                     </div>
                                 </div>
@@ -850,22 +848,22 @@ const CreateKonsepPasal = () => {
                                                 </tr>
                                             </tbody>
                                             {/* <tfoot className="text-gray-800 font-semibold bg-gray-100">
-                                                <tr>
-                                                    <td className="p-2 text-right min-w-[150px]" colSpan={11}>Jumlah Pendapatan Kotor dan Pajak Penghasilan Yang Ditanggung Oleh Pemerintah</td>
-                                                    <td className="p-2 text-center">0</td>
-                                                    <td className="p-2"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td className="p-2 text-right min-w-[150px]" colSpan={11}>Jumlah Pendapatan Kotor dan Pajak Penghasilan Yang Dipotong</td>
-                                                    <td className="p-2 text-center">0</td>
-                                                    <td className="p-2"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td className="p-2 text-right min-w-[150px]" colSpan={11}>Jumlah Total Pendapatan Kotor Dan Pajak Penghasilan Yang Ditanggung Oleh Pemerintah <br /> serta Pajak penghasilan Yang Dipotong</td>
-                                                    <td className="p-2 text-center">0</td>
-                                                    <td className="p-2"></td>
-                                                </tr>
-                                            </tfoot> */}
+                                                   <tr>
+                                                       <td className="p-2 text-right min-w-[150px]" colSpan={11}>Jumlah Pendapatan Kotor dan Pajak Penghasilan Yang Ditanggung Oleh Pemerintah</td>
+                                                       <td className="p-2 text-center">0</td>
+                                                       <td className="p-2"></td>
+                                                   </tr>
+                                                   <tr>
+                                                       <td className="p-2 text-right min-w-[150px]" colSpan={11}>Jumlah Pendapatan Kotor dan Pajak Penghasilan Yang Dipotong</td>
+                                                       <td className="p-2 text-center">0</td>
+                                                       <td className="p-2"></td>
+                                                   </tr>
+                                                   <tr>
+                                                       <td className="p-2 text-right min-w-[150px]" colSpan={11}>Jumlah Total Pendapatan Kotor Dan Pajak Penghasilan Yang Ditanggung Oleh Pemerintah <br /> serta Pajak penghasilan Yang Dipotong</td>
+                                                       <td className="p-2 text-center">0</td>
+                                                       <td className="p-2"></td>
+                                                   </tr>
+                                               </tfoot> */}
                                         </table>
                                     </div>
                                 </div>
@@ -1013,10 +1011,10 @@ const CreateKonsepPasal = () => {
                                                     <td className="p-2">0</td>
                                                 </tr>
                                                 {/* <tr>
-                                                    <td className="p-2 text-right min-w-[150px]" colSpan={13}>Jumlah Total Pendapatan Kotor Dan Pajak Penghasilan Yang Ditanggung Oleh Pemerintah <br /> serta Pajak penghasilan Yang Dipotong</td>
-                                                    <td className="p-2 text-center">0</td>
-                                                    <td className="p-2"></td>
-                                                </tr> */}
+                                                       <td className="p-2 text-right min-w-[150px]" colSpan={13}>Jumlah Total Pendapatan Kotor Dan Pajak Penghasilan Yang Ditanggung Oleh Pemerintah <br /> serta Pajak penghasilan Yang Dipotong</td>
+                                                       <td className="p-2 text-center">0</td>
+                                                       <td className="p-2"></td>
+                                                   </tr> */}
                                             </tfoot>
                                         </table>
                                     </div>
@@ -1092,7 +1090,8 @@ const CreateKonsepPasal = () => {
                 </div>
             </div>
         </div>
+
     )
 }
 
-export default CreateKonsepPasal
+export default CreateKonsepUnifikasi
