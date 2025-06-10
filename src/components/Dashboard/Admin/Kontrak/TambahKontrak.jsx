@@ -372,7 +372,7 @@ const TambahKontrak = ({
             <label>Soal *</label>
             <RadioGroup
               name="is_buy_task"
-              value={formData.is_buy_task.toString()}
+              value={formData.is_buy_task?.toString()}
               onValueChange={(value) =>
                 setFormData({ ...formData, is_buy_task: Number(value) })
               }
