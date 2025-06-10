@@ -101,7 +101,7 @@ const typeConfigs = {
 const BUPOTWrapper = (props) => {
   // Extract type from the URL
   // const { type } = useParams();
-  const { type, status } = props.params; // Access params from RoleBasedRenderer
+  const { type, status } = useParams(); // Access params from RoleBasedRenderer
 
   // Get the configuration for this BUPOT type
   const config = typeConfigs[type] || {};

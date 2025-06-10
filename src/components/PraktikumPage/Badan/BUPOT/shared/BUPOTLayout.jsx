@@ -55,6 +55,7 @@ const BUPOTLayout = ({
             status={status}
             selectedItems={selectedItems}
             onSelectionChange={setSelectedItems}
+            type={type}
           />
         )}
 

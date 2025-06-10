@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { useParams } from "react-router";
+import { useLocation, useNavigate } from "react-router-dom";
 import countryData from "../../../../../../src/all.json";
 // import Select from "react-select";
 import {
@@ -22,7 +23,12 @@ const BUPOTForm = ({
   onSubmit,
   sidebarTitle,
   initialData = {},
+  isEditing = false,
+  isLoading = false,
 }) => {
+  const location = useLocation();
+  const navigate = useNavigate();
+
   // State for accordion sections
   const [openSections, setOpenSections] = useState({
     informasiUmum: true,
@@ -254,7 +260,14 @@ const BUPOTForm = ({
   };
 
   // Form data state
-  const [formData, setFormData] = useState(initialData);
+  const [formData, setFormData] = useState({});
+
+  // Initialize form data
+  useEffect(() => {
+    if (initialData && Object.keys(initialData).length > 0) {
+      setFormData(initialData);
+    }
+  }, [initialData]);
 
   // 2nd Form data state
   const [supportingFormData, setSupportingFormData] = useState({});
@@ -334,17 +347,32 @@ const BUPOTForm = ({
 
   // Helper to update form data
   const updateFormData = (field, value) => {
-    setFormData({
-      ...formData,
-      [field]: value,
-    });
+    setFormData(prev => ({
+      ...prev,
+      [field]: value
+    }));
   };
+
+  // Set default status based on create/edit mode
+  // useEffect(() => {
+  //   if (!isEditing) {
+  //     updateFormData("status", "normal");
+  //   }
+  // }, [isEditing]);
 
   const updateSupportingFormData = (field, value) => {
     setSupportingFormData({
       ...supportingFormData,
       [field]: value,
     });
+  };
+
+  // Handle edit form submission
+  const handleEditSubmit = (action = "save") => {
+    if (onSubmit) {
+      onSubmit(formData, action);
+    }
+    console.log(formData);
   };
 
   // Handle submitting the form
@@ -373,6 +401,12 @@ const BUPOTForm = ({
       console.log(updatedFormData);
       onSubmit(updatedFormData, action);
     }
+
+    if (action === "cancel") {
+      navigate(
+        `/praktikum/${id}/sistem/${akun}/bupot/${type}`
+      );
+    }
   };
 
   // Format rupiah helper
@@ -392,11 +426,13 @@ const BUPOTForm = ({
 
   // set nitku_dokumen to current
   useEffect(() => {
-    const currentAkun = npwp.find((obj) => (obj.id = akun));
-    updateFormData(
-      "nitku_dokumen",
-      currentAkun?.npwp_akun + "000000 - " + currentAkun?.nama_akun
-    );
+    if (!isEditing) {
+      const currentAkun = npwp.find((obj) => (obj.id = akun));
+      updateFormData(
+        "nitku_dokumen",
+        currentAkun?.npwp_akun + "000000 - " + currentAkun?.nama_akun
+      );
+    }
   }, [formData.jenis_dokumen]);
 
   // ✅ Alternative: Single useEffect with switch
@@ -660,7 +696,7 @@ const BUPOTForm = ({
 
   // set status
   useEffect(() => {
-    const newStatus = location.pathname.includes("/create")
+    const newStatus = (location.pathname.includes("/create") || formData.status_penerbitan === "draft")
       ? "normal"
       : "pembetulan";
     if (formData.status !== newStatus) {
@@ -3417,6 +3453,15 @@ const BUPOTForm = ({
 
         {/* Action buttons */}
         <div className="flex justify-end mt-4">
+          {isEditing && (
+            <button
+              className="bg-blue-500 text-white px-4 py-2 rounded-md mr-2"
+              disabled={isLoading}
+              onClick={() => handleEditSubmit("save")}
+            >
+              {isLoading ? "Menyimpan..." : (isEditing ? "Perbarui" : "Simpan")}
+            </button>
+          )}
           {location.pathname.includes("/create") && (
             <>
               <button

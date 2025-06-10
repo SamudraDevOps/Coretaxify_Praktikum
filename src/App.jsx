@@ -165,6 +165,7 @@ import SptMasaPph21Pdf from "./components/PraktikumPage/PDFTemplate/SPTMasaPPH";
 // BUPOT PRAKTIKUM
 import BUPOTWrapper from "./components/PraktikumPage/Badan/BUPOT/BUPOTWrapper";
 import BUPOTCreateWrapper from "./components/PraktikumPage/Badan/BUPOT/BUPOTCreateWrapper";
+import BUPOTEditWrapper from "./components/PraktikumPage/Badan/BUPOT/BUPOTEditWrapper";
 
 const Main = () => {
   const [loading, setLoading] = useState(true);
@@ -1066,6 +1067,22 @@ const Main = () => {
                 Badan={BUPOTCreateWrapper}
                 intent={"dynamic"}
                 query={"bupot-create"}
+              />
+            </>
+          }
+        />
+
+        {/* BUPOT Editing Routes */}
+        <Route
+          path="/praktikum/:id/sistem/:akun/bupot/:type/:bupotId/edit"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/bupot`}
+                OrangPribadi={BUPOTEditWrapper}
+                Badan={BUPOTEditWrapper}
+                intent={"dynamic"}
+                query={"bupot-edit"}
               />
             </>
           }

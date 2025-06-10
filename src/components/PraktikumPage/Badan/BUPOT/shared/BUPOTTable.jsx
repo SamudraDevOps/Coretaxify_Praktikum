@@ -1,4 +1,5 @@
 import React from "react";
+import { Link, useParams } from "react-router-dom";
 
 const BUPOTTable = ({
   columns,
@@ -7,7 +8,10 @@ const BUPOTTable = ({
   emptyMessage = "Tidak ada data yang ditemukan.",
   selectedItems = [],
   onSelectionChange,
+  type,
 }) => {
+  const { id, akun } = useParams();
+
   // handle select all
   const handleSelectAll = (e) => {
     if (e.target.checked) {
@@ -36,6 +40,7 @@ const BUPOTTable = ({
           onChange={handleSelectAll}
         />
       ) },
+      { key: "actions", label: "Actions" },
       ...columns,
     ];
 
@@ -79,6 +84,15 @@ const BUPOTTable = ({
                       />
                     ) : column.key === "no" ? (
                       rowIndex + 1
+                    ) : column.key === "actions" ? (
+                      <div className="flex pace-x-2">
+                        <Link 
+                          to={`/praktikum/${id}/sistem/${akun}/bupot/${type}/${row.id}/edit`}
+                          className="bg-blue-500 text-white px-2 py-1 rounded text-sm hover:bg-blue-600"
+                        >
+                          Edit
+                        </Link>
+                      </div>
                     ) : (
                       row[column.key]
                     )}
