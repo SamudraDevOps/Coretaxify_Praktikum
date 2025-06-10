@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, useSearchParams } from "react-router-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useCookies } from "react-cookie";
@@ -24,6 +24,7 @@ const BUPOTRenderer = ({
   const [cookies] = useCookies(["token"]);
   const location = useLocation();
   const queryClient = useQueryClient();
+  const [searchParams] = useSearchParams();
 
   const getBupot = () => {
     const pathSegments = location.pathname.split("/");
@@ -66,9 +67,19 @@ const BUPOTRenderer = ({
     }
   };
 
+  const getPembuat = () => {
+    const viewParam = searchParams.get("viewAs");
+    if (viewParam) {
+      return viewParam;
+    }
+    return akun;
+  };
+
   const currentBupot = getBupot();
+  const currentPembuat = getPembuat();
 
   console.log("Current BUPOT:", currentBupot);
+  console.log("Current Pembuat:", currentPembuat);
 
   // Determine which status we're viewing
   const getStatus = () => {
@@ -98,6 +109,7 @@ const BUPOTRenderer = ({
           column_filters: {
             status_penerbitan: currentStatus,
             tipe_bupot: currentBupot,
+            pembuat_id: currentPembuat
           },
         },
       });
