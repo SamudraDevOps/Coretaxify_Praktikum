@@ -122,6 +122,11 @@ export default function MahasiswaPraktikum() {
     assignment_code: "",
   });
 
+  const resetForm = () => {
+    setFormData({
+      assignment_code: "",
+    });
+  };
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -178,7 +183,7 @@ export default function MahasiswaPraktikum() {
             onChange={(e) => setSearch(e.target.value)}
           />
           <AlertDialog>
-            <AlertDialogTrigger className="bg-blue-800 p-2 rounded-md text-white hover:bg-blue-900">
+            <AlertDialogTrigger className="bg-blue-800 p-2 rounded-md text-white hover:bg-blue-900" onClick={() => resetForm()}>
               Tambah Praktikum
             </AlertDialogTrigger>
             <AlertDialogContent>
@@ -258,7 +263,7 @@ export default function MahasiswaPraktikum() {
                         window.location.href = `/praktikum/${item.id}`;
                       } else {
                         // If not started, call the mutation to start
-                        startPraktikum.mutate(item.id);
+                        startPraktikum.mutate(item.assignment.id);
                       }
                     }}
                   >
