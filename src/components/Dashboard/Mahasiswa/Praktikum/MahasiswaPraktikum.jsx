@@ -68,13 +68,13 @@ export default function MahasiswaPraktikum() {
       );
       return data;
     },
-    onSuccess: (data) => {
+    onSuccess: (data, variables) => {
       console.log(data);
       Swal.fire("Berhasil!", "Praktikum berhasil dimulai!", "success").then(
         (result) => {
           if (result.isConfirmed) {
             // Navigate to the praktikum system or refresh
-            window.location.href = `/praktikum/${data.data.assignment_user_id}`;
+            window.location.href = `/praktikum/${variables}`;
             refetch();
           }
         }
@@ -260,7 +260,7 @@ export default function MahasiswaPraktikum() {
                     onClick={() => {
                       if (item.is_start === 1) {
                         // If already started, redirect directly
-                        window.location.href = `/praktikum/${item.id}`;
+                        window.location.href = `/praktikum/${item.assignment.id}`;
                       } else {
                         // If not started, call the mutation to start
                         startPraktikum.mutate(item.assignment.id);
