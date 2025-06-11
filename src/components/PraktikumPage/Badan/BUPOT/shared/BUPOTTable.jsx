@@ -1,5 +1,6 @@
 import React from "react";
 import { Link, useParams } from "react-router-dom";
+import { useNavigateWithParams } from "@/hooks/useNavigateWithParams";
 
 const BUPOTTable = ({
   columns,
@@ -11,6 +12,7 @@ const BUPOTTable = ({
   type,
 }) => {
   const { id, akun } = useParams();
+  const navigate = useNavigateWithParams();
 
   // handle select all
   const handleSelectAll = (e) => {
@@ -86,12 +88,12 @@ const BUPOTTable = ({
                       rowIndex + 1
                     ) : column.key === "actions" ? (
                       <div className="flex pace-x-2">
-                        <Link 
-                          to={`/praktikum/${id}/sistem/${akun}/bupot/${type}/${row.id}/edit`}
+                        <button 
+                          onClick={() => navigate(`/praktikum/${id}/sistem/${akun}/bupot/${type}/${row.id}/edit`)}
                           className="bg-blue-500 text-white px-2 py-1 rounded text-sm hover:bg-blue-600"
                         >
                           Edit
-                        </Link>
+                        </button>
                       </div>
                     ) : (
                       row[column.key]

@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import BUPOTSidebar from "./BUPOTSidebar"; // Assuming you have a sidebar component
 import { useObjekPajak } from "@/hooks/bupot/useObjekPajak";
 import { useNpwp } from "@/hooks/bupot/useNpwp";
+import { useNavigateWithParams } from "@/hooks/useNavigateWithParams";
 
 const BUPOTForm = ({
   type,
@@ -27,7 +28,7 @@ const BUPOTForm = ({
   isLoading = false,
 }) => {
   const location = useLocation();
-  const navigate = useNavigate();
+  const navigate = useNavigateWithParams();
 
   // State for accordion sections
   const [openSections, setOpenSections] = useState({

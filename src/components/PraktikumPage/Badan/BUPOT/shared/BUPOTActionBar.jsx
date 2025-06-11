@@ -4,6 +4,7 @@ import axios from "axios";
 import { useCookies } from "react-cookie";
 import { RoutesApi } from "@/Routes";
 import Swal from "sweetalert2";
+import { useNavigateWithParams } from "@/hooks/useNavigateWithParams";
 
 const BUPOTActionBar = ({
   type,
@@ -16,6 +17,7 @@ const BUPOTActionBar = ({
   const { id, akun } = useParams();
   const [cookies] = useCookies(["token"]);
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigateWithParams();
 
   // Map types to their creation routes
   const createPaths = {
@@ -150,11 +152,11 @@ const BUPOTActionBar = ({
       </h1>
       <div className="flex space-x-2">
         {showCreateButton && isDraft && (
-          <Link to={createPaths[type]}>
-            <button className="bg-blue-700 text-white px-4 py-2 rounded">
+          
+            <button className="bg-blue-700 text-white px-4 py-2 rounded" onClick={() => navigate(createPaths[type])}>
               + Create eBupot {type.toUpperCase()}
             </button>
-          </Link>
+          
         )}
 
         {isDraft && (

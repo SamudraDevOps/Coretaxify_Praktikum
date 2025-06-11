@@ -1,9 +1,11 @@
 import React from "react";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, Navigate, useLocation, useParams } from "react-router-dom";
+import { useNavigateWithParams } from "@/hooks/useNavigateWithParams";
 
 const BUPOTSidebar = ({ type, title }) => {
   const location = useLocation();
   const { id, akun } = useParams(); // Get current assignment parameters
+  const navigate = useNavigateWithParams();
 
   // Map of BUPOT type to its route path
   const typeToPath = {
@@ -46,9 +48,9 @@ const BUPOTSidebar = ({ type, title }) => {
                   : "hover:bg-blue-700 hover:text-white"
               }`}
             >
-              <Link to={item.path} className="block w-full p-2">
+              <button onClick={() => navigate(item.path)} className="block w-full p-2">
                 {item.label}
-              </Link>
+              </button>
             </li>
           );
         })}
