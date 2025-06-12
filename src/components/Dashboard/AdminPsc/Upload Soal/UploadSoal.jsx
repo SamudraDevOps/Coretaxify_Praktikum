@@ -107,7 +107,7 @@ export default function UploadSoal() {
         });
       }
     },
-    onSuccess: (variables) => {
+    onSuccess: (data, variables) => {
       const { action } = variables;
       if (action === "create") {
         Swal.fire("Berhasil!", "Soal berhasil dibuat!", "success");
@@ -125,12 +125,7 @@ export default function UploadSoal() {
       });
     },
     onError: (error) => {
-      console.log(error.response);
-      if (error.response === undefined) {
-        Swal.fire("Gagal!", error.message, "error");
-        return;
-      }
-      Swal.fire("Gagal!", error.response.data.message, "error");
+      Swal.fire("Gagal!", "Data soal tidak sesuai template.", "error");
     },
   });
 

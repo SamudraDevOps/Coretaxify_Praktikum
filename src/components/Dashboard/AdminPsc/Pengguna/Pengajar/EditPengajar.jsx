@@ -143,7 +143,7 @@ const EditPengajar = () => {
         });
       }
     },
-    onSuccess: (variables) => {
+    onSuccess: (data, variables) => {
       const { action } = variables;
       if (action === "create") {
         Swal.fire("Berhasil!", "Instruktur berhasil dibuat!", "success");

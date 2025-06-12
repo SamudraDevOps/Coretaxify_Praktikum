@@ -67,7 +67,7 @@ export const joinAssignmentMahasiswa = (cookie, formData, refetch) =>
     onError: (error) => {
       console.log("hello!");
       console.log(error);
-      Swal.fire("Gagal !", error.message, "error");
+      Swal.fire("Gagal !", error.response.data.message, "error");
     },
   });
 

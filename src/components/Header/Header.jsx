@@ -535,19 +535,65 @@ const Header = () => {
                 links: `e-faktur`,
                 submenu: [],
               },
+              // {
+              //   label: "e-Bupot",
+              //   submenu: [
+              //     "BPPU",
+              //     "BPNR",
+              //     "Penyetoran Sendiri",
+              //     "Pemotongan Secara Digunggung",
+              //     "BP 21 - Bukti Pemotongan Selain Pegawai Tetap",
+              //     "BP 26 - Bukti Pemotongan Wajib Pajak Luar Negeri",
+              //     "BP A1 - Bukti Pemotongan A1 Masa Pajak Terakhir",
+              //     "BP A2 - Bukti Pemotongan A1 Masa Pajak Terakhir",
+              //     "Bukti Pemotongan Bulanan Pegawai Tetap",
+              //     "Unggah Dokumen Yang Dipersamakan dengan Bukti Pemotongan/Pemungutan",
+              //   ],
+              // },
               {
                 label: "e-Bupot",
                 submenu: [
-                  "BPPU",
-                  "BPNR",
-                  "Penyetoran Sendiri",
-                  "Pemotongan Secara Digunggung",
-                  "BP 21 - Bukti Pemotongan Selain Pegawai Tetap",
-                  "BP 26 - Bukti Pemotongan Wajib Pajak Luar Negeri",
-                  "BP A1 - Bukti Pemotongan A1 Masa Pajak Terakhir",
-                  "BP A2 - Bukti Pemotongan A1 Masa Pajak Terakhir",
-                  "Bukti Pemotongan Bulanan Pegawai Tetap",
-                  "Unggah Dokumen Yang Dipersamakan dengan Bukti Pemotongan/Pemungutan",
+                  {
+                    label: "BPPU",
+                    links: `/praktikum/${id}/sistem/${akun}/bupot/bppu`,
+                  },
+                  {
+                    label: "BPNR",
+                    links: `/praktikum/${id}/sistem/${akun}/bupot/bpnr`,
+                  },
+                  {
+                    label: "Penyetoran Sendiri",
+                    links: `/praktikum/${id}/sistem/${akun}/bupot/ps`,
+                  },
+                  {
+                    label: "Pemotongan Secara Digunggung",
+                    links: `/praktikum/${id}/sistem/${akun}/bupot/psd`,
+                  },
+                  {
+                    label: "BP 21 - Bukti Pemotongan Selain Pegawai Tetap",
+                    links: `/praktikum/${id}/sistem/${akun}/bupot/bp21`,
+                  },
+                  {
+                    label: "BP 26 - Bukti Pemotongan Wajib Pajak Luar Negeri",
+                    links: `/praktikum/${id}/sistem/${akun}/bupot/bp26`,
+                  },
+                  {
+                    label: "BP A1 - Bukti Pemotongan A1 Masa Pajak Terakhir",
+                    links: `/praktikum/${id}/sistem/${akun}/bupot/bpa1`,
+                  },
+                  {
+                    label: "BP A2 - Bukti Pemotongan A2 Masa Pajak Terakhir",
+                    links: `/praktikum/${id}/sistem/${akun}/bupot/bpa2`,
+                  },
+                  {
+                    label: "Bukti Pemotongan Bulanan Pegawai Tetap",
+                    links: `/praktikum/${id}/sistem/${akun}/bupot/bpbpt`,
+                  },
+                  {
+                    label:
+                      "Unggah Dokumen Yang Dipersamakan dengan Bukti Pemotongan/Pemungutan",
+                    links: `/praktikum/${id}/sistem/${akun}/bupot/dsbp`,
+                  },
                 ],
               },
               {
@@ -587,7 +633,11 @@ const Header = () => {
               },
               { label: "Buku Besar", submenu: [] },
             ].map((item, index) => (
-              <li key={index} className="relative">
+              <li
+                key={index}
+                className="relative"
+                onClick={() => toggleDropdown(item.label)}
+              >
                 {item.submenu.length > 0 ? (
                   <button
                     ref={(el) => (buttonRefs.current[index] = el)}
@@ -613,23 +663,19 @@ const Header = () => {
                       <li
                         key={subIndex}
                         className="relative px-4 py-4 hover:bg-yellow-500 cursor-pointer whitespace-nowrap"
+                        onClick={() => {
+                          const newPath = sub.links;
+                          if (viewAsCompanyId) {
+                            navigate(`${newPath}?viewAs=${viewAsCompanyId}`);
+                          } else {
+                            navigate(newPath);
+                          }
+                        }}
                       >
                         {typeof sub === "string" ? (
                           <button onClick={() => navigateTo(sub)}>{sub}</button>
                         ) : sub.links ? (
-                          <button
-                            className="w-full text-left"
-                            onClick={() => {
-                              const newPath = sub.links;
-                              if (viewAsCompanyId) {
-                                navigate(
-                                  `${newPath}?viewAs=${viewAsCompanyId}`
-                                );
-                              } else {
-                                navigate(newPath);
-                              }
-                            }}
-                          >
+                          <button className="w-full text-left">
                             {sub.label}
                           </button>
                         ) : (

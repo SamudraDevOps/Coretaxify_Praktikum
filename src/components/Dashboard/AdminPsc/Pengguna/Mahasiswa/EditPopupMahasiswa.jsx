@@ -3,6 +3,7 @@ import "./editPopupMahasiswa.css";
 import { FaPlus, FaTrash, FaFileImport } from "react-icons/fa";
 import * as XLSX from 'xlsx';
 import { RxCross1 } from "react-icons/rx";
+import Swal from "sweetalert2";
 
 const EditPopupMahasiswa = ({ 
   onClose, 
@@ -53,7 +54,7 @@ const EditPopupMahasiswa = ({
     // Filter out any empty rows
     const validStudents = students.filter(student => student.name && student.email && student.status);
     if (validStudents.length === 0) {
-      alert("Harap isi setidaknya satu mahasiswa dengan nama, email, dan status.");
+      Swal.fire("Gagal!", "Harap isi setidaknya satu mahasiswa dengan nama, email, dan status.", "error");
       return;
     }
 
@@ -62,7 +63,8 @@ const EditPopupMahasiswa = ({
     const uniqueEmails = new Set(emails);
 
     if (emails.length !== uniqueEmails.size) {
-      alert("Terdapat email duplikat. Email mahasiswa tidak boleh sama");
+      
+      Swal.fire("Gagal!", "Terdapat email duplikat. Email mahasiswa tidak boleh sama", "error");
       return;
     }
 

@@ -72,7 +72,8 @@ const Kontrak = () => {
   const mutation = deleteContract(getCookie());
 
   const handleData = (newData) => {
-    setData([...data, newData]);
+    // setData([...data, newData]);
+    refetch();
   };
 
   const handleSort = (key) => {

@@ -150,8 +150,8 @@ export default function DosenPraktikumKelas() {
       setFormData({
         name: dataOne.data.name,
         task_id: dataOne.data.task_id,
-        start_period: dataOne.data.start_period.split("-").reverse().join("-"),
-        end_period: dataOne.data.end_period.split("-").reverse().join("-"),
+        start_period: dataOne.data.start_period.split(" ")[0].split("-").reverse().join("-"),
+        end_period: dataOne.data.end_period.split(" ")[0].split("-").reverse().join("-"),
       });
     }
   }, [dataOne]);
@@ -254,6 +254,27 @@ export default function DosenPraktikumKelas() {
                       </select>
                     </div>
                     <div className="edit-form-group-mahasiswa">
+                      <label>Tanggal Mulai:</label>
+                      <input
+                        type="date"
+                        name="start_period"
+                        onChange={handleChange}
+                        min={new Date().toISOString().split("T")[0]}
+                      />
+                    </div>
+                    <div className="edit-form-group-mahasiswa">
+                      <label>Tanggal Selesai:</label>
+                      <input
+                        type="date"
+                        name="end_period"
+                        onChange={handleChange}
+                        min={
+                          formData.periodeAwal ||
+                          new Date().toISOString().split("T")[0]
+                        }
+                      />
+                    </div>
+                    <div className="edit-form-group-mahasiswa">
                       <label>File Support:</label>
                       <div className="flex items-center justify-center w-full ">
                         <label
@@ -309,27 +330,6 @@ export default function DosenPraktikumKelas() {
                           />
                         </label>
                       </div>
-                    </div>
-                    <div className="edit-form-group-mahasiswa">
-                      <label>Tanggal Mulai:</label>
-                      <input
-                        type="date"
-                        name="start_period"
-                        onChange={handleChange}
-                        min={new Date().toISOString().split("T")[0]}
-                      />
-                    </div>
-                    <div className="edit-form-group-mahasiswa">
-                      <label>Tanggal Selesai:</label>
-                      <input
-                        type="date"
-                        name="end_period"
-                        onChange={handleChange}
-                        min={
-                          formData.periodeAwal ||
-                          new Date().toISOString().split("T")[0]
-                        }
-                      />
                     </div>
                   </form>
                 </div>
@@ -459,6 +459,55 @@ export default function DosenPraktikumKelas() {
                                     </select>
                                   </div>
                                   <div className="edit-form-group-mahasiswa">
+                                    <label>Tanggal Mulai:</label>
+                                    {/* <input
+                                  type="text"
+                                  value={formData.start_period}
+                                /> */}
+                                    <input
+                                      type="date"
+                                      name="start_period"
+                                      onChange={handleChange}
+                                      // className="bg-red-400"
+                                      value={
+                                        formData.start_period
+                                      }
+                                      // value={formData.start_period
+                                      //   .split("-")
+                                      //   .reverse()
+                                      //   .join("-")}
+                                      // value={
+                                      //   formData.start_period
+                                      //     ? new Date(formData.start_period)
+                                      //         .toISOString()
+                                      //         .split("T")[0]
+                                      //     : ""
+                                      // }
+                                    />
+                                  </div>
+                                  <div className="edit-form-group-mahasiswa">
+                                    <label>Tanggal Selesai:</label>
+                                    <input
+                                      type="date"
+                                      name="end_period"
+                                      onChange={handleChange}
+                                      value={
+                                        formData.end_period
+                                      }
+                                      // value={formData.end_period
+                                      //   .split("-")
+                                      //   .reverse()
+                                      //   .join("-")}
+                                      // value={
+                                      //   formData.end_period
+                                      //     ? new Date(formData.end_period)
+                                      //         .toISOString()
+                                      //         .split("T")[0]
+                                      //     : ""
+                                      // }
+                                    />
+                                  </div>
+                                  <div className="edit-form-group-mahasiswa">
                                     <label>File Support:</label>
                                     <div className="flex items-center justify-center w-full ">
                                       <label
@@ -514,53 +563,6 @@ export default function DosenPraktikumKelas() {
                                         />
                                       </label>
                                     </div>
-                                  </div>
-                                  <div className="edit-form-group-mahasiswa">
-                                    <label>Tanggal Mulai:</label>
-                                    {/* <input
-                                  type="text"
-                                  value={formData.start_period}
-                                /> */}
-                                    <input
-                                      type="date"
-                                      name="start_period"
-                                      onChange={handleChange}
-                                      // className="bg-red-400"
-                                      value={
-                                        formData.start_period.split(" ")[0]
-                                      }
-                                      // value={formData.start_period
-                                      //   .split("-")
-                                      //   .reverse()
-                                      //   .join("-")}
-                                      // value={
-                                      //   formData.start_period
-                                      //     ? new Date(formData.start_period)
-                                      //         .toISOString()
-                                      //         .split("T")[0]
-                                      //     : ""
-                                      // }
-                                    />
-                                  </div>
-                                  <div className="edit-form-group-mahasiswa">
-                                    <label>Tanggal Selesai:</label>
-                                    <input
-                                      type="date"
-                                      name="end_period"
-                                      onChange={handleChange}
-                                      value={formData.end_period}
-                                      // value={formData.end_period
-                                      //   .split("-")
-                                      //   .reverse()
-                                      //   .join("-")}
-                                      // value={
-                                      //   formData.end_period
-                                      //     ? new Date(formData.end_period)
-                                      //         .toISOString()
-                                      //         .split("T")[0]
-                                      //     : ""
-                                      // }
-                                    />
                                   </div>
                                 </>
                               ) : null}

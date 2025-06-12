@@ -12,6 +12,7 @@ import DashboardDosen from "./components/Dashboard/Dosen/Dashboard/DashboardDose
 import DosenKelas from "./components/Dashboard/Dosen/Kelas/DosenKelas";
 // import DosenCardKelas from "./components/Dashboard/Dosen/Kelas/DosenCardKelas";
 import UjianDosen from "./components/Dashboard/Dosen/Ujian/UjianDosen";
+import UjianDosenMember from "./components/Dashboard/Dosen/Ujian/Members/UjianDosenMember";
 import EditDosen from "./components/Dashboard/Admin/Pengguna/Dosen/EditDosen";
 import PenilaianDosen from "./components/Dashboard/Dosen/Penilaian/PenilaianDosen";
 import DetailPenilaian from "./components/Dashboard/Dosen/Penilaian/DetailPenilaianDosen";
@@ -34,6 +35,8 @@ import EditUlasan from "./components/Dashboard/Admin/LandingPage/EditUlasan";
 import Praktikum from "./components/Dashboard/Dosen/Praktikum/Praktikum";
 // import Praktikum from "./components/Dashboard/Admin/Praktikum/Praktikum";
 import Ujian from "./components/Dashboard/Admin/Praktikum/Ujian";
+import AdminPraktikum from "./components/Dashboard/Admin/Praktikum/Praktikum";
+import AdminPraktikumMember from "./components/Dashboard/Admin/Praktikum/Members/PraktikumMember";
 import UploadSoal from "./components/Dashboard/Admin/Praktikum/UploadSoal";
 import KontrakBackup from "./components/Dashboard/Admin/Kontrak/KontrakBackup";
 import PraktikumBackup from "./components/Dashboard/Admin/Praktikum/PraktikumBackup";
@@ -159,6 +162,11 @@ import BpeSptPdf from "./components/PraktikumPage/PDFTemplate/BPESPTTemplate";
 import BillingCodePdf from "./components/PraktikumPage/PDFTemplate/BillingCodeTemplate";
 import SptMasaPph21Pdf from "./components/PraktikumPage/PDFTemplate/SPTMasaPPH";
 
+// BUPOT PRAKTIKUM
+import BUPOTWrapper from "./components/PraktikumPage/Badan/BUPOT/BUPOTWrapper";
+import BUPOTCreateWrapper from "./components/PraktikumPage/Badan/BUPOT/BUPOTCreateWrapper";
+import BUPOTEditWrapper from "./components/PraktikumPage/Badan/BUPOT/BUPOTEditWrapper";
+
 const Main = () => {
   const [loading, setLoading] = useState(true);
   const [cookies, setCookie] = useCookies(["token, role"]);
@@ -248,7 +256,11 @@ const Main = () => {
           <Route path="/admin/coretaxify" element={<CoretaxifyList />} />
           <Route path="/admin/edit-dosen" element={<EditDosen />} />
           <Route path="/admin/upload-soal" element={<UploadSoal />} />
-          <Route path="/admin/praktikum" element={<Praktikum />} />
+          <Route path="/admin/praktikum" element={<AdminPraktikum />} />
+          <Route
+            path="/admin/praktikum/:assignmentId/members"
+            element={<AdminPraktikumMember />}
+          />
           <Route
             path="/admin/coretaxify/coretaxify-send"
             element={<CoretaxifySendDetail />}
@@ -263,6 +275,7 @@ const Main = () => {
           <Route path="/admin/praktikum-backup" element={<PraktikumBackup />} />
           <Route path="/admin/praktikum" element={<Praktikum />} />
         </Route>
+
         {/* DOSEN ROUTE */}
         <Route
           element={
@@ -290,7 +303,12 @@ const Main = () => {
             element={<DetailPenilaian />}
           />
           <Route path="/dosen/ujian" element={<UjianDosen />} />
+          <Route
+            path="/dosen/ujian/:examId/members"
+            element={<UjianDosenMember />}
+          />
         </Route>
+
         {/* MAHASISWA ROUTE */}
         <Route
           element={
@@ -1004,6 +1022,68 @@ const Main = () => {
               <div className="w-full h-screen">
                 <ViewerPDF document={<SptMasaPph21Pdf />} />
               </div>
+            </>
+          }
+        />
+
+        <Route
+          path="/praktikum/:id/sistem/:akun/bupot/:type"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/bupot`}
+                OrangPribadi={BUPOTWrapper}
+                Badan={BUPOTWrapper}
+                intent={"dynamic"}
+                query={"bupot"}
+              ></RoleBasedRenderer>
+            </>
+          }
+        />
+
+        <Route
+          path="/praktikum/:id/sistem/:akun/bupot/:type/:status"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/bupot`}
+                OrangPribadi={BUPOTWrapper}
+                Badan={BUPOTWrapper}
+                intent={"dynamic"}
+                query={"bupot"}
+              />
+            </>
+          }
+        />
+
+        {/* BUPOT Creation Routes */}
+        <Route
+          path="/praktikum/:id/sistem/:akun/bupot/:type/create"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/bupot`}
+                OrangPribadi={BUPOTCreateWrapper}
+                Badan={BUPOTCreateWrapper}
+                intent={"dynamic"}
+                query={"bupot-create"}
+              />
+            </>
+          }
+        />
+
+        {/* BUPOT Editing Routes */}
+        <Route
+          path="/praktikum/:id/sistem/:akun/bupot/:type/:bupotId/edit"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/bupot`}
+                OrangPribadi={BUPOTEditWrapper}
+                Badan={BUPOTEditWrapper}
+                intent={"dynamic"}
+                query={"bupot-edit"}
+              />
             </>
           }
         />
