@@ -657,7 +657,7 @@ const Header = () => {
                 {item.submenu.length > 0 && dropdownOpen === item.label && (
                   <ul
                     ref={(el) => (dropdownRefs.current[index] = el)}
-                    className="absolute left-0 mt-3 min-w-max bg-blue-900 text-white shadow-md rounded-md"
+                    className="absolute left-0 mt-3 min-w-max bg-purple-700 text-white shadow-md rounded-md"
                   >
                     {item.submenu.map((sub, subIndex) => (
                       <li
