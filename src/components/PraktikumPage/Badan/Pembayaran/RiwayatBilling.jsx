@@ -8,8 +8,11 @@ import {
   AlertDialogTitle,
   AlertDialogDescription,
   AlertDialogAction,
+  AlertDialogCancel,
 } from "@/components/ui/alert-dialog";
 import { AlertDialogTrigger } from "@radix-ui/react-alert-dialog";
+import { PDFViewer } from "@react-pdf/renderer";
+import BillingCodePdf from "../../PDFTemplate/BillingCodeTemplate";
 
 const generateNTPN = () => {
   // 16 digit random number
@@ -114,7 +117,7 @@ const RiwayatBilling = ({ data, sidebar }) => {
                     <AlertDialog open={openNTPN} onOpenChange={setOpenNTPN}>
                       <AlertDialogTrigger>
                         <button className="bg-blue-100 text-blue-600 hover:bg-blue-200 hover:underline rounded px-3 py-1">
-                          Lihat
+                          Lihat NTPN
                         </button>
                       </AlertDialogTrigger>
                       <AlertDialogContent>
@@ -142,6 +145,45 @@ const RiwayatBilling = ({ data, sidebar }) => {
                           <AlertDialogAction onClick={() => setOpenNTPN(false)}>
                             Tutup
                           </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                    <AlertDialog>
+                      <AlertDialogTrigger>
+                        <button className="bg-blue-100 text-blue-600 hover:bg-blue-200 hover:underline rounded px-3 py-1">
+                          Lihat PDF
+                        </button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent className="max-w-4xl max-h-[90vh] overflow-auto">
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>
+                            Preview Dokumen -{" "}
+                            {item.kode_billing || "Kode Billing"}
+                          </AlertDialogTitle>
+                          <AlertDialogDescription>
+                            Detail dokumen untuk NPWP: {item.npwp}
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+
+                        <div className="flex flex-col items-center space-y-4">
+                          <PDFViewer
+                            style={{
+                              width: "100%",
+                              height: "50vh",
+                              border: "none",
+                              backgroundColor: "hsl(var(--background))",
+                            }}
+                          >
+                            <BillingCodePdf data={item}></BillingCodePdf>
+                          </PDFViewer>
+                        </div>
+
+                        <AlertDialogFooter>
+                          <AlertDialogCancel
+                          // onClick={() => setOpenPdfPreview(false)}
+                          >
+                            Tutup
+                          </AlertDialogCancel>
                         </AlertDialogFooter>
                       </AlertDialogContent>
                     </AlertDialog>
