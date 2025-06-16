@@ -163,7 +163,7 @@ const TambahKontrak = ({
     console.log(formData);
     if (validate()) {
       // onSave(formData);
-      setFormData({ formData });
+      // setFormData({ formData });
       mutation.mutate();
     }
   };
