@@ -75,13 +75,15 @@ const DaftarKodeBilingBelumBayar = ({ data, sidebar }) => {
       //   ? "Draft Faktur berhasil dibuat"
       //   : "Faktur berhasil diupload";
 
-      Swal.fire("Berhasil!", `Pembayaran SPT berhasil .\n\n Berikut kode NTPN anda "${data.data.ntpn}"`, "success").then(
-        (result) => {
-          if (result.isConfirmed) {
-            window.location.reload();
-          }
+      Swal.fire(
+        "Berhasil!",
+        `Pembayaran SPT berhasil .\n\n Berikut kode NTPN anda "<b>${data.data.ntpn}</b>"`,
+        "success"
+      ).then((result) => {
+        if (result.isConfirmed) {
+          window.location.reload();
         }
-      );
+      });
     },
     onError: (error) => {
       console.error("Error saving data:", error);
