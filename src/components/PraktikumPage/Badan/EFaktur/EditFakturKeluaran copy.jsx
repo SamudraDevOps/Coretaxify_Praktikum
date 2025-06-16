@@ -17,7 +17,7 @@ import {
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Button } from "@/components/ui/button";
-import { RoutesApi } from "@/Routes";
+// import { RoutesApi as RoutesApiReal } from "@/Routes";
 import {
   AlertDialog,
   AlertDialogTrigger,
@@ -37,10 +37,8 @@ import { useParams, useSearchParams } from "react-router";
 import { ClipLoader } from "react-spinners";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import Swal from "sweetalert2";
-import Select from "react-select";
 
-const TambahFakturKeluaran = ({ data, sidebar }) => {
-  // console.log("mamamia",data)
+const EditFakturKeluaran = ({ sidebar }) => {
   const [editMode, setEditMode] = useState(false);
   const [editingTransaksiId, setEditingTransaksiId] = useState(null);
 
@@ -74,10 +72,12 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
   const [ppnbm, setPPnBM] = useState("Rp 0");
   const [isCustomPPnBM, setIsCustomPPnBM] = useState(false);
 
-  const { id, akun, faktur } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const viewAsCompanyId = searchParams.get("viewAs");
+  const { id, akun, faktur } = useParams();
   const [cookies] = useCookies(["token"]);
+
+  // alert(faktur);
 
   const RoutesApi = {
     kodeTransaksi: "http://127.0.0.1:8000/api/kode-transaksi",
@@ -103,31 +103,6 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
   };
 
   const {
-    data: npwp_faktur,
-    isLoading,
-    isError,
-    error,
-  } = useQuery({
-    queryKey: ["npwp_faktur"],
-    queryFn: async () => {
-      const data = await axios.get(
-        // RoutesApiReal.apiUrl + `student/assignments/${id}/sistem/${akun}`,
-        RoutesApiReal.apiUrl +
-          `student/assignments/${id}/sistem/${akun}/getAkun`,
-        {
-          headers: {
-            Authorization: `Bearer ${cookies.token}`,
-          },
-          // params: {
-          //   intent: "api.sistem.get.akun.orang.pibadi",
-          // },
-        }
-      );
-      console.log(data.data);
-      return data.data;
-    },
-  });
-  const {
     data: fakturData,
     isLoading: fakturLoading,
     isError: fakturError,
@@ -148,187 +123,36 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
           },
         }
       );
-      return data;
+      return data.data;
     },
   });
-  useEffect(() => {
-    if (fakturData && !fakturLoading && !fakturError) {
-      console.log("Setting formData from fakturData:", fakturData);
 
-      setFormData({
-        uangMuka: fakturData.data.uangMuka || false,
-        pelunasan: fakturData.data.pelunasan || false,
-        nomorFaktur: fakturData.data.nomor_faktur_pajak || "",
-        kode_transaksi: fakturData.data.kode_transaksi || "",
-        tanggal_faktur_pajak: fakturData.data.tanggal_faktur_pajak || "",
-        jenisFaktur: fakturData.data.jenisFaktur || "Normal",
-        esign_status: fakturData.data.esign_status || "Belum Ditandatangani",
-        masa_pajak: fakturData.data.masa_pajak || "",
-        tahun: fakturData.data.tahun || new Date().getFullYear().toString(),
-        informasi_tambahan: fakturData.data.informasi_tambahan || "",
-        cap_fasilitas: fakturData.data.cap_fasilitas || "",
-        nomorPendukung: fakturData.data.nomorPendukung || "",
-        referensi: fakturData.data.referensi || "",
-        alamat:
-          fakturData.data.akun_penerima_id?.alamat_utama_akun ||
-          fakturData.data.alamat ||
-          "",
-        idtku: fakturData.data.idtku || "000000",
-        akun_penerima_id: fakturData.data.akun_penerima_id || "",
-        identification: fakturData.data.identification || "",
-        negara:
-          fakturData.data.akun_penerima_id?.negara_asal ||
-          fakturData.data.negara ||
-          "",
-        nomorDokumen: fakturData.data.nomorDokumen || "",
-        nama:
-          fakturData.data.akun_penerima_id?.nama_akun ||
-          fakturData.data.nama ||
-          "",
-        email:
-          fakturData.data.akun_penerima_id?.email_akun ||
-          fakturData.data.email ||
-          "",
-        detail_transaksi: fakturData.data.detail_transaksi || [],
-      });
-
-      // Set other related state variables
-      if (
-        fakturData.data.detail_transaksi &&
-        fakturData.data.detail_transaksi.length > 0
-      ) {
-        setSavedTransaksi(fakturData.data.detail_transaksi);
-      }
-
-      // Set form control states
-      setInformasiTambahan(fakturData.data.informasi_tambahan || "");
-      setCapFasilitas(fakturData.data.cap_fasilitas || "");
-      setNomorPendukung(fakturData.data.nomorPendukung || "");
-      setKodeTransaksi(fakturData.data.kode_transaksi || "");
-
-      // Set year picker
-      if (fakturData.data.tahun) {
-        const year = parseInt(fakturData.data.tahun);
-        if (!isNaN(year)) {
-          setSelectedYear(new Date(year, 0));
-          setTahunString(fakturData.data.tahun);
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ["npwp_faktur"],
+    queryFn: async () => {
+      const data = await axios.get(
+        // RoutesApiReal.apiUrl + `student/assignments/${id}/sistem/${akun}`,
+        RoutesApiReal.apiUrl +
+          `student/assignments/${id}/sistem/${akun}/getAkun`,
+        {
+          headers: {
+            Authorization: `Bearer ${cookies.token}`,
+          },
+          // params: {
+          //   intent: "api.sistem.get.akun.orang.pibadi",
+          // },
         }
-      }
-
-      // Set DPP, PPN, PPnBM values
-      if (fakturData.data.dpp) {
-        setDPP(parseFloat(fakturData.data.dpp));
-      }
-      if (fakturData.data.ppn) {
-        setTarifPPN(parseFloat(fakturData.data.ppn));
-      }
-      if (fakturData.data.ppnbm) {
-        setPPnBM(parseFloat(fakturData.data.ppnbm));
-      }
-    }
-  }, [fakturData, fakturLoading, fakturError]);
-
-  // console.log(fakturData);
-
-  useEffect(() => {
-    if (fakturData && !fakturLoading && !fakturError) {
-      console.log("Setting formData from fakturData:", fakturData);
-
-      setFormData({
-        uangMuka: fakturData.data.uangMuka || false,
-        pelunasan: fakturData.data.pelunasan || false,
-        nomorFaktur: fakturData.data.nomor_faktur_pajak || "",
-        kode_transaksi: fakturData.data.kode_transaksi || "",
-        tanggal_faktur_pajak: fakturData.data.tanggal_faktur_pajak || "",
-        jenisFaktur: fakturData.data.jenisFaktur || "Normal",
-        esign_status: fakturData.data.esign_status || "Belum Ditandatangani",
-        masa_pajak: fakturData.data.masa_pajak || "",
-        tahun: fakturData.data.tahun || new Date().getFullYear().toString(),
-        informasi_tambahan: fakturData.data.informasi_tambahan || "",
-        cap_fasilitas: fakturData.data.cap_fasilitas || "",
-        nomorPendukung: fakturData.data.nomorPendukung || "",
-        referensi: fakturData.data.referensi || "",
-        alamat:
-          fakturData.data.akun_penerima_id?.alamat_utama_akun ||
-          fakturData.data.alamat ||
-          "",
-        idtku: fakturData.data.idtku || "000000",
-        akun_penerima_id: fakturData.data.akun_penerima_id || "",
-        identification: fakturData.data.identification || "",
-        negara:
-          fakturData.data.akun_penerima_id?.negara_asal ||
-          fakturData.data.negara ||
-          "",
-        nomorDokumen: fakturData.data.nomorDokumen || "",
-        nama:
-          fakturData.data.akun_penerima_id?.nama_akun ||
-          fakturData.data.nama ||
-          "",
-        email:
-          fakturData.data.akun_penerima_id?.email_akun ||
-          fakturData.data.email ||
-          "",
-        detail_transaksi: fakturData.data.detail_transaksi || [],
-      });
-
-      // Set other related state variables
-      if (
-        fakturData.data.detail_transaksi &&
-        fakturData.data.detail_transaksi.length > 0
-      ) {
-        setSavedTransaksi(fakturData.data.detail_transaksi);
-      }
-
-      // Set form control states
-      setInformasiTambahan(fakturData.data.informasi_tambahan || "");
-      setCapFasilitas(fakturData.data.cap_fasilitas || "");
-      setNomorPendukung(fakturData.data.nomorPendukung || "");
-      setKodeTransaksi(fakturData.data.kode_transaksi || "");
-
-      // Set year picker
-      if (fakturData.data.tahun) {
-        const year = parseInt(fakturData.data.tahun);
-        if (!isNaN(year)) {
-          setSelectedYear(new Date(year, 0));
-          setTahunString(fakturData.data.tahun);
-        }
-      }
-
-      // Set DPP, PPN, PPnBM values
-      if (fakturData.data.dpp) {
-        setDPP(parseFloat(fakturData.data.dpp));
-      }
-      if (fakturData.data.ppn) {
-        setTarifPPN(parseFloat(fakturData.data.ppn));
-      }
-      if (fakturData.data.ppnbm) {
-        setPPnBM(parseFloat(fakturData.data.ppnbm));
-      }
-    }
-  }, [fakturData, fakturLoading, fakturError]);
+      );
+      console.log(data.data);
+      return data.data;
+    },
+  });
 
   const handleTipeChange = (e) => {
     const value = e.target.value;
     setTipe(value);
     fetchKodeByJenis(value);
   };
-
-  const stripCurrencyFormat = (value) => {
-    if (typeof value === "string") {
-      return parseFloat(value.replace(/[^\d.-]/g, "")) || 0;
-    }
-    return parseFloat(value) || 0;
-  };
-
-  const formatCurrencyForDB = (value) => {
-    return stripCurrencyFormat(value);
-  };
-
-  //  {
-  //     const value = e.target.value;
-  //     setTipe(value);
-  //     fetchKodeByJenis(value);
-  //   };
 
   function formatRupiah(value) {
     const numberString = value.replace(/[^0-9]/g, ""); // Hanya angka
@@ -547,6 +371,59 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
     detail_transaksi: [],
   });
 
+  useEffect(() => {
+    if (fakturData && !fakturLoading) {
+      // Populate formData with the fetched faktur data
+      setFormData({
+        uangMuka: fakturData.uangMuka || false,
+        pelunasan: fakturData.pelunasan || false,
+        nomorFaktur: fakturData.nomorFaktur || "",
+        kode_transaksi: fakturData.kode_transaksi || "",
+        tanggal_faktur_pajak: fakturData.tanggal_faktur_pajak || "",
+        jenisFaktur: fakturData.jenisFaktur || "Normal",
+        esign_status: fakturData.esign_status || "Belum Ditandatangani",
+        masa_pajak: fakturData.masa_pajak || "",
+        tahun: fakturData.tahun || new Date().getFullYear().toString(),
+        informasi_tambahan: fakturData.informasi_tambahan || "",
+        cap_fasilitas: fakturData.cap_fasilitas || "",
+        nomorPendukung: fakturData.nomorPendukung || "",
+        referensi: fakturData.referensi || "",
+        alamat: fakturData.alamat || "",
+        idtku: fakturData.idtku || "000000",
+        akun_penerima_id: fakturData.akun_penerima_id || "",
+        identification: fakturData.identification || "",
+        negara: fakturData.negara || "",
+        nomorDokumen: fakturData.nomorDokumen || "",
+        nama: fakturData.nama || "",
+        email: fakturData.email || "",
+        detail_transaksi: fakturData.detail_transaksi || [],
+      });
+
+      // Also update other state variables that are used in the form
+      if (
+        fakturData.detail_transaksi &&
+        fakturData.detail_transaksi.length > 0
+      ) {
+        setSavedTransaksi(fakturData.detail_transaksi);
+      }
+
+      // Set other form-related states
+      setInformasiTambahan(fakturData.informasi_tambahan || "");
+      setCapFasilitas(fakturData.cap_fasilitas || "");
+      setNomorPendukung(fakturData.nomorPendukung || "");
+      setKodeTransaksi(fakturData.kode_transaksi || "");
+
+      // Set the year if available
+      if (fakturData.tahun) {
+        const year = parseInt(fakturData.tahun);
+        if (!isNaN(year)) {
+          setSelectedYear(new Date(year, 0));
+          setTahunString(fakturData.tahun);
+        }
+      }
+    }
+  }, [fakturData, fakturLoading]);
+
   const [namaBarang, setNamaBarang] = useState("");
 
   // const handleSimpanTransaksi = () => {
@@ -622,20 +499,21 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
     }
 
     const transactionData = {
-      // id: editMode ? editingTransaksiId : Date.now(),
+      id: editMode ? editingTransaksiId : Date.now(),
       tipe,
       nama: namaBarang,
       kode: selectedKode,
-      kuantitas: kuantitas.toString(),
       satuan: selectedSatuan,
-      harga_satuan: formatCurrencyForDB(harga_satuan),
-      total_harga: formatCurrencyForDB(total_harga),
-      pemotongan_harga: formatCurrencyForDB(pemotongan_harga),
-      dpp: formatCurrencyForDB(dpp),
-      ppn: formatCurrencyForDB(ppn), // Changed from ppnNominal to ppn
-      dpp_lain: isChecked ? formatCurrencyForDB(jumlah) : 0, // Changed from jumlah to dpp_lain
-      ppnbm: formatCurrencyForDB(ppnbm),
+      harga_satuan,
+      kuantitas: kuantitas.toString(),
+      total_harga,
+      pemotongan_harga,
+      dpp,
+      jumlah,
+      ppn: parseInt("12%".replace(/\D/g, ""), 10) || 0,
+      ppnNominal: ppn,
       tarif_ppnbm: parseInt(tarif_ppnbm.replace(/\D/g, ""), 10) || 0,
+      ppnbm,
     };
 
     let updatedTransaksi;
@@ -688,6 +566,28 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
     setEditingTransaksiId(null);
   };
 
+  const handleCancelEdit = () => {
+    setEditMode(false);
+    setEditingTransaksiId(null);
+
+    // Reset form fields
+    setTipe("");
+    setNamaBarang("");
+    setSelectedKode("");
+    setSelectedSatuan("");
+    setHarga("Rp 0");
+    setKuantitas(0);
+    setTotalHarga("Rp 0");
+    setPotonganHarga("Rp 0");
+    setDPP("Rp 0");
+    setJumlah("Rp 0");
+    setTarifPPN("Rp 0");
+    setTarifPPnBM("");
+    setPPnBM("Rp 0");
+    setIsChecked(false);
+    setIsCustomPPnBM(false);
+  };
+
   const handleHapusTransaksi = (id) => {
     const updatedTransaksi = savedTransaksi.filter((item) => item.id !== id);
 
@@ -716,41 +616,15 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
       setTotalHarga(transaksiToEdit.total_harga);
       setPotonganHarga(transaksiToEdit.pemotongan_harga);
       setDPP(transaksiToEdit.dpp);
-      setJumlah(transaksiToEdit.dpp_lain || 0); // Changed from jumlah to dpp_lain
-      setTarifPPN(transaksiToEdit.ppn); // Changed from ppnNominal to ppn
+      setJumlah(transaksiToEdit.jumlah);
       setTarifPPnBM(
         transaksiToEdit.tarif_ppnbm ? `${transaksiToEdit.tarif_ppnbm}%` : ""
       );
       setPPnBM(transaksiToEdit.ppnbm);
 
-      // Set checkbox state based on dpp_lain value
-      setIsChecked(transaksiToEdit.dpp_lain > 0);
-
-      // Show modal
+      // Show modal or alert dialog
       document.querySelector(".AlertDialogTrigger").click();
     }
-  };
-
-  const handleCancelEdit = () => {
-    setEditMode(false);
-    setEditingTransaksiId(null);
-
-    // Reset form fields
-    setTipe("");
-    setNamaBarang("");
-    setSelectedKode("");
-    setSelectedSatuan("");
-    setHarga("Rp 0");
-    setKuantitas(0);
-    setTotalHarga("Rp 0");
-    setPotonganHarga("Rp 0");
-    setDPP("Rp 0");
-    setJumlah("Rp 0");
-    setTarifPPN("Rp 0");
-    setTarifPPnBM("");
-    setPPnBM("Rp 0");
-    setIsChecked(false);
-    setIsCustomPPnBM(false);
   };
 
   const handleChange = (e) => {
@@ -760,14 +634,13 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
       [name]: type === "checkbox" ? checked : value,
     }));
   };
-
-  // alert(viewAsCompanyId);
-  const updateFaktur = useMutation({
-    mutationFn: async ({ data, isDraft }) => {
+  const createDraftFaktur = useMutation({
+    mutationFn: async (data) => {
       const csrf = await getCsrf();
       const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
       return axios.put(
         `${RoutesApiReal.url}api/student/assignments/${id}/sistem/${accountId}/faktur/${faktur}`,
+        // `${RoutesApiReal.url}api/student/assignments/${id}/sistem/${akun}/faktur/${faktur}`,
         data,
         {
           headers: {
@@ -776,114 +649,143 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
             "X-CSRF-TOKEN": csrf,
             Authorization: `Bearer ${cookies.token}`,
           },
-          params: {
-            intent: isDraft
-              ? "api.create.faktur.draft"
-              : "api.create.faktur.fix",
-          },
+          // params: {
+          //   intent: "api.create.faktur.draft",
+          // },
         }
       );
     },
-    onSuccess: (data, variables) => {
+    onSuccess: (data) => {
       console.log(data);
-      const successMessage = variables.isDraft
-        ? "Draft Faktur berhasil dibuat"
-        : "Faktur berhasil diupload";
-
-      Swal.fire("Berhasil!", successMessage, "success").then((result) => {
-        if (result.isConfirmed) {
-          window.location.href = `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran?viewAs=${viewAsCompanyId}`;
+      Swal.fire("Berhasil!", "Faktur berhasil disimpan", "success").then(
+        (result) => {
+          if (result.isConfirmed) {
+            window.location.reload();
+          }
         }
-      });
+      );
     },
     onError: (error) => {
       console.error("Error saving data:", error);
       Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
     },
   });
-  useEffect(() => {
-    const formattedDPP = formatRupiah(dpp.toString());
-    setJumlah(formattedDPP);
-    updateTarifPPN(dpp.toString());
-  }, [dpp]);
-  // const [formData, setFormData] = useState({
-  //   uangMuka: false,
-  //   pelunasan: false,
-  //   nomorFaktur: "",
-  //   kodeTransaksi: "",
-  //   tanggalFaktur: "",
-  //   jenisFaktur: "Normal",
-  //   masaPajak: "",
-  //   tahun: new Date().getFullYear(),
-  //   informasiTambahan: "",
-  //   capFasilitas: "",
-  //   nomorPendukung: "",
-  //   referensi: "",
-  //   alamat: "",
-  //   idtku: "000000",
-  //   npwp: "",
-  //   identification: "",
-  //   negara: "",
-  //   nomorDokumen: "",
-  //   nama: "",
-  //   email: "",
-  //   detailTransaksi: [],
-  // });
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
 
-  // const [namaBarang, setNamaBarang] = useState("");
-  const handleSubmit = (e, isDraft = true) => {
+  //   // Validasi apakah ada detail transaksi
+  //   if (!formData.detail_transaksi || formData.detail_transaksi.length === 0) {
+  //     alert("Mohon tambahkan minimal satu detail transaksi");
+  //     return;
+  //   }
+
+  //   // Hitung total DPP, PPN, dan PPnBM dari semua transaksi
+  //   const totalDPP = formData.detail_transaksi.reduce((sum, item) => {
+  //     //   return sum + (parseInt(item.dpp.replace(/\D/g, ""), 10) || 0);
+  //     return sum + item.dpp;
+  //   }, 0);
+
+  //   const totalPPN = formData.detail_transaksi.reduce((sum, item) => {
+  //     //   return sum + (parseInt(item.ppnNominal.replace(/\D/g, ""), 10) || 0);
+  //     return sum + item.ppnNominal;
+  //   }, 0);
+
+  //   const totalPPnBM = formData.detail_transaksi.reduce((sum, item) => {
+  //     //   return sum + (parseInt(item.ppnbm.replace(/\D/g, ""), 10) || 0);
+  //     return sum + item.ppnbm;
+  //   }, 0);
+
+  //   // Tambahkan total ke formData
+  //   const finalFormData = {
+  //     ...formData,
+  //     akun_penerima_id: formData.akun_penerima_id.id,
+  //     dpp: parseInt(totalDPP),
+  //     ppn: parseInt(totalPPN),
+  //     ppnbm: parseInt(totalPPnBM),
+  //     informasi_tambahan: informasi_tambahan,
+  //     cap_fasilitas: cap_fasilitas,
+
+  //     //   totalTagihan: formatRupiah((totalDPP + totalPPN + totalPPnBM).toString()),
+  //   };
+  //   // alert(finalFormData)
+
+  //   console.log(finalFormData);
+  //   createDraftFaktur.mutate(finalFormData);
+  // };
+  const handleSubmit = (e) => {
     e.preventDefault();
 
+    // Validasi apakah ada detail transaksi
     if (!formData.detail_transaksi || formData.detail_transaksi.length === 0) {
       alert("Mohon tambahkan minimal satu detail transaksi");
       return;
     }
 
-    // Calculate totals with proper numeric formatting
-    const totalDPP = formData.detail_transaksi.reduce((sum, item) => {
-      return sum + formatCurrencyForDB(item.dpp);
+    // Transform detail_transaksi to ensure proper data format
+    const transformedDetailTransaksi = formData.detail_transaksi.map(
+      (item) => ({
+        ...item,
+        // Convert numeric values to numbers, but keep kuantitas as string
+        harga_satuan:
+          typeof item.harga_satuan === "string"
+            ? parseInt(item.harga_satuan.replace(/\D/g, ""), 10) || 0
+            : item.harga_satuan,
+        kuantitas: item.kuantitas.toString(), // Keep as string - backend expects string
+        total_harga:
+          typeof item.total_harga === "string"
+            ? parseInt(item.total_harga.replace(/\D/g, ""), 10) || 0
+            : item.total_harga,
+        pemotongan_harga:
+          typeof item.pemotongan_harga === "string"
+            ? parseInt(item.pemotongan_harga.replace(/\D/g, ""), 10) || 0
+            : item.pemotongan_harga,
+        dpp:
+          typeof item.dpp === "string"
+            ? parseInt(item.dpp.replace(/\D/g, ""), 10) || 0
+            : item.dpp,
+        jumlah:
+          typeof item.jumlah === "string"
+            ? parseInt(item.jumlah.replace(/\D/g, ""), 10) || 0
+            : item.jumlah,
+        ppnNominal:
+          typeof item.ppnNominal === "string"
+            ? parseInt(item.ppnNominal.replace(/\D/g, ""), 10) || 0
+            : item.ppnNominal,
+        ppnbm:
+          typeof item.ppnbm === "string"
+            ? parseInt(item.ppnbm.replace(/\D/g, ""), 10) || 0
+            : item.ppnbm,
+      })
+    );
+
+    // Hitung total DPP, PPN, dan PPnBM dari semua transaksi
+    const totalDPP = transformedDetailTransaksi.reduce((sum, item) => {
+      return sum + (item.dpp || 0);
     }, 0);
 
-    const totalPPN = formData.detail_transaksi.reduce((sum, item) => {
-      return sum + formatCurrencyForDB(item.ppn); // Changed from ppnNominal to ppn
+    const totalPPN = transformedDetailTransaksi.reduce((sum, item) => {
+      return sum + (item.ppnNominal || 0);
     }, 0);
 
-    const totalPPnBM = formData.detail_transaksi.reduce((sum, item) => {
-      return sum + formatCurrencyForDB(item.ppnbm);
+    const totalPPnBM = transformedDetailTransaksi.reduce((sum, item) => {
+      return sum + (item.ppnbm || 0);
     }, 0);
 
-    // Format the final form data with proper structure
+    // Tambahkan total ke formData
     const finalFormData = {
       ...formData,
-      dpp: totalDPP,
-      ppn: totalPPN,
-      ppnbm: totalPPnBM,
-      informasi_tambahan: informasi_tambahan,
-      cap_fasilitas: cap_fasilitas,
       akun_penerima_id:
         formData.akun_penerima_id?.id || formData.akun_penerima_id,
-      pic_id: akun,
-      // Ensure detail_transaksi matches the required structure
-      detail_transaksi: formData.detail_transaksi.map((item) => ({
-        id: item.id,
-        tipe: item.tipe,
-        nama: item.nama,
-        kode: item.kode,
-        kuantitas: item.kuantitas,
-        satuan: item.satuan,
-        harga_satuan: formatCurrencyForDB(item.harga_satuan),
-        total_harga: formatCurrencyForDB(item.total_harga),
-        pemotongan_harga: formatCurrencyForDB(item.pemotongan_harga),
-        dpp: formatCurrencyForDB(item.dpp),
-        ppn: formatCurrencyForDB(item.ppn), // Changed from ppnNominal
-        dpp_lain: formatCurrencyForDB(item.dpp_lain || 0), // Changed from jumlah
-        ppnbm: formatCurrencyForDB(item.ppnbm),
-        tarif_ppnbm: parseInt(item.tarif_ppnbm) || 0,
-      })),
+      detail_transaksi: transformedDetailTransaksi,
+      dpp: parseInt(totalDPP),
+      ppn: parseInt(totalPPN),
+      ppnbm: parseInt(totalPPnBM),
+      informasi_tambahan: informasi_tambahan,
+      cap_fasilitas: cap_fasilitas,
     };
 
-    console.log(finalFormData);
-    updateFaktur.mutate({ data: finalFormData, isDraft });
+    console.log("Final form data being sent:", finalFormData);
+    createDraftFaktur.mutate(finalFormData);
   };
 
   const handleSimpan = () => {
@@ -947,7 +849,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
         case "24":
           return "24 - (Tidak ada Cap)";
         case "25":
-          return "25 - PPN tidak dipungut berdasarkan PP Nomor 49 Tahun 2022";
+          return "25 - PPN tidak dipungut berdasarkan PP Nomor 49 Taakun_penerima_id.nama_akunhun 2022";
         case "26":
           return "26 - PPN tidak dipungut berdasarkan PP Nomor 12 Tahun 2023";
         case "27":
@@ -983,64 +885,6 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
     }
     return "";
   };
-  // useEffect(() => {
-  //   if (fakturData && !fakturLoading) {
-  //     // Populate formData with the fetched faktur data
-  //     console.log("use effect", fakturData);
-  //     setFormData({
-  //       uangMuka: fakturData.uangMuka || false,
-  //       pelunasan: fakturData.pelunasan || false,
-  //       nomorFaktur: fakturData.nomorFaktur || "",
-  //       kode_transaksi: fakturData.kode_transaksi || "",
-  //       tanggal_faktur_pajak: fakturData.tanggal_faktur_pajak || "",
-  //       jenisFaktur: fakturData.jenisFaktur || "Normal",
-  //       esign_status: fakturData.esign_status || "Belum Ditandatangani",
-  //       masa_pajak: fakturData.masa_pajak || "",
-  //       tahun: fakturData.tahun || new Date().getFullYear().toString(),
-  //       informasi_tambahan: fakturData.informasi_tambahan || "",
-  //       cap_fasilitas: fakturData.cap_fasilitas || "",
-  //       nomorPendukung: fakturData.nomorPendukung || "",
-  //       referensi: fakturData.referensi || "",
-  //       alamat: fakturData.alamat || "",
-  //       idtku: fakturData.idtku || "000000",
-  //       akun_penerima_id: fakturData.akun_penerima_id || "",
-  //       identification: fakturData.identification || "",
-  //       negara: fakturData.negara || "",
-  //       nomorDokumen: fakturData.nomorDokumen || "",
-  //       nama: fakturData.nama || "",
-  //       email: fakturData.email || "",
-  //       detail_transaksi: fakturData.detail_transaksi || [],
-  //     });
-
-  //     // Also update other state variables that are used in the form
-  //     if (
-  //       fakturData.detail_transaksi &&
-  //       fakturData.detail_transaksi.length > 0
-  //     ) {
-  //       setSavedTransaksi(fakturData.detail_transaksi);
-  //     }
-
-  //     // Set other form-related states
-  //     setInformasiTambahan(fakturData.informasi_tambahan || "");
-  //     setCapFasilitas(fakturData.cap_fasilitas || "");
-  //     setNomorPendukung(fakturData.nomorPendukung || "");
-  //     setKodeTransaksi(fakturData.kode_transaksi || "");
-
-  //     // Set the year if available
-  //     if (fakturData.tahun) {
-  //       const year = parseInt(fakturData.tahun);
-  //       if (!isNaN(year)) {
-  //         setSelectedYear(new Date(year, 0));
-  //         setTahunString(fakturData.tahun);
-  //       }
-  //     }
-  //   }
-  // }, [fakturData, fakturLoading]);
-
-  const options = listKode.map((item) => ({
-    value: item.kode,
-    label: `${item.kode} - ${item.nama_transaksi}`,
-  }));
 
   if (isLoading) {
     return (
@@ -1050,21 +894,8 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
       // <div className="h-full w-full text-2xl italic font-bold text-center flex items-center justify-center">Loading...</div>
     );
   }
-  if (fakturLoading) {
-    return (
-      <div className="loading">
-        <ClipLoader color="#7502B5" size={50} />
-      </div>
-      // <div className="h-full w-full text-2xl italic font-bold text-center flex items-center justify-center">Loading...</div>
-    );
-  }
 
-  console.log(npwp_faktur);
   console.log(fakturData);
-  // console.log(
-  //   `${RoutesApiReal.apiUrl}student/assignments/${id}/sistem/${vie}/faktur/${faktur}`
-  // );
-  console.log(viewAsCompanyId);
 
   return (
     console.log(""),
@@ -1088,7 +919,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
             {showDokumenTransaksi ? <FaChevronUp /> : <FaChevronDown />}
           </div>
           {showDokumenTransaksi && (
-            <div className="border rounded-md p-4 mb-2 grid grid-cols-3 gap-4 w-[1200px]">
+            <div className="border rounded-md p-4 mb-2 grid grid-cols-3 gap-4 w-full">
               <div className="space-y-2">
                 <label className="block text-sm font-medium">Uang Muka</label>
                 <input
@@ -1695,32 +1526,15 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                 <label className="block text-sm font-medium">NPWP </label>
                 <select
                   name="akun_penerima_id"
-                  value={formData.akun_penerima_id}
-                  // onChange={handleChange}
-                  onChange={(e) => {
-                    const selectedId = e.target.value;
-                    const selectedItem = npwp_faktur.data.find(
-                      (item) => item.id.toString() == selectedId
-                    );
-
-                    console.log(selectedItem);
-
-                    setFormData((prev) => ({
-                      ...prev,
-                      akun_penerima_id: selectedItem?.id,
-                      nama: selectedItem?.nama_akun || "",
-                      alamat: selectedItem?.alamat_utama_akun || "",
-                      negara: selectedItem?.negara_asal,
-                      email: selectedItem?.email_akun,
-                    }));
-                  }}
+                  value={formData.akun_penerima_id.id}
+                  onChange={handleChange}
                   className="p-2 border rounded w-full"
                 >
                   <option value="">Pilih NPWP</option>
                   {!isLoading &&
-                    npwp_faktur &&
-                    npwp_faktur.data.map((item, index) => (
-                      <option key={index} value={item.id}>
+                    data &&
+                    data.data.map((item, index) => (
+                      <option key={index} value={item.id || ""}>
                         {item.npwp_akun || "NPWP tidak tersedia"} -{" "}
                         {item.nama_akun}
                       </option>
@@ -1758,8 +1572,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                   name="negara"
                   value={formData.negara}
                   onChange={handleChange}
-                  className="p-2 border rounded w-full bg-gray-100"
-                  readOnly
+                  className="p-2 border rounded w-full"
                 />
               </div>
               <div className="space-y-2">
@@ -1780,11 +1593,9 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                 <input
                   type="text"
                   name="nama"
-                  // value={formData.akun_penerima_id.nama_akun}
-                  value={formData.nama}
+                  value={formData.akun_penerima_id.nama_akun}
                   onChange={handleChange}
-                  className="p-2 border rounded w-full bg-gray-100"
-                  disabled
+                  className="p-2 border rounded w-full"
                 />
               </div>
               <div className="space-y-2">
@@ -1794,8 +1605,9 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                   name="alamat"
                   value={formData.alamat}
                   onChange={handleChange}
-                  className="p-2 border rounded w-full bg-gray-100"
+                  className="p-2 border rounded w-full"
                   disabled
+                  placeholder="Ngelink kang"
                 />
               </div>
               <div className="space-y-2">
@@ -1815,8 +1627,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  className="p-2 border rounded w-full bg-gray-100"
-                  disabled
+                  className="p-2 border rounded w-full"
                 />
               </div>
             </div>
@@ -1829,7 +1640,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
             {showDetailTransaksi ? <FaChevronUp /> : <FaChevronDown />}
           </div>
           {showDetailTransaksi && (
-            <div className="border rounded-md p-4 mb-2 w-[1200px]">
+            <div className="border rounded-md p-4 mb-2 w-full">
               <div className="flex justify-between mb-4 border-b pb-3">
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
@@ -1840,7 +1651,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                   <AlertDialogContent className="bg-white rounded-md shadow-md p-4 !min-w-[1000px]">
                     <AlertDialogHeader className="text-lg font-semibold ">
                       <AlertDialogTitle className="text-lg font-semibold border-b pb-2 w-full">
-                        Tambah Transaksi
+                        {editMode ? "Edit Transaksi" : "Tambah Transaksi"}
                       </AlertDialogTitle>
                     </AlertDialogHeader>
                     <div className="grid grid-cols-2 gap-6 w-full overflow-auto h-96">
@@ -1879,26 +1690,21 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                         </div>
                         {tipe && (
                           <div>
-                            <label className="block text-sm font-medium mb-1">
+                            <label className="block text-sm font-medium">
                               Kode Transaksi
                             </label>
-                            <div className="w-full">
-                              <Select
-                                options={options}
-                                value={options.find(
-                                  (opt) => opt.value === selectedKode
-                                )}
-                                onChange={(selected) =>
-                                  setSelectedKode(selected?.value || "")
-                                }
-                                styles={{
-                                  menu: (provided) => ({
-                                    ...provided,
-                                    width: "full",
-                                  }),
-                                }}
-                              />
-                            </div>
+                            <select
+                              className="p-2 border rounded w-[250px] max-w-full"
+                              value={selectedKode}
+                              onChange={(e) => setSelectedKode(e.target.value)}
+                            >
+                              <option value="">Pilih Kode Transaksi</option>
+                              {listKode.map((item) => (
+                                <option key={item.id} value={item.kode}>
+                                  {item.kode} - {item.nama_transaksi}
+                                </option>
+                              ))}
+                            </select>
                           </div>
                         )}
 
@@ -1920,7 +1726,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                               Satuan
                             </label>
                             <select
-                              className="p-2 border rounded w-full max-w-full"
+                              className="p-2 border rounded w-[250px] max-w-full"
                               value={selectedSatuan}
                               onChange={(e) =>
                                 setSelectedSatuan(e.target.value)
@@ -2209,25 +2015,19 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
             </div>
           )}
           <div className="flex justify-end mt-4 gap-3">
-            <button
-              onClick={() =>
-                (window.location.href = `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran?viewAs=${viewAsCompanyId}`)
-              }
-              className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded"
-            >
+            <button className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded">
               Batal
             </button>
             <button
-              onClick={(e) => handleSubmit(e, true)}
-              className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded"
+              onClick={handleSubmit}
+              disabled={createDraftFaktur.isPending}
+              className={`py-2 px-4 rounded text-white ${
+                createDraftFaktur.isPending
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-blue-500 hover:bg-blue-600"
+              }`}
             >
-              Simpan Draft
-            </button>
-            <button
-              onClick={(e) => handleSubmit(e, false)}
-              className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded"
-            >
-              Upload Faktur
+              {createDraftFaktur.isPending ? "Menyimpan..." : "Simpan"}
             </button>
           </div>
         </div>
@@ -2236,4 +2036,4 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
   );
 };
 
-export default TambahFakturKeluaran;
+export default EditFakturKeluaran;

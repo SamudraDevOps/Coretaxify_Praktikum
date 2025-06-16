@@ -1,7 +1,12 @@
-import { IntentEnum } from './enums/IntentEnum';
+import { IntentEnum } from "./enums/IntentEnum";
 
 // const url = "http://192.168.1.86/";
 // const url = "http://192.168.1.93:8000/";
+// const url = "http://127.0.0.1:8000/";
+// const apiUrl = "http://127.0.0.1:8000/api/";
+
+// const url = "https://api.coretaxify.com/";
+// const apiUrl = "https://api.coretaxify.com/api/";
 const url = "http://127.0.0.1:8000/";
 const apiUrl = "http://127.0.0.1:8000/api/";
 const role = {
@@ -10,11 +15,11 @@ const role = {
   lecturer: "lecturer",
   psc: "psc",
   student_psc: "student-psc",
-  instructor: "instructor",  
+  instructor: "instructor",
 };
 
 const apiResource = (baseUrl, resourceName) => {
-  const base = baseUrl && !baseUrl.endsWith('/') ? `${baseUrl}/` : baseUrl;
+  const base = baseUrl && !baseUrl.endsWith("/") ? `${baseUrl}/` : baseUrl;
   const resourceUrl = `${base}${resourceName}`;
 
   return {
@@ -23,34 +28,34 @@ const apiResource = (baseUrl, resourceName) => {
     url: resourceUrl,
 
     // Basic Endpoints
-    index: () => ({url: resourceUrl, method: 'GET'}), // get index
-    show: (id) => ({ url: `${resourceUrl}/${id}`, method: 'GET'}), // show
-    store: () => ({ url: resourceUrl, method: 'POST'  }), // store (create)
-    update: (id) => ({ url:`${resourceUrl}/${id}`, method: 'PUT'}), // update
-    destroy: (id) => ({ url: `${resourceUrl}/${id}`, method: 'DELETE' }), // delete
+    index: () => ({ url: resourceUrl, method: "GET" }), // get index
+    show: (id) => ({ url: `${resourceUrl}/${id}`, method: "GET" }), // show
+    store: () => ({ url: resourceUrl, method: "POST" }), // store (create)
+    update: (id) => ({ url: `${resourceUrl}/${id}`, method: "PUT" }), // update
+    destroy: (id) => ({ url: `${resourceUrl}/${id}`, method: "DELETE" }), // delete
 
     // intent
     withIntent: (action, intentValue) => ({
       url: resourceUrl,
-      intent: {intent: intentValue},
+      intent: { intent: intentValue },
     }),
 
     showWithIntent: (id, intentValue) => ({
       url: `${resourceUrl}/${id}`,
-      intent: {intent: intentValue},
+      intent: { intent: intentValue },
     }),
 
     // nested
-    nested: function(id, nestedResourceName) {
+    nested: function (id, nestedResourceName) {
       return apiResource(`${resourceUrl}/${id}`, nestedResourceName);
     },
 
     // custo endpoint
-    custom: function(actionName) {
+    custom: function (actionName) {
       return `${resourceUrl}/${actionName}`;
     },
 
-    customWithId: function(id, actionName) {
+    customWithId: function (id, actionName) {
       return `${resourceUrl}/${id}/${actionName}`;
     },
   };
@@ -65,7 +70,7 @@ export const RoutesApi = {
   register: apiUrl + "register", // req name, email, password, password_confirmation, contract_code (class_code for psc)
   login: apiUrl + "login", // req email, password
   reset_password: apiUrl + "reset-password", // req email
-  
+
   // auth after-login
   logout: apiUrl + "logout", // req token
   profile: apiUrl + "profile", // req token
@@ -80,76 +85,90 @@ export const RoutesApi = {
   // api that use resource
   // admin
   admin: {
-    users: apiResource(apiUrl + `${role.admin}`, 'users'),
-    accounts: apiResource(apiUrl + `${role.admin}`, 'accounts'),
-    assignments: apiResource(apiUrl + `${role.admin}`, 'assignments'),
-    groups: apiResource(apiUrl + `${role.admin}`, 'groups'),
-    roles: apiResource(apiUrl + `${role.admin}`, 'roles'),
-    tasks: apiResource(apiUrl + `${role.admin}`, 'tasks'),
-    universities: apiResource(apiUrl + `${role.admin}`, 'universities'),
-    contract: apiResource(apiUrl + `${role.admin}`, 'contract'),
-    accountTypes: apiResource(apiUrl + `${role.admin}`, 'account-types'),
+    users: apiResource(apiUrl + `${role.admin}`, "users"),
+    accounts: apiResource(apiUrl + `${role.admin}`, "accounts"),
+    groups: apiResource(apiUrl + `${role.admin}`, "groups"),
+    roles: apiResource(apiUrl + `${role.admin}`, "roles"),
+    tasks: apiResource(apiUrl + `${role.admin}`, "tasks"),
+    universities: apiResource(apiUrl + `${role.admin}`, "universities"),
+    contract: apiResource(apiUrl + `${role.admin}`, "contract"),
+    accountTypes: apiResource(apiUrl + `${role.admin}`, "account-types"),
   },
-  
+
   // lecturer
   lecturer: {
-    groups: apiResource(apiUrl + `${role.lecturer}`, 'groups'),
-    assignments: apiResource(apiUrl + `${role.lecturer}`, 'assignments'),
-    exams: apiResource(apiUrl + `${role.lecturer}`, 'exams'),
+    groups: apiResource(apiUrl + `${role.lecturer}`, "groups"),
+    assignments: apiResource(apiUrl + `${role.lecturer}`, "assignments"),
+    exams: apiResource(apiUrl + `${role.lecturer}`, "exams"),
   },
 
   student: {
-    groups: apiResource(apiUrl + `${role.student}`, 'groups'),
-    assignments: apiResource(apiUrl + `${role.student}`, 'assignments'),
-    exams: apiResource(apiUrl + `${role.student}`, 'exams'),
-    sistems: apiResource(apiUrl + `${role.student}`, 'sistems'),
-    portal_saya: apiResource(apiUrl + `${role.student}`, 'portal-saya'),
-    profil_saya: apiResource(apiUrl + `${role.student}`, 'profil-saya'),
-    informasi_umum: apiResource(apiUrl + `${role.student}`, 'informasi-umum'),
-    detail_kontak: apiResource(apiUrl + `${role.student}`, 'detail-kontak'),
-    detail_bank: apiResource(apiUrl + `${role.student}`, 'detail-bank'),
-    jenis_pajak: apiResource(apiUrl + `${role.student}`, 'jenis-pajak'),
-    kode_klu: apiResource(apiUrl + `${role.student}`, 'kode-klu'),
-    pihak_terkait: apiResource(apiUrl + `${role.student}`, 'pihak-terkait'),
-    data_ekonomi: apiResource(apiUrl + `${role.student}`, 'data-ekonomi'),
-    objek_pajak_bumi_dan_bangunan: apiResource(apiUrl + `${role.student}`, 'objek-pajak-bumi-dan-bangunan'),
-    nomor_identifikasi_eksternal: apiResource(apiUrl + `${role.student}`, 'nomor-identifikasi-eksternal'),
-    penunjukkan_wajib_pajak_saya: apiResource(apiUrl + `${role.student}`, 'penunjukkan-wajib-pajak-saya'),
-    manajemen_kasuses: apiResource(apiUrl + `${role.student}`, 'manajemen-kasuses'),
-    alamat_wajib_pajak: apiResource(apiUrl + `${role.student}`, 'alamat-wajib-pajak'),
+    groups: apiResource(apiUrl + `${role.student}`, "groups"),
+    assignments: apiResource(apiUrl + `${role.student}`, "assignments"),
+    exams: apiResource(apiUrl + `${role.student}`, "exams"),
+    sistems: apiResource(apiUrl + `${role.student}`, "sistems"),
+    portal_saya: apiResource(apiUrl + `${role.student}`, "portal-saya"),
+    profil_saya: apiResource(apiUrl + `${role.student}`, "profil-saya"),
+    informasi_umum: apiResource(apiUrl + `${role.student}`, "informasi-umum"),
+    detail_kontak: apiResource(apiUrl + `${role.student}`, "detail-kontak"),
+    detail_bank: apiResource(apiUrl + `${role.student}`, "detail-bank"),
+    jenis_pajak: apiResource(apiUrl + `${role.student}`, "jenis-pajak"),
+    kode_klu: apiResource(apiUrl + `${role.student}`, "kode-klu"),
+    pihak_terkait: apiResource(apiUrl + `${role.student}`, "pihak-terkait"),
+    data_ekonomi: apiResource(apiUrl + `${role.student}`, "data-ekonomi"),
+    objek_pajak_bumi_dan_bangunan: apiResource(
+      apiUrl + `${role.student}`,
+      "objek-pajak-bumi-dan-bangunan"
+    ),
+    nomor_identifikasi_eksternal: apiResource(
+      apiUrl + `${role.student}`,
+      "nomor-identifikasi-eksternal"
+    ),
+    penunjukkan_wajib_pajak_saya: apiResource(
+      apiUrl + `${role.student}`,
+      "penunjukkan-wajib-pajak-saya"
+    ),
+    manajemen_kasuses: apiResource(
+      apiUrl + `${role.student}`,
+      "manajemen-kasuses"
+    ),
+    alamat_wajib_pajak: apiResource(
+      apiUrl + `${role.student}`,
+      "alamat-wajib-pajak"
+    ),
   },
 
   psc: {
-    groups: apiResource(apiUrl + `${role.psc}`, 'groups'),
-    users: apiResource(apiUrl + `${role.psc}`, 'users'),
-    assignments: apiResource(apiUrl + `${role.psc}`, 'assignments'),
-    exams: apiResource(apiUrl + `${role.psc}`, 'exams'),
-    tasks: apiResource(apiUrl + `${role.psc}`, 'tasks'),
+    groups: apiResource(apiUrl + `${role.psc}`, "groups"),
+    users: apiResource(apiUrl + `${role.psc}`, "users"),
+    assignments: apiResource(apiUrl + `${role.psc}`, "assignments"),
+    exams: apiResource(apiUrl + `${role.psc}`, "exams"),
+    tasks: apiResource(apiUrl + `${role.psc}`, "tasks"),
   },
 
   student_psc: {
-    groups: apiResource(apiUrl + `${role.student_psc}`, 'groups'),
-    assignments: apiResource(apiUrl + `${role.student_psc}`, 'assignments'),
-    exams: apiResource(apiUrl + `${role.student_psc}`, 'exams'),
-    sistems: apiResource(apiUrl + `${role.student_psc}`, 'sistems'),
+    groups: apiResource(apiUrl + `${role.student_psc}`, "groups"),
+    assignments: apiResource(apiUrl + `${role.student_psc}`, "assignments"),
+    exams: apiResource(apiUrl + `${role.student_psc}`, "exams"),
+    sistems: apiResource(apiUrl + `${role.student_psc}`, "sistems"),
   },
 
   instructor: {
-    tasks: apiResource(apiUrl + `${role.instructor}`, 'tasks'),
-    assignments: apiResource(apiUrl + `${role.instructor}`, 'assignments'),
+    tasks: apiResource(apiUrl + `${role.instructor}`, "tasks"),
+    assignments: apiResource(apiUrl + `${role.instructor}`, "assignments"),
   },
 
   // Helper nested
   getGroupAssignmentMembers: (groupId, assignmentId) =>
     RoutesApi.lecturer.groups
-      .nested(groupId, 'assignments')
-      .nested(assignmentId, 'members')
+      .nested(groupId, "assignments")
+      .nested(assignmentId, "members")
       .index(),
 
   getGroupAssignmentMembers: (groupId, assignmentId) =>
     RoutesApi.lecturer.groups
-      .nested(groupId, 'assignments')
-      .nested(assignmentId, 'members')
+      .nested(groupId, "assignments")
+      .nested(assignmentId, "members")
       .show(memberId),
 
   // LEGACY URL

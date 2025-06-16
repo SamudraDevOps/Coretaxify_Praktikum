@@ -242,7 +242,7 @@ const BillingCodePdf = ({ data }) => (
       </View>
 
       {/* Detail Billing */}
-      <View style={styles.section}>
+      {/* <View style={styles.section}>
         <Text style={{ fontWeight: "bold", marginBottom: 4 }}>
           DETAIL BILLING:
         </Text>
@@ -267,7 +267,7 @@ const BillingCodePdf = ({ data }) => (
           <Text style={{ marginLeft: 5 }}>Rp{data.nilai}</Text>
         </View>
         <Text>Terbilang: Dua Puluh Ribu Rupiah</Text>
-      </View>
+      </View> */}
 
       {/* Instruction */}
       <Text style={{ fontWeight: "bold", marginBottom: 6 }}>URAIAN:</Text>

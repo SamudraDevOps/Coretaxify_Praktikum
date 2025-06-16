@@ -293,13 +293,20 @@ const PajakKeluaran = ({
                     </td>
                     <td className="px-4 py-2 border">
                       <div className="flex space-x-2">
-                        <a
+                        {/* <a
                           href={`/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran/edit-faktur-keluaran/${item.id}`}
+                        > */}
+                        <button
+                          onClick={() =>
+                            navigate(
+                              `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran/edit-faktur-keluaran/${item.id}`
+                            )
+                          }
+                          className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs"
                         >
-                          <button className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs">
-                            Edit
-                          </button>
-                        </a>
+                          Edit
+                        </button>
+                        {/* </a> */}
                         <button
                           onClick={() => deleteFaktur.mutate(item.id)}
                           className="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-xs"
