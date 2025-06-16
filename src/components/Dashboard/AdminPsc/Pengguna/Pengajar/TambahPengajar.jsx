@@ -1,8 +1,8 @@
 import React, { useState, useRef } from "react";
 import "./tambahPengajar.css";
-import { IoMdClose } from "react-icons/io";
 import { FaFileImport, FaPlus, FaTrash } from "react-icons/fa";
 import * as XLSX from 'xlsx';
+import { RxCross1 } from "react-icons/rx";
 
 const TambahPengajar = ({ 
   isOpen, 
@@ -16,16 +16,23 @@ const TambahPengajar = ({
 }) => {
   if (!isOpen) return null;
 
-   // For multiple instructors mode
-   const [instructors, setInstructors] = useState(isMultipleMode ? [{ name: "", email: "", status: "ACTIVE" }] : []);
-   const [importError, setImportError] = useState("");
-   const [importSuccess, setImportSuccess] = useState("");
-   const [isImporting, setIsImporting] = useState(false);
-   const fileInputRef = useRef(null);
+  // For multiple instructors mode
+  const [instructors, setInstructors] = useState(isMultipleMode ? [{ name: "", email: "", status: "ACTIVE" }] : []);
+  const [importError, setImportError] = useState("");
+  const [importSuccess, setImportSuccess] = useState("");
+  const [isImporting, setIsImporting] = useState(false);
+  const fileInputRef = useRef(null);
+  // Add errors state for validation
+  const [errors, setErrors] = useState({});
+  const [instructorErrors, setInstructorErrors] = useState([{}]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+    // Clear error when field is changed
+    if (errors[name]) {
+      setErrors({ ...errors, [name]: null });
+    }
   };
 
   // For handling changes in multiple instructors mode
@@ -33,11 +40,19 @@ const TambahPengajar = ({
     const updatedInstructors = [...instructors];
     updatedInstructors[index] = { ...updatedInstructors[index], [field]: value };
     setInstructors(updatedInstructors);
+    
+    // Clear error for this field in this instructor
+    const updatedErrors = [...instructorErrors];
+    if (updatedErrors[index] && updatedErrors[index][field]) {
+      updatedErrors[index] = { ...updatedErrors[index], [field]: null };
+      setInstructorErrors(updatedErrors);
+    }
   };
 
   // Add a new instructor row
   const addInstructorRow = () => {
     setInstructors([...instructors, { name: "", email: "", status: "ACTIVE" }]);
+    setInstructorErrors([...instructorErrors, {}]);
   };
 
   // Remove an instructor row
@@ -45,30 +60,93 @@ const TambahPengajar = ({
     const updatedInstructors = [...instructors];
     updatedInstructors.splice(index, 1);
     setInstructors(updatedInstructors);
+    
+    const updatedErrors = [...instructorErrors];
+    updatedErrors.splice(index, 1);
+    setInstructorErrors(updatedErrors);
+  };
+
+  // Validate single instructor form
+  const validateSingleForm = () => {
+    let newErrors = {};
+
+    if (!formData.name) {
+      newErrors.name = "Nama pengajar harus diisi";
+    }
+
+    if (!formData.email) {
+      newErrors.email = "Email pengajar harus diisi";
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = "Format email tidak valid";
+    }
+
+    if (!formData.status) {
+      newErrors.status = "Status harus dipilih";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  // Validate multiple instructors
+  const validateMultipleForm = () => {
+    let isValid = true;
+    const newInstructorErrors = instructors.map((instructor, index) => {
+      let instructorError = {};
+      
+      if (!instructor.name) {
+        instructorError.name = "Nama pengajar harus diisi";
+        isValid = false;
+      }
+      
+      if (!instructor.email) {
+        instructorError.email = "Email pengajar harus diisi";
+        isValid = false;
+      } else if (!/\S+@\S+\.\S+/.test(instructor.email)) {
+        instructorError.email = "Format email tidak valid";
+        isValid = false;
+      }
+      
+      if (!instructor.status) {
+        instructorError.status = "Status harus dipilih";
+        isValid = false;
+      }
+      
+      return instructorError;
+    });
+    
+    // Check for duplicate emails
+    const emails = instructors.map(instructor => instructor.email);
+    const uniqueEmails = new Set(emails.filter(email => email)); // Filter out empty emails
+    
+    if (uniqueEmails.size < emails.filter(email => email).length) {
+      // There are duplicates
+      const duplicateEmails = {};
+      emails.forEach((email, index) => {
+        if (email && emails.indexOf(email) !== index) {
+          newInstructorErrors[index] = {
+            ...newInstructorErrors[index],
+            email: "Email duplikat. Setiap pengajar harus memiliki email unik."
+          };
+          isValid = false;
+        }
+      });
+    }
+    
+    setInstructorErrors(newInstructorErrors);
+    return isValid;
   };
 
   // Handle save for multiple instructors
   const handleSaveMultiple = () => {
-    // Filter out any empty rows and validate each instructor
-    const validInstructors = instructors.filter(instructor => 
-      instructor.name && instructor.email && instructor.status
-    );
-    
-    if (validInstructors.length === 0) {
-      alert("Harap isi setidaknya satu pengajar dengan nama, email, dan status");
-      return;
+    if (validateMultipleForm()) {
+      // Filter out any empty rows
+      const validInstructors = instructors.filter(instructor => 
+        instructor.name && instructor.email && instructor.status
+      );
+      
+      onSave(validInstructors);
     }
-    
-    // Check for duplicate emails
-    const emails = validInstructors.map(instructor => instructor.email);
-    const uniqueEmails = new Set(emails);
-    
-    if (emails.length !== uniqueEmails.size) {
-      alert("Terdapat email duplikat. Setiap pengajar harus memiliki email unik.");
-      return;
-    }
-    
-    onSave(validInstructors);
   };
 
   // Handle file import
@@ -130,10 +208,12 @@ const TambahPengajar = ({
         if (isMultipleMode) {
           // Set the imported instructors for multiple mode
           setInstructors(importedInstructors);
+          setInstructorErrors(Array(importedInstructors.length).fill({}));
           setImportSuccess(`Berhasil mengimpor ${importedInstructors.length} data pengajar dari file.`);
         } else if (importedInstructors.length > 0) {
           // If only adding one instructor, set the form data to the first imported instructor
           setFormData(importedInstructors[0]);
+          setErrors({});
           setImportSuccess("Berhasil mengimpor data pengajar dari file.");
         }
         
@@ -178,14 +258,22 @@ const TambahPengajar = ({
     fileInputRef.current.click();
   };
 
+  // Handle save with validation for single instructor
+  const handleSaveWithValidation = () => {
+    if (validateSingleForm()) {
+      onSave();
+    }
+  };
+
   return (
     <div className="tambah-instruktur-overlay">
       <div className="tambah-instruktur-container">
         <div className="tambah-instruktur-header">
           <h2>Tambah Pengajar</h2>
-          <button className="close-button" onClick={onClose}>
-            <IoMdClose />
-          </button>
+          <RxCross1
+            className="text-2xl hover:cursor-pointer"
+            onClick={onClose}
+          />
         </div>
 
         {/* Import Section */}
@@ -265,6 +353,9 @@ const TambahPengajar = ({
                         placeholder="Nama Pengajar"
                         required
                       />
+                      {instructorErrors[index]?.name && (
+                        <p className="text-red-500 text-sm">{instructorErrors[index].name}</p>
+                      )}
                     </div>
                     <div className="instructor-field">
                       <input
@@ -274,6 +365,9 @@ const TambahPengajar = ({
                         placeholder="Email"
                         required
                       />
+                      {instructorErrors[index]?.email && (
+                        <p className="text-red-500 text-sm">{instructorErrors[index].email}</p>
+                      )}
                     </div>
                     <div className="instructor-field">
                       <select
@@ -283,6 +377,9 @@ const TambahPengajar = ({
                         <option value="ACTIVE">Active</option>
                         <option value="INACTIVE">Inactive</option>
                       </select>
+                      {instructorErrors[index]?.status && (
+                        <p className="text-red-500 text-sm">{instructorErrors[index].status}</p>
+                      )}
                     </div>
                     <div className="instructor-field actions">
                       <button 
@@ -347,6 +444,9 @@ const TambahPengajar = ({
                   required
                   placeholder="Masukkan nama pengajar"
                 />
+                {errors.name && (
+                  <p className="text-red-500 text-sm">{errors.name}</p>
+                )}
               </div>
               <div className="form-group">
                 <label>Email:</label>
@@ -358,6 +458,9 @@ const TambahPengajar = ({
                   required
                   placeholder="Masukkan email pengajar"
                 />
+                {errors.email && (
+                  <p className="text-red-500 text-sm">{errors.email}</p>
+                )}
               </div>
               <div className="form-group">
                 <label>Status:</label>
@@ -371,6 +474,9 @@ const TambahPengajar = ({
                   <option value="ACTIVE">Active</option>
                   <option value="INACTIVE">Inactive</option>
                 </select>
+                {errors.status && (
+                  <p className="text-red-500 text-sm">{errors.status}</p>
+                )}
               </div>
               <div className="password-info">
                 <p>Password akan digenerate secara otomatis dan akan dikirimkan ke email pengajar.</p>
@@ -385,7 +491,7 @@ const TambahPengajar = ({
               </button>
               <button 
                 className="save-button" 
-                onClick={onSave}
+                onClick={handleSaveWithValidation}
                 disabled={isLoading}
               >
                 {isLoading ? "Loading..." : "Simpan"}

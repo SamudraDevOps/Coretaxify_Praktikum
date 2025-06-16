@@ -283,6 +283,16 @@ const SidebarAdmin = () => {
                     >
                       {isOpen && <span>Praktikum</span>}
                     </li>
+                    <li
+                      className={`dropdown-item  ${
+                        cookies.role == "admin" ? "" : "!hidden"
+                      }`}
+                      onClick={() => {
+                        window.location.href = "/admin/ujian";
+                      }}
+                    >
+                      Ujian
+                    </li>
                   </ul>
                 </AccordionContent>
               </AccordionItem>
@@ -298,7 +308,7 @@ const SidebarAdmin = () => {
             </li>
             <li
               className={`menu-item ${
-                cookies.role == "psc" || cookies.role == "admin" ? "" : "!hidden"
+                cookies.role == "psc" ? "" : "!hidden"
               }`}
               onClick={() => {
                 window.location.href = `/${cookies.role}/ujian`;

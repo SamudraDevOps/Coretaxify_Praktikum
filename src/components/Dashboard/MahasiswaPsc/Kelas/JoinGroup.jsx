@@ -65,6 +65,7 @@ const JoinGroup = ({ isOpen, setIsOpen, onSuccess }) => {
     },
     onError: (error) => {
       console.error(error);
+      setIsOpen(false);
       Swal.fire({
         title: "Gagal!",
         text: error.response?.data?.message || "Terjadi kesalahan saat bergabung dengan kelas.",
@@ -77,6 +78,7 @@ const JoinGroup = ({ isOpen, setIsOpen, onSuccess }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!groupCode.trim()) {
+      setIsOpen(false);
       Swal.fire({
         title: "Error!",
         text: "Kode kelas tidak boleh kosong!",
@@ -110,7 +112,7 @@ const JoinGroup = ({ isOpen, setIsOpen, onSuccess }) => {
                   id="groupCode"
                   className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600"
                   placeholder="Masukkan kode kelas"
-                  value={groupCode}
+                  value=""
                   onChange={(e) => setGroupCode(e.target.value)}
                   required
                 />

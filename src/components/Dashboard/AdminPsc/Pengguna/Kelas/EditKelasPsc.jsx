@@ -11,6 +11,7 @@ import { RoutesApi } from "@/Routes";
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 import { IntentEnum } from "@/enums/IntentEnum"; // Import IntentEnum
+import { RxCross1 } from "react-icons/rx";
 
 const EditKelasPsc = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -29,7 +30,7 @@ const EditKelasPsc = () => {
     class_code: "",
     start_period: "",
     end_period: "",
-    import_file: null
+    // import_file: null
   });
 
   const [createFormData, setCreateFormData] = useState({
@@ -38,7 +39,7 @@ const EditKelasPsc = () => {
     class_code: "",
     start_period: "",
     end_period: "",
-    import_file: null
+    // import_file: null
   });
 
   // Generate random code for new groups
@@ -93,9 +94,9 @@ const EditKelasPsc = () => {
         formDataObj.append("end_period", createFormData.end_period);
         
         // Add optional import file if present
-        if (createFormData.import_file) {
-          formDataObj.append("import_file", createFormData.import_file);
-        }
+        // if (createFormData.import_file) {
+        //   formDataObj.append("import_file", createFormData.import_file);
+        // }
 
         return await axios.post(
           RoutesApi.psc.groups.store().url,
@@ -144,8 +145,15 @@ const EditKelasPsc = () => {
         });
       }
     },
-    onSuccess: () => {
-      Swal.fire("Berhasil!", "Operasi berhasil dilakukan!", "success");
+    onSuccess: (data, variables) => {
+      const { action } = variables;
+      if (action === "create") {
+        Swal.fire("Berhasil!", "Kelas berhasil dibuat!", "success");
+      } else if (action === "update") {
+        Swal.fire("Berhasil!", "Kelas berhasil diperbarui!", "success");
+      } else if (action === "delete") {
+        Swal.fire("Berhasil!", "Kelas berhasil dihapus!", "success");
+      }
       refetch();
       setIsOpen(false);
       setIsCreateOpen(false);
@@ -157,7 +165,7 @@ const EditKelasPsc = () => {
         class_code: "",
         start_period: "",
         end_period: "",
-        import_file: null
+        // import_file: null
       });
     },
     onError: (error) => {

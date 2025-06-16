@@ -1,8 +1,208 @@
 import React from "react";
 import { FaTrash } from "react-icons/fa";
+import * as XLSX from "xlsx";
+
+// Excel processing utilities
+const readExcelFileMultipleRows = (file) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+      try {
+        const data = new Uint8Array(e.target.result);
+        const workbook = XLSX.read(data, { type: "array" });
+
+        // Look specifically for a sheet named "data"
+        const dataSheetIndex = workbook.SheetNames.findIndex(
+          (name) => name == "DATA"
+        );
+
+        if (dataSheetIndex === -1) {
+          reject(new Error("Excel file must contain a sheet named 'data'"));
+          return;
+        }
+
+        const worksheet = workbook.Sheets[workbook.SheetNames[dataSheetIndex]];
+
+        // Convert to JSON - let XLSX auto-detect headers
+        const jsonData = XLSX.utils.sheet_to_json(worksheet, {
+          range: 4,
+        });
+
+        // console.log(jsonData);
+        console.log("Raw Excel headers:", Object.keys(jsonData[0] || {}));
+        console.log("Raw Excel first row:", jsonData[0]);
+        resolve(jsonData);
+      } catch (error) {
+        reject(error);
+      }
+    };
+
+    reader.onerror = (error) => reject(error);
+    reader.readAsArrayBuffer(file);
+  });
+};
+
+const filterRequiredColumns = (excelData) => {
+  const requiredColumns = ["DPP/Harga Jual", "DPP Nilai Lain", "PPN", "PPnBM"];
+
+  // Add debugging to see original data
+  console.log("Before filtering, first row:", excelData[0]);
+
+  return excelData.map((row) => {
+    const filteredRow = {};
+    let matchFound = false;
+
+    // For each required column, try to find a matching column in the Excel data
+    requiredColumns.forEach((reqCol) => {
+      // Generate variations for this required column
+      const reqColVariations = [
+        reqCol,
+        reqCol.toLowerCase(),
+        reqCol.toUpperCase(),
+        reqCol.replace(/\s+/g, ""),
+        reqCol.replace(/\s+/g, "_"),
+        reqCol.replace(/\//g, ""),
+        reqCol.replace(/[\s\/]/g, ""),
+      ];
+
+      // Check all keys in the Excel row
+      for (const key of Object.keys(row)) {
+        // Generate variations for this Excel column
+        const keyVariations = [
+          key,
+          key.toLowerCase(),
+          key.toUpperCase(),
+          key.replace(/\s+/g, ""),
+          key.replace(/\s+/g, "_"),
+          key.replace(/\//g, ""),
+          key.replace(/[\s\/]/g, ""),
+        ];
+
+        // Check if any variation of the Excel column matches any variation of our required column
+        const hasMatch = keyVariations.some((keyVar) =>
+          reqColVariations.some(
+            (reqVar) =>
+              keyVar === reqVar ||
+              keyVar.includes(reqVar) ||
+              reqVar.includes(keyVar)
+          )
+        );
+
+        if (hasMatch) {
+          filteredRow[reqCol] = row[key];
+          matchFound = true;
+          console.log(
+            `Matched column: Excel="${key}" to Required="${reqCol}" with value=${row[key]}`
+          );
+          break; // Found a match for this required column, move to next
+        }
+      }
+
+      // If no match was found for this required column, set a default value
+      if (!filteredRow[reqCol]) {
+        filteredRow[reqCol] = reqCol.includes("PPN") ? 0 : "";
+        console.log(
+          `No match found for required column: ${reqCol}, using default value`
+        );
+      }
+    });
+
+    if (!matchFound) {
+      console.warn("No matches found for any required columns in row:", row);
+    }
+    console.log("Filtered Row", filteredRow);
+    return filteredRow;
+  });
+};
+
+const validateExcelData = (data) => {
+  if (!data || data.length === 0) {
+    throw new Error("Excel file is empty");
+  }
+  return true;
+};
+
+// Dynamic mapping based on columns configuration
+const mapExcelDataToRows = (excelData, columns, initialRow) => {
+  return excelData.map((row) => {
+    const mappedRow = { ...initialRow };
+
+    // Dynamically map each column based on the columns configuration
+    columns.forEach((col) => {
+      if (col.type !== "file") {
+        // Try multiple variations of the column key
+        const possibleKeys = generateColumnKeyVariations(col.key, col.label);
+
+        // Find the first matching key in the Excel data
+        const matchingKey = possibleKeys.find((key) => row.hasOwnProperty(key));
+
+        if (matchingKey) {
+          mappedRow[col.key] = row[matchingKey];
+        } else {
+          mappedRow[col.key] = col.type === "number" ? 0 : "";
+        }
+      }
+    });
+
+    return mappedRow;
+  });
+};
+
+// Generate possible column name variations
+const generateColumnKeyVariations = (key, label) => {
+  const variations = [
+    key, // Original key (e.g., 'hargaJual')
+    label, // Label as-is (e.g., 'Harga Jual')
+    key.toLowerCase(), // lowercase (e.g., 'hargajual')
+    key.toUpperCase(), // uppercase (e.g., 'HARGAJUAL')
+
+    // Convert camelCase to snake_case
+    key.replace(/([A-Z])/g, "_$1").toLowerCase(), // 'harga_jual'
+    key.replace(/([A-Z])/g, "_$1").toUpperCase(), // 'HARGA_JUAL'
+
+    // Convert camelCase to space-separated
+    key.replace(/([A-Z])/g, " $1").trim(), // 'harga Jual'
+    key
+      .replace(/([A-Z])/g, " $1")
+      .trim()
+      .toLowerCase(), // 'harga jual'
+    key
+      .replace(/([A-Z])/g, " $1")
+      .trim()
+      .toUpperCase(), // 'HARGA JUAL'
+
+    // Convert label to various formats
+    label.toLowerCase(), // 'harga jual'
+    label.toUpperCase(), // 'HARGA JUAL'
+    label.replace(/\s+/g, ""), // 'HargaJual'
+    label.replace(/\s+/g, "").toLowerCase(), // 'hargajual'
+    label.replace(/\s+/g, "").toUpperCase(), // 'HARGAJUAL'
+    label.replace(/\s+/g, "_"), // 'Harga_Jual'
+    label.replace(/\s+/g, "_").toLowerCase(), // 'harga_jual'
+    label.replace(/\s+/g, "_").toUpperCase(), // 'HARGA_JUAL'
+  ];
+
+  // Remove duplicates
+  return [...new Set(variations)];
+};
+
+// Generate expected column format info
+const generateExpectedColumnsInfo = (columns) => {
+  const nonFileColumns = columns.filter((col) => col.type !== "file");
+  return nonFileColumns.map((col) => {
+    const variations = generateColumnKeyVariations(col.key, col.label);
+    return {
+      field: col.key,
+      label: col.label,
+      examples: variations.slice(0, 3), // Show first 3 variations as examples
+    };
+  });
+};
 
 export default function DynamicUploadTable({
   rows,
+  setRows,
   handleFileChange,
   handleInputChange,
   handleAddRow,
@@ -12,7 +212,482 @@ export default function DynamicUploadTable({
   fileLabel = "File",
   addLabel = "+ Tambah data",
   showTotal = true,
+  consolacon, // console.log(jsonData);
 }) {
+  // WORK MULTIPLE ROW
+  // const handleExcelFileUpload = async (file, rowIndex) => {
+  //   try {
+  //     // Validate file type
+  //     const validTypes = [
+  //       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // .xlsx
+  //       "application/vnd.ms-excel", // .xls
+  //       "text/csv", // .csv
+  //     ];
+
+  //     if (!validTypes.includes(file.type)) {
+  //       throw new Error(
+  //         "Please upload a valid Excel file (.xlsx, .xls) or CSV file"
+  //       );
+  //     }
+
+  //     const excelData = await readExcelFileMultipleRows(file);
+  //     validateExcelData(excelData);
+
+  //     // Filter to only include the required columns
+  //     const filteredData = filterRequiredColumns(excelData);
+  //     console.log("Filtered data with required columns:", filteredData);
+
+  //     // Get the initial row structure
+  //     const initialRow = rows[rowIndex] || {};
+
+  //     // Map Excel data to table rows
+  //     const mappedExcelRows = mapExcelDataToRows(
+  //       filteredData,
+  //       columns,
+  //       initialRow
+  //     );
+
+  //     // Create a copy of current rows
+  //     const updatedRows = [...rows];
+
+  //     if (mappedExcelRows.length === 1) {
+  //       // Single row: Update the current row with Excel data
+  //       updatedRows[rowIndex] = {
+  //         ...mappedExcelRows[0],
+  //         file: file,
+  //       };
+  //     } else if (mappedExcelRows.length > 1) {
+  //       // Multiple rows: Replace current row and add additional rows
+  //       // Set file reference only for the first row
+  //       mappedExcelRows[0].file = file;
+
+  //       // Replace current row with first Excel row
+  //       updatedRows[rowIndex] = mappedExcelRows[0];
+
+  //       // Insert additional rows after the current row
+  //       const additionalRows = mappedExcelRows.slice(1);
+  //       updatedRows.splice(rowIndex + 1, 0, ...additionalRows);
+  //     }
+
+  //     // Update the rows state
+  //     setRows(updatedRows);
+
+  //     // Log mapping info for debugging
+  //     console.log(
+  //       `Excel data loaded successfully at row ${rowIndex}:`,
+  //       mappedExcelRows
+  //     );
+  //     console.log(
+  //       "Available Excel columns:",
+  //       Object.keys(filteredData[0] || {})
+  //     );
+  //     console.log("Expected columns:", generateExpectedColumnsInfo(columns));
+  //   } catch (error) {
+  //     console.error("Error reading Excel file:", error);
+  //     alert(`Error reading Excel file: ${error.message}`);
+  //   }
+  // };
+  // const handleExcelFileUpload = async (file, rowIndex) => {
+  //   try {
+  //     // Validate file type
+  //     const validTypes = [
+  //       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // .xlsx
+  //       "application/vnd.ms-excel", // .xls
+  //       "text/csv", // .csv
+  //     ];
+
+  //     if (!validTypes.includes(file.type)) {
+  //       throw new Error(
+  //         "Please upload a valid Excel file (.xlsx, .xls) or CSV file"
+  //       );
+  //     }
+
+  //     const excelData = await readExcelFileMultipleRows(file);
+  //     console.log("Raw Excel headers:", Object.keys(excelData[0] || {}));
+  //     console.log("Raw Excel first row:", excelData[0]);
+
+  //     validateExcelData(excelData);
+
+  //     // Create a more precise mapping between Excel columns and component columns
+  //     const columnMapping = {
+  //       "DPP/Harga Jual": "dppHargaJual",
+  //       "DPP Nilai Lain": "dppNilaiLain",
+  //       "PPN": "ppn",
+  //       "PPnBM": "ppnbm"
+  //     };
+
+  //     // Calculate sums for each column
+  //     const sums = {};
+
+  //     // Initialize sums object with numeric columns from our configuration
+  //     columns.forEach(col => {
+  //       if (col.type === "number") {
+  //         sums[col.key] = 0;
+  //       }
+  //     });
+
+  //     // For debugging - create a map to track which Excel columns map to which component columns
+  //     const mappingUsed = {};
+
+  //     // Process each row from Excel and add to sums
+  //     excelData.forEach((row, rowIdx) => {
+  //       // For each Excel row, we need to determine which columns match our required columns
+  //       const rowMappings = {}; // To track which Excel column maps to which component column for this row
+
+  //       // For each key in the Excel row
+  //       Object.keys(row).forEach(excelColName => {
+  //         // For each of our required columns, check if this Excel column matches
+  //         Object.entries(columnMapping).forEach(([requiredName, componentKey]) => {
+  //           // Generate variations for the required column name
+  //           const requiredVariations = [
+  //             requiredName,
+  //             requiredName.toLowerCase(),
+  //             requiredName.toUpperCase(),
+  //             requiredName.replace(/\s+/g, ""),
+  //             requiredName.replace(/\s+/g, "_"),
+  //             requiredName.replace(/\//g, ""),
+  //             requiredName.replace(/[\s\/]/g, "")
+  //           ];
+
+  //           // Generate variations for the Excel column name
+  //           const excelVariations = [
+  //             excelColName,
+  //             excelColName.toLowerCase(),
+  //             excelColName.toUpperCase(),
+  //             excelColName.replace(/\s+/g, ""),
+  //             excelColName.replace(/\s+/g, "_"),
+  //             excelColName.replace(/\//g, ""),
+  //             excelColName.replace(/[\s\/]/g, "")
+  //           ];
+
+  //           // Check if any variation of the Excel column matches any variation of our required column
+  //           const matchFound = requiredVariations.some(reqVar =>
+  //             excelVariations.some(excelVar =>
+  //               excelVar === reqVar ||
+  //               (excelVar.length > 3 && reqVar.length > 3 &&
+  //                (excelVar.includes(reqVar) || reqVar.includes(excelVar)))
+  //             )
+  //           );
+
+  //           if (matchFound) {
+  //             rowMappings[componentKey] = excelColName;
+  //             if (!mappingUsed[excelColName]) {
+  //               mappingUsed[excelColName] = componentKey;
+  //               console.log(`Mapping Excel column "${excelColName}" to component column "${componentKey}"`);
+  //             }
+  //           }
+  //         });
+  //       });
+
+  //       // Now add the values using the mappings determined for this row
+  //       Object.entries(rowMappings).forEach(([componentKey, excelColName]) => {
+  //         // If this is a numeric column, add to sum
+  //         const col = columns.find(c => c.key === componentKey);
+  //         if (col && col.type === "number") {
+  //           const value = parseFloat(row[excelColName]) || 0;
+  //           sums[componentKey] = (sums[componentKey] || 0) + value;
+  //           console.log(`Row ${rowIdx+1}: Adding ${value} to sum of ${componentKey} (from Excel column "${excelColName}"), new total: ${sums[componentKey]}`);
+  //         }
+  //       });
+  //     });
+
+  //     console.log("Final calculated sums:", sums);
+  //     console.log("Column mappings used:", mappingUsed);
+
+  //     // Create a copy of current rows
+  //     const updatedRows = [...rows];
+
+  //     // Update the current row with the sums
+  //     updatedRows[rowIndex] = {
+  //       ...initialRow,
+  //       ...sums,
+  //       file: file,
+  //     };
+
+  //     // Update the rows state
+  //     setRows(updatedRows);
+
+  //     // Display confirmation with row count
+  //     console.log(`Summed ${excelData.length} rows from Excel into one row`);
+
+  //   } catch (error) {
+  //     console.error("Error reading Excel file:", error);
+  //     alert(`Error reading Excel file: ${error.message}`);
+  //   }
+  // };
+  const handleExcelFileUpload = async (file, rowIndex) => {
+    try {
+      // Validate file type
+      const validTypes = [
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // .xlsx
+        "application/vnd.ms-excel", // .xls
+        "text/csv", // .csv
+      ];
+
+      if (!validTypes.includes(file.type)) {
+        throw new Error(
+          "Please upload a valid Excel file (.xlsx, .xls) or CSV file"
+        );
+      }
+
+      const excelData = await readExcelFileMultipleRows(file);
+      console.log("Raw Excel headers:", Object.keys(excelData[0] || {}));
+      console.log("Raw Excel data (first few rows):", excelData.slice(0, 3));
+
+      validateExcelData(excelData);
+
+      // Get the initial row structure
+      const initialRow = rows[rowIndex] || {};
+
+      // Create column mapping
+      const columnMapping = {
+        "DPP/Harga Jual": "dppHargaJual",
+        "DPP Nilai Lain": "dppNilaiLain",
+        PPN: "ppn",
+        PPnBM: "ppnbm",
+      };
+
+      // Find the summary row
+      const summaryRow = findSummaryRow(excelData);
+      console.log("Found summary row:", summaryRow);
+
+      if (!summaryRow) {
+        throw new Error(
+          "Could not find a summary row containing 'jumlah' or 'total'"
+        );
+      }
+
+      // Extract the values from the summary row
+      const extractedValues = {};
+
+      // Map the summary row values to our component columns
+      Object.keys(summaryRow).forEach((excelColName) => {
+        // For each of our required columns, check if this Excel column matches
+        Object.entries(columnMapping).forEach(
+          ([requiredName, componentKey]) => {
+            // Generate variations for the required column name
+            const requiredVariations = [
+              requiredName,
+              requiredName.toLowerCase(),
+              requiredName.toUpperCase(),
+              requiredName.replace(/\s+/g, ""),
+              requiredName.replace(/\//g, ""),
+              requiredName.replace(/[\s\/]/g, ""),
+            ];
+
+            // Generate variations for the Excel column name
+            const excelVariations = [
+              excelColName,
+              excelColName.toLowerCase(),
+              excelColName.toUpperCase(),
+              excelColName.replace(/\s+/g, ""),
+              excelColName.replace(/\//g, ""),
+              excelColName.replace(/[\s\/]/g, ""),
+            ];
+
+            // Check if any variation of the Excel column matches any variation of our required column
+            const matchFound = requiredVariations.some((reqVar) =>
+              excelVariations.some(
+                (excelVar) =>
+                  excelVar === reqVar ||
+                  (excelVar.length > 3 &&
+                    reqVar.length > 3 &&
+                    (excelVar.includes(reqVar) || reqVar.includes(excelVar)))
+              )
+            );
+
+            if (matchFound) {
+              // Convert to number if needed and store in our extracted values
+              const col = columns.find((c) => c.key === componentKey);
+              if (col && col.type === "number") {
+                extractedValues[componentKey] =
+                  parseFloat(summaryRow[excelColName]) || 0;
+              } else {
+                extractedValues[componentKey] = summaryRow[excelColName];
+              }
+              console.log(
+                `Mapped summary row column "${excelColName}" to "${componentKey}" with value: ${extractedValues[componentKey]}`
+              );
+            }
+          }
+        );
+      });
+
+      // Create a copy of current rows
+      const updatedRows = [...rows];
+
+      // Update the current row with the extracted values
+      updatedRows[rowIndex] = {
+        ...initialRow,
+        ...extractedValues,
+        file: file,
+      };
+
+      // Update the rows state
+      setRows(updatedRows);
+
+      console.log(`Extracted summary row data successfully`);
+    } catch (error) {
+      console.error("Error reading Excel file:", error);
+      alert(`Error reading Excel file: ${error.message}`);
+    }
+  };
+  const findSummaryRow = (excelData) => {
+    // Summary keywords in various languages and formats
+    const summaryKeywords = [
+      "jumlah",
+      "total",
+      "sum",
+      "grand total",
+      "subtotal",
+      "jml",
+      "jml.",
+      "juml",
+      "juml.",
+      "jmlh",
+      "jmlh.",
+      "ttl",
+      "ttl.",
+      "tot",
+      "tot.",
+    ];
+
+    // Look through each row
+    for (const row of excelData) {
+      // Check all column values in this row
+      for (const colName of Object.keys(row)) {
+        const value = row[colName];
+
+        // Check if the value is a string and matches any of our summary keywords
+        if (
+          value &&
+          typeof value === "string" &&
+          summaryKeywords.some((keyword) =>
+            value.toLowerCase().includes(keyword)
+          )
+        ) {
+          console.log(
+            `Found summary row with '${value}' in column '${colName}'`
+          );
+          return row;
+        }
+      }
+
+      // Also look for rows that might be a summary based on numeric patterns
+      // If this row has numeric values in columns that typically have the required data
+      const numericColumns = Object.keys(row).filter(
+        (key) => typeof row[key] === "number" && !isNaN(row[key])
+      );
+
+      // If it has multiple numeric columns and is near the end of the dataset
+      if (
+        numericColumns.length >= 3 &&
+        excelData.indexOf(row) > excelData.length * 0.7
+      ) {
+        // Check if any previous rows have the same structure but different values
+        const prevRowIdx = excelData.indexOf(row) - 1;
+        if (prevRowIdx >= 0) {
+          const prevRow = excelData[prevRowIdx];
+          const hasSameNumericStructure = numericColumns.every(
+            (key) => typeof prevRow[key] === "number" && !isNaN(prevRow[key])
+          );
+
+          // If it has the same structure and the values are generally larger,
+          // it might be a summary row
+          if (
+            hasSameNumericStructure &&
+            numericColumns.some((key) => row[key] > prevRow[key])
+          ) {
+            console.log(
+              "Detected potential summary row based on numeric pattern analysis"
+            );
+            return row;
+          }
+        }
+      }
+    }
+
+    // If no summary row was found through keywords or patterns,
+    // as a fallback, take the last row that has numeric values in the required columns
+    for (let i = excelData.length - 1; i >= 0; i--) {
+      const row = excelData[i];
+      const hasNumericValues = [
+        "DPP/Harga Jual",
+        "DPP Nilai Lain",
+        "PPN",
+        "PPnBM",
+      ].some((col) => {
+        // Try various forms of the column name
+        const variations = [
+          col,
+          col.toLowerCase(),
+          col.toUpperCase(),
+          col.replace(/\s+/g, ""),
+          col.replace(/\//g, ""),
+          col.replace(/[\s\/]/g, ""),
+        ];
+
+        // Check if any of the row's columns match and have numeric values
+        return Object.keys(row).some((rowKey) => {
+          const rowKeyVariations = [
+            rowKey,
+            rowKey.toLowerCase(),
+            rowKey.toUpperCase(),
+            rowKey.replace(/\s+/g, ""),
+            rowKey.replace(/\//g, ""),
+            rowKey.replace(/[\s\/]/g, ""),
+          ];
+
+          const columnMatches = variations.some((v) =>
+            rowKeyVariations.some(
+              (r) => r === v || r.includes(v) || v.includes(r)
+            )
+          );
+
+          return (
+            columnMatches &&
+            typeof row[rowKey] === "number" &&
+            !isNaN(row[rowKey])
+          );
+        });
+      });
+
+      if (hasNumericValues) {
+        console.log(
+          "Using last row with numeric values as fallback summary row"
+        );
+        return row;
+      }
+    }
+
+    return null; // No summary row found
+  };
+
+  const handleFileChangeWithExcel = (idx, file) => {
+    if (file) {
+      // Check if it's an Excel/CSV file
+      const isExcelFile =
+        file.type.includes("spreadsheet") ||
+        file.type.includes("excel") ||
+        file.type.includes("csv") ||
+        file.name.endsWith(".xlsx") ||
+        file.name.endsWith(".xls") ||
+        file.name.endsWith(".csv");
+
+      if (isExcelFile) {
+        handleExcelFileUpload(file, idx);
+      } else {
+        // Handle regular file upload
+        if (handleFileChange) {
+          handleFileChange(idx, file);
+        }
+      }
+    }
+  };
+
+  // Generate help text based on columns
+  const expectedColumnsInfo = generateExpectedColumnsInfo(columns);
+
   return (
     <div className="overflow-x-auto">
       <table className="min-w-full border border-gray-300 rounded-md">
@@ -37,22 +712,33 @@ export default function DynamicUploadTable({
                         type="file"
                         accept={col.accept || "*"}
                         onChange={(e) =>
-                          handleFileChange(idx, e.target.files[0])
+                          handleFileChangeWithExcel(idx, e.target.files[0])
                         }
                       />
                       {row.file && (
-                        <div className="text-xs mt-1">{row.file.name}</div>
+                        <div className="text-xs mt-1 text-green-600">
+                          {row.file.name}
+                          {(row.file.name.endsWith(".xlsx") ||
+                            row.file.name.endsWith(".xls") ||
+                            row.file.name.endsWith(".csv")) && (
+                            <span className="block text-blue-600">
+                              ✓ Excel data loaded
+                            </span>
+                          )}
+                        </div>
                       )}
                     </>
                   ) : (
                     <input
                       type={col.type}
                       className="w-24 border rounded px-2 py-1 text-right"
-                      value={row[col.key]}
+                      value={row[col.key] || ""}
                       onChange={(e) =>
+                        handleInputChange &&
                         handleInputChange(idx, col.key, e.target.value)
                       }
                       min={col.type === "number" ? "0" : undefined}
+                      placeholder={col.placeholder || ""}
                     />
                   )}
                 </td>
@@ -61,7 +747,7 @@ export default function DynamicUploadTable({
                 <button
                   type="button"
                   className="text-red-600 hover:text-red-800 text-xl"
-                  onClick={() => handleRemoveRow(idx)}
+                  onClick={() => handleRemoveRow && handleRemoveRow(idx)}
                   title="Hapus"
                 >
                   <FaTrash />
@@ -87,7 +773,11 @@ export default function DynamicUploadTable({
               <td className="py-2 px-3 text-right">Total</td>
               {columns.map((col) => (
                 <td key={col.key} className="py-2 px-3 text-right">
-                  {col.type === "number" ? (total(col.key) ?? 0) : ""}
+                  {col.type === "number"
+                    ? total && total(col.key)
+                      ? total(col.key)
+                      : 0
+                    : ""}
                 </td>
               ))}
               <td></td>

@@ -12,6 +12,7 @@ import DashboardDosen from "./components/Dashboard/Dosen/Dashboard/DashboardDose
 import DosenKelas from "./components/Dashboard/Dosen/Kelas/DosenKelas";
 // import DosenCardKelas from "./components/Dashboard/Dosen/Kelas/DosenCardKelas";
 import UjianDosen from "./components/Dashboard/Dosen/Ujian/UjianDosen";
+import UjianDosenMember from "./components/Dashboard/Dosen/Ujian/Members/UjianDosenMember";
 import EditDosen from "./components/Dashboard/Admin/Pengguna/Dosen/EditDosen";
 import PenilaianDosen from "./components/Dashboard/Dosen/Penilaian/PenilaianDosen";
 import DetailPenilaian from "./components/Dashboard/Dosen/Penilaian/DetailPenilaianDosen";
@@ -34,6 +35,8 @@ import EditUlasan from "./components/Dashboard/Admin/LandingPage/EditUlasan";
 import Praktikum from "./components/Dashboard/Dosen/Praktikum/Praktikum";
 // import Praktikum from "./components/Dashboard/Admin/Praktikum/Praktikum";
 import Ujian from "./components/Dashboard/Admin/Praktikum/Ujian";
+import AdminPraktikum from "./components/Dashboard/Admin/Praktikum/Praktikum";
+import AdminPraktikumMember from "./components/Dashboard/Admin/Praktikum/Members/PraktikumMember";
 import UploadSoal from "./components/Dashboard/Admin/Praktikum/UploadSoal";
 import KontrakBackup from "./components/Dashboard/Admin/Kontrak/KontrakBackup";
 import PraktikumBackup from "./components/Dashboard/Admin/Praktikum/PraktikumBackup";
@@ -44,7 +47,8 @@ import EditPengajar from "./components/Dashboard/AdminPsc/Pengguna/Pengajar/Edit
 import EditKelasPsc from "./components/Dashboard/AdminPsc/Pengguna/Kelas/EditKelasPsc";
 import PraktikumPsc from "./components/Dashboard/AdminPsc/Pengguna/Praktikum/PraktikumPsc";
 import AssignmentPscMember from "./components/Dashboard/AdminPsc/Pengguna/Praktikum/Members/AssignmentPscMember";
-// import UjianPsc from "./components/Dashboard/AdminPsc/Ujian/UjianPsc";
+import ExamPsc from "./components/Dashboard/AdminPsc/Ujian/ExamPsc";
+import ExamPscMembers from "./components/Dashboard/AdminPsc/Ujian/Members/ExamPscMembers";
 import EditMahasiswaPsc from "./components/Dashboard/AdminPsc/Pengguna/Mahasiswa/EditMahasiswaPsc";
 import Header from "./components/Header/Header";
 import Home from "./components/Header/Home";
@@ -149,10 +153,25 @@ import EditMahasiswaPscKelas from "./components/Dashboard/AdminPsc/Pengguna/Kela
 import DosenPraktikumKelas from "./components/Dashboard/Dosen/Kelas/DosenPraktikumKelas";
 import { CookiesProvider, useCookies } from "react-cookie";
 import DosenPraktikumKelasMember from "./components/Dashboard/Dosen/Kelas/DosenPraktikumKelasMember";
+import RoleBasedRenderer from "./components/PraktikumPage/RoleBaseRenderer";
+import { useParams } from "react-router";
+import { RoutesApi } from "@/Routes";
+import EditFakturKeluaran from "./components/PraktikumPage/Badan/EFaktur/EditFakturKeluaran";
+import { ViewerPDF } from "./components/PraktikumPage/PDFTemplate/PDFViewer";
+import FakturPajakKeluaranPdf from "./components/PraktikumPage/PDFTemplate/FakturKeluaran";
+import BpeSptPdf from "./components/PraktikumPage/PDFTemplate/BPESPTTemplate";
+import BillingCodePdf from "./components/PraktikumPage/PDFTemplate/BillingCodeTemplate";
+import SptMasaPph21Pdf from "./components/PraktikumPage/PDFTemplate/SPTMasaPPH";
+
+// BUPOT PRAKTIKUM
+import BUPOTWrapper from "./components/PraktikumPage/Badan/BUPOT/BUPOTWrapper";
+import BUPOTCreateWrapper from "./components/PraktikumPage/Badan/BUPOT/BUPOTCreateWrapper";
+import BUPOTEditWrapper from "./components/PraktikumPage/Badan/BUPOT/BUPOTEditWrapper";
 
 const Main = () => {
   const [loading, setLoading] = useState(true);
   const [cookies, setCookie] = useCookies(["token, role"]);
+  // const { id, akun } = useParams();
 
   useEffect(() => {
     setLoading(true);
@@ -162,47 +181,47 @@ const Main = () => {
   }, []);
 
   // In the useEffect that validates the token
-  useEffect(() => {
-    const validateToken = async () => {
-      if (cookies.token) {
-        try {
-          // Try to get user profile to validate token
-          await axios.get(RoutesApi.profile, {
-            headers: {
-              Authorization: `Bearer ${cookies.token}`,
-              Accept: "application/json",
-            }
-          });
-          // Token is valid, check verification status
-          try {
-            const verificationResponse = await axios.get(RoutesApi.apiUrl + "verification-status", {
-              headers: {
-                Authorization: `Bearer ${cookies.token}`,
-                Accept: "application/json",
-              }
-            });
+  // useEffect(() => {
+  //   const validateToken = async () => {
+  //     if (cookies.token) {
+  //       try {
+  //         // Try to get user profile to validate token
+  //         await axios.get(RoutesApi.profile, {
+  //           headers: {
+  //             Authorization: `Bearer ${cookies.token}`,
+  //             Accept: "application/json",
+  //           }
+  //         });
+  //         // Token is valid, check verification status
+  //         try {
+  //           const verificationResponse = await axios.get(RoutesApi.apiUrl + "verification-status", {
+  //             headers: {
+  //               Authorization: `Bearer ${cookies.token}`,
+  //               Accept: "application/json",
+  //             }
+  //           });
 
-            // If not verified, store email for OTP verification
-            if (!verificationResponse.data.verified) {
-              localStorage.setItem("pendingVerificationEmail", verificationResponse.data.email);
-            }
-          } catch (verificationError) {
-            console.error("Verification status check error:", verificationError);
-          }
-        } catch (error) {
-          console.error("Token validation error:", error);
-          // If token is invalid, clear cookies and redirect to login
-          if (error.response?.status === 401) {
-            setCookie("token", "", { path: "/", expires: new Date(0) });
-            setCookie("role", "", { path: "/", expires: new Date(0) });
-            window.location.href = "/login";
-          }
-        }
-      }
-    };
+  //           // If not verified, store email for OTP verification
+  //           if (!verificationResponse.data.verified) {
+  //             localStorage.setItem("pendingVerificationEmail", verificationResponse.data.email);
+  //           }
+  //         } catch (verificationError) {
+  //           console.error("Verification status check error:", verificationError);
+  //         }
+  //       } catch (error) {
+  //         console.error("Token validation error:", error);
+  //         // If token is invalid, clear cookies and redirect to login
+  //         if (error.response?.status === 401) {
+  //           setCookie("token", "", { path: "/", expires: new Date(0) });
+  //           setCookie("role", "", { path: "/", expires: new Date(0) });
+  //           window.location.href = "/login";
+  //         }
+  //       }
+  //     }
+  //   };
 
-    validateToken();
-  }, [cookies.token, setCookie]);
+  //   validateToken();
+  // }, [cookies.token, setCookie]);
 
   return loading ? (
     <div className="loading">
@@ -213,7 +232,6 @@ const Main = () => {
     // <userContext.js>
     <Router>
       <Routes>
-
         {/* ROOT REDIRECT */}
         <Route
           path="/"
@@ -223,22 +241,31 @@ const Main = () => {
             </ProtectedRoutes>
           }
         />
-
         {/* AUTHENTICATION */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/confirm-otp" element={<ConfirmOTP />} />
-
         {/* ADMIN ROUTE */}
-        <Route element={<RoleProtectedRoutes allowedRoles={["admin"]} layout="admin" />}>
+        <Route
+          element={
+            <RoleProtectedRoutes allowedRoles={["admin"]} layout="admin" />
+          }
+        >
           <Route path="/admin" element={<DashboardAdmin />} />
           <Route path="/admin/kontrak" element={<Kontrak />} />
           <Route path="/admin/coretaxify" element={<CoretaxifyList />} />
           <Route path="/admin/edit-dosen" element={<EditDosen />} />
           <Route path="/admin/upload-soal" element={<UploadSoal />} />
-          <Route path="/admin/praktikum" element={<Praktikum />} />
-          <Route path="/admin/coretaxify/coretaxify-send" element={<CoretaxifySendDetail />} />
+          <Route path="/admin/praktikum" element={<AdminPraktikum />} />
+          <Route
+            path="/admin/praktikum/:assignmentId/members"
+            element={<AdminPraktikumMember />}
+          />
+          <Route
+            path="/admin/coretaxify/coretaxify-send"
+            element={<CoretaxifySendDetail />}
+          />
           <Route path="/admin/ujian" element={<Ujian />} />
           <Route path="/admin/edit-admin" element={<EditAdmin />} />
           <Route path="/admin/edit-kelas" element={<EditKelas />} />
@@ -251,60 +278,132 @@ const Main = () => {
         </Route>
 
         {/* DOSEN ROUTE */}
-        <Route element={<RoleProtectedRoutes allowedRoles={["dosen"]} layout="admin" />}>
+        <Route
+          element={
+            <RoleProtectedRoutes allowedRoles={["dosen"]} layout="admin" />
+          }
+        >
           <Route path="/dosen" element={<DashboardDosen />} />
           <Route path="/dosen/kelas" element={<DosenKelas />} />
-          <Route path="/dosen/kelas/praktikum/:id" element={<DosenPraktikumKelas />} />
-          <Route path="/dosen/kelas/:id/praktikum/:idpraktikum" element={<DosenPraktikumKelasMember />} />
+          <Route
+            path="/dosen/kelas/praktikum/:id"
+            element={<DosenPraktikumKelas />}
+          />
+          <Route
+            path="/dosen/kelas/:id/praktikum/:idpraktikum"
+            element={<DosenPraktikumKelasMember />}
+          />
           <Route path="/dosen/praktikum" element={<Praktikum />} />
           <Route path="/dosen/penilaian" element={<PenilaianDosen />} />
-          <Route path="/dosen/penilaian/detail-tugas" element={<DetailTugasPenilaianDosen />} />
-          <Route path="/dosen/penilaian/detail-tugas/detail-penilaian" element={<DetailPenilaian />} />
+          <Route
+            path="/dosen/penilaian/detail-tugas"
+            element={<DetailTugasPenilaianDosen />}
+          />
+          <Route
+            path="/dosen/penilaian/detail-tugas/detail-penilaian"
+            element={<DetailPenilaian />}
+          />
           <Route path="/dosen/ujian" element={<UjianDosen />} />
+          <Route
+            path="/dosen/ujian/:examId/members"
+            element={<UjianDosenMember />}
+          />
         </Route>
 
         {/* MAHASISWA ROUTE */}
-        <Route element={<RoleProtectedRoutes allowedRoles={["mahasiswa"]} layout="admin" />}>
+        <Route
+          element={
+            <RoleProtectedRoutes allowedRoles={["mahasiswa"]} layout="admin" />
+          }
+        >
           <Route path="/mahasiswa/kelas" element={<MahasiswaKelas />} />
-          <Route path="/mahasiswa/kelas/:id" element={<MahasiswaPraktikumKelas />} />
-          <Route path="/mahasiswa" element={<Navigate to="/mahasiswa/kelas" replace />} />
+          <Route
+            path="/mahasiswa/kelas/:id"
+            element={<MahasiswaPraktikumKelas />}
+          />
+          <Route
+            path="/mahasiswa"
+            element={<Navigate to="/mahasiswa/kelas" replace />}
+          />
           <Route path="/mahasiswa/praktikum" element={<MahasiswaPraktikum />} />
           <Route path="/mahasiswa/ujian" element={<MahasiswaUjian />} />
         </Route>
-
         {/* PSC ROUTE */}
-        <Route element={<RoleProtectedRoutes allowedRoles={["psc"]} layout="admin" />}>
+        <Route
+          element={
+            <RoleProtectedRoutes allowedRoles={["psc"]} layout="admin" />
+          }
+        >
           <Route path="/psc/" element={<DashboardPsc />} />
           <Route path="/psc/master-soal" element={<UploadSoalPsc />} />
           <Route path="/psc/edit-pengajar" element={<EditPengajar />} />
           <Route path="/psc/edit-kelas" element={<EditKelasPsc />} />
           {/* <Route path="/psc/edit-kelas/1" element={<EditMahasiswaPscKelas />} /> */}
-          <Route path="/psc/kelas/:groupId/mahasiswa" element={<EditMahasiswaPscKelas />} />
+          <Route
+            path="/psc/kelas/:groupId/mahasiswa"
+            element={<EditMahasiswaPscKelas />}
+          />
           {/* <Route path="/psc/kelas/:groupId/mahasiswa/:memberId" element={<MemberDetailPage />} /> */}
           <Route path="/psc/praktikum" element={<PraktikumPsc />} />
-          <Route path="/psc/praktikum/:assignmentId/members" element={<AssignmentPscMember />} />
-          <Route path="/psc/ujian" element={{/* <UjianPsc /> */ }} />
+          <Route
+            path="/psc/praktikum/:assignmentId/members"
+            element={<AssignmentPscMember />}
+          />
+          <Route path="/psc/ujian" element={<ExamPsc />} />
+          <Route
+            path="/psc/ujian/:examId/members"
+            element={<ExamPscMembers />}
+          />
           <Route path="/psc/edit-mahasiswa" element={<EditMahasiswaPsc />} />
         </Route>
-
         {/* MAHASISWA-PSC ROUTE */}
-        <Route element={<RoleProtectedRoutes allowedRoles={["mahasiswa-psc"]} layout="admin" />}>
-          <Route path="/mahasiswa-psc" element={<Navigate to="/mahasiswa-psc/kelas" replace />} />
+        <Route
+          element={
+            <RoleProtectedRoutes
+              allowedRoles={["mahasiswa-psc"]}
+              layout="admin"
+            />
+          }
+        >
+          <Route
+            path="/mahasiswa-psc"
+            element={<Navigate to="/mahasiswa-psc/kelas" replace />}
+          />
           <Route path="/mahasiswa-psc/kelas" element={<MahasiswaPscKelas />} />
-          <Route path="/mahasiswa-psc/kelas/:id/praktikum" element={<MahasiswaPscKelasPraktikum />} />
+          <Route
+            path="/mahasiswa-psc/kelas/:id/praktikum"
+            element={<MahasiswaPscKelasPraktikum />}
+          />
           {/* <Route path="/mahasiswa-psc/kelas/:id/praktikum/:idpraktikum" element={<MahasiswaPscPraktikumKelasMember />} /> */}
-          <Route path="/mahasiswa-psc/praktikum" element={<MahasiswaPscPraktikum />} />
+          <Route
+            path="/mahasiswa-psc/praktikum"
+            element={<MahasiswaPscPraktikum />}
+          />
           <Route path="/mahasiswa-psc/ujian" element={<MahasiswaPscUjian />} />
         </Route>
-
         {/* PENGAJAR ROUTE */}
-        <Route element={<RoleProtectedRoutes allowedRoles={["instruktur"]} layout="admin" />}>
-          <Route path="/instruktur" element={<Navigate to="/instruktur/praktikum" replace />} />
-          <Route path="/instruktur/praktikum" element={<InstrukturPraktikum />} />
-          <Route path="/instruktur/praktikum/terisi" element={<FilledAssignment />} />
-          <Route path="/instruktur/praktikum/kosong" element={<BlankAssignment />} />
+        <Route
+          element={
+            <RoleProtectedRoutes allowedRoles={["instruktur"]} layout="admin" />
+          }
+        >
+          <Route
+            path="/instruktur"
+            element={<Navigate to="/instruktur/praktikum" replace />}
+          />
+          <Route
+            path="/instruktur/praktikum"
+            element={<InstrukturPraktikum />}
+          />
+          <Route
+            path="/instruktur/praktikum/terisi"
+            element={<FilledAssignment />}
+          />
+          <Route
+            path="/instruktur/praktikum/kosong"
+            element={<BlankAssignment />}
+          />
         </Route>
-
         {/* Praktikum */}
         <Route
           path="/admin/praktikum/prak1"
@@ -378,7 +477,7 @@ const Main = () => {
             </>
           }
         />
-        <Route
+        {/* <Route
           path="/admin/praktikum/profil-saya/informasi-umum/edit-data-profil"
           element={
             <>
@@ -386,7 +485,7 @@ const Main = () => {
               <EditDataProfil />
             </>
           }
-        />
+        /> */}
         <Route
           path="/admin/praktikum/profil-saya/alamat"
           element={
@@ -463,6 +562,7 @@ const Main = () => {
           path="/admin/praktikum/profil-saya/nomor-identifikasi-eksternal"
           element={
             <>
+              {/* query={} */}
               <Header />
               <NomorIdentifikasiEksternal />
             </>
@@ -514,10 +614,18 @@ const Main = () => {
           }
         />
         {/* Praktikum */}
-
         {/* Praktikum  Orang Pribadi*/}
-        <Route
+        {/* <Route
           path="/admin/praktikum/1/prak1"
+          element={
+            <>
+              <Header />
+              <Home />
+            </>
+          }
+        /> */}
+        <Route
+          path="/praktikum/:id/"
           element={
             <>
               <Header />
@@ -571,32 +679,416 @@ const Main = () => {
           }
         />
         <Route
-          path="/admin/praktikum/1/profil-saya"
+          path="/praktikum/:id/sistem/:akun/profil-saya"
           element={
             <>
-              <Header />
-              <ProfilSaya />
+              {/* <p>12</p> */}
+              {/* <Header />
+              <ProfilSaya /> */}
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun`}
+                OrangPribadi={ProfilSaya}
+                Badan={ProfilSayaBadan}
+                intent={"api.get.sistem.ikhtisar.profil"}
+                query={"profil"}
+              ></RoleBasedRenderer>
             </>
           }
         />
         <Route
-          path="/admin/praktikum/1/profil-saya/informasi-umum"
+          path="/praktikum/:id/sistem/:akun/alamat"
           element={
             <>
-              <Header />
-              <InformasiSaya />
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun`}
+                OrangPribadi={AlamatSaya}
+                Badan={AlamatSayaBadan}
+                intent={"api.get.sistem.ikhtisar.profil"}
+                query={"alamat"}
+              ></RoleBasedRenderer>
             </>
           }
         />
         <Route
-          path="/admin/praktikum/1/profil-saya/informasi-umum/edit-data-profil"
+          path="/praktikum/:id/sistem/:akun/detail-kontak"
           element={
             <>
-              <Header />
-              <EditDataProfil />
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/detail-kontak`}
+                OrangPribadi={DetailKontak}
+                Badan={DetailKontakBadan}
+                intent={"api.get.sistem.ikhtisar.profil"}
+                query={"detail-kontak"}
+              ></RoleBasedRenderer>
             </>
           }
         />
+        <Route
+          path="/praktikum/:id/sistem/:akun/pihak-terkait"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/pihak-terkait`}
+                intent={""}
+                OrangPribadi={PihakTerkait}
+                Badan={PihakTerkaitBadan}
+                query={"pihak-terkait"}
+              ></RoleBasedRenderer>
+            </>
+          }
+        />
+        <Route
+          path="/praktikum/:id/sistem/:akun/detail-bank"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/detail-bank`}
+                intent={""}
+                OrangPribadi={DetailBank}
+                Badan={DetailBankBadan}
+                query={""}
+              ></RoleBasedRenderer>
+            </>
+          }
+        />
+        <Route
+          path="/praktikum/:id/sistem/:akun/data-unit-keluarga"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/unit-pajak-keluarga`}
+                intent={""}
+                OrangPribadi={DataUnitKeluarga}
+                Badan={DataUnitKeluargaBadan}
+                query={""}
+              ></RoleBasedRenderer>
+            </>
+          }
+        />
+        <Route
+          path="/praktikum/:id/sistem/:akun/informasi-umum"
+          // path="/admin/praktikum/1/profil-saya/informasi-umum"
+          element={
+            <>
+              {/* <Header />
+              <InformasiSaya /> */}
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun`}
+                intent={"api.get.sistem.informasi.umum"}
+                OrangPribadi={InformasiSaya}
+                Badan={InformasiSayaBadan}
+                query={"info"}
+              ></RoleBasedRenderer>
+            </>
+          }
+        />
+        <Route
+          path="/praktikum/:id/sistem/:akun/edit-informasi-umum"
+          // path="/admin/praktikum/1/profil-saya/informasi-umum/edit-data-profil"
+          element={
+            <>
+              {/* <Header />
+              <EditDataProfil /> */}
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun`}
+                intent={"api.get.sistem.edit.informasi.umum"}
+                OrangPribadi={EditDataProfil}
+                Badan={EditDataProfilBadan}
+                query={"edit-info"}
+              ></RoleBasedRenderer>
+            </>
+          }
+        />
+        <Route
+          path="/praktikum/:id/sistem/:akun/e-faktur"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun`}
+                intent={"api.get.sistem.edit.informasi.umum"}
+                OrangPribadi={DashboardEFakturOP}
+                Badan={DashboardEFaktur}
+                query={"edit-info"}
+              ></RoleBasedRenderer>
+            </>
+          }
+        />
+        <Route
+          path="/praktikum/:id/sistem/:akun/e-faktur/pajak-keluaran"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/faktur`}
+                intent={"api.get.faktur.pengirim"}
+                OrangPribadi={PajakKeluaranOP}
+                Badan={PajakKeluaranOP}
+                query={"edit-info"}
+              ></RoleBasedRenderer>
+            </>
+          }
+        />
+        <Route
+          path="/praktikum/:id/sistem/:akun/e-faktur/pajak-keluaran/tambah-faktur-keluaran"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun`}
+                intent={"api.get.sistem.edit.informasi.umum"}
+                OrangPribadi={TambahFakturKeluaran}
+                Badan={TambahFakturKeluaran}
+                query={"edit-info"}
+              ></RoleBasedRenderer>
+            </>
+          }
+        />
+        <Route
+          path="/praktikum/:id/sistem/:akun/e-faktur/pajak-keluaran/edit-faktur-keluaran/:faktur"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun`}
+                intent={"api.get.sistem.edit.informasi.umum"}
+                OrangPribadi={TambahFakturKeluaranOP}
+                Badan={EditFakturKeluaran}
+                query={"edit-info"}
+              ></RoleBasedRenderer>
+            </>
+          }
+        />
+        <Route
+          path="/praktikum/:id/sistem/:akun/e-faktur/pajak-masukan"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/faktur`}
+                intent={"api.get.faktur.penerima"}
+                OrangPribadi={PajakMasukanOP}
+                Badan={PajakMasukan}
+                query={"edit-info"}
+              ></RoleBasedRenderer>
+            </>
+          }
+        />
+        {/* SPT */}
+
+        <Route
+          path="/praktikum/:id/sistem/:akun/surat-pemberitahuan-spt"
+          // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/spt`}
+                intent={""}
+                OrangPribadi={KonsepSPT}
+                Badan={KonsepSPT}
+                query={""}
+              ></RoleBasedRenderer>
+            </>
+            // <>
+            //   <Header />
+            //   <KonsepSPT />
+            // </>
+          }
+        />
+        <Route
+          path="/praktikum/:id/sistem/:akun/buat-konsep-spt"
+          // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={``}
+                intent={""}
+                OrangPribadi={BuatKonsepSPT}
+                Badan={BuatKonsepSPT}
+                query={""}
+              ></RoleBasedRenderer>
+            </>
+            // <>
+            //   <Header />
+            //   <KonsepSPT />
+            // </>
+          }
+        />
+        <Route
+          path="/praktikum/:id/sistem/:akun/buat-konsep-spt/:idSpt"
+          // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/spt/:idSpt`}
+                intent={""}
+                OrangPribadi={CreateKonsepSPT}
+                Badan={CreateKonsepSPT}
+                query={""}
+              ></RoleBasedRenderer>
+            </>
+            // <>
+            //   <Header />
+            //   <KonsepSPT />
+            // </>
+          }
+        />
+        <Route
+          path="/praktikum/:id/sistem/:akun/layanan-mandiri-kode-billing"
+          // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
+          element={
+            <>
+              <RoleBasedRenderer
+                // url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/spt`}
+                url={`${RoutesApi.apiUrl}kap-kjs`}
+                intent={""}
+                OrangPribadi={SelfBilling}
+                Badan={SelfBilling}
+                query={""}
+              ></RoleBasedRenderer>
+            </>
+            // <>
+            //   <Header />
+            //   <KonsepSPT />
+            // </>
+          }
+        />
+        <Route
+          path="/praktikum/:id/sistem/:akun/daftar-kode-billing-belum-dibayar"
+          // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/pembayaran`}
+                intent={""}
+                OrangPribadi={DaftarKodeBilingBelumBayar}
+                Badan={DaftarKodeBilingBelumBayar}
+                query={""}
+              ></RoleBasedRenderer>
+            </>
+            // <>
+            //   <Header />
+            //   <KonsepSPT />
+            // </>
+          }
+        />
+        <Route
+          path="/praktikum/:id/sistem/:akun/riwayat-pembayaran"
+          // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/pembayaran`}
+                intent={"api.get.sudah.pembayaran"}
+                OrangPribadi={RiwayatBilling}
+                Badan={RiwayatBilling}
+                query={""}
+              ></RoleBasedRenderer>
+            </>
+            // <>
+            //   <Header />
+            //   <KonsepSPT />
+            // </>
+          }
+        />
+        <Route
+          path="/pdf/faktur-keluaran"
+          element={
+            <>
+              <div className="w-full h-screen">
+                <ViewerPDF document={<FakturPajakKeluaranPdf />} />
+              </div>
+            </>
+          }
+        />
+        <Route
+          path="/pdf/bpespt"
+          element={
+            <>
+              <div className="w-full h-screen">
+                <ViewerPDF document={<BpeSptPdf />} />
+              </div>
+            </>
+          }
+        />
+        <Route
+          path="/pdf/billing-code"
+          element={
+            <>
+              <div className="w-full h-screen">
+                <ViewerPDF document={<BillingCodePdf />} />
+              </div>
+            </>
+          }
+        />
+        <Route
+          path="/pdf/sptmasa"
+          element={
+            <>
+              <div className="w-full h-screen">
+                <ViewerPDF document={<SptMasaPph21Pdf />} />
+              </div>
+            </>
+          }
+        />
+
+        <Route
+          path="/praktikum/:id/sistem/:akun/bupot/:type"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/bupot`}
+                OrangPribadi={BUPOTWrapper}
+                Badan={BUPOTWrapper}
+                intent={"dynamic"}
+                query={"bupot"}
+              ></RoleBasedRenderer>
+            </>
+          }
+        />
+
+        <Route
+          path="/praktikum/:id/sistem/:akun/bupot/:type/:status"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/bupot`}
+                OrangPribadi={BUPOTWrapper}
+                Badan={BUPOTWrapper}
+                intent={"dynamic"}
+                query={"bupot"}
+              />
+            </>
+          }
+        />
+
+        {/* BUPOT Creation Routes */}
+        <Route
+          path="/praktikum/:id/sistem/:akun/bupot/:type/create"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/bupot`}
+                OrangPribadi={BUPOTCreateWrapper}
+                Badan={BUPOTCreateWrapper}
+                intent={"dynamic"}
+                query={"bupot-create"}
+              />
+            </>
+          }
+        />
+
+        {/* BUPOT Editing Routes */}
+        <Route
+          path="/praktikum/:id/sistem/:akun/bupot/:type/:bupotId/edit"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/bupot`}
+                OrangPribadi={BUPOTEditWrapper}
+                Badan={BUPOTEditWrapper}
+                intent={"dynamic"}
+                query={"bupot-edit"}
+              />
+            </>
+          }
+        />
+
         <Route
           path="/admin/praktikum/1/profil-saya/alamat"
           element={
@@ -621,15 +1113,6 @@ const Main = () => {
             <>
               <Header />
               <PihakTerkait />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/1/profil-saya/detail-bank"
-          element={
-            <>
-              <Header />
-              <DetailBank />
             </>
           }
         />
@@ -760,7 +1243,6 @@ const Main = () => {
           }
         />
         {/* Praktikum Orang Pribadi*/}
-
         {/* Praktikum  Orang Badan*/}
         <Route
           path="/admin/praktikum/2/prak1"
@@ -822,6 +1304,17 @@ const Main = () => {
             <>
               <Header />
               <ProfilSayaBadan />
+            </>
+          }
+        />
+        <Route
+          path="/tes/:id/:akun"
+          element={
+            <>
+              <RoleBasedRenderer
+                OrangPribadi={DashboardAdmin}
+                Badan={DetailKontakBadan}
+              ></RoleBasedRenderer>
             </>
           }
         />
@@ -970,7 +1463,6 @@ const Main = () => {
           }
         />
         {/* Praktikum Orang Pribadi*/}
-
         <Route
           path="/admin/praktikum/2/e-faktur"
           element={

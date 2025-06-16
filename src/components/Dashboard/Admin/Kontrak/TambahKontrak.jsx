@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./tambahKontrak.css";
 import { IoReload } from "react-icons/io5";
 import { useQuery, useMutation } from "@tanstack/react-query";
@@ -12,8 +12,7 @@ import { RxCross1 } from "react-icons/rx";
 import { createPortal } from "react-dom";
 import Swal from "sweetalert2";
 
-// import { useToast } from "@/hooks/use-toast";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { Check, ChevronsUpDown, Search } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -31,6 +30,22 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
+// Initial form state to use for resetting
+const initialFormState = {
+  jenisKontrak: "",
+  instansi: "",
+  mahasiswa: "",
+  periodeAwal: "",
+  periodeAkhir: "",
+  spt: "",
+  bupot: "",
+  faktur: "",
+  kodePembelian: "",
+  is_buy_task: 0,
+  opsiTambahan: [],
+  status: "",
+};
+
 const TambahKontrak = ({
   isOpen,
   onClose,
@@ -40,58 +55,123 @@ const TambahKontrak = ({
   setOpen,
   refetch,
 }) => {
-  // const { toast } = useToast();
-  const [formData, setFormData] = useState({
-    jenisKontrak: "",
-    instansi: "",
-    mahasiswa: "",
-    periodeAwal: "",
-    periodeAkhir: "",
-    spt: "",
-    bupot: "",
-    faktur: "",
-    kodePembelian: "",
-    is_buy_task: 0,
-    opsiTambahan: [],
-    status: "",
-  });
+  // Form state
+  const [formData, setFormData] = useState({ ...initialFormState });
   const [cookies, setCookie] = useCookies(["user"]);
-
+  const [errors, setErrors] = useState({});
   const [lastNumbers, setLastNumbers] = useState({
     Lisensi: 0,
     Unit: 0,
     BNSP: 0,
   });
 
+  const validate = () => {
+    let newErrors = {};
+
+    if (!formData.jenisKontrak) {
+      newErrors.jenisKontrak = "Jenis kontrak harus diisi";
+    }
+
+    if (!formData.instansi) {
+      newErrors.instansi = "Instansi harus diisi";
+    }
+
+    if (!formData.mahasiswa) {
+      newErrors.mahasiswa = "Jumlah mahasiswa harus diisi";
+    }
+
+    if (!formData.periodeAwal) {
+      newErrors.periodeAwal = "Periode awal harus diisi";
+    }
+
+    if (!formData.periodeAwal) {
+      newErrors.periodeAkhir = "Periode akhir harus diisi";
+    }
+
+    if (!formData.spt) {
+      newErrors.spt = "SPT harus diisi";
+    }
+
+    if (!formData.bupot) {
+      newErrors.bupot = "BUPOT harus diisi";
+    }
+
+    if (!formData.faktur) {
+      newErrors.faktur = "Faktur harus diisi";
+    }
+
+    // if (!formData.kodePembelian) {
+    //   newErrors.kodePembelian = "Kode Pembelian harus diisi";
+    // }
+
+    // if (!formData.is_buy_task) {
+    //   newErrors.is_buy_task = "Pembelian Soal harus diisi";
+    // }
+
+    if (!formData.status) {
+      newErrors.status = "Status harus diisi";
+    }
+
+    if (formData.is_buy_task === 1) {
+      if (!formData.opsiTambahan || formData.opsiTambahan.length === 0) {
+        newErrors.opsiTambahan = "Opsi Tambahan harus diisi";
+      }
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+    // return true;
+  };
+
+  // Custom dropdown state
+  const [openInstansi, setOpenInstansi] = useState(false);
+  const [searchInstansi, setSearchInstansi] = useState("");
+  const dropdownRef = useRef(null);
+
+  // Reset form when popup is opened
+  useEffect(() => {
+    if (isOpen) {
+      setFormData({ ...initialFormState });
+      setOpenInstansi(false);
+      setSearchInstansi("");
+    }
+  }, [isOpen]);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setOpenInstansi(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+    if(errors[name]) {
+      setErrors({ ...errors, [name]: null });
+    }
   };
 
   const handleSave = () => {
-    // onSave(formData);
-    // setFormData({
-    //   jenisKontrak: "",
-    //   instansi: "",
-    //   mahasiswa: "",
-    //   periodeAwal: "",
-    //   periodeAkhir: "",
-    //   spt: "",
-    //   bupot: "",
-    //   faktur: "",
-    //   kodePembelian: "",
-    //   status: "",
-    // });
     console.log(formData);
-    mutation.mutate();
-    // onClose();
+    if (validate()) {
+      // onSave(formData);
+      // setFormData({ formData });
+      mutation.mutate();
+    }
   };
+
   const mutation = useMutation({
     mutationFn: async () => {
       console.log("button clicked");
-      // const { response } = await axios.post(RoutesApi.login, {
       const response = await axios.get(`${RoutesApi.url}api/csrf-token`, {
-        // withCredentials: true,
         headers: {
           "X-Requested-With": "XMLHttpRequest",
           Accept: "application/json",
@@ -125,24 +205,13 @@ const TambahKontrak = ({
           },
         }
       );
-      return data;
     },
     onSuccess: (data) => {
-      console.log(data);
-      Swal.fire({
-        title: "Kontrak berhasil dibuat",
-        // text: "Silakan verifikasi email Anda terlebih dahulu.",
-        icon: "success",
-        confirmButtonText: "Lanjutkan",
-      }).then(() => {
-        refetch();
-        // navigate("/confirm-otp");
-      });
-      // window.location.reload();
-
-      // window.location.href = "/" + role;
-      // alert("Login successful!");
-      // queryClient.invalidateQueries({ queryKey: ["todos"] });
+      // console.log(data);
+      setFormData({ ...initialFormState });
+      Swal.fire("Lanjutkan", "Kontrak berhasil dibuat", "success");
+      onClose();
+      refetch();
     },
     onError: (error) => {
       console.log(error);
@@ -194,29 +263,12 @@ const TambahKontrak = ({
 
   const [open, setOpenSelect] = useState(false);
   const [value, setValue] = useState("");
-
-  const frameworks = [
-    {
-      value: "next.js",
-      label: "Next.js",
-    },
-    {
-      value: "sveltekit",
-      label: "SvelteKit",
-    },
-    {
-      value: "nuxt.js",
-      label: "Nuxt.js",
-    },
-    {
-      value: "remix",
-      label: "Remix",
-    },
-    {
-      value: "astro",
-      label: "Astro",
-    },
-  ];
+  // Filter universities based on search
+  const filteredUniversities = searchInstansi
+    ? UniData.filter((uni) =>
+        uni.name.toLowerCase().includes(searchInstansi.toLowerCase())
+      )
+    : UniData;
 
   if (!isOpen) return null;
 
@@ -232,50 +284,25 @@ const TambahKontrak = ({
         <h2>Tambah Data Kontrak</h2>
         <form>
           <div className="kontrak-form-group">
-            <label>Jenis Kontrak</label>
+            <label>Jenis Kontrak *</label>
             <select
               name="jenisKontrak"
               value={formData.jenisKontrak}
               onChange={handleChange}
-              required
+              // required
             >
               <option value="">Pilih Jenis Kontrak</option>
               <option value="LICENSE">Lisensi</option>
               <option value="UNIT">Unit</option>
               <option value="BNSP">BNSP</option>
             </select>
+            {errors.jenisKontrak && (
+              <p className="text-red-500 text-sm">{errors.jenisKontrak}</p>
+            )}
           </div>
-          {/* <div className="kontrak-form-group">
-            <label>
-              Choose a browser from this list:
-              <input list="browsers" name="myBrowser" />
-            </label>
-            <datalist id="browsers">
-              <option value="Chrome" />
-              <option value="Firefox" />
-              <option value="Internet Explorer" />
-              <option value="Opera" />
-              <option value="Safari" />
-              <option value="Microsoft Edge" />
-            </datalist>
-          </div> */}
-          <div className="kontrak-form-group">
-            <label>Instansi</label>
-            {/* <select
-              name="instansi"
-              value={formData.instansi}
-              onChange={handleChange}
-              required
-            >
-              <option value="">Pilih Instansi</option>
-              {UniData.map((item, index) => (
-                <option key={index} value={item.id}>
-                  {item.name}
-                </option>
-              ))}
-            </select> */}
-            {/* <input type="text" name="instansi" value={formData.instansi} onChange={handleChange} required /> */}
-          </div>
+
+          {/* Custom Instansi dropdown */}
+
           <div className="kontrak-form-group">
             <Popover open={open} onOpenChange={setOpenSelect}>
               <PopoverTrigger asChild>
@@ -294,7 +321,7 @@ const TambahKontrak = ({
                 </Button>
               </PopoverTrigger>
               {/* {createPortal( */}
-              <PopoverContent className="w-[200px] p-0 z-[9999]" sideOffset={5}>
+              <PopoverContent className="w-[450px] p-0 z-[9999]" sideOffset={5}>
                 <Command>
                   <CommandInput placeholder="Pilih Instansi..." />
                   <CommandList>
@@ -304,6 +331,7 @@ const TambahKontrak = ({
                         <CommandItem
                           key={uni.id}
                           value={uni.name}
+                          onChange={handleChange}
                           onSelect={(currentValue) => {
                             // alert(currentValue);
                             setFormData({
@@ -335,12 +363,16 @@ const TambahKontrak = ({
               {/* document.body
                )} */}
             </Popover>
+            {errors.instansi && (
+              <p className="text-red-500 text-sm">{errors.instansi}</p>
+            )}
           </div>
+
           <div className="kontrak-form-group">
-            <label>Soal</label>
+            <label>Soal *</label>
             <RadioGroup
               name="is_buy_task"
-              value={formData.is_buy_task.toString()}
+              value={formData.is_buy_task?.toString()}
               onValueChange={(value) =>
                 setFormData({ ...formData, is_buy_task: Number(value) })
               }
@@ -392,7 +424,7 @@ const TambahKontrak = ({
           </div>
 
           <div className="kontrak-form-group">
-            <label>Jumlah Mahasiswa</label>
+            <label>Jumlah Mahasiswa *</label>
             <input
               type="number"
               name="mahasiswa"
@@ -404,21 +436,28 @@ const TambahKontrak = ({
                   e.preventDefault();
                 }
               }}
-              required
+              // required
             />
+            {errors.mahasiswa && (
+              <p className="text-red-500 text-sm">{errors.mahasiswa}</p>
+            )}
           </div>
           <div className="kontrak-form-group">
-            <label>Periode Awal</label>
+            <label>Periode Awal *</label>
             <input
               type="date"
               name="periodeAwal"
               value={formData.periodeAwal}
               onChange={handleChange}
-              required
+              max={formData.periodeAkhir}
+              // required
             />
+            {errors.periodeAwal && (
+              <p className="text-red-500 text-sm">{errors.periodeAwal}</p>
+            )}
           </div>
           <div className="kontrak-form-group">
-            <label>Periode Akhir</label>
+            <label>Periode Akhir *</label>
             <input
               type="date"
               name="periodeAkhir"
@@ -427,11 +466,14 @@ const TambahKontrak = ({
               min={
                 formData.periodeAwal || new Date().toISOString().split("T")[0]
               }
-              required
+              // required
             />
+            {errors.periodeAkhir && (
+              <p className="text-red-500 text-sm">{errors.periodeAkhir}</p>
+            )}
           </div>
           <div className="kontrak-form-group">
-            <label>SPT</label>
+            <label>SPT *</label>
             <input
               type="number"
               name="spt"
@@ -443,11 +485,14 @@ const TambahKontrak = ({
                   e.preventDefault();
                 }
               }}
-              required
+              // required
             />
+            {errors.spt && (
+              <p className="text-red-500 text-sm">{errors.spt}</p>
+            )}
           </div>
           <div className="kontrak-form-group">
-            <label>Bupot</label>
+            <label>Bupot *</label>
             <input
               type="number"
               name="bupot"
@@ -459,11 +504,14 @@ const TambahKontrak = ({
                   e.preventDefault();
                 }
               }}
-              required
-            />
+              // required
+              />
+              {errors.bupot && (
+                <p className="text-red-500 text-sm">{errors.bupot}</p>
+              )}
           </div>
           <div className="kontrak-form-group">
-            <label>Faktur</label>
+            <label>Faktur *</label>
             <input
               type="number"
               name="faktur"
@@ -475,44 +523,28 @@ const TambahKontrak = ({
                   e.preventDefault();
                 }
               }}
-              required
+              // required
             />
+            {errors.faktur && (
+              <p className="text-red-500 text-sm">{errors.faktur}</p>
+            )}
           </div>
 
-          {/* Kode Pembelian dengan Auto Generate */}
-          {/* <div className="kontrak-form-group">
-            <label>Kode Pembelian</label>
-            <div style={{ display: "flex", gap: "10px" }}>
-              <input
-                type="text"
-                name="kodePembelian"
-                value={formData.kodePembelian}
-                onChange={handleChange}
-                required
-                readOnly
-              />
-              <button
-                type="button"
-                className="auto-generate-button"
-                onClick={generateKodePembelian}
-              >
-                <IoReload />
-              </button>
-            </div>
-          </div> */}
-
           <div className="kontrak-form-group">
-            <label>Status</label>
+            <label>Status *</label>
             <select
               name="status"
               value={formData.status}
               onChange={handleChange}
-              required
+              // required
             >
               <option value="">Pilih Status</option>
               <option value="ACTIVE">Active</option>
               <option value="INACTIVE">Expired</option>
             </select>
+            {errors.status && (
+              <p className="text-red-500 text-sm">{errors.status}</p>
+            )}
           </div>
         </form>
 
@@ -524,7 +556,7 @@ const TambahKontrak = ({
             Batal
           </button>
         </div>
-        <div className="text-xs  mt-2 text-red-700">
+        <div className="text-xs mt-2 text-red-700">
           {mutation.isError && mutation.error.response.data.message}
         </div>
       </div>

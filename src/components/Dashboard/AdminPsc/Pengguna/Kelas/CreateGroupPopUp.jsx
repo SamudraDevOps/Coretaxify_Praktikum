@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./editPopupKelas.css"; // Reuse existing styles
 import { IoReload } from "react-icons/io5";
+import { RxCross1 } from "react-icons/rx";
 
 const CreateGroupPopup = ({ 
   isOpen, 
@@ -10,11 +11,16 @@ const CreateGroupPopup = ({
   setFormData, 
   isLoading 
 }) => {
+  const [errors, setErrors] = useState({});
+
   if (!isOpen) return null;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+    if (errors[name]) {
+      setErrors({ ...errors, [name]: null });
+    }
   };
 
   const handleFileChange = (e) => {
@@ -34,6 +40,45 @@ const CreateGroupPopup = ({
 
   const handleReloadCode = () => {
     setFormData({ ...formData, class_code: generateRandomCode() });
+    if (errors.class_code) {
+      setErrors({ ...errors, class_code: null });
+    }
+  };
+
+  const validate = () => {
+    let newErrors = {};
+
+    if (!formData.name) {
+      newErrors.name = "Nama kelas harus diisi";
+    }
+
+    if (!formData.start_period) {
+      newErrors.start_period = "Periode mulai harus diisi";
+    }
+
+    if (!formData.end_period) {
+      newErrors.end_period = "Periode selesai harus diisi";
+    } else if (formData.start_period && new Date(formData.end_period) <= new Date(formData.start_period)) {
+      newErrors.end_period = "Periode selesai harus setelah periode mulai";
+    }
+
+    if (!formData.class_code) {
+      newErrors.class_code = "Kode kelas harus diisi";
+    }
+
+    if (!formData.status) {
+      newErrors.status = "Status harus diisi";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  // Modify the save handler to use validation
+  const handleSave = () => {
+    if (validate()) {
+      onSave();
+    }
   };
 
   return (
@@ -41,6 +86,10 @@ const CreateGroupPopup = ({
       <div className="edit-popup-content-kelas">
         <div className="edit-popup-header-kelas">
           <h2>Tambah Kelas Baru</h2>
+          <RxCross1
+            className="text-2xl hover:cursor-pointer"
+            onClick={onClose}
+          />
         </div>
         <form>
           <div className="edit-form-group-kelas">
@@ -50,9 +99,11 @@ const CreateGroupPopup = ({
               name="name"
               value={formData.name || ""}
               onChange={handleChange}
-              required
               placeholder="Masukkan nama kelas"
             />
+            {errors.name && (
+              <p className="text-red-500 text-sm">{errors.name}</p>
+            )}
           </div>
           
           <div className="edit-form-group-kelas">
@@ -62,8 +113,11 @@ const CreateGroupPopup = ({
               name="start_period"
               value={formData.start_period || ""}
               onChange={handleChange}
-              required
+              max={formData.end_period}
             />
+            {errors.start_period && (
+              <p className="text-red-500 text-sm">{errors.start_period}</p>
+            )}
           </div>
           
           <div className="edit-form-group-kelas">
@@ -73,9 +127,12 @@ const CreateGroupPopup = ({
               name="end_period"
               value={formData.end_period || ""}
               onChange={handleChange}
-              required
+              min={formData.start_period || new Date().toISOString().split("T")[0]}
             />
             <small>Harus setelah periode mulai</small>
+            {errors.end_period && (
+              <p className="text-red-500 text-sm">{errors.end_period}</p>
+            )}
           </div>
           
           <div className="edit-form-group-kelas">
@@ -86,7 +143,6 @@ const CreateGroupPopup = ({
                 name="class_code"
                 value={formData.class_code || ""}
                 onChange={handleChange}
-                required
                 className="code-input"
                 placeholder="Kode kelas unik"
               />
@@ -99,6 +155,9 @@ const CreateGroupPopup = ({
               </button>
             </div>
             <small>Kode kelas harus unik</small>
+            {errors.class_code && (
+              <p className="text-red-500 text-sm">{errors.class_code}</p>
+            )}
           </div>
           
           <div className="edit-form-group-kelas">
@@ -107,15 +166,17 @@ const CreateGroupPopup = ({
               name="status"
               value={formData.status || ""}
               onChange={handleChange}
-              required
             >
               <option value="">Pilih Status</option>
               <option value="ACTIVE">Active</option>
               <option value="INACTIVE">Inactive</option>
             </select>
+            {errors.status && (
+              <p className="text-red-500 text-sm">{errors.status}</p>
+            )}
           </div>
           
-          <div className="edit-form-group-kelas">
+          {/* <div className="edit-form-group-kelas">
             <label>Import Data (Opsional):</label>
             <input
               type="file"
@@ -124,7 +185,7 @@ const CreateGroupPopup = ({
               accept=".xlsx,.xls"
             />
             <small>Format: XLSX, XLS (Max 5MB)</small>
-          </div>
+          </div> */}
           
           <div className="edit-popup-actions-kelas">
             <button
@@ -136,9 +197,9 @@ const CreateGroupPopup = ({
             </button>
             <button
               type="button"
-              onClick={onSave}
+              onClick={handleSave}
               className="edit-save-button"
-              disabled={isLoading || !formData.name || !formData.start_period || !formData.end_period || !formData.class_code || !formData.status}
+              disabled={isLoading}
             >
               {isLoading ? "Loading..." : "Simpan"}
             </button>
