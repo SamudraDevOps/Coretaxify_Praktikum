@@ -26,10 +26,11 @@ import axios from "axios";
 import { getCsrf } from "@/service/getCsrf";
 import Swal from "sweetalert2";
 import { useParams, useSearchParams } from "react-router";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { RoutesApi } from "@/Routes";
 import { useCookies } from "react-cookie";
 import { useNavigateWithParams } from "@/hooks/useNavigateWithParams";
+import { ClipLoader } from "react-spinners";
 
 // const columnsUpload = [
 //   { key: "file", label: "File Excel", type: "file", accept: ".xlsx,.xls,.csv" },
@@ -60,6 +61,7 @@ const initialRowUpload = {
 const CreateKonsepSPT = ({ data }) => {
   const { id, akun, idSpt } = useParams();
   const [activeTab, setActiveTab] = useState("induk");
+  const [activeTabContent, setActiveTabContent] = useState("A1");
   const [showHeaderInduk, setShowHeaderInduk] = useState(false);
   const [showPenyerahanBarangJasa, setShowPenyerahanBarangJasa] =
     useState(false);
@@ -261,31 +263,36 @@ const CreateKonsepSPT = ({ data }) => {
   const penyerahanBarangJasaTable = useDynamicTableRows(initialRowUpload);
   const [rows, setRows] = useState([{ ...initialRowUpload }]);
 
-  // const {
-  //   data,
-  //   isLoading,
-  //   isError,
-  //   error,
-  // } = useQuery({
-  //   queryKey: ["calculate_spt"],
-  //   queryFn: async () => {
-  //     const data = await axios.get(
-  //       // RoutesApiReal.apiUrl + `student/assignments/${id}/sistem/${akun}`,
-  //       RoutesApi.apiUrl +
-  //         `student/assignments/${id}/sistem/${akun}/getAkun`,
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${cookies.token}`,
-  //         },
-  //         // params: {
-  //         //   intent: "api.sistem.get.akun.orang.pibadi",
-  //         // },
-  //       }
-  //     );
-  //     console.log(data.data);
-  //     return data.data;
-  //   },
-  // });
+  const {
+    data: sptOther,
+    isLoading: isLoadingOther,
+    isError: isErrorOther,
+    error: sptError,
+  } = useQuery({
+    queryKey: [activeTabContent],
+    queryFn: async () => {
+      const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
+      const data = await axios.get(
+        RoutesApi.apiUrl +
+          `student/assignments/${id}/sistem/${accountId}/spt/${idSpt}/show-faktur-ppn`,
+        {
+          headers: {
+            Authorization: `Bearer ${cookies.token}`,
+          },
+          params: {
+            jenis_spt_ppn: activeTabContent,
+          },
+        }
+      );
+      console.log(data.data);
+      return data.data;
+    },
+    enabled: activeTabContent !== null && activeTabContent !== undefined,
+    // Add these options to prevent unnecessary refetches
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    cacheTime: 10 * 60 * 1000, // 10 minutes
+    refetchOnWindowFocus: false,
+  });
 
   const calculateSpt = useMutation({
     mutationFn: async () => {
@@ -509,6 +516,43 @@ const CreateKonsepSPT = ({ data }) => {
       Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
     },
   });
+  const handleTabChange = (value) => {
+    // Prevent any default behavior if this is called from an event
+    if (value?.preventDefault) {
+      value.preventDefault();
+      return;
+    }
+
+    setActiveTab(value);
+    const formattedValue = value.replace(
+      /([a-z])-(\d+)/i,
+      (match, letter, number) => {
+        return letter.toUpperCase() + number;
+      }
+    );
+
+    // Use a callback to ensure state is updated before query runs
+    setActiveTabContent(formattedValue);
+
+    // Optional: Add a small delay to ensure state is updated
+    // setTimeout(() => {
+    //   setActiveTabContent(formattedValue);
+    // }, 0);
+
+    // Swal.fire({
+    //   title: "Tab Changed",
+    //   text: `Current tab: ${formattedValue}`,
+    //   icon: "info",
+    // });
+  };
+
+  // if (isLoadingOther) {
+  //   return (
+  //     <div className="loading">
+  //       <ClipLoader></ClipLoader>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -519,7 +563,8 @@ const CreateKonsepSPT = ({ data }) => {
           </h2>
         </div>
         <div className="w-full p-2 ml-0 border-t text-lg">
-          <Tabs defaultValue="induk" onValueChange={(val) => setActiveTab(val)}>
+          {/* <Tabs  defaultValue="induk" onValueChange={(val) => setActiveTab(val)}> */}
+          <Tabs defaultValue="induk" onValueChange={handleTabChange}>
             <TabsList className="flex justify-start gap-2 text-blue-700 text-lg">
               <TabsTrigger value="induk">Induk</TabsTrigger>
               <TabsTrigger value="a-1">A-1</TabsTrigger>
@@ -2836,817 +2881,1017 @@ const CreateKonsepSPT = ({ data }) => {
                 )}
               </div>
             </TabsContent>
-            <TabsContent value="a-1">
-              <div className="mt-4">
-                <div className="text-lg font-semibold mb-4">
-                  <h1>
-                    DAFTAR EKSPOR BKP BERWUJUD, BKP TIDAK BERWUJUD, DAN/ATAU PKP
-                  </h1>
-                </div>
-                <div
-                  className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
-                  onClick={() => setShowHeadera1(!showHeadera1)}
-                >
-                  <h3 className="text-lg font-semibold">Header</h3>
-                  {showHeadera1 ? <FaChevronUp /> : <FaChevronDown />}
-                </div>
-                {showHeadera1 && (
-                  <div className="border rounded-md p-4 mb-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {/* Kiri */}
-                      <div>
-                        <label className="block font-medium text-gray-700">
-                          NAMA PKP *
-                        </label>
-                        <input
-                          type="text"
-                          readOnly
-                          value="KANTOR AKUNTAN PUBLIK MOH WILDAN DAN ADI DARMAWAN"
-                          className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
-                        />
-                      </div>
+            {isLoadingOther ? (
+              <div className="loading">
+                <ClipLoader></ClipLoader>
+              </div>
+            ) : (
+              <>
+                <TabsContent value="a-1">
+                  <div className="mt-4">
+                    <div className="text-lg font-semibold mb-4">
+                      <h1>
+                        DAFTAR EKSPOR BKP BERWUJUD, BKP TIDAK BERWUJUD, DAN/ATAU
+                        PKP
+                      </h1>
+                    </div>
+                    <div
+                      className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
+                      onClick={() => setShowHeadera1(!showHeadera1)}
+                    >
+                      <h3 className="text-lg font-semibold">Header</h3>
+                      {showHeadera1 ? <FaChevronUp /> : <FaChevronDown />}
+                    </div>
+                    {showHeadera1 && (
+                      <div className="border rounded-md p-4 mb-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {/* Kiri */}
+                          <div>
+                            <label className="block font-medium text-gray-700">
+                              NAMA PKP *
+                            </label>
+                            <input
+                              type="text"
+                              readOnly
+                              value="KANTOR AKUNTAN PUBLIK MOH WILDAN DAN ADI DARMAWAN"
+                              className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
+                            />
+                          </div>
 
-                      <div>
-                        <label className="block font-medium text-gray-700">
-                          MASA *
-                        </label>
-                        <input
-                          type="text"
-                          readOnly
-                          value="032025"
-                          className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
-                        />
+                          <div>
+                            <label className="block font-medium text-gray-700">
+                              MASA *
+                            </label>
+                            <input
+                              type="text"
+                              readOnly
+                              value="032025"
+                              className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
+                            />
+                          </div>
+                          <div>
+                            <label className="block font-medium text-gray-700">
+                              NPWP*
+                            </label>
+                            <input
+                              type="text"
+                              readOnly
+                              value="0934274002429000"
+                              className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
+                            />
+                          </div>
+                          <div>
+                            <label className="block font-medium text-gray-700">
+                              Normal/Pembetulan
+                            </label>
+                            <select
+                              disabled
+                              className="w-full p-2 border rounded-md bg-gray-100 text-gray-600 cursor-not-allowed"
+                            >
+                              <option>Normal</option>
+                            </select>
+                          </div>
+                        </div>
                       </div>
-                      <div>
-                        <label className="block font-medium text-gray-700">
-                          NPWP*
-                        </label>
-                        <input
-                          type="text"
-                          readOnly
-                          value="0934274002429000"
-                          className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
-                        />
-                      </div>
-                      <div>
-                        <label className="block font-medium text-gray-700">
-                          Normal/Pembetulan
-                        </label>
-                        <select
-                          disabled
-                          className="w-full p-2 border rounded-md bg-gray-100 text-gray-600 cursor-not-allowed"
-                        >
-                          <option>Normal</option>
-                        </select>
-                      </div>
+                    )}
+                    <div className="border">
+                      <table className="min-w-full text-sm text-left border overflow-x-auto">
+                        <thead className="bg-purple-700 text-white text-center">
+                          <tr>
+                            <th className="p-2 border-b">No</th>
+                            <th className="p-2 border-b min-w-[200px]">
+                              Nama Pembeli
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">NPWP</th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              Faktur Pajak Nomor
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              Faktur Pajak Tanggal
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              DPP (Rupiah)
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              DPP Lain (Rupiah)
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              PPN (Rupiah)
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              PPnBM (Rupiah)
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody className="text-gray-600 text-center">
+                          {sptOther.data.length > 0 ? (
+                            sptOther.data.map((item, index) => (
+                              <tr key={index}>
+                                <td className="p-2 border-b text-center">
+                                  {index + 1}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.nama_pembeli || "-"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.npwp || "-"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.faktur_pajak_nomor || "-"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.faktur_pajak_tanggal || "-"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.dpp || "0"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.dpp_lain || "0"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.ppn || "0"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.ppnbm || "0"}
+                                </td>
+                              </tr>
+                            ))
+                          ) : (
+                            <tr>
+                              <td
+                                className="p-2 border-b text-center"
+                                colSpan={6}
+                              >
+                                No data available
+                              </td>
+                            </tr>
+                          )}
+                        </tbody>
+                        <tfoot className="text-gray-800 font-semibold bg-gray-100">
+                          <tr>
+                            <td
+                              className="p-2 text-center min-w-[150px]"
+                              colSpan={4}
+                            >
+                              Jumlah
+                            </td>
+                            <td className="p-2 text-center">
+                              {/* {data.reduce(
+                            (sum, item) => sum + parseFloat(item.dpp || 0),
+                            0
+                          )} */}
+                            </td>
+                            <td className="p-2"></td>
+                          </tr>
+                        </tfoot>
+                      </table>
                     </div>
                   </div>
-                )}
-                <div className="border">
-                  <table className="min-w-full text-sm text-left border overflow-x-auto">
-                    <thead className="bg-purple-700 text-white text-center">
-                      <tr>
-                        <th className="p-2 border-b ">No</th>
-                        <th className="p-2 border-b min-w-[200px]">
-                          Nama Pembeli BKP/Penerima Manfaat BKP Tidak
-                          Berwujud/Penerima JKP
-                        </th>
-                        <th className="p-2  border-b min-w-[150px]">
-                          Dokumen Tertentu Atau Nomor
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          Dokumen Tertentu Atau Tanggal
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          DPP (Rupiah)
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          Keterangan
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="text-gray-600 text-center">
-                      <tr>
-                        <td className="p-2 border-b text-center">1</td>
-                        <td className="p-2 border-b">
-                          KANTOR AKUNTAN PUBLIK MOH WILDAN DAN ADI DARMAWAN
-                        </td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                      </tr>
-                    </tbody>
-                    <tfoot className="text-gray-800 font-semibold bg-gray-100">
-                      <tr>
-                        <td
-                          className="p-2 text-center min-w-[150px]"
-                          colSpan={4}
-                        >
-                          Jumlah
-                        </td>
-                        <td className="p-2 text-center">0</td>
-                        <td className="p-2"></td>
-                      </tr>
-                    </tfoot>
-                  </table>
-                </div>
-              </div>
-            </TabsContent>
-            <TabsContent value="a-2">
-              <div className="mt-4">
-                <div className="text-lg font-semibold mb-4">
-                  <h1>
-                    DAFTAR PAJAK KELUARAN ATAS PENYERAHAN DALAM NEGERI DENGAN
-                    FAKTUR PAJAK
-                  </h1>
-                </div>
-                <div
-                  className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
-                  onClick={() => setShowHeadera2(!showHeadera2)}
-                >
-                  <h3 className="text-lg font-semibold">Header</h3>
-                  {showHeadera2 ? <FaChevronUp /> : <FaChevronDown />}
-                </div>
-                {showHeadera2 && (
-                  <div className="border rounded-md p-4 mb-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {/* Kiri */}
-                      <div>
-                        <label className="block font-medium text-gray-700">
-                          NAMA PKP *
-                        </label>
-                        <input
-                          type="text"
-                          readOnly
-                          value="KANTOR AKUNTAN PUBLIK MOH WILDAN DAN ADI DARMAWAN"
-                          className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
-                        />
-                      </div>
+                </TabsContent>
+                <TabsContent value="a-2">
+                  <div className="mt-4">
+                    <div className="text-lg font-semibold mb-4">
+                      <h1>
+                        DAFTAR PAJAK KELUARAN ATAS PENYERAHAN DALAM NEGERI
+                        DENGAN FAKTUR PAJAK
+                      </h1>
+                    </div>
+                    <div
+                      className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
+                      onClick={() => setShowHeadera2(!showHeadera2)}
+                    >
+                      <h3 className="text-lg font-semibold">Header</h3>
+                      {showHeadera2 ? <FaChevronUp /> : <FaChevronDown />}
+                    </div>
+                    {showHeadera2 && (
+                      <div className="border rounded-md p-4 mb-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {/* Kiri */}
+                          <div>
+                            <label className="block font-medium text-gray-700">
+                              NAMA PKP *
+                            </label>
+                            <input
+                              type="text"
+                              readOnly
+                              value="KANTOR AKUNTAN PUBLIK MOH WILDAN DAN ADI DARMAWAN"
+                              className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
+                            />
+                          </div>
 
-                      <div>
-                        <label className="block font-medium text-gray-700">
-                          MASA *
-                        </label>
-                        <input
-                          type="text"
-                          readOnly
-                          value="032025"
-                          className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
-                        />
+                          <div>
+                            <label className="block font-medium text-gray-700">
+                              MASA *
+                            </label>
+                            <input
+                              type="text"
+                              readOnly
+                              value="032025"
+                              className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
+                            />
+                          </div>
+                          <div>
+                            <label className="block font-medium text-gray-700">
+                              NPWP*
+                            </label>
+                            <input
+                              type="text"
+                              readOnly
+                              value="0934274002429000"
+                              className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
+                            />
+                          </div>
+                          <div>
+                            <label className="block font-medium text-gray-700">
+                              Normal/Pembetulan
+                            </label>
+                            <select
+                              disabled
+                              className="w-full p-2 border rounded-md bg-gray-100 text-gray-600 cursor-not-allowed"
+                            >
+                              <option>Normal</option>
+                            </select>
+                          </div>
+                        </div>
                       </div>
-                      <div>
-                        <label className="block font-medium text-gray-700">
-                          NPWP*
-                        </label>
-                        <input
-                          type="text"
-                          readOnly
-                          value="0934274002429000"
-                          className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
-                        />
-                      </div>
-                      <div>
-                        <label className="block font-medium text-gray-700">
-                          Normal/Pembetulan
-                        </label>
-                        <select
-                          disabled
-                          className="w-full p-2 border rounded-md bg-gray-100 text-gray-600 cursor-not-allowed"
-                        >
-                          <option>Normal</option>
-                        </select>
-                      </div>
+                    )}
+                    <div className=" w-[1450px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden ">
+                      <table className="table-auto text-sm text-left border overflow-hidden">
+                        <thead className="bg-purple-700 text-white text-center">
+                          <tr>
+                            <th className="p-2 border-b ">No</th>
+                            <th className="p-2 border-b min-w-[200px]">
+                              Nama Pembeli BKP/Penerima Manfaat BKP Tidak
+                              Berwujud/Penerima JKP
+                            </th>
+                            <th className="p-2  border-b min-w-[150px]">
+                              NPWP/NIK/Nomor Paspor
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              Faktur Pajak Dokumen Tertentu/Nota Retur/Nota
+                              Pembatalan - nomor
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              Harga Jual/Pengganti/DPP (Rupiah)
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              DPP Nilai Lain/DPP (Rupiah)
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              PPN (Rupiah)
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              PPnBM (Rupiah)
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              Kode dan Nomor Seri Faktur Pajak Diganti/Diretur
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody className="text-gray-600 text-center">
+                          {sptOther.data.length > 0 ? (
+                            sptOther.data.map((item, index) => (
+                              <tr key={index}>
+                                <td className="p-2 border-b text-center">
+                                  {index + 1}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.nama_pembeli || "-"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.npwp || "-"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.faktur_pajak_nomor || "-"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.faktur_pajak_tanggal || "-"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.dpp || "0"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.dpp_lain || "0"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.ppn || "0"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.ppnbm || "0"}
+                                </td>
+                              </tr>
+                            ))
+                          ) : (
+                            <tr>
+                              <td
+                                className="p-2 border-b text-center"
+                                colSpan={6}
+                              >
+                                No data available
+                              </td>
+                            </tr>
+                          )}
+                        </tbody>
+                        <tfoot className="text-gray-800 font-semibold bg-gray-100">
+                          <tr>
+                            <td
+                              className="p-2 text-center min-w-[150px]"
+                              colSpan={4}
+                            >
+                              Jumlah
+                            </td>
+                            <td className="p-2 text-center">0</td>
+                            <td className="p-2"></td>
+                          </tr>
+                        </tfoot>
+                      </table>
                     </div>
                   </div>
-                )}
-                <div className=" w-[1450px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden ">
-                  <table className="table-auto text-sm text-left border overflow-hidden">
-                    <thead className="bg-purple-700 text-white text-center">
-                      <tr>
-                        <th className="p-2 border-b ">No</th>
-                        <th className="p-2 border-b min-w-[200px]">
-                          Nama Pembeli BKP/Penerima Manfaat BKP Tidak
-                          Berwujud/Penerima JKP
-                        </th>
-                        <th className="p-2  border-b min-w-[150px]">
-                          NPWP/NIK/Nomor Paspor
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          Faktur Pajak Dokumen Tertentu/Nota Retur/Nota
-                          Pembatalan - nomor
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          Harga Jual/Pengganti/DPP (Rupiah)
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          DPP Nilai Lain/DPP (Rupiah)
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          PPN (Rupiah)
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          PPnBM (Rupiah)
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          Kode dan Nomor Seri Faktur Pajak Diganti/Diretur
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="text-gray-600 text-center">
-                      <tr>
-                        <td className="p-2 border-b text-center">1</td>
-                        <td className="p-2 border-b">
-                          KANTOR AKUNTAN PUBLIK MOH WILDAN DAN ADI DARMAWAN
-                        </td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                      </tr>
-                    </tbody>
-                    <tfoot className="text-gray-800 font-semibold bg-gray-100">
-                      <tr>
-                        <td
-                          className="p-2 text-center min-w-[150px]"
-                          colSpan={4}
-                        >
-                          Jumlah
-                        </td>
-                        <td className="p-2 text-center">0</td>
-                        <td className="p-2"></td>
-                      </tr>
-                    </tfoot>
-                  </table>
-                </div>
-              </div>
-            </TabsContent>
-            <TabsContent value="b-1">
-              <div className="mt-4">
-                <div className="text-lg font-semibold mb-4">
-                  <h1>
-                    DAFTAR PAJAK MASUKAN YANG DAPAT DIKREDITKAN ATAS IMPOR BKP
-                    DAN PEMANFAATAN BKP TIDAK BERWUJUD/JKP DARI LUAR DAERAH
-                    PABEAN
-                  </h1>
-                </div>
-                <div
-                  className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
-                  onClick={() => setShowHeaderb1(!showHeaderb1)}
-                >
-                  <h3 className="text-lg font-semibold">Header</h3>
-                  {showHeaderb1 ? <FaChevronUp /> : <FaChevronDown />}
-                </div>
-                {showHeaderb1 && (
-                  <div className="border rounded-md p-4 mb-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {/* Kiri */}
-                      <div>
-                        <label className="block font-medium text-gray-700">
-                          NAMA PKP *
-                        </label>
-                        <input
-                          type="text"
-                          readOnly
-                          value="KANTOR AKUNTAN PUBLIK MOH WILDAN DAN ADI DARMAWAN"
-                          className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
-                        />
-                      </div>
+                </TabsContent>
+                <TabsContent value="b-1">
+                  <div className="mt-4">
+                    <div className="text-lg font-semibold mb-4">
+                      <h1>
+                        DAFTAR PAJAK MASUKAN YANG DAPAT DIKREDITKAN ATAS IMPOR
+                        BKP DAN PEMANFAATAN BKP TIDAK BERWUJUD/JKP DARI LUAR
+                        DAERAH PABEAN
+                      </h1>
+                    </div>
+                    <div
+                      className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
+                      onClick={() => setShowHeaderb1(!showHeaderb1)}
+                    >
+                      <h3 className="text-lg font-semibold">Header</h3>
+                      {showHeaderb1 ? <FaChevronUp /> : <FaChevronDown />}
+                    </div>
+                    {showHeaderb1 && (
+                      <div className="border rounded-md p-4 mb-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {/* Kiri */}
+                          <div>
+                            <label className="block font-medium text-gray-700">
+                              NAMA PKP *
+                            </label>
+                            <input
+                              type="text"
+                              readOnly
+                              value="KANTOR AKUNTAN PUBLIK MOH WILDAN DAN ADI DARMAWAN"
+                              className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
+                            />
+                          </div>
 
-                      <div>
-                        <label className="block font-medium text-gray-700">
-                          MASA *
-                        </label>
-                        <input
-                          type="text"
-                          readOnly
-                          value="032025"
-                          className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
-                        />
+                          <div>
+                            <label className="block font-medium text-gray-700">
+                              MASA *
+                            </label>
+                            <input
+                              type="text"
+                              readOnly
+                              value="032025"
+                              className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
+                            />
+                          </div>
+                          <div>
+                            <label className="block font-medium text-gray-700">
+                              NPWP*
+                            </label>
+                            <input
+                              type="text"
+                              readOnly
+                              value="0934274002429000"
+                              className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
+                            />
+                          </div>
+                          <div>
+                            <label className="block font-medium text-gray-700">
+                              Normal/Pembetulan
+                            </label>
+                            <select
+                              disabled
+                              className="w-full p-2 border rounded-md bg-gray-100 text-gray-600 cursor-not-allowed"
+                            >
+                              <option>Normal</option>
+                            </select>
+                          </div>
+                        </div>
                       </div>
-                      <div>
-                        <label className="block font-medium text-gray-700">
-                          NPWP*
-                        </label>
-                        <input
-                          type="text"
-                          readOnly
-                          value="0934274002429000"
-                          className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
-                        />
-                      </div>
-                      <div>
-                        <label className="block font-medium text-gray-700">
-                          Normal/Pembetulan
-                        </label>
-                        <select
-                          disabled
-                          className="w-full p-2 border rounded-md bg-gray-100 text-gray-600 cursor-not-allowed"
-                        >
-                          <option>Normal</option>
-                        </select>
-                      </div>
+                    )}
+                    <div className=" w-[1450px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden ">
+                      <table className="table-auto text-sm text-left border overflow-hidden">
+                        <thead className="bg-purple-700 text-white text-center">
+                          <tr>
+                            <th className="p-2 border-b ">No</th>
+                            <th className="p-2 border-b min-w-[200px]">
+                              Nama Pembeli BKP/Penerima Manfaat BKP Tidak
+                              Berwujud/Penerima JKP
+                            </th>
+                            <th className="p-2  border-b min-w-[150px]">
+                              NPWP/NIK/Nomor Paspor
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              Dokumen Tertentu - Nomor
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              Dokumen Tertentu - Tanggal
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              DPP (Rupiah)
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              PPN (Rupiah)
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              PPnBM (Rupiah)
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              Keterangan
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody className="text-gray-600 text-center">
+                          {sptOther.data.length > 0 ? (
+                            sptOther.data.map((item, index) => (
+                              <tr key={index}>
+                                <td className="p-2 border-b text-center">
+                                  {index + 1}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.nama_pembeli || "-"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.npwp || "-"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.faktur_pajak_nomor || "-"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.faktur_pajak_tanggal || "-"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.dpp || "0"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.dpp_lain || "0"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.ppn || "0"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.ppnbm || "0"}
+                                </td>
+                              </tr>
+                            ))
+                          ) : (
+                            <tr>
+                              <td
+                                className="p-2 border-b text-center"
+                                colSpan={6}
+                              >
+                                No data available
+                              </td>
+                            </tr>
+                          )}
+                        </tbody>
+                        <tfoot className="text-gray-800 font-semibold bg-gray-100">
+                          <tr>
+                            <td
+                              className="p-2 text-center min-w-[150px]"
+                              colSpan={4}
+                            >
+                              Jumlah
+                            </td>
+                            <td className="p-2 text-center">0</td>
+                            <td className="p-2"></td>
+                            <td className="p-2"></td>
+                            <td className="p-2"></td>
+                            <td className="p-2"></td>
+                            <td className="p-2"></td>
+                          </tr>
+                        </tfoot>
+                      </table>
                     </div>
                   </div>
-                )}
-                <div className=" w-[1450px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden ">
-                  <table className="table-auto text-sm text-left border overflow-hidden">
-                    <thead className="bg-purple-700 text-white text-center">
-                      <tr>
-                        <th className="p-2 border-b ">No</th>
-                        <th className="p-2 border-b min-w-[200px]">
-                          Nama Pembeli BKP/Penerima Manfaat BKP Tidak
-                          Berwujud/Penerima JKP
-                        </th>
-                        <th className="p-2  border-b min-w-[150px]">
-                          NPWP/NIK/Nomor Paspor
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          Dokumen Tertentu - Nomor
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          Dokumen Tertentu - Tanggal
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          DPP (Rupiah)
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          PPN (Rupiah)
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          PPnBM (Rupiah)
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          Keterangan
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="text-gray-600 text-center">
-                      <tr>
-                        <td className="p-2 border-b text-center">1</td>
-                        <td className="p-2 border-b">
-                          KANTOR AKUNTAN PUBLIK MOH WILDAN DAN ADI DARMAWAN
-                        </td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                      </tr>
-                    </tbody>
-                    <tfoot className="text-gray-800 font-semibold bg-gray-100">
-                      <tr>
-                        <td
-                          className="p-2 text-center min-w-[150px]"
-                          colSpan={4}
-                        >
-                          Jumlah
-                        </td>
-                        <td className="p-2 text-center">0</td>
-                        <td className="p-2"></td>
-                        <td className="p-2"></td>
-                        <td className="p-2"></td>
-                        <td className="p-2"></td>
-                        <td className="p-2"></td>
-                      </tr>
-                    </tfoot>
-                  </table>
-                </div>
-              </div>
-            </TabsContent>
-            <TabsContent value="b-2">
-              <div className="mt-4">
-                <div className="text-lg font-semibold mb-4">
-                  <h1>
-                    DAFTAR PAJAK MASUKAN YANG DAPAT DIKREDITKAN BKP/JKP DALAM
-                    NEGERI
-                  </h1>
-                </div>
-                <div
-                  className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
-                  onClick={() => setShowHeaderb2(!showHeaderb2)}
-                >
-                  <h3 className="text-lg font-semibold">Header</h3>
-                  {showHeaderb2 ? <FaChevronUp /> : <FaChevronDown />}
-                </div>
-                {showHeaderb2 && (
-                  <div className="border rounded-md p-4 mb-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {/* Kiri */}
-                      <div>
-                        <label className="block font-medium text-gray-700">
-                          NAMA PKP *
-                        </label>
-                        <input
-                          type="text"
-                          readOnly
-                          value="KANTOR AKUNTAN PUBLIK MOH WILDAN DAN ADI DARMAWAN"
-                          className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
-                        />
-                      </div>
+                </TabsContent>
+                <TabsContent value="b-2">
+                  <div className="mt-4">
+                    <div className="text-lg font-semibold mb-4">
+                      <h1>
+                        DAFTAR PAJAK MASUKAN YANG DAPAT DIKREDITKAN BKP/JKP
+                        DALAM NEGERI
+                      </h1>
+                    </div>
+                    <div
+                      className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
+                      onClick={() => setShowHeaderb2(!showHeaderb2)}
+                    >
+                      <h3 className="text-lg font-semibold">Header</h3>
+                      {showHeaderb2 ? <FaChevronUp /> : <FaChevronDown />}
+                    </div>
+                    {showHeaderb2 && (
+                      <div className="border rounded-md p-4 mb-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {/* Kiri */}
+                          <div>
+                            <label className="block font-medium text-gray-700">
+                              NAMA PKP *
+                            </label>
+                            <input
+                              type="text"
+                              readOnly
+                              value="KANTOR AKUNTAN PUBLIK MOH WILDAN DAN ADI DARMAWAN"
+                              className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
+                            />
+                          </div>
 
-                      <div>
-                        <label className="block font-medium text-gray-700">
-                          MASA *
-                        </label>
-                        <input
-                          type="text"
-                          readOnly
-                          value="032025"
-                          className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
-                        />
+                          <div>
+                            <label className="block font-medium text-gray-700">
+                              MASA *
+                            </label>
+                            <input
+                              type="text"
+                              readOnly
+                              value="032025"
+                              className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
+                            />
+                          </div>
+                          <div>
+                            <label className="block font-medium text-gray-700">
+                              NPWP*
+                            </label>
+                            <input
+                              type="text"
+                              readOnly
+                              value="0934274002429000"
+                              className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
+                            />
+                          </div>
+                          <div>
+                            <label className="block font-medium text-gray-700">
+                              Normal/Pembetulan
+                            </label>
+                            <select
+                              disabled
+                              className="w-full p-2 border rounded-md bg-gray-100 text-gray-600 cursor-not-allowed"
+                            >
+                              <option>Normal</option>
+                            </select>
+                          </div>
+                        </div>
                       </div>
-                      <div>
-                        <label className="block font-medium text-gray-700">
-                          NPWP*
-                        </label>
-                        <input
-                          type="text"
-                          readOnly
-                          value="0934274002429000"
-                          className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
-                        />
-                      </div>
-                      <div>
-                        <label className="block font-medium text-gray-700">
-                          Normal/Pembetulan
-                        </label>
-                        <select
-                          disabled
-                          className="w-full p-2 border rounded-md bg-gray-100 text-gray-600 cursor-not-allowed"
-                        >
-                          <option>Normal</option>
-                        </select>
-                      </div>
+                    )}
+                    <div className=" w-[1450px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden ">
+                      <table className="table-auto text-sm text-left border overflow-hidden">
+                        <thead className="bg-purple-700 text-white text-center">
+                          <tr>
+                            <th className="p-2 border-b ">No</th>
+                            <th className="p-2 border-b min-w-[200px]">
+                              Nama Pembeli BKP/Penerima Manfaat BKP Tidak
+                              Berwujud/Penerima JKP
+                            </th>
+                            <th className="p-2  border-b min-w-[150px]">
+                              NPWP/NIK/Nomor Paspor
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              Faktur Pajak/Dokumen Tertentu/Nota Retur/ Nota
+                              Pembatalan - Nomor
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              Faktur Pajak/Dokumen Tertentu/Nota Retur/ Nota
+                              Pembatalan - Tanggal
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              Harga Jual/Pengganti/DPP(Rupiah)
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              DPP Nilai Lain/ DPP (Rupiah)
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              PPN (Rupiah)
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              PPnBM (Rupiah)
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              Kode dan Nomor Seri Faktur Pajak yang
+                              Diganti/Diretur
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody className="text-gray-600 text-center">
+                          {sptOther.data.length > 0 ? (
+                            sptOther.data.map((item, index) => (
+                              <tr key={index}>
+                                <td className="p-2 border-b text-center">
+                                  {index + 1}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.nama_pembeli || "-"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.npwp || "-"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.faktur_pajak_nomor || "-"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.faktur_pajak_tanggal || "-"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.dpp || "0"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.dpp_lain || "0"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.ppn || "0"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.ppnbm || "0"}
+                                </td>
+                              </tr>
+                            ))
+                          ) : (
+                            <tr>
+                              <td
+                                className="p-2 border-b text-center"
+                                colSpan={6}
+                              >
+                                No data available
+                              </td>
+                            </tr>
+                          )}
+                        </tbody>
+                        <tfoot className="text-gray-800 font-semibold bg-gray-100">
+                          <tr>
+                            <td
+                              className="p-2 text-center min-w-[150px]"
+                              colSpan={4}
+                            >
+                              Jumlah
+                            </td>
+                            <td className="p-2 text-center">0</td>
+                            <td className="p-2"></td>
+                            <td className="p-2"></td>
+                            <td className="p-2"></td>
+                            <td className="p-2"></td>
+                            <td className="p-2"></td>
+                          </tr>
+                        </tfoot>
+                      </table>
                     </div>
                   </div>
-                )}
-                <div className=" w-[1450px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden ">
-                  <table className="table-auto text-sm text-left border overflow-hidden">
-                    <thead className="bg-purple-700 text-white text-center">
-                      <tr>
-                        <th className="p-2 border-b ">No</th>
-                        <th className="p-2 border-b min-w-[200px]">
-                          Nama Pembeli BKP/Penerima Manfaat BKP Tidak
-                          Berwujud/Penerima JKP
-                        </th>
-                        <th className="p-2  border-b min-w-[150px]">
-                          NPWP/NIK/Nomor Paspor
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          Faktur Pajak/Dokumen Tertentu/Nota Retur/ Nota
-                          Pembatalan - Nomor
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          Faktur Pajak/Dokumen Tertentu/Nota Retur/ Nota
-                          Pembatalan - Tanggal
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          Harga Jual/Pengganti/DPP(Rupiah)
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          DPP Nilai Lain/ DPP (Rupiah)
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          PPN (Rupiah)
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          PPnBM (Rupiah)
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          Kode dan Nomor Seri Faktur Pajak yang Diganti/Diretur
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="text-gray-600 text-center">
-                      <tr>
-                        <td className="p-2 border-b text-center">1</td>
-                        <td className="p-2 border-b">
-                          KANTOR AKUNTAN PUBLIK MOH WILDAN DAN ADI DARMAWAN
-                        </td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                      </tr>
-                    </tbody>
-                    <tfoot className="text-gray-800 font-semibold bg-gray-100">
-                      <tr>
-                        <td
-                          className="p-2 text-center min-w-[150px]"
-                          colSpan={4}
-                        >
-                          Jumlah
-                        </td>
-                        <td className="p-2 text-center">0</td>
-                        <td className="p-2"></td>
-                        <td className="p-2"></td>
-                        <td className="p-2"></td>
-                        <td className="p-2"></td>
-                        <td className="p-2"></td>
-                      </tr>
-                    </tfoot>
-                  </table>
-                </div>
-              </div>
-            </TabsContent>
-            <TabsContent value="b-3">
-              <div className="mt-4">
-                <div className="text-lg font-semibold mb-4">
-                  <h1>
-                    DAFTAR PAJAK MASUKAN YANG TIDAK DIKREDITKAN ATAU MENDAPAT
-                    FASILITAS
-                  </h1>
-                </div>
-                <div
-                  className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
-                  onClick={() => setShowHeaderb3(!showHeaderb3)}
-                >
-                  <h3 className="text-lg font-semibold">Header</h3>
-                  {showHeaderb3 ? <FaChevronUp /> : <FaChevronDown />}
-                </div>
-                {showHeaderb3 && (
-                  <div className="border rounded-md p-4 mb-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {/* Kiri */}
-                      <div>
-                        <label className="block font-medium text-gray-700">
-                          NAMA PKP *
-                        </label>
-                        <input
-                          type="text"
-                          readOnly
-                          value="KANTOR AKUNTAN PUBLIK MOH WILDAN DAN ADI DARMAWAN"
-                          className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
-                        />
-                      </div>
+                </TabsContent>
+                <TabsContent value="b-3">
+                  <div className="mt-4">
+                    <div className="text-lg font-semibold mb-4">
+                      <h1>
+                        DAFTAR PAJAK MASUKAN YANG TIDAK DIKREDITKAN ATAU
+                        MENDAPAT FASILITAS
+                      </h1>
+                    </div>
+                    <div
+                      className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
+                      onClick={() => setShowHeaderb3(!showHeaderb3)}
+                    >
+                      <h3 className="text-lg font-semibold">Header</h3>
+                      {showHeaderb3 ? <FaChevronUp /> : <FaChevronDown />}
+                    </div>
+                    {showHeaderb3 && (
+                      <div className="border rounded-md p-4 mb-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {/* Kiri */}
+                          <div>
+                            <label className="block font-medium text-gray-700">
+                              NAMA PKP *
+                            </label>
+                            <input
+                              type="text"
+                              readOnly
+                              value="KANTOR AKUNTAN PUBLIK MOH WILDAN DAN ADI DARMAWAN"
+                              className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
+                            />
+                          </div>
 
-                      <div>
-                        <label className="block font-medium text-gray-700">
-                          MASA *
-                        </label>
-                        <input
-                          type="text"
-                          readOnly
-                          value="032025"
-                          className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
-                        />
+                          <div>
+                            <label className="block font-medium text-gray-700">
+                              MASA *
+                            </label>
+                            <input
+                              type="text"
+                              readOnly
+                              value="032025"
+                              className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
+                            />
+                          </div>
+                          <div>
+                            <label className="block font-medium text-gray-700">
+                              NPWP*
+                            </label>
+                            <input
+                              type="text"
+                              readOnly
+                              value="0934274002429000"
+                              className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
+                            />
+                          </div>
+                          <div>
+                            <label className="block font-medium text-gray-700">
+                              Normal/Pembetulan
+                            </label>
+                            <select
+                              disabled
+                              className="w-full p-2 border rounded-md bg-gray-100 text-gray-600 cursor-not-allowed"
+                            >
+                              <option>Normal</option>
+                            </select>
+                          </div>
+                        </div>
                       </div>
-                      <div>
-                        <label className="block font-medium text-gray-700">
-                          NPWP*
-                        </label>
-                        <input
-                          type="text"
-                          readOnly
-                          value="0934274002429000"
-                          className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
-                        />
-                      </div>
-                      <div>
-                        <label className="block font-medium text-gray-700">
-                          Normal/Pembetulan
-                        </label>
-                        <select
-                          disabled
-                          className="w-full p-2 border rounded-md bg-gray-100 text-gray-600 cursor-not-allowed"
-                        >
-                          <option>Normal</option>
-                        </select>
-                      </div>
+                    )}
+                    <div className=" w-[1450px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden ">
+                      <table className="table-auto text-sm text-left border overflow-hidden">
+                        <thead className="bg-purple-700 text-white text-center">
+                          <tr>
+                            <th className="p-2 border-b ">No</th>
+                            <th className="p-2 border-b min-w-[200px]">
+                              Nama Pembeli BKP/Penerima Manfaat BKP Tidak
+                              Berwujud/Penerima JKP
+                            </th>
+                            <th className="p-2  border-b min-w-[150px]">
+                              NPWP/NIK/Nomor Paspor
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              Faktur Pajak/Dokumen Tertentu/Nota Retur/ Nota
+                              Pembatalan - Nomor
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              Faktur Pajak/Dokumen Tertentu/Nota Retur/ Nota
+                              Pembatalan - Tanggal
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              Harga Jual/Pengganti/DPP(Rupiah)
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              DPP Nilai Lain/ DPP (Rupiah)
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              PPN (Rupiah)
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              PPnBM (Rupiah)
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              Kode dan Nomor Seri Faktur Pajak yang
+                              Diganti/Diretur
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody className="text-gray-600 text-center">
+                          {sptOther.data.length > 0 ? (
+                            sptOther.data.map((item, index) => (
+                              <tr key={index}>
+                                <td className="p-2 border-b text-center">
+                                  {index + 1}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.nama_pembeli || "-"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.npwp || "-"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.faktur_pajak_nomor || "-"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.faktur_pajak_tanggal || "-"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.dpp || "0"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.dpp_lain || "0"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.ppn || "0"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.ppnbm || "0"}
+                                </td>
+                              </tr>
+                            ))
+                          ) : (
+                            <tr>
+                              <td
+                                className="p-2 border-b text-center"
+                                colSpan={6}
+                              >
+                                No data available
+                              </td>
+                            </tr>
+                          )}
+                        </tbody>
+                        <tfoot className="text-gray-800 font-semibold bg-gray-100">
+                          <tr>
+                            <td
+                              className="p-2 text-center min-w-[150px]"
+                              colSpan={4}
+                            >
+                              Jumlah
+                            </td>
+                            <td className="p-2 text-center">0</td>
+                            <td className="p-2"></td>
+                            <td className="p-2"></td>
+                            <td className="p-2"></td>
+                            <td className="p-2"></td>
+                            <td className="p-2"></td>
+                          </tr>
+                        </tfoot>
+                      </table>
                     </div>
                   </div>
-                )}
-                <div className=" w-[1450px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden ">
-                  <table className="table-auto text-sm text-left border overflow-hidden">
-                    <thead className="bg-purple-700 text-white text-center">
-                      <tr>
-                        <th className="p-2 border-b ">No</th>
-                        <th className="p-2 border-b min-w-[200px]">
-                          Nama Pembeli BKP/Penerima Manfaat BKP Tidak
-                          Berwujud/Penerima JKP
-                        </th>
-                        <th className="p-2  border-b min-w-[150px]">
-                          NPWP/NIK/Nomor Paspor
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          Faktur Pajak/Dokumen Tertentu/Nota Retur/ Nota
-                          Pembatalan - Nomor
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          Faktur Pajak/Dokumen Tertentu/Nota Retur/ Nota
-                          Pembatalan - Tanggal
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          Harga Jual/Pengganti/DPP(Rupiah)
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          DPP Nilai Lain/ DPP (Rupiah)
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          PPN (Rupiah)
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          PPnBM (Rupiah)
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          Kode dan Nomor Seri Faktur Pajak yang Diganti/Diretur
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="text-gray-600 text-center">
-                      <tr>
-                        <td className="p-2 border-b text-center">1</td>
-                        <td className="p-2 border-b">
-                          KANTOR AKUNTAN PUBLIK MOH WILDAN DAN ADI DARMAWAN
-                        </td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                      </tr>
-                    </tbody>
-                    <tfoot className="text-gray-800 font-semibold bg-gray-100">
-                      <tr>
-                        <td
-                          className="p-2 text-center min-w-[150px]"
-                          colSpan={4}
-                        >
-                          Jumlah
-                        </td>
-                        <td className="p-2 text-center">0</td>
-                        <td className="p-2"></td>
-                        <td className="p-2"></td>
-                        <td className="p-2"></td>
-                        <td className="p-2"></td>
-                        <td className="p-2"></td>
-                      </tr>
-                    </tfoot>
-                  </table>
-                </div>
-              </div>
-            </TabsContent>
-            <TabsContent value="c">
-              <div className="mt-4">
-                <div className="text-lg font-semibold mb-4">
-                  <h1>DAFTAR PPN DAN PPNBM YANG DIPUNGUT PIHAK LAIN</h1>
-                </div>
-                <div
-                  className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
-                  onClick={() => setShowHeaderc(!showHeaderc)}
-                >
-                  <h3 className="text-lg font-semibold">Header</h3>
-                  {showHeaderc ? <FaChevronUp /> : <FaChevronDown />}
-                </div>
-                {showHeaderc && (
-                  <div className="border rounded-md p-4 mb-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {/* Kiri */}
-                      <div>
-                        <label className="block font-medium text-gray-700">
-                          NAMA PKP *
-                        </label>
-                        <input
-                          type="text"
-                          readOnly
-                          value="KANTOR AKUNTAN PUBLIK MOH WILDAN DAN ADI DARMAWAN"
-                          className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
-                        />
-                      </div>
+                </TabsContent>
+                <TabsContent value="c">
+                  <div className="mt-4">
+                    <div className="text-lg font-semibold mb-4">
+                      <h1>DAFTAR PPN DAN PPNBM YANG DIPUNGUT PIHAK LAIN</h1>
+                    </div>
+                    <div
+                      className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
+                      onClick={() => setShowHeaderc(!showHeaderc)}
+                    >
+                      <h3 className="text-lg font-semibold">Header</h3>
+                      {showHeaderc ? <FaChevronUp /> : <FaChevronDown />}
+                    </div>
+                    {showHeaderc && (
+                      <div className="border rounded-md p-4 mb-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {/* Kiri */}
+                          <div>
+                            <label className="block font-medium text-gray-700">
+                              NAMA PKP *
+                            </label>
+                            <input
+                              type="text"
+                              readOnly
+                              value="KANTOR AKUNTAN PUBLIK MOH WILDAN DAN ADI DARMAWAN"
+                              className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
+                            />
+                          </div>
 
-                      <div>
-                        <label className="block font-medium text-gray-700">
-                          MASA *
-                        </label>
-                        <input
-                          type="text"
-                          readOnly
-                          value="032025"
-                          className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
-                        />
+                          <div>
+                            <label className="block font-medium text-gray-700">
+                              MASA *
+                            </label>
+                            <input
+                              type="text"
+                              readOnly
+                              value="032025"
+                              className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
+                            />
+                          </div>
+                          <div>
+                            <label className="block font-medium text-gray-700">
+                              NPWP*
+                            </label>
+                            <input
+                              type="text"
+                              readOnly
+                              value="0934274002429000"
+                              className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
+                            />
+                          </div>
+                          <div>
+                            <label className="block font-medium text-gray-700">
+                              Normal/Pembetulan
+                            </label>
+                            <select
+                              disabled
+                              className="w-full p-2 border rounded-md bg-gray-100 text-gray-600 cursor-not-allowed"
+                            >
+                              <option>Normal</option>
+                            </select>
+                          </div>
+                        </div>
                       </div>
-                      <div>
-                        <label className="block font-medium text-gray-700">
-                          NPWP*
-                        </label>
-                        <input
-                          type="text"
-                          readOnly
-                          value="0934274002429000"
-                          className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
-                        />
-                      </div>
-                      <div>
-                        <label className="block font-medium text-gray-700">
-                          Normal/Pembetulan
-                        </label>
-                        <select
-                          disabled
-                          className="w-full p-2 border rounded-md bg-gray-100 text-gray-600 cursor-not-allowed"
-                        >
-                          <option>Normal</option>
-                        </select>
-                      </div>
+                    )}
+                    <div className=" w-[1450px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden ">
+                      <table className="table-auto text-sm text-left border overflow-hidden">
+                        <thead className="bg-purple-700 text-white text-center">
+                          <tr>
+                            <th className="p-2 border-b ">No</th>
+                            <th className="p-2 border-b ">Tindakan</th>
+                            <th className="p-2 border-b min-w-[200px]">
+                              NPWP/NIK/ID Lainnya Penjual Barang Kena
+                              Pajak/Barang Kena Pajak Tidak Berwujud/Penyedia
+                              Jasa Kena Pajak
+                            </th>
+                            <th className="p-2  border-b min-w-[150px]">
+                              Nama Penjual Barang Kena Pajak/Baran Kena Pajak
+                              Tidak Berwujud/Jasa Kena Pajak
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              Nomor Identitas Pembeli BKP/Penerima Manfaat BKP
+                              Tidak Berwujud/Penerima JKP
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              Nama Pembeli BKP/penerima Manfaat BKP TIdak
+                              Berwujud/Penerima JKP
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              Tipe Transaksi PPN yang Dipungut
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              Nomor Faktur Pajak/Dokumen Tertentu
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              Tanggal Faktur Pajak/Dokumen Tertentu
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              Kode dan Nomor Seri Faktur Pajak yang Diganti
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              Harga Jual/DPP (Rupiah)
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              DPP Nilai Lain/DPP (Rupiah)
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              PPN (Rupiah)
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              PPnBM (Rupiah)
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              Informasi
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody className="text-gray-600 text-center">
+                          {sptOther.data.length > 0 ? (
+                            sptOther.data.map((item, index) => (
+                              <tr key={index}>
+                                <td className="p-2 border-b text-center">
+                                  {index + 1}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.nama_pembeli || "-"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.npwp || "-"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.faktur_pajak_nomor || "-"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.faktur_pajak_tanggal || "-"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.dpp || "0"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.dpp_lain || "0"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.ppn || "0"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.ppnbm || "0"}
+                                </td>
+                              </tr>
+                            ))
+                          ) : (
+                            <tr>
+                              <td
+                                className="p-2 border-b text-center"
+                                colSpan={6}
+                              >
+                                No data available
+                              </td>
+                            </tr>
+                          )}
+                        </tbody>
+                        <tfoot className="text-gray-800 font-semibold bg-gray-100">
+                          <tr>
+                            <td
+                              className="p-2 text-center min-w-[150px]"
+                              colSpan={4}
+                            >
+                              Jumlah
+                            </td>
+                            <td className="p-2 text-center">0</td>
+                            <td className="p-2"></td>
+                            <td className="p-2"></td>
+                            <td className="p-2"></td>
+                            <td className="p-2"></td>
+                            <td className="p-2"></td>
+                          </tr>
+                        </tfoot>
+                      </table>
                     </div>
                   </div>
-                )}
-                <div className=" w-[1450px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden ">
-                  <table className="table-auto text-sm text-left border overflow-hidden">
-                    <thead className="bg-purple-700 text-white text-center">
-                      <tr>
-                        <th className="p-2 border-b ">No</th>
-                        <th className="p-2 border-b ">Tindakan</th>
-                        <th className="p-2 border-b min-w-[200px]">
-                          NPWP/NIK/ID Lainnya Penjual Barang Kena Pajak/Barang
-                          Kena Pajak Tidak Berwujud/Penyedia Jasa Kena Pajak
-                        </th>
-                        <th className="p-2  border-b min-w-[150px]">
-                          Nama Penjual Barang Kena Pajak/Baran Kena Pajak Tidak
-                          Berwujud/Jasa Kena Pajak
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          Nomor Identitas Pembeli BKP/Penerima Manfaat BKP Tidak
-                          Berwujud/Penerima JKP
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          Nama Pembeli BKP/penerima Manfaat BKP TIdak
-                          Berwujud/Penerima JKP
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          Tipe Transaksi PPN yang Dipungut
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          Nomor Faktur Pajak/Dokumen Tertentu
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          Tanggal Faktur Pajak/Dokumen Tertentu
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          Kode dan Nomor Seri Faktur Pajak yang Diganti
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          Harga Jual/DPP (Rupiah)
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          DPP Nilai Lain/DPP (Rupiah)
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          PPN (Rupiah)
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          PPnBM (Rupiah)
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          Informasi
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="text-gray-600 text-center">
-                      <tr>
-                        <td className="p-2 border-b text-center">1</td>
-                        <td className="p-2 border-b">
-                          KANTOR AKUNTAN PUBLIK MOH WILDAN DAN ADI DARMAWAN
-                        </td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                      </tr>
-                    </tbody>
-                    <tfoot className="text-gray-800 font-semibold bg-gray-100">
-                      <tr>
-                        <td
-                          className="p-2 text-center min-w-[150px]"
-                          colSpan={4}
-                        >
-                          Jumlah
-                        </td>
-                        <td className="p-2 text-center">0</td>
-                        <td className="p-2"></td>
-                        <td className="p-2"></td>
-                        <td className="p-2"></td>
-                        <td className="p-2"></td>
-                        <td className="p-2"></td>
-                      </tr>
-                    </tfoot>
-                  </table>
-                </div>
-              </div>
-            </TabsContent>
+                </TabsContent>
+              </>
+            )}
           </Tabs>
         </div>
       </div>
