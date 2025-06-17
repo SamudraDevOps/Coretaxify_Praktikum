@@ -366,6 +366,17 @@ const BUPOTForm = ({
     });
   };
 
+  // remove bruto_2_tahun
+  useEffect(() => {
+    setFormData(prev => {
+      const tempData = { ...prev };
+      if (tempData.bruto_2_tahun) {
+        delete tempData.bruto_2_tahun;
+      }
+      return tempData;
+    });
+  }, [formData.kode_objek_pajak]);
+
   // Set default status based on create/edit mode
   // useEffect(() => {
   //   if (!isEditing) {
@@ -1484,9 +1495,11 @@ const BUPOTForm = ({
                         type="text"
                         className="w-64 flex-auto border p-2 rounded"
                         placeholder="Jumlah"
-                        value={formData.bruto_2_tahun || ""}
+                        value={formatRupiah(formData.bruto_2_tahun) || ""}
                         onChange={(e) => {
-                          updateFormData("bruto_2_tahun", e.target.value);
+                          const rawValue = e.target.value.replace(/[^\d]/g, "");
+                          const numericValue = parseFloat(rawValue) || 0;
+                          updateFormData("bruto_2_tahun", rawValue);
                         }}
                       />
                     </div>
