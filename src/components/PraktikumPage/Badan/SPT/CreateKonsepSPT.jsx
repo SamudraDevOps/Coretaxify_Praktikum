@@ -107,6 +107,26 @@ const CreateKonsepSPT = ({ data }) => {
 
   const [searchParams, setSearchParams] = useSearchParams();
   const viewAsCompanyId = searchParams.get("viewAs");
+  // const formatRupiah = (number) => {
+  //   if (typeof number !== "number") return "";
+  //   return new Intl.NumberFormat("id-ID", {
+  //     style: "currency",
+  //     currency: "IDR",
+  //     minimumFractionDigits: 0,
+  //   }).format(number);
+  // };
+  const formatRupiah = (number) => {
+    if (typeof number !== "number" && typeof number !== "string") return "";
+    const numericValue =
+      typeof number === "string"
+        ? Number(number.replace(/[^0-9]/g, ""))
+        : number;
+    if (isNaN(numericValue)) return "";
+    return new Intl.NumberFormat("id-ID", {
+      style: "decimal",
+      minimumFractionDigits: 0,
+    }).format(numericValue);
+  };
 
   // Add this function to calculate totals from the table
   const calculateTableTotals = (tableRows, columns) => {
@@ -159,81 +179,128 @@ const CreateKonsepSPT = ({ data }) => {
   };
 
   const [cookies] = useCookies(["token"]);
-  const [formData, setFormData] = useState({
-    // cl_1a1_dpp: data?.detailspt?.cl_1a1_dpp || "0",
-    cl_1b_jumlah_dpp: data?.detailspt?.cl_1b_jumlah_dpp || "0",
-    // cl_1b_dpp: data?.detailspt?.cl_1b_dpp || "0",
-    // cl_1c_dpp: data?.detailspt?.cl_1c_dpp || "0",
-    cl_1a5_dpp: data?.detailspt?.cl_1a5_dpp || "0",
-    cl_1a5_dpp_lain: data?.detailspt?.cl_1a5_dpp_lain || "0",
-    cl_1a5_ppn: data?.detailspt?.cl_1a5_ppn || "0",
-    cl_1a5_ppnbm: data?.detailspt?.cl_1a5_ppnbm || "0",
-    cl_1a9_dpp: data?.detailspt?.cl_1a9_dpp || "0",
-    cl_1a9_dpp_lain: data?.detailspt?.cl_1a9_dpp_lain || "0",
-    cl_1a9_ppn: data?.detailspt?.cl_1a9_ppn || "0",
-    cl_1a9_ppnbm: data?.detailspt?.cl_1a9_ppnbm || "0",
-    // cl_1a_jumlah_ppn: data?.detailspt?.cl_1a_jumlah_ppn || "0",
-    // cl_1a_jumlah_ppnbm: data?.detailspt?.cl_1a_jumlah_ppnbm || "0",
-    // cl_2a_dpp: data?.detailspt?.cl_2a_dpp || "0",
-    // cl_2a_ppn: data?.detailspt?.cl_2a_ppn || "0",
-    // cl_2a_ppnbm: data?.detailspt?.cl_2a_ppnbm || "0",
-    // cl_2g_dpp: data?.detailspt?.cl_2g_dpp || "0",
-    // cl_2h_dpp_lain: data?.detailspt?.cl_2h_dpp_lain || "0",
-    cl_2e_ppn: data?.detailspt?.cl_2e_ppn || "0",
-    cl_2f_ppn: data?.detailspt?.cl_2f_ppn || "0",
-    // cl_2g_ppn: data?.detailspt?.cl_2g_ppn || "0",
-    // cl_2h_ppn: data?.detailspt?.cl_2h_ppn || "0",
-    // cl_2h_ppnbm: data?.detailspt?.cl_2h_ppnbm || "0",
-    cl_2i_dpp: data?.detailspt?.cl_2i_dpp || "0",
-    // cl_2j_dpp: data?.detailspt?.cl_2j_dpp || "0",
-    cl_3b_ppnb: data?.detailspt?.cl_3b_ppnb || "0",
-    cl_3d_ppnb: data?.detailspt?.cl_3d_ppnb || "0",
-    cl_3f_ppnb: data?.detailspt?.cl_3f_ppnb || "0",
 
+  const [formData, setFormData] = useState({
+    cl_1b_jumlah_dpp: formatRupiah(data?.detailspt?.cl_1b_jumlah_dpp || "0"),
+    cl_1a5_dpp: formatRupiah(data?.detailspt?.cl_1a5_dpp || "0"),
+    cl_1a5_dpp_lain: formatRupiah(data?.detailspt?.cl_1a5_dpp_lain || "0"),
+    cl_1a5_ppn: formatRupiah(data?.detailspt?.cl_1a5_ppn || "0"),
+    cl_1a5_ppnbm: formatRupiah(data?.detailspt?.cl_1a5_ppnbm || "0"),
+    cl_1a9_dpp: formatRupiah(data?.detailspt?.cl_1a9_dpp || "0"),
+    cl_1a9_dpp_lain: formatRupiah(data?.detailspt?.cl_1a9_dpp_lain || "0"),
+    cl_1a9_ppn: formatRupiah(data?.detailspt?.cl_1a9_ppn || "0"),
+    cl_1a9_ppnbm: formatRupiah(data?.detailspt?.cl_1a9_ppnbm || "0"),
+    cl_2e_ppn: formatRupiah(data?.detailspt?.cl_2e_ppn || "0"),
+    cl_2f_ppn: formatRupiah(data?.detailspt?.cl_2f_ppn || "0"),
+    cl_2i_dpp: formatRupiah(data?.detailspt?.cl_2i_dpp || "0"),
+    cl_3b_ppnb: formatRupiah(data?.detailspt?.cl_3b_ppnb || "0"),
+    cl_3d_ppnb: formatRupiah(data?.detailspt?.cl_3d_ppnb || "0"),
+    cl_3f_ppnb: formatRupiah(data?.detailspt?.cl_3f_ppnb || "0"),
     cl_3h_diminta: data?.detailspt?.cl_3h_diminta || "",
     cl_3h_nomor_rekening: data?.detailspt?.cl_3h_nomor_rekening || "",
     cl_3h_nama_bank: data?.detailspt?.cl_3h_nama_bank || "",
     cl_3h_nama_pemilik_bank: data?.detailspt?.cl_3h_nama_pemilik_bank || "",
-    // cl_4_ppn_terutang_dppp: data?.detailspt?.cl_4_ppn_terutang_dppp || ""
-    // cl_3f_ppnb: data?.detailspt?.cl_3f_ppnb || "0",
-    cl_4_ppn_terutang_dpp: data?.detailspt?.cl_4_ppn_terutang_dpp || "0",
-    cl_5_ppn_wajib: data?.detailspt?.cl_5_ppn_wajib || "0",
-    cl_6b_ppnbm: data?.detailspt?.cl_6b_ppnbm || "0",
-    cl_6d_ppnbm: data?.detailspt?.cl_6d_ppnbm || "0",
-    cl_6f_diminta_pengembalian:
-      data?.detailspt?.cl_6f_diminta_pengembalian || "0",
-    cl_7a_dpp: data?.detailspt?.cl_7a_dpp || "0",
-    cl_7a_dpp_lain: data?.detailspt?.cl_7a_dpp_lain || "0",
-    cl_7a_ppn: data?.detailspt?.cl_7a_ppn || "0",
-    cl_7a_ppnbm: data?.detailspt?.cl_7a_ppnbm || "0",
-    cl_7b_dpp: data?.detailspt?.cl_7b_dpp || "0",
-    cl_7b_dpp_lain: data?.detailspt?.cl_7b_dpp_lain || "0",
-    cl_7b_ppn: data?.detailspt?.cl_7b_ppn || "0",
-    cl_7b_ppnbm: data?.detailspt?.cl_7b_ppnbm || "0",
-    cl_8a_dpp: data?.detailspt?.cl_8a_dpp || "0",
-    cl_8a_dpplain: data?.detailspt?.cl_8a_dpplain || "0",
-    cl_8a_ppn: data?.detailspt?.cl_8a_ppn || "0",
-    cl_8a_ppnbm: data?.detailspt?.cl_8a_ppnbm || "0",
-    cl_8b_dpp: data?.detailspt?.cl_8b_dpp || "0",
-    cl_8b_dpp_lain: data?.detailspt?.cl_8b_dpp_lain || "0",
-    cl_8b_ppn: data?.detailspt?.cl_8b_ppn || "0",
-    cl_8b_ppnbm: data?.detailspt?.cl_8b_ppnbm || "0",
-    cl_8d_diminta_pengembalian:
-      data?.detailspt?.cl_8d_diminta_pengembalian || "0",
-    cl_9a_daftar: data?.detailspt?.cl_9a_daftar || "0",
-    cl_9a_hasil_perhitungan: data?.detailspt?.cl_9a_hasil_perhitungan || "0",
-    cl_10_batas_waktu: data?.detailspt?.cl_10_batas_waktu || "0",
+    cl_4_ppn_terutang_dpp: formatRupiah(
+      data?.detailspt?.cl_4_ppn_terutang_dpp || "0"
+    ),
+    cl_5_ppn_wajib: formatRupiah(data?.detailspt?.cl_5_ppn_wajib || "0"),
+    cl_6b_ppnbm: formatRupiah(data?.detailspt?.cl_6b_ppnbm || "0"),
+    cl_6d_ppnbm: formatRupiah(data?.detailspt?.cl_6d_ppnbm || "0"),
+    cl_6f_diminta_pengembalian: formatRupiah(
+      data?.detailspt?.cl_6f_diminta_pengembalian || "0"
+    ),
+    cl_7a_dpp: formatRupiah(data?.detailspt?.cl_7a_dpp || "0"),
+    cl_7a_dpp_lain: formatRupiah(data?.detailspt?.cl_7a_dpp_lain || "0"),
+    cl_7a_ppn: formatRupiah(data?.detailspt?.cl_7a_ppn || "0"),
+    cl_7a_ppnbm: formatRupiah(data?.detailspt?.cl_7a_ppnbm || "0"),
+    cl_7b_dpp: formatRupiah(data?.detailspt?.cl_7b_dpp || "0"),
+    cl_7b_dpp_lain: formatRupiah(data?.detailspt?.cl_7b_dpp_lain || "0"),
+    cl_7b_ppn: formatRupiah(data?.detailspt?.cl_7b_ppn || "0"),
+    cl_7b_ppnbm: formatRupiah(data?.detailspt?.cl_7b_ppnbm || "0"),
+    cl_8a_dpp: formatRupiah(data?.detailspt?.cl_8a_dpp || "0"),
+    cl_8a_dpplain: formatRupiah(data?.detailspt?.cl_8a_dpplain || "0"),
+    cl_8a_ppn: formatRupiah(data?.detailspt?.cl_8a_ppn || "0"),
+    cl_8a_ppnbm: formatRupiah(data?.detailspt?.cl_8a_ppnbm || "0"),
+    cl_8b_dpp: formatRupiah(data?.detailspt?.cl_8b_dpp || "0"),
+    cl_8b_dpp_lain: formatRupiah(data?.detailspt?.cl_8b_dpp_lain || "0"),
+    cl_8b_ppn: formatRupiah(data?.detailspt?.cl_8b_ppn || "0"),
+    cl_8b_ppnbm: formatRupiah(data?.detailspt?.cl_8b_ppnbm || "0"),
+    cl_8d_diminta_pengembalian: formatRupiah(
+      data?.detailspt?.cl_8d_diminta_pengembalian || "0"
+    ),
+    cl_9a_daftar: formatRupiah(data?.detailspt?.cl_9a_daftar || "0"),
+    cl_9a_hasil_perhitungan: formatRupiah(
+      data?.detailspt?.cl_9a_hasil_perhitungan || "0"
+    ),
+    cl_10_batas_waktu: formatRupiah(data?.detailspt?.cl_10_batas_waktu || "0"),
     klasifikasi_lapangan_usaha:
       data?.detailspt?.klasifikasi_lapangan_usaha || "0",
   });
 
   const navigate = useNavigateWithParams();
 
+  // const handleChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setFormData((prevData) => ({
+  //     ...prevData,
+  //     [name]: value,
+  //   }));
+  // };
   const handleChange = (e) => {
     const { name, value } = e.target;
+
+    // Define fields that need rupiah formatting
+    const currencyFields = [
+      "cl_1b_jumlah_dpp",
+      "cl_1a5_dpp",
+      "cl_1a5_dpp_lain",
+      "cl_1a5_ppn",
+      "cl_1a5_ppnbm",
+      "cl_1a9_dpp",
+      "cl_1a9_dpp_lain",
+      "cl_1a9_ppn",
+      "cl_1a9_ppnbm",
+      "cl_2e_ppn",
+      "cl_2f_ppn",
+      "cl_2i_dpp",
+      "cl_3b_ppnb",
+      "cl_3d_ppnb",
+      "cl_3f_ppnb",
+      "cl_4_ppn_terutang_dpp",
+      "cl_5_ppn_wajib",
+      "cl_6b_ppnbm",
+      "cl_6d_ppnbm",
+      "cl_6f_diminta_pengembalian",
+      "cl_7a_dpp",
+      "cl_7a_dpp_lain",
+      "cl_7a_ppn",
+      "cl_7a_ppnbm",
+      "cl_7b_dpp",
+      "cl_7b_dpp_lain",
+      "cl_7b_ppn",
+      "cl_7b_ppnbm",
+      "cl_8a_dpp",
+      "cl_8a_dpplain",
+      "cl_8a_ppn",
+      "cl_8a_ppnbm",
+      "cl_8b_dpp",
+      "cl_8b_dpp_lain",
+      "cl_8b_ppn",
+      "cl_8b_ppnbm",
+      "cl_8d_diminta_pengembalian",
+      "cl_9a_daftar",
+      "cl_9a_hasil_perhitungan",
+      "cl_10_batas_waktu",
+    ];
+
+    // Format value if it's a currency field, otherwise use raw value
+    const processedValue = currencyFields.includes(name)
+      ? formatRupiah(value.replace(/[^0-9]/g, ""))
+      : value;
+
     setFormData((prevData) => ({
       ...prevData,
-      [name]: value,
+      [name]: processedValue,
     }));
   };
 
@@ -516,6 +583,7 @@ const CreateKonsepSPT = ({ data }) => {
       Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
     },
   });
+
   const handleTabChange = (value) => {
     // Prevent any default behavior if this is called from an event
     if (value?.preventDefault) {
