@@ -122,7 +122,7 @@ const EditMahasiswa = () => {
                     <td>{item.email}</td>
                     {/* <td>{item.instansi}</td>
                     <td>{item.kelas}</td> */}
-                    <td>{item.email_verified_at.slice(0, 10)}</td>
+                    <td>{item.email_verified_at?.slice(0, 10)}</td>
                     {/* <td>{item.kodeRegistrasi}</td>
                     <td>{item.status}</td> */}
                     <td>
