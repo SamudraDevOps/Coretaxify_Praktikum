@@ -257,6 +257,7 @@ export default function MahasiswaPraktikum() {
                     // onClick={() => {
                     //   startPraktikum.mutate(item.id);
                     // }}
+                    disabled={startPraktikum.isPending}
                     onClick={() => {
                       if (item.is_start === 1) {
                         // If already started, redirect directly
@@ -267,7 +268,14 @@ export default function MahasiswaPraktikum() {
                       }
                     }}
                   >
-                    Mulai
+                    {startPraktikum.isPending ? (
+                      <div className="flex items-center gap-2">
+                        <ClipLoader color="#ffffff" size={16} />
+                        Loading...
+                      </div>
+                    ) : (
+                      "Mulai"
+                    )}
                   </button>
                 </td>
               </tr>
