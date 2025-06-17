@@ -73,31 +73,45 @@ const PajakKeluaranOP = () => {
                     </div>
                 </div>
 
-                <div className="w-auto overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden mt-4">
-                    <table className="table-auto border border-gray-300 w-full">
-                        <thead className="bg-gray-200">
-                            <tr>
-                                <th className="px-6 py-2 border">No</th>
-                                <th className="px-8 py-2 border">Checklist</th>
-                                <th className="px-4 py-2 border">Aksi</th>
-                                <th className="px-4 py-2 border">NPWP Pembeli</th>
-                                <th className="px-4 py-2 border">Nama Pembeli</th>
-                                <th className="px-4 py-2 border">Kode Transaksi</th>
-                                <th className="px-4 py-2 border">Nomor Faktur Pajak</th>
-                                <th className="px-4 py-2 border">Tanggal Faktur Pajak</th>
-                                <th className="px-4 py-2 border">Masa Pajak</th>
-                                <th className="px-4 py-2 border">Tahun</th>
-                            </tr>
-                        </thead>
-                        <tbody className="text-gray-600">
-                            <tr>
-                                <td className="">1</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+        <div className="w-[1180px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden mt-4">
+          <table className="table-auto border border-gray-300 w-full">
+            <thead className="bg-gray-200">
+              <tr>
+                <th className="px-6 py-2 border">No</th>
+                <th className="px-8 py-2 border">Checklist</th>
+                <th className="px-4 py-2 border">Aksi</th>
+                <th className="px-4 py-2 border">NPWP Pembeli</th>
+                <th className="px-4 py-2 border">Nama Pembeli</th>
+                <th className="px-4 py-2 border">Kode Transaksi</th>
+                <th className="px-4 py-2 border">Nomor Faktur Pajak</th>
+                <th className="px-4 py-2 border">Tanggal Faktur Pajak</th>
+                <th className="px-4 py-2 border">Masa Pajak</th>
+                <th className="px-4 py-2 border">Tahun</th>
+                <th className="px-4 py-2 border">Masa Pajak Pengkreditan</th>
+                <th className="px-4 py-2 border">Tahun Pajak Pengkreditan</th>
+                <th className="px-4 py-2 border">Status Faktur</th>
+                <th className="px-4 py-2 border">Harga Jual/Pengganti/DPP</th>
+                <th className="px-4 py-2 border">DPP Nilai Lain / DPP</th>
+                <th className="px-4 py-2 border">PPN</th>
+                <th className="px-4 py-2 border">PPnBM</th>
+                <th className="px-4 py-2 border">Perekam (Pengirim faktur)</th>
+                <th className="px-4 py-2 border">Nomor SP2D</th>
+                <th className="px-4 py-2 border">Valid</th>
+                <th className="px-4 py-2 border">Dilaporkan</th>
+                <th className="px-4 py-2 border">Dilaporkan Oleh Penjual</th>
+              </tr>
+            </thead>
+            <tbody className="text-gray-600">
+              <tr>
+                <td colSpan="22" className="text-center p-4 border">
+                  Belum ada data
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-    );
+      </div>
+    </div>
+  );
 };
 export default PajakKeluaranOP;
