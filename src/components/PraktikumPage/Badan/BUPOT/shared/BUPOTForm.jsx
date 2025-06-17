@@ -354,6 +354,18 @@ const BUPOTForm = ({
     }));
   };
 
+  const updatePegawaiAsing = (value) => {
+    setFormData(prev => {
+      const newData = { ...prev };
+      newData.pegawai_asing = value;
+      if (newData.negara_akun && newData.nomor_paspor_akun) {
+        delete newData.negara_akun;
+        delete newData.nomor_paspor_akun;
+      }
+      return newData;
+    });
+  };
+
   // Set default status based on create/edit mode
   // useEffect(() => {
   //   if (!isEditing) {
@@ -862,13 +874,13 @@ const BUPOTForm = ({
                         className="w-64 flex-auto border p-2 rounded appearance-none"
                         value={formData.pegawai_asing || ""}
                         onChange={(e) =>
-                          updateFormData("pegawai_asing", e.target.value)
+                          updatePegawaiAsing(e.target.value)
                         }
                         placehoder="Please Select"
                       >
                         <option value="">Please Select</option>
-                        <option value="true">Ya</option>
-                        <option value="false">Tidak</option>
+                        <option value="1">Ya</option>
+                        <option value="0">Tidak</option>
                       </select>
                     </div>
                   </>
@@ -982,7 +994,7 @@ const BUPOTForm = ({
                       className="w-64 flex-auto border p-2 rounded"
                       placeholder="Nomor Paspor"
                       value={
-                        formData.pegawai_asing === "true"
+                        formData.pegawai_asing === "1"
                           ? formData.nomor_paspor_akun || ""
                           : ""
                       }
@@ -990,7 +1002,7 @@ const BUPOTForm = ({
                         updateFormData("nomor_paspor_akun", e.target.value);
                       }}
                       readOnly={
-                        formData.pegawai_asing === "true" ? false : true
+                        formData.pegawai_asing === "1" ? false : true
                       }
                     />
                   </div>
@@ -1007,7 +1019,7 @@ const BUPOTForm = ({
                     <select
                       className="w-64 flex-auto border p-2 rounded appearance-none"
                       value={
-                        formData.pegawai_asing === "true"
+                        formData.pegawai_asing === "1"
                           ? formData.negara_akun || ""
                           : ""
                       }
@@ -1015,8 +1027,8 @@ const BUPOTForm = ({
                         updateFormData("negara_akun", e.target.value)
                       }
                       placehoder="Please Select"
-                      readOnly={
-                        formData.pegawai_asing === "true" ? false : true
+                      disabled={
+                        formData.pegawai_asing === "1" ? false : true
                       }
                     >
                       <option value="">Please Select</option>
