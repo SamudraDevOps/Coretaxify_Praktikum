@@ -92,7 +92,6 @@ export default function UploadSoal() {
     },
     onError: (error) => {
       console.log(error);
-      Swal.fire("Gagal!", "Data soal tidak sesuai template.", "error");
     },
   });
   const mutationEdit = useMutation({
@@ -137,10 +136,6 @@ export default function UploadSoal() {
       Swal.fire("Berhasil!", "Soal berhasil diperbarui!", "success").then(
         (result) => {
           if (result.isConfirmed) {
-            setFormData({
-              name: "",
-              file: null,
-            });
             refetch();
           }
         }
@@ -305,6 +300,7 @@ export default function UploadSoal() {
                       <input
                         type="text"
                         name="name"
+                        value={formData.name}
                         onChange={handleChange}
                         required
                       />

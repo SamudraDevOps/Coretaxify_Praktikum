@@ -15,24 +15,6 @@ import { getOneContract } from "@/hooks/dashboard";
 import { ClipLoader } from "react-spinners";
 import { getCookieToken } from "@/service";
 
-import Swal from "sweetalert2";
-import { cn } from "@/lib/utils";
-import { Check, ChevronsUpDown } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-
 const EditKontrak = ({
   isOpen,
   onClose,
@@ -41,15 +23,12 @@ const EditKontrak = ({
   taskData,
   setOpen,
   id,
-  setEdit,
-  refetch,
 }) => {
   const { toast } = useToast();
   const { isLoading, isError, data, error } = getOneContract(
     RoutesApi.contractAdmin + `/${id}`,
     getCookieToken()
   );
-
   const [formData, setFormData] = useState({
     jenisKontrak: "",
     instansi: "",
@@ -65,9 +44,7 @@ const EditKontrak = ({
     status: "",
   });
   useEffect(() => {
-    console.log(data);
-    if (data != null) {
-      const universityId = data.data.university.id.toString();
+    if (data) {
       setFormData({
         jenisKontrak: data.data.contract_type,
         instansi: data.data.university.id,
@@ -82,20 +59,12 @@ const EditKontrak = ({
         opsiTambahan: data.data.tasks,
         status: data.data.status,
       });
-      const university = UniData.find(
-        (uni) => uni.id.toString() === universityId
-      );
-      if (university) {
-        setValue(university.name);
-      }
     }
-  }, [data, UniData]);
-  // console.log("makan");
-  // console.log(formData);
+  }, [data]);
+  console.log("makan");
+  console.log(formData);
 
   const [cookies, setCookie] = useCookies(["user"]);
-  const [open, setOpenSelect] = useState(false);
-  const [value, setValue] = useState("");
 
   const [lastNumbers, setLastNumbers] = useState({
     Lisensi: 0,
@@ -122,7 +91,6 @@ const EditKontrak = ({
     //   kodePembelian: "",
     //   status: "",
     // });
-    console.log("form before format");
     console.log(formData);
     mutation.mutate();
     // onClose();
@@ -155,10 +123,7 @@ const EditKontrak = ({
           contract_code: formData.kodePembelian,
           is_buy_task: Number(formData.is_buy_task),
           status: formData.status,
-          // tasks: formData.opsiTambahan.map((task) => task.id),
-          tasks: formData.opsiTambahan.map((task) =>
-            typeof task === "object" && task.id ? task.id : parseInt(task)
-          ),
+          tasks: formData.opsiTambahan,
         },
         {
           headers: {
@@ -172,45 +137,14 @@ const EditKontrak = ({
       return data;
     },
     onSuccess: (data) => {
-      console.log("form");
-      console.log(formData);
-      console.log(formData.opsiTambahan.map((task) => task.id));
-      console.log("data");
       console.log(data);
-      Swal.fire({
-        title: "Kontrak berhasil diubah",
-        // text: "Silakan verifikasi email Anda terlebih dahulu.",
-        icon: "success",
-        confirmButtonText: "Lanjutkan",
-      }).then(() => {
-        setFormData({
-          jenisKontrak: "",
-          instansi: "",
-          mahasiswa: "",
-          periodeAwal: "",
-          periodeAkhir: "",
-          spt: "",
-          bupot: "",
-          faktur: "",
-          kodePembelian: "",
-          is_buy_task: 0,
-          opsiTambahan: [],
-          status: "",
-        });
-        setEdit(-1);
-        onClose();
-        refetch();
-      });
+      window.location.reload();
+
       // window.location.href = "/" + role;
       // alert("Login successful!");
       // queryClient.invalidateQueries({ queryKey: ["todos"] });
     },
     onError: (error) => {
-      console.log("form");
-      console.log(formData);
-      console.log(formData.opsiTambahan.map((task) => task.id));
-      console.log("error");
-      // console.log
       console.log(error);
     },
   });
@@ -267,8 +201,8 @@ const EditKontrak = ({
       // <div className="h-full w-full text-2xl italic font-bold text-center flex items-center justify-center">Loading...</div>
     );
   }
-  // console.log("this");
-  // console.log(data);
+  console.log("this");
+  console.log(data);
 
   return (
     <div className="kontrak-popup-overlay">
@@ -295,7 +229,7 @@ const EditKontrak = ({
               <option value="BNSP">BNSP</option>
             </select>
           </div>
-          {/* <div className="kontrak-form-group">
+          <div className="kontrak-form-group">
             <label>Instansi</label>
             <select
               name="instansi"
@@ -310,76 +244,7 @@ const EditKontrak = ({
                 </option>
               ))}
             </select>
-          </div> */}
-          <div className="kontrak-form-group">
-            <Popover open={open} onOpenChange={setOpenSelect}>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  role="combobox"
-                  aria-expanded={open}
-                  className="w-full justify-between"
-                >
-                  {value ||
-                    (formData.instansi
-                      ? UniData.find(
-                          (uni) => uni.id.toString() === formData.instansi
-                        )?.name
-                      : "Pilih Instansi...")}
-                  {/* {value || formData.instansi
-                    ? UniData.find(
-                        (uni) => uni.id.toString() === formData.instansi
-                      )?.name || "Pilih Instansi..."
-                    : "Pilih Instansi..."} */}
-                  <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                </Button>
-              </PopoverTrigger>
-              {/* {createPortal( */}
-              <PopoverContent className="w-[450px] p-0 z-[9999]" sideOffset={5}>
-                <Command>
-                  <CommandInput
-                    value={value}
-                    onValueChange={setValue}
-                    placeholder="Pilih Instansi..."
-                  />
-                  <CommandList>
-                    <CommandEmpty>Instansi tidak ditemukan.</CommandEmpty>
-                    <CommandGroup>
-                      {UniData.map((uni) => (
-                        <CommandItem
-                          key={uni.id}
-                          value={uni.name}
-                          onSelect={(currentValue) => {
-                            // alert(currentValue);
-                            setFormData({
-                              ...formData,
-                              instansi: uni.id.toString(),
-                            });
-                            setValue(
-                              currentValue === value ? "" : currentValue
-                            );
-                            setOpenSelect(false);
-                          }}
-                        >
-                          <Check
-                            className={cn(
-                              "mr-2 h-4 w-4",
-                              formData.instansi === uni.id.toString()
-                                ? "opacity-100"
-                                : "opacity-0"
-                            )}
-                          />
-                          {uni.name}
-                        </CommandItem>
-                      ))}
-                    </CommandGroup>
-                  </CommandList>
-                </Command>
-              </PopoverContent>
-              {/* , */}
-              {/* document.body
-               )} */}
-            </Popover>
+            {/* <input type="text" name="instansi" value={formData.instansi} onChange={handleChange} required /> */}
           </div>
           <div className="kontrak-form-group">
             <label>Soal</label>
@@ -543,7 +408,7 @@ const EditKontrak = ({
           </button>
         </div>
         <div className="text-xs  mt-2 text-red-700">
-          {/* {mutation.isError && mutation.error.response.data.message} */}
+          {mutation.isError && mutation.error.response.data.message}
         </div>
       </div>
     </div>

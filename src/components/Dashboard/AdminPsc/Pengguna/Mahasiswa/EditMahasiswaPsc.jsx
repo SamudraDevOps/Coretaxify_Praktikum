@@ -126,34 +126,27 @@ const EditMahasiswaPsc = () => {
             }
           }
         );
+      } else if (action === "delete" && id) {
+        const deleteEndpoint = RoutesApi.psc.users.destroy(id);
+        return await axios.delete(
+          deleteEndpoint.url, 
+          {
+            headers: {
+              "X-CSRF-TOKEN": response.data.token,
+              Authorization: `Bearer ${cookies.token}`,
+            }
+          }
+        );
       }
-      // } else if (action === "delete" && id) {
-      //   const deleteEndpoint = RoutesApi.psc.users.destroy(id);
-      //   return await axios.delete(
-      //     deleteEndpoint.url, 
-      //     {
-      //       headers: {
-      //         "X-CSRF-TOKEN": response.data.token,
-      //         Authorization: `Bearer ${cookies.token}`,
-      //       }
-      //     }
-      //   );
-      // }
     },
 
-    onSuccess: (data, variables) => {
-      const { action } = variables;
-      if (action === "create") {
-        if (Array.isArray(data)) {
-          Swal.fire("Berhasil!", `${data.length} mahasiswa berhasil ditambahkan!`, "success");
-        } else {
-          Swal.fire("Berhasil!", "Operasi berhasil dilakukan!", "success");
-        }
-      } else if (action === "update") {
-        Swal.fire("Berhasil!", "Mahasiswa berhasil diperbarui!", "success");
-      } else if (action === "delete") {
-        Swal.fire("Berhasil!", "Mahasiswa berhasil dihapus!", "success");
+    onSuccess: () => {
+      if (Array.isArray(data)) {
+        Swal.fire("Berhasil!", `${data.length} mahasiswa berhasil ditambahkan!`, "success");
+      } else {
+        Swal.fire("Berhasil!", "Operasi berhasil dilakukan!", "success");
       }
+      
       refetch();
       setIsOpen(false);
       setIsCreateOpen(false);
@@ -408,7 +401,7 @@ const EditMahasiswaPsc = () => {
                   >
                     Edit
                   </button>
-                  {/* <button
+                  <button
                     className="action-button delete"
                     onClick={() => {
                       Swal.fire({
@@ -429,7 +422,7 @@ const EditMahasiswaPsc = () => {
                     }}
                   >
                     Delete
-                  </button> */}
+                  </button>
                 </td>
               </tr>
             ))}

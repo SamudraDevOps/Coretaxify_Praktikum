@@ -1,109 +1,77 @@
+// import React from "react";
 import React, { useEffect, useState } from "react";
-import EditPopupPraktikum from "./EditPopupPraktikum";
+// import "../Pengguna/Mahasiswa/editMahasiswa.css";
+import EditPopupMahasiswa from "../Pengguna/Mahasiswa/EditPopupMahasiswa";
 import Swal from "sweetalert2";
-import { IntentEnum } from "@/enums/IntentEnum";
+
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { CookiesProvider, useCookies } from "react-cookie";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { RoutesApi } from "@/Routes";
 import ClipLoader from "react-spinners/ClipLoader";
-import { useNavigate } from "react-router-dom";
 
 export default function Praktikum() {
+  const [isOpen, setIsOpen] = useState(false);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
-  const [isUpdateOpen, setIsUpdateOpen] = useState(false);
-  const [selectedAssignment, setSelectedAssignment] = useState(null);
+  const [selectedData, setSelectedData] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const [cookies, setCookie] = useCookies(["user"]);
-  const navigate = useNavigate();
 
-  const { isLoading, isError, data, error, refetch } = useQuery({
+  const { isLoading, isError, data, error } = useQuery({
     queryKey: ["tasks_question"],
     queryFn: async () => {
-      const { data } = await axios.get(
-        RoutesApi.admin.assignments.index().url,
-        {
-          headers: {
-            Authorization: `Bearer ${cookies.token}`,
-          },
-          params: {
-            intent: IntentEnum.API_GET_ASSIGNMENT_ALL,
-          },
-        }
-      );
-      console.log(data);
+      const { data } = await axios.get(RoutesApi.tasksAdmin, {
+        headers: {
+          Authorization: `Bearer ${cookies.token}`,
+        },
+      });
+      console.log(data.data);
       return data.data;
     },
   });
 
-  
-  const [formData, setFormData] = useState({
-    name: "",
-  });
+  // const [data, setData] = useState([
+  //   {
+  //     namaPraktikum: "Praktikum Pajak Bumi Bangunan",
+  //     kodePraktikum: "xAE12",
+  //     nilai: "98",
+  //     tanggal: "25-Januari-2024",
+  //   },
+  //   {
+  //     namaPraktikum: "Praktikum Pajak Bumi Makanan",
+  //     kodePraktikum: "xAE12",
+  //     nilai: "98",
+  //     tanggal: "25-Januari-2024",
+  //   },
+  //   {
+  //     namaPraktikum: "Praktikum Pajak Bumi Bangunan",
+  //     kodePraktikum: "xAE12",
+  //     nilai: "98",
+  //     tanggal: "25-Januari-2024",
+  //   },
+  //   {
+  //     namaPraktikum: "Praktikum Pajak Bumi Bangunan",
+  //     kodePraktikum: "xAE12",
+  //     nilai: "98",
+  //     tanggal: "25-Januari-2024",
+  //   },
+  // ]);
 
-  const mutation = useMutation({
-    mutationFn: async ({ id, action }) => {
-      const response = await axios.get(RoutesApi.csrf, {
-        headers: {
-          "X-Requested-With": "XMLHttpRequest",
-          Accept: "application/json",
-        },
-      });
-
-      axios.defaults.headers.common["X-CSRF-TOKEN"] = response.data.token;
-
-      if (action === "update" && id) {
-        const updateEndpoint = RoutesApi.admin.assignments.update(id);
-        return await axios.put(updateEndpoint.url,
-          {
-            name: formData.name
-          },
-          {
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            "X-CSRF-TOKEN": response.data.token,
-            Authorization: `Bearer ${cookies.token}`,
-          },
-        });
-      } 
-    },
-    onSuccess: (data, variables) => {
-      const { action } = variables;
-      if (action === "update") {
-        Swal.fire("Berhasil", "Praktikum berhasil diperbarui!", "success");
-      } else if (action === "delete") {
-        Swal.fire("Berhasil", "Praktikum berhasil dihapus!", "success");
-      }
-      refetch();
-      setIsUpdateOpen(false);
-      setFormData({
-        name: "",
-      });
-    },
-    onError: (error) => {
-      console.log(error.message);
-      if (error.response === undefined) {
-        Swal.fire("Gagal!", error.message, "error");
-        return;
-      }
-      Swal.fire("Gagal!", error.response.data.message, "error");
-    },
-  });
-
-  const handleEdit = (assignment) => {
-    setSelectedAssignment(assignment);
-    setFormData({
-      name: assignment.name,
-    });
-
-    setIsUpdateOpen(true);
-  };
-
-  const handleViewMembers = (assignmentId) => {
-    navigate(`/admin/praktikum/${assignmentId}/members`);
-  };
+  useEffect(() => {
+    console.log(data);
+  }, []);
 
   const handleSort = (key) => {
     let direction = "ascending";
@@ -124,11 +92,48 @@ export default function Praktikum() {
     setData(sortedData);
   };
 
+  const handleEditClick = (index) => {
+    setSelectedData(data[index]);
+    setIsOpen(true);
+  };
+
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   // const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  const [formData, setFormData] = useState({
+    namaPraktikum: "",
+    kodePraktikum: "",
+    nilai: "",
+    tanggal: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSave = () => {
+    // Logic to save the data
+    onClose();
+  };
+  const [file, setFile] = useState();
+  function handleChangeFile(e) {
+    console.log(e.target.files);
+    setFile(URL.createObjectURL(e.target.files[0]));
+  }
+  const [search, setSearch] = useState("");
+
+  // const processedData = data.map((item) => ({
+  //   ...item,
+  //   highlight:
+  //     search &&
+  //     Object.values(item).some((value) =>
+  //       String(value).toLowerCase().includes(search.toLowerCase())
+  //     ),
+  // }));
 
   if (isLoading) {
     return (
@@ -160,14 +165,62 @@ export default function Praktikum() {
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
+        <AlertDialog>
+          <AlertDialogTrigger>
+            <div className="bg-blue-800 p-2 rounded-lg text-white">
+              + Tambah Praktikum
+            </div>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Tambah Praktikum</AlertDialogTitle>
+              <AlertDialogDescription className="w-full">
+                <div className="">
+                  <form>
+                    <div className="edit-form-group-mahasiswa ">
+                      <label>Judul Praktikum:</label>
+                      <input
+                        type="text"
+                        name="namaPraktikum"
+                        value={formData.namaPraktikum}
+                        onChange={handleChange}
+                        required
+                      />
+                    </div>
+                    <div className="edit-form-group-mahasiswa">
+                      <label>Kode Praktikum:</label>
+                      <input
+                        className="text-black"
+                        name="kodePraktikum"
+                        value={formData.kodePraktikum}
+                        onChange={handleChange}
+                      />
+                    </div>
+                    <div className="edit-form-group-mahasiswa">
+                      <label>Tanggal Praktikum:</label>
+                      <input type="date" onChange={handleChangeFile} />
+                    </div>
+                  </form>
+                </div>
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel className="bg-red-600 text-white">
+                Kembali
+              </AlertDialogCancel>
+              <AlertDialogAction className="bg-green-600">
+                Simpan
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
       <div className="table-container">
         <table>
           <thead>
             <tr>
-              <th>No</th>
               <th onClick={() => handleSort("name")}>
-                Nama Praktikum{" "}
+                Judul Praktikum{" "}
                 {sortConfig.key === "name"
                   ? sortConfig.direction === "ascending"
                     ? "↑"
@@ -176,32 +229,109 @@ export default function Praktikum() {
                   ? "↓"
                   : "↑"}
               </th>
-              <th className="">Nama Dosen</th>
-              <th className="">Instansi</th>
-              <th className="">Status</th>
-              <th className="">Aksi</th>
+              <th className="">Kode Praktikum</th>
+              <th className="">Tanggal Praktikum</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
             {data.map((item, index) => (
               <tr>
-                <td>{index + 1}</td>
                 <td>{item.name}</td>
-                <td>{item.group.teacher}</td>
-                <td>{item.instansi}</td>
-                <td>{item.group.status}</td>
+                <td className="max-w-5">
+                  {/* <p className="truncate">{item.kodePraktikum}</p> */}
+                  <p className="truncate">Xae12</p>
+                </td>
+                <td className="max-w-5">
+                  <p className="">
+                    {(item.updated_at = item.updated_at.split(" ")[0])}
+                  </p>
+                </td>
                 <td>
-                  <button
+                  <AlertDialog>
+                    <AlertDialogTrigger className="action-button edit">
+                      Edit
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Edit Praktikum</AlertDialogTitle>
+                        <AlertDialogDescription className="w-full">
+                          <div className="">
+                            <form>
+                              <div className="edit-form-group-mahasiswa ">
+                                <label>Judul Praktikum:</label>
+                                <input
+                                  type="text"
+                                  name="namaPraktikum"
+                                  value={formData.namaPraktikum}
+                                  onChange={handleChange}
+                                  required
+                                />
+                              </div>
+                              <div className="edit-form-group-mahasiswa">
+                                <label>Kode Praktikum:</label>
+                                <input
+                                  className="text-black"
+                                  name="kodePraktikum"
+                                  value={formData.kodePraktikum}
+                                  onChange={handleChange}
+                                />
+                              </div>
+                              <div className="edit-form-group-mahasiswa">
+                                <label>Tanggal Praktikum:</label>
+                                <input
+                                  type="date"
+                                  onChange={handleChangeFile}
+                                />
+                              </div>
+                            </form>
+                          </div>
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel className="bg-red-600 text-white">
+                          Kembali
+                        </AlertDialogCancel>
+                        <AlertDialogAction className="bg-green-600 ">
+                          Simpan
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+
+                  {/* <button
                     className="action-button edit"
-                    onClick={() => handleEdit(item)}
+                    onClick={() => handleEditClick(index)}
                   >
                     Edit
-                  </button>
+                  </button> */}
                   <button
-                    className="action-button view"
-                    onClick={() => handleViewMembers(item.id)}
+                    className="action-button delete"
+                    onClick={() => {
+                      Swal.fire({
+                        title: "Hapus Praktikum?",
+                        text: "Praktikum akan dihapus secara permanen!",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonText: "Ya, hapus!",
+                        cancelButtonText: "Batal",
+                        dangerMode: true,
+                      }).then((result) => {
+                        if (result.isConfirmed) {
+                          const newData = data.filter(
+                            (itemData) => itemData.id !== item.id
+                          );
+                          setData(newData);
+                          Swal.fire(
+                            "Berhasil!",
+                            "Praktikum berhasil dihapus!",
+                            "success"
+                          );
+                        }
+                      });
+                    }}
                   >
-                    Detail
+                    Delete
                   </button>
                 </td>
               </tr>
@@ -224,19 +354,38 @@ export default function Praktikum() {
             >
               &lt;
             </button>
+            {/* {Array.from(
+              { length: Math.ceil(data.length / itemsPerPage) },
+              (_, index) => (
+                <button
+                  key={index + 1}
+                  className={`page-item ${currentPage === index + 1 ? "active" : ""
+                    }`}
+                  onClick={() => paginate(index + 1)}
+                >
+                  {index + 1}
+                </button>
+              )
+            )} */}
+            {/* <button
+              className={`page-item ${currentPage === Math.ceil(data.length / itemsPerPage)
+                ? "disabled"
+                : ""
+                }`}
+              onClick={() => paginate(currentPage + 1)}
+              disabled={currentPage === Math.ceil(data.length / itemsPerPage)}
+            >
+              &gt;
+            </button> */}
           </div>
         </div>
       </div>
-      <EditPopupPraktikum
-        isOpen={isUpdateOpen}
-        onClose={() => setIsUpdateOpen(false)}
-        onSave={() =>
-          mutation.mutate({ id: selectedAssignment.id, action: "update" })
-        }
-        formData={formData}
-        setFormData={setFormData}
-        isLoading={mutation.isPending}
-      />
+      {isOpen && (
+        <EditPopupMahasiswa
+          onClose={() => setIsOpen(false)}
+          data={selectedData}
+        />
+      )}
     </div>
   );
 }

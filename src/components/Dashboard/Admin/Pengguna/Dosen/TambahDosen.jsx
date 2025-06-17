@@ -1,9 +1,8 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import "./editPopupDosen.css";
 // import "../../../AdminPsc/Pengguna/Mahasiswa/editPopupMahasiswa.css"
 import { FaPlus, FaTrash, FaFileImport } from "react-icons/fa";
 import * as XLSX from "xlsx";
-import Swal from "sweetalert2";
 
 const TambahDosen = ({
   onClose,
@@ -16,28 +15,20 @@ const TambahDosen = ({
   isCreateMode = false,
   isReadOnly = false,
   isMultipleMode = true, // bulk
-  initialStudents = null,
 }) => {
   // For multiple students mode
   const [students, setStudents] = useState(
-    initialStudents ||
-      (isMultipleMode
-        ? [
-            {
-              name: "",
-              email: "",
-              status: "ACTIVE",
-              // contract_id: "",
-            },
-          ]
-        : [])
+    isMultipleMode
+      ? [
+          {
+            name: "",
+            email: "",
+            status: "ACTIVE",
+            // contract_id: "",
+          },
+        ]
+      : []
   );
-
-  useEffect(() => {
-    if (initialStudents) {
-      setStudents(initialStudents);
-    }
-  }, [initialStudents]);
   const [importError, setImportError] = useState("");
   const [isImporting, setIsImporting] = useState(false);
   const [importSuccess, setImportSuccess] = useState("");
@@ -76,80 +67,26 @@ const TambahDosen = ({
 
   // Handle save for multiple students
   const handleSaveMultiple = () => {
-    // Check if contract is selected
-    if (!formData.contract_id) {
-      Swal.fire("Gagal", "Harap pilih kontrak terlebih dahulu.", "error");
-      return;
-    }
-
-    // Separate valid and invalid students
-    const validStudents = [];
-    const invalidStudents = [];
-    const errors = [];
-
-    students.forEach((student, index) => {
-      const rowNum = index + 1;
-
-      // Skip completely empty rows
-      if (!student.name && !student.email) {
-        return;
-      }
-
-      let isValid = true;
-
-      if (!student.name) {
-        errors.push(`Baris ${rowNum}: Nama dosen tidak boleh kosong`);
-        isValid = false;
-      }
-
-      if (!student.email) {
-        errors.push(`Baris ${rowNum}: Email dosen tidak boleh kosong`);
-        isValid = false;
-      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(student.email)) {
-        errors.push(
-          `Baris ${rowNum}: Format email "${student.email}" tidak valid`
-        );
-        isValid = false;
-      }
-
-      if (isValid) {
-        validStudents.push(student);
-      } else {
-        invalidStudents.push(student);
-      }
-    });
-
-    // Check if there are any valid students
+    // Filter out any empty rows
+    const validStudents = students.filter(
+      (student) => student.name && student.email && student.status
+    );
     if (validStudents.length === 0) {
-      Swal.fire(
-        "Gagal",
-        "Tidak ada data dosen yang valid untuk disimpan.",
-        "error"
-      );
+      alert("Harap isi setidaknya satu dosen dengan nama, email.");
       return;
     }
 
-    // Check for duplicate emails among valid students
+    // check email duplicates
     const emails = validStudents.map((student) => student.email);
     const uniqueEmails = new Set(emails);
 
     if (emails.length !== uniqueEmails.size) {
-      // Find duplicate emails
-      const duplicates = emails.filter(
-        (email, index) => emails.indexOf(email) !== index
-      );
-      const uniqueDuplicates = [...new Set(duplicates)];
-
-      Swal.fire({
-        title: "Email Duplikat",
-        html: `Terdapat email duplikat: <br>${uniqueDuplicates.join("<br>")}`,
-        icon: "error",
-      });
+      alert("Terdapat email duplikat. Email dosen tidak boleh sama");
       return;
     }
+    console.log("validStudents", students);
 
-    // Save valid students and update the form with only invalid ones
-    onSave(validStudents, formData.contract_id, invalidStudents, errors);
+    onSave(validStudents, formData.contract_id);
   };
 
   // file input

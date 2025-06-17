@@ -14,25 +14,19 @@ export const getContracts = (url, cookie) =>
         headers: {
           Authorization: `Bearer ${cookie}`,
         },
-        params: {
-          perPage: 20,
-        },
+        params:{
+          perPage:20
+        }
       });
       console.log(data.data);
       return data.data;
     },
   });
-
 export const getOneContract = (url, cookie) =>
   useQuery({
     queryKey: [dashboard_const.contracts, url],
     queryFn: async () => {
       console.log(url);
-      if (url.endsWith("/-1") || url.endsWith("-1")) {
-        // Return empty data or a default structure to avoid errors
-
-        return null;
-      }
       const { data } = await axios.get(url, {
         headers: {
           Authorization: `Bearer ${cookie}`,
@@ -85,11 +79,8 @@ export const deleteContract = (cookie) =>
     },
 
     onError: (error) => {
-      if(error.response.data.message.includes("Integrity constraint violation") || error.response.data.message.includes("foreign key constraint fails")) {
-        Swal.fire("Gagal!", "Data tidak dapat dihapus karena masih digunakan oleh data lain.", "error");
-      } else {
-        console.log(error);
-        Swal.fire("Gagal!", error.message, "error");
-      }
+      console.log("hello!");
+      console.log(error);
+      Swal.fire("Gagal !", error.message, "error");
     },
   });

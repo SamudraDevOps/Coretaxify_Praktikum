@@ -143,15 +143,8 @@ const EditPengajar = () => {
         });
       }
     },
-    onSuccess: (data, variables) => {
-      const { action } = variables;
-      if (action === "create") {
-        Swal.fire("Berhasil!", "Instruktur berhasil dibuat!", "success");
-      } else if (action === "update") {
-        Swal.fire("Berhasil!", "Instruktur berhasil diubah!", "success");
-      } else if (action === "delete") {
-        Swal.fire("Berhasil!", "Instruktur berhasil dihapus!", "success");
-      }
+    onSuccess: () => {
+      Swal.fire("Berhasil!", "Operasi berhasil dilakukan!", "success");
       refetch();
       setIsOpen(false);
       setIsCreateOpen(false);

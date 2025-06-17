@@ -22,7 +22,6 @@ import { RoutesApi } from "@/Routes";
 import { ClipLoader } from "react-spinners";
 import { joinAssignmentMahasiswa } from "@/hooks/dashboard/useMahasiswa";
 import { getCookie } from "@/service";
-import { getCsrf } from "@/service/getCsrf";
 
 export default function MahasiswaPraktikum() {
   const [isOpen, setIsOpen] = useState(false);
@@ -31,8 +30,7 @@ export default function MahasiswaPraktikum() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const [cookies, setCookie] = useCookies(["user"]);
-  // const [url, setUrl] = useState(`${RoutesApi.url}api/student/assignments`);
-  const [url, setUrl] = useState(`${RoutesApi.url}api/student/assignment-user`);
+  const [url, setUrl] = useState(`${RoutesApi.url}api/student/assignments`);
 
   const { isLoading, isError, data, error, refetch } = useQuery({
     queryKey: ["praktikum", url],
@@ -45,44 +43,6 @@ export default function MahasiswaPraktikum() {
       });
       console.log(data);
       return data;
-    },
-  });
-
-  const startPraktikum = useMutation({
-    mutationFn: async (assignment_id) => {
-      console.log("Start button clicked");
-      const csrf = await getCsrf();
-      const data = await axios.post(
-        `${RoutesApi.url}api/student/sistem`,
-        {
-          assignment: String(assignment_id),
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            "X-CSRF-TOKEN": csrf,
-            Authorization: `Bearer ${cookies.token}`,
-          },
-        }
-      );
-      return data;
-    },
-    onSuccess: (data, variables) => {
-      console.log(data);
-      Swal.fire("Berhasil!", "Praktikum berhasil dimulai!", "success").then(
-        (result) => {
-          if (result.isConfirmed) {
-            // Navigate to the praktikum system or refresh
-            window.location.href = `/praktikum/${variables}`;
-            refetch();
-          }
-        }
-      );
-    },
-    onError: (error) => {
-      console.log("Error starting praktikum:", error);
-      Swal.fire("Gagal!", error.message, "error");
     },
   });
 
@@ -122,11 +82,6 @@ export default function MahasiswaPraktikum() {
     assignment_code: "",
   });
 
-  const resetForm = () => {
-    setFormData({
-      assignment_code: "",
-    });
-  };
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -153,6 +108,48 @@ export default function MahasiswaPraktikum() {
   //     ),
   // }));
   const mutation = joinAssignmentMahasiswa(getCookie(), formData, refetch);
+  // const mutation = useMutation({
+  //   mutationFn: async (id) => {
+  //     console.log("button clicked");
+  //     // const { response } = await axios.post(RoutesApi.login, {
+  //     const response = await axios.get(`${RoutesApi.url}api/csrf-token`, {
+  //       // withCredentials: true,
+  //       headers: {
+  //         "X-Requested-With": "XMLHttpRequest",
+  //         Accept: "application/json",
+  //       },
+  //     });
+  //     console.log(response.data.token);
+  //     axios.defaults.headers.common["X-CSRF-TOKEN"] = response.data.token;
+  //     console.log(cookies.token);
+  //     const data = await axios.post(
+  //       RoutesApi.assignmentStudent.url,
+  //       {
+  //         assignment_code: formData.assignment_code,
+  //       },
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           Accept: "application/json",
+  //           "X-CSRF-TOKEN": response.data.token,
+  //           Authorization: `Bearer ${cookies.token}`,
+  //         },
+  //         params: {
+  //           intent: RoutesApi.assignmentStudent.intent,
+  //         },
+  //       }
+  //     );
+  //     return data;
+  //   },
+  //   onSuccess: (data) => {
+  //     console.log(data);
+  //     window.location.reload();
+  //   },
+  //   onError: (error) => {
+  //     console.log(error);
+  //   },
+  // });
+
   if (isLoading) {
     return (
       <div className="loading">
@@ -183,7 +180,7 @@ export default function MahasiswaPraktikum() {
             onChange={(e) => setSearch(e.target.value)}
           />
           <AlertDialog>
-            <AlertDialogTrigger className="bg-blue-800 p-2 rounded-md text-white hover:bg-blue-900" onClick={() => resetForm()}>
+            <AlertDialogTrigger className="bg-blue-800 p-2 rounded-md text-white hover:bg-blue-900">
               Tambah Praktikum
             </AlertDialogTrigger>
             <AlertDialogContent>
@@ -241,34 +238,18 @@ export default function MahasiswaPraktikum() {
           <tbody>
             {data.data.map((item, index) => (
               <tr key={index}>
-                <td>{item.assignment.group.name}</td>
+                <td>{item.group.name}</td>
                 <td></td>
-                {/* <td>{item.assignment.dosen.name}</td> */}
-                <td>{item.assignment.name}</td>
+                {/* <td>{item.dosen.name}</td> */}
+                <td>{item.name}</td>
                 {/* <td className="max-w-5">
-                  <p className="truncate">{item.assignment.assignment_code}</p>
+                  <p className="truncate">{item.assignment_code}</p>
                 </td> */}
                 <td className="max-w-5">
-                  <p className="">{item.assignment.end_period}</p>
+                  <p className="">{item.end_period}</p>
                 </td>
                 <td>
-                  <button
-                    className="action-button"
-                    // onClick={() => {
-                    //   startPraktikum.mutate(item.id);
-                    // }}
-                    onClick={() => {
-                      if (item.is_start === 1) {
-                        // If already started, redirect directly
-                        window.location.href = `/praktikum/${item.assignment.id}`;
-                      } else {
-                        // If not started, call the mutation to start
-                        startPraktikum.mutate(item.assignment.id);
-                      }
-                    }}
-                  >
-                    Mulai
-                  </button>
+                  <button className="action-button">Mulai</button>
                 </td>
               </tr>
             ))}

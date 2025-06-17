@@ -1,6 +1,6 @@
 import React from "react";
 import "./assignmentPopup.css";
-import { RxCross1 } from "react-icons/rx";
+import { IoMdClose } from "react-icons/io";
 
 const CreateAssignmentPopup = ({
   isOpen,
@@ -10,7 +10,7 @@ const CreateAssignmentPopup = ({
   setFormData,
   isLoading,
   tasks = [],
-  groups = [],
+  groups = []
 }) => {
   if (!isOpen) return null;
 
@@ -18,7 +18,7 @@ const CreateAssignmentPopup = ({
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: value,
+      [name]: value
     });
   };
 
@@ -26,7 +26,7 @@ const CreateAssignmentPopup = ({
     if (e.target.files && e.target.files[0]) {
       setFormData({
         ...formData,
-        supporting_file: e.target.files[0],
+        supporting_file: e.target.files[0]
       });
     }
   };
@@ -35,7 +35,7 @@ const CreateAssignmentPopup = ({
   //   // Convert HTMLCollection to Array and get selected options
   //   const selectedOptions = Array.from(e.target.selectedOptions);
   //   const selectedGroups = selectedOptions.map(option => option.value);
-
+    
   //   setFormData({ ...formData, groups: selectedGroups });
   // };
 
@@ -43,16 +43,16 @@ const CreateAssignmentPopup = ({
   const handleGroupCheckbox = (groupId) => {
     // Create a copy of the current groups array
     let updatedGroups = [...(formData.groups || [])];
-
+    
     // Check if the group is already selected
     if (updatedGroups.includes(groupId)) {
       // If selected, remove it
-      updatedGroups = updatedGroups.filter((id) => id !== groupId);
+      updatedGroups = updatedGroups.filter(id => id !== groupId);
     } else {
       // If not selected, add it
       updatedGroups.push(groupId);
     }
-
+    
     // Update the form data with the new groups array
     setFormData({ ...formData, groups: updatedGroups });
   };
@@ -62,10 +62,9 @@ const CreateAssignmentPopup = ({
       <div className="assignment-popup-container">
         <div className="assignment-popup-header">
           <h2>Tambah Praktikum</h2>
-          <RxCross1
-            className="text-2xl hover:cursor-pointer"
-            onClick={onClose}
-          />
+          <button className="close-button" onClick={onClose}>
+            <IoMdClose />
+          </button>
         </div>
         <div className="assignment-popup-form">
           <div className="form-group">
@@ -105,7 +104,7 @@ const CreateAssignmentPopup = ({
             <label>Pilih Kelas:</label>
             <div className="checkbox-group-container">
               {groups.length > 0 ? (
-                groups.map((group) => (
+                groups.map(group => (
                   <div key={group.id} className="checkbox-item">
                     <input
                       type="checkbox"
@@ -123,7 +122,7 @@ const CreateAssignmentPopup = ({
               )}
             </div>
           </div>
-
+          
           <div className="form-group">
             <label>Soal:</label>
             <select
@@ -133,40 +132,36 @@ const CreateAssignmentPopup = ({
               required
             >
               <option value="">Pilih Soal</option>
-              {tasks.map((task) => (
+              {tasks.map(task => (
                 <option key={task.id} value={task.id}>
                   {task.name}
                 </option>
               ))}
             </select>
           </div>
-
+          
           <div className="form-group">
             <label>Periode Mulai:</label>
             <input
-              type="datetime-local"
-              name="start_period"
-              value={formData.start_period || ""}
-              onChange={handleChange}
-              max={formData.end_period}
-              required
+                type="datetime-local"
+                name="start_period"
+                value={formData.start_period || ""}
+                onChange={handleChange}
+                required
             />
-          </div>
+            </div>
 
-          <div className="form-group">
+            <div className="form-group">
             <label>Periode Selesai:</label>
             <input
-              type="datetime-local"
-              name="end_period"
-              value={formData.end_period || ""}
-              onChange={handleChange}
-              min={
-                formData.start_period || new Date().toISOString().split("T")[0]
-              }
-              required
+                type="datetime-local"
+                name="end_period"
+                value={formData.end_period || ""}
+                onChange={handleChange}
+                required
             />
-          </div>
-
+            </div>
+            
           <div className="form-group">
             <label>File Pendukung (Opsional):</label>
             <div className="file-upload-container">
@@ -192,19 +187,16 @@ const CreateAssignmentPopup = ({
           </div>
         </div>
         <div className="assignment-popup-actions">
-          <button className="cancel-button" onClick={onClose}>
+          <button 
+            className="cancel-button" 
+            onClick={onClose}
+          >
             Batal
           </button>
-          <button
-            className="save-button"
+          <button 
+            className="save-button" 
             onClick={onSave}
-            disabled={
-              isLoading ||
-              !formData.name ||
-              !formData.task_id ||
-              !formData.start_period ||
-              !formData.end_period
-            }
+            disabled={isLoading || !formData.name || !formData.task_id || !formData.start_period || !formData.end_period}
           >
             {isLoading ? "Loading..." : "Simpan"}
           </button>

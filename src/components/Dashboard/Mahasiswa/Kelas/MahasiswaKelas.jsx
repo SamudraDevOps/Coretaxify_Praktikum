@@ -250,9 +250,6 @@ export default function MahasiswaKelas() {
         <button
           className="bg-blue-800 p-2 rounded-md text-white hover:bg-blue-900"
           onClick={() => {
-            setFormData({
-              kodeKelas: "",
-            });
             setIsAddOpen(true);
             // setFormData({ ...formData, kodePraktikum: generateRandomCode() });
           }}

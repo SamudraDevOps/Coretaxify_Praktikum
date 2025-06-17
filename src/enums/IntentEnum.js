@@ -24,7 +24,7 @@ export const IntentEnum = {
     
     // Assignment Management
     API_USER_CREATE_ASSIGNMENT: 'api.user.create.assignment',
-    API_USER_JOIN_ASSIGNMENT: 'api.user.join.assignment',
+    API_USER_JOIN_ASSIGNMENT: 'api.user.assign.task',
     
     // Exam Management
     API_USER_CREATE_EXAM: 'api.user.create.exam',

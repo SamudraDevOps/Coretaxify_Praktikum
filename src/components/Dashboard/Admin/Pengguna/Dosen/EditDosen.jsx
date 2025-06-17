@@ -24,7 +24,6 @@ const EditDosen = () => {
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
   const [currentPage, setCurrentPage] = useState(1);
   const [cookies, setCookie] = useCookies(["user"]);
-  const [invalidLecturers, setInvalidLecturers] = useState(null);
   const itemsPerPage = 10;
 
   const { isLoading, isError, data, error, refetch } = useQuery({
@@ -113,11 +112,7 @@ const EditDosen = () => {
     },
     onError: (error) => {
       console.log(error);
-      if (error.response === undefined) {
-        Swal.fire("Gagal !", error.message, "error");
-        return;
-      }
-      Swal.fire("Gagal !", error.response.data.message, "error").then((result) => {
+      Swal.fire("Gagal!", "Terjadi Kesalahan!", "error").then((result) => {
         if (result.isConfirmed) {
           refetch();
           // window.location.reload();
@@ -136,52 +131,49 @@ const EditDosen = () => {
     },
   });
 
-  const handleCreateMultipleDosen = (validLecturers, contract_id, invalidLecturers = [], errors = []) => {
-    if (!contract_id) {
-      Swal.fire("Gagal", "Harap pilih kontrak terlebih dahulu.", "error");
+  const handleCreateMultipleDosen = (lecturers, contract_id) => {
+    const invalidLecturer = lecturers.filter(
+      (lecturer) => !lecturer.name || !lecturer.email
+    );
+
+    if (invalidLecturer.length > 0) {
+      Swal.fire(
+        "Validasi Gagal",
+        "Semua Dosen harus memili nama, email",
+        "error"
+      );
       return;
     }
-  
+
+    // check duplicate email
+    const emails = lecturers.map((lecturer) => lecturer.email);
+    const uniqueEmails = new Set(emails);
+
+    if (emails.length !== uniqueEmails.size) {
+      Swal.fire(
+        "Validasi Gagal",
+        "Terdapat email duplikat. Email setiap dosen harus unik",
+        "error"
+      );
+      return;
+    }
+
     Swal.fire({
       title: "Tambah Dosen",
-      text: `Anda akan menambahkan ${(validLecturers.length+invalidLecturers.length)} dosen baru. Lanjutkan?`,
+      text: `Anda akan menambahkan ${lecturers.length} mahasiswa baru. Lanjutkan?`,
       icon: "question",
       showCancelButton: true,
       confirmButtonText: "Ya, lanjutkan",
       cancelButtonText: "Batal",
     }).then((result) => {
       if (result.isConfirmed) {
-        mutationCreate.mutate(
-          { lecturers: validLecturers, contract_id },
-          {
-            onSuccess: () => {
-              // After successful mutation, check if there were invalid lecturers
-              if (invalidLecturers.length > 0) {
-                // Keep the invalid lecturers in the form
-                // You'll need to pass these back to TambahDosen component
-                setTambahPopupOpen(true);
-                setInvalidLecturers(invalidLecturers);
-
-                // Show alert about partial success
-                Swal.fire({
-                  title: "Sebagian Data Berhasil Disimpan",
-                  html: `${validLecturers.length} dosen berhasil disimpan.<br><br>
-                         ${invalidLecturers.length} dosen gagal disimpan dengan error:<br>
-                         ${errors.join('<br>')}`,
-                  icon: "warning"
-                }).then(() => {
-                  refetch();
-                })
-              } else {
-                // All lecturers were valid and saved successfully
-                Swal.fire("Berhasil!", "Semua dosen berhasil ditambahkan!", "success").then(() => {
-                  setTambahPopupOpen(false);
-                  refetch();
-                });
-              }
-            }
-          }
-        );
+        // alert("clicked");
+        console.log("contract", contract_id);
+        mutationCreate.mutate({ lecturers, contract_id });
+        // mutation.mutate({
+        //   action: "create",
+        //   multipleStudents: lecturers,
+        // });
       }
     });
   };
@@ -302,7 +294,6 @@ const EditDosen = () => {
             onClick={() => {
               setTambahPopupOpen(true);
               setIsOpen(false);
-              setInvalidLecturers(null);
             }}
           >
             + Tambah Dosen
@@ -325,7 +316,6 @@ const EditDosen = () => {
             onClose={() => setTambahPopupOpen(false)}
             dosen={selectedDosen}
             onSave={handleCreateMultipleDosen}
-            initialStudents={invalidLecturers}
             // id={id}
           />
         )}

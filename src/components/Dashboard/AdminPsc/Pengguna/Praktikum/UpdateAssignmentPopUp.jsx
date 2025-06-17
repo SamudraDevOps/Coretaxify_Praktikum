@@ -1,6 +1,6 @@
 import React from "react";
 import "./assignmentPopup.css";
-import { RxCross1 } from "react-icons/rx";
+import { IoMdClose } from "react-icons/io";
 
 const UpdateAssignmentPopup = ({
   isOpen,
@@ -9,7 +9,7 @@ const UpdateAssignmentPopup = ({
   formData,
   setFormData,
   isLoading,
-  tasks = [],
+  tasks = []
 }) => {
   if (!isOpen) return null;
 
@@ -17,7 +17,7 @@ const UpdateAssignmentPopup = ({
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: value,
+      [name]: value
     });
   };
 
@@ -25,22 +25,17 @@ const UpdateAssignmentPopup = ({
     if (e.target.files && e.target.files[0]) {
       setFormData({
         ...formData,
-        supporting_file: e.target.files[0],
+        supporting_file: e.target.files[0]
       });
     }
   };
 
   // Find the current task
-  const currentTask = tasks.find(
-    (task) => task.id === parseInt(formData.task_id)
-  );
+  const currentTask = tasks.find(task => task.id === parseInt(formData.task_id));
 
   // Add debug info
   if (formData.task_id && !currentTask) {
-    console.warn(
-      `Selected task (ID: ${formData.task_id}) not found in available tasks:`,
-      tasks
-    );
+    console.warn(`Selected task (ID: ${formData.task_id}) not found in available tasks:`, tasks);
   }
 
   return (
@@ -48,10 +43,9 @@ const UpdateAssignmentPopup = ({
       <div className="assignment-popup-container">
         <div className="assignment-popup-header">
           <h2>Edit Praktikum</h2>
-          <RxCross1
-            className="text-2xl hover:cursor-pointer"
-            onClick={onClose}
-          />
+          <button className="close-button" onClick={onClose}>
+            <IoMdClose />
+          </button>
         </div>
         <div className="assignment-popup-form">
           <div className="form-group">
@@ -64,7 +58,7 @@ const UpdateAssignmentPopup = ({
               placeholder="Masukkan judul praktikum"
             />
           </div>
-
+          
           <div className="form-group">
             <label>Kode Praktikum:</label>
             <input
@@ -77,38 +71,33 @@ const UpdateAssignmentPopup = ({
             />
             <small>Kode praktikum tidak dapat diubah</small>
           </div>
-
+          
           <div className="form-group">
-            <label>
-              Soal: {currentTask ? `(Sekarang: ${currentTask.name})` : ""}
-            </label>
+            <label>Soal: {currentTask ? `(Sekarang: ${currentTask.name})` : ''}</label>
             <select
               name="task_id"
               value={formData.task_id || ""}
               onChange={handleChange}
             >
               <option value="">Pilih Soal</option>
-              {tasks.map((task) => (
+              {tasks.map(task => (
                 <option key={task.id} value={task.id}>
                   {task.name}
-                </option>
-              ))}
+                  </option>
+                ))}
             </select>
             {formData.task_id && !currentTask && (
-              <small className="error-text">
-                Task dengan ID {formData.task_id} tidak ditemukan
-              </small>
+              <small className="error-text">Task dengan ID {formData.task_id} tidak ditemukan</small>
             )}
           </div>
-
+          
           <div className="form-group">
             <label>Periode Mulai:</label>
             <input
-              type="datetime-local"
-              name="start_period"
-              value={formData.start_period || ""}
-              onChange={handleChange}
-              max={formData.end_period}
+                type="datetime-local"
+                name="start_period"
+                value={formData.start_period || ""}
+                onChange={handleChange}
             />
             <small>Format: YYYY-MM-DD HH:MM</small>
           </div>
@@ -116,28 +105,23 @@ const UpdateAssignmentPopup = ({
           <div className="form-group">
             <label>Periode Selesai:</label>
             <input
-              type="datetime-local"
-              name="end_period"
-              value={formData.end_period || ""}
-              onChange={handleChange}
-              min={
-                formData.start_period || new Date().toISOString().split("T")[0]
-              }
+                type="datetime-local"
+                name="end_period"
+                value={formData.end_period || ""}
+                onChange={handleChange}
             />
             <small>Format: YYYY-MM-DD HH:MM</small>
           </div>
-
+          
           <div className="form-group">
             <label>File Pendukung (Kosongkan jika tidak ingin mengubah):</label>
             <div className="file-upload-container">
               <div className="file-upload-box">
                 {formData.supporting_file ? (
                   <div className="file-selected">
-                    <p>
-                      {typeof formData.supporting_file === "object"
-                        ? formData.supporting_file.name
-                        : "File tersedia: " + formData.supporting_file}
-                    </p>
+                    <p>{typeof formData.supporting_file === 'object' 
+                      ? formData.supporting_file.name 
+                      : 'File tersedia: ' + formData.supporting_file}</p>
                   </div>
                 ) : (
                   <div className="file-upload-placeholder">
@@ -156,10 +140,17 @@ const UpdateAssignmentPopup = ({
           </div>
         </div>
         <div className="assignment-popup-actions">
-          <button className="cancel-button" onClick={onClose}>
+          <button 
+            className="cancel-button" 
+            onClick={onClose}
+          >
             Batal
           </button>
-          <button className="save-button" onClick={onSave} disabled={isLoading}>
+          <button 
+            className="save-button" 
+            onClick={onSave}
+            disabled={isLoading}
+          >
             {isLoading ? "Loading..." : "Simpan"}
           </button>
         </div>

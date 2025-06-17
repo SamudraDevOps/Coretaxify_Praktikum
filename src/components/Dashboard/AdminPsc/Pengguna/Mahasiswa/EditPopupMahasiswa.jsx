@@ -2,8 +2,6 @@ import React, { useState, useRef } from "react";
 import "./editPopupMahasiswa.css";
 import { FaPlus, FaTrash, FaFileImport } from "react-icons/fa";
 import * as XLSX from 'xlsx';
-import { RxCross1 } from "react-icons/rx";
-import Swal from "sweetalert2";
 
 const EditPopupMahasiswa = ({ 
   onClose, 
@@ -54,7 +52,7 @@ const EditPopupMahasiswa = ({
     // Filter out any empty rows
     const validStudents = students.filter(student => student.name && student.email && student.status);
     if (validStudents.length === 0) {
-      Swal.fire("Gagal!", "Harap isi setidaknya satu mahasiswa dengan nama, email, dan status.", "error");
+      alert("Harap isi setidaknya satu mahasiswa dengan nama, email, dan status.");
       return;
     }
 
@@ -63,8 +61,7 @@ const EditPopupMahasiswa = ({
     const uniqueEmails = new Set(emails);
 
     if (emails.length !== uniqueEmails.size) {
-      
-      Swal.fire("Gagal!", "Terdapat email duplikat. Email mahasiswa tidak boleh sama", "error");
+      alert("Terdapat email duplikat. Email mahasiswa tidak boleh sama");
       return;
     }
 
@@ -195,10 +192,6 @@ const downloadTemplate = () => {
       <div className="edit-popup-content-mahasiswa">
         <div className="edit-popup-header-mahasiswa">
           <h2>{title}</h2>
-          <RxCross1
-            className="text-2xl hover:cursor-pointer"
-            onClick={onClose}
-          />
         </div>
 
         {/* Handle Multiple Students Mode */}
