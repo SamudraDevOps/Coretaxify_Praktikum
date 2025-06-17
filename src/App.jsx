@@ -166,6 +166,7 @@ import SptMasaPph21Pdf from "./components/PraktikumPage/PDFTemplate/SPTMasaPPH";
 import BUPOTWrapper from "./components/PraktikumPage/Badan/BUPOT/BUPOTWrapper";
 import BUPOTCreateWrapper from "./components/PraktikumPage/Badan/BUPOT/BUPOTCreateWrapper";
 import BUPOTEditWrapper from "./components/PraktikumPage/Badan/BUPOT/BUPOTEditWrapper";
+import BukuBesar from "./components/PraktikumPage/PortalSaya/BukuBesar";
 
 const Main = () => {
   const [loading, setLoading] = useState(true);
@@ -1087,6 +1088,15 @@ const Main = () => {
             </>
           }
         />
+        <Route
+          path="/praktikum/:id/sistem/:akun/buku-besar"
+          element={
+            <>
+              <Header />
+              <BukuBesar />
+            </>
+          }
+        />
 
         <Route
           path="/admin/praktikum/1/profil-saya/alamat"
@@ -1480,15 +1490,15 @@ const Main = () => {
             </>
           }
         />
-          <Route
-            path="/admin/praktikum/2/e-faktur/dokumen-lain/pajak-keluaran"
-            element={
-              <>
-                <Header />
-                <PajakKeluaranDokumenLain />
-              </>
-            }
-          />
+        <Route
+          path="/admin/praktikum/2/e-faktur/dokumen-lain/pajak-keluaran"
+          element={
+            <>
+              <Header />
+              <PajakKeluaranDokumenLain />
+            </>
+          }
+        />
         <Route
           path="/admin/praktikum/2/e-faktur/pajak-keluaran/tambah-faktur-keluaran"
           element={
@@ -1498,15 +1508,15 @@ const Main = () => {
             </>
           }
         />
-          <Route
-            path="/admin/praktikum/2/e-faktur/dokumen-lain/pajak-keluaran/tambah-faktur-keluaran"
-            element={
-              <>
-                <Header />
-                <TambahFakturKeluaranDokumenLain />
-              </>
-            }
-          />
+        <Route
+          path="/admin/praktikum/2/e-faktur/dokumen-lain/pajak-keluaran/tambah-faktur-keluaran"
+          element={
+            <>
+              <Header />
+              <TambahFakturKeluaranDokumenLain />
+            </>
+          }
+        />
         <Route
           path="/admin/praktikum/2/e-faktur/pajak-masukan"
           element={
