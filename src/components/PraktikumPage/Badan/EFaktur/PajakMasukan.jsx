@@ -103,8 +103,8 @@ const PajakMasukan = ({
                   />
                 </th>
                 <th className="px-4 py-2 border">Aksi</th>
-                <th className="px-4 py-2 border">NPWP Pembeli</th>
-                <th className="px-4 py-2 border">Nama Pembeli</th>
+                <th className="px-4 py-2 border">NPWP Penjual</th>
+                <th className="px-4 py-2 border">Nama Penjual</th>
                 <th className="px-4 py-2 border">Kode Transaksi</th>
                 <th className="px-4 py-2 border">Nomor Faktur Pajak</th>
                 <th className="px-4 py-2 border">Tanggal Faktur Pajak</th>
