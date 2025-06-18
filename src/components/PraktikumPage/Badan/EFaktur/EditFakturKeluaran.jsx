@@ -80,8 +80,8 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
   const [cookies] = useCookies(["token"]);
 
   const RoutesApi = {
-    kodeTransaksi: "http://127.0.0.1:8000/api/kode-transaksi",
-    satuan: "http://127.0.0.1:8000/api/satuan",
+    kodeTransaksi: "https://api.coretaxify.com/api/kode-transaksi",
+    satuan: "https://api.coretaxify.com/api/satuan",
   };
 
   const fetchKodeByJenis = async (jenis) => {
