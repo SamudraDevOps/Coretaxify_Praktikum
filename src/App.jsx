@@ -25,6 +25,7 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
+import axios from "axios";
 import RoleProtectedRoutes from "./components/Dashboard/Auth/RoleProtectedRoutes";
 import NotFound from "./components/NotFound";
 // import { BrowserRouter, Routes, Route, Router } from "react-router";
@@ -50,6 +51,7 @@ import Header from "./components/Header/Header";
 import Home from "./components/Header/Home";
 import CoretaxifyList from "./components/Dashboard/Admin/Coretaxify/CoretaxifyList";
 import CoretaxifySendDetail from "./components/Dashboard/Admin/Coretaxify/CoretaxifySendDetail";
+import EditProfile from "./components/Dashboard/EditProfile/editProfile";
 
 //Route Praktikum Orang Pribadi
 import DokumenSaya from "./components/PraktikumPage/OrangPribadi/PortalSaya/DokumenSaya";
@@ -230,6 +232,14 @@ const Main = () => {
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/confirm-otp" element={<ConfirmOTP />} />
 
+        <Route
+          element={
+            <RoleProtectedRoutes allowedRoles={["dosen", "admin", "psc", "mahasiswa"]} layout="admin" />
+          }
+        >
+          <Route path="/edit-profile" element={<EditProfile />} />
+        </Route>
+
         {/* ADMIN ROUTE */}
         <Route element={<RoleProtectedRoutes allowedRoles={["admin"]} layout="admin" />}>
           <Route path="/admin" element={<DashboardAdmin />} />
@@ -248,6 +258,7 @@ const Main = () => {
           <Route path="/admin/kontrak-backup" element={<KontrakBackup />} />
           <Route path="/admin/praktikum-backup" element={<PraktikumBackup />} />
           <Route path="/admin/praktikum" element={<Praktikum />} />
+
         </Route>
 
         {/* DOSEN ROUTE */}
@@ -304,6 +315,8 @@ const Main = () => {
           <Route path="/instruktur/praktikum/terisi" element={<FilledAssignment />} />
           <Route path="/instruktur/praktikum/kosong" element={<BlankAssignment />} />
         </Route>
+
+
 
         {/* Praktikum */}
         <Route
@@ -989,15 +1002,15 @@ const Main = () => {
             </>
           }
         />
-          <Route
-            path="/admin/praktikum/2/e-faktur/dokumen-lain/pajak-keluaran"
-            element={
-              <>
-                <Header />
-                <PajakKeluaranDokumenLain />
-              </>
-            }
-          />
+        <Route
+          path="/admin/praktikum/2/e-faktur/dokumen-lain/pajak-keluaran"
+          element={
+            <>
+              <Header />
+              <PajakKeluaranDokumenLain />
+            </>
+          }
+        />
         <Route
           path="/admin/praktikum/2/e-faktur/pajak-keluaran/tambah-faktur-keluaran"
           element={
@@ -1007,15 +1020,15 @@ const Main = () => {
             </>
           }
         />
-          <Route
-            path="/admin/praktikum/2/e-faktur/dokumen-lain/pajak-keluaran/tambah-faktur-keluaran"
-            element={
-              <>
-                <Header />
-                <TambahFakturKeluaranDokumenLain />
-              </>
-            }
-          />
+        <Route
+          path="/admin/praktikum/2/e-faktur/dokumen-lain/pajak-keluaran/tambah-faktur-keluaran"
+          element={
+            <>
+              <Header />
+              <TambahFakturKeluaranDokumenLain />
+            </>
+          }
+        />
         <Route
           path="/admin/praktikum/2/e-faktur/pajak-masukan"
           element={
@@ -1097,15 +1110,15 @@ const Main = () => {
             </>
           }
         />
-          <Route
-            path="/admin/praktikum/2/surat-pemberitahuan-(spt)/tambah-konsep-spt-unifikasi"
-            element={
-              <>
-                <Header />
-                <CreateKonsepUnifikasi />
-              </>
-            }
-          />
+        <Route
+          path="/admin/praktikum/2/surat-pemberitahuan-(spt)/tambah-konsep-spt-unifikasi"
+          element={
+            <>
+              <Header />
+              <CreateKonsepUnifikasi />
+            </>
+          }
+        />
         <Route
           path="/admin/praktikum/2/bppu"
           element={
