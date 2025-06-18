@@ -126,18 +126,19 @@ const EditMahasiswaPsc = () => {
             }
           }
         );
-      } else if (action === "delete" && id) {
-        const deleteEndpoint = RoutesApi.psc.users.destroy(id);
-        return await axios.delete(
-          deleteEndpoint.url, 
-          {
-            headers: {
-              "X-CSRF-TOKEN": response.data.token,
-              Authorization: `Bearer ${cookies.token}`,
-            }
-          }
-        );
       }
+      // } else if (action === "delete" && id) {
+      //   const deleteEndpoint = RoutesApi.psc.users.destroy(id);
+      //   return await axios.delete(
+      //     deleteEndpoint.url, 
+      //     {
+      //       headers: {
+      //         "X-CSRF-TOKEN": response.data.token,
+      //         Authorization: `Bearer ${cookies.token}`,
+      //       }
+      //     }
+      //   );
+      // }
     },
 
     onSuccess: (data, variables) => {
@@ -407,7 +408,7 @@ const EditMahasiswaPsc = () => {
                   >
                     Edit
                   </button>
-                  <button
+                  {/* <button
                     className="action-button delete"
                     onClick={() => {
                       Swal.fire({
@@ -428,7 +429,7 @@ const EditMahasiswaPsc = () => {
                     }}
                   >
                     Delete
-                  </button>
+                  </button> */}
                 </td>
               </tr>
             ))}

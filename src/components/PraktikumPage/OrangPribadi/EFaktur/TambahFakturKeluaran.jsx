@@ -30,17 +30,18 @@ import {
   AlertDialogCancel,
 } from "@/components/ui/alert-dialog";
 import { useParams } from "react-router";
+import { NumericFormat } from 'react-number-format';
 
 const TambahFakturKeluaran = ({ sidebar }) => {
   const [showDokumenTransaksi, setShowDokumenTransaksi] = useState(false);
   const [showInformasiPembeli, setShowInformasiPembeli] = useState(false);
   const [showDetailTransaksi, setShowDetailTransaksi] = useState(false);
   const [kodeTransaksi, setKodeTransaksi] = useState("");
-  const [harga, setHarga] = useState("");
+  const [harga, setHarga] = useState(""); // Harga Satuan
   const [kuantitas, setKuantitas] = useState(0);
-  const [totalHarga, setTotalHarga] = useState("");
-  const [potonganHarga, setPotonganHarga] = useState("");
-  const [dpp, setDPP] = useState("");
+  const [totalHarga, setTotalHarga] = useState(""); // Total Harga
+  const [potonganHarga, setPotonganHarga] = useState(""); // Potongan Harga
+  const [dpp, setDPP] = useState(""); // DPP
   const [selectedYear, setSelectedYear] = useState(new Date());
   const [informasiTambahan, setInformasiTambahan] = useState("");
   const [tipe, setTipe] = useState("");
@@ -52,17 +53,17 @@ const TambahFakturKeluaran = ({ sidebar }) => {
   const [nomorPendukung, setNomorPendukung] = useState("");
 
   const [isChecked, setIsChecked] = useState(false);
-  const [jumlah, setJumlah] = useState(formatRupiah(dpp.toString()));
-  const [tarifPPN, setTarifPPN] = useState("Rp 0");
+  const [jumlah, setJumlah] = useState(""); // DPP Nilai Lain / DPP
+  const [tarifPPN, setTarifPPN] = useState(""); // Tarif PPN
   const [tarifPPnBM, setTarifPPnBM] = useState("");
-  const [ppnBM, setPPnBM] = useState("Rp 0");
+  const [ppnBM, setPPnBM] = useState(""); // PPnBM
   const [isCustomPPnBM, setIsCustomPPnBM] = useState(false);
 
   const { id, akun } = useParams();
 
   const RoutesApi = {
-    kodeTransaksi: "http://127.0.0.1:8000/api/kode-transaksi",
-    satuan: "http://127.0.0.1:8000/api/satuan",
+    kodeTransaksi: "https://api.coretaxify.com/api/kode-transaksi",
+    satuan: "https://api.coretaxify.com/api/satuan",
   };
 
   const fetchKodeByJenis = async (jenis) => {
@@ -688,12 +689,23 @@ const TambahFakturKeluaran = ({ sidebar }) => {
                           <label className="block text-sm font-medium">
                             Harga Satuan
                           </label>
-                          <input
-                            type="text"
-                            className="p-2 border rounded w-full"
+                          <NumberFormat
                             value={harga}
-                            onChange={handleHargaChange}
+                            onValueChange={({ value }) => {
+                              setHarga(value);
+                              const numericHarga = parseInt(value, 10) || 0;
+                              const newTotalHarga = numericHarga * (parseInt(kuantitas, 10) || 0);
+                              setTotalHarga(newTotalHarga.toString());
+                              const newDPP = newTotalHarga - (parseInt(potonganHarga, 10) || 0);
+                              setDPP(newDPP.toString());
+                              if (!isChecked) setJumlah(newDPP.toString());
+                            }}
+                            thousandSeparator="."
+                            decimalSeparator=","
+                            prefix="Rp "
+                            className="p-2 border rounded w-full"
                             placeholder="Rp 0"
+                            allowNegative={false}
                           />
                         </div>
                         <div className="space-y-2">
@@ -726,11 +738,23 @@ const TambahFakturKeluaran = ({ sidebar }) => {
                           <label className="block text-sm font-medium">
                             Potongan Harga
                           </label>
-                          <input
-                            type="text"
+                          <NumberFormat
+                            thousandSeparator="."
+                            decimalSeparator=","
+                            prefix="Rp "
                             className="p-2 border rounded w-full"
-                            value={potonganHarga}
-                            onChange={handlePotonganHargaChange}
+                            value={potonganHarga.replace(/[^0-9]/g, "")}
+                            onValueChange={({ formattedValue, value }) => {
+                              setPotonganHarga(formattedValue);
+
+                              const numericTotalHarga = parseInt(totalHarga.replace(/\D/g, ""), 10) || 0;
+                              const numericPotongan = parseInt(value, 10) || 0;
+                              const newDPP = numericTotalHarga - numericPotongan;
+                              setDPP(formatRupiah(newDPP.toString()));
+                              if (!isChecked) {
+                                setJumlah(formatRupiah(newDPP.toString()));
+                              }
+                            }}
                             placeholder="Rp 0"
                           />
                         </div>
@@ -767,18 +791,21 @@ const TambahFakturKeluaran = ({ sidebar }) => {
 
                           <div className="space-y-2">
                             <label className="block text-sm font-medium"></label>
-                            <input
-                              type="text"
+                            <NumberFormat
+                              thousandSeparator="."
+                              decimalSeparator=","
+                              prefix="Rp "
                               className={`
                                                             p-2 border rounded w-full
-                                                            ${
-                                                              isChecked
-                                                                ? ""
-                                                                : "bg-gray-100"
-                                                            }
+                                                            ${isChecked ? "" : "bg-gray-100"}
                                                         `}
-                              value={jumlah}
-                              onChange={handleJumlahChange}
+                              value={jumlah.replace(/[^0-9]/g, "")}
+                              onValueChange={({ formattedValue, value }) => {
+                                if (isChecked) {
+                                  setJumlah(formattedValue);
+                                  updateTarifPPN(value);
+                                }
+                              }}
                               disabled={!isChecked}
                               placeholder="Rp 0"
                             />
@@ -822,11 +849,23 @@ const TambahFakturKeluaran = ({ sidebar }) => {
                             <label className="block text-sm font-medium">
                               PPnBM
                             </label>
-                            <input
-                              type="text"
+                            <NumberFormat
+                              thousandSeparator="."
+                              decimalSeparator=","
+                              prefix="Rp "
                               className="p-2 border rounded w-full"
-                              value={ppnBM}
-                              onChange={handlePPnBMChange}
+                              value={ppnBM.replace(/[^0-9]/g, "")}
+                              onValueChange={({ formattedValue, value }) => {
+                                setIsCustomPPnBM(true);
+                                setPPnBM(formattedValue);
+
+                                if (value === "" || value === "0") {
+                                  setIsCustomPPnBM(false);
+                                  const numericJumlah = parseInt(jumlah.replace(/\D/g, ""), 10) || 0;
+                                  const numericPPnBM = parseInt(tarifPPnBM.replace(/\D/g, ""), 10) || 0;
+                                  setPPnBM(formatRupiah(((numericJumlah * numericPPnBM) / 100).toString()));
+                                }
+                              }}
                               placeholder="Rp 0"
                             />
                           </div>

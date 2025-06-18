@@ -11,8 +11,11 @@ export default defineConfig({
   },
   server: {
     allowedHosts: [
-      '.ngrok-free.app', // mengizinkan semua subdomain dari ngrok-free.app
-      '.loca.lt'
-    ]
-  }
+      ".ngrok-free.app", // mengizinkan semua subdomain dari ngrok-free.app
+      ".loca.lt",
+    ],
+  },
+  build: {
+    sourcemap: true, // Enable source maps for production
+  },
 });

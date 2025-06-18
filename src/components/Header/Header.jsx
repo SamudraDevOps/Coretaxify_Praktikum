@@ -420,7 +420,7 @@ const Header = () => {
 
             {/* Dropdown menu */}
             {isDropdownOpen && (
-              <ul className="absolute right-14 top-14 mt-2 w-64 bg-white border rounded-md shadow-lg py-1 px-2">
+              <ul className="absolute right-14 top-14 mt-2 w-64 bg-white border rounded-md shadow-lg py-1 px-2 z-50">
                 <li className="px-4 py-1 mt-2 text-gray-500 text-sm font-semibold border-b">
                   Orang Pribadi
                 </li>
@@ -661,7 +661,7 @@ const Header = () => {
                 {item.submenu.length > 0 && dropdownOpen === item.label && (
                   <ul
                     ref={(el) => (dropdownRefs.current[index] = el)}
-                    className="absolute left-0 mt-3 min-w-max bg-blue-900 text-white shadow-md rounded-md"
+                    className="absolute left-0 mt-3 min-w-max bg-purple-700 text-white shadow-md rounded-md z-50"
                   >
                     {item.submenu.map((sub, subIndex) => (
                       <li
@@ -692,7 +692,7 @@ const Header = () => {
                               <ChevronRight className="w-4 h-4 ml-2" />
                             </button>
                             {sub.submenu && subDropdownOpen === sub.label && (
-                              <ul className="absolute left-full mx-1 top-0 mt-0 min-w-max bg-blue-900 text-white shadow-md rounded-md text-left">
+                              <ul className="absolute left-full mx-1 top-0 mt-0 min-w-max bg-blue-900 text-white shadow-md rounded-md text-left z-50">
                                 {sub.submenu.map((nestedSub, nestedIndex) => (
                                   <li
                                     key={nestedIndex}
