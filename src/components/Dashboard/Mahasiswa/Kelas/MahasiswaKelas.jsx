@@ -262,7 +262,7 @@ export default function MahasiswaKelas() {
             // setFormData({ ...formData, kodePraktikum: generateRandomCode() });
           }}
         >
-          Tambah Kelas
+          Gabung Kelas
         </button>
       </div>
       {/* <div className="table-container"> */}
