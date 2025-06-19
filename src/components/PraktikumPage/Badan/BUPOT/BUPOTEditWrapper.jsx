@@ -7,6 +7,7 @@ import { ClipLoader } from "react-spinners";
 import { RoutesApi } from "@/Routes";
 import BUPOTForm from "./shared/BUPOTForm";
 import Swal from "sweetalert2";
+import { useNavigateWithParams } from "@/hooks/useNavigateWithParams";
 
 // Form configurations for different BUPOT types
 const formConfigs = {
@@ -76,7 +77,8 @@ const formConfigs = {
 
 const BUPOTEditWrapper = () => {
   const { id, akun, type, bupotId } = useParams();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
+  const navigate = useNavigateWithParams();
   const [cookies] = useCookies(["token"]);
 
   // Get form config for this BUPOT type
@@ -106,7 +108,8 @@ const BUPOTEditWrapper = () => {
   });
 
   // Mutation for updating the form
-  const { mutate, isLoading } = useMutation({
+  // const { mutate, isLoading } = useMutation({
+  const mutation = useMutation({
     mutationFn: async (data) => {
       const response = await axios.get(`${RoutesApi.url}api/csrf-token`, {
         headers: {
@@ -146,8 +149,17 @@ const BUPOTEditWrapper = () => {
     },
   });
 
+  // Get the correct loading state - try both properties
+  const isLoading = mutation.isLoading || mutation.isPending || false;
+
   // Handle form submission
   const handleSubmit = (formData, action) => {
+    // Prevent double submission
+    if (isLoading) {
+      console.log("Submission blocked due to loading state");
+      return;
+    }
+
     if (action === "cancel") {
       navigate(`/praktikum/${id}/sistem/${akun}/bupot/${type}`);
       return;
@@ -158,7 +170,7 @@ const BUPOTEditWrapper = () => {
       ...formData,
     };
 
-    mutate(submitData);
+    mutation.mutate(submitData);
   };
 
   if (isLoadingData) {
