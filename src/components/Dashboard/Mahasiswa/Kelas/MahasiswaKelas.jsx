@@ -203,7 +203,7 @@ export default function MahasiswaKelas() {
     },
     onSuccess: (data) => {
       console.log(data);
-      Swal.fire("Berhasil!", "Praktikum berhasil ditambahkan!", "success").then(
+      Swal.fire("Berhasil!", "Kelas berhasil ditambahkan!", "success").then(
         () => {
           refetch();
         }
@@ -217,6 +217,11 @@ export default function MahasiswaKelas() {
       // queryClient.invalidateQueries({ queryKey: ["todos"] });
     },
     onError: (error) => {
+      Swal.fire("Gagal!", "Kode kelas salah atau tidak ada!", "error").then(
+        () => {
+          refetch();
+        }
+      );
       console.log(error);
     },
   });
