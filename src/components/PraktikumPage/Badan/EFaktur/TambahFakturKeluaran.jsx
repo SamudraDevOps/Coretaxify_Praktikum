@@ -600,7 +600,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
       setPPnBM(transaksiToEdit.ppnbm);
 
       // Show modal or alert dialog
-      document.querySelector(".AlertDialogTrigger").click();
+      // document.querySelector(".AlertDialogTrigger").click();
     }
   };
   const handleCancelEdit = () => {
@@ -2211,12 +2211,355 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                             <input type="checkbox" className="w-4 h-4" />
                           </td>
                           <td className="px-1 py-2 border">
-                            <button
-                              className="bg-blue-500 hover:bg-blue-600 text-white py-1 px-2 rounded text-xs"
-                              onClick={() => handleEditTransaksi(item.id)}
-                            >
-                              Edit
-                            </button>
+                            <AlertDialog>
+                              <AlertDialogTrigger asChild>
+                                <button
+                                  className="bg-blue-500 hover:bg-blue-600 text-white py-1 px-2 rounded text-xs"
+                                  onClick={() => handleEditTransaksi(item.id)}
+                                >
+                                  Edit
+                                </button>
+                              </AlertDialogTrigger>
+                              <AlertDialogContent className="bg-white rounded-md shadow-md p-4 !min-w-[1000px]">
+                                <AlertDialogHeader className="text-lg font-semibold ">
+                                  <AlertDialogTitle className="text-lg font-semibold border-b pb-2 w-full">
+                                    Edit Transaksi
+                                  </AlertDialogTitle>
+                                </AlertDialogHeader>
+                                <div className="grid grid-cols-2 gap-6 w-full overflow-auto h-96">
+                                  {/* Kolom Kiri */}
+                                  <div className="space-y-4 h-full">
+                                    <div className="space-y-2">
+                                      <label className="block text-sm font-medium">
+                                        Tipe
+                                      </label>
+                                      <div className="grid grid-cols-2 gap-3">
+                                        <div className="flex items-center gap-2">
+                                          <label className="flex items-center gap-2">
+                                            <input
+                                              type="radio"
+                                              name="tipe"
+                                              value="Barang"
+                                              checked={tipe === "Barang"}
+                                              onChange={handleTipeChange}
+                                            />
+                                            Barang
+                                          </label>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                          <label className="flex items-center gap-2">
+                                            <input
+                                              type="radio"
+                                              name="tipe"
+                                              value="Jasa"
+                                              checked={tipe === "Jasa"}
+                                              onChange={handleTipeChange}
+                                            />
+                                            Jasa
+                                          </label>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    {tipe && (
+                                      <div>
+                                        <label className="block text-sm font-medium mb-1">
+                                          Kode Transaksi
+                                        </label>
+                                        <div className="w-full">
+                                          <Select
+                                            options={options}
+                                            value={options.find(
+                                              (opt) =>
+                                                opt.value === selectedKode
+                                            )}
+                                            onChange={(selected) =>
+                                              setSelectedKode(
+                                                selected?.value || ""
+                                              )
+                                            }
+                                            styles={{
+                                              menu: (provided) => ({
+                                                ...provided,
+                                                width: "full",
+                                              }),
+                                            }}
+                                          />
+                                        </div>
+                                      </div>
+                                    )}
+
+                                    <div className="space-y-2">
+                                      <label className="block text-sm font-medium">
+                                        Nama{" "}
+                                      </label>
+                                      <input
+                                        type="text"
+                                        className="p-2 border rounded w-full"
+                                        value={namaBarang}
+                                        onChange={(e) =>
+                                          setNamaBarang(e.target.value)
+                                        }
+                                        placeholder="Masukkan nama barang/jasa"
+                                      />
+                                    </div>
+                                    {tipe && (
+                                      <div className="space-y-2">
+                                        <label className="block text-sm font-medium">
+                                          Satuan
+                                        </label>
+                                        <select
+                                          className="p-2 border rounded w-full max-w-full"
+                                          value={selectedSatuan}
+                                          onChange={(e) =>
+                                            setSelectedSatuan(e.target.value)
+                                          }
+                                        >
+                                          <option value="">Pilih Satuan</option>
+                                          {listSatuan.map((item) => (
+                                            <option
+                                              key={item.id}
+                                              value={item.satuan}
+                                            >
+                                              {item.satuan}
+                                            </option>
+                                          ))}
+                                        </select>
+                                      </div>
+                                    )}
+                                    <div className="space-y-2">
+                                      <label className="block text-sm font-medium">
+                                        Harga Satuan
+                                      </label>
+                                      <NumericFormat
+                                        value={harga_satuan}
+                                        onValueChange={({ value }) => {
+                                          setHarga(value);
+                                          const numericHarga =
+                                            parseInt(value, 10) || 0;
+                                          const newTotalHarga =
+                                            numericHarga *
+                                            (parseInt(kuantitas, 10) || 0);
+                                          setTotalHarga(
+                                            newTotalHarga.toString()
+                                          );
+                                          const newDPP =
+                                            newTotalHarga -
+                                            (parseInt(pemotongan_harga, 10) ||
+                                              0);
+                                          setDPP(newDPP.toString());
+                                          if (!isChecked)
+                                            setJumlah(newDPP.toString());
+                                        }}
+                                        thousandSeparator="."
+                                        decimalSeparator=","
+                                        prefix="Rp "
+                                        className="p-2 border rounded w-full"
+                                        placeholder="Rp 0"
+                                        allowNegative={false}
+                                      />
+                                    </div>
+                                    <div className="space-y-2">
+                                      <label className="block text-sm font-medium">
+                                        Kuantitas
+                                      </label>
+                                      <input
+                                        type="number"
+                                        className="p-2 border rounded w-full"
+                                        min="0"
+                                        step="1"
+                                        value={kuantitas === 0 ? "" : kuantitas}
+                                        onChange={handleKuantitasChange}
+                                        placeholder="0"
+                                      />
+                                    </div>
+                                    <div className="space-y-2">
+                                      <label className="block text-sm font-medium">
+                                        Total Harga
+                                      </label>
+                                      <NumericFormat
+                                        value={total_harga}
+                                        displayType="input"
+                                        thousandSeparator="."
+                                        decimalSeparator=","
+                                        prefix="Rp "
+                                        className="p-2 border rounded w-full bg-gray-100"
+                                        readOnly
+                                        placeholder="Rp 0"
+                                      />
+                                    </div>
+                                    <div className="space-y-2">
+                                      <label className="block text-sm font-medium">
+                                        Potongan Harga
+                                      </label>
+                                      <NumericFormat
+                                        value={pemotongan_harga}
+                                        onValueChange={({ value }) => {
+                                          setPotonganHarga(value);
+                                          const numericTotalHarga =
+                                            parseInt(total_harga, 10) || 0;
+                                          const numericPotongan =
+                                            parseInt(value, 10) || 0;
+                                          const newDPP =
+                                            numericTotalHarga - numericPotongan;
+                                          setDPP(newDPP.toString());
+                                          if (!isChecked)
+                                            setJumlah(newDPP.toString());
+                                        }}
+                                        thousandSeparator="."
+                                        decimalSeparator=","
+                                        prefix="Rp "
+                                        className="p-2 border rounded w-full"
+                                        placeholder="Rp 0"
+                                        allowNegative={false}
+                                      />
+                                    </div>
+                                  </div>
+
+                                  {/* Kolom Kanan */}
+                                  <div className="space-y-4 h-full ">
+                                    <div className="space-y-2">
+                                      <label className="block text-sm font-medium">
+                                        DPP
+                                      </label>
+                                      <NumericFormat
+                                        value={dpp}
+                                        displayType="input"
+                                        thousandSeparator="."
+                                        decimalSeparator=","
+                                        prefix="Rp "
+                                        className="p-2 border rounded w-full bg-gray-100"
+                                        readOnly
+                                        placeholder="Rp 0"
+                                      />
+                                    </div>
+                                    <div className="space-y-2">
+                                      <div className="flex items-center gap-2 ">
+                                        <input
+                                          type="checkbox"
+                                          className="justify-start p-3 border rounded"
+                                          checked={isChecked}
+                                          onChange={handleCheckboxChange}
+                                          disabled={kode_transaksi === "01"}
+                                        />
+                                        <label className="block text-sm font-medium">
+                                          DPP Nilai Lain / DPP
+                                        </label>
+                                      </div>
+
+                                      <div className="space-y-2">
+                                        <label className="block text-sm font-medium"></label>
+                                        <NumericFormat
+                                          value={jumlah}
+                                          onValueChange={({ value }) => {
+                                            if (isChecked) {
+                                              setJumlah(value);
+                                              updateTarifPPN(value);
+                                            }
+                                          }}
+                                          thousandSeparator="."
+                                          decimalSeparator=","
+                                          prefix="Rp "
+                                          className={`
+p-2 border rounded w-full
+${isChecked ? "" : "bg-gray-100"}
+`}
+                                          placeholder="Rp 0"
+                                          allowNegative={false}
+                                          disabled={!isChecked}
+                                        />
+                                      </div>
+                                      <div className="space-y-2">
+                                        <label className="block text-sm font-medium">
+                                          PPN
+                                        </label>
+                                        <input
+                                          type="text"
+                                          className="p-2 border rounded w-full bg-gray-100"
+                                          value="12%"
+                                          readOnly
+                                        />
+                                      </div>
+                                      <div className="space-y-2">
+                                        <label className="block text-sm font-medium">
+                                          Tarif PPN
+                                        </label>
+                                        <input
+                                          type="text"
+                                          className="p-2 border rounded w-full bg-gray-100"
+                                          value={ppn}
+                                          readOnly
+                                          placeholder="Rp 0"
+                                        />
+                                      </div>
+                                      <div className="space-y-2">
+                                        <label className="block text-sm font-medium">
+                                          Tarif PPnBM (%)
+                                        </label>
+                                        <input
+                                          type="text"
+                                          className="p-2 border rounded w-full"
+                                          value={tarif_ppnbm}
+                                          onChange={handleTarifPPnBMChange}
+                                          placeholder="Masukkan persen"
+                                        />
+                                      </div>
+                                      <div className="space-y-2">
+                                        <label className="block text-sm font-medium">
+                                          PPnBM
+                                        </label>
+                                        <NumericFormat
+                                          value={ppnbm}
+                                          onValueChange={({ value }) => {
+                                            setIsCustomPPnBM(true);
+                                            setPPnBM(value);
+                                            if (value === "" || value === "0") {
+                                              setIsCustomPPnBM(false);
+                                              const numericJumlah =
+                                                parseInt(jumlah, 10) || 0;
+                                              const numericPPnBM =
+                                                parseInt(
+                                                  tarif_ppnbm.replace(
+                                                    /\D/g,
+                                                    ""
+                                                  ),
+                                                  10
+                                                ) || 0;
+                                              setPPnBM(
+                                                (
+                                                  (numericJumlah *
+                                                    numericPPnBM) /
+                                                  100
+                                                ).toString()
+                                              );
+                                            }
+                                          }}
+                                          thousandSeparator="."
+                                          decimalSeparator=","
+                                          prefix="Rp "
+                                          className="p-2 border rounded w-full"
+                                          placeholder="Rp 0"
+                                          allowNegative={false}
+                                        />
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <AlertDialogFooter className="flex justify-end mt-6 space-x-2">
+                                  <AlertDialogCancel
+                                    onClick={handleCancelEdit}
+                                    className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600"
+                                  >
+                                    Batal
+                                  </AlertDialogCancel>
+                                  <AlertDialogAction
+                                    className="bg-blue-900 text-white px-4 py-2 rounded-md hover:bg-blue-950"
+                                    onClick={handleSimpanTransaksi}
+                                  >
+                                    Perbarui
+                                  </AlertDialogAction>
+                                </AlertDialogFooter>
+                              </AlertDialogContent>
+                            </AlertDialog>
                             <button
                               className="bg-red-500 hover:bg-red-600 text-white py-1 px-2 rounded text-xs ml-1"
                               onClick={() => handleHapusTransaksi(item.id)}
