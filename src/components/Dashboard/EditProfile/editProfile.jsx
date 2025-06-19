@@ -82,9 +82,7 @@ const EditProfile = () => {
       const user = data.data;
 
       const photoUrl = user.image_path
-        ? `${
-            process.env.REACT_APP_API_URL || "http://localhost:8000"
-          }/storage/${user.image_path}`
+        ? `${RoutesApi.url}storage/${user.image_path}`
         : `https://ui-avatars.com/api/?name=${encodeURIComponent(
             user.name || "User"
           )}&background=random&size=128`;
