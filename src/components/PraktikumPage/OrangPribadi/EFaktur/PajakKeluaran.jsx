@@ -150,7 +150,7 @@ const PajakKeluaran = ({
           </div>
 
           {/* Company Selector - If there are multiple companies, show a dropdown */}
-          {representedCompanies.data &&
+          {/* {representedCompanies.data &&
             representedCompanies.data.length > 0 && (
               <div className="relative" ref={companyDropdownRef}>
                 <button
@@ -188,7 +188,7 @@ const PajakKeluaran = ({
                   </div>
                 )}
               </div>
-            )}
+            )} */}
         </div>
 
         <div className="flex justify-between mb-4 border-b pb-3">

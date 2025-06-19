@@ -148,6 +148,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
           },
         }
       );
+      console.log("faktur data :", data);
       return data;
     },
   });
@@ -1092,6 +1093,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
               <div className="space-y-2">
                 <label className="block text-sm font-medium">Uang Muka</label>
                 <input
+                  readOnly
                   type="checkbox"
                   name="uangMuka"
                   checked={formData.uangMuka}
@@ -1102,6 +1104,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
               <div className="space-y-2">
                 <label className="block text-sm font-medium">Pelunasan</label>
                 <input
+                  readOnly
                   type="checkbox"
                   name="pelunasan"
                   checked={formData.pelunasan}
@@ -1114,6 +1117,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                   Nomor Faktur
                 </label>
                 <input
+                  readOnly
                   type="text"
                   className="p-2 border rounded w-full bg-gray-100"
                   disabled
@@ -1129,6 +1133,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                   name="kode_transaksi"
                   value={formData.kode_transaksi}
                   onChange={handleKodeTransaksiChange}
+                  disabled
                 >
                   <option value="">Pilih Kode Transaksi</option>
                   <option value="1">01 - kepada selain pemungut PPN</option>
@@ -1163,6 +1168,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                   Tanggal Faktur
                 </label>
                 <input
+                  readOnly
                   type="date"
                   value={formData.tanggal_faktur_pajak}
                   onChange={handleChange}
@@ -1175,6 +1181,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                   Jenis Faktur
                 </label>
                 <input
+                  readOnly
                   type="text"
                   value="Normal"
                   name="jenisFaktur"
@@ -1189,6 +1196,8 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                   </label>
                   {/* <input type="month" className='p-2 border rounded w-full' /> */}
                   <select
+                    // required
+                    disabled
                     className="p-2 border rounded w-full"
                     name="masa_pajak"
                     value={formData.masa_pajak}
@@ -1229,6 +1238,8 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                         className="border p-2 rounded-md w-full text-center"
                       /> */}
                       <DatePicker
+                        required
+                        disabled
                         selected={selectedYear}
                         onChange={(date) => {
                           setSelectedYear(date);
@@ -1593,6 +1604,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                         Cap Fasilitas
                       </label>
                       <input
+                        readOnly
                         type="text"
                         className="p-2 border rounded w-full bg-gray-100"
                         value={cap_fasilitas}
@@ -1627,6 +1639,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                           Nomor Pendukung
                         </label>
                         <input
+                          readOnly
                           type="text"
                           name="nomorPendukung"
                           className="p-2 border rounded w-full"
@@ -1650,6 +1663,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
               <div className="space-y-2">
                 <label className="block text-sm font-medium">Referensi</label>
                 <input
+                  readOnly
                   type="text"
                   value={formData.referensi}
                   name="referensi"
@@ -1662,6 +1676,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                   Pilih Alamat
                 </label>
                 <input
+                  readOnly
                   type="text"
                   name="alamat"
                   value={formData.alamat}
@@ -1674,6 +1689,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
               <div className="space-y-2">
                 <label className="block text-sm font-medium">IDTKU</label>
                 <input
+                  readOnly
                   type="text"
                   className="p-2 border rounded w-full bg-gray-100"
                   value="000000"
@@ -1694,13 +1710,17 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
               <div className="space-y-2">
                 <label className="block text-sm font-medium">NPWP </label>
                 <select
+                  disabled
                   name="akun_penerima_id"
-                  value={formData.akun_penerima_id}
-                  // onChange={handleChange}
+                  value={
+                    typeof formData.akun_penerima_id === "object"
+                      ? formData.akun_penerima_id?.id || ""
+                      : formData.akun_penerima_id || ""
+                  }
                   onChange={(e) => {
                     const selectedId = e.target.value;
                     const selectedItem = npwp_faktur.data.find(
-                      (item) => item.id.toString() == selectedId
+                      (item) => item.id.toString() === selectedId
                     );
 
                     console.log(selectedItem);
@@ -1726,6 +1746,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                       </option>
                     ))}
                 </select>
+
                 {isLoading && (
                   <div className="text-sm text-gray-500">
                     Loading NPWP data...
@@ -1739,6 +1760,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                   {["NPWP", "Paspor", "NIK", "Identitas Lain"].map((value) => (
                     <div key={value} className="flex items-center gap-2">
                       <input
+                        readOnly
                         type="radio"
                         name="identification"
                         value={value}
@@ -1754,6 +1776,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
               <div className="space-y-2">
                 <label className="block text-sm font-medium">Negara</label>
                 <input
+                  // readOnly
                   type="text"
                   name="negara"
                   value={formData.negara}
@@ -1767,6 +1790,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                   Nomor Dokumen
                 </label>
                 <input
+                  readOnly
                   type="text"
                   name="nomorDokumen"
                   value={formData.nomorDokumen}
@@ -1778,6 +1802,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
               <div className="space-y-2">
                 <label className="block text-sm font-medium">Nama</label>
                 <input
+                  readOnly
                   type="text"
                   name="nama"
                   // value={formData.akun_penerima_id.nama_akun}
@@ -1790,6 +1815,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
               <div className="space-y-2">
                 <label className="block text-sm font-medium">Alamat</label>
                 <input
+                  readOnly
                   type="text"
                   name="alamat"
                   value={formData.alamat}
@@ -1801,6 +1827,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
               <div className="space-y-2">
                 <label className="block text-sm font-medium">IDTKU</label>
                 <input
+                  readOnly
                   type="text"
                   name="idtku"
                   value={formData.idtku}
@@ -1811,6 +1838,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
               <div className="space-y-2">
                 <label className="block text-sm font-medium">Email</label>
                 <input
+                  readOnly
                   type="text"
                   name="email"
                   value={formData.email}
@@ -1854,6 +1882,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                             <div className="flex items-center gap-2">
                               <label className="flex items-center gap-2">
                                 <input
+                                  readOnly
                                   type="radio"
                                   name="tipe"
                                   value="Barang"
@@ -1866,6 +1895,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                             <div className="flex items-center gap-2">
                               <label className="flex items-center gap-2">
                                 <input
+                                  readOnly
                                   type="radio"
                                   name="tipe"
                                   value="Jasa"
@@ -1884,6 +1914,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                             </label>
                             <div className="w-full">
                               <Select
+                                isDisabled={true}
                                 options={options}
                                 value={options.find(
                                   (opt) => opt.value === selectedKode
@@ -1907,6 +1938,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                             Nama{" "}
                           </label>
                           <input
+                            readOnly
                             type="text"
                             className="p-2 border rounded w-full"
                             value={namaBarang}
@@ -1940,6 +1972,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                             Harga Satuan
                           </label>
                           <input
+                            readOnly
                             type="text"
                             className="p-2 border rounded w-full"
                             value={harga_satuan}
@@ -1952,6 +1985,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                             Kuantitas
                           </label>
                           <input
+                            readOnly
                             type="number"
                             className="p-2 border rounded w-full"
                             min="0"
@@ -1966,10 +2000,11 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                             Total Harga
                           </label>
                           <input
+                            readOnly
                             type="text"
                             className="p-2 border rounded w-full bg-gray-100"
                             value={total_harga}
-                            readOnly
+                            // readOnly
                             placeholder="Rp 0"
                           />
                         </div>
@@ -1978,6 +2013,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                             Potongan Harga
                           </label>
                           <input
+                            readOnly
                             type="text"
                             className="p-2 border rounded w-full"
                             value={pemotongan_harga}
@@ -1994,17 +2030,19 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                             DPP
                           </label>
                           <input
+                            readOnly
                             type="text"
                             className="p-2 border rounded w-full bg-gray-100"
                             value={dpp}
                             onChange={handleDppChange}
-                            readOnly
+                            // readOnly
                             placeholder="Rp 0"
                           />
                         </div>
                         <div className="space-y-2">
                           <div className="flex items-center gap-2 ">
                             <input
+                              readOnly
                               type="checkbox"
                               className="justify-start p-3 border rounded"
                               checked={isChecked}
@@ -2019,6 +2057,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                           <div className="space-y-2">
                             <label className="block text-sm font-medium"></label>
                             <input
+                              readOnly
                               type="text"
                               className={`
                                                             p-2 border rounded w-full
@@ -2039,10 +2078,11 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                               PPN
                             </label>
                             <input
+                              readOnly
                               type="text"
                               className="p-2 border rounded w-full bg-gray-100"
                               value="12%"
-                              readOnly
+                              // readOnly
                             />
                           </div>
                           <div className="space-y-2">
@@ -2050,10 +2090,11 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                               Tarif PPN
                             </label>
                             <input
+                              readOnly
                               type="text"
                               className="p-2 border rounded w-full bg-gray-100"
                               value={ppn}
-                              readOnly
+                              // readOnly
                               placeholder="Rp 0"
                             />
                           </div>
@@ -2062,6 +2103,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                               Tarif PPnBM (%)
                             </label>
                             <input
+                              readOnly
                               type="text"
                               className="p-2 border rounded w-full"
                               value={tarif_ppnbm}
@@ -2074,6 +2116,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                               PPnBM
                             </label>
                             <input
+                              readOnly
                               type="text"
                               className="p-2 border rounded w-full"
                               value={ppnbm}
@@ -2153,7 +2196,11 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                         >
                           <td className="px-1 py-2 border">{index + 1}</td>
                           <td className="px-1 py-2 border">
-                            <input type="checkbox" className="w-4 h-4" />
+                            <input
+                              readOnly
+                              type="checkbox"
+                              className="w-4 h-4"
+                            />
                           </td>
                           <td className="px-1 py-2 border">
                             <button
@@ -2214,20 +2261,37 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                 (window.location.href = `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran?viewAs=${viewAsCompanyId}`)
               }
               className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded"
+              disabled={updateFaktur.isPending}
             >
               Batal
             </button>
             <button
               onClick={(e) => handleSubmit(e, true)}
-              className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded"
+              className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              disabled={updateFaktur.isPending}
             >
-              Simpan Draft
+              {updateFaktur.isPending ? (
+                <>
+                  <ClipLoader color="#ffffff" size={16} />
+                  Menyimpan...
+                </>
+              ) : (
+                "Simpan Draft"
+              )}
             </button>
             <button
               onClick={(e) => handleSubmit(e, false)}
-              className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded"
+              className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              disabled={updateFaktur.isPending}
             >
-              Upload Faktur
+              {updateFaktur.isPending ? (
+                <>
+                  <ClipLoader color="#ffffff" size={16} />
+                  Mengupload...
+                </>
+              ) : (
+                "Upload Faktur"
+              )}
             </button>
           </div>
         </div>
