@@ -17,27 +17,32 @@ export default function Praktikum() {
   const itemsPerPage = 10;
   const [cookies, setCookie] = useCookies(["user"]);
   const navigate = useNavigate();
+  const [url, setUrl] = useState(RoutesApi.admin.assignments.index().url);
 
   const { isLoading, isError, data, error, refetch } = useQuery({
-    queryKey: ["tasks_question"],
+    queryKey: ["tasks_question", url],
     queryFn: async () => {
       const { data } = await axios.get(
-        RoutesApi.admin.assignments.index().url,
+        url,
         {
           headers: {
             Authorization: `Bearer ${cookies.token}`,
+            Accept: "application/json",
           },
           params: {
             intent: IntentEnum.API_GET_ASSIGNMENT_ALL,
           },
         }
       );
-      console.log(data);
       return data.data;
     },
   });
+  useEffect(() => {
+    if (data) {
+      console.log(data);
+    }
+  }, [data]);
 
-  
   const [formData, setFormData] = useState({
     name: "",
   });
@@ -55,19 +60,21 @@ export default function Praktikum() {
 
       if (action === "update" && id) {
         const updateEndpoint = RoutesApi.admin.assignments.update(id);
-        return await axios.put(updateEndpoint.url,
+        return await axios.put(
+          updateEndpoint.url,
           {
-            name: formData.name
+            name: formData.name,
           },
           {
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            "X-CSRF-TOKEN": response.data.token,
-            Authorization: `Bearer ${cookies.token}`,
-          },
-        });
-      } 
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+              "X-CSRF-TOKEN": response.data.token,
+              Authorization: `Bearer ${cookies.token}`,
+            },
+          }
+        );
+      }
     },
     onSuccess: (data, variables) => {
       const { action } = variables;
@@ -183,29 +190,30 @@ export default function Praktikum() {
             </tr>
           </thead>
           <tbody>
-            {data.map((item, index) => (
-              <tr>
-                <td>{index + 1}</td>
-                <td>{item.name}</td>
-                <td>{item.group.teacher}</td>
-                <td>{item.instansi}</td>
-                <td>{item.group.status}</td>
-                <td>
-                  <button
-                    className="action-button edit"
-                    onClick={() => handleEdit(item)}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    className="action-button view"
-                    onClick={() => handleViewMembers(item.id)}
-                  >
-                    Detail
-                  </button>
-                </td>
-              </tr>
-            ))}
+            {data &&
+              data.map((item, index) => (
+                <tr>
+                  <td>{index + 1}</td>
+                  <td>{item.name}</td>
+                  <td>{item.group.teacher}</td>
+                  <td>{item.instansi}</td>
+                  <td>{item.group.status}</td>
+                  <td>
+                    <button
+                      className="action-button edit"
+                      onClick={() => handleEdit(item)}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="action-button view"
+                      onClick={() => handleViewMembers(item.id)}
+                    >
+                      Detail
+                    </button>
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
         <div className="">
