@@ -350,6 +350,78 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
     email: "",
     detail_transaksi: [],
   });
+  const validateFormData = () => {
+    const errors = [];
+
+    // Check required fields in formData
+    if (!formData.kode_transaksi) {
+      errors.push("Kode Transaksi harus dipilih");
+    }
+
+    if (!formData.tanggal_faktur_pajak) {
+      errors.push("Tanggal Faktur Pajak harus diisi");
+    }
+
+    if (!formData.masa_pajak) {
+      errors.push("Masa Pajak harus dipilih");
+    }
+
+    if (!formData.tahun) {
+      errors.push("Tahun harus dipilih");
+    }
+
+    if (!formData.akun_penerima_id) {
+      errors.push("NPWP Pembeli harus dipilih");
+    }
+
+    if (!formData.identification) {
+      errors.push("Jenis Identifikasi harus dipilih");
+    }
+
+    // Check conditional fields based on kode_transaksi
+    if (formData.kode_transaksi === "7" || formData.kode_transaksi === "8") {
+      if (!formData.informasi_tambahan) {
+        errors.push(
+          "Informasi Tambahan harus dipilih untuk kode transaksi ini"
+        );
+      }
+
+      // Check if nomor pendukung is required for specific informasi_tambahan
+      const requiresNomorPendukung = [
+        "1 - untuk Kawasan Bebas",
+        "2 - untuk Tempat Penimbunan Berikat",
+        "8 - untuk Penyerahan jasa kena pajak terkait alat angkutan tertentu",
+        "9 - untuk Penyerahan BKP Tertentu di KEK",
+        "11 - untuk Penyerahan alat angkutan tertentu dan/atau Jasa Kena Pajak terkait alat angkutan tertentu",
+        "12 - untuk Penyerahan kepada Kontraktor Kerja Sama Migas yang mengikuti ketentuan Peraturan Pemerintah Nomor 27 Tahun 2017",
+        "17 - Kawasan Ekonomi Khusus PP nomor 40 Tahun 2021",
+        "18 - Kawasan Bebas PP nomor 41 Tahun 2021",
+        "21 - Penyerahan kepada Kontraktor Kerja Sama Migas yang mengikuti ketentuan Peraturan Pemerintah Nomor 53 Tahun 2017",
+        "25 - BKP dan JKP tertentu",
+        "26 - Penyerahan BKP dan JKP di Ibu Kota Negara baru",
+        "5 - untuk BKP Tertentu yang Bersifat Strategis sesuai PP Nomor 81 Tahun 2015",
+        "8 - Penyerahan BKP tertentu yang bersifat strategis berdasarkan PP 48 Tahun 2020",
+        "9 - Penyerahan kepada Perwakilan Negara Asing dan Badan Internasional serta Pejabatnya",
+        "10 - BKP dan JKP tertentu",
+      ];
+
+      if (
+        requiresNomorPendukung.includes(formData.informasi_tambahan) &&
+        !formData.nomorPendukung
+      ) {
+        errors.push(
+          "Nomor Pendukung harus diisi untuk informasi tambahan yang dipilih"
+        );
+      }
+    }
+
+    // Check if detail_transaksi is not empty
+    if (!formData.detail_transaksi || formData.detail_transaksi.length === 0) {
+      errors.push("Minimal satu detail transaksi harus ditambahkan");
+    }
+
+    return errors;
+  };
 
   const [namaBarang, setNamaBarang] = useState("");
 
@@ -634,6 +706,26 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
   // const [namaBarang, setNamaBarang] = useState("");
   const handleSubmit = (e, isDraft = true) => {
     e.preventDefault();
+    const validationErrors = validateFormData();
+
+    if (validationErrors.length > 0) {
+      // Show validation errors using SweetAlert2
+      Swal.fire({
+        icon: "error",
+        title: "Form Tidak Lengkap",
+        html: `
+        <div style="text-align: left;">
+          <p>Mohon lengkapi field berikut:</p>
+          <ul style="margin: 10px 0; padding-left: 20px;">
+            ${validationErrors.map((error) => `<li>${error}</li>`).join("")}
+          </ul>
+        </div>
+      `,
+        confirmButtonText: "OK",
+        confirmButtonColor: "#3085d6",
+      });
+      return;
+    }
 
     // Validasi apakah ada detail transaksi
 
