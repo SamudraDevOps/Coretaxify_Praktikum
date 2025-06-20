@@ -144,9 +144,11 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
   }
 
   function formatPersen(value) {
-    const numberString = value.replace(/[^0-9]/g, ""); // Hanya angka
-    return numberString ? `${numberString}%` : "";
+    // Hanya angka, tanpa persen
+    return value.replace(/[^0-9]/g, "");
   }
+
+
 
   const handleHargaChange = (e) => {
     const rawValue = e.target.value;
@@ -276,13 +278,24 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
     const formattedTarif = formatPersen(e.target.value);
     setTarifPPnBM(formattedTarif);
 
-    // Hitung ulang PPnBM jika PPnBM tidak diedit manual
-    if (!isCustomPPnBM) {
-      const numericJumlah = parseInt(jumlah.replace(/\D/g, ""), 10) || 0;
-      const numericPPnBM = parseInt(formattedTarif.replace(/\D/g, ""), 10) || 0;
-      setPPnBM((numericJumlah * numericPPnBM) / 100);
+    const numericJumlah = parseInt(jumlah.replace(/\D/g, ""), 10) || 0;
+    const numericPPnBM = parseInt(formattedTarif, 10) || 0;
+
+    // Jika input kosong, reset custom flag dan set PPnBM ke 0
+    if (formattedTarif === "") {
+      setIsCustomPPnBM(false);
+      setPPnBM("0");
+      return;
+    }
+
+    // Jika user mengetik angka baru setelah menghapus, hitung otomatis
+    if (!isCustomPPnBM || formattedTarif !== "") {
+      setPPnBM(((numericJumlah * numericPPnBM) / 100).toString());
     }
   };
+
+
+
 
   const handlePPnBMChange = (e) => {
     setIsCustomPPnBM(true); // Tandai bahwa user mengedit manual
@@ -322,7 +335,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
     setJumlah("Rp 0");
     setTarifPPN("Rp 0");
     setTarifPPnBM("");
-    setPPnBM("Rp 0");
+    setPPnBM("");
     setIsChecked(false);
   };
 
@@ -478,15 +491,15 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
     setNamaBarang("");
     setSelectedKode("");
     setSelectedSatuan("");
-    setHarga("Rp 0");
+    setHarga("");
     setKuantitas(0);
     setTotalHarga("Rp 0");
-    setPotonganHarga("Rp 0");
+    setPotonganHarga("");
     setDPP("Rp 0");
     setJumlah("Rp 0");
     setTarifPPN("Rp 0");
     setTarifPPnBM("");
-    setPPnBM("Rp 0");
+    setPPnBM("");
     setIsChecked(false);
     setIsCustomPPnBM(false);
     setEditMode(false);
@@ -540,15 +553,15 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
     setNamaBarang("");
     setSelectedKode("");
     setSelectedSatuan("");
-    setHarga("Rp 0");
+    setHarga("");
     setKuantitas(0);
     setTotalHarga("Rp 0");
-    setPotonganHarga("Rp 0");
+    setPotonganHarga("");
     setDPP("Rp 0");
     setJumlah("Rp 0");
     setTarifPPN("Rp 0");
     setTarifPPnBM("");
-    setPPnBM("Rp 0");
+    setPPnBM("");
     setIsChecked(false);
     setIsCustomPPnBM(false);
   };
@@ -669,7 +682,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
       setJumlah("Rp 0");
       setTarifPPN("Rp 0");
       setTarifPPnBM("");
-      setPPnBM("Rp 0");
+      setPPnBM("");
       setIsChecked(false);
     };
 
@@ -733,15 +746,15 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
       setNamaBarang("");
       setSelectedKode("");
       setSelectedSatuan("");
-      setHarga("Rp 0");
+      setHarga("");
       setKuantitas(0);
       setTotalHarga("Rp 0");
-      setPotonganHarga("Rp 0");
+      setPotonganHarga("");
       setDPP("Rp 0");
       setJumlah("Rp 0");
       setTarifPPN("Rp 0");
       setTarifPPnBM("");
-      setPPnBM("Rp 0");
+      setPPnBM("");
       setIsChecked(false);
       setIsCustomPPnBM(false);
     };
@@ -1987,10 +2000,13 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                             <label className="block text-sm font-medium">
                               Tarif PPN
                             </label>
-                            <input
-                              type="text"
-                              className="p-2 border rounded w-full bg-gray-100"
+                            <NumericFormat
                               value={ppn}
+                              displayType="input"
+                              thousandSeparator="."
+                              decimalSeparator=","
+                              prefix="Rp "
+                              className="p-2 border rounded w-full bg-gray-100"
                               readOnly
                               placeholder="Rp 0"
                             />
@@ -2006,6 +2022,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                               onChange={handleTarifPPnBMChange}
                               placeholder="Masukkan persen"
                             />
+
                           </div>
                           <div className="space-y-2">
                             <label className="block text-sm font-medium">
