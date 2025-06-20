@@ -85,19 +85,43 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
     satuan: "https://api.coretaxify.com/api/satuan",
   };
 
+  // const fetchKodeByJenis = async (jenis) => {
+  //   try {
+  //     // Fetch kode transaksi
+  //     const kodeRes = await axios.get(RoutesApi.kodeTransaksi, {
+  //       params: { jenis },
+  //     });
+  //     setListKode(kodeRes.data.data);
+
+  //     // Fetch satuan
+  //     const satuanRes = await axios.get(RoutesApi.satuan, {
+  //       params: { jenis },
+  //     });
+  //     setListSatuan(satuanRes.data.data);
+  //   } catch (err) {
+  //     console.error("Gagal fetch data:", err);
+  //   }
+  // };
   const fetchKodeByJenis = async (jenis) => {
     try {
-      // Fetch kode transaksi
-      const kodeRes = await axios.get(RoutesApi.kodeTransaksi, {
-        params: { jenis },
-      });
-      setListKode(kodeRes.data.data);
+      // Use your existing backend API pattern
+      const [kodeRes, satuanRes] = await Promise.all([
+        axios.get(`${RoutesApiReal.apiUrl}kode-transaksi`, {
+          headers: {
+            Authorization: `Bearer ${cookies.token}`,
+          },
+          params: { jenis },
+        }),
+        axios.get(`${RoutesApiReal.apiUrl}satuan`, {
+          headers: {
+            Authorization: `Bearer ${cookies.token}`,
+          },
+          params: { jenis },
+        }),
+      ]);
 
-      // Fetch satuan
-      const satuanRes = await axios.get(RoutesApi.satuan, {
-        params: { jenis },
-      });
-      setListSatuan(satuanRes.data.data);
+      setListKode(kodeRes.data.data || []);
+      setListSatuan(satuanRes.data.data || []);
     } catch (err) {
       console.error("Gagal fetch data:", err);
     }
@@ -1116,7 +1140,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
         />
         <div className="flex-grow p-6 bg-white h-full overflow-y-auto">
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-            Tambah Data
+            Edit Data
           </h2>
           <div
             className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 "

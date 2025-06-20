@@ -848,7 +848,7 @@ const Main = () => {
               <RoleBasedRenderer
                 url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun`}
                 intent={"api.get.sistem.edit.informasi.umum"}
-                OrangPribadi={TambahFakturKeluaranOP}
+                OrangPribadi={EditFakturKeluaran}
                 Badan={EditFakturKeluaran}
                 query={"edit-info"}
               ></RoleBasedRenderer>
