@@ -391,8 +391,18 @@ const BUPOTForm = ({
     });
   };
 
+   // Add this debug log
+  console.log("BUPOTForm received isLoading:", isLoading);
+
   // Handle edit form submission
   const handleEditSubmit = (action = "save") => {
+    console.log("BUPOTForm handleSubmit called, isLoading:", isLoading);
+    
+    if (isLoading) {
+      console.log("BUPOTForm: Submission blocked due to loading state");
+      return;
+    }
+
     if (onSubmit) {
       onSubmit(formData, action);
     }
@@ -401,6 +411,13 @@ const BUPOTForm = ({
 
   // Handle submitting the form
   const handleSubmit = (action) => {
+    console.log("BUPOTForm handleSubmit called, isLoading:", isLoading);
+    
+    if (isLoading) {
+      console.log("BUPOTForm: Submission blocked due to loading state");
+      return;
+    }
+
     if (action === "save") {
       const updatedFormData = {
         ...formData,
@@ -3493,16 +3510,18 @@ const BUPOTForm = ({
               <button
                 className="bg-blue-500 text-white px-4 py-2 rounded-md mr-2"
                 onClick={() => handleSubmit("save")}
+                disabled={isLoading}
               >
-                Simpan
+                {isLoading ? "Menyimpan..." : "Simpan"}
               </button>
               <button
                 className="bg-blue-500 text-white px-4 py-2 rounded-md mr-2"
+                disabled={isLoading}
                 onClick={() => {
                   handleSubmit("draft");
                 }}
               >
-                Simpan Draft
+                {isLoading ? "Menyimpan..." : "Simpan Draft"}
               </button>
             </>
           )}

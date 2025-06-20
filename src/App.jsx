@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import "./App.css";
+import EditProfile from "./components/Dashboard/EditProfile/editProfile";
 import SidebarAdmin from "./components/Dashboard/Admin/SidebarAdmin/SidebarAdmin";
 import Login from "./components/Dashboard/Auth/Login/Login";
 import Register from "./components/Dashboard/Auth/Register/Register";
@@ -246,6 +247,15 @@ const Main = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/confirm-otp" element={<ConfirmOTP />} />
+
+        <Route
+          element={
+            <RoleProtectedRoutes allowedRoles={["dosen", "admin", "psc", "mahasiswa", "instruktur", "mahasiswa-psc"]} layout="admin" />
+          }
+        >
+          <Route path="/edit-profile" element={<EditProfile />} />
+        </Route>
+
         {/* ADMIN ROUTE */}
         <Route
           element={

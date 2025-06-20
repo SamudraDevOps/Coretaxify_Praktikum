@@ -7,6 +7,7 @@ import { RoutesApi } from "@/Routes";
 import Header from "@/components/Header/Header";
 import BUPOTForm from "./shared/BUPOTForm";
 import Swal from "sweetalert2";
+import { useNavigateWithParams } from "@/hooks/useNavigateWithParams";
 
 // Form configurations for different BUPOT types
 const formConfigs = {
@@ -68,14 +69,16 @@ const formConfigs = {
 
 const BUPOTCreateWrapper = (props) => {
   const { id, akun, type } = useParams();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
+  const navigate = useNavigateWithParams();
   const [cookies] = useCookies(["token"]);
 
   // Get form config for this BUPOT type
   const config = formConfigs[type] || {};
 
   // Mutation for submitting the form
-  const { mutate, isLoading } = useMutation({
+  // const { mutate, isLoading } = useMutation({
+  const mutation = useMutation({
     mutationFn: async (data) => {
       const response = await axios.get(`${RoutesApi.url}api/csrf-token`, {
         // withCredentials: true,
@@ -102,6 +105,7 @@ const BUPOTCreateWrapper = (props) => {
       );
     },
     onSuccess: () => {
+      Swal.fire("Berhasil!", "BUPOT berhasil dibuat!", "success");
       // Redirect back to the list page on success
       navigate(`/praktikum/${id}/sistem/${akun}/bupot/${type}`);
     },
@@ -115,8 +119,17 @@ const BUPOTCreateWrapper = (props) => {
     },
   });
 
+  // Get the correct loading state - try both properties
+  const isLoading = mutation.isLoading || mutation.isPending || false;
+
   // Handle form submission
   const handleSubmit = (formData, action) => {
+    // Prevent double submission
+    if (isLoading) {
+      console.log("Submission blocked due to loading state");
+      return;
+    }
+
     if (action === "cancel") {
       navigate(`/praktikum/${id}/sistem/${akun}/bupot/${type}`);
       return;
@@ -127,7 +140,7 @@ const BUPOTCreateWrapper = (props) => {
       ...formData
     };
 
-    mutate(submitData);
+    mutation.mutate(submitData);
   };
 
   return (
@@ -140,6 +153,7 @@ const BUPOTCreateWrapper = (props) => {
         sections={config.sections}
         onSubmit={handleSubmit}
         initialData={props.data?.formData || {}} // Use data from RoleBasedRenderer if available
+        isLoading={isLoading} // Pass the loading state
       />
     </>
   );

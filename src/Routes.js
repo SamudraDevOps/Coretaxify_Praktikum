@@ -5,10 +5,10 @@ import { IntentEnum } from "./enums/IntentEnum";
 // const url = "http://127.0.0.1:8000/";
 // const apiUrl = "http://127.0.0.1:8000/api/";
 
-// const url = "https://api.coretaxify.com/";
-// const apiUrl = "https://api.coretaxify.com/api/";
-const url = "http://127.0.0.1:8000/";
-const apiUrl = "http://127.0.0.1:8000/api/";
+const url = "https://api.coretaxify.com/";
+const apiUrl = "https://api.coretaxify.com/api/";
+// const url = "http://127.0.0.1:8000/";
+// const apiUrl = "http://127.0.0.1:8000/api/";
 const role = {
   admin: "admin",
   student: "student",
@@ -86,6 +86,7 @@ export const RoutesApi = {
   // admin
   admin: {
     users: apiResource(apiUrl + `${role.admin}`, "users"),
+    assignments: apiResource(apiUrl + `${role.admin}`, "assignments"),
     accounts: apiResource(apiUrl + `${role.admin}`, "accounts"),
     groups: apiResource(apiUrl + `${role.admin}`, "groups"),
     roles: apiResource(apiUrl + `${role.admin}`, "roles"),
