@@ -1786,7 +1786,7 @@ const BUPOTForm = ({
                     type="number"
                     className="w-64 flex-auto border p-2 rounded"
                     placeholder="Tarif (%)"
-                    value={formData.tarif_pajak || ""}
+                    value={formData.tarif_pajak ?? ""}
                     onChange={(e) => {
                       updateFormData("tarif_pajak", e.target.value);
                     }}
@@ -2232,7 +2232,7 @@ const BUPOTForm = ({
                     type="number"
                     className="w-64 flex-auto border p-2 rounded"
                     placeholder="Tax Rate (%)"
-                    value={formData.tarif_pajak || ""}
+                    value={formData.tarif_pajak ?? ""}
                     onChange={(e) => {
                       updateFormData("tarif_pajak", e.target.value);
                     }}
@@ -3294,7 +3294,7 @@ const BUPOTForm = ({
                     type="number"
                     className="w-64 flex-auto border p-2 rounded"
                     placeholder="Tax Rate (%)"
-                    value={formData.tarif_pajak || ""}
+                    value={formData.tarif_pajak ?? ""}
                     onChange={(e) => {
                       updateFormData("tarif_pajak", e.target.value);
                     }}
