@@ -936,9 +936,9 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
     // Tambahkan total ke formData
     const finalFormData = {
       ...formData,
-      dpp: totalDPP,
-      ppn: totalPPN,
-      ppnbm: totalPPnBM,
+      dpp: Number(totalDPP),
+      ppn: Number(totalPPN),
+      ppnbm: Number(totalPPnBM),
       informasi_tambahan: informasi_tambahan,
       cap_fasilitas: cap_fasilitas,
       akun_penerima_id:
@@ -2503,7 +2503,7 @@ ${isChecked ? "" : "bg-gray-100"}
                                           placeholder="Masukkan persen"
                                         />
                                       </div>
-                                      <div className="space-y-2">
+                                      {/* <div className="space-y-2">
                                         <label className="block text-sm font-medium">
                                           PPnBM
                                         </label>
@@ -2531,6 +2531,45 @@ ${isChecked ? "" : "bg-gray-100"}
                                                   100
                                                 ).toString()
                                               );
+                                            }
+                                          }}
+                                          thousandSeparator="."
+                                          decimalSeparator=","
+                                          prefix="Rp "
+                                          className="p-2 border rounded w-full"
+                                          placeholder="Rp 0"
+                                          allowNegative={false}
+                                        />
+                                      </div> */}
+                                      <div className="space-y-2">
+                                        <label className="block text-sm font-medium">
+                                          PPnBM
+                                        </label>
+                                        <NumericFormat
+                                          value={ppnbm}
+                                          onValueChange={({ value }) => {
+                                            setIsCustomPPnBM(true);
+                                            // Convert to number before setting
+                                            const numericValue =
+                                              parseFloat(value) || 0;
+                                            setPPnBM(numericValue);
+
+                                            if (value === "" || value === "0") {
+                                              setIsCustomPPnBM(false);
+                                              const numericJumlah =
+                                                parseFloat(jumlah) || 0;
+                                              const numericPPnBM =
+                                                parseInt(
+                                                  tarif_ppnbm.replace(
+                                                    /\D/g,
+                                                    ""
+                                                  ),
+                                                  10
+                                                ) || 0;
+                                              const calculatedPPnBM =
+                                                (numericJumlah * numericPPnBM) /
+                                                100;
+                                              setPPnBM(calculatedPPnBM);
                                             }
                                           }}
                                           thousandSeparator="."
