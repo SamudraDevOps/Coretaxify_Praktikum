@@ -354,15 +354,34 @@ const BUPOTForm = ({
     }));
   };
 
+  // Helper for negara and paspor
+  const [tempData, setTempData] = useState({});
+
+  const updateTempData = (field, value) => {
+    setTempData(prev =>({
+      ...prev,
+      [field]: value
+    }));
+  };
+
   const updatePegawaiAsing = (value) => {
+    updateTempData("nomor_paspor_akun", formData.nomor_paspor_akun || "");
+    updateTempData("negara_akun", formData.negara_akun || "");
+    
     setFormData(prev => {
       const newData = { ...prev };
       newData.pegawai_asing = value;
-      if (newData.negara_akun && newData.nomor_paspor_akun) {
-        delete newData.negara_akun;
-        delete newData.nomor_paspor_akun;
+
+
+      if (value === "0") {
+        newData.nomor_paspor_akun = "";
+        newData.negara_akun = "";
+        return newData;
+      } else if (value === "1") {
+        newData.nomor_paspor_akun = tempData.nomor_paspor_akun || "";
+        newData.negara_akun = tempData.negara_akun || "";
+        return newData;
       }
-      return newData;
     });
   };
 
@@ -900,7 +919,7 @@ const BUPOTForm = ({
                       </label>
                       <select
                         className="w-64 flex-auto border p-2 rounded appearance-none"
-                        value={formData.pegawai_asing || ""}
+                        value={String(formData.pegawai_asing) || ""}
                         onChange={(e) =>
                           updatePegawaiAsing(e.target.value)
                         }
@@ -1022,7 +1041,7 @@ const BUPOTForm = ({
                       className="w-64 flex-auto border p-2 rounded"
                       placeholder="Nomor Paspor"
                       value={
-                        formData.pegawai_asing === "1"
+                        String(formData.pegawai_asing) === "1"
                           ? formData.nomor_paspor_akun || ""
                           : ""
                       }
@@ -1030,7 +1049,7 @@ const BUPOTForm = ({
                         updateFormData("nomor_paspor_akun", e.target.value);
                       }}
                       readOnly={
-                        formData.pegawai_asing === "1" ? false : true
+                        String(formData.pegawai_asing) === "1" ? false : true
                       }
                     />
                   </div>
@@ -1047,7 +1066,7 @@ const BUPOTForm = ({
                     <select
                       className="w-64 flex-auto border p-2 rounded appearance-none"
                       value={
-                        formData.pegawai_asing === "1"
+                        String(formData.pegawai_asing) === "1"
                           ? formData.negara_akun || ""
                           : ""
                       }
@@ -1056,7 +1075,7 @@ const BUPOTForm = ({
                       }
                       placehoder="Please Select"
                       disabled={
-                        formData.pegawai_asing === "1" ? false : true
+                        String(formData.pegawai_asing) === "1" ? false : true
                       }
                     >
                       <option value="">Please Select</option>
