@@ -566,6 +566,9 @@ const BUPOTForm = ({
         const bp21Calculation = Math.round(
           bp21Ps17Calculation(bp21Tarif, bp21EffectiveIncome)
         );
+        console.log('tarif bp 21: ', bp21Tarif);
+        console.log('effective income: ', bp21EffectiveIncome);
+        console.log('hasil bp 21: ', bp21Calculation)
         // const bp21Calculation = bp21EffectiveIncome * (bp21Tarif / 100);
         updateMultipleFields({
           tarif_pajak: bp21Tarif,
@@ -703,7 +706,9 @@ const BUPOTForm = ({
 
   // Helper BP21 calculation
   const bp21Ps17Calculation = (tarif, effectiveIncome) => {
-    if (
+    if (formData.fasilitas_pajak === "fasilitas_lainnya") {
+      return effectiveIncome * (tarif / 100);
+    } else if (
       formData.kode_objek_pajak === "21-100-35" ||
       formData.kode_objek_pajak === "21-100-10" ||
       formData.kode_objek_pajak === "21-100-27" ||
@@ -1790,7 +1795,11 @@ const BUPOTForm = ({
                           e.target.value
                         );
                       }}
-                      readOnly={true}
+                      readOnly={
+                        formData.fasilitas_pajak === "fasilitas_lainnya"
+                          ? false
+                          : true
+                      }
                     />
                   </div>
                 )}
@@ -2255,7 +2264,11 @@ const BUPOTForm = ({
                     onChange={(e) => {
                       updateFormData("tarif_pajak", e.target.value);
                     }}
-                    readOnly={true}
+                    readOnly={
+                      formData.fasilitas_pajak === "fasilitas_lainnya"
+                        ? false
+                        : true
+                    }
                   />
                 </div>
 
@@ -3317,7 +3330,11 @@ const BUPOTForm = ({
                     onChange={(e) => {
                       updateFormData("tarif_pajak", e.target.value);
                     }}
-                    readOnly={true}
+                    readOnly={
+                      formData.fasilitas_pajak === "fasilitas_lainnya"
+                        ? false
+                        : true
+                    }
                   />
                 </div>
 
