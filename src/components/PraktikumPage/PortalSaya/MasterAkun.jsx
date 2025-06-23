@@ -36,10 +36,12 @@ export default function MasterAkun({
   const [cookies] = useCookies(["token"]);
   const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
   const [formData, setFormData] = useState({
-    nama: "",
-    nik_npwp: "",
-    alamat: "",
-    email: "",
+    nama_akun: "",
+    tipe_akun: "",
+    npwp_akun: "",
+    alamat_utama_akun: "",
+    email_akun: "",
+    negara_asal: "",
   });
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -55,10 +57,11 @@ export default function MasterAkun({
   // Reset form data
   const resetForm = () => {
     setFormData({
-      nama: "",
+      nama_akun: "",
       nik_npwp: "",
       alamat: "",
       email: "",
+      negara_asal: "",
     });
   };
 
@@ -67,36 +70,37 @@ export default function MasterAkun({
   //   data,
   const navigate = useNavigateWithParams();
 
-  //   const deleteFaktur = useMutation({
-  //     mutationFn: async (fakturId) => {
-  //       const csrf = await getCsrf();
-  //       return axios.delete(
-  //         `${RoutesApi.apiUrl}student/assignments/${id}/sistem/${accountId}/faktur/${fakturId}`,
-  //         {
-  //           headers: {
-  //             "Content-Type": "application/json",
-  //             Accept: "application/json",
-  //             "X-CSRF-TOKEN": csrf,
-  //             Authorization: `Bearer ${cookies.token}`,
-  //           },
-  //         }
-  //       );
-  //     },
-  //     onSuccess: (data) => {
-  //       console.log(data);
-  //       Swal.fire("Berhasil!", "Faktur berhasil dihapus", "success").then(
-  //         (result) => {
-  //           if (result.isConfirmed) {
-  //             window.location.reload();
-  //           }
-  //         }
-  //       );
-  //     },
-  //     onError: (error) => {
-  //       console.error("Error deleting data:", error);
-  //       Swal.fire("Gagal!", "Terjadi kesalahan saat menghapus data.", "error");
-  //     },
-  //   });
+  const createMasterAkun = useMutation({
+    mutationFn: async () => {
+      const csrf = await getCsrf();
+      return axios.post(
+        `${RoutesApi.apiUrl}student/assignments/${id}/sistem/${accountId}/sistem-tambahan`,
+        { ...formData },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": csrf,
+            Authorization: `Bearer ${cookies.token}`,
+          },
+        }
+      );
+    },
+    onSuccess: (data) => {
+      console.log(data);
+      Swal.fire("Berhasil!", "Master Akun berhasil dibuat", "success").then(
+        (result) => {
+          if (result.isConfirmed) {
+            window.location.reload();
+          }
+        }
+      );
+    },
+    onError: (error) => {
+      console.error("Error Creating data:", error);
+      Swal.fire("Gagal!", "Terjadi kesalahan saat membuat data.", "error");
+    },
+  });
 
   //   const approveMultipleFaktur = useMutation({
   //     mutationFn: async () => {
@@ -281,11 +285,11 @@ export default function MasterAkun({
 
                 <div className="grid gap-4 py-4">
                   <div className="grid gap-2">
-                    <label htmlFor="nama">Nama</label>
+                    <label htmlFor="nama_akun">Nama Akun</label>
                     <input
-                      id="nama"
-                      name="nama"
-                      value={formData.nama}
+                      id="nama_akun"
+                      name="nama_akun"
+                      value={formData.nama_akun}
                       onChange={handleInputChange}
                       placeholder="Masukkan nama"
                       className="w-full"
@@ -293,40 +297,64 @@ export default function MasterAkun({
                   </div>
 
                   <div className="grid gap-2">
-                    <label htmlFor="nik_npwp">NIK/NPWP</label>
+                    <label htmlFor="npwp_akun">NIK/NPWP</label>
                     <input
-                      id="nik_npwp"
-                      name="nik_npwp"
-                      value={formData.nik_npwp}
+                      id="npwp_akun"
+                      name="npwp_akun"
+                      value={formData.npwp_akun}
                       onChange={handleInputChange}
                       placeholder="Masukkan NIK/NPWP"
                       className="w-full"
                     />
                   </div>
 
-                  <div className="grid gap-2">
-                    <label htmlFor="alamat">Alamat</label>
-                    <textarea
-                      id="alamat"
-                      name="alamat"
-                      value={formData.alamat}
+                  <div classname="grid gap-2">
+                    <label htmlfor="alamat_utama_akun">Alamat : </label>
+                    <input
+                      id="alamat_utama_akun"
+                      name="alamat_utama_akun"
+                      value={formData.alamat_utama_akun}
                       onChange={handleInputChange}
-                      placeholder="Masukkan alamat"
-                      className="w-full min-h-[80px]"
+                      placeholder="masukkan alamat"
+                      classname="w-full min-h-[80px]"
                     />
+                  </div>
+                  <div classname="grid gap-2">
+                    <label htmlfor="tipe_akun">Tipe Akun : </label>
+                    <select
+                      name="tipe_akun"
+                      id=""
+                      value={formData.tipe_akun}
+                      onChange={handleInputChange}
+                    >
+                      <option value="Orang Pribadi">Orang Pribadi</option>
+                      <option value="Badan">Badan</option>
+                    </select>
                   </div>
 
                   <div className="grid gap-2">
-                    <label htmlFor="email">Email</label>
+                    <label htmlFor="email_akun">Email</label>
                     <input
-                      id="email"
-                      name="email"
-                      type="email"
-                      value={formData.email}
+                      id="email_akun"
+                      name="email_akun"
+                      type="email_akun"
+                      value={formData.email_akun}
                       onChange={handleInputChange}
-                      placeholder="Masukkan email"
+                      placeholder="Masukkan Email"
                       className="w-full"
                     />
+                    <div className="grid gap-2">
+                      <label htmlFor="negara_asal">Negara Asal</label>
+                      <input
+                        id="negara_asal"
+                        name="negara_asal"
+                        // type=""
+                        value={formData.negara_asal}
+                        onChange={handleInputChange}
+                        placeholder="Masukkan Negara Asal"
+                        className="w-full"
+                      />
+                    </div>{" "}
                   </div>
                 </div>
 
@@ -340,11 +368,11 @@ export default function MasterAkun({
                     Batal
                   </AlertDialogCancel>
                   <AlertDialogAction
-                    // onClick={handleSubmit}
-                    // disabled={createAccount.isLoading}
-                    className="bg-blue-900 hover:bg-blue-950"
+                    onClick={() => createMasterAkun.mutate()}
+                    disabled={createMasterAkun.isLoading}
+                    className="bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-4 rounded"
                   >
-                    {/* {createAccount.isLoading ? "Menyimpan..." : "Simpan"} */}
+                    {createMasterAkun.isLoading ? "Menyimpan..." : "Simpan"}
                   </AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
@@ -373,10 +401,13 @@ export default function MasterAkun({
             <thead className="bg-gray-200">
               <tr>
                 <th className="px-6 py-2 border">No</th>
+                <th className="px-6 py-2 border">Aksi</th>
                 <th className="px-8 py-2 border">Nama Akun</th>
-                <th className="px-4 py-2 border">NIK</th>
                 <th className="px-4 py-2 border">NPWP</th>
                 <th className="px-4 py-2 border">Alamat</th>
+                <th className="px-4 py-2 border">Tipe Akun</th>
+                <th className="px-4 py-2 border">Email Akun</th>
+                <th className="px-4 py-2 border">Negara Asal</th>
               </tr>
             </thead>
             <tbody className="text-gray-600">
@@ -384,14 +415,14 @@ export default function MasterAkun({
                 data.map((item, index) => (
                   <tr key={index}>
                     <td className="px-6 py-2 border">{index + 1}</td>
-                    <td className="px-8 py-2 border">
+                    {/* <td className="px-8 py-2 border">
                       <input
                         type="checkbox"
                         className="form-checkbox h-5 w-5"
                         checked={selectedFakturIds.includes(item.id)}
                         onChange={() => handleCheckboxChange(item.id)}
                       />
-                    </td>
+                    </td> */}
                     <td className="px-4 py-2 border">
                       <div className="flex space-x-2">
                         {/* <a
@@ -417,46 +448,22 @@ export default function MasterAkun({
                       </div>
                     </td>
                     <td className="px-4 py-2 border">
-                      {item.akun_penerima_id.npwp_akun || "-"}
+                      {item.nama_akun || "-"}
                     </td>
                     <td className="px-4 py-2 border">
-                      {item.akun_penerima_id.nama_akun || "-"}
+                      {item.npwp_akun || "-"}
                     </td>
                     <td className="px-4 py-2 border">
-                      {item.kode_transaksi || "-"}
+                      {item.alamat_utama_akun || "-"}
                     </td>
                     <td className="px-4 py-2 border">
-                      {item.nomor_faktur_pajak || "-"}
+                      {item.tipe_akun || "-"}
                     </td>
                     <td className="px-4 py-2 border">
-                      {item.tanggal_faktur_pajak || "-"}
+                      {item.email_akun || "-"}
                     </td>
                     <td className="px-4 py-2 border">
-                      {item.masa_pajak || "-"}
-                    </td>
-                    <td className="px-4 py-2 border">{item.tahun || "-"}</td>
-                    <td className="px-4 py-2 border">{item.status || "-"}</td>
-                    <td className="px-4 py-2 border">
-                      {item.esign_status || "-"}
-                    </td>
-                    <td className="px-4 py-2 border">{item.dpp || "-"}</td>
-                    <td className="px-4 py-2 border">{item.dpp_lain || "-"}</td>
-                    <td className="px-4 py-2 border">{item.ppn || "-"}</td>
-                    <td className="px-4 py-2 border">{item.ppnbm || "-"}</td>
-                    {/* <td className="px-4 py-2 border">
-                      {item.ppnbm_nilai || "-"}
-                    </td> */}
-                    <td className="px-4 py-2 border">
-                      {item.penandatangan || "-"}
-                    </td>
-                    <td className="px-4 py-2 border">
-                      {item.referensi || "-"}
-                    </td>
-                    <td className="px-4 py-2 border">
-                      {item.dilaporkan_penjual == 1 ? "Ya" : "Tidak"}
-                    </td>
-                    <td className="px-4 py-2 border">
-                      {item.dilaporkan_pemungut == 1 ? "Ya" : "Tidak"}
+                      {item.negara_asal || "-"}
                     </td>
                   </tr>
                 ))
