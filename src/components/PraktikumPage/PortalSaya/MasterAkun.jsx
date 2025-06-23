@@ -43,6 +43,22 @@ export default function MasterAkun({
     email_akun: "",
     negara_asal: "",
   });
+  const [editFormData, setEditFormData] = useState({
+    nama_akun: "",
+    tipe_akun: "",
+    npwp_akun: "",
+    alamat_utama_akun: "",
+    email_akun: "",
+    negara_asal: "",
+  });
+  const handleEditInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   // Handle form input changes
@@ -69,6 +85,50 @@ export default function MasterAkun({
   //   `${RoutesApiReal.url}api/student/assignments/${id}/sistem/${accountId}/faktur`,
   //   data,
   const navigate = useNavigateWithParams();
+  // Add this mutation after the createMasterAkun mutation
+  const updateMasterAkun = useMutation({
+    mutationFn: async ({ masterAkunId, data }) => {
+      const csrf = await getCsrf();
+      return axios.put(
+        `${RoutesApi.apiUrl}student/assignments/${id}/sistem/${accountId}/sistem-tambahan/${masterAkunId}`,
+        data,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": csrf,
+            Authorization: `Bearer ${cookies.token}`,
+          },
+        }
+      );
+    },
+    onSuccess: (data) => {
+      console.log(data);
+      Swal.fire("Berhasil!", "Master Akun berhasil diupdate", "success").then(
+        (result) => {
+          if (result.isConfirmed) {
+            window.location.reload();
+          }
+        }
+      );
+    },
+    onError: (error) => {
+      console.error("Error updating data:", error);
+      Swal.fire("Gagal!", "Terjadi kesalahan saat mengupdate data.", "error");
+    },
+  });
+
+  // Add this function to populate edit form with current item data
+  const populateEditForm = (item) => {
+    setEditFormData({
+      nama_akun: item.nama_akun || "",
+      tipe_akun: item.tipe_akun || "",
+      npwp_akun: item.npwp_akun || "",
+      alamat_utama_akun: item.alamat_utama_akun || "",
+      email_akun: item.email_akun || "",
+      negara_asal: item.negara_asal || "",
+    });
+  };
 
   const createMasterAkun = useMutation({
     mutationFn: async () => {
@@ -99,6 +159,49 @@ export default function MasterAkun({
     onError: (error) => {
       console.error("Error Creating data:", error);
       Swal.fire("Gagal!", "Terjadi kesalahan saat membuat data.", "error");
+    },
+  });
+  const deleteMasterAkun = useMutation({
+    mutationFn: async ({ idMaster }) => {
+      const csrf = await getCsrf();
+      const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
+      return axios.delete(
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${accountId}/sistem-tambahan/${idMaster}/`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": csrf,
+            Authorization: `Bearer ${cookies.token}`,
+          },
+          // params: {
+          //   intent: isDraft
+          //     ? "api.create.faktur.draft"
+          //     : "api.create.faktur.fix",
+          // },
+        }
+      );
+    },
+    onSuccess: (data, variables) => {
+      // console.log(data);
+      // const successMessage = variables.isDraft
+      //   ? "Draft Faktur berhasil dibuat"
+      //   : "Faktur berhasil diupload";
+
+      Swal.fire(
+        "Berhasil!",
+        "Detail Transaksi berhasil dihapus",
+        "success"
+      ).then((result) => {
+        if (result.isConfirmed) {
+          window.location.reload();
+          // window.location.href = `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran?viewAs=${viewAsCompanyId}`;
+        }
+      });
+    },
+    onError: (error) => {
+      console.error("Error saving data:", error);
+      Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
     },
   });
 
@@ -428,7 +531,7 @@ export default function MasterAkun({
                         {/* <a
                           href={`/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran/edit-faktur-keluaran/${item.id}`}
                         > */}
-                        <button
+                        {/* <button
                           onClick={() =>
                             navigate(
                               `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran/edit-faktur-keluaran/${item.id}`
@@ -437,10 +540,138 @@ export default function MasterAkun({
                           className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs"
                         >
                           Edit
-                        </button>
+                        </button> */}
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <button
+                              onClick={() => populateEditForm(item)}
+                              className="bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded text-sm"
+                            >
+                              Edit
+                            </button>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent className="max-w-md">
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>
+                                Edit Master Akun
+                              </AlertDialogTitle>
+                              <AlertDialogDescription>
+                                Ubah data akun yang sudah ada.
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+
+                            <div className="grid gap-4 py-4">
+                              <div className="grid gap-2">
+                                <label htmlFor="edit_nama_akun">
+                                  Nama Akun
+                                </label>
+                                <input
+                                  id="edit_nama_akun"
+                                  name="nama_akun"
+                                  value={editFormData.nama_akun}
+                                  onChange={handleEditInputChange}
+                                  placeholder="Masukkan nama"
+                                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                                />
+                              </div>
+
+                              <div className="grid gap-2">
+                                <label htmlFor="edit_npwp_akun">NIK/NPWP</label>
+                                <input
+                                  id="edit_npwp_akun"
+                                  name="npwp_akun"
+                                  value={editFormData.npwp_akun}
+                                  onChange={handleEditInputChange}
+                                  placeholder="Masukkan NIK/NPWP"
+                                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                                />
+                              </div>
+
+                              <div className="grid gap-2">
+                                <label htmlFor="edit_alamat_utama_akun">
+                                  Alamat
+                                </label>
+                                <input
+                                  id="edit_alamat_utama_akun"
+                                  name="alamat_utama_akun"
+                                  value={editFormData.alamat_utama_akun}
+                                  onChange={handleEditInputChange}
+                                  placeholder="Masukkan alamat"
+                                  className="w-full px-3 py-2 border border-gray-300 rounded-md min-h-[80px]"
+                                />
+                              </div>
+
+                              <div className="grid gap-2">
+                                <label htmlFor="edit_tipe_akun">
+                                  Tipe Akun
+                                </label>
+                                <select
+                                  name="tipe_akun"
+                                  id="edit_tipe_akun"
+                                  value={editFormData.tipe_akun}
+                                  onChange={handleEditInputChange}
+                                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                                >
+                                  <option value="">Pilih Tipe Akun</option>
+                                  <option value="Orang Pribadi">
+                                    Orang Pribadi
+                                  </option>
+                                  <option value="Badan">Badan</option>
+                                </select>
+                              </div>
+
+                              <div className="grid gap-2">
+                                <label htmlFor="edit_email_akun">Email</label>
+                                <input
+                                  id="edit_email_akun"
+                                  name="email_akun"
+                                  type="email"
+                                  value={editFormData.email_akun}
+                                  onChange={handleEditInputChange}
+                                  placeholder="Masukkan Email"
+                                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                                />
+                              </div>
+
+                              <div className="grid gap-2">
+                                <label htmlFor="edit_negara_asal">
+                                  Negara Asal
+                                </label>
+                                <input
+                                  id="edit_negara_asal"
+                                  name="negara_asal"
+                                  value={editFormData.negara_asal}
+                                  onChange={handleEditInputChange}
+                                  placeholder="Masukkan Negara Asal"
+                                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                                />
+                              </div>
+                            </div>
+
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>Batal</AlertDialogCancel>
+                              <AlertDialogAction
+                                onClick={() =>
+                                  updateMasterAkun.mutate({
+                                    masterAkunId: item.id,
+                                    data: editFormData,
+                                  })
+                                }
+                                disabled={updateMasterAkun.isLoading}
+                                className="bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-4 rounded"
+                              >
+                                {updateMasterAkun.isLoading
+                                  ? "Mengupdate..."
+                                  : "Update"}
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
                         {/* </a> */}
                         <button
-                          onClick={() => deleteFaktur.mutate(item.id)}
+                          onClick={() =>
+                            deleteMasterAkun.mutate({ idMaster: item.id })
+                          }
                           className="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-xs"
                         >
                           Hapus
