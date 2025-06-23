@@ -211,19 +211,19 @@ export default function RoleBasedRenderer({
     : userData.data.tipe_akun.includes("Orang Pribadi");
 
   // props for rendered components
-  const commonProps = {
-    data: contentData.data,
-    sidebar: userData.data,
-    pagination: contentData,
-    onPageChange: handlePageChange,
-    currentPage: currentPage,
-    onCompanyChange: handleCompanyChange,
-    representedCompanies: representedCompanies?.data | [],
-    // add intent
-    currentIntent: intent,
-    params: params,
-  }
+  // const commonProps = {
+  //   data: hasValidUrl ? contentData?.data || {} : {},
+  //   sidebar: userData.data,
+  //   pagination: hasValidUrl ? contentData || emptyContentData : emptyContentData,
+  //   onPageChange: handlePageChange,
+  //   currentPage: currentPage,
+  //   onCompanyChange: handleCompanyChange,
+  //   representedCompanies: representedCompanies?.data || [],
+  //   currentIntent: intent,
+  //   params: params,
+  // };
   
+
   return (
     <>
       <Header />
