@@ -983,10 +983,8 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
     mutationFn: async ({ idTransaksi }) => {
       const csrf = await getCsrf();
       const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
-      alert(accountId);
       return axios.delete(
         `${RoutesApiReal.url}api/student/assignments/${id}/sistem/${accountId}/faktur/${faktur}/detail-transaksi/${idTransaksi}`,
-        {},
         {
           headers: {
             "Content-Type": "application/json",
