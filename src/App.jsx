@@ -168,6 +168,7 @@ import BUPOTWrapper from "./components/PraktikumPage/Badan/BUPOT/BUPOTWrapper";
 import BUPOTCreateWrapper from "./components/PraktikumPage/Badan/BUPOT/BUPOTCreateWrapper";
 import BUPOTEditWrapper from "./components/PraktikumPage/Badan/BUPOT/BUPOTEditWrapper";
 import BukuBesar from "./components/PraktikumPage/PortalSaya/BukuBesar";
+import MasterAkun from "./components/PraktikumPage/PortalSaya/MasterAkun";
 
 const Main = () => {
   const [loading, setLoading] = useState(true);
@@ -250,7 +251,17 @@ const Main = () => {
 
         <Route
           element={
-            <RoleProtectedRoutes allowedRoles={["dosen", "admin", "psc", "mahasiswa", "instruktur", "mahasiswa-psc"]} layout="admin" />
+            <RoleProtectedRoutes
+              allowedRoles={[
+                "dosen",
+                "admin",
+                "psc",
+                "mahasiswa",
+                "instruktur",
+                "mahasiswa-psc",
+              ]}
+              layout="admin"
+            />
           }
         >
           <Route path="/edit-profile" element={<EditProfile />} />
@@ -1104,6 +1115,20 @@ const Main = () => {
             <>
               <Header />
               <BukuBesar />
+            </>
+          }
+        />
+        <Route
+          path="/praktikum/:id/sistem/:akun/master-akun"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={``}
+                OrangPribadi={MasterAkun}
+                Badan={MasterAkun}
+                intent={"dynamic"}
+                query={"bupot-edit"}
+              />
             </>
           }
         />
