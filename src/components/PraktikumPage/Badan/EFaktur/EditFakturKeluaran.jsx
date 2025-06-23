@@ -863,6 +863,167 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
       Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
     },
   });
+  const addDetailTransaksi = useMutation({
+    mutationFn: async () => {
+      const csrf = await getCsrf();
+      const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
+      return axios.post(
+        `${RoutesApiReal.url}api/student/assignments/${id}/sistem/${accountId}/faktur/${faktur}/detail-transaksi`,
+        {
+          tipe,
+          nama: namaBarang,
+          kode: selectedKode,
+          kuantitas: kuantitas.toString(),
+          satuan: selectedSatuan,
+          harga_satuan: formatCurrencyForDB(harga_satuan),
+          total_harga: formatCurrencyForDB(total_harga),
+          pemotongan_harga: formatCurrencyForDB(pemotongan_harga),
+          dpp: formatCurrencyForDB(dpp),
+          ppn: formatCurrencyForDB(ppn),
+          dpp_lain: isChecked ? formatCurrencyForDB(jumlah) : 0,
+          ppnbm: formatCurrencyForDB(ppnbm),
+          tarif_ppnbm: parseInt(tarif_ppnbm.replace(/\D/g, ""), 10) || 0,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": csrf,
+            Authorization: `Bearer ${cookies.token}`,
+          },
+          // params: {
+          //   intent: isDraft
+          //     ? "api.create.faktur.draft"
+          //     : "api.create.faktur.fix",
+          // },
+        }
+      );
+    },
+    onSuccess: (data, variables) => {
+      // console.log(data);
+      // const successMessage = variables.isDraft
+      //   ? "Draft Faktur berhasil dibuat"
+      //   : "Faktur berhasil diupload";
+
+      Swal.fire(
+        "Berhasil!",
+        "Detail Transaksi berhasil ditambahkan",
+        "success"
+      ).then((result) => {
+        if (result.isConfirmed) {
+          window.location.reload();
+          // window.location.href = `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran?viewAs=${viewAsCompanyId}`;
+        }
+      });
+    },
+    onError: (error) => {
+      console.error("Error saving data:", error);
+      Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
+    },
+  });
+  const updateDetailTransaksi = useMutation({
+    mutationFn: async ({ idTransaksi }) => {
+      const csrf = await getCsrf();
+      const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
+      return axios.put(
+        `${RoutesApiReal.url}api/student/assignments/${id}/sistem/${accountId}/faktur/${faktur}/detail-transaksi/${idTransaksi}`,
+        {
+          tipe,
+          nama: namaBarang,
+          kode: selectedKode,
+          kuantitas: kuantitas.toString(),
+          satuan: selectedSatuan,
+          harga_satuan: formatCurrencyForDB(harga_satuan),
+          total_harga: formatCurrencyForDB(total_harga),
+          pemotongan_harga: formatCurrencyForDB(pemotongan_harga),
+          dpp: formatCurrencyForDB(dpp),
+          ppn: formatCurrencyForDB(ppn),
+          dpp_lain: isChecked ? formatCurrencyForDB(jumlah) : 0,
+          ppnbm: formatCurrencyForDB(ppnbm),
+          tarif_ppnbm: parseInt(tarif_ppnbm.replace(/\D/g, ""), 10) || 0,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": csrf,
+            Authorization: `Bearer ${cookies.token}`,
+          },
+          // params: {
+          //   intent: isDraft
+          //     ? "api.create.faktur.draft"
+          //     : "api.create.faktur.fix",
+          // },
+        }
+      );
+    },
+    onSuccess: (data, variables) => {
+      // console.log(data);
+      // const successMessage = variables.isDraft
+      //   ? "Draft Faktur berhasil dibuat"
+      //   : "Faktur berhasil diupload";
+
+      Swal.fire(
+        "Berhasil!",
+        "Detail Transaksi berhasil ditambahkan",
+        "success"
+      ).then((result) => {
+        if (result.isConfirmed) {
+          window.location.reload();
+          // window.location.href = `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran?viewAs=${viewAsCompanyId}`;
+        }
+      });
+    },
+    onError: (error) => {
+      console.error("Error saving data:", error);
+      Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
+    },
+  });
+  const deleteDetailTransaksi = useMutation({
+    mutationFn: async ({ idTransaksi }) => {
+      const csrf = await getCsrf();
+      const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
+      alert(accountId);
+      return axios.delete(
+        `${RoutesApiReal.url}api/student/assignments/${id}/sistem/${accountId}/faktur/${faktur}/detail-transaksi/${idTransaksi}`,
+        {},
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": csrf,
+            Authorization: `Bearer ${cookies.token}`,
+          },
+          // params: {
+          //   intent: isDraft
+          //     ? "api.create.faktur.draft"
+          //     : "api.create.faktur.fix",
+          // },
+        }
+      );
+    },
+    onSuccess: (data, variables) => {
+      // console.log(data);
+      // const successMessage = variables.isDraft
+      //   ? "Draft Faktur berhasil dibuat"
+      //   : "Faktur berhasil diupload";
+
+      Swal.fire(
+        "Berhasil!",
+        "Detail Transaksi berhasil dihapus",
+        "success"
+      ).then((result) => {
+        if (result.isConfirmed) {
+          window.location.reload();
+          // window.location.href = `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran?viewAs=${viewAsCompanyId}`;
+        }
+      });
+    },
+    onError: (error) => {
+      console.error("Error saving data:", error);
+      Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
+    },
+  });
   useEffect(() => {
     const formattedDPP = formatRupiah(dpp.toString());
     setJumlah(formattedDPP);
@@ -2196,9 +2357,14 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                       </AlertDialogCancel>
                       <AlertDialogAction
                         className="bg-blue-900 text-white px-4 py-2 rounded-md hover:bg-blue-950"
-                        onClick={handleSimpanTransaksi}
+                        onClick={() => addDetailTransaksi.mutate()}
+                        disabled={addDetailTransaksi.isPending}
                       >
-                        {editMode ? "Perbarui" : "Simpan"}
+                        {addDetailTransaksi.isPending
+                          ? "Menyimpan..."
+                          : editMode
+                          ? "Perbarui"
+                          : "Simpan"}
                       </AlertDialogAction>
                     </AlertDialogFooter>
                   </AlertDialogContent>
@@ -2612,7 +2778,11 @@ ${isChecked ? "" : "bg-gray-100"}
                                   </AlertDialogCancel>
                                   <AlertDialogAction
                                     className="bg-blue-900 text-white px-4 py-2 rounded-md hover:bg-blue-950"
-                                    onClick={handleSimpanTransaksi}
+                                    onClick={() =>
+                                      updateDetailTransaksi.mutate({
+                                        idTransaksi: item.id,
+                                      })
+                                    }
                                   >
                                     Perbarui
                                   </AlertDialogAction>
@@ -2621,7 +2791,11 @@ ${isChecked ? "" : "bg-gray-100"}
                             </AlertDialog>
                             <button
                               className="bg-red-500 hover:bg-red-600 text-white py-1 px-2 rounded text-xs ml-1"
-                              onClick={() => handleHapusTransaksi(item.id)}
+                              onClick={() =>
+                                deleteDetailTransaksi.mutate({
+                                  idTransaksi: item.id,
+                                })
+                              }
                             >
                               Hapus
                             </button>
