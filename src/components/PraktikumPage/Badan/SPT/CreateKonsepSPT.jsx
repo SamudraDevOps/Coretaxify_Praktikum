@@ -186,61 +186,63 @@ const CreateKonsepSPT = ({ data }) => {
   const [cookies] = useCookies(["token"]);
 
   const [formData, setFormData] = useState({
-    cl_1b_jumlah_dpp: formatRupiah(data?.detailspt?.cl_1b_jumlah_dpp || "0"),
-    cl_1a5_dpp: formatRupiah(data?.detailspt?.cl_1a5_dpp || "0"),
-    cl_1a5_dpp_lain: formatRupiah(data?.detailspt?.cl_1a5_dpp_lain || "0"),
-    cl_1a5_ppn: formatRupiah(data?.detailspt?.cl_1a5_ppn || "0"),
-    cl_1a5_ppnbm: formatRupiah(data?.detailspt?.cl_1a5_ppnbm || "0"),
-    cl_1a9_dpp: formatRupiah(data?.detailspt?.cl_1a9_dpp || "0"),
-    cl_1a9_dpp_lain: formatRupiah(data?.detailspt?.cl_1a9_dpp_lain || "0"),
-    cl_1a9_ppn: formatRupiah(data?.detailspt?.cl_1a9_ppn || "0"),
-    cl_1a9_ppnbm: formatRupiah(data?.detailspt?.cl_1a9_ppnbm || "0"),
-    cl_2e_ppn: formatRupiah(data?.detailspt?.cl_2e_ppn || "0"),
-    cl_2f_ppn: formatRupiah(data?.detailspt?.cl_2f_ppn || "0"),
-    cl_2i_dpp: formatRupiah(data?.detailspt?.cl_2i_dpp || "0"),
-    cl_3b_ppnb: formatRupiah(data?.detailspt?.cl_3b_ppnb || "0"),
-    cl_3d_ppnb: formatRupiah(data?.detailspt?.cl_3d_ppnb || "0"),
-    cl_3f_ppnb: formatRupiah(data?.detailspt?.cl_3f_ppnb || "0"),
-    cl_3h_diminta: data?.detailspt?.cl_3h_diminta || "",
-    cl_3h_nomor_rekening: data?.detailspt?.cl_3h_nomor_rekening || "",
-    cl_3h_nama_bank: data?.detailspt?.cl_3h_nama_bank || "",
-    cl_3h_nama_pemilik_bank: data?.detailspt?.cl_3h_nama_pemilik_bank || "",
+    cl_1b_jumlah_dpp: formatRupiah(data?.detail_spt?.cl_1b_jumlah_dpp || "0"),
+    cl_1a5_dpp: formatRupiah(data?.detail_spt?.cl_1a5_dpp || "0"),
+    cl_1a5_dpp_lain: formatRupiah(data?.detail_spt?.cl_1a5_dpp_lain || "0"),
+    cl_1a5_ppn: formatRupiah(data?.detail_spt?.cl_1a5_ppn || "0"),
+    cl_1a5_ppnbm: formatRupiah(data?.detail_spt?.cl_1a5_ppnbm || "0"),
+    cl_1a9_dpp: formatRupiah(data?.detail_spt?.cl_1a9_dpp || "0"),
+    cl_1a9_dpp_lain: formatRupiah(data?.detail_spt?.cl_1a9_dpp_lain || "0"),
+    cl_1a9_ppn: formatRupiah(data?.detail_spt?.cl_1a9_ppn || "0"),
+    cl_1a9_ppnbm: formatRupiah(data?.detail_spt?.cl_1a9_ppnbm || "0"),
+    cl_2e_ppn: formatRupiah(data?.detail_spt?.cl_2e_ppn || "0"),
+    cl_2f_ppn: formatRupiah(data?.detail_spt?.cl_2f_ppn || "0"),
+    cl_2i_dpp: formatRupiah(data?.detail_spt?.cl_2i_dpp || "0"),
+    cl_3b_ppnb: formatRupiah(data?.detail_spt?.cl_3b_ppnb || "0"),
+    cl_3d_ppnb: formatRupiah(data?.detail_spt?.cl_3d_ppnb || "0"),
+    cl_3f_ppnb: formatRupiah(data?.detail_spt?.cl_3f_ppnb || "0"),
+    cl_3h_diminta: data?.detail_spt?.cl_3h_diminta || "",
+    cl_3h_nomor_rekening: data?.detail_spt?.cl_3h_nomor_rekening || "",
+    cl_3h_nama_bank: data?.detail_spt?.cl_3h_nama_bank || "",
+    cl_3h_nama_pemilik_bank: data?.detail_spt?.cl_3h_nama_pemilik_bank || "",
     cl_4_ppn_terutang_dpp: formatRupiah(
-      data?.detailspt?.cl_4_ppn_terutang_dpp || "0"
+      data?.detail_spt?.cl_4_ppn_terutang_dpp || "0"
     ),
-    cl_5_ppn_wajib: formatRupiah(data?.detailspt?.cl_5_ppn_wajib || "0"),
-    cl_6b_ppnbm: formatRupiah(data?.detailspt?.cl_6b_ppnbm || "0"),
-    cl_6d_ppnbm: formatRupiah(data?.detailspt?.cl_6d_ppnbm || "0"),
+    cl_5_ppn_wajib: formatRupiah(data?.detail_spt?.cl_5_ppn_wajib || "0"),
+    cl_6b_ppnbm: formatRupiah(data?.detail_spt?.cl_6b_ppnbm || "0"),
+    cl_6d_ppnbm: formatRupiah(data?.detail_spt?.cl_6d_ppnbm || "0"),
     cl_6f_diminta_pengembalian: formatRupiah(
-      data?.detailspt?.cl_6f_diminta_pengembalian || "0"
+      data?.detail_spt?.cl_6f_diminta_pengembalian || "0"
     ),
-    cl_7a_dpp: formatRupiah(data?.detailspt?.cl_7a_dpp || "0"),
-    cl_7a_dpp_lain: formatRupiah(data?.detailspt?.cl_7a_dpp_lain || "0"),
-    cl_7a_ppn: formatRupiah(data?.detailspt?.cl_7a_ppn || "0"),
-    cl_7a_ppnbm: formatRupiah(data?.detailspt?.cl_7a_ppnbm || "0"),
-    cl_7b_dpp: formatRupiah(data?.detailspt?.cl_7b_dpp || "0"),
-    cl_7b_dpp_lain: formatRupiah(data?.detailspt?.cl_7b_dpp_lain || "0"),
-    cl_7b_ppn: formatRupiah(data?.detailspt?.cl_7b_ppn || "0"),
-    cl_7b_ppnbm: formatRupiah(data?.detailspt?.cl_7b_ppnbm || "0"),
-    cl_8a_dpp: formatRupiah(data?.detailspt?.cl_8a_dpp || "0"),
-    cl_8a_dpplain: formatRupiah(data?.detailspt?.cl_8a_dpplain || "0"),
-    cl_8a_ppn: formatRupiah(data?.detailspt?.cl_8a_ppn || "0"),
-    cl_8a_ppnbm: formatRupiah(data?.detailspt?.cl_8a_ppnbm || "0"),
-    cl_8b_dpp: formatRupiah(data?.detailspt?.cl_8b_dpp || "0"),
-    cl_8b_dpp_lain: formatRupiah(data?.detailspt?.cl_8b_dpp_lain || "0"),
-    cl_8b_ppn: formatRupiah(data?.detailspt?.cl_8b_ppn || "0"),
-    cl_8b_ppnbm: formatRupiah(data?.detailspt?.cl_8b_ppnbm || "0"),
+    cl_7a_dpp: formatRupiah(data?.detail_spt?.cl_7a_dpp || "0"),
+    cl_7a_dpp_lain: formatRupiah(data?.detail_spt?.cl_7a_dpp_lain || "0"),
+    cl_7a_ppn: formatRupiah(data?.detail_spt?.cl_7a_ppn || "0"),
+    cl_7a_ppnbm: formatRupiah(data?.detail_spt?.cl_7a_ppnbm || "0"),
+    cl_7b_dpp: formatRupiah(data?.detail_spt?.cl_7b_dpp || "0"),
+    cl_7b_dpp_lain: formatRupiah(data?.detail_spt?.cl_7b_dpp_lain || "0"),
+    cl_7b_ppn: formatRupiah(data?.detail_spt?.cl_7b_ppn || "0"),
+    cl_7b_ppnbm: formatRupiah(data?.detail_spt?.cl_7b_ppnbm || "0"),
+    cl_8a_dpp: formatRupiah(data?.detail_spt?.cl_8a_dpp || "0"),
+    cl_8a_dpplain: formatRupiah(data?.detail_spt?.cl_8a_dpplain || "0"),
+    cl_8a_ppn: formatRupiah(data?.detail_spt?.cl_8a_ppn || "0"),
+    cl_8a_ppnbm: formatRupiah(data?.detail_spt?.cl_8a_ppnbm || "0"),
+    cl_8b_dpp: formatRupiah(data?.detail_spt?.cl_8b_dpp || "0"),
+    cl_8b_dpp_lain: formatRupiah(data?.detail_spt?.cl_8b_dpp_lain || "0"),
+    cl_8b_ppn: formatRupiah(data?.detail_spt?.cl_8b_ppn || "0"),
+    cl_8b_ppnbm: formatRupiah(data?.detail_spt?.cl_8b_ppnbm || "0"),
     cl_8d_diminta_pengembalian: formatRupiah(
-      data?.detailspt?.cl_8d_diminta_pengembalian || "0"
+      data?.detail_spt?.cl_8d_diminta_pengembalian || "0"
     ),
-    cl_9a_daftar: formatRupiah(data?.detailspt?.cl_9a_daftar || "0"),
+    cl_9a_daftar: formatRupiah(data?.detail_spt?.cl_9a_daftar || "0"),
     cl_9a_hasil_perhitungan: formatRupiah(
-      data?.detailspt?.cl_9a_hasil_perhitungan || "0"
+      data?.detail_spt?.cl_9a_hasil_perhitungan || "0"
     ),
-    cl_10_batas_waktu: formatRupiah(data?.detailspt?.cl_10_batas_waktu || "0"),
+    cl_10_batas_waktu: formatRupiah(data?.detail_spt?.cl_10_batas_waktu || "0"),
     klasifikasi_lapangan_usaha:
-      data?.detailspt?.klasifikasi_lapangan_usaha || "0",
+      data?.detail_spt?.klasifikasi_lapangan_usaha || "0",
   });
+
+  console.log("form data", formData);
 
   const navigate = useNavigateWithParams();
 
@@ -1497,7 +1499,7 @@ const CreateKonsepSPT = ({ data }) => {
                               // type="number"
                               readOnly
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_1c_dpp}
+                              value={data.detail_spt.cl_1c_jumlah_dpp}
                               onChange={handleChange}
                               name="cl_1c_jumlah_dpp"
                             />
