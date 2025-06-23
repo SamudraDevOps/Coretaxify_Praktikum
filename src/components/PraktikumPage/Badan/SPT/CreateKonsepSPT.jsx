@@ -26,14 +26,15 @@ import axios from "axios";
 import { getCsrf } from "@/service/getCsrf";
 import Swal from "sweetalert2";
 import { useParams, useSearchParams } from "react-router";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { RoutesApi } from "@/Routes";
 import { useCookies } from "react-cookie";
 import { useNavigateWithParams } from "@/hooks/useNavigateWithParams";
+import { ClipLoader } from "react-spinners";
 
 // const columnsUpload = [
 //   { key: "file", label: "File Excel", type: "file", accept: ".xlsx,.xls,.csv" },
-//   { key: "DPP Nilai Lain", label: "DPP Lain", type: "number" },
+// { key: "DPP Nilai Lain", label: "DPP Lain", type: "number" },
 //   { key: "DPP Nilai Lain Lain", label: "DPP Lain Lain", type: "number" },
 //   { key: "PPN", label: "PPN", type: "number" },
 //   { key: "PPnBM", label: "PPnBM", type: "number" },
@@ -60,6 +61,7 @@ const initialRowUpload = {
 const CreateKonsepSPT = ({ data }) => {
   const { id, akun, idSpt } = useParams();
   const [activeTab, setActiveTab] = useState("induk");
+  const [activeTabContent, setActiveTabContent] = useState("A1");
   const [showHeaderInduk, setShowHeaderInduk] = useState(false);
   const [showPenyerahanBarangJasa, setShowPenyerahanBarangJasa] =
     useState(false);
@@ -105,6 +107,31 @@ const CreateKonsepSPT = ({ data }) => {
 
   const [searchParams, setSearchParams] = useSearchParams();
   const viewAsCompanyId = searchParams.get("viewAs");
+  // const formatRupiah = (number) => {
+  //   if (typeof number !== "number") return "";
+  //   return new Intl.NumberFormat("id-ID", {
+  //     style: "currency",
+  //     currency: "IDR",
+  //     minimumFractionDigits: 0,
+  //   }).format(number);
+  // };
+  const formatRupiah = (number) => {
+    if (typeof number !== "number" && typeof number !== "string") return "";
+    const numericValue =
+      typeof number === "string"
+        ? Number(number.replace(/[^0-9]/g, ""))
+        : number;
+    if (isNaN(numericValue)) return "";
+    return new Intl.NumberFormat("id-ID", {
+      style: "decimal",
+      minimumFractionDigits: 0,
+    }).format(numericValue);
+  };
+  const stripRupiahFormat = (value) => {
+    if (!value) return value;
+    // Remove all dots from the string
+    return value.toString().replace(/\./g, "");
+  };
 
   // Add this function to calculate totals from the table
   const calculateTableTotals = (tableRows, columns) => {
@@ -157,82 +184,145 @@ const CreateKonsepSPT = ({ data }) => {
   };
 
   const [cookies] = useCookies(["token"]);
-  const [formData, setFormData] = useState({
-    // cl_1a1_dpp: data?.detailspt?.cl_1a1_dpp || "0",
-    cl_1b_jumlah_dpp: data?.detailspt?.cl_1b_jumlah_dpp || "0",
-    // cl_1b_dpp: data?.detailspt?.cl_1b_dpp || "0",
-    // cl_1c_dpp: data?.detailspt?.cl_1c_dpp || "0",
-    cl_1a5_dpp: data?.detailspt?.cl_1a5_dpp || "0",
-    cl_1a5_dpp_lain: data?.detailspt?.cl_1a5_dpp_lain || "0",
-    cl_1a5_ppn: data?.detailspt?.cl_1a5_ppn || "0",
-    cl_1a5_ppnbm: data?.detailspt?.cl_1a5_ppnbm || "0",
-    cl_1a9_dpp: data?.detailspt?.cl_1a9_dpp || "0",
-    cl_1a9_dpp_lain: data?.detailspt?.cl_1a9_dpp_lain || "0",
-    cl_1a9_ppn: data?.detailspt?.cl_1a9_ppn || "0",
-    cl_1a9_ppnbm: data?.detailspt?.cl_1a9_ppnbm || "0",
-    // cl_1a_jumlah_ppn: data?.detailspt?.cl_1a_jumlah_ppn || "0",
-    // cl_1a_jumlah_ppnbm: data?.detailspt?.cl_1a_jumlah_ppnbm || "0",
-    // cl_2a_dpp: data?.detailspt?.cl_2a_dpp || "0",
-    // cl_2a_ppn: data?.detailspt?.cl_2a_ppn || "0",
-    // cl_2a_ppnbm: data?.detailspt?.cl_2a_ppnbm || "0",
-    // cl_2g_dpp: data?.detailspt?.cl_2g_dpp || "0",
-    // cl_2h_dpp_lain: data?.detailspt?.cl_2h_dpp_lain || "0",
-    cl_2e_ppn: data?.detailspt?.cl_2e_ppn || "0",
-    cl_2f_ppn: data?.detailspt?.cl_2f_ppn || "0",
-    // cl_2g_ppn: data?.detailspt?.cl_2g_ppn || "0",
-    // cl_2h_ppn: data?.detailspt?.cl_2h_ppn || "0",
-    // cl_2h_ppnbm: data?.detailspt?.cl_2h_ppnbm || "0",
-    cl_2i_dpp: data?.detailspt?.cl_2i_dpp || "0",
-    // cl_2j_dpp: data?.detailspt?.cl_2j_dpp || "0",
-    cl_3b_ppnb: data?.detailspt?.cl_3b_ppnb || "0",
-    cl_3d_ppnb: data?.detailspt?.cl_3d_ppnb || "0",
-    cl_3f_ppnb: data?.detailspt?.cl_3f_ppnb || "0",
 
+  const [formData, setFormData] = useState({
+    cl_1b_jumlah_dpp: formatRupiah(data?.detailspt?.cl_1b_jumlah_dpp || "0"),
+    cl_1a5_dpp: formatRupiah(data?.detailspt?.cl_1a5_dpp || "0"),
+    cl_1a5_dpp_lain: formatRupiah(data?.detailspt?.cl_1a5_dpp_lain || "0"),
+    cl_1a5_ppn: formatRupiah(data?.detailspt?.cl_1a5_ppn || "0"),
+    cl_1a5_ppnbm: formatRupiah(data?.detailspt?.cl_1a5_ppnbm || "0"),
+    cl_1a9_dpp: formatRupiah(data?.detailspt?.cl_1a9_dpp || "0"),
+    cl_1a9_dpp_lain: formatRupiah(data?.detailspt?.cl_1a9_dpp_lain || "0"),
+    cl_1a9_ppn: formatRupiah(data?.detailspt?.cl_1a9_ppn || "0"),
+    cl_1a9_ppnbm: formatRupiah(data?.detailspt?.cl_1a9_ppnbm || "0"),
+    cl_2e_ppn: formatRupiah(data?.detailspt?.cl_2e_ppn || "0"),
+    cl_2f_ppn: formatRupiah(data?.detailspt?.cl_2f_ppn || "0"),
+    cl_2i_dpp: formatRupiah(data?.detailspt?.cl_2i_dpp || "0"),
+    cl_3b_ppnb: formatRupiah(data?.detailspt?.cl_3b_ppnb || "0"),
+    cl_3d_ppnb: formatRupiah(data?.detailspt?.cl_3d_ppnb || "0"),
+    cl_3f_ppnb: formatRupiah(data?.detailspt?.cl_3f_ppnb || "0"),
     cl_3h_diminta: data?.detailspt?.cl_3h_diminta || "",
     cl_3h_nomor_rekening: data?.detailspt?.cl_3h_nomor_rekening || "",
     cl_3h_nama_bank: data?.detailspt?.cl_3h_nama_bank || "",
     cl_3h_nama_pemilik_bank: data?.detailspt?.cl_3h_nama_pemilik_bank || "",
-    // cl_4_ppn_terutang_dppp: data?.detailspt?.cl_4_ppn_terutang_dppp || ""
-    // cl_3f_ppnb: data?.detailspt?.cl_3f_ppnb || "0",
-    cl_4_ppn_terutang_dpp: data?.detailspt?.cl_4_ppn_terutang_dpp || "0",
-    cl_5_ppn_wajib: data?.detailspt?.cl_5_ppn_wajib || "0",
-    cl_6b_ppnbm: data?.detailspt?.cl_6b_ppnbm || "0",
-    cl_6d_ppnbm: data?.detailspt?.cl_6d_ppnbm || "0",
-    cl_6f_diminta_pengembalian:
-      data?.detailspt?.cl_6f_diminta_pengembalian || "0",
-    cl_7a_dpp: data?.detailspt?.cl_7a_dpp || "0",
-    cl_7a_dpp_lain: data?.detailspt?.cl_7a_dpp_lain || "0",
-    cl_7a_ppn: data?.detailspt?.cl_7a_ppn || "0",
-    cl_7a_ppnbm: data?.detailspt?.cl_7a_ppnbm || "0",
-    cl_7b_dpp: data?.detailspt?.cl_7b_dpp || "0",
-    cl_7b_dpp_lain: data?.detailspt?.cl_7b_dpp_lain || "0",
-    cl_7b_ppn: data?.detailspt?.cl_7b_ppn || "0",
-    cl_7b_ppnbm: data?.detailspt?.cl_7b_ppnbm || "0",
-    cl_8a_dpp: data?.detailspt?.cl_8a_dpp || "0",
-    cl_8a_dpplain: data?.detailspt?.cl_8a_dpplain || "0",
-    cl_8a_ppn: data?.detailspt?.cl_8a_ppn || "0",
-    cl_8a_ppnbm: data?.detailspt?.cl_8a_ppnbm || "0",
-    cl_8b_dpp: data?.detailspt?.cl_8b_dpp || "0",
-    cl_8b_dpp_lain: data?.detailspt?.cl_8b_dpp_lain || "0",
-    cl_8b_ppn: data?.detailspt?.cl_8b_ppn || "0",
-    cl_8b_ppnbm: data?.detailspt?.cl_8b_ppnbm || "0",
-    cl_8d_diminta_pengembalian:
-      data?.detailspt?.cl_8d_diminta_pengembalian || "0",
-    cl_9a_daftar: data?.detailspt?.cl_9a_daftar || "0",
-    cl_9a_hasil_perhitungan: data?.detailspt?.cl_9a_hasil_perhitungan || "0",
-    cl_10_batas_waktu: data?.detailspt?.cl_10_batas_waktu || "0",
+    cl_4_ppn_terutang_dpp: formatRupiah(
+      data?.detailspt?.cl_4_ppn_terutang_dpp || "0"
+    ),
+    cl_5_ppn_wajib: formatRupiah(data?.detailspt?.cl_5_ppn_wajib || "0"),
+    cl_6b_ppnbm: formatRupiah(data?.detailspt?.cl_6b_ppnbm || "0"),
+    cl_6d_ppnbm: formatRupiah(data?.detailspt?.cl_6d_ppnbm || "0"),
+    cl_6f_diminta_pengembalian: formatRupiah(
+      data?.detailspt?.cl_6f_diminta_pengembalian || "0"
+    ),
+    cl_7a_dpp: formatRupiah(data?.detailspt?.cl_7a_dpp || "0"),
+    cl_7a_dpp_lain: formatRupiah(data?.detailspt?.cl_7a_dpp_lain || "0"),
+    cl_7a_ppn: formatRupiah(data?.detailspt?.cl_7a_ppn || "0"),
+    cl_7a_ppnbm: formatRupiah(data?.detailspt?.cl_7a_ppnbm || "0"),
+    cl_7b_dpp: formatRupiah(data?.detailspt?.cl_7b_dpp || "0"),
+    cl_7b_dpp_lain: formatRupiah(data?.detailspt?.cl_7b_dpp_lain || "0"),
+    cl_7b_ppn: formatRupiah(data?.detailspt?.cl_7b_ppn || "0"),
+    cl_7b_ppnbm: formatRupiah(data?.detailspt?.cl_7b_ppnbm || "0"),
+    cl_8a_dpp: formatRupiah(data?.detailspt?.cl_8a_dpp || "0"),
+    cl_8a_dpplain: formatRupiah(data?.detailspt?.cl_8a_dpplain || "0"),
+    cl_8a_ppn: formatRupiah(data?.detailspt?.cl_8a_ppn || "0"),
+    cl_8a_ppnbm: formatRupiah(data?.detailspt?.cl_8a_ppnbm || "0"),
+    cl_8b_dpp: formatRupiah(data?.detailspt?.cl_8b_dpp || "0"),
+    cl_8b_dpp_lain: formatRupiah(data?.detailspt?.cl_8b_dpp_lain || "0"),
+    cl_8b_ppn: formatRupiah(data?.detailspt?.cl_8b_ppn || "0"),
+    cl_8b_ppnbm: formatRupiah(data?.detailspt?.cl_8b_ppnbm || "0"),
+    cl_8d_diminta_pengembalian: formatRupiah(
+      data?.detailspt?.cl_8d_diminta_pengembalian || "0"
+    ),
+    cl_9a_daftar: formatRupiah(data?.detailspt?.cl_9a_daftar || "0"),
+    cl_9a_hasil_perhitungan: formatRupiah(
+      data?.detailspt?.cl_9a_hasil_perhitungan || "0"
+    ),
+    cl_10_batas_waktu: formatRupiah(data?.detailspt?.cl_10_batas_waktu || "0"),
     klasifikasi_lapangan_usaha:
       data?.detailspt?.klasifikasi_lapangan_usaha || "0",
   });
 
   const navigate = useNavigateWithParams();
 
+  // const handleChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setFormData((prevData) => ({
+  //     ...prevData,
+  //     [name]: value,
+  //   }));
+  // };
   const handleChange = (e) => {
     const { name, value } = e.target;
+
+    // Define fields that need rupiah formatting
+    const currencyFields = [
+      "cl_1b_jumlah_dpp",
+      "cl_1a5_dpp",
+      "cl_1a5_dpp_lain",
+      "cl_1a5_ppn",
+      "cl_1a5_ppnbm",
+      "cl_1a9_dpp",
+      "cl_1a9_dpp_lain",
+      "cl_1a9_ppn",
+      "cl_1a9_ppnbm",
+      "cl_2e_ppn",
+      "cl_2f_ppn",
+      "cl_2i_dpp",
+      "cl_3b_ppnb",
+      "cl_3d_ppnb",
+      "cl_3f_ppnb",
+      "cl_4_ppn_terutang_dpp",
+      "cl_5_ppn_wajib",
+      "cl_6b_ppnbm",
+      "cl_6d_ppnbm",
+      "cl_6f_diminta_pengembalian",
+      "cl_7a_dpp",
+      "cl_7a_dpp_lain",
+      "cl_7a_ppn",
+      "cl_7a_ppnbm",
+      "cl_7b_dpp",
+      "cl_7b_dpp_lain",
+      "cl_7b_ppn",
+      "cl_7b_ppnbm",
+      "cl_8a_dpp",
+      "cl_8a_dpplain",
+      "cl_8a_ppn",
+      "cl_8a_ppnbm",
+      "cl_8b_dpp",
+      "cl_8b_dpp_lain",
+      "cl_8b_ppn",
+      "cl_8b_ppnbm",
+      "cl_8d_diminta_pengembalian",
+      "cl_9a_daftar",
+      "cl_9a_hasil_perhitungan",
+      "cl_10_batas_waktu",
+    ];
+
+    // Format value if it's a currency field, otherwise use raw value
+    // const processedValue = currencyFields.includes(name)
+    //   ? formatRupiah(value.replace(/[^0-9]/g, ""))
+    //   : value;
+
+    // setFormData((prevData) => ({
+    //   ...prevData,
+    //   [name]: processedValue,
+    // }));
+    let processedValue;
+
+    if (currencyFields.includes(name)) {
+      // For currency fields, format as rupiah after removing non-numeric chars
+      processedValue = formatRupiah(value.replace(/[^0-9]/g, ""));
+    } else {
+      // For non-currency fields, use the value directly without additional processing
+      console.log(value);
+      processedValue = value;
+    }
+
     setFormData((prevData) => ({
       ...prevData,
-      [name]: value,
+      [name]: processedValue,
     }));
+    // console.log(formData);
   };
 
   console.log(data);
@@ -261,49 +351,114 @@ const CreateKonsepSPT = ({ data }) => {
   const penyerahanBarangJasaTable = useDynamicTableRows(initialRowUpload);
   const [rows, setRows] = useState([{ ...initialRowUpload }]);
 
-  // const {
-  //   data,
-  //   isLoading,
-  //   isError,
-  //   error,
-  // } = useQuery({
-  //   queryKey: ["calculate_spt"],
-  //   queryFn: async () => {
-  //     const data = await axios.get(
-  //       // RoutesApiReal.apiUrl + `student/assignments/${id}/sistem/${akun}`,
-  //       RoutesApi.apiUrl +
-  //         `student/assignments/${id}/sistem/${akun}/getAkun`,
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${cookies.token}`,
-  //         },
-  //         // params: {
-  //         //   intent: "api.sistem.get.akun.orang.pibadi",
-  //         // },
-  //       }
-  //     );
-  //     console.log(data.data);
-  //     return data.data;
-  //   },
-  // });
+  const {
+    data: sptOther,
+    isLoading: isLoadingOther,
+    isError: isErrorOther,
+    error: sptError,
+  } = useQuery({
+    queryKey: [activeTabContent],
+    queryFn: async () => {
+      const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
+      const data = await axios.get(
+        RoutesApi.apiUrl +
+          `student/assignments/${id}/sistem/${accountId}/spt/${idSpt}/show-faktur-ppn`,
+        {
+          headers: {
+            Authorization: `Bearer ${cookies.token}`,
+          },
+          params: {
+            jenis_spt_ppn: activeTabContent,
+          },
+        }
+      );
+      console.log(data.data);
+      return data.data;
+    },
+    enabled: activeTabContent !== null && activeTabContent !== undefined,
+    // Add these options to prevent unnecessary refetches
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    cacheTime: 10 * 60 * 1000, // 10 minutes
+    refetchOnWindowFocus: false,
+  });
 
   const calculateSpt = useMutation({
     mutationFn: async () => {
       const csrf = await getCsrf();
 
       // Check if viewAsCompanyId exists
-      if (!viewAsCompanyId) {
-        throw new Error("Company ID is not defined");
-      }
+      // if (!viewAsCompanyId) {
+      //   throw new Error("Company ID is not defined");
+      // }
 
       // Helper function to convert string to number, return 0 if empty/null/undefined
+      console.log(formData);
+      // const toNumber = (value) => {
+      //   // consol("called");
+      //   console.log("value", value);
+      //   if (value === null || value === undefined) {
+      //     return 0;
+      //   }
+      //   const num = parseFloat(value);
+      //   console.log("num", num);
+      //   return isNaN(num) ? 0 : num;
+      // };
       const toNumber = (value) => {
-        if (value === null || value === undefined || value === "") {
-          return 0;
-        }
-        const num = parseFloat(value);
-        return isNaN(num) ? 0 : num;
+        if (value === undefined || value === null || value === "") return 0;
+        // console.log("value", value);
+        // First strip the dots, then convert to number
+        const strippedValue = stripRupiahFormat(value);
+        // console.log("num", strippedValue);
+        return Number(strippedValue);
       };
+      // const currencyFields = [
+      //   "cl_1b_jumlah_dpp",
+      //   "cl_1a5_dpp",
+      //   "cl_1a5_dpp_lain",
+      //   "cl_1a5_ppn",
+      //   "cl_1a5_ppnbm",
+      //   "cl_1a9_dpp",
+      //   "cl_1a9_dpp_lain",
+      //   "cl_1a9_ppn",
+      //   "cl_1a9_ppnbm",
+      //   "cl_2e_ppn",
+      //   "cl_2f_ppn",
+      //   "cl_2i_dpp",
+      //   "cl_3b_ppnb",
+      //   "cl_3d_ppnb",
+      //   "cl_3f_ppnb",
+      //   "cl_4_ppn_terutang_dpp",
+      //   "cl_5_ppn_wajib",
+      //   "cl_6b_ppnbm",
+      //   "cl_6d_ppnbm",
+      //   "cl_6f_diminta_pengembalian",
+      //   "cl_7a_dpp",
+      //   "cl_7a_dpp_lain",
+      //   "cl_7a_ppn",
+      //   "cl_7a_ppnbm",
+      //   "cl_7b_dpp",
+      //   "cl_7b_dpp_lain",
+      //   "cl_7b_ppn",
+      //   "cl_7b_ppnbm",
+      //   "cl_8a_dpp",
+      //   "cl_8a_dpplain",
+      //   "cl_8a_ppn",
+      //   "cl_8a_ppnbm",
+      //   "cl_8b_dpp",
+      //   "cl_8b_dpp_lain",
+      //   "cl_8b_ppn",
+      //   "cl_8b_ppnbm",
+      //   "cl_8d_diminta_pengembalian",
+      //   "cl_9a_daftar",
+      //   "cl_9a_hasil_perhitungan",
+      //   "cl_10_batas_waktu",
+      // ];
+      // const toNumber = (value) => {
+      //   if (value === undefined || value === null || value === "") return 0;
+      //   // First strip the Rupiah formatting, then convert to number
+      //   const strippedValue = stripRupiahFormat(value);
+      //   return Number(strippedValue);
+      // };
 
       // Create an object with all the required fields from formData, converting to numbers
       const sptData = {
@@ -353,6 +508,9 @@ const CreateKonsepSPT = ({ data }) => {
         klasifikasi_lapangan_usaha: formData.klasifikasi_lapangan_usaha, // Keep as string
         badan_id: viewAsCompanyId,
       };
+
+      // alert("mamamia");
+      // alert("Sending SPT data: " + JSON.stringify(sptData, null, 2));
 
       console.log("Sending SPT data:", sptData); // Debug what's being sent
 
@@ -510,6 +668,44 @@ const CreateKonsepSPT = ({ data }) => {
     },
   });
 
+  const handleTabChange = (value) => {
+    // Prevent any default behavior if this is called from an event
+    if (value?.preventDefault) {
+      value.preventDefault();
+      return;
+    }
+
+    setActiveTab(value);
+    const formattedValue = value.replace(
+      /([a-z])-(\d+)/i,
+      (match, letter, number) => {
+        return letter.toUpperCase() + number;
+      }
+    );
+
+    // Use a callback to ensure state is updated before query runs
+    setActiveTabContent(formattedValue);
+
+    // Optional: Add a small delay to ensure state is updated
+    // setTimeout(() => {
+    //   setActiveTabContent(formattedValue);
+    // }, 0);
+
+    // Swal.fire({
+    //   title: "Tab Changed",
+    //   text: `Current tab: ${formattedValue}`,
+    //   icon: "info",
+    // });
+  };
+
+  // if (isLoadingOther) {
+  //   return (
+  //     <div className="loading">
+  //       <ClipLoader></ClipLoader>
+  //     </div>
+  //   );
+  // }
+
   return (
     <div className="flex h-screen bg-gray-100">
       <div className="flex-auto p-3 bg-white rounded-md h-full">
@@ -519,7 +715,8 @@ const CreateKonsepSPT = ({ data }) => {
           </h2>
         </div>
         <div className="w-full p-2 ml-0 border-t text-lg">
-          <Tabs defaultValue="induk" onValueChange={(val) => setActiveTab(val)}>
+          {/* <Tabs  defaultValue="induk" onValueChange={(val) => setActiveTab(val)}> */}
+          <Tabs defaultValue="induk" onValueChange={handleTabChange}>
             <TabsList className="flex justify-start gap-2 text-blue-700 text-lg">
               <TabsTrigger value="induk">Induk</TabsTrigger>
               <TabsTrigger value="a-1">A-1</TabsTrigger>
@@ -715,7 +912,7 @@ const CreateKonsepSPT = ({ data }) => {
                           </td>
                           <td className="p-2">
                             <input
-                              type="number"
+                              // type="number"
                               name="cl_1a1_dpp"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={data.detail_spt.cl_1a1_dpp}
@@ -733,7 +930,8 @@ const CreateKonsepSPT = ({ data }) => {
                           </td>
                           <td className="p-2">
                             <input
-                              type="number"
+                              // type="number"
+
                               name="cl_1a2_dpp"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={data.detail_spt.cl_1a2_dpp}
@@ -742,7 +940,7 @@ const CreateKonsepSPT = ({ data }) => {
                           </td>
                           <td className="p-2">
                             <input
-                              type="number"
+                              // type="number"
                               name="cl_1a2_dpp_nilai_lain"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={data.detail_spt.cl_1a2_dpp_lain}
@@ -751,7 +949,7 @@ const CreateKonsepSPT = ({ data }) => {
                           </td>
                           <td className="p-2">
                             <input
-                              type="number"
+                              // type="number"
                               name="cl_1a2_ppn"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={data.detail_spt.cl_1a2_ppn}
@@ -760,7 +958,7 @@ const CreateKonsepSPT = ({ data }) => {
                           </td>
                           <td className="p-2">
                             <input
-                              type="number"
+                              // type="number"
                               name="cl_1a2_ppnbm"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={data.detail_spt.cl_1a2_ppnbm}
@@ -781,13 +979,13 @@ const CreateKonsepSPT = ({ data }) => {
                               type="number"
                               name="cl_1a3_dpp"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_1a3_dpp}
+                              // value={data.detail_spt.cl_1a3_dpp}
                               readOnly
                             />
                           </td>
                           <td className="p-2">
                             <input
-                              type="number"
+                              // type="number"
                               name="cl_1a3_dpp_lain"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={data.detail_spt.cl_1a3_dpp_lain}
@@ -796,7 +994,7 @@ const CreateKonsepSPT = ({ data }) => {
                           </td>
                           <td className="p-2">
                             <input
-                              type="number"
+                              // type="number"
                               name="cl_1a3_ppn"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={data.detail_spt.cl_1a3_ppn}
@@ -805,7 +1003,7 @@ const CreateKonsepSPT = ({ data }) => {
                           </td>
                           <td className="p-2">
                             <input
-                              type="number"
+                              // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               defaultValue="0"
                               disabled
@@ -824,7 +1022,7 @@ const CreateKonsepSPT = ({ data }) => {
                           </td>
                           <td className="p-2">
                             <input
-                              type="number"
+                              // type="number"
                               name="cl_1a4_dpp"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={data.detail_spt.cl_1a4_dpp}
@@ -836,7 +1034,7 @@ const CreateKonsepSPT = ({ data }) => {
                           </td>
                           <td className="p-2">
                             <input
-                              type="number"
+                              // type="number"
                               name="cl_1a4_ppn"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={data.detail_spt.cl_1a4_ppn}
@@ -845,7 +1043,7 @@ const CreateKonsepSPT = ({ data }) => {
                           </td>
                           <td className="p-2">
                             <input
-                              type="number"
+                              // type="number"
                               name="cl_1a4_ppnbm"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={data.detail_spt.cl_1a4_ppnbm}
@@ -863,7 +1061,8 @@ const CreateKonsepSPT = ({ data }) => {
                           </td>
                           <td className="p-2">
                             <input
-                              type="number"
+                              // type="number"
+                              readOnly
                               name="cl_1a5_dpp"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={formData.cl_1a5_dpp}
@@ -872,7 +1071,8 @@ const CreateKonsepSPT = ({ data }) => {
                           </td>
                           <td className="p-2">
                             <input
-                              type="number"
+                              // type="number"
+                              readOnly
                               name="cl_1a5_dpp_lain"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={formData.cl_1a5_dpp_lain}
@@ -881,7 +1081,8 @@ const CreateKonsepSPT = ({ data }) => {
                           </td>
                           <td className="p-2">
                             <input
-                              type="number"
+                              // type="number"
+                              readOnly
                               name="cl_1a5_ppn"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={formData.cl_1a5_ppn}
@@ -890,7 +1091,8 @@ const CreateKonsepSPT = ({ data }) => {
                           </td>
                           <td className="p-2 flex items-center gap-2">
                             <input
-                              type="number"
+                              // type="number"
+                              readOnly
                               name="cl_1a5_ppnbm"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={formData.cl_1a5_ppnbm}
@@ -957,7 +1159,7 @@ const CreateKonsepSPT = ({ data }) => {
                           </td>
                           <td className="p-2">
                             <input
-                              type="number"
+                              // type="number"
                               name="cl_1a6_dpp"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={data.detail_spt.cl_1a6_dpp}
@@ -966,7 +1168,7 @@ const CreateKonsepSPT = ({ data }) => {
                           </td>
                           <td className="p-2">
                             <input
-                              type="number"
+                              // type="number"
                               name="cl_1a6_dpp_lain"
                               className="w-full p-1 border rounded-md text-right text-sm"
                               value={data.detail_spt.cl_1a6_dpp_lain}
@@ -975,7 +1177,7 @@ const CreateKonsepSPT = ({ data }) => {
                           </td>
                           <td className="p-2">
                             <input
-                              type="number"
+                              // type="number"
                               name="cl_1a6_ppn"
                               className="w-full p-1 border rounded-md text-right text-sm"
                               value={data.detail_spt.cl_1a6_ppn}
@@ -984,7 +1186,7 @@ const CreateKonsepSPT = ({ data }) => {
                           </td>
                           <td className="p-2">
                             <input
-                              type="number"
+                              // type="number"
                               name="cl_1a6_ppnbm"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={data.detail_spt.cl_1a6_ppnbm}
@@ -1001,7 +1203,7 @@ const CreateKonsepSPT = ({ data }) => {
                           </td>
                           <td className="p-2">
                             <input
-                              type="number"
+                              // type="number"
                               name="cl_1a7_dpp"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={data.detail_spt.cl_1a7_dpp}
@@ -1010,7 +1212,7 @@ const CreateKonsepSPT = ({ data }) => {
                           </td>
                           <td className="p-2">
                             <input
-                              type="number"
+                              // type="number"
                               name="cl_1a7_dpp_lain"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={data.detail_spt.cl_1a7_dpp_lain}
@@ -1019,7 +1221,7 @@ const CreateKonsepSPT = ({ data }) => {
                           </td>
                           <td className="p-2">
                             <input
-                              type="number"
+                              // type="number"
                               name="cl_1a7_ppn"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={data.detail_spt.cl_1a7_ppn}
@@ -1028,7 +1230,7 @@ const CreateKonsepSPT = ({ data }) => {
                           </td>
                           <td className="p-2">
                             <input
-                              type="number"
+                              // type="number"
                               name="cl_1a7_ppnbm"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={data.detail_spt.cl_1a7_ppnbm}
@@ -1045,7 +1247,7 @@ const CreateKonsepSPT = ({ data }) => {
                           </td>
                           <td className="p-2">
                             <input
-                              type="number"
+                              // type="number"
                               name="cl_1a8_dpp"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={data.detail_spt.cl_1a8_dpp}
@@ -1054,7 +1256,7 @@ const CreateKonsepSPT = ({ data }) => {
                           </td>
                           <td className="p-2">
                             <input
-                              type="number"
+                              // type="number"
                               name="cl_1a8_dpp_lain"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={data.detail_spt.cl_1a8_dpp_lain}
@@ -1063,7 +1265,7 @@ const CreateKonsepSPT = ({ data }) => {
                           </td>
                           <td className="p-2">
                             <input
-                              type="number"
+                              // type="number"
                               name="cl_1a8_ppn"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={data.detail_spt.cl_1a8_ppn}
@@ -1072,7 +1274,7 @@ const CreateKonsepSPT = ({ data }) => {
                           </td>
                           <td className="p-2">
                             <input
-                              type="number"
+                              // type="number"
                               name="cl_1a8_ppnbm"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={data.detail_spt.cl_1a8_ppnbm}
@@ -1091,7 +1293,7 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2">
                             <input
                               name="cl_1a9_dpp"
-                              type="number"
+                              // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm"
                               value={formData.cl_1a9_dpp}
                               onChange={handleChange}
@@ -1100,7 +1302,7 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2">
                             <input
                               name="cl_1a9_dpp_lain"
-                              type="number"
+                              // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={formData.cl_1a9_dpp_lain}
                               onChange={handleChange}
@@ -1109,7 +1311,7 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2">
                             <input
                               name="cl_1a9_ppn"
-                              type="number"
+                              // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={formData.cl_1a9_ppn}
                               onChange={handleChange}
@@ -1118,7 +1320,7 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2 flex items-center gap-2">
                             <input
                               name="cl_1a9_ppnbm"
-                              type="number"
+                              // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm"
                               value={formData.cl_1a9_ppnbm}
                               onChange={handleChange}
@@ -1185,7 +1387,8 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2 flex items-center gap-2">
                             <input
                               name="cl_1a_jumlah_dpp"
-                              type="number"
+                              // type="number"
+                              readOnly
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={data.detail_spt.cl_1a_jumlah_dpp}
                               onChange={handleChange}
@@ -1195,7 +1398,8 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2">
                             <input
                               name="cl_1a_jumlah_ppn"
-                              type="number"
+                              // type="number"
+                              readOnly
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={data.detail_spt.cl_1a_jumlah_ppn}
                               onChange={handleChange}
@@ -1204,7 +1408,8 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2">
                             <input
                               name="cl_1a_jumlah_ppnbm"
-                              type="number"
+                              // type="number"
+                              readOnly
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={data.detail_spt.cl_1a_jumlah_ppnbm}
                               onChange={handleChange}
@@ -1219,7 +1424,7 @@ const CreateKonsepSPT = ({ data }) => {
                           </td>
                           <td className="p-2 flex items-center gap-2">
                             <input
-                              type="number"
+                              // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={formData.cl_1b_jumlah_dpp}
                               onChange={handleChange}
@@ -1289,7 +1494,8 @@ const CreateKonsepSPT = ({ data }) => {
                           </td>
                           <td className="p-2 flex items-center gap-2">
                             <input
-                              type="number"
+                              // type="number"
+                              readOnly
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={data.detail_spt.cl_1c_dpp}
                               onChange={handleChange}
@@ -1344,9 +1550,10 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2">
                             <input
                               name="cl_2a_dpp"
-                              type="number"
+                              // type="number"
+                              readOnly
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={formData.cl_2a_dpp}
+                              value={data.detail_spt.cl_2a_dpp}
                               onChange={handleChange}
                             />
                           </td>
@@ -1354,18 +1561,20 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2">
                             <input
                               name="cl_2a_ppn"
-                              type="number"
+                              // type="number"
+                              readOnly
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={formData.cl_2a_ppn}
+                              value={data.detail_spt.cl_2a_ppn}
                               onChange={handleChange}
                             />
                           </td>
                           <td className="p-2">
                             <input
                               name="cl_2a_ppnbm"
-                              type="number"
+                              // type="number"
+                              readOnly
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={formData.cl_2a_ppnbm}
+                              value={data.detail_spt.cl_2a_ppnbm}
                               onChange={handleChange}
                             />
                           </td>
@@ -1382,7 +1591,7 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2">
                             <input
                               name="cl_2b_dpp"
-                              type="number"
+                              // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={data.detail_spt.cl_2b_dpp}
                               readOnly
@@ -1391,7 +1600,7 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2">
                             <input
                               name="cl_2b_dpp_lain"
-                              type="number"
+                              // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={data.detail_spt.cl_2b_dpp_lain}
                               readOnly
@@ -1400,7 +1609,7 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2">
                             <input
                               name="cl_2b_ppn"
-                              type="number"
+                              // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={data.detail_spt.cl_2b_ppn}
                               readOnly
@@ -1409,7 +1618,7 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2">
                             <input
                               name="cl_2b_ppnbm"
-                              type="number"
+                              // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={data.detail_spt.cl_2b_ppnbm}
                               readOnly
@@ -1427,7 +1636,7 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2">
                             <input
                               name="cl_2c_dpp"
-                              type="number"
+                              // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={data.detail_spt.cl_2c_dpp}
                               readOnly
@@ -1437,7 +1646,7 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2">
                             <input
                               name="cl_2c_ppn"
-                              type="number"
+                              // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={data.detail_spt.cl_2c_ppn}
                               readOnly
@@ -1446,7 +1655,7 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2">
                             <input
                               name="cl_2c_ppnbm"
-                              type="number"
+                              // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={data.detail_spt.cl_2c_ppnbm}
                               readOnly
@@ -1464,7 +1673,7 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2">
                             <input
                               name="cl_2d_dpp"
-                              type="number"
+                              // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={data.detail_spt.cl_2d_dpp}
                               readOnly
@@ -1473,7 +1682,7 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2">
                             <input
                               name="cl_2d_dpp_lain"
-                              type="number"
+                              // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={data.detail_spt.cl_2d_dpp_lain}
                               readOnly
@@ -1482,7 +1691,7 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2">
                             <input
                               name="cl_2d_ppn"
-                              type="number"
+                              // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={data.detail_spt.cl_2d_ppn}
                               readOnly
@@ -1491,7 +1700,7 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2">
                             <input
                               name="cl_2d_ppnbm"
-                              type="number"
+                              // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={data.detail_spt.cl_2d_ppnbm}
                               readOnly
@@ -1508,7 +1717,7 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2"></td>
                           <td className="p-2">
                             <input
-                              type="number"
+                              // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={formData.cl_2e_ppn}
                               onChange={handleChange}
@@ -1528,7 +1737,7 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2"></td>
                           <td className="p-2">
                             <input
-                              type="number"
+                              // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm"
                               value={formData.cl_2f_ppn}
                               onChange={handleChange}
@@ -1546,7 +1755,8 @@ const CreateKonsepSPT = ({ data }) => {
                           </td>
                           <td className="p-2">
                             <input
-                              type="number"
+                              // type="number"
+                              readOnly
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={data.detail_spt.cl_2g_dpp}
                               onChange={handleChange}
@@ -1556,7 +1766,8 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2"></td>
                           <td className="p-2">
                             <input
-                              type="number"
+                              // type="number"
+                              readOnly
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={data.detail_spt.cl_2g_ppn}
                               onChange={handleChange}
@@ -1576,36 +1787,41 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2">
                             <input
                               name="cl_2h_dpp"
-                              type="number"
+                              readOnly
+                              // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={formData.cl_2h_dpp}
+                              // value={formData.cl_2h_dpp}
+                              value={data.detail_spt.cl_2h_dpp}
                               onChange={handleChange}
                             />
                           </td>
                           <td className="p-2">
                             <input
                               name="cl_2h_dpp_lain"
-                              type="number"
+                              // type="number"
+                              readOnly
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={formData.cl_2h_dpp_lain}
+                              value={data.detail_spt.cl_2h_dpp_lain}
                               onChange={handleChange}
                             />
                           </td>
                           <td className="p-2">
                             <input
                               name="cl_2h_ppn"
-                              type="number"
+                              // type="number"
+                              readOnly
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={formData.cl_2h_ppn}
+                              value={data.detail_spt.cl_2h_ppn}
                               onChange={handleChange}
                             />
                           </td>
                           <td className="p-2">
                             <input
                               name="cl_2h_ppnbm"
-                              type="number"
+                              // type="number"
+                              readOnly
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={formData.cl_2h_ppnbm}
+                              value={data.detail_spt.cl_2h_ppnbm}
                               onChange={handleChange}
                             />
                           </td>
@@ -1620,7 +1836,7 @@ const CreateKonsepSPT = ({ data }) => {
                           </td>
                           <td className="p-2">
                             <input
-                              type="number"
+                              // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm"
                               value={formData.cl_2i_dpp}
                               onChange={handleChange}
@@ -1640,7 +1856,7 @@ const CreateKonsepSPT = ({ data }) => {
                           </td>
                           <td className="p-2">
                             <input
-                              type="number"
+                              // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={data.detail_spt.cl_2j_dpp}
                               onChange={handleChange}
@@ -1692,7 +1908,7 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2"></td>
                           <td className="p-2">
                             <input
-                              type="number"
+                              // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               defaultValue="0"
                               name="cl_3a_ppnb"
@@ -1712,7 +1928,7 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2"></td>
                           <td className="p-2">
                             <input
-                              type="number"
+                              // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               name="cl_3b_ppnb"
                               value={formData.cl_3b_ppnb}
@@ -1731,7 +1947,8 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2"></td>
                           <td className="p-2">
                             <input
-                              type="number"
+                              // type="number"
+                              readOnly
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               defaultValue="0"
                               disabled
@@ -1751,7 +1968,7 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2"></td>
                           <td className="p-2">
                             <input
-                              type="number"
+                              // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               defaultValue="0"
                               name="cl_3d_ppnb"
@@ -1772,7 +1989,7 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2"></td>
                           <td className="p-2">
                             <input
-                              type="number"
+                              // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={data.detail_spt.cl_3e_ppnb}
                               name="cl_3e_ppnb"
@@ -1793,7 +2010,7 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2"></td>
                           <td className="p-2">
                             <input
-                              type="number"
+                              // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               defaultValue="0"
                               name="cl_3f_ppnb"
@@ -1814,7 +2031,7 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2"></td>
                           <td className="p-2">
                             <input
-                              type="number"
+                              // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={data.detail_spt.cl_3g_ppnb}
                               disabled
@@ -1884,7 +2101,7 @@ const CreateKonsepSPT = ({ data }) => {
                                 Nomor Rekening
                                 <input
                                   type="text"
-                                  name="nomor_rekening"
+                                  name="cl_3h_nomor_rekening"
                                   className="w-full p-1 border rounded-md text-sm ml-7 mt-1"
                                   value={formData.cl_3h_nomor_rekening}
                                   onChange={handleChange}
@@ -1894,7 +2111,7 @@ const CreateKonsepSPT = ({ data }) => {
                                 Nama Bank
                                 <input
                                   type="text"
-                                  name="nama_bank"
+                                  name="cl_3h_nama_bank"
                                   className="w-full p-1 border rounded-md text-sm ml-16 mt-1"
                                   value={formData.cl_3h_nama_bank}
                                   onChange={handleChange}
@@ -1904,7 +2121,7 @@ const CreateKonsepSPT = ({ data }) => {
                                 Nama Pemilik Bank
                                 <input
                                   type="text"
-                                  name="nama_pemilik_bank"
+                                  name="cl_3h_nama_pemilik_bank"
                                   className="w-full p-1 border rounded-md text-sm ml-3 mt-1"
                                   value={formData.cl_3h_nama_pemilik_bank}
                                   onChange={handleChange}
@@ -1954,7 +2171,7 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2"></td>
                           <td className="p-2">
                             <input
-                              type="number"
+                              // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm"
                               defaultValue="0"
                               value={formData.cl_4_ppn_terutang_dpp}
@@ -1964,7 +2181,7 @@ const CreateKonsepSPT = ({ data }) => {
                           </td>
                           <td className="p-2">
                             <input
-                              type="number"
+                              // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={data.detail_spt.cl_4_ppn_terutang}
                               disabled
@@ -2071,7 +2288,7 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2"></td>
                           <td className="p-2">
                             <input
-                              type="number"
+                              // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={data.detail_spt.cl_6a_ppnbm}
                               disabled
@@ -2089,7 +2306,7 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2"></td>
                           <td className="p-2">
                             <input
-                              type="number"
+                              // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm"
                               defaultValue="0"
                               name="cl_6b_ppnbm"
@@ -2108,7 +2325,7 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2"></td>
                           <td className="p-2">
                             <input
-                              type="number"
+                              // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={data.detail_spt.cl_6c_ppnbm}
                               disabled
@@ -2127,7 +2344,7 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2"></td>
                           <td className="p-2">
                             <input
-                              type="number"
+                              // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm"
                               defaultValue="0"
                               name="cl_6d_ppnbm"
@@ -2147,7 +2364,7 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2"></td>
                           <td className="p-2">
                             <input
-                              type="number"
+                              // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm BG-gray-100"
                               value={data.detail_spt.cl_6e_ppnbm}
                               disabled
@@ -2163,14 +2380,14 @@ const CreateKonsepSPT = ({ data }) => {
                             sebelumnya
                           </td>
 
-                          <input
-                            type="number"
+                          {/* <input
+                            // type="number"
                             className="w-full p-1 border rounded-md text-right text-sm BG-gray-100"
                             value={formData.cl_6f_diminta_pengembalian}
                             disabled={data.detail_spt.cl_6e_ppnbm > 0}
                             name="cl_6f_diminta_pengembalian"
                             onChange={handleChange}
-                          />
+                          /> */}
                         </tr>
                       </tbody>
                     </table>
@@ -2219,7 +2436,7 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2">
                             <input
                               name="cl_7a_dpp"
-                              type="number"
+                              // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm"
                               value={formData.cl_7a_dpp}
                               onChange={handleChange}
@@ -2228,7 +2445,7 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2">
                             <input
                               name="cl_7a_dpp_lain"
-                              type="number"
+                              // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm"
                               value={formData.cl_7a_dpp_lain}
                               onChange={handleChange}
@@ -2237,7 +2454,7 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2">
                             <input
                               name="cl_7a_ppn"
-                              type="number"
+                              // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm"
                               value={formData.cl_7a_ppn}
                               onChange={handleChange}
@@ -2246,7 +2463,7 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2">
                             <input
                               name="cl_7a_ppnbm"
-                              type="number"
+                              // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm"
                               value={formData.cl_7a_ppnbm}
                               onChange={handleChange}
@@ -2263,7 +2480,7 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2">
                             <input
                               name="cl_7b_dpp"
-                              type="number"
+                              // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm"
                               value={formData.cl_7b_dpp}
                               onChange={handleChange}
@@ -2272,7 +2489,7 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2">
                             <input
                               name="cl_7b_dpp_lain"
-                              type="number"
+                              // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm"
                               value={formData.cl_7b_dpp_lain}
                               onChange={handleChange}
@@ -2281,7 +2498,7 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2">
                             <input
                               name="cl_7b_ppn"
-                              type="number"
+                              // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm"
                               value={formData.cl_7b_ppn}
                               onChange={handleChange}
@@ -2290,7 +2507,7 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2">
                             <input
                               name="cl_7b_ppnbm"
-                              type="number"
+                              // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm"
                               value={formData.cl_7b_ppnbm}
                               onChange={handleChange}
@@ -2307,7 +2524,7 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2">
                             <input
                               name="cl_7c_dpp"
-                              type="number"
+                              // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={data.detail_spt.cl_7c_dpp}
                               disabled
@@ -2316,7 +2533,7 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2">
                             <input
                               name="cl_7c_dpp_lain"
-                              type="number"
+                              // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={data.detail_spt.cl_7c_dpp_lain}
                               disabled
@@ -2325,7 +2542,7 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2">
                             <input
                               name="cl_7c_ppn"
-                              type="number"
+                              // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={data.detail_spt.cl_7c_ppn}
                               disabled
@@ -2334,7 +2551,7 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2">
                             <input
                               name="cl_7c_ppnbm"
-                              type="number"
+                              // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={data.detail_spt.cl_7c_ppnbm}
                               disabled
@@ -2397,7 +2614,7 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2">
                             <input
                               name="cl_8a_dpp"
-                              type="number"
+                              // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={formData.cl_8a_dpp}
                               onChange={handleChange}
@@ -2406,18 +2623,16 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2">
                             <input
                               name="cl_8a_dpp_lain"
-                              type="number"
+                              // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={
-                                formData.cl_8a_dpplain
-                              } /* Note: there's a name mismatch in formData */
+                              value={formData.cl_8a_dpp_lain}
                               onChange={handleChange}
                             />
                           </td>
                           <td className="p-2">
                             <input
                               name="cl_8a_ppn"
-                              type="number"
+                              // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={formData.cl_8a_ppn}
                               onChange={handleChange}
@@ -2426,7 +2641,7 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2">
                             <input
                               name="cl_8a_ppnbm"
-                              type="number"
+                              // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm"
                               value={formData.cl_8a_ppnbm}
                               onChange={handleChange}
@@ -2529,7 +2744,7 @@ const CreateKonsepSPT = ({ data }) => {
                             pengembalian pajak yang tidak seharusnya terutang
                           </td>
                           <td className="p-2">
-                            <input
+                            {/* <input
                               type="checkbox"
                               name="cl_8c_dpp"
                               className="p-1 border rounded-md bg-gray-100"
@@ -2550,7 +2765,7 @@ const CreateKonsepSPT = ({ data }) => {
                                   },
                                 });
                               }}
-                            />
+                            /> */}
                           </td>
                         </tr>
                       </tbody>
@@ -2836,817 +3051,1017 @@ const CreateKonsepSPT = ({ data }) => {
                 )}
               </div>
             </TabsContent>
-            <TabsContent value="a-1">
-              <div className="mt-4">
-                <div className="text-lg font-semibold mb-4">
-                  <h1>
-                    DAFTAR EKSPOR BKP BERWUJUD, BKP TIDAK BERWUJUD, DAN/ATAU PKP
-                  </h1>
-                </div>
-                <div
-                  className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
-                  onClick={() => setShowHeadera1(!showHeadera1)}
-                >
-                  <h3 className="text-lg font-semibold">Header</h3>
-                  {showHeadera1 ? <FaChevronUp /> : <FaChevronDown />}
-                </div>
-                {showHeadera1 && (
-                  <div className="border rounded-md p-4 mb-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {/* Kiri */}
-                      <div>
-                        <label className="block font-medium text-gray-700">
-                          NAMA PKP *
-                        </label>
-                        <input
-                          type="text"
-                          readOnly
-                          value="KANTOR AKUNTAN PUBLIK MOH WILDAN DAN ADI DARMAWAN"
-                          className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
-                        />
-                      </div>
+            {isLoadingOther ? (
+              <div className="loading">
+                <ClipLoader></ClipLoader>
+              </div>
+            ) : (
+              <>
+                <TabsContent value="a-1">
+                  <div className="mt-4">
+                    <div className="text-lg font-semibold mb-4">
+                      <h1>
+                        DAFTAR EKSPOR BKP BERWUJUD, BKP TIDAK BERWUJUD, DAN/ATAU
+                        PKP
+                      </h1>
+                    </div>
+                    <div
+                      className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
+                      onClick={() => setShowHeadera1(!showHeadera1)}
+                    >
+                      <h3 className="text-lg font-semibold">Header</h3>
+                      {showHeadera1 ? <FaChevronUp /> : <FaChevronDown />}
+                    </div>
+                    {showHeadera1 && (
+                      <div className="border rounded-md p-4 mb-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {/* Kiri */}
+                          <div>
+                            <label className="block font-medium text-gray-700">
+                              NAMA PKP *
+                            </label>
+                            <input
+                              type="text"
+                              readOnly
+                              value="KANTOR AKUNTAN PUBLIK MOH WILDAN DAN ADI DARMAWAN"
+                              className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
+                            />
+                          </div>
 
-                      <div>
-                        <label className="block font-medium text-gray-700">
-                          MASA *
-                        </label>
-                        <input
-                          type="text"
-                          readOnly
-                          value="032025"
-                          className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
-                        />
+                          <div>
+                            <label className="block font-medium text-gray-700">
+                              MASA *
+                            </label>
+                            <input
+                              type="text"
+                              readOnly
+                              value="032025"
+                              className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
+                            />
+                          </div>
+                          <div>
+                            <label className="block font-medium text-gray-700">
+                              NPWP*
+                            </label>
+                            <input
+                              type="text"
+                              readOnly
+                              value="0934274002429000"
+                              className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
+                            />
+                          </div>
+                          <div>
+                            <label className="block font-medium text-gray-700">
+                              Normal/Pembetulan
+                            </label>
+                            <select
+                              disabled
+                              className="w-full p-2 border rounded-md bg-gray-100 text-gray-600 cursor-not-allowed"
+                            >
+                              <option>Normal</option>
+                            </select>
+                          </div>
+                        </div>
                       </div>
-                      <div>
-                        <label className="block font-medium text-gray-700">
-                          NPWP*
-                        </label>
-                        <input
-                          type="text"
-                          readOnly
-                          value="0934274002429000"
-                          className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
-                        />
-                      </div>
-                      <div>
-                        <label className="block font-medium text-gray-700">
-                          Normal/Pembetulan
-                        </label>
-                        <select
-                          disabled
-                          className="w-full p-2 border rounded-md bg-gray-100 text-gray-600 cursor-not-allowed"
-                        >
-                          <option>Normal</option>
-                        </select>
-                      </div>
+                    )}
+                    <div className="border">
+                      <table className="min-w-full text-sm text-left border overflow-x-auto">
+                        <thead className="bg-purple-700 text-white text-center">
+                          <tr>
+                            <th className="p-2 border-b">No</th>
+                            <th className="p-2 border-b min-w-[200px]">
+                              Nama Pembeli
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">NPWP</th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              Faktur Pajak Nomor
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              Faktur Pajak Tanggal
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              DPP (Rupiah)
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              DPP Lain (Rupiah)
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              PPN (Rupiah)
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              PPnBM (Rupiah)
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody className="text-gray-600 text-center">
+                          {sptOther.data.length > 0 ? (
+                            sptOther.data.map((item, index) => (
+                              <tr key={index}>
+                                <td className="p-2 border-b text-center">
+                                  {index + 1}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.nama_pembeli || "-"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.npwp || "-"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.faktur_pajak_nomor || "-"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.faktur_pajak_tanggal || "-"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.dpp || "0"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.dpp_lain || "0"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.ppn || "0"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.ppnbm || "0"}
+                                </td>
+                              </tr>
+                            ))
+                          ) : (
+                            <tr>
+                              <td
+                                className="p-2 border-b text-center"
+                                colSpan={6}
+                              >
+                                No data available
+                              </td>
+                            </tr>
+                          )}
+                        </tbody>
+                        <tfoot className="text-gray-800 font-semibold bg-gray-100">
+                          <tr>
+                            <td
+                              className="p-2 text-center min-w-[150px]"
+                              colSpan={4}
+                            >
+                              Jumlah
+                            </td>
+                            <td className="p-2 text-center">
+                              {/* {data.reduce(
+                            (sum, item) => sum + parseFloat(item.dpp || 0),
+                            0
+                          )} */}
+                            </td>
+                            <td className="p-2"></td>
+                          </tr>
+                        </tfoot>
+                      </table>
                     </div>
                   </div>
-                )}
-                <div className="border">
-                  <table className="min-w-full text-sm text-left border overflow-x-auto">
-                    <thead className="bg-purple-700 text-white text-center">
-                      <tr>
-                        <th className="p-2 border-b ">No</th>
-                        <th className="p-2 border-b min-w-[200px]">
-                          Nama Pembeli BKP/Penerima Manfaat BKP Tidak
-                          Berwujud/Penerima JKP
-                        </th>
-                        <th className="p-2  border-b min-w-[150px]">
-                          Dokumen Tertentu Atau Nomor
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          Dokumen Tertentu Atau Tanggal
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          DPP (Rupiah)
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          Keterangan
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="text-gray-600 text-center">
-                      <tr>
-                        <td className="p-2 border-b text-center">1</td>
-                        <td className="p-2 border-b">
-                          KANTOR AKUNTAN PUBLIK MOH WILDAN DAN ADI DARMAWAN
-                        </td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                      </tr>
-                    </tbody>
-                    <tfoot className="text-gray-800 font-semibold bg-gray-100">
-                      <tr>
-                        <td
-                          className="p-2 text-center min-w-[150px]"
-                          colSpan={4}
-                        >
-                          Jumlah
-                        </td>
-                        <td className="p-2 text-center">0</td>
-                        <td className="p-2"></td>
-                      </tr>
-                    </tfoot>
-                  </table>
-                </div>
-              </div>
-            </TabsContent>
-            <TabsContent value="a-2">
-              <div className="mt-4">
-                <div className="text-lg font-semibold mb-4">
-                  <h1>
-                    DAFTAR PAJAK KELUARAN ATAS PENYERAHAN DALAM NEGERI DENGAN
-                    FAKTUR PAJAK
-                  </h1>
-                </div>
-                <div
-                  className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
-                  onClick={() => setShowHeadera2(!showHeadera2)}
-                >
-                  <h3 className="text-lg font-semibold">Header</h3>
-                  {showHeadera2 ? <FaChevronUp /> : <FaChevronDown />}
-                </div>
-                {showHeadera2 && (
-                  <div className="border rounded-md p-4 mb-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {/* Kiri */}
-                      <div>
-                        <label className="block font-medium text-gray-700">
-                          NAMA PKP *
-                        </label>
-                        <input
-                          type="text"
-                          readOnly
-                          value="KANTOR AKUNTAN PUBLIK MOH WILDAN DAN ADI DARMAWAN"
-                          className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
-                        />
-                      </div>
+                </TabsContent>
+                <TabsContent value="a-2">
+                  <div className="mt-4">
+                    <div className="text-lg font-semibold mb-4">
+                      <h1>
+                        DAFTAR PAJAK KELUARAN ATAS PENYERAHAN DALAM NEGERI
+                        DENGAN FAKTUR PAJAK
+                      </h1>
+                    </div>
+                    <div
+                      className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
+                      onClick={() => setShowHeadera2(!showHeadera2)}
+                    >
+                      <h3 className="text-lg font-semibold">Header</h3>
+                      {showHeadera2 ? <FaChevronUp /> : <FaChevronDown />}
+                    </div>
+                    {showHeadera2 && (
+                      <div className="border rounded-md p-4 mb-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {/* Kiri */}
+                          <div>
+                            <label className="block font-medium text-gray-700">
+                              NAMA PKP *
+                            </label>
+                            <input
+                              type="text"
+                              readOnly
+                              value="KANTOR AKUNTAN PUBLIK MOH WILDAN DAN ADI DARMAWAN"
+                              className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
+                            />
+                          </div>
 
-                      <div>
-                        <label className="block font-medium text-gray-700">
-                          MASA *
-                        </label>
-                        <input
-                          type="text"
-                          readOnly
-                          value="032025"
-                          className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
-                        />
+                          <div>
+                            <label className="block font-medium text-gray-700">
+                              MASA *
+                            </label>
+                            <input
+                              type="text"
+                              readOnly
+                              value="032025"
+                              className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
+                            />
+                          </div>
+                          <div>
+                            <label className="block font-medium text-gray-700">
+                              NPWP*
+                            </label>
+                            <input
+                              type="text"
+                              readOnly
+                              value="0934274002429000"
+                              className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
+                            />
+                          </div>
+                          <div>
+                            <label className="block font-medium text-gray-700">
+                              Normal/Pembetulan
+                            </label>
+                            <select
+                              disabled
+                              className="w-full p-2 border rounded-md bg-gray-100 text-gray-600 cursor-not-allowed"
+                            >
+                              <option>Normal</option>
+                            </select>
+                          </div>
+                        </div>
                       </div>
-                      <div>
-                        <label className="block font-medium text-gray-700">
-                          NPWP*
-                        </label>
-                        <input
-                          type="text"
-                          readOnly
-                          value="0934274002429000"
-                          className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
-                        />
-                      </div>
-                      <div>
-                        <label className="block font-medium text-gray-700">
-                          Normal/Pembetulan
-                        </label>
-                        <select
-                          disabled
-                          className="w-full p-2 border rounded-md bg-gray-100 text-gray-600 cursor-not-allowed"
-                        >
-                          <option>Normal</option>
-                        </select>
-                      </div>
+                    )}
+                    <div className=" w-[1450px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden ">
+                      <table className="table-auto text-sm text-left border overflow-hidden">
+                        <thead className="bg-purple-700 text-white text-center">
+                          <tr>
+                            <th className="p-2 border-b ">No</th>
+                            <th className="p-2 border-b min-w-[200px]">
+                              Nama Pembeli BKP/Penerima Manfaat BKP Tidak
+                              Berwujud/Penerima JKP
+                            </th>
+                            <th className="p-2  border-b min-w-[150px]">
+                              NPWP/NIK/Nomor Paspor
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              Faktur Pajak Dokumen Tertentu/Nota Retur/Nota
+                              Pembatalan - nomor
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              Harga Jual/Pengganti/DPP (Rupiah)
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              DPP Nilai Lain/DPP (Rupiah)
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              PPN (Rupiah)
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              PPnBM (Rupiah)
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              Kode dan Nomor Seri Faktur Pajak Diganti/Diretur
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody className="text-gray-600 text-center">
+                          {sptOther.data.length > 0 ? (
+                            sptOther.data.map((item, index) => (
+                              <tr key={index}>
+                                <td className="p-2 border-b text-center">
+                                  {index + 1}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.nama_pembeli || "-"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.npwp || "-"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.faktur_pajak_nomor || "-"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.faktur_pajak_tanggal || "-"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.dpp || "0"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.dpp_lain || "0"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.ppn || "0"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.ppnbm || "0"}
+                                </td>
+                              </tr>
+                            ))
+                          ) : (
+                            <tr>
+                              <td
+                                className="p-2 border-b text-center"
+                                colSpan={6}
+                              >
+                                No data available
+                              </td>
+                            </tr>
+                          )}
+                        </tbody>
+                        <tfoot className="text-gray-800 font-semibold bg-gray-100">
+                          <tr>
+                            <td
+                              className="p-2 text-center min-w-[150px]"
+                              colSpan={4}
+                            >
+                              Jumlah
+                            </td>
+                            <td className="p-2 text-center">0</td>
+                            <td className="p-2"></td>
+                          </tr>
+                        </tfoot>
+                      </table>
                     </div>
                   </div>
-                )}
-                <div className=" w-[1450px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden ">
-                  <table className="table-auto text-sm text-left border overflow-hidden">
-                    <thead className="bg-purple-700 text-white text-center">
-                      <tr>
-                        <th className="p-2 border-b ">No</th>
-                        <th className="p-2 border-b min-w-[200px]">
-                          Nama Pembeli BKP/Penerima Manfaat BKP Tidak
-                          Berwujud/Penerima JKP
-                        </th>
-                        <th className="p-2  border-b min-w-[150px]">
-                          NPWP/NIK/Nomor Paspor
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          Faktur Pajak Dokumen Tertentu/Nota Retur/Nota
-                          Pembatalan - nomor
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          Harga Jual/Pengganti/DPP (Rupiah)
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          DPP Nilai Lain/DPP (Rupiah)
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          PPN (Rupiah)
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          PPnBM (Rupiah)
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          Kode dan Nomor Seri Faktur Pajak Diganti/Diretur
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="text-gray-600 text-center">
-                      <tr>
-                        <td className="p-2 border-b text-center">1</td>
-                        <td className="p-2 border-b">
-                          KANTOR AKUNTAN PUBLIK MOH WILDAN DAN ADI DARMAWAN
-                        </td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                      </tr>
-                    </tbody>
-                    <tfoot className="text-gray-800 font-semibold bg-gray-100">
-                      <tr>
-                        <td
-                          className="p-2 text-center min-w-[150px]"
-                          colSpan={4}
-                        >
-                          Jumlah
-                        </td>
-                        <td className="p-2 text-center">0</td>
-                        <td className="p-2"></td>
-                      </tr>
-                    </tfoot>
-                  </table>
-                </div>
-              </div>
-            </TabsContent>
-            <TabsContent value="b-1">
-              <div className="mt-4">
-                <div className="text-lg font-semibold mb-4">
-                  <h1>
-                    DAFTAR PAJAK MASUKAN YANG DAPAT DIKREDITKAN ATAS IMPOR BKP
-                    DAN PEMANFAATAN BKP TIDAK BERWUJUD/JKP DARI LUAR DAERAH
-                    PABEAN
-                  </h1>
-                </div>
-                <div
-                  className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
-                  onClick={() => setShowHeaderb1(!showHeaderb1)}
-                >
-                  <h3 className="text-lg font-semibold">Header</h3>
-                  {showHeaderb1 ? <FaChevronUp /> : <FaChevronDown />}
-                </div>
-                {showHeaderb1 && (
-                  <div className="border rounded-md p-4 mb-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {/* Kiri */}
-                      <div>
-                        <label className="block font-medium text-gray-700">
-                          NAMA PKP *
-                        </label>
-                        <input
-                          type="text"
-                          readOnly
-                          value="KANTOR AKUNTAN PUBLIK MOH WILDAN DAN ADI DARMAWAN"
-                          className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
-                        />
-                      </div>
+                </TabsContent>
+                <TabsContent value="b-1">
+                  <div className="mt-4">
+                    <div className="text-lg font-semibold mb-4">
+                      <h1>
+                        DAFTAR PAJAK MASUKAN YANG DAPAT DIKREDITKAN ATAS IMPOR
+                        BKP DAN PEMANFAATAN BKP TIDAK BERWUJUD/JKP DARI LUAR
+                        DAERAH PABEAN
+                      </h1>
+                    </div>
+                    <div
+                      className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
+                      onClick={() => setShowHeaderb1(!showHeaderb1)}
+                    >
+                      <h3 className="text-lg font-semibold">Header</h3>
+                      {showHeaderb1 ? <FaChevronUp /> : <FaChevronDown />}
+                    </div>
+                    {showHeaderb1 && (
+                      <div className="border rounded-md p-4 mb-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {/* Kiri */}
+                          <div>
+                            <label className="block font-medium text-gray-700">
+                              NAMA PKP *
+                            </label>
+                            <input
+                              type="text"
+                              readOnly
+                              value="KANTOR AKUNTAN PUBLIK MOH WILDAN DAN ADI DARMAWAN"
+                              className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
+                            />
+                          </div>
 
-                      <div>
-                        <label className="block font-medium text-gray-700">
-                          MASA *
-                        </label>
-                        <input
-                          type="text"
-                          readOnly
-                          value="032025"
-                          className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
-                        />
+                          <div>
+                            <label className="block font-medium text-gray-700">
+                              MASA *
+                            </label>
+                            <input
+                              type="text"
+                              readOnly
+                              value="032025"
+                              className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
+                            />
+                          </div>
+                          <div>
+                            <label className="block font-medium text-gray-700">
+                              NPWP*
+                            </label>
+                            <input
+                              type="text"
+                              readOnly
+                              value="0934274002429000"
+                              className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
+                            />
+                          </div>
+                          <div>
+                            <label className="block font-medium text-gray-700">
+                              Normal/Pembetulan
+                            </label>
+                            <select
+                              disabled
+                              className="w-full p-2 border rounded-md bg-gray-100 text-gray-600 cursor-not-allowed"
+                            >
+                              <option>Normal</option>
+                            </select>
+                          </div>
+                        </div>
                       </div>
-                      <div>
-                        <label className="block font-medium text-gray-700">
-                          NPWP*
-                        </label>
-                        <input
-                          type="text"
-                          readOnly
-                          value="0934274002429000"
-                          className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
-                        />
-                      </div>
-                      <div>
-                        <label className="block font-medium text-gray-700">
-                          Normal/Pembetulan
-                        </label>
-                        <select
-                          disabled
-                          className="w-full p-2 border rounded-md bg-gray-100 text-gray-600 cursor-not-allowed"
-                        >
-                          <option>Normal</option>
-                        </select>
-                      </div>
+                    )}
+                    <div className=" w-[1450px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden ">
+                      <table className="table-auto text-sm text-left border overflow-hidden">
+                        <thead className="bg-purple-700 text-white text-center">
+                          <tr>
+                            <th className="p-2 border-b ">No</th>
+                            <th className="p-2 border-b min-w-[200px]">
+                              Nama Pembeli BKP/Penerima Manfaat BKP Tidak
+                              Berwujud/Penerima JKP
+                            </th>
+                            <th className="p-2  border-b min-w-[150px]">
+                              NPWP/NIK/Nomor Paspor
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              Dokumen Tertentu - Nomor
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              Dokumen Tertentu - Tanggal
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              DPP (Rupiah)
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              PPN (Rupiah)
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              PPnBM (Rupiah)
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              Keterangan
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody className="text-gray-600 text-center">
+                          {sptOther.data.length > 0 ? (
+                            sptOther.data.map((item, index) => (
+                              <tr key={index}>
+                                <td className="p-2 border-b text-center">
+                                  {index + 1}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.nama_pembeli || "-"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.npwp || "-"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.faktur_pajak_nomor || "-"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.faktur_pajak_tanggal || "-"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.dpp || "0"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.dpp_lain || "0"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.ppn || "0"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.ppnbm || "0"}
+                                </td>
+                              </tr>
+                            ))
+                          ) : (
+                            <tr>
+                              <td
+                                className="p-2 border-b text-center"
+                                colSpan={6}
+                              >
+                                No data available
+                              </td>
+                            </tr>
+                          )}
+                        </tbody>
+                        <tfoot className="text-gray-800 font-semibold bg-gray-100">
+                          <tr>
+                            <td
+                              className="p-2 text-center min-w-[150px]"
+                              colSpan={4}
+                            >
+                              Jumlah
+                            </td>
+                            <td className="p-2 text-center">0</td>
+                            <td className="p-2"></td>
+                            <td className="p-2"></td>
+                            <td className="p-2"></td>
+                            <td className="p-2"></td>
+                            <td className="p-2"></td>
+                          </tr>
+                        </tfoot>
+                      </table>
                     </div>
                   </div>
-                )}
-                <div className=" w-[1450px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden ">
-                  <table className="table-auto text-sm text-left border overflow-hidden">
-                    <thead className="bg-purple-700 text-white text-center">
-                      <tr>
-                        <th className="p-2 border-b ">No</th>
-                        <th className="p-2 border-b min-w-[200px]">
-                          Nama Pembeli BKP/Penerima Manfaat BKP Tidak
-                          Berwujud/Penerima JKP
-                        </th>
-                        <th className="p-2  border-b min-w-[150px]">
-                          NPWP/NIK/Nomor Paspor
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          Dokumen Tertentu - Nomor
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          Dokumen Tertentu - Tanggal
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          DPP (Rupiah)
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          PPN (Rupiah)
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          PPnBM (Rupiah)
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          Keterangan
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="text-gray-600 text-center">
-                      <tr>
-                        <td className="p-2 border-b text-center">1</td>
-                        <td className="p-2 border-b">
-                          KANTOR AKUNTAN PUBLIK MOH WILDAN DAN ADI DARMAWAN
-                        </td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                      </tr>
-                    </tbody>
-                    <tfoot className="text-gray-800 font-semibold bg-gray-100">
-                      <tr>
-                        <td
-                          className="p-2 text-center min-w-[150px]"
-                          colSpan={4}
-                        >
-                          Jumlah
-                        </td>
-                        <td className="p-2 text-center">0</td>
-                        <td className="p-2"></td>
-                        <td className="p-2"></td>
-                        <td className="p-2"></td>
-                        <td className="p-2"></td>
-                        <td className="p-2"></td>
-                      </tr>
-                    </tfoot>
-                  </table>
-                </div>
-              </div>
-            </TabsContent>
-            <TabsContent value="b-2">
-              <div className="mt-4">
-                <div className="text-lg font-semibold mb-4">
-                  <h1>
-                    DAFTAR PAJAK MASUKAN YANG DAPAT DIKREDITKAN BKP/JKP DALAM
-                    NEGERI
-                  </h1>
-                </div>
-                <div
-                  className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
-                  onClick={() => setShowHeaderb2(!showHeaderb2)}
-                >
-                  <h3 className="text-lg font-semibold">Header</h3>
-                  {showHeaderb2 ? <FaChevronUp /> : <FaChevronDown />}
-                </div>
-                {showHeaderb2 && (
-                  <div className="border rounded-md p-4 mb-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {/* Kiri */}
-                      <div>
-                        <label className="block font-medium text-gray-700">
-                          NAMA PKP *
-                        </label>
-                        <input
-                          type="text"
-                          readOnly
-                          value="KANTOR AKUNTAN PUBLIK MOH WILDAN DAN ADI DARMAWAN"
-                          className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
-                        />
-                      </div>
+                </TabsContent>
+                <TabsContent value="b-2">
+                  <div className="mt-4">
+                    <div className="text-lg font-semibold mb-4">
+                      <h1>
+                        DAFTAR PAJAK MASUKAN YANG DAPAT DIKREDITKAN BKP/JKP
+                        DALAM NEGERI
+                      </h1>
+                    </div>
+                    <div
+                      className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
+                      onClick={() => setShowHeaderb2(!showHeaderb2)}
+                    >
+                      <h3 className="text-lg font-semibold">Header</h3>
+                      {showHeaderb2 ? <FaChevronUp /> : <FaChevronDown />}
+                    </div>
+                    {showHeaderb2 && (
+                      <div className="border rounded-md p-4 mb-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {/* Kiri */}
+                          <div>
+                            <label className="block font-medium text-gray-700">
+                              NAMA PKP *
+                            </label>
+                            <input
+                              type="text"
+                              readOnly
+                              value="KANTOR AKUNTAN PUBLIK MOH WILDAN DAN ADI DARMAWAN"
+                              className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
+                            />
+                          </div>
 
-                      <div>
-                        <label className="block font-medium text-gray-700">
-                          MASA *
-                        </label>
-                        <input
-                          type="text"
-                          readOnly
-                          value="032025"
-                          className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
-                        />
+                          <div>
+                            <label className="block font-medium text-gray-700">
+                              MASA *
+                            </label>
+                            <input
+                              type="text"
+                              readOnly
+                              value="032025"
+                              className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
+                            />
+                          </div>
+                          <div>
+                            <label className="block font-medium text-gray-700">
+                              NPWP*
+                            </label>
+                            <input
+                              type="text"
+                              readOnly
+                              value="0934274002429000"
+                              className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
+                            />
+                          </div>
+                          <div>
+                            <label className="block font-medium text-gray-700">
+                              Normal/Pembetulan
+                            </label>
+                            <select
+                              disabled
+                              className="w-full p-2 border rounded-md bg-gray-100 text-gray-600 cursor-not-allowed"
+                            >
+                              <option>Normal</option>
+                            </select>
+                          </div>
+                        </div>
                       </div>
-                      <div>
-                        <label className="block font-medium text-gray-700">
-                          NPWP*
-                        </label>
-                        <input
-                          type="text"
-                          readOnly
-                          value="0934274002429000"
-                          className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
-                        />
-                      </div>
-                      <div>
-                        <label className="block font-medium text-gray-700">
-                          Normal/Pembetulan
-                        </label>
-                        <select
-                          disabled
-                          className="w-full p-2 border rounded-md bg-gray-100 text-gray-600 cursor-not-allowed"
-                        >
-                          <option>Normal</option>
-                        </select>
-                      </div>
+                    )}
+                    <div className=" w-[1450px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden ">
+                      <table className="table-auto text-sm text-left border overflow-hidden">
+                        <thead className="bg-purple-700 text-white text-center">
+                          <tr>
+                            <th className="p-2 border-b ">No</th>
+                            <th className="p-2 border-b min-w-[200px]">
+                              Nama Pembeli BKP/Penerima Manfaat BKP Tidak
+                              Berwujud/Penerima JKP
+                            </th>
+                            <th className="p-2  border-b min-w-[150px]">
+                              NPWP/NIK/Nomor Paspor
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              Faktur Pajak/Dokumen Tertentu/Nota Retur/ Nota
+                              Pembatalan - Nomor
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              Faktur Pajak/Dokumen Tertentu/Nota Retur/ Nota
+                              Pembatalan - Tanggal
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              Harga Jual/Pengganti/DPP(Rupiah)
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              DPP Nilai Lain/ DPP (Rupiah)
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              PPN (Rupiah)
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              PPnBM (Rupiah)
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              Kode dan Nomor Seri Faktur Pajak yang
+                              Diganti/Diretur
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody className="text-gray-600 text-center">
+                          {sptOther.data.length > 0 ? (
+                            sptOther.data.map((item, index) => (
+                              <tr key={index}>
+                                <td className="p-2 border-b text-center">
+                                  {index + 1}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.nama_pembeli || "-"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.npwp || "-"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.faktur_pajak_nomor || "-"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.faktur_pajak_tanggal || "-"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.dpp || "0"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.dpp_lain || "0"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.ppn || "0"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.ppnbm || "0"}
+                                </td>
+                              </tr>
+                            ))
+                          ) : (
+                            <tr>
+                              <td
+                                className="p-2 border-b text-center"
+                                colSpan={6}
+                              >
+                                No data available
+                              </td>
+                            </tr>
+                          )}
+                        </tbody>
+                        <tfoot className="text-gray-800 font-semibold bg-gray-100">
+                          <tr>
+                            <td
+                              className="p-2 text-center min-w-[150px]"
+                              colSpan={4}
+                            >
+                              Jumlah
+                            </td>
+                            <td className="p-2 text-center">0</td>
+                            <td className="p-2"></td>
+                            <td className="p-2"></td>
+                            <td className="p-2"></td>
+                            <td className="p-2"></td>
+                            <td className="p-2"></td>
+                          </tr>
+                        </tfoot>
+                      </table>
                     </div>
                   </div>
-                )}
-                <div className=" w-[1450px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden ">
-                  <table className="table-auto text-sm text-left border overflow-hidden">
-                    <thead className="bg-purple-700 text-white text-center">
-                      <tr>
-                        <th className="p-2 border-b ">No</th>
-                        <th className="p-2 border-b min-w-[200px]">
-                          Nama Pembeli BKP/Penerima Manfaat BKP Tidak
-                          Berwujud/Penerima JKP
-                        </th>
-                        <th className="p-2  border-b min-w-[150px]">
-                          NPWP/NIK/Nomor Paspor
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          Faktur Pajak/Dokumen Tertentu/Nota Retur/ Nota
-                          Pembatalan - Nomor
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          Faktur Pajak/Dokumen Tertentu/Nota Retur/ Nota
-                          Pembatalan - Tanggal
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          Harga Jual/Pengganti/DPP(Rupiah)
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          DPP Nilai Lain/ DPP (Rupiah)
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          PPN (Rupiah)
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          PPnBM (Rupiah)
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          Kode dan Nomor Seri Faktur Pajak yang Diganti/Diretur
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="text-gray-600 text-center">
-                      <tr>
-                        <td className="p-2 border-b text-center">1</td>
-                        <td className="p-2 border-b">
-                          KANTOR AKUNTAN PUBLIK MOH WILDAN DAN ADI DARMAWAN
-                        </td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                      </tr>
-                    </tbody>
-                    <tfoot className="text-gray-800 font-semibold bg-gray-100">
-                      <tr>
-                        <td
-                          className="p-2 text-center min-w-[150px]"
-                          colSpan={4}
-                        >
-                          Jumlah
-                        </td>
-                        <td className="p-2 text-center">0</td>
-                        <td className="p-2"></td>
-                        <td className="p-2"></td>
-                        <td className="p-2"></td>
-                        <td className="p-2"></td>
-                        <td className="p-2"></td>
-                      </tr>
-                    </tfoot>
-                  </table>
-                </div>
-              </div>
-            </TabsContent>
-            <TabsContent value="b-3">
-              <div className="mt-4">
-                <div className="text-lg font-semibold mb-4">
-                  <h1>
-                    DAFTAR PAJAK MASUKAN YANG TIDAK DIKREDITKAN ATAU MENDAPAT
-                    FASILITAS
-                  </h1>
-                </div>
-                <div
-                  className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
-                  onClick={() => setShowHeaderb3(!showHeaderb3)}
-                >
-                  <h3 className="text-lg font-semibold">Header</h3>
-                  {showHeaderb3 ? <FaChevronUp /> : <FaChevronDown />}
-                </div>
-                {showHeaderb3 && (
-                  <div className="border rounded-md p-4 mb-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {/* Kiri */}
-                      <div>
-                        <label className="block font-medium text-gray-700">
-                          NAMA PKP *
-                        </label>
-                        <input
-                          type="text"
-                          readOnly
-                          value="KANTOR AKUNTAN PUBLIK MOH WILDAN DAN ADI DARMAWAN"
-                          className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
-                        />
-                      </div>
+                </TabsContent>
+                <TabsContent value="b-3">
+                  <div className="mt-4">
+                    <div className="text-lg font-semibold mb-4">
+                      <h1>
+                        DAFTAR PAJAK MASUKAN YANG TIDAK DIKREDITKAN ATAU
+                        MENDAPAT FASILITAS
+                      </h1>
+                    </div>
+                    <div
+                      className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
+                      onClick={() => setShowHeaderb3(!showHeaderb3)}
+                    >
+                      <h3 className="text-lg font-semibold">Header</h3>
+                      {showHeaderb3 ? <FaChevronUp /> : <FaChevronDown />}
+                    </div>
+                    {showHeaderb3 && (
+                      <div className="border rounded-md p-4 mb-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {/* Kiri */}
+                          <div>
+                            <label className="block font-medium text-gray-700">
+                              NAMA PKP *
+                            </label>
+                            <input
+                              type="text"
+                              readOnly
+                              value="KANTOR AKUNTAN PUBLIK MOH WILDAN DAN ADI DARMAWAN"
+                              className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
+                            />
+                          </div>
 
-                      <div>
-                        <label className="block font-medium text-gray-700">
-                          MASA *
-                        </label>
-                        <input
-                          type="text"
-                          readOnly
-                          value="032025"
-                          className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
-                        />
+                          <div>
+                            <label className="block font-medium text-gray-700">
+                              MASA *
+                            </label>
+                            <input
+                              type="text"
+                              readOnly
+                              value="032025"
+                              className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
+                            />
+                          </div>
+                          <div>
+                            <label className="block font-medium text-gray-700">
+                              NPWP*
+                            </label>
+                            <input
+                              type="text"
+                              readOnly
+                              value="0934274002429000"
+                              className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
+                            />
+                          </div>
+                          <div>
+                            <label className="block font-medium text-gray-700">
+                              Normal/Pembetulan
+                            </label>
+                            <select
+                              disabled
+                              className="w-full p-2 border rounded-md bg-gray-100 text-gray-600 cursor-not-allowed"
+                            >
+                              <option>Normal</option>
+                            </select>
+                          </div>
+                        </div>
                       </div>
-                      <div>
-                        <label className="block font-medium text-gray-700">
-                          NPWP*
-                        </label>
-                        <input
-                          type="text"
-                          readOnly
-                          value="0934274002429000"
-                          className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
-                        />
-                      </div>
-                      <div>
-                        <label className="block font-medium text-gray-700">
-                          Normal/Pembetulan
-                        </label>
-                        <select
-                          disabled
-                          className="w-full p-2 border rounded-md bg-gray-100 text-gray-600 cursor-not-allowed"
-                        >
-                          <option>Normal</option>
-                        </select>
-                      </div>
+                    )}
+                    <div className=" w-[1450px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden ">
+                      <table className="table-auto text-sm text-left border overflow-hidden">
+                        <thead className="bg-purple-700 text-white text-center">
+                          <tr>
+                            <th className="p-2 border-b ">No</th>
+                            <th className="p-2 border-b min-w-[200px]">
+                              Nama Pembeli BKP/Penerima Manfaat BKP Tidak
+                              Berwujud/Penerima JKP
+                            </th>
+                            <th className="p-2  border-b min-w-[150px]">
+                              NPWP/NIK/Nomor Paspor
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              Faktur Pajak/Dokumen Tertentu/Nota Retur/ Nota
+                              Pembatalan - Nomor
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              Faktur Pajak/Dokumen Tertentu/Nota Retur/ Nota
+                              Pembatalan - Tanggal
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              Harga Jual/Pengganti/DPP(Rupiah)
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              DPP Nilai Lain/ DPP (Rupiah)
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              PPN (Rupiah)
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              PPnBM (Rupiah)
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              Kode dan Nomor Seri Faktur Pajak yang
+                              Diganti/Diretur
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody className="text-gray-600 text-center">
+                          {sptOther.data.length > 0 ? (
+                            sptOther.data.map((item, index) => (
+                              <tr key={index}>
+                                <td className="p-2 border-b text-center">
+                                  {index + 1}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.nama_pembeli || "-"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.npwp || "-"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.faktur_pajak_nomor || "-"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.faktur_pajak_tanggal || "-"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.dpp || "0"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.dpp_lain || "0"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.ppn || "0"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.ppnbm || "0"}
+                                </td>
+                              </tr>
+                            ))
+                          ) : (
+                            <tr>
+                              <td
+                                className="p-2 border-b text-center"
+                                colSpan={6}
+                              >
+                                No data available
+                              </td>
+                            </tr>
+                          )}
+                        </tbody>
+                        <tfoot className="text-gray-800 font-semibold bg-gray-100">
+                          <tr>
+                            <td
+                              className="p-2 text-center min-w-[150px]"
+                              colSpan={4}
+                            >
+                              Jumlah
+                            </td>
+                            <td className="p-2 text-center">0</td>
+                            <td className="p-2"></td>
+                            <td className="p-2"></td>
+                            <td className="p-2"></td>
+                            <td className="p-2"></td>
+                            <td className="p-2"></td>
+                          </tr>
+                        </tfoot>
+                      </table>
                     </div>
                   </div>
-                )}
-                <div className=" w-[1450px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden ">
-                  <table className="table-auto text-sm text-left border overflow-hidden">
-                    <thead className="bg-purple-700 text-white text-center">
-                      <tr>
-                        <th className="p-2 border-b ">No</th>
-                        <th className="p-2 border-b min-w-[200px]">
-                          Nama Pembeli BKP/Penerima Manfaat BKP Tidak
-                          Berwujud/Penerima JKP
-                        </th>
-                        <th className="p-2  border-b min-w-[150px]">
-                          NPWP/NIK/Nomor Paspor
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          Faktur Pajak/Dokumen Tertentu/Nota Retur/ Nota
-                          Pembatalan - Nomor
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          Faktur Pajak/Dokumen Tertentu/Nota Retur/ Nota
-                          Pembatalan - Tanggal
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          Harga Jual/Pengganti/DPP(Rupiah)
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          DPP Nilai Lain/ DPP (Rupiah)
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          PPN (Rupiah)
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          PPnBM (Rupiah)
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          Kode dan Nomor Seri Faktur Pajak yang Diganti/Diretur
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="text-gray-600 text-center">
-                      <tr>
-                        <td className="p-2 border-b text-center">1</td>
-                        <td className="p-2 border-b">
-                          KANTOR AKUNTAN PUBLIK MOH WILDAN DAN ADI DARMAWAN
-                        </td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                      </tr>
-                    </tbody>
-                    <tfoot className="text-gray-800 font-semibold bg-gray-100">
-                      <tr>
-                        <td
-                          className="p-2 text-center min-w-[150px]"
-                          colSpan={4}
-                        >
-                          Jumlah
-                        </td>
-                        <td className="p-2 text-center">0</td>
-                        <td className="p-2"></td>
-                        <td className="p-2"></td>
-                        <td className="p-2"></td>
-                        <td className="p-2"></td>
-                        <td className="p-2"></td>
-                      </tr>
-                    </tfoot>
-                  </table>
-                </div>
-              </div>
-            </TabsContent>
-            <TabsContent value="c">
-              <div className="mt-4">
-                <div className="text-lg font-semibold mb-4">
-                  <h1>DAFTAR PPN DAN PPNBM YANG DIPUNGUT PIHAK LAIN</h1>
-                </div>
-                <div
-                  className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
-                  onClick={() => setShowHeaderc(!showHeaderc)}
-                >
-                  <h3 className="text-lg font-semibold">Header</h3>
-                  {showHeaderc ? <FaChevronUp /> : <FaChevronDown />}
-                </div>
-                {showHeaderc && (
-                  <div className="border rounded-md p-4 mb-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {/* Kiri */}
-                      <div>
-                        <label className="block font-medium text-gray-700">
-                          NAMA PKP *
-                        </label>
-                        <input
-                          type="text"
-                          readOnly
-                          value="KANTOR AKUNTAN PUBLIK MOH WILDAN DAN ADI DARMAWAN"
-                          className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
-                        />
-                      </div>
+                </TabsContent>
+                <TabsContent value="c">
+                  <div className="mt-4">
+                    <div className="text-lg font-semibold mb-4">
+                      <h1>DAFTAR PPN DAN PPNBM YANG DIPUNGUT PIHAK LAIN</h1>
+                    </div>
+                    <div
+                      className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
+                      onClick={() => setShowHeaderc(!showHeaderc)}
+                    >
+                      <h3 className="text-lg font-semibold">Header</h3>
+                      {showHeaderc ? <FaChevronUp /> : <FaChevronDown />}
+                    </div>
+                    {showHeaderc && (
+                      <div className="border rounded-md p-4 mb-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {/* Kiri */}
+                          <div>
+                            <label className="block font-medium text-gray-700">
+                              NAMA PKP *
+                            </label>
+                            <input
+                              type="text"
+                              readOnly
+                              value="KANTOR AKUNTAN PUBLIK MOH WILDAN DAN ADI DARMAWAN"
+                              className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
+                            />
+                          </div>
 
-                      <div>
-                        <label className="block font-medium text-gray-700">
-                          MASA *
-                        </label>
-                        <input
-                          type="text"
-                          readOnly
-                          value="032025"
-                          className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
-                        />
+                          <div>
+                            <label className="block font-medium text-gray-700">
+                              MASA *
+                            </label>
+                            <input
+                              type="text"
+                              readOnly
+                              value="032025"
+                              className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
+                            />
+                          </div>
+                          <div>
+                            <label className="block font-medium text-gray-700">
+                              NPWP*
+                            </label>
+                            <input
+                              type="text"
+                              readOnly
+                              value="0934274002429000"
+                              className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
+                            />
+                          </div>
+                          <div>
+                            <label className="block font-medium text-gray-700">
+                              Normal/Pembetulan
+                            </label>
+                            <select
+                              disabled
+                              className="w-full p-2 border rounded-md bg-gray-100 text-gray-600 cursor-not-allowed"
+                            >
+                              <option>Normal</option>
+                            </select>
+                          </div>
+                        </div>
                       </div>
-                      <div>
-                        <label className="block font-medium text-gray-700">
-                          NPWP*
-                        </label>
-                        <input
-                          type="text"
-                          readOnly
-                          value="0934274002429000"
-                          className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
-                        />
-                      </div>
-                      <div>
-                        <label className="block font-medium text-gray-700">
-                          Normal/Pembetulan
-                        </label>
-                        <select
-                          disabled
-                          className="w-full p-2 border rounded-md bg-gray-100 text-gray-600 cursor-not-allowed"
-                        >
-                          <option>Normal</option>
-                        </select>
-                      </div>
+                    )}
+                    <div className=" w-[1450px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden ">
+                      <table className="table-auto text-sm text-left border overflow-hidden">
+                        <thead className="bg-purple-700 text-white text-center">
+                          <tr>
+                            <th className="p-2 border-b ">No</th>
+                            <th className="p-2 border-b ">Tindakan</th>
+                            <th className="p-2 border-b min-w-[200px]">
+                              NPWP/NIK/ID Lainnya Penjual Barang Kena
+                              Pajak/Barang Kena Pajak Tidak Berwujud/Penyedia
+                              Jasa Kena Pajak
+                            </th>
+                            <th className="p-2  border-b min-w-[150px]">
+                              Nama Penjual Barang Kena Pajak/Baran Kena Pajak
+                              Tidak Berwujud/Jasa Kena Pajak
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              Nomor Identitas Pembeli BKP/Penerima Manfaat BKP
+                              Tidak Berwujud/Penerima JKP
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              Nama Pembeli BKP/penerima Manfaat BKP TIdak
+                              Berwujud/Penerima JKP
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              Tipe Transaksi PPN yang Dipungut
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              Nomor Faktur Pajak/Dokumen Tertentu
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              Tanggal Faktur Pajak/Dokumen Tertentu
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              Kode dan Nomor Seri Faktur Pajak yang Diganti
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              Harga Jual/DPP (Rupiah)
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              DPP Nilai Lain/DPP (Rupiah)
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              PPN (Rupiah)
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              PPnBM (Rupiah)
+                            </th>
+                            <th className="p-2 border-b min-w-[150px]">
+                              Informasi
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody className="text-gray-600 text-center">
+                          {sptOther.data.length > 0 ? (
+                            sptOther.data.map((item, index) => (
+                              <tr key={index}>
+                                <td className="p-2 border-b text-center">
+                                  {index + 1}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.nama_pembeli || "-"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.npwp || "-"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.faktur_pajak_nomor || "-"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.faktur_pajak_tanggal || "-"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.dpp || "0"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.dpp_lain || "0"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.ppn || "0"}
+                                </td>
+                                <td className="p-2 border-b">
+                                  {item.ppnbm || "0"}
+                                </td>
+                              </tr>
+                            ))
+                          ) : (
+                            <tr>
+                              <td
+                                className="p-2 border-b text-center"
+                                colSpan={6}
+                              >
+                                No data available
+                              </td>
+                            </tr>
+                          )}
+                        </tbody>
+                        <tfoot className="text-gray-800 font-semibold bg-gray-100">
+                          <tr>
+                            <td
+                              className="p-2 text-center min-w-[150px]"
+                              colSpan={4}
+                            >
+                              Jumlah
+                            </td>
+                            <td className="p-2 text-center">0</td>
+                            <td className="p-2"></td>
+                            <td className="p-2"></td>
+                            <td className="p-2"></td>
+                            <td className="p-2"></td>
+                            <td className="p-2"></td>
+                          </tr>
+                        </tfoot>
+                      </table>
                     </div>
                   </div>
-                )}
-                <div className=" w-[1450px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden ">
-                  <table className="table-auto text-sm text-left border overflow-hidden">
-                    <thead className="bg-purple-700 text-white text-center">
-                      <tr>
-                        <th className="p-2 border-b ">No</th>
-                        <th className="p-2 border-b ">Tindakan</th>
-                        <th className="p-2 border-b min-w-[200px]">
-                          NPWP/NIK/ID Lainnya Penjual Barang Kena Pajak/Barang
-                          Kena Pajak Tidak Berwujud/Penyedia Jasa Kena Pajak
-                        </th>
-                        <th className="p-2  border-b min-w-[150px]">
-                          Nama Penjual Barang Kena Pajak/Baran Kena Pajak Tidak
-                          Berwujud/Jasa Kena Pajak
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          Nomor Identitas Pembeli BKP/Penerima Manfaat BKP Tidak
-                          Berwujud/Penerima JKP
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          Nama Pembeli BKP/penerima Manfaat BKP TIdak
-                          Berwujud/Penerima JKP
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          Tipe Transaksi PPN yang Dipungut
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          Nomor Faktur Pajak/Dokumen Tertentu
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          Tanggal Faktur Pajak/Dokumen Tertentu
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          Kode dan Nomor Seri Faktur Pajak yang Diganti
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          Harga Jual/DPP (Rupiah)
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          DPP Nilai Lain/DPP (Rupiah)
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          PPN (Rupiah)
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          PPnBM (Rupiah)
-                        </th>
-                        <th className="p-2 border-b min-w-[150px]">
-                          Informasi
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="text-gray-600 text-center">
-                      <tr>
-                        <td className="p-2 border-b text-center">1</td>
-                        <td className="p-2 border-b">
-                          KANTOR AKUNTAN PUBLIK MOH WILDAN DAN ADI DARMAWAN
-                        </td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                        <td className="p-2 border-b">-</td>
-                      </tr>
-                    </tbody>
-                    <tfoot className="text-gray-800 font-semibold bg-gray-100">
-                      <tr>
-                        <td
-                          className="p-2 text-center min-w-[150px]"
-                          colSpan={4}
-                        >
-                          Jumlah
-                        </td>
-                        <td className="p-2 text-center">0</td>
-                        <td className="p-2"></td>
-                        <td className="p-2"></td>
-                        <td className="p-2"></td>
-                        <td className="p-2"></td>
-                        <td className="p-2"></td>
-                      </tr>
-                    </tfoot>
-                  </table>
-                </div>
-              </div>
-            </TabsContent>
+                </TabsContent>
+              </>
+            )}
           </Tabs>
         </div>
       </div>

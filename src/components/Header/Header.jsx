@@ -631,7 +631,16 @@ const Header = () => {
                   },
                 ],
               },
-              { label: "Buku Besar", submenu: [] },
+              {
+                label: "Buku Besar",
+                submenu: [],
+                links: `/buku-besar`,
+              },
+              {
+                label: "Master Akun",
+                submenu: [],
+                links: `/master-akun`,
+              },
             ].map((item, index) => (
               <li
                 key={index}

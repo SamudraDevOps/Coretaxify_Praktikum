@@ -786,7 +786,7 @@ const EditDataProfil = ({ data, sidebar }) => {
       const csrf = await getCsrf();
       const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
       return axios.put(
-        `${RoutesApi.url}api/student/assignments/${id}/sistem/${accountId}/nomor-identifikasi-eksternal/${accountId}`,
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${accountId}/nomor-identifikasi-eksternal`,
         extIdFormData,
         {
           headers: {

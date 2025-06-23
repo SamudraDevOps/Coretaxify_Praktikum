@@ -167,6 +167,8 @@ import SptMasaPph21Pdf from "./components/PraktikumPage/PDFTemplate/SPTMasaPPH";
 import BUPOTWrapper from "./components/PraktikumPage/Badan/BUPOT/BUPOTWrapper";
 import BUPOTCreateWrapper from "./components/PraktikumPage/Badan/BUPOT/BUPOTCreateWrapper";
 import BUPOTEditWrapper from "./components/PraktikumPage/Badan/BUPOT/BUPOTEditWrapper";
+import BukuBesar from "./components/PraktikumPage/PortalSaya/BukuBesar";
+import MasterAkun from "./components/PraktikumPage/PortalSaya/MasterAkun";
 
 const Main = () => {
   const [loading, setLoading] = useState(true);
@@ -249,7 +251,17 @@ const Main = () => {
 
         <Route
           element={
-            <RoleProtectedRoutes allowedRoles={["dosen", "admin", "psc", "mahasiswa", "instruktur", "mahasiswa-psc"]} layout="admin" />
+            <RoleProtectedRoutes
+              allowedRoles={[
+                "dosen",
+                "admin",
+                "psc",
+                "mahasiswa",
+                "instruktur",
+                "mahasiswa-psc",
+              ]}
+              layout="admin"
+            />
           }
         >
           <Route path="/edit-profile" element={<EditProfile />} />
@@ -857,7 +869,7 @@ const Main = () => {
               <RoleBasedRenderer
                 url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun`}
                 intent={"api.get.sistem.edit.informasi.umum"}
-                OrangPribadi={TambahFakturKeluaranOP}
+                OrangPribadi={EditFakturKeluaran}
                 Badan={EditFakturKeluaran}
                 query={"edit-info"}
               ></RoleBasedRenderer>
@@ -1091,6 +1103,29 @@ const Main = () => {
                 url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/bupot`}
                 OrangPribadi={BUPOTEditWrapper}
                 Badan={BUPOTEditWrapper}
+                intent={"dynamic"}
+                query={"bupot-edit"}
+              />
+            </>
+          }
+        />
+        <Route
+          path="/praktikum/:id/sistem/:akun/buku-besar"
+          element={
+            <>
+              <Header />
+              <BukuBesar />
+            </>
+          }
+        />
+        <Route
+          path="/praktikum/:id/sistem/:akun/master-akun"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/sistem-tambahan`}
+                OrangPribadi={MasterAkun}
+                Badan={MasterAkun}
                 intent={"dynamic"}
                 query={"bupot-edit"}
               />
@@ -1490,15 +1525,15 @@ const Main = () => {
             </>
           }
         />
-          <Route
-            path="/admin/praktikum/2/e-faktur/dokumen-lain/pajak-keluaran"
-            element={
-              <>
-                <Header />
-                <PajakKeluaranDokumenLain />
-              </>
-            }
-          />
+        <Route
+          path="/admin/praktikum/2/e-faktur/dokumen-lain/pajak-keluaran"
+          element={
+            <>
+              <Header />
+              <PajakKeluaranDokumenLain />
+            </>
+          }
+        />
         <Route
           path="/admin/praktikum/2/e-faktur/pajak-keluaran/tambah-faktur-keluaran"
           element={
@@ -1508,15 +1543,15 @@ const Main = () => {
             </>
           }
         />
-          <Route
-            path="/admin/praktikum/2/e-faktur/dokumen-lain/pajak-keluaran/tambah-faktur-keluaran"
-            element={
-              <>
-                <Header />
-                <TambahFakturKeluaranDokumenLain />
-              </>
-            }
-          />
+        <Route
+          path="/admin/praktikum/2/e-faktur/dokumen-lain/pajak-keluaran/tambah-faktur-keluaran"
+          element={
+            <>
+              <Header />
+              <TambahFakturKeluaranDokumenLain />
+            </>
+          }
+        />
         <Route
           path="/admin/praktikum/2/e-faktur/pajak-masukan"
           element={
