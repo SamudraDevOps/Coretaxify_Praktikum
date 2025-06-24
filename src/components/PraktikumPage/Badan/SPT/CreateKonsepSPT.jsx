@@ -198,9 +198,9 @@ const CreateKonsepSPT = ({ data }) => {
     cl_2e_ppn: formatRupiah(data?.detail_spt?.cl_2e_ppn || "0"),
     cl_2f_ppn: formatRupiah(data?.detail_spt?.cl_2f_ppn || "0"),
     cl_2i_dpp: formatRupiah(data?.detail_spt?.cl_2i_dpp || "0"),
-    cl_3b_ppnb: formatRupiah(data?.detail_spt?.cl_3b_ppnb || "0"),
-    cl_3d_ppnb: formatRupiah(data?.detail_spt?.cl_3d_ppnb || "0"),
-    cl_3f_ppnb: formatRupiah(data?.detail_spt?.cl_3f_ppnb || "0"),
+    cl_3b_ppn: formatRupiah(data?.detail_spt?.cl_3b_ppn || "0"),
+    cl_3d_ppn: formatRupiah(data?.detail_spt?.cl_3d_ppn || "0"),
+    cl_3f_ppn: formatRupiah(data?.detail_spt?.cl_3f_ppn || "0"),
     cl_3h_diminta: data?.detail_spt?.cl_3h_diminta || "",
     cl_3h_nomor_rekening: data?.detail_spt?.cl_3h_nomor_rekening || "",
     cl_3h_nama_bank: data?.detail_spt?.cl_3h_nama_bank || "",
@@ -223,7 +223,7 @@ const CreateKonsepSPT = ({ data }) => {
     cl_7b_ppn: formatRupiah(data?.detail_spt?.cl_7b_ppn || "0"),
     cl_7b_ppnbm: formatRupiah(data?.detail_spt?.cl_7b_ppnbm || "0"),
     cl_8a_dpp: formatRupiah(data?.detail_spt?.cl_8a_dpp || "0"),
-    cl_8a_dpplain: formatRupiah(data?.detail_spt?.cl_8a_dpplain || "0"),
+    cl_8a_dpp_lain: formatRupiah(data?.detail_spt?.cl_8a_dpp_lain || "0"),
     cl_8a_ppn: formatRupiah(data?.detail_spt?.cl_8a_ppn || "0"),
     cl_8a_ppnbm: formatRupiah(data?.detail_spt?.cl_8a_ppnbm || "0"),
     cl_8b_dpp: formatRupiah(data?.detail_spt?.cl_8b_dpp || "0"),
@@ -270,9 +270,9 @@ const CreateKonsepSPT = ({ data }) => {
       "cl_2e_ppn",
       "cl_2f_ppn",
       "cl_2i_dpp",
-      "cl_3b_ppnb",
-      "cl_3d_ppnb",
-      "cl_3f_ppnb",
+      "cl_3b_ppn",
+      "cl_3d_ppn",
+      "cl_3f_ppn",
       "cl_4_ppn_terutang_dpp",
       "cl_5_ppn_wajib",
       "cl_6b_ppnbm",
@@ -287,7 +287,7 @@ const CreateKonsepSPT = ({ data }) => {
       "cl_7b_ppn",
       "cl_7b_ppnbm",
       "cl_8a_dpp",
-      "cl_8a_dpplain",
+      "cl_8a_dpp_lain",
       "cl_8a_ppn",
       "cl_8a_ppnbm",
       "cl_8b_dpp",
@@ -426,9 +426,9 @@ const CreateKonsepSPT = ({ data }) => {
       //   "cl_2e_ppn",
       //   "cl_2f_ppn",
       //   "cl_2i_dpp",
-      //   "cl_3b_ppnb",
-      //   "cl_3d_ppnb",
-      //   "cl_3f_ppnb",
+      //   "cl_3b_ppn",
+      //   "cl_3d_ppn",
+      //   "cl_3f_ppn",
       //   "cl_4_ppn_terutang_dpp",
       //   "cl_5_ppn_wajib",
       //   "cl_6b_ppnbm",
@@ -443,7 +443,7 @@ const CreateKonsepSPT = ({ data }) => {
       //   "cl_7b_ppn",
       //   "cl_7b_ppnbm",
       //   "cl_8a_dpp",
-      //   "cl_8a_dpplain",
+      //   "cl_8a_dpp_lain",
       //   "cl_8a_ppn",
       //   "cl_8a_ppnbm",
       //   "cl_8b_dpp",
@@ -471,9 +471,9 @@ const CreateKonsepSPT = ({ data }) => {
         cl_2e_ppn: toNumber(formData.cl_2e_ppn),
         cl_2f_ppn: toNumber(formData.cl_2f_ppn),
         cl_2i_dpp: toNumber(formData.cl_2i_dpp),
-        cl_3b_ppnbm: toNumber(formData.cl_3b_ppnb),
-        cl_3d_ppnbm: toNumber(formData.cl_3d_ppnb),
-        cl_3f_ppnbm: toNumber(formData.cl_3f_ppnb),
+        cl_3b_ppn: toNumber(formData.cl_3b_ppn),
+        cl_3d_ppn: toNumber(formData.cl_3d_ppn),
+        cl_3f_ppn: toNumber(formData.cl_3f_ppn),
         cl_3h_diminta: toNumber(formData.cl_3h_diminta),
         cl_3h_nomor_rekening: formData.cl_3h_nomor_rekening, // Keep as string
         cl_3h_nama_bank: formData.cl_3h_nama_bank, // Keep as string
@@ -494,7 +494,7 @@ const CreateKonsepSPT = ({ data }) => {
         cl_7b_ppn: toNumber(formData.cl_7b_ppn),
         cl_7b_ppnbm: toNumber(formData.cl_7b_ppnbm),
         cl_8a_dpp: toNumber(formData.cl_8a_dpp),
-        cl_8a_dpplain: toNumber(formData.cl_8a_dpplain),
+        cl_8a_dpp_lain: toNumber(formData.cl_8a_dpplain),
         cl_8a_ppn: toNumber(formData.cl_8a_ppn),
         cl_8a_ppnbm: toNumber(formData.cl_8a_ppnbm),
         cl_8b_dpp: toNumber(formData.cl_8b_dpp),
@@ -1009,8 +1009,8 @@ const CreateKonsepSPT = ({ data }) => {
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               defaultValue="0"
                               disabled
-                              name="cl_3a_ppnb"
-                              value={data.detail_spt.cl_3a_ppnb}
+                              name="cl_3a_ppn"
+                              value={data.detail_spt.cl_3a_ppn}
                             />
                           </td>
                         </tr>
@@ -1913,8 +1913,8 @@ const CreateKonsepSPT = ({ data }) => {
                               // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               defaultValue="0"
-                              name="cl_3a_ppnb"
-                              value={data.detail_spt.cl_3a_ppnb}
+                              name="cl_3a_ppn"
+                              value={data.detail_spt.cl_3a_ppn}
                               disabled
                             />
                           </td>
@@ -1932,8 +1932,8 @@ const CreateKonsepSPT = ({ data }) => {
                             <input
                               // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              name="cl_3b_ppnb"
-                              value={formData.cl_3b_ppnb}
+                              name="cl_3b_ppn"
+                              value={formData.cl_3b_ppn}
                               onChange={handleChange}
                             />
                           </td>
@@ -1954,8 +1954,8 @@ const CreateKonsepSPT = ({ data }) => {
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               defaultValue="0"
                               disabled
-                              name="cl_3c_ppnb"
-                              value={data.detail_spt.cl_3c_ppnb}
+                              name="cl_3c_ppn"
+                              value={data.detail_spt.cl_3c_ppn}
                             />
                           </td>
                           <td className="p-2"></td>
@@ -1973,8 +1973,8 @@ const CreateKonsepSPT = ({ data }) => {
                               // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               defaultValue="0"
-                              name="cl_3d_ppnb"
-                              value={formData.cl_3d_ppnb}
+                              name="cl_3d_ppn"
+                              value={formData.cl_3d_ppn}
                               onChange={handleChange}
                             />
                           </td>
@@ -1993,8 +1993,8 @@ const CreateKonsepSPT = ({ data }) => {
                             <input
                               // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_3e_ppnb}
-                              name="cl_3e_ppnb"
+                              value={data.detail_spt.cl_3e_ppn}
+                              name="cl_3e_ppn"
                               readOnly
                               // onChange={handleChange}
                             />
@@ -2015,8 +2015,8 @@ const CreateKonsepSPT = ({ data }) => {
                               // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               defaultValue="0"
-                              name="cl_3f_ppnb"
-                              value={formData.cl_3f_ppnb}
+                              name="cl_3f_ppn"
+                              value={formData.cl_3f_ppn}
                               onChange={handleChange}
                             />
                           </td>
@@ -2035,9 +2035,9 @@ const CreateKonsepSPT = ({ data }) => {
                             <input
                               // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_3g_ppnb}
+                              value={data.detail_spt.cl_3g_ppn}
                               disabled
-                              name="cl_3g_ppnb"
+                              name="cl_3g_ppn"
                             />
                           </td>
                           <td className="p-2"></td>
