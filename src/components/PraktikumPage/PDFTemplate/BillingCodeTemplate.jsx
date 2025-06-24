@@ -165,28 +165,28 @@ const BillingCodePdf = ({ data }) => (
       {/* Taxpayer Info */}
       <View style={styles.section}>
         <View style={styles.row}>
-          <Text style={styles.label}>NPWP:</Text>
-          <Text style={styles.value}>{data.npwp}</Text>
+          <Text style={styles.label}>NPWP</Text>
+          <Text style={styles.value}>: {data.npwp}</Text>
         </View>
         <View style={styles.row}>
-          <Text style={styles.label}>NAMA:</Text>
-          <Text style={styles.value}>{data.nama}</Text>
+          <Text style={styles.label}>NAMA</Text>
+          <Text style={styles.value}>: {data.nama}</Text>
         </View>
         <View style={styles.row}>
-          <Text style={styles.label}>ALAMAT:</Text>
-          <Text style={styles.value}>{data.alamat}</Text>
+          <Text style={styles.label}>ALAMAT</Text>
+          <Text style={styles.value}>: {data.alamat}</Text>
         </View>
         <View style={styles.row}>
-          <Text style={styles.label}>MATA UANG:</Text>
-          <Text style={styles.value}>IDR</Text>
+          <Text style={styles.label}>MATA UANG</Text>
+          <Text style={styles.value}>: IDR</Text>
         </View>
         <View style={styles.row}>
-          <Text style={styles.label}>NOMINAL:</Text>
-          <Text style={styles.value}>{data.nilai}</Text>
+          <Text style={styles.label}>NOMINAL</Text>
+          <Text style={styles.value}>: {data.nilai}</Text>
         </View>
         <View style={styles.row}>
-          <Text style={styles.label}>JUMLAH DETAIL:</Text>
-          <Text style={styles.value}>1</Text>
+          <Text style={styles.label}>JUMLAH DETAIL</Text>
+          <Text style={styles.value}>: 1</Text>
         </View>
       </View>
       <View style={styles.section}>

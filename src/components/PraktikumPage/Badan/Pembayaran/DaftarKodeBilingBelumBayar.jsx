@@ -16,7 +16,7 @@ import { getCsrf } from "@/service/getCsrf";
 import { useMutation } from "@tanstack/react-query";
 import { RoutesApi } from "@/Routes";
 import { useCookies } from "react-cookie";
-import { useParams } from "react-router";
+import { useParams, useSearchParams } from "react-router";
 import Swal from "sweetalert2";
 import { PDFViewer } from "@react-pdf/renderer";
 import BillingCodePdf from "../../PDFTemplate/BillingCodeTemplate";
@@ -34,6 +34,8 @@ const DaftarKodeBilingBelumBayar = ({ data, sidebar }) => {
   const [openNTPN, setOpenNTPN] = useState(false);
   const [ntpn, setNtpn] = useState("");
   const [copied, setCopied] = useState(false); // Tambahkan state untuk pesan copy
+  const [searchParams, setSearchParams] = useSearchParams();
+  const viewAsCompanyId = searchParams.get("viewAs");
 
   console.log(data);
   const handleBayarClick = () => {
@@ -56,9 +58,10 @@ const DaftarKodeBilingBelumBayar = ({ data, sidebar }) => {
   const paySpt = useMutation({
     mutationFn: async (idSpt) => {
       const csrf = await getCsrf();
+      const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
       return axios.put(
-        `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/pembayaran/${idSpt}`,
-        {},
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${accountId}/pembayaran/${idSpt}`,
+        // {},
         {
           headers: {
             "Content-Type": "application/json",
