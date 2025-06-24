@@ -237,7 +237,7 @@ const CreateKonsepSPT = ({ data }) => {
     cl_9a_hasil_perhitungan: formatRupiah(
       data?.detail_spt?.cl_9a_hasil_perhitungan || "0"
     ),
-    cl_10_batas_waktu: formatRupiah(data?.detail_spt?.cl_10_batas_waktu || "0"),
+    cl_10_batas_waktu: data?.detail_spt?.cl_10_batas_waktu,
     klasifikasi_lapangan_usaha:
       data?.detail_spt?.klasifikasi_lapangan_usaha || "0",
   });
@@ -297,7 +297,6 @@ const CreateKonsepSPT = ({ data }) => {
       "cl_8d_diminta_pengembalian",
       "cl_9a_daftar",
       "cl_9a_hasil_perhitungan",
-      "cl_10_batas_waktu",
     ];
 
     // Format value if it's a currency field, otherwise use raw value
@@ -548,6 +547,11 @@ const CreateKonsepSPT = ({ data }) => {
     onError: (error) => {
       console.error("Error saving data:", error);
       Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
+      // Swal.fire(
+      //   "Gagal!",
+      //   `Terjadi kesalahan saat menyimpan data. ${error?.response?.data?.message}`,
+      //   "error"
+      // );
     },
   });
 
@@ -623,7 +627,12 @@ const CreateKonsepSPT = ({ data }) => {
     },
     onError: (error) => {
       console.error("Error saving data:", error);
-      Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
+      // Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
+      Swal.fire(
+        "Gagal!",
+        `Terjadi kesalahan saat menyimpan data. ${error?.response?.data?.message}`,
+        "error"
+      );
     },
   });
   const payBilling = useMutation({
@@ -2995,20 +3004,92 @@ const CreateKonsepSPT = ({ data }) => {
                   </div>
                 )}
                 <div className="flex justify-start mt-4 gap-2">
-                  <button
-                    onClick={() => saveConcept.mutate()}
-                    // type="submit"
-                    className="bg-blue-700 text-white py-2 px-4 rounded-md shadow-sm hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-sm"
-                  >
-                    Simpan Konsep
-                  </button>
                   <AlertDialog>
+                    <button
+                      onClick={() => saveConcept.mutate()}
+                      disabled={saveConcept.isPending}
+                      className={`py-2 px-4 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-sm flex items-center justify-center ${
+                        saveConcept.isPending
+                          ? "bg-blue-400 text-white cursor-not-allowed"
+                          : "bg-blue-700 text-white hover:bg-blue-800"
+                      }`}
+                    >
+                      {saveConcept.isPending ? (
+                        <>
+                          <svg
+                            className="animate-spin -ml-1 mr-3 h-4 w-4 text-white"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                          >
+                            <circle
+                              className="opacity-25"
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="currentColor"
+                              strokeWidth="4"
+                            ></circle>
+                            <path
+                              className="opacity-75"
+                              fill="currentColor"
+                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                            ></path>
+                          </svg>
+                          Menyimpan...
+                        </>
+                      ) : (
+                        "Simpan Konsep"
+                      )}
+                    </button>
+
                     <AlertDialogTrigger asChild>
                       <button
-                        type="button"
-                        className="bg-blue-700 text-white py-2 px-4 rounded-md shadow-sm hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-sm"
+                        // onClick={() => saveConcept.mutate()}
+                        disabled={
+                          saveConcept.isPending ||
+                          payDeposit.isPending ||
+                          payBilling.isPending
+                        }
+                        className={`py-2 px-4 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-sm flex items-center justify-center ${
+                          saveConcept.isPending ||
+                          payDeposit.isPending ||
+                          payBilling.isPending
+                            ? "bg-blue-400 text-white cursor-not-allowed"
+                            : "bg-blue-700 text-white hover:bg-blue-800"
+                        }`}
                       >
-                        Bayar dan Lapor
+                        {saveConcept.isPending ||
+                        payDeposit.isPending ||
+                        payBilling.isPending ? (
+                          <>
+                            <svg
+                              className="animate-spin -ml-1 mr-3 h-4 w-4 text-white"
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                            >
+                              <circle
+                                className="opacity-25"
+                                cx="12"
+                                cy="12"
+                                r="10"
+                                stroke="currentColor"
+                                strokeWidth="4"
+                              ></circle>
+                              <path
+                                className="opacity-75"
+                                fill="currentColor"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                              ></path>
+                            </svg>
+                            {saveConcept.isPending && "Menyimpan..."}
+                            {payDeposit.isPending && "Membayar Deposit..."}
+                            {payBilling.isPending && "Memproses Pembayaran..."}
+                          </>
+                        ) : (
+                          "Bayar dan Lapor"
+                        )}
                       </button>
                     </AlertDialogTrigger>
                     <AlertDialogContent className="max-w-xl">
