@@ -51,23 +51,53 @@ export default function MasterAkun({
     email_akun: "",
     negara_asal: "",
   });
+  // GANTI FUNGSI LAMA ANDA DENGAN YANG INI
   const handleEditInputChange = (e) => {
     const { name, value } = e.target;
-    setEditFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+
+    // Cek jika nama input adalah 'npwp_akun'
+    if (name === "npwp_akun") {
+      // Jika ya, hapus semua karakter yang bukan angka
+      const numericValue = value.replace(/[^0-9]/g, '');
+
+      // Simpan nilai angka saja ke state editFormData
+      setEditFormData((prev) => ({
+        ...prev,
+        [name]: numericValue,
+      }));
+    } else {
+      // Untuk input lain, simpan seperti biasa
+      setEditFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
   };
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   // Handle form input changes
+  // Fungsi ini khusus untuk form TAMBAH DATA (menggunakan formData)
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+
+    // Cek apakah field yang sedang diubah adalah 'npwp_akun'
+    if (name === "npwp_akun") {
+      // Jika ya, maka saring nilainya, hapus semua karakter yang BUKAN angka (0-9)
+      const numericValue = value.replace(/[^0-9]/g, "");
+
+      // Simpan nilai yang sudah bersih dari huruf ke dalam state
+      setFormData((prev) => ({
+        ...prev,
+        [name]: numericValue,
+      }));
+    } else {
+      // Jika ini adalah field lain (seperti nama_akun, alamat, dll), biarkan seperti biasa
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
   };
 
   // Reset form data
@@ -386,78 +416,105 @@ export default function MasterAkun({
                   </AlertDialogDescription>
                 </AlertDialogHeader>
 
-                <div className="grid gap-4 py-4">
-                  <div className="grid gap-2">
-                    <label htmlFor="nama_akun">Nama Akun</label>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 p-4">
+
+                  {/* Nama Akun */}
+                  <div className="grid gap-1.5">
+                    <label htmlFor="nama_akun" className="text-sm font-medium text-gray-700">
+                      Nama Akun
+                    </label>
                     <input
                       id="nama_akun"
                       name="nama_akun"
                       value={formData.nama_akun}
                       onChange={handleInputChange}
-                      placeholder="Masukkan nama"
-                      className="w-full"
+                      placeholder="Contoh: Budi Santoso"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     />
                   </div>
 
-                  <div className="grid gap-2">
-                    <label htmlFor="npwp_akun">NIK/NPWP</label>
+                  {/* NIK/NPWP */}
+                  <div className="grid gap-1.5">
+                    <label htmlFor="npwp_akun" className="text-sm font-medium text-gray-700">
+                      NIK/NPWP
+                    </label>
                     <input
                       id="npwp_akun"
                       name="npwp_akun"
                       value={formData.npwp_akun}
                       onChange={handleInputChange}
-                      placeholder="Masukkan NIK/NPWP"
-                      className="w-full"
+                      placeholder="Masukkan 16 digit NIK/NPWP"
+                      type="text"
+                      inputMode="numeric"
+                      pattern="[0-9]*"
+                      maxLength="16"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     />
                   </div>
 
-                  <div classname="grid gap-2">
-                    <label htmlfor="alamat_utama_akun">Alamat : </label>
-                    <input
+                  {/* Alamat Utama (di-span agar lebar penuh) */}
+                  <div className="grid gap-1.5 md:col-span-2">
+                    <label htmlFor="alamat_utama_akun" className="text-sm font-medium text-gray-700">
+                      Alamat
+                    </label>
+                    <textarea
                       id="alamat_utama_akun"
                       name="alamat_utama_akun"
                       value={formData.alamat_utama_akun}
                       onChange={handleInputChange}
-                      placeholder="masukkan alamat"
-                      classname="w-full min-h-[80px]"
+                      placeholder="Masukkan alamat lengkap"
+                      rows={3}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     />
                   </div>
-                  <div classname="grid gap-2">
-                    <label htmlfor="tipe_akun">Tipe Akun : </label>
+
+                  {/* Tipe Akun */}
+                  <div className="grid gap-1.5">
+                    <label htmlFor="tipe_akun" className="text-sm font-medium text-gray-700">
+                      Tipe Akun
+                    </label>
                     <select
+                      id="tipe_akun"
                       name="tipe_akun"
-                      id=""
                       value={formData.tipe_akun}
                       onChange={handleInputChange}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     >
+                      <option defaultValue={"Pilih Tipe Akun"}>Pilih Tipe Akun</option>
                       <option value="Orang Pribadi">Orang Pribadi</option>
                       <option value="Badan">Badan</option>
                     </select>
                   </div>
 
-                  <div className="grid gap-2">
-                    <label htmlFor="email_akun">Email</label>
+                  {/* Email */}
+                  <div className="grid gap-1.5">
+                    <label htmlFor="email_akun" className="text-sm font-medium text-gray-700">
+                      Email
+                    </label>
                     <input
                       id="email_akun"
                       name="email_akun"
-                      type="email_akun"
+                      type="email"
                       value={formData.email_akun}
                       onChange={handleInputChange}
-                      placeholder="Masukkan Email"
-                      className="w-full"
+                      placeholder="contoh@email.com"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     />
-                    <div className="grid gap-2">
-                      <label htmlFor="negara_asal">Negara Asal</label>
-                      <input
-                        id="negara_asal"
-                        name="negara_asal"
-                        // type=""
-                        value={formData.negara_asal}
-                        onChange={handleInputChange}
-                        placeholder="Masukkan Negara Asal"
-                        className="w-full"
-                      />
-                    </div>{" "}
+                  </div>
+
+                  {/* Negara Asal */}
+                  <div className="grid gap-1.5 md:col-span-2">
+                    <label htmlFor="negara_asal" className="text-sm font-medium text-gray-700">
+                      Negara Asal
+                    </label>
+                    <input
+                      id="negara_asal"
+                      name="negara_asal"
+                      value={formData.negara_asal}
+                      onChange={handleInputChange}
+                      placeholder="Contoh: Indonesia"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
                   </div>
                 </div>
 
@@ -516,9 +573,10 @@ export default function MasterAkun({
             <tbody className="text-gray-600">
               {data && data.length > 0 ? (
                 data.map((item, index) => (
-                  <tr key={index}>
-                    <td className="px-6 py-2 border">{index + 1}</td>
-                    {/* <td className="px-8 py-2 border">
+                  <tr key={item.id || index}>
+                    <td className="px-6 py-2 border text-center">
+                      {index + (pagination?.meta?.from || 1)}
+                    </td>                    {/* <td className="px-8 py-2 border">
                       <input
                         type="checkbox"
                         className="form-checkbox h-5 w-5"
@@ -550,19 +608,19 @@ export default function MasterAkun({
                               Edit
                             </button>
                           </AlertDialogTrigger>
-                          <AlertDialogContent className="max-w-md">
-                            <AlertDialogHeader>
-                              <AlertDialogTitle>
-                                Edit Master Akun
-                              </AlertDialogTitle>
+                          <AlertDialogContent className="max-w-md flex flex-col max-h-[90vh]">
+                            <AlertDialogHeader className="p-6 pb-4 border-b">
+                              <AlertDialogTitle className="text-xl">Edit Master Akun</AlertDialogTitle>
                               <AlertDialogDescription>
                                 Ubah data akun yang sudah ada.
                               </AlertDialogDescription>
                             </AlertDialogHeader>
 
-                            <div className="grid gap-4 py-4">
-                              <div className="grid gap-2">
-                                <label htmlFor="edit_nama_akun">
+                            {/* Bagian form yang bisa di-scroll */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 p-6 overflow-y-auto">
+                              {/* Nama Akun */}
+                              <div className="grid gap-1.5 md:col-span-2">
+                                <label htmlFor="edit_nama_akun" className="text-sm font-medium text-gray-700">
                                   Nama Akun
                                 </label>
                                 <input
@@ -571,38 +629,48 @@ export default function MasterAkun({
                                   value={editFormData.nama_akun}
                                   onChange={handleEditInputChange}
                                   placeholder="Masukkan nama"
-                                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 />
                               </div>
 
-                              <div className="grid gap-2">
-                                <label htmlFor="edit_npwp_akun">NIK/NPWP</label>
+                              {/* NIK/NPWP */}
+                              <div className="grid gap-1.5 md:col-span-2">
+                                <label htmlFor="edit_npwp_akun" className="text-sm font-medium text-gray-700">
+                                  NIK/NPWP
+                                </label>
                                 <input
                                   id="edit_npwp_akun"
                                   name="npwp_akun"
                                   value={editFormData.npwp_akun}
                                   onChange={handleEditInputChange}
                                   placeholder="Masukkan NIK/NPWP"
-                                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                                  type="text"
+                                  inputMode="numeric"
+                                  pattern="[0-9]*"
+                                  maxLength="16"
+                                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 />
                               </div>
 
-                              <div className="grid gap-2">
-                                <label htmlFor="edit_alamat_utama_akun">
+                              {/* Alamat */}
+                              <div className="grid gap-1.5 md:col-span-2">
+                                <label htmlFor="edit_alamat_utama_akun" className="text-sm font-medium text-gray-700">
                                   Alamat
                                 </label>
-                                <input
+                                <textarea
                                   id="edit_alamat_utama_akun"
                                   name="alamat_utama_akun"
                                   value={editFormData.alamat_utama_akun}
                                   onChange={handleEditInputChange}
                                   placeholder="Masukkan alamat"
-                                  className="w-full px-3 py-2 border border-gray-300 rounded-md min-h-[80px]"
+                                  rows={3}
+                                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 />
                               </div>
 
-                              <div className="grid gap-2">
-                                <label htmlFor="edit_tipe_akun">
+                              {/* Tipe Akun */}
+                              <div className="grid gap-1.5">
+                                <label htmlFor="edit_tipe_akun" className="text-sm font-medium text-gray-700">
                                   Tipe Akun
                                 </label>
                                 <select
@@ -610,18 +678,19 @@ export default function MasterAkun({
                                   id="edit_tipe_akun"
                                   value={editFormData.tipe_akun}
                                   onChange={handleEditInputChange}
-                                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 >
                                   <option value="">Pilih Tipe Akun</option>
-                                  <option value="Orang Pribadi">
-                                    Orang Pribadi
-                                  </option>
+                                  <option value="Orang Pribadi">Orang Pribadi</option>
                                   <option value="Badan">Badan</option>
                                 </select>
                               </div>
 
-                              <div className="grid gap-2">
-                                <label htmlFor="edit_email_akun">Email</label>
+                              {/* Email */}
+                              <div className="grid gap-1.5">
+                                <label htmlFor="edit_email_akun" className="text-sm font-medium text-gray-700">
+                                  Email
+                                </label>
                                 <input
                                   id="edit_email_akun"
                                   name="email_akun"
@@ -629,12 +698,13 @@ export default function MasterAkun({
                                   value={editFormData.email_akun}
                                   onChange={handleEditInputChange}
                                   placeholder="Masukkan Email"
-                                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 />
                               </div>
 
-                              <div className="grid gap-2">
-                                <label htmlFor="edit_negara_asal">
+                              {/* Negara Asal */}
+                              <div className="grid gap-1.5 md:col-span-2">
+                                <label htmlFor="edit_negara_asal" className="text-sm font-medium text-gray-700">
                                   Negara Asal
                                 </label>
                                 <input
@@ -643,12 +713,12 @@ export default function MasterAkun({
                                   value={editFormData.negara_asal}
                                   onChange={handleEditInputChange}
                                   placeholder="Masukkan Negara Asal"
-                                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 />
                               </div>
                             </div>
 
-                            <AlertDialogFooter>
+                            <AlertDialogFooter className="p-6 pt-4 border-t">
                               <AlertDialogCancel>Batal</AlertDialogCancel>
                               <AlertDialogAction
                                 onClick={() =>
@@ -658,11 +728,9 @@ export default function MasterAkun({
                                   })
                                 }
                                 disabled={updateMasterAkun.isLoading}
-                                className="bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-4 rounded"
+                                className="bg-blue-900 hover:bg-blue-950 text-white"
                               >
-                                {updateMasterAkun.isLoading
-                                  ? "Mengupdate..."
-                                  : "Update"}
+                                {updateMasterAkun.isLoading ? "Mengupdate..." : "Update"}
                               </AlertDialogAction>
                             </AlertDialogFooter>
                           </AlertDialogContent>
@@ -718,22 +786,20 @@ export default function MasterAkun({
                 <button
                   onClick={() => onPageChange(firstPage)}
                   disabled={!prevPage}
-                  className={`px-3 py-1 rounded ${
-                    !prevPage
-                      ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                      : "bg-blue-500 text-white hover:bg-blue-600"
-                  }`}
+                  className={`px-3 py-1 rounded ${!prevPage
+                    ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                    : "bg-blue-500 text-white hover:bg-blue-600"
+                    }`}
                 >
                   First
                 </button>
                 <button
                   onClick={() => onPageChange(prevPage || 1)}
                   disabled={!prevPage}
-                  className={`px-3 py-1 rounded ${
-                    !prevPage
-                      ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                      : "bg-blue-500 text-white hover:bg-blue-600"
-                  }`}
+                  className={`px-3 py-1 rounded ${!prevPage
+                    ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                    : "bg-blue-500 text-white hover:bg-blue-600"
+                    }`}
                 >
                   <FaChevronLeft className="h-4 w-4" />
                 </button>
@@ -767,11 +833,10 @@ export default function MasterAkun({
                           )}
                           <button
                             onClick={() => onPageChange(pageNum)}
-                            className={`px-3 py-1 rounded ${
-                              currentPage === pageNum
-                                ? "bg-blue-600 text-white"
-                                : "bg-gray-200 hover:bg-gray-300"
-                            }`}
+                            className={`px-3 py-1 rounded ${currentPage === pageNum
+                              ? "bg-blue-600 text-white"
+                              : "bg-gray-200 hover:bg-gray-300"
+                              }`}
                           >
                             {pageNum}
                           </button>
@@ -788,22 +853,20 @@ export default function MasterAkun({
                 <button
                   onClick={() => onPageChange(nextPage || lastPage)}
                   disabled={!nextPage}
-                  className={`px-3 py-1 rounded ${
-                    !nextPage
-                      ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                      : "bg-blue-500 text-white hover:bg-blue-600"
-                  }`}
+                  className={`px-3 py-1 rounded ${!nextPage
+                    ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                    : "bg-blue-500 text-white hover:bg-blue-600"
+                    }`}
                 >
                   <FaChevronRight className="h-4 w-4" />
                 </button>
                 <button
                   onClick={() => onPageChange(lastPage)}
                   disabled={!nextPage}
-                  className={`px-3 py-1 rounded ${
-                    !nextPage
-                      ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                      : "bg-blue-500 text-white hover:bg-blue-600"
-                  }`}
+                  className={`px-3 py-1 rounded ${!nextPage
+                    ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                    : "bg-blue-500 text-white hover:bg-blue-600"
+                    }`}
                 >
                   Last
                 </button>
