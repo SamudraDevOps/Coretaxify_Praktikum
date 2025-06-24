@@ -21,6 +21,10 @@ import DetailTugasPenilaianDosen from "./components/Dashboard/Dosen/Penilaian/De
 import EditMahasiswa from "./components/Dashboard/Admin/Pengguna/Mahasiswa/EditMahasiswa";
 import EditAdmin from "./components/Dashboard/Admin/Pengguna/Admin/EditAdmin";
 import EditKelas from "./components/Dashboard/Admin/Pengguna/Kelas/EditKelas";
+
+// DOSEN
+import DosenCoretaxify from "./components/Dashboard/Dosen/Coretaxify/DosenCoretaxify";
+
 import {
   BrowserRouter as Router,
   Routes,
@@ -246,7 +250,8 @@ const Main = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/confirm-otp" element={<ConfirmOTP />} />
-
+        
+        {/* EDIT PROFILE ROUTE */}
         <Route
           element={
             <RoleProtectedRoutes allowedRoles={["dosen", "admin", "psc", "mahasiswa", "instruktur", "mahasiswa-psc"]} layout="admin" />
@@ -303,6 +308,7 @@ const Main = () => {
             element={<DosenPraktikumKelasMember />}
           />
           <Route path="/dosen/praktikum" element={<Praktikum />} />
+          <Route path="/dosen/coretaxify" element={<DosenCoretaxify />} />
           <Route path="/dosen/penilaian" element={<PenilaianDosen />} />
           <Route
             path="/dosen/penilaian/detail-tugas"
