@@ -186,61 +186,63 @@ const CreateKonsepSPT = ({ data }) => {
   const [cookies] = useCookies(["token"]);
 
   const [formData, setFormData] = useState({
-    cl_1b_jumlah_dpp: formatRupiah(data?.detailspt?.cl_1b_jumlah_dpp || "0"),
-    cl_1a5_dpp: formatRupiah(data?.detailspt?.cl_1a5_dpp || "0"),
-    cl_1a5_dpp_lain: formatRupiah(data?.detailspt?.cl_1a5_dpp_lain || "0"),
-    cl_1a5_ppn: formatRupiah(data?.detailspt?.cl_1a5_ppn || "0"),
-    cl_1a5_ppnbm: formatRupiah(data?.detailspt?.cl_1a5_ppnbm || "0"),
-    cl_1a9_dpp: formatRupiah(data?.detailspt?.cl_1a9_dpp || "0"),
-    cl_1a9_dpp_lain: formatRupiah(data?.detailspt?.cl_1a9_dpp_lain || "0"),
-    cl_1a9_ppn: formatRupiah(data?.detailspt?.cl_1a9_ppn || "0"),
-    cl_1a9_ppnbm: formatRupiah(data?.detailspt?.cl_1a9_ppnbm || "0"),
-    cl_2e_ppn: formatRupiah(data?.detailspt?.cl_2e_ppn || "0"),
-    cl_2f_ppn: formatRupiah(data?.detailspt?.cl_2f_ppn || "0"),
-    cl_2i_dpp: formatRupiah(data?.detailspt?.cl_2i_dpp || "0"),
-    cl_3b_ppnb: formatRupiah(data?.detailspt?.cl_3b_ppnb || "0"),
-    cl_3d_ppnb: formatRupiah(data?.detailspt?.cl_3d_ppnb || "0"),
-    cl_3f_ppnb: formatRupiah(data?.detailspt?.cl_3f_ppnb || "0"),
-    cl_3h_diminta: data?.detailspt?.cl_3h_diminta || "",
-    cl_3h_nomor_rekening: data?.detailspt?.cl_3h_nomor_rekening || "",
-    cl_3h_nama_bank: data?.detailspt?.cl_3h_nama_bank || "",
-    cl_3h_nama_pemilik_bank: data?.detailspt?.cl_3h_nama_pemilik_bank || "",
+    cl_1b_jumlah_dpp: formatRupiah(data?.detail_spt?.cl_1b_jumlah_dpp || "0"),
+    cl_1a5_dpp: formatRupiah(data?.detail_spt?.cl_1a5_dpp || "0"),
+    cl_1a5_dpp_lain: formatRupiah(data?.detail_spt?.cl_1a5_dpp_lain || "0"),
+    cl_1a5_ppn: formatRupiah(data?.detail_spt?.cl_1a5_ppn || "0"),
+    cl_1a5_ppnbm: formatRupiah(data?.detail_spt?.cl_1a5_ppnbm || "0"),
+    cl_1a9_dpp: formatRupiah(data?.detail_spt?.cl_1a9_dpp || "0"),
+    cl_1a9_dpp_lain: formatRupiah(data?.detail_spt?.cl_1a9_dpp_lain || "0"),
+    cl_1a9_ppn: formatRupiah(data?.detail_spt?.cl_1a9_ppn || "0"),
+    cl_1a9_ppnbm: formatRupiah(data?.detail_spt?.cl_1a9_ppnbm || "0"),
+    cl_2e_ppn: formatRupiah(data?.detail_spt?.cl_2e_ppn || "0"),
+    cl_2f_ppn: formatRupiah(data?.detail_spt?.cl_2f_ppn || "0"),
+    cl_2i_dpp: formatRupiah(data?.detail_spt?.cl_2i_dpp || "0"),
+    cl_3b_ppn: formatRupiah(data?.detail_spt?.cl_3b_ppn || "0"),
+    cl_3d_ppn: formatRupiah(data?.detail_spt?.cl_3d_ppn || "0"),
+    cl_3f_ppn: formatRupiah(data?.detail_spt?.cl_3f_ppn || "0"),
+    cl_3h_diminta: data?.detail_spt?.cl_3h_diminta || "",
+    cl_3h_nomor_rekening: data?.detail_spt?.cl_3h_nomor_rekening || "",
+    cl_3h_nama_bank: data?.detail_spt?.cl_3h_nama_bank || "",
+    cl_3h_nama_pemilik_bank: data?.detail_spt?.cl_3h_nama_pemilik_bank || "",
     cl_4_ppn_terutang_dpp: formatRupiah(
-      data?.detailspt?.cl_4_ppn_terutang_dpp || "0"
+      data?.detail_spt?.cl_4_ppn_terutang_dpp || "0"
     ),
-    cl_5_ppn_wajib: formatRupiah(data?.detailspt?.cl_5_ppn_wajib || "0"),
-    cl_6b_ppnbm: formatRupiah(data?.detailspt?.cl_6b_ppnbm || "0"),
-    cl_6d_ppnbm: formatRupiah(data?.detailspt?.cl_6d_ppnbm || "0"),
+    cl_5_ppn_wajib: formatRupiah(data?.detail_spt?.cl_5_ppn_wajib || "0"),
+    cl_6b_ppnbm: formatRupiah(data?.detail_spt?.cl_6b_ppnbm || "0"),
+    cl_6d_ppnbm: formatRupiah(data?.detail_spt?.cl_6d_ppnbm || "0"),
     cl_6f_diminta_pengembalian: formatRupiah(
-      data?.detailspt?.cl_6f_diminta_pengembalian || "0"
+      data?.detail_spt?.cl_6f_diminta_pengembalian || "0"
     ),
-    cl_7a_dpp: formatRupiah(data?.detailspt?.cl_7a_dpp || "0"),
-    cl_7a_dpp_lain: formatRupiah(data?.detailspt?.cl_7a_dpp_lain || "0"),
-    cl_7a_ppn: formatRupiah(data?.detailspt?.cl_7a_ppn || "0"),
-    cl_7a_ppnbm: formatRupiah(data?.detailspt?.cl_7a_ppnbm || "0"),
-    cl_7b_dpp: formatRupiah(data?.detailspt?.cl_7b_dpp || "0"),
-    cl_7b_dpp_lain: formatRupiah(data?.detailspt?.cl_7b_dpp_lain || "0"),
-    cl_7b_ppn: formatRupiah(data?.detailspt?.cl_7b_ppn || "0"),
-    cl_7b_ppnbm: formatRupiah(data?.detailspt?.cl_7b_ppnbm || "0"),
-    cl_8a_dpp: formatRupiah(data?.detailspt?.cl_8a_dpp || "0"),
-    cl_8a_dpplain: formatRupiah(data?.detailspt?.cl_8a_dpplain || "0"),
-    cl_8a_ppn: formatRupiah(data?.detailspt?.cl_8a_ppn || "0"),
-    cl_8a_ppnbm: formatRupiah(data?.detailspt?.cl_8a_ppnbm || "0"),
-    cl_8b_dpp: formatRupiah(data?.detailspt?.cl_8b_dpp || "0"),
-    cl_8b_dpp_lain: formatRupiah(data?.detailspt?.cl_8b_dpp_lain || "0"),
-    cl_8b_ppn: formatRupiah(data?.detailspt?.cl_8b_ppn || "0"),
-    cl_8b_ppnbm: formatRupiah(data?.detailspt?.cl_8b_ppnbm || "0"),
+    cl_7a_dpp: formatRupiah(data?.detail_spt?.cl_7a_dpp || "0"),
+    cl_7a_dpp_lain: formatRupiah(data?.detail_spt?.cl_7a_dpp_lain || "0"),
+    cl_7a_ppn: formatRupiah(data?.detail_spt?.cl_7a_ppn || "0"),
+    cl_7a_ppnbm: formatRupiah(data?.detail_spt?.cl_7a_ppnbm || "0"),
+    cl_7b_dpp: formatRupiah(data?.detail_spt?.cl_7b_dpp || "0"),
+    cl_7b_dpp_lain: formatRupiah(data?.detail_spt?.cl_7b_dpp_lain || "0"),
+    cl_7b_ppn: formatRupiah(data?.detail_spt?.cl_7b_ppn || "0"),
+    cl_7b_ppnbm: formatRupiah(data?.detail_spt?.cl_7b_ppnbm || "0"),
+    cl_8a_dpp: formatRupiah(data?.detail_spt?.cl_8a_dpp || "0"),
+    cl_8a_dpp_lain: formatRupiah(data?.detail_spt?.cl_8a_dpp_lain || "0"),
+    cl_8a_ppn: formatRupiah(data?.detail_spt?.cl_8a_ppn || "0"),
+    cl_8a_ppnbm: formatRupiah(data?.detail_spt?.cl_8a_ppnbm || "0"),
+    cl_8b_dpp: formatRupiah(data?.detail_spt?.cl_8b_dpp || "0"),
+    cl_8b_dpp_lain: formatRupiah(data?.detail_spt?.cl_8b_dpp_lain || "0"),
+    cl_8b_ppn: formatRupiah(data?.detail_spt?.cl_8b_ppn || "0"),
+    cl_8b_ppnbm: formatRupiah(data?.detail_spt?.cl_8b_ppnbm || "0"),
     cl_8d_diminta_pengembalian: formatRupiah(
-      data?.detailspt?.cl_8d_diminta_pengembalian || "0"
+      data?.detail_spt?.cl_8d_diminta_pengembalian || "0"
     ),
-    cl_9a_daftar: formatRupiah(data?.detailspt?.cl_9a_daftar || "0"),
+    cl_9a_daftar: formatRupiah(data?.detail_spt?.cl_9a_daftar || "0"),
     cl_9a_hasil_perhitungan: formatRupiah(
-      data?.detailspt?.cl_9a_hasil_perhitungan || "0"
+      data?.detail_spt?.cl_9a_hasil_perhitungan || "0"
     ),
-    cl_10_batas_waktu: formatRupiah(data?.detailspt?.cl_10_batas_waktu || "0"),
+    cl_10_batas_waktu: data?.detail_spt?.cl_10_batas_waktu,
     klasifikasi_lapangan_usaha:
-      data?.detailspt?.klasifikasi_lapangan_usaha || "0",
+      data?.detail_spt?.klasifikasi_lapangan_usaha || "0",
   });
+
+  console.log("form data", formData);
 
   const navigate = useNavigateWithParams();
 
@@ -268,9 +270,9 @@ const CreateKonsepSPT = ({ data }) => {
       "cl_2e_ppn",
       "cl_2f_ppn",
       "cl_2i_dpp",
-      "cl_3b_ppnb",
-      "cl_3d_ppnb",
-      "cl_3f_ppnb",
+      "cl_3b_ppn",
+      "cl_3d_ppn",
+      "cl_3f_ppn",
       "cl_4_ppn_terutang_dpp",
       "cl_5_ppn_wajib",
       "cl_6b_ppnbm",
@@ -285,7 +287,7 @@ const CreateKonsepSPT = ({ data }) => {
       "cl_7b_ppn",
       "cl_7b_ppnbm",
       "cl_8a_dpp",
-      "cl_8a_dpplain",
+      "cl_8a_dpp_lain",
       "cl_8a_ppn",
       "cl_8a_ppnbm",
       "cl_8b_dpp",
@@ -295,7 +297,6 @@ const CreateKonsepSPT = ({ data }) => {
       "cl_8d_diminta_pengembalian",
       "cl_9a_daftar",
       "cl_9a_hasil_perhitungan",
-      "cl_10_batas_waktu",
     ];
 
     // Format value if it's a currency field, otherwise use raw value
@@ -424,9 +425,9 @@ const CreateKonsepSPT = ({ data }) => {
       //   "cl_2e_ppn",
       //   "cl_2f_ppn",
       //   "cl_2i_dpp",
-      //   "cl_3b_ppnb",
-      //   "cl_3d_ppnb",
-      //   "cl_3f_ppnb",
+      //   "cl_3b_ppn",
+      //   "cl_3d_ppn",
+      //   "cl_3f_ppn",
       //   "cl_4_ppn_terutang_dpp",
       //   "cl_5_ppn_wajib",
       //   "cl_6b_ppnbm",
@@ -441,7 +442,7 @@ const CreateKonsepSPT = ({ data }) => {
       //   "cl_7b_ppn",
       //   "cl_7b_ppnbm",
       //   "cl_8a_dpp",
-      //   "cl_8a_dpplain",
+      //   "cl_8a_dpp_lain",
       //   "cl_8a_ppn",
       //   "cl_8a_ppnbm",
       //   "cl_8b_dpp",
@@ -469,9 +470,9 @@ const CreateKonsepSPT = ({ data }) => {
         cl_2e_ppn: toNumber(formData.cl_2e_ppn),
         cl_2f_ppn: toNumber(formData.cl_2f_ppn),
         cl_2i_dpp: toNumber(formData.cl_2i_dpp),
-        cl_3b_ppnbm: toNumber(formData.cl_3b_ppnb),
-        cl_3d_ppnbm: toNumber(formData.cl_3d_ppnb),
-        cl_3f_ppnbm: toNumber(formData.cl_3f_ppnb),
+        cl_3b_ppn: toNumber(formData.cl_3b_ppn),
+        cl_3d_ppn: toNumber(formData.cl_3d_ppn),
+        cl_3f_ppn: toNumber(formData.cl_3f_ppn),
         cl_3h_diminta: toNumber(formData.cl_3h_diminta),
         cl_3h_nomor_rekening: formData.cl_3h_nomor_rekening, // Keep as string
         cl_3h_nama_bank: formData.cl_3h_nama_bank, // Keep as string
@@ -492,7 +493,7 @@ const CreateKonsepSPT = ({ data }) => {
         cl_7b_ppn: toNumber(formData.cl_7b_ppn),
         cl_7b_ppnbm: toNumber(formData.cl_7b_ppnbm),
         cl_8a_dpp: toNumber(formData.cl_8a_dpp),
-        cl_8a_dpplain: toNumber(formData.cl_8a_dpplain),
+        cl_8a_dpp_lain: toNumber(formData.cl_8a_dpplain),
         cl_8a_ppn: toNumber(formData.cl_8a_ppn),
         cl_8a_ppnbm: toNumber(formData.cl_8a_ppnbm),
         cl_8b_dpp: toNumber(formData.cl_8b_dpp),
@@ -546,6 +547,11 @@ const CreateKonsepSPT = ({ data }) => {
     onError: (error) => {
       console.error("Error saving data:", error);
       Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
+      // Swal.fire(
+      //   "Gagal!",
+      //   `Terjadi kesalahan saat menyimpan data. ${error?.response?.data?.message}`,
+      //   "error"
+      // );
     },
   });
 
@@ -621,7 +627,12 @@ const CreateKonsepSPT = ({ data }) => {
     },
     onError: (error) => {
       console.error("Error saving data:", error);
-      Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
+      // Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
+      Swal.fire(
+        "Gagal!",
+        `Terjadi kesalahan saat menyimpan data. ${error?.response?.data?.message}`,
+        "error"
+      );
     },
   });
   const payBilling = useMutation({
@@ -1007,8 +1018,8 @@ const CreateKonsepSPT = ({ data }) => {
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               defaultValue="0"
                               disabled
-                              name="cl_3a_ppnb"
-                              value={data.detail_spt.cl_3a_ppnb}
+                              name="cl_3a_ppn"
+                              value={data.detail_spt.cl_3a_ppn}
                             />
                           </td>
                         </tr>
@@ -1497,7 +1508,7 @@ const CreateKonsepSPT = ({ data }) => {
                               // type="number"
                               readOnly
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_1c_dpp}
+                              value={data.detail_spt.cl_1c_jumlah_dpp}
                               onChange={handleChange}
                               name="cl_1c_jumlah_dpp"
                             />
@@ -1911,8 +1922,8 @@ const CreateKonsepSPT = ({ data }) => {
                               // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               defaultValue="0"
-                              name="cl_3a_ppnb"
-                              value={data.detail_spt.cl_3a_ppnb}
+                              name="cl_3a_ppn"
+                              value={data.detail_spt.cl_3a_ppn}
                               disabled
                             />
                           </td>
@@ -1930,8 +1941,8 @@ const CreateKonsepSPT = ({ data }) => {
                             <input
                               // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              name="cl_3b_ppnb"
-                              value={formData.cl_3b_ppnb}
+                              name="cl_3b_ppn"
+                              value={formData.cl_3b_ppn}
                               onChange={handleChange}
                             />
                           </td>
@@ -1952,8 +1963,8 @@ const CreateKonsepSPT = ({ data }) => {
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               defaultValue="0"
                               disabled
-                              name="cl_3c_ppnb"
-                              value={data.detail_spt.cl_3c_ppnb}
+                              name="cl_3c_ppn"
+                              value={data.detail_spt.cl_3c_ppn}
                             />
                           </td>
                           <td className="p-2"></td>
@@ -1971,8 +1982,8 @@ const CreateKonsepSPT = ({ data }) => {
                               // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               defaultValue="0"
-                              name="cl_3d_ppnb"
-                              value={formData.cl_3d_ppnb}
+                              name="cl_3d_ppn"
+                              value={formData.cl_3d_ppn}
                               onChange={handleChange}
                             />
                           </td>
@@ -1991,8 +2002,8 @@ const CreateKonsepSPT = ({ data }) => {
                             <input
                               // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_3e_ppnb}
-                              name="cl_3e_ppnb"
+                              value={data.detail_spt.cl_3e_ppn}
+                              name="cl_3e_ppn"
                               readOnly
                               // onChange={handleChange}
                             />
@@ -2013,8 +2024,8 @@ const CreateKonsepSPT = ({ data }) => {
                               // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               defaultValue="0"
-                              name="cl_3f_ppnb"
-                              value={formData.cl_3f_ppnb}
+                              name="cl_3f_ppn"
+                              value={formData.cl_3f_ppn}
                               onChange={handleChange}
                             />
                           </td>
@@ -2033,9 +2044,9 @@ const CreateKonsepSPT = ({ data }) => {
                             <input
                               // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_3g_ppnb}
+                              value={data.detail_spt.cl_3g_ppn}
                               disabled
-                              name="cl_3g_ppnb"
+                              name="cl_3g_ppn"
                             />
                           </td>
                           <td className="p-2"></td>
@@ -2993,20 +3004,92 @@ const CreateKonsepSPT = ({ data }) => {
                   </div>
                 )}
                 <div className="flex justify-start mt-4 gap-2">
-                  <button
-                    onClick={() => saveConcept.mutate()}
-                    // type="submit"
-                    className="bg-blue-700 text-white py-2 px-4 rounded-md shadow-sm hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-sm"
-                  >
-                    Simpan Konsep
-                  </button>
                   <AlertDialog>
+                    <button
+                      onClick={() => saveConcept.mutate()}
+                      disabled={saveConcept.isPending}
+                      className={`py-2 px-4 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-sm flex items-center justify-center ${
+                        saveConcept.isPending
+                          ? "bg-blue-400 text-white cursor-not-allowed"
+                          : "bg-blue-700 text-white hover:bg-blue-800"
+                      }`}
+                    >
+                      {saveConcept.isPending ? (
+                        <>
+                          <svg
+                            className="animate-spin -ml-1 mr-3 h-4 w-4 text-white"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                          >
+                            <circle
+                              className="opacity-25"
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="currentColor"
+                              strokeWidth="4"
+                            ></circle>
+                            <path
+                              className="opacity-75"
+                              fill="currentColor"
+                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                            ></path>
+                          </svg>
+                          Menyimpan...
+                        </>
+                      ) : (
+                        "Simpan Konsep"
+                      )}
+                    </button>
+
                     <AlertDialogTrigger asChild>
                       <button
-                        type="button"
-                        className="bg-blue-700 text-white py-2 px-4 rounded-md shadow-sm hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-sm"
+                        // onClick={() => saveConcept.mutate()}
+                        disabled={
+                          saveConcept.isPending ||
+                          payDeposit.isPending ||
+                          payBilling.isPending
+                        }
+                        className={`py-2 px-4 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-sm flex items-center justify-center ${
+                          saveConcept.isPending ||
+                          payDeposit.isPending ||
+                          payBilling.isPending
+                            ? "bg-blue-400 text-white cursor-not-allowed"
+                            : "bg-blue-700 text-white hover:bg-blue-800"
+                        }`}
                       >
-                        Bayar dan Lapor
+                        {saveConcept.isPending ||
+                        payDeposit.isPending ||
+                        payBilling.isPending ? (
+                          <>
+                            <svg
+                              className="animate-spin -ml-1 mr-3 h-4 w-4 text-white"
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                            >
+                              <circle
+                                className="opacity-25"
+                                cx="12"
+                                cy="12"
+                                r="10"
+                                stroke="currentColor"
+                                strokeWidth="4"
+                              ></circle>
+                              <path
+                                className="opacity-75"
+                                fill="currentColor"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                              ></path>
+                            </svg>
+                            {saveConcept.isPending && "Menyimpan..."}
+                            {payDeposit.isPending && "Membayar Deposit..."}
+                            {payBilling.isPending && "Memproses Pembayaran..."}
+                          </>
+                        ) : (
+                          "Bayar dan Lapor"
+                        )}
                       </button>
                     </AlertDialogTrigger>
                     <AlertDialogContent className="max-w-xl">
@@ -3154,8 +3237,8 @@ const CreateKonsepSPT = ({ data }) => {
                           </tr>
                         </thead>
                         <tbody className="text-gray-600 text-center">
-                          {sptOther.data.length > 0 ? (
-                            sptOther.data.map((item, index) => (
+                          {sptOther?.data?.length > 0 ? (
+                            sptOther?.data?.map((item, index) => (
                               <tr key={index}>
                                 <td className="p-2 border-b text-center">
                                   {index + 1}
