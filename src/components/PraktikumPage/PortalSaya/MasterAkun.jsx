@@ -51,16 +51,12 @@ export default function MasterAkun({
     email_akun: "",
     negara_asal: "",
   });
-  // GANTI FUNGSI LAMA ANDA DENGAN YANG INI
   const handleEditInputChange = (e) => {
     const { name, value } = e.target;
 
-    // Cek jika nama input adalah 'npwp_akun'
     if (name === "npwp_akun") {
-      // Jika ya, hapus semua karakter yang bukan angka
       const numericValue = value.replace(/[^0-9]/g, '');
 
-      // Simpan nilai angka saja ke state editFormData
       setEditFormData((prev) => ({
         ...prev,
         [name]: numericValue,
