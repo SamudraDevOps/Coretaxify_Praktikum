@@ -1113,8 +1113,15 @@ const Main = () => {
           path="/praktikum/:id/sistem/:akun/buku-besar"
           element={
             <>
-              <Header />
-              <BukuBesar />
+              {/* <Header />
+              <BukuBesar /> */}
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun`}
+                OrangPribadi={BukuBesar}
+                Badan={BukuBesar}
+                intent={""}
+                query={""}
+              />
             </>
           }
         />

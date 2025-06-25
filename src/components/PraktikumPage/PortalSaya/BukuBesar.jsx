@@ -2,7 +2,8 @@ import React from "react";
 import { CreditCard, Banknote, Wallet, Printer } from "lucide-react"; // Import icons from lucide-react
 
 // Main App component
-export default function BukuBesar() {
+export default function BukuBesar({ data }) {
+  console.log(data);
   return (
     <div className="min-h-screen bg-gray-100 p-4 font-sans antialiased">
       {/* Header Section */}
@@ -54,7 +55,7 @@ export default function BukuBesar() {
             <DashboardCard
               icon={<Wallet className="w-6 h-6 text-blue-800" />} // Lucide Wallet icon
               title="Saldo"
-              value="0,00"
+              value={data?.saldo}
               highlighted={true}
             />
           </div>
