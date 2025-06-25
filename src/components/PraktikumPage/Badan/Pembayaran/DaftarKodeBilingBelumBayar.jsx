@@ -59,9 +59,10 @@ const DaftarKodeBilingBelumBayar = ({ data, sidebar }) => {
     mutationFn: async (idSpt) => {
       const csrf = await getCsrf();
       const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
+      // alert()
       return axios.put(
         `${RoutesApi.url}api/student/assignments/${id}/sistem/${accountId}/pembayaran/${idSpt}`,
-        // {},
+        {},
         {
           headers: {
             "Content-Type": "application/json",
@@ -90,7 +91,12 @@ const DaftarKodeBilingBelumBayar = ({ data, sidebar }) => {
     },
     onError: (error) => {
       console.error("Error saving data:", error);
-      Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
+      // Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
+      Swal.fire(
+        "Gagal!",
+        `Terjadi kesalahan saat menyimpan data. ${error?.response?.data?.message}`,
+        "error"
+      );
     },
   });
   const totalPembayaran =

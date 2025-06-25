@@ -537,10 +537,10 @@ const CreateKonsepSPT = ({ data }) => {
       console.log(data);
       Swal.fire("Berhasil!", "Konsep SPT berhasil dihitung.", "success").then(
         (result) => {
-          // if (result.isConfirmed) {
-          //   window.location.href = `/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt`;
-          // }
-          navigate(`/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt`);
+          if (result.isConfirmed) {
+            window.location.reload();
+          }
+          // navigate(`/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt`);
         }
       );
     },
