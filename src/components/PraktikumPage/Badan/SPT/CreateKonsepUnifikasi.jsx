@@ -9,6 +9,10 @@ const CreateKonsepUnifikasi = () => {
     const [showPajakPenghasilan21, setShowPajakPenghasilan21] = useState(false);
     const [showPajakPenghasilan26, setShowPajakPenghasilan26] = useState(false);
     const [showPernyataan, setShowPernyataan] = useState(false);
+    const [showTabelBPPUnifikasi, setShowTabelBPPUnifikasi] = useState(false);
+    const [showTabelBPNRUnifikasi, setShowTabelBPNRUnifikasi] = useState(false);
+    const [showTabelDaftarPPh, setShowTabelDaftarPPh] = useState(false);
+    const [showTabelDaftarPajakPenghasilan, setShowTabelDaftarPajakPenghasilan] = useState(false);
 
     const [showHeadera1, setShowHeadera1] = useState(false);
     const [showHeadera2, setShowHeadera2] = useState(false);
@@ -41,10 +45,10 @@ const CreateKonsepUnifikasi = () => {
                     <Tabs defaultValue='induk' onValueChange={(val) => setActiveTab(val)} >
                         <TabsList className="flex justify-start gap-2 text-blue-700 text-lg">
                             <TabsTrigger value="induk">Induk</TabsTrigger>
-                            <TabsTrigger value="l-ia">L-IA</TabsTrigger>
-                            <TabsTrigger value="l-ib">L-IB</TabsTrigger>
-                            <TabsTrigger value="l-ii">L-II</TabsTrigger>
-                            <TabsTrigger value="l-iii">L-III</TabsTrigger>
+                            <TabsTrigger value="l-ia">Daftar I</TabsTrigger>
+                            <TabsTrigger value="l-ib">Daftar II</TabsTrigger>
+                            <TabsTrigger value="l-ii">Lampiran</TabsTrigger>
+
                         </TabsList>
                         <TabsContent value="induk">
                             <div className="mt-4">
@@ -303,10 +307,10 @@ const CreateKonsepUnifikasi = () => {
                                                 </tr>
                                             </tbody>
                                         </table>
-                                        
+
                                     </div>
                                 )}
-                                
+
                                 <div className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full" onClick={() => setShowPernyataan(!showPernyataan)}>
                                     <h3 className='text-lg font-semibold'>3. Pernyataan</h3>
                                     {showPernyataan ? <FaChevronUp /> : <FaChevronDown />}
@@ -366,11 +370,7 @@ const CreateKonsepUnifikasi = () => {
                             </div>
                         </TabsContent>
                         <TabsContent value="l-ia">
-                            <div className="flex justify-between items-center mb-6">
-                                <h2 className="text-lg font-light text-yellow-500 mt-4">DAFTAR PEMOTONGAN BULANAN PAJAK PENGHASILAN PASAL 21 BAGI PEGAWAI TETAP DAN PENSIUNAN YANG MENERIMA UANG TERKAIT PENSIUN SECARA BERKALA SERTA BAGI PEGAWAI
-                                    NEGERI SIPIL, ANGGOTA TENTARA NASIONAL INDONESIA, ANGGOTA KEPOLISIAN REPUBLIK INDONESIA, PEJABAT NEGARA DAN PENSIUNANNYA
-                                </h2>
-                            </div>
+
                             <div className="mt-4">
                                 <div className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full" onClick={() => setShowHeadera1(!showHeadera1)}>
                                     <h3 className='text-lg font-semibold'>Header</h3>
@@ -378,7 +378,7 @@ const CreateKonsepUnifikasi = () => {
                                 </div>
                                 {showHeadera1 && (
                                     <div className="border rounded-md p-4 mb-4">
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                                             <div>
                                                 <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">NPWP</label>
                                                 <input
@@ -400,51 +400,163 @@ const CreateKonsepUnifikasi = () => {
                                         </div>
                                     </div>
                                 )}
-                                <div className="border rounded-md p-4 mb-4">
-                                    <div className="w-[1450px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden">
-                                        <table className="table-auto text-sm text-left border overflow-hidden">
-                                            <thead className="bg-purple-700 text-white text-center">
-                                                <tr>
-                                                    <th className="p-2 border-b ">No</th>
-                                                    <th className="p-2 border-b min-w-[200px]">NIK/NPWP</th>
-                                                    <th className="p-2  border-b min-w-[150px]">Nama</th>
-                                                    <th className="p-2 border-b min-w-[150px]">Nomor Bukti Potong </th>
-                                                    <th className="p-2 border-b min-w-[150px]">Tanggal Bukti Pemotongan </th>
-                                                    <th className="p-2 border-b min-w-[150px]">Kode Objek Pajak</th>
-                                                    <th className="p-2 border-b min-w-[150px]">Penghasilan Bruto (Rp)</th>
-                                                    <th className="p-2 border-b min-w-[150px]">Pajak Penghasilan (Rp)</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody className="text-gray-600 text-center">
-                                                <tr>
-                                                    <td className="p-2 border-b text-center">1</td>
-                                                    <td className="p-2 border-b">881381978971381309</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                </tr>
-                                            </tbody>
-                                            <tfoot className="text-gray-800 font-semibold bg-gray-100">
-                                                <tr>
-                                                    <td className="p-2 text-right min-w-[150px]" colSpan={7}>Jumlah Pendapatan Kotor dan Pajak Penghasilan Yang Ditanggung Oleh Pemerintah</td>
-                                                    <td className="p-2 text-center">0</td>
-                                                    <td className="p-2"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td className="p-2 text-right min-w-[150px]" colSpan={7}>Jumlah Pendapatan Kotor dan Pajak Penghasilan Yang Dipotong</td>
-                                                    <td className="p-2 text-center">0</td>
-                                                    <td className="p-2"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td className="p-2 text-right min-w-[150px]" colSpan={7}>Jumlah Total Pendapatan Kotor Dan Pajak Penghasilan Yang Ditanggung Oleh Pemerintah <br /> serta Pajak penghasilan Yang Dipotong</td>
-                                                    <td className="p-2 text-center">0</td>
-                                                    <td className="p-2"></td>
-                                                </tr>
-                                            </tfoot>
-                                        </table>
+                                <div className="mt-4">
+                                    <div className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full" onClick={() => setShowTabelBPPUnifikasi(!showTabelBPPUnifikasi)} >
+                                        <h3 className='text-lg font-semibold'>Tabel.I BPPU</h3>
+                                        {showTabelBPPUnifikasi ? <FaChevronUp /> : <FaChevronDown />}
+                                    </div>
+                                    {showTabelBPPUnifikasi && (
+                                        <div className="border rounded-md p-4 overflow-x-auto w-[1400px]">
+                                            <table className='w-[1200px] text-sm text-left border overflow-x-auto'>
+                                                <thead className="bg-purple-700 text-white text-center ">
+                                                    <tr>
+                                                        <th className='border border-gray-300 px-2 py-1 whitespace-normal'>No</th>
+                                                        <th className='border border-gray-300 px-2 py-1 whitespace-normal'>NIK/NPWP</th>
+                                                        <th className='border border-gray-300 px-2 py-1 whitespace-normal'>NAMA</th>
+                                                        <th className='border border-gray-300 px-2 py-1 whitespace-normal'>NOMOR BUKTI POTONG</th>
+                                                        <th className='border border-gray-300 px-2 py-1 whitespace-normal'>TANGGAL BUKTI POTONG</th>
+                                                        <th className='border border-gray-300 px-2 py-1 whitespace-normal'>JENIS PAJAK </th>
+                                                        <th className='border border-gray-300 px-2 py-1 whitespace-normal'>KODE OBJEK PAJAK</th>
+                                                        <th className='border border-gray-300 px-2 py-1 whitespace-normal'>OBJEK PAJAK</th>
+                                                        <th className='border border-gray-300 px-2 py-1 whitespace-normal'>DASAR PENGENAAN PAJAK</th>
+                                                        <th className='border border-gray-300 px-2 py-1 whitespace-normal'>TARIF</th>
+                                                        <th className='border border-gray-300 px-2 py-1 whitespace-normal'>PAJAK PENGHASILAN</th>
+                                                        <th className='border border-gray-300 px-2 py-1 whitespace-normal'>FASILITAS PERPAJAKAN</th>
+                                                        <th className='border border-gray-300 px-2 py-1 whitespace-normal'>UANG PERSEDIAAN / PEMBAYARAN LANGSUNG</th>
+                                                        <th className='border border-gray-300 px-2 py-1 whitespace-normal'>NITKU</th>
+                                                        <th className='border border-gray-300 px-2 py-1 whitespace-normal'>STATUS</th>
+                                                        <th className='border border-gray-300 px-2 py-1 whitespace-normal'>KAP-KJS</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td className='border border-gray-300 px-2 py-1 text-center'>1</td>
+                                                        <td className='border border-gray-300 px-2 py-1'>123456789012345</td>
+                                                        <td className='border border-gray-300 px-2 py-1'>Budi Santoso</td>
+                                                        <td className='border border-gray-300 px-2 py-1'>BP-001/2025</td>
+                                                        <td className='border border-gray-300 px-2 py-1'>2025-05-10</td>
+                                                        <td className='border border-gray-300 px-2 py-1'>PPh 21</td>
+                                                        <td className='border border-gray-300 px-2 py-1'>21-100-01</td>
+                                                        <td className='border border-gray-300 px-2 py-1'>Gaji</td>
+                                                        <td className='border border-gray-300 px-2 py-1 text-right'>10.000.000</td>
+                                                        <td className='border border-gray-300 px-2 py-1 text-right'>5%</td>
+                                                        <td className='border border-gray-300 px-2 py-1 text-right'>500.000</td>
+                                                        <td className='border border-gray-300 px-2 py-1'>Tidak Ada</td>
+                                                        <td className='border border-gray-300 px-2 py-1'>-</td>
+                                                        <td className='border border-gray-300 px-2 py-1'>NITKU-001</td>
+                                                        <td className='border border-gray-300 px-2 py-1'>Valid</td>
+                                                        <td className='border border-gray-300 px-2 py-1'>KAP-001</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td className='border border-gray-300 px-2 py-1 text-center'>2</td>
+                                                        <td className='border border-gray-300 px-2 py-1'>987654321098765</td>
+                                                        <td className='border border-gray-300 px-2 py-1'>Siti Aminah</td>
+                                                        <td className='border border-gray-300 px-2 py-1'>BP-002/2025</td>
+                                                        <td className='border border-gray-300 px-2 py-1'>2025-05-15</td>
+                                                        <td className='border border-gray-300 px-2 py-1'>PPh 23</td>
+                                                        <td className='border border-gray-300 px-2 py-1'>23-200-02</td>
+                                                        <td className='border border-gray-300 px-2 py-1'>Honorarium</td>
+                                                        <td className='border border-gray-300 px-2 py-1 text-right'>5.000.000</td>
+                                                        <td className='border border-gray-300 px-2 py-1 text-right'>2%</td>
+                                                        <td className='border border-gray-300 px-2 py-1 text-right'>100.000</td>
+                                                        <td className='border border-gray-300 px-2 py-1'>Ada</td>
+                                                        <td className='border border-gray-300 px-2 py-1'>-</td>
+                                                        <td className='border border-gray-300 px-2 py-1'>NITKU-002</td>
+                                                        <td className='border border-gray-300 px-2 py-1'>Valid</td>
+                                                        <td className='border border-gray-300 px-2 py-1'>KAP-002</td>
+                                                    </tr>
+                                                </tbody>
+
+                                            </table>
+                                        </div>
+                                    )}
+                                    <div className="mt-4">
+                                        <div className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full" onClick={() => setShowTabelBPNRUnifikasi(!showTabelBPNRUnifikasi)} >
+                                            <h3 className='text-lg font-semibold'>Tabel.II BPNR</h3>
+                                            {showTabelBPNRUnifikasi ? <FaChevronUp /> : <FaChevronDown />}
+                                        </div>
+                                        {showTabelBPNRUnifikasi && (
+                                            <div className="border rounded-md p-4 overflow-x-auto w-[1400px]">
+                                                <table className='w-[1200px] text-sm text-left border overflow-x-auto'>
+                                                    <thead className="bg-purple-700 text-white text-center ">
+                                                        <tr>
+                                                            <th className='border border-gray-300 px-2 py-1 whitespace-normal'>No</th>
+                                                            <th className='border border-gray-300 px-2 py-1 whitespace-normal'>NIK/NPWP</th>
+                                                            <th className='border border-gray-300 px-2 py-1 whitespace-normal'>NAMA</th>
+                                                            <th className='border border-gray-300 px-2 py-1 whitespace-normal'>NOMOR BUKTI POTONG</th>
+                                                            <th className='border border-gray-300 px-2 py-1 whitespace-normal'>TANGGAL BUKTI POTONG</th>
+                                                            <th className='border border-gray-300 px-2 py-1 whitespace-normal'>JENIS PAJAK </th>
+                                                            <th className='border border-gray-300 px-2 py-1 whitespace-normal'>KODE OBJEK PAJAK</th>
+                                                            <th className='border border-gray-300 px-2 py-1 whitespace-normal'>OBJEK PAJAK</th>
+                                                            <th className='border border-gray-300 px-2 py-1 whitespace-normal'>DASAR PENGENAAN PAJAK</th>
+                                                            <th className='border border-gray-300 px-2 py-1 whitespace-normal'>TARIF</th>
+                                                            <th className='border border-gray-300 px-2 py-1 whitespace-normal'>PAJAK PENGHASILAN</th>
+                                                            <th className='border border-gray-300 px-2 py-1 whitespace-normal'>FASILITAS PERPAJAKAN</th>
+                                                            <th className='border border-gray-300 px-2 py-1 whitespace-normal'>UANG PERSEDIAAN / PEMBAYARAN LANGSUNG</th>
+                                                            <th className='border border-gray-300 px-2 py-1 whitespace-normal'>NITKU</th>
+                                                            <th className='border border-gray-300 px-2 py-1 whitespace-normal'>STATUS</th>
+                                                            <th className='border border-gray-300 px-2 py-1 whitespace-normal'>KAP-KJS</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td className='border border-gray-300 px-2 py-1 text-center'>1</td>
+                                                            <td className='border border-gray-300 px-2 py-1'>123456789012345</td>
+                                                            <td className='border border-gray-300 px-2 py-1'>Budi Santoso</td>
+                                                            <td className='border border-gray-300 px-2 py-1'>BP-001/2025</td>
+                                                            <td className='border border-gray-300 px-2 py-1'>2025-05-10</td>
+                                                            <td className='border border-gray-300 px-2 py-1'>PPh 21</td>
+                                                            <td className='border border-gray-300 px-2 py-1'>21-100-01</td>
+                                                            <td className='border border-gray-300 px-2 py-1'>Gaji</td>
+                                                            <td className='border border-gray-300 px-2 py-1 text-right'>10.000.000</td>
+                                                            <td className='border border-gray-300 px-2 py-1 text-right'>5%</td>
+                                                            <td className='border border-gray-300 px-2 py-1 text-right'>500.000</td>
+                                                            <td className='border border-gray-300 px-2 py-1'>Tidak Ada</td>
+                                                            <td className='border border-gray-300 px-2 py-1'>-</td>
+                                                            <td className='border border-gray-300 px-2 py-1'>NITKU-001</td>
+                                                            <td className='border border-gray-300 px-2 py-1'>Valid</td>
+                                                            <td className='border border-gray-300 px-2 py-1'>KAP-001</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td className='border border-gray-300 px-2 py-1 text-center'>2</td>
+                                                            <td className='border border-gray-300 px-2 py-1'>987654321098765</td>
+                                                            <td className='border border-gray-300 px-2 py-1'>Siti Aminah</td>
+                                                            <td className='border border-gray-300 px-2 py-1'>BP-002/2025</td>
+                                                            <td className='border border-gray-300 px-2 py-1'>2025-05-15</td>
+                                                            <td className='border border-gray-300 px-2 py-1'>PPh 23</td>
+                                                            <td className='border border-gray-300 px-2 py-1'>23-200-02</td>
+                                                            <td className='border border-gray-300 px-2 py-1'>Honorarium</td>
+                                                            <td className='border border-gray-300 px-2 py-1 text-right'>5.000.000</td>
+                                                            <td className='border border-gray-300 px-2 py-1 text-right'>2%</td>
+                                                            <td className='border border-gray-300 px-2 py-1 text-right'>100.000</td>
+                                                            <td className='border border-gray-300 px-2 py-1'>Ada</td>
+                                                            <td className='border border-gray-300 px-2 py-1'>-</td>
+                                                            <td className='border border-gray-300 px-2 py-1'>NITKU-002</td>
+                                                            <td className='border border-gray-300 px-2 py-1'>Valid</td>
+                                                            <td className='border border-gray-300 px-2 py-1'>KAP-002</td>
+                                                        </tr>
+                                                    </tbody>
+                                                    <tfoot>
+                                                        <tr>
+                                                            <td colSpan={15} className='border border-gray-300 px-2 py-1 text-right font-bold'>JUMLAH PAJAK PEMERINTAH DITANGGUNG PEMERINTAH DENGAN MENGGUNAKAN PEMBAYARAN LANGSUNG</td>
+                                                            <td className='border border-gray-300 px-2 py-1 text-right font-bold'>15.000.000</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colSpan={15} className='border border-gray-300 px-2 py-1 text-right font-bold'>JUMLAH PAJAK PEMERINTAH DITANGGUNG PEMERINTAH </td>
+                                                            <td className='border border-gray-300 px-2 py-1 text-right font-bold'>15.000.000</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colSpan={15} className='border border-gray-300 px-2 py-1 text-right font-bold'>JUMLAH PAJAK PENGHASILAN DITANGGUNG PEMERINTAH DENGAN MENGGUNAKAN PEMBAYARAN LANGSUNG</td>
+                                                            <td className='border border-gray-300 px-2 py-1 text-right font-bold'>15.000.000</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colSpan={15} className='border border-gray-300 px-2 py-1 text-right font-bold'>JUMLAH PAJAK PENGHASILAN YANG HARUS DI BAYAR</td>
+                                                            <td className='border border-gray-300 px-2 py-1 text-right font-bold'>15.000.000</td>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -455,11 +567,7 @@ const CreateKonsepUnifikasi = () => {
                             </div>
                         </TabsContent>
                         <TabsContent value="l-ib">
-                            <div className="flex justify-between items-center mb-6">
-                                <h2 className="text-lg font-light text-yellow-500 mt-4">DAFTAR PEMOTONGAN PAJAK PENGHASILAN PASAL 21 BAGI PEGAWAI TETAP DAN PENSIUNAN YANG MENERIMA UANG TERKAIT PENSIUN SECARA BERKALA SERTA BAGI PEGAWAI NEGERI SIPIL,
-                                    ANGGOTA TENTARA NASIONAL INDONESIA, ANGGOTA KEPOLISIAN REPUBLIK INDONESIA, PEJABAT NEGARA, DAN PENSIUNANNYA UNTUK MASA PAJAK TERAKKHIR
-                                </h2>
-                            </div>
+
                             <div className="mt-4">
                                 <div className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full" onClick={() => setShowHeadera2(!showHeadera2)}>
                                     <h3 className='text-lg font-semibold'>Header</h3>
@@ -467,7 +575,7 @@ const CreateKonsepUnifikasi = () => {
                                 </div>
                                 {showHeadera2 && (
                                     <div className="border rounded-md p-4 mb-4">
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                                             <div>
                                                 <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">NPWP</label>
                                                 <input
@@ -489,134 +597,165 @@ const CreateKonsepUnifikasi = () => {
                                         </div>
                                     </div>
                                 )}
-                                <div className="border rounded-md p-4 mb-4">
-                                    <div className="border rounded-md p-4 mb-4 font-semibold">
-                                        BPA1
-                                    </div>
-                                    <div className="w-[1400px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden">
-                                        <table className="table-auto text-sm text-left border overflow-hidden">
-                                            <thead className="bg-purple-700 text-white text-center">
-                                                <tr>
-                                                    <th className="p-2 border-b ">No</th>
-                                                    <th className="p-2 border-b min-w-[200px]">NIK/NPWP</th>
-                                                    <th className="p-2  border-b min-w-[150px]">Nama</th>
-                                                    <th className="p-2 border-b min-w-[150px]">Nomor Bukti Potong </th>
-                                                    <th className="p-2 border-b min-w-[150px]">Tanggal Bukti Pemotongan </th>
-                                                    <th className="p-2 border-b min-w-[150px]">Kode Objek Pajak</th>
-                                                    <th className="p-2 border-b min-w-[150px]">Penghasilan Bruto (Rp)</th>
-                                                    <th className="p-2 border-b min-w-[150px]">Pajak Penghasilan (Rp)</th>
-                                                    <th className="p-2 border-b min-w-[150px]">Fasilitas Perpajakan</th>
-                                                    <th className="p-2 border-b min-w-[150px]">Negara</th>
-                                                    <th className="p-2 border-b min-w-[150px]">ID Tempat Kegiatan Usaha</th>
-                                                    <th className="p-2 border-b min-w-[150px]">KAP-KJS</th>
-                                                    <th className="p-2 border-b min-w-[150px]">Status</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody className="text-gray-600 text-center">
-                                                <tr>
-                                                    <td className="p-2 border-b text-center">1</td>
-                                                    <td className="p-2 border-b">881381978971381309</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                </tr>
-                                            </tbody>
-                                            {/* <tfoot className="text-gray-800 font-semibold bg-gray-100">
-                                                   <tr>
-                                                       <td className="p-2 text-right min-w-[150px]" colSpan={11}>Jumlah Pendapatan Kotor dan Pajak Penghasilan Yang Ditanggung Oleh Pemerintah</td>
-                                                       <td className="p-2 text-center">0</td>
-                                                       <td className="p-2"></td>
-                                                   </tr>
-                                                   <tr>
-                                                       <td className="p-2 text-right min-w-[150px]" colSpan={11}>Jumlah Pendapatan Kotor dan Pajak Penghasilan Yang Dipotong</td>
-                                                       <td className="p-2 text-center">0</td>
-                                                       <td className="p-2"></td>
-                                                   </tr>
-                                                   <tr>
-                                                       <td className="p-2 text-right min-w-[150px]" colSpan={11}>Jumlah Total Pendapatan Kotor Dan Pajak Penghasilan Yang Ditanggung Oleh Pemerintah <br /> serta Pajak penghasilan Yang Dipotong</td>
-                                                       <td className="p-2 text-center">0</td>
-                                                       <td className="p-2"></td>
-                                                   </tr>
-                                               </tfoot> */}
-                                        </table>
-                                    </div>
+                                <div className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full" onClick={() => setShowTabelDaftarPPh(!showTabelDaftarPPh)} >
+                                    <h3 className='text-lg font-semibold'>Tabel.I DAFTAR PPh YANG DIBAYAR SENDIRI DAN/ ATAU DISETOR SENDIRI</h3>
+                                    {showTabelDaftarPPh ? <FaChevronUp /> : <FaChevronDown />}
                                 </div>
-                                <div className="border rounded-md p-4 mb-4">
-                                    <div className="border rounded-md p-4 mb-4 font-semibold">
-                                        BPA2
-                                    </div>
-                                    <div className="w-[1400px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden">
-                                        <table className="table-auto text-sm text-left border overflow-hidden">
-                                            <thead className="bg-purple-700 text-white text-center">
+                                {showTabelDaftarPPh && (
+                                    <div className="border rounded-md p-4 overflow-x-auto w-[1400px]">
+                                        <table className='w-[1200px] text-sm text-left border overflow-x-auto'>
+                                            <thead className="bg-purple-700 text-white text-center ">
                                                 <tr>
-                                                    <th className="p-2 border-b ">No</th>
-                                                    <th className="p-2 border-b min-w-[200px]">NIK/NPWP</th>
-                                                    <th className="p-2  border-b min-w-[150px]">Nama</th>
-                                                    <th className="p-2 border-b min-w-[150px]">Nomor Bukti Potong </th>
-                                                    <th className="p-2 border-b min-w-[150px]">Tanggal Bukti Pemotongan </th>
-                                                    <th className="p-2 border-b min-w-[150px]">Kode Objek Pajak</th>
-                                                    <th className="p-2 border-b min-w-[150px]">Penghasilan Bruto (Rp)</th>
-                                                    <th className="p-2 border-b min-w-[150px]">Pajak Penghasilan (Rp)</th>
-                                                    <th className="p-2 border-b min-w-[150px]">Fasilitas Perpajakan</th>
-                                                    <th className="p-2 border-b min-w-[150px]">Negara</th>
-                                                    <th className="p-2 border-b min-w-[150px]">ID Tempat Kegiatan Usaha</th>
-                                                    <th className="p-2 border-b min-w-[150px]">KAP-KJS</th>
-                                                    <th className="p-2 border-b min-w-[150px]">Status</th>
+                                                    <th className='border border-gray-300 px-2 py-1 whitespace-normal'>No</th>
+                                                    <th className='border border-gray-300 px-2 py-1 whitespace-normal'>NIK/NPWP</th>
+                                                    <th className='border border-gray-300 px-2 py-1 whitespace-normal'>NAMA</th>
+                                                    <th className='border border-gray-300 px-2 py-1 whitespace-normal'>NOMOR BUKTI POTONG</th>
+                                                    <th className='border border-gray-300 px-2 py-1 whitespace-normal'>TANGGAL BUKTI POTONG</th>
+                                                    <th className='border border-gray-300 px-2 py-1 whitespace-normal'>JENIS PAJAK </th>
+                                                    <th className='border border-gray-300 px-2 py-1 whitespace-normal'>KODE OBJEK PAJAK</th>
+                                                    <th className='border border-gray-300 px-2 py-1 whitespace-normal'>OBJEK PAJAK</th>
+                                                    <th className='border border-gray-300 px-2 py-1 whitespace-normal'>DASAR PENGENAAN PAJAK</th>
+                                                    <th className='border border-gray-300 px-2 py-1 whitespace-normal'>TARIF</th>
+                                                    <th className='border border-gray-300 px-2 py-1 whitespace-normal'>PAJAK PENGHASILAN</th>
+                                                    <th className='border border-gray-300 px-2 py-1 whitespace-normal'>FASILITAS PERPAJAKAN</th>
+                                                    <th className='border border-gray-300 px-2 py-1 whitespace-normal'>UANG PERSEDIAAN / PEMBAYARAN LANGSUNG</th>
+                                                    <th className='border border-gray-300 px-2 py-1 whitespace-normal'>NITKU</th>
+                                                    <th className='border border-gray-300 px-2 py-1 whitespace-normal'>STATUS</th>
+                                                    <th className='border border-gray-300 px-2 py-1 whitespace-normal'>KAP-KJS</th>
                                                 </tr>
                                             </thead>
-                                            <tbody className="text-gray-600 text-center">
+                                            <tbody>
                                                 <tr>
-                                                    <td className="p-2 border-b text-center">1</td>
-                                                    <td className="p-2 border-b">881381978971381309</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
+                                                    <td className='border border-gray-300 px-2 py-1 text-center'>1</td>
+                                                    <td className='border border-gray-300 px-2 py-1'>123456789012345</td>
+                                                    <td className='border border-gray-300 px-2 py-1'>Budi Santoso</td>
+                                                    <td className='border border-gray-300 px-2 py-1'>BP-001/2025</td>
+                                                    <td className='border border-gray-300 px-2 py-1'>2025-05-10</td>
+                                                    <td className='border border-gray-300 px-2 py-1'>PPh 21</td>
+                                                    <td className='border border-gray-300 px-2 py-1'>21-100-01</td>
+                                                    <td className='border border-gray-300 px-2 py-1'>Gaji</td>
+                                                    <td className='border border-gray-300 px-2 py-1 text-right'>10.000.000</td>
+                                                    <td className='border border-gray-300 px-2 py-1 text-right'>5%</td>
+                                                    <td className='border border-gray-300 px-2 py-1 text-right'>500.000</td>
+                                                    <td className='border border-gray-300 px-2 py-1'>Tidak Ada</td>
+                                                    <td className='border border-gray-300 px-2 py-1'>-</td>
+                                                    <td className='border border-gray-300 px-2 py-1'>NITKU-001</td>
+                                                    <td className='border border-gray-300 px-2 py-1'>Valid</td>
+                                                    <td className='border border-gray-300 px-2 py-1'>KAP-001</td>
+                                                </tr>
+                                                <tr>
+                                                    <td className='border border-gray-300 px-2 py-1 text-center'>2</td>
+                                                    <td className='border border-gray-300 px-2 py-1'>987654321098765</td>
+                                                    <td className='border border-gray-300 px-2 py-1'>Siti Aminah</td>
+                                                    <td className='border border-gray-300 px-2 py-1'>BP-002/2025</td>
+                                                    <td className='border border-gray-300 px-2 py-1'>2025-05-15</td>
+                                                    <td className='border border-gray-300 px-2 py-1'>PPh 23</td>
+                                                    <td className='border border-gray-300 px-2 py-1'>23-200-02</td>
+                                                    <td className='border border-gray-300 px-2 py-1'>Honorarium</td>
+                                                    <td className='border border-gray-300 px-2 py-1 text-right'>5.000.000</td>
+                                                    <td className='border border-gray-300 px-2 py-1 text-right'>2%</td>
+                                                    <td className='border border-gray-300 px-2 py-1 text-right'>100.000</td>
+                                                    <td className='border border-gray-300 px-2 py-1'>Ada</td>
+                                                    <td className='border border-gray-300 px-2 py-1'>-</td>
+                                                    <td className='border border-gray-300 px-2 py-1'>NITKU-002</td>
+                                                    <td className='border border-gray-300 px-2 py-1'>Valid</td>
+                                                    <td className='border border-gray-300 px-2 py-1'>KAP-002</td>
                                                 </tr>
                                             </tbody>
-                                            <tfoot className="text-gray-800 font-semibold bg-gray-100">
+                                            <tfoot>
                                                 <tr>
-                                                    <td className="p-2 text-right min-w-[150px]" colSpan={11}>Jumlah Pendapatan Kotor dan Pajak Penghasilan Yang Ditanggung Oleh Pemerintah</td>
-                                                    <td className="p-2 text-center">0</td>
-                                                    <td className="p-2"></td>
+                                                    <td colSpan={15} className='border border-gray-300 px-2 py-1 text-right font-bold'>JUMLAH PPh YANG DITANGGUNG PEMERINTAH</td>
+                                                    <td className='border border-gray-300 px-2 py-1 text-right font-bold'>15.000.000</td>
                                                 </tr>
                                                 <tr>
-                                                    <td className="p-2 text-right min-w-[150px]" colSpan={11}>Jumlah Pendapatan Kotor dan Pajak Penghasilan Yang Dipotong</td>
-                                                    <td className="p-2 text-center">0</td>
-                                                    <td className="p-2"></td>
+                                                    <td colSpan={15} className='border border-gray-300 px-2 py-1 text-right font-bold'>JUMLAH PPh YANG HARUS DIBAYAR</td>
+                                                    <td className='border border-gray-300 px-2 py-1 text-right font-bold'>15.000.000</td>
                                                 </tr>
-                                                <tr>
-                                                    <td className="p-2 text-right min-w-[150px]" colSpan={11}>Jumlah Total Pendapatan Kotor Dan Pajak Penghasilan Yang Ditanggung Oleh Pemerintah <br /> serta Pajak penghasilan Yang Dipotong</td>
-                                                    <td className="p-2 text-center">0</td>
-                                                    <td className="p-2"></td>
-                                                </tr>
+
                                             </tfoot>
                                         </table>
                                     </div>
+                                )}
+                                <div className="mt-4">
+                                    <div className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full" onClick={() => setShowTabelDaftarPajakPenghasilan(!showTabelDaftarPajakPenghasilan)} >
+                                        <h3 className='text-lg font-semibold'>Tabel.II DAFTAR PAJAK PENGHASILAN - PEMBAYARAN KUMULATIF</h3>
+                                        {showTabelDaftarPajakPenghasilan ? <FaChevronUp /> : <FaChevronDown />}
+                                    </div>
+                                    {showTabelDaftarPajakPenghasilan && (
+                                        <div className="border rounded-md p-4 overflow-x-auto w-[1400px]">
+                                            <table className='w-[1200px] text-sm text-left border overflow-x-auto'>
+                                                <thead className="bg-purple-700 text-white text-center ">
+                                                    <tr>
+                                                        <th className='border border-gray-300 px-2 py-1 whitespace-normal'>No</th>
+                                                        <th className='border border-gray-300 px-2 py-1 whitespace-normal'>NIK/NPWP</th>
+                                                        <th className='border border-gray-300 px-2 py-1 whitespace-normal'>NAMA</th>
+                                                        <th className='border border-gray-300 px-2 py-1 whitespace-normal'>NOMOR BUKTI POTONG</th>
+                                                        <th className='border border-gray-300 px-2 py-1 whitespace-normal'>TANGGAL BUKTI POTONG</th>
+                                                        <th className='border border-gray-300 px-2 py-1 whitespace-normal'>JENIS PAJAK </th>
+                                                        <th className='border border-gray-300 px-2 py-1 whitespace-normal'>KODE OBJEK PAJAK</th>
+                                                        <th className='border border-gray-300 px-2 py-1 whitespace-normal'>OBJEK PAJAK</th>
+                                                        <th className='border border-gray-300 px-2 py-1 whitespace-normal'>DASAR PENGENAAN PAJAK</th>
+                                                        <th className='border border-gray-300 px-2 py-1 whitespace-normal'>TARIF</th>
+                                                        <th className='border border-gray-300 px-2 py-1 whitespace-normal'>PAJAK PENGHASILAN</th>
+                                                        <th className='border border-gray-300 px-2 py-1 whitespace-normal'>FASILITAS PERPAJAKAN</th>
+                                                        <th className='border border-gray-300 px-2 py-1 whitespace-normal'>UANG PERSEDIAAN / PEMBAYARAN LANGSUNG</th>
+                                                        <th className='border border-gray-300 px-2 py-1 whitespace-normal'>NITKU</th>
+                                                        <th className='border border-gray-300 px-2 py-1 whitespace-normal'>STATUS</th>
+                                                        <th className='border border-gray-300 px-2 py-1 whitespace-normal'>KAP-KJS</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td className='border border-gray-300 px-2 py-1 text-center'>1</td>
+                                                        <td className='border border-gray-300 px-2 py-1'>123456789012345</td>
+                                                        <td className='border border-gray-300 px-2 py-1'>Budi Santoso</td>
+                                                        <td className='border border-gray-300 px-2 py-1'>BP-001/2025</td>
+                                                        <td className='border border-gray-300 px-2 py-1'>2025-05-10</td>
+                                                        <td className='border border-gray-300 px-2 py-1'>PPh 21</td>
+                                                        <td className='border border-gray-300 px-2 py-1'>21-100-01</td>
+                                                        <td className='border border-gray-300 px-2 py-1'>Gaji</td>
+                                                        <td className='border border-gray-300 px-2 py-1 text-right'>10.000.000</td>
+                                                        <td className='border border-gray-300 px-2 py-1 text-right'>5%</td>
+                                                        <td className='border border-gray-300 px-2 py-1 text-right'>500.000</td>
+                                                        <td className='border border-gray-300 px-2 py-1'>Tidak Ada</td>
+                                                        <td className='border border-gray-300 px-2 py-1'>-</td>
+                                                        <td className='border border-gray-300 px-2 py-1'>NITKU-001</td>
+                                                        <td className='border border-gray-300 px-2 py-1'>Valid</td>
+                                                        <td className='border border-gray-300 px-2 py-1'>KAP-001</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td className='border border-gray-300 px-2 py-1 text-center'>2</td>
+                                                        <td className='border border-gray-300 px-2 py-1'>987654321098765</td>
+                                                        <td className='border border-gray-300 px-2 py-1'>Siti Aminah</td>
+                                                        <td className='border border-gray-300 px-2 py-1'>BP-002/2025</td>
+                                                        <td className='border border-gray-300 px-2 py-1'>2025-05-15</td>
+                                                        <td className='border border-gray-300 px-2 py-1'>PPh 23</td>
+                                                        <td className='border border-gray-300 px-2 py-1'>23-200-02</td>
+                                                        <td className='border border-gray-300 px-2 py-1'>Honorarium</td>
+                                                        <td className='border border-gray-300 px-2 py-1 text-right'>5.000.000</td>
+                                                        <td className='border border-gray-300 px-2 py-1 text-right'>2%</td>
+                                                        <td className='border border-gray-300 px-2 py-1 text-right'>100.000</td>
+                                                        <td className='border border-gray-300 px-2 py-1'>Ada</td>
+                                                        <td className='border border-gray-300 px-2 py-1'>-</td>
+                                                        <td className='border border-gray-300 px-2 py-1'>NITKU-002</td>
+                                                        <td className='border border-gray-300 px-2 py-1'>Valid</td>
+                                                        <td className='border border-gray-300 px-2 py-1'>KAP-002</td>
+                                                    </tr>
+                                                </tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <td colSpan={15} className='border border-gray-300 px-2 py-1 text-right font-bold'>JUMLAH PPh YANG HARUS DIBAYAR</td>
+                                                        <td className='border border-gray-300 px-2 py-1 text-right font-bold'>15.000.000</td>
+                                                    </tr>
+                                                    
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </TabsContent>
                         <TabsContent value="l-ii">
-                            <div className="flex justify-between items-center mb-6">
-                                <h2 className="text-lg font-light text-yellow-500 mt-4">DAFTAR PEMOTONGAN SATU TAHUN PAJAK ATAU BAGIAN TAHUN PAJAK PAJAK PENGHASILAN PASAL 21 BAGI PEGAWAI TETAP DAN PENSIUNAN YANG MENERIMA UANG TERKAIT
-                                    PENSIUN SECARA BERKALA SERTA BAGI PEGAWAI NEGERI SIPIL, ANGGOTA TENTARA NASIONAL INDONESIA, ANGGOTA KEPOLISIAN REPUBLIK INDONESIA, PEJABAT NEGARA, DAN PENSIUNANNYA
-                                </h2>
-                            </div>
                             <div className="mt-4">
                                 <div className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full" onClick={() => setShowHeaderb1(!showHeaderb1)}>
                                     <h3 className='text-lg font-semibold'>Header</h3>
@@ -648,283 +787,78 @@ const CreateKonsepUnifikasi = () => {
                                 )}
                                 <div className="border rounded-md p-4 mb-4">
                                     <div className="border rounded-md p-4 mb-4 font-semibold">
-                                        BPA1
+                                        TABEL I. ATC
                                     </div>
-                                    <div className="w-[1400px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden">
-                                        <table className="table-auto text-sm text-left border overflow-hidden">
-                                            <thead className="bg-purple-700 text-white text-center">
+                                    <div className="border rounded-md p-4 overflow-x-auto w-[1400px]">
+                                        <table className='w-[1200px] text-sm text-left border overflow-x-auto'>
+                                            <thead className="bg-purple-700 text-white text-center ">
                                                 <tr>
-                                                    <th className="p-2 border-b ">No</th>
-                                                    <th className="p-2 border-b min-w-[200px]">NIK/NPWP</th>
-                                                    <th className="p-2  border-b min-w-[150px]">Nama</th>
-                                                    <th className="p-2 border-b min-w-[150px]">Nomor Bukti Potong </th>
-                                                    <th className="p-2 border-b min-w-[150px]">Tanggal Bukti Pemotongan </th>
-                                                    <th className="p-2 border-b min-w-[150px]">Kode Objek Pajak</th>
-                                                    <th className="p-2 border-b min-w-[150px]">Penghasilan Bruto (Rp)</th>
-                                                    <th className="p-2 border-b min-w-[150px]">Pajak Penghasilan (Rp)</th>
-                                                    <th className="p-2 border-b min-w-[150px]">Fasilitas Perpajakan</th>
-                                                    <th className="p-2 border-b min-w-[150px]">Negara</th>
-                                                    <th className="p-2 border-b min-w-[150px]">ID Tempat Kegiatan Usaha</th>
-                                                    <th className="p-2 border-b min-w-[150px]">KAP-KJS</th>
-                                                    <th className="p-2 border-b min-w-[150px]">Status</th>
+                                                    <th className='border border-gray-300 px-2 py-1 whitespace-normal'>No</th>
+                                                    <th className='border border-gray-300 px-2 py-1 whitespace-normal'>NIK/NPWP PENERIMA PENGHASILAN</th>
+                                                    <th className='border border-gray-300 px-2 py-1 whitespace-normal'>NAMA PENERIMA PENGHASILAN</th>
+                                                    <th className='border border-gray-300 px-2 py-1 whitespace-normal'>IDENTITAS AKUN PENERIMA PENGHASILAN</th>
+                                                    <th className='border border-gray-300 px-2 py-1 whitespace-normal'>NIK/NPWP PEMBERI PENGHASILAN </th>
+                                                    <th className='border border-gray-300 px-2 py-1 whitespace-normal'>NAMA PEMBERI PENGHASILAN </th>
+                                                    <th className='border border-gray-300 px-2 py-1 whitespace-normal'>IDENTITAS AKUN PEMBERI PENGHASILAN</th>
+                                                    <th className='border border-gray-300 px-2 py-1 whitespace-normal'>KODE OBJEK PAJAK</th>
+                                                    <th className='border border-gray-300 px-2 py-1 whitespace-normal'>NOMOR DOKUMEN </th>
+                                                    <th className='border border-gray-300 px-2 py-1 whitespace-normal'>TANGGAL DOKUMEN</th>
+                                                    <th className='border border-gray-300 px-2 py-1 whitespace-normal'>DASAR PENGENAAN PAJAK(Rp)</th>
+                                                    <th className='border border-gray-300 px-2 py-1 whitespace-normal'>TARIF %</th>
+                                                    <th className='border border-gray-300 px-2 py-1 whitespace-normal'>PAJAK PENGHASILAN(Rp)</th>
+                                                    <th className='border border-gray-300 px-2 py-1 whitespace-normal'>FASILITAS PERPAJAKAN</th>
+                                                    <th className='border border-gray-300 px-2 py-1 whitespace-normal'>NITKU</th>
+                                                    <th className='border border-gray-300 px-2 py-1 whitespace-normal'>STATUS</th>
+                                                    <th className='border border-gray-300 px-2 py-1 whitespace-normal'>KAP-KJS</th>
                                                 </tr>
                                             </thead>
-                                            <tbody className="text-gray-600 text-center">
+                                            <tbody>
                                                 <tr>
-                                                    <td className="p-2 border-b text-center">1</td>
-                                                    <td className="p-2 border-b">881381978971381309</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
+                                                    <td className='border border-gray-300 px-2 py-1 text-center'>1</td>
+                                                    <td className='border border-gray-300 px-2 py-1'>123456789012345</td>
+                                                    <td className='border border-gray-300 px-2 py-1'>Budi Santoso</td>
+                                                    <td className='border border-gray-300 px-2 py-1'>akun-budi</td>
+                                                    <td className='border border-gray-300 px-2 py-1'>543210987654321</td>
+                                                    <td className='border border-gray-300 px-2 py-1'>PT Maju Jaya</td>
+                                                    <td className='border border-gray-300 px-2 py-1'>akun-majujaya</td>
+                                                    <td className='border border-gray-300 px-2 py-1'>21-100-01</td>
+                                                    <td className='border border-gray-300 px-2 py-1'>DOC-001/2025</td>
+                                                    <td className='border border-gray-300 px-2 py-1'>2025-05-10</td>
+                                                    <td className='border border-gray-300 px-2 py-1 text-right'>10.000.000</td>
+                                                    <td className='border border-gray-300 px-2 py-1 text-right'>5</td>
+                                                    <td className='border border-gray-300 px-2 py-1 text-right'>500.000</td>
+                                                    <td className='border border-gray-300 px-2 py-1'>Tidak Ada</td>
+                                                    <td className='border border-gray-300 px-2 py-1'>NITKU-001</td>
+                                                    <td className='border border-gray-300 px-2 py-1'>Valid</td>
+                                                    <td className='border border-gray-300 px-2 py-1'>KAP-001</td>
+                                                </tr>
+                                                <tr>
+                                                    <td className='border border-gray-300 px-2 py-1 text-center'>2</td>
+                                                    <td className='border border-gray-300 px-2 py-1'>987654321098765</td>
+                                                    <td className='border border-gray-300 px-2 py-1'>Siti Aminah</td>
+                                                    <td className='border border-gray-300 px-2 py-1'>akun-siti</td>
+                                                    <td className='border border-gray-300 px-2 py-1'>678905432109876</td>
+                                                    <td className='border border-gray-300 px-2 py-1'>PT Sejahtera</td>
+                                                    <td className='border border-gray-300 px-2 py-1'>akun-sejahtera</td>
+                                                    <td className='border border-gray-300 px-2 py-1'>23-200-02</td>
+                                                    <td className='border border-gray-300 px-2 py-1'>DOC-002/2025</td>
+                                                    <td className='border border-gray-300 px-2 py-1'>2025-05-15</td>
+                                                    <td className='border border-gray-300 px-2 py-1 text-right'>5.000.000</td>
+                                                    <td className='border border-gray-300 px-2 py-1 text-right'>2</td>
+                                                    <td className='border border-gray-300 px-2 py-1 text-right'>100.000</td>
+                                                    <td className='border border-gray-300 px-2 py-1'>Ada</td>
+                                                    <td className='border border-gray-300 px-2 py-1'>NITKU-002</td>
+                                                    <td className='border border-gray-300 px-2 py-1'>Valid</td>
+                                                    <td className='border border-gray-300 px-2 py-1'>KAP-002</td>
                                                 </tr>
                                             </tbody>
-                                            {/* <tfoot className="text-gray-800 font-semibold bg-gray-100">
-                                                   <tr>
-                                                       <td className="p-2 text-right min-w-[150px]" colSpan={11}>Jumlah Pendapatan Kotor dan Pajak Penghasilan Yang Ditanggung Oleh Pemerintah</td>
-                                                       <td className="p-2 text-center">0</td>
-                                                       <td className="p-2"></td>
-                                                   </tr>
-                                                   <tr>
-                                                       <td className="p-2 text-right min-w-[150px]" colSpan={11}>Jumlah Pendapatan Kotor dan Pajak Penghasilan Yang Dipotong</td>
-                                                       <td className="p-2 text-center">0</td>
-                                                       <td className="p-2"></td>
-                                                   </tr>
-                                                   <tr>
-                                                       <td className="p-2 text-right min-w-[150px]" colSpan={11}>Jumlah Total Pendapatan Kotor Dan Pajak Penghasilan Yang Ditanggung Oleh Pemerintah <br /> serta Pajak penghasilan Yang Dipotong</td>
-                                                       <td className="p-2 text-center">0</td>
-                                                       <td className="p-2"></td>
-                                                   </tr>
-                                               </tfoot> */}
                                         </table>
                                     </div>
                                 </div>
-                                <div className="border rounded-md p-4 mb-4">
-                                    <div className="border rounded-md p-4 mb-4 font-semibold">
-                                        BPA2
-                                    </div>
-                                    <div className="w-[1400px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden">
-                                        <table className="table-auto text-sm text-left border overflow-hidden">
-                                            <thead className="bg-purple-700 text-white text-center">
-                                                <tr>
-                                                    <th className="p-2 border-b ">No</th>
-                                                    <th className="p-2 border-b min-w-[200px]">NIK/NPWP</th>
-                                                    <th className="p-2  border-b min-w-[150px]">Nama</th>
-                                                    <th className="p-2 border-b min-w-[150px]">Nomor Bukti Potong </th>
-                                                    <th className="p-2 border-b min-w-[150px]">Tanggal Bukti Pemotongan </th>
-                                                    <th className="p-2 border-b min-w-[150px]">Kode Objek Pajak</th>
-                                                    <th className="p-2 border-b min-w-[150px]">Penghasilan Bruto (Rp)</th>
-                                                    <th className="p-2 border-b min-w-[150px]">Pajak Penghasilan (Rp)</th>
-                                                    <th className="p-2 border-b min-w-[150px]">Fasilitas Perpajakan</th>
-                                                    <th className="p-2 border-b min-w-[150px]">Negara</th>
-                                                    <th className="p-2 border-b min-w-[150px]">ID Tempat Kegiatan Usaha</th>
-                                                    <th className="p-2 border-b min-w-[150px]">KAP-KJS</th>
-                                                    <th className="p-2 border-b min-w-[150px]">Status</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody className="text-gray-600 text-center">
-                                                <tr>
-                                                    <td className="p-2 border-b text-center">1</td>
-                                                    <td className="p-2 border-b">881381978971381309</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                </tr>
-                                            </tbody>
-                                            <tfoot className="text-gray-800 font-semibold bg-gray-100">
-                                                <tr>
-                                                    <td className="p-2 text-right min-w-[150px]" colSpan={11}>Total</td>
-                                                    <td className="p-2 text-center">0</td>
-                                                    <td className="p-2"></td>
-                                                </tr>
-
-                                            </tfoot>
-                                        </table>
-                                    </div>
-                                </div>
+                                
                             </div>
                         </TabsContent>
-                        <TabsContent value="l-iii">
-                            <div className="flex justify-between items-center mb-6">
-                                <h2 className="text-lg font-light text-yellow-500 mt-4">DAFTAR PEMOTONGAN PAJAK PENGHASILAN PASAL 21
-                                    DAN/ATAU PASAL 26 SELAIN PEGAWAI TETAP ATAU PENSIUNAN YANG MENERIMA UANG TERKAIT PENSIUN SECARA BERKALA
-                                </h2>
-                            </div>
-                            <div className="mt-4">
-                                <div className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full" onClick={() => setShowHeaderb2(!showHeaderb2)}>
-                                    <h3 className='text-lg font-semibold'>Header</h3>
-                                    {showHeaderb2 ? <FaChevronUp /> : <FaChevronDown />}
-                                </div>
-                                {showHeaderb2 && (
-                                    <div className="border rounded-md p-4 mb-4">
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                            <div>
-                                                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">NPWP</label>
-                                                <input
-                                                    type="text"
-                                                    readOnly
-                                                    value="2002909301990"
-                                                    className='w-full p-2 border rounded-md bg-gray-100 text-gray-600'
-                                                />
-                                            </div>
-                                            <div>
-                                                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Masa Pajak</label>
-                                                <input
-                                                    type="text"
-                                                    readOnly
-                                                    value="2025"
-                                                    className='w-full p-2 border rounded-md bg-gray-100 text-gray-600'
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                )}
-                                <div className="border rounded-md p-4 mb-4">
-                                    <div className="border rounded-md p-4 mb-4 font-semibold">
-                                        BP21
-                                    </div>
-                                    <div className="w-[1400px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden">
-                                        <table className="table-auto text-sm text-left border overflow-hidden">
-                                            <thead className="bg-purple-700 text-white text-center">
-                                                <tr>
-                                                    <th className="p-2 border-b ">No</th>
-                                                    <th className="p-2 border-b min-w-[200px]">NIK/NPWP</th>
-                                                    <th className="p-2  border-b min-w-[150px]">Nama</th>
-                                                    <th className="p-2 border-b min-w-[150px]">Nomor Bukti Potong </th>
-                                                    <th className="p-2 border-b min-w-[150px]">Tanggal Bukti Pemotongan </th>
-                                                    <th className="p-2 border-b min-w-[150px]">Kode Objek Pajak</th>
-                                                    <th className="p-2 border-b min-w-[150px]">Objek Pajak</th>
-                                                    <th className="p-2 border-b min-w-[150px]">Penghasilan Bruto (Rp)</th>
-                                                    <th className="p-2 border-b min-w-[150px]">Pajak Penghasilan (Rp)</th>
-                                                    <th className="p-2 border-b min-w-[150px]">Fasilitas Perpajakan</th>
-                                                    <th className="p-2 border-b min-w-[150px]">ID Tempat Kegiatan Usaha</th>
-                                                    <th className="p-2 border-b min-w-[150px]">Negara</th>
-                                                    <th className="p-2 border-b min-w-[150px]">ID Tempat Kegiatan Usaha</th>
-                                                    <th className="p-2 border-b min-w-[150px]">KAP-KJS</th>
-                                                    <th className="p-2 border-b min-w-[150px]">Status</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody className="text-gray-600 text-center">
-                                                <tr>
-                                                    <td className="p-2 border-b text-center">1</td>
-                                                    <td className="p-2 border-b">881381978971381309</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                </tr>
-                                            </tbody>
-                                            <tfoot className="text-gray-800 font-semibold bg-gray-100">
-                                                <tr>
-                                                    <td className="p-2 text-right min-w-[150px]" colSpan={13}>JUMLAH PENDAPATAN KOTOR UNTUK PASAL 21 DAN PAJAK PENGHASILAN PASAL 21 YANG DITANGGUNG OLEH PEMERINTAH</td>
-                                                    <td className="p-2 text-center">0</td>
-                                                    <td className="p-2">0</td>
-                                                </tr>
-                                                <tr>
-                                                    <td className="p-2 text-right min-w-[150px]" colSpan={13}>JUMLAH UNTUK PASAL 21 DAN PENDAPATAN KOTOR PASAL 21 SERTA PAJAK PENGHASILAN YANG DIPOTONG</td>
-                                                    <td className="p-2 text-center">0</td>
-                                                    <td className="p-2">0</td>
-                                                </tr>
-                                                {/* <tr>
-                                                       <td className="p-2 text-right min-w-[150px]" colSpan={13}>Jumlah Total Pendapatan Kotor Dan Pajak Penghasilan Yang Ditanggung Oleh Pemerintah <br /> serta Pajak penghasilan Yang Dipotong</td>
-                                                       <td className="p-2 text-center">0</td>
-                                                       <td className="p-2"></td>
-                                                   </tr> */}
-                                            </tfoot>
-                                        </table>
-                                    </div>
-                                </div>
-                                <div className="border rounded-md p-4 mb-4">
-                                    <div className="border rounded-md p-4 mb-4 font-semibold">
-                                        BP26
-                                    </div>
-                                    <div className="w-[1400px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden">
-                                        <table className="table-auto text-sm text-left border overflow-hidden">
-                                            <thead className="bg-purple-700 text-white text-center">
-                                                <tr>
-                                                    <th className="p-2 border-b ">No</th>
-                                                    <th className="p-2 border-b min-w-[200px]">NIK/NPWP</th>
-                                                    <th className="p-2  border-b min-w-[150px]">Nama</th>
-                                                    <th className="p-2 border-b min-w-[150px]">Nomor Bukti Potong </th>
-                                                    <th className="p-2 border-b min-w-[150px]">Tanggal Bukti Pemotongan </th>
-                                                    <th className="p-2 border-b min-w-[150px]">Kode Objek Pajak</th>
-                                                    <th className="p-2 border-b min-w-[150px]">Objek Pajak</th>
-                                                    <th className="p-2 border-b min-w-[150px]">Penghasilan Bruto (Rp)</th>
-                                                    <th className="p-2 border-b min-w-[150px]">Pajak Penghasilan (Rp)</th>
-                                                    <th className="p-2 border-b min-w-[150px]">Fasilitas Perpajakan</th>
-                                                    <th className="p-2 border-b min-w-[150px]">ID Tempat Kegiatan Usaha</th>
-                                                    <th className="p-2 border-b min-w-[150px]">Negara</th>
-                                                    <th className="p-2 border-b min-w-[150px]">ID Tempat Kegiatan Usaha</th>
-                                                    <th className="p-2 border-b min-w-[150px]">KAP-KJS</th>
-                                                    <th className="p-2 border-b min-w-[150px]">Status</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody className="text-gray-600 text-center">
-                                                <tr>
-                                                    <td className="p-2 border-b text-center">1</td>
-                                                    <td className="p-2 border-b">881381978971381309</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                    <td className="p-2 border-b">-</td>
-                                                </tr>
-                                            </tbody>
-                                            <tfoot className="text-gray-800 font-semibold bg-gray-100">
-                                                <tr>
-                                                    <td className="p-2 text-right min-w-[150px]" colSpan={13}>JUMLAH PENDAPATAN KOTOR UNTUK PASAL 26 DAN PAJAK PENGHASILAN PASAL 26 YANG DITANGGUNG OLEH PEMERINTAH
-                                                    </td>
-                                                    <td className="p-2 text-center">0</td>
-                                                    <td className="p-2"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td className="p-2 text-right min-w-[150px]" colSpan={13}>JUMLAH UNTUK PASAL 26 DAN PENDAPATAN KOTOR PASAL 26 SERTA PAJAK PENGHASILAN YANG DIPOTONG</td>
-                                                    <td className="p-2 text-center">0</td>
-                                                    <td className="p-2"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td className="p-2 text-right min-w-[150px]" colSpan={13}>JUMLAH TOTAL PENDAPATAN KOTOR DAN PAJAK PENGHASILAN YANG DITANGGUNG OLEH PEMERINTAH SERTA PAJAK PENGHASILAN YANG DIPOTONG</td>
-                                                    <td className="p-2 text-center">0</td>
-                                                    <td className="p-2"></td>
-                                                </tr>
-                                            </tfoot>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </TabsContent>
+                        
                     </Tabs>
                 </div>
             </div>
