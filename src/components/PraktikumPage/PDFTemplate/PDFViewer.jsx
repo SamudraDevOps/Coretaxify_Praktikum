@@ -5,7 +5,7 @@ export const ViewerPDF = ({ document }) => (
   <PDFViewer
     style={{
       width: "100%",
-      height: "100vh",
+      height: "80vh",
       border: "none",
       backgroundColor: "hsl(var(--background))",
     }}

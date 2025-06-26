@@ -169,6 +169,7 @@ import BUPOTCreateWrapper from "./components/PraktikumPage/Badan/BUPOT/BUPOTCrea
 import BUPOTEditWrapper from "./components/PraktikumPage/Badan/BUPOT/BUPOTEditWrapper";
 import BukuBesar from "./components/PraktikumPage/PortalSaya/BukuBesar";
 import MasterAkun from "./components/PraktikumPage/PortalSaya/MasterAkun";
+import FakturViewPDF from "./components/PraktikumPage/Badan/EFaktur/FakturViewPDF";
 
 const Main = () => {
   const [loading, setLoading] = useState(true);
@@ -844,6 +845,20 @@ const Main = () => {
                 OrangPribadi={PajakKeluaranOP}
                 Badan={PajakKeluaranOP}
                 query={"edit-info"}
+              ></RoleBasedRenderer>
+            </>
+          }
+        />
+        <Route
+          path="/praktikum/:id/sistem/:akun/e-faktur/pajak-keluaran/pdf/:faktur"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/faktur/:faktur`}
+                intent={""}
+                OrangPribadi={FakturViewPDF}
+                Badan={FakturViewPDF}
+                query={""}
               ></RoleBasedRenderer>
             </>
           }
