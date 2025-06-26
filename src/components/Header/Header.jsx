@@ -351,7 +351,10 @@ const Header = () => {
         </div>
         <div className="flex items-center space-x-6 mr-1">
           <FileText className="w-6 h-6 cursor-pointer" />
-          <Bell className="w-6 h-6 cursor-pointer" />
+          <Bell
+            className="w-6 h-6 cursor-pointer"
+            onClick={() => navigate("/admin/praktikum/2/notifikasi")}
+          />
           {representedCompanies &&
             representedCompanies.data &&
             representedCompanies.data.length > 0 && (

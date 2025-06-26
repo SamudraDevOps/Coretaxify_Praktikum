@@ -55,6 +55,7 @@ import Header from "./components/Header/Header";
 import Home from "./components/Header/Home";
 import CoretaxifyList from "./components/Dashboard/Admin/Coretaxify/CoretaxifyList";
 import CoretaxifySendDetail from "./components/Dashboard/Admin/Coretaxify/CoretaxifySendDetail";
+import Notifikasi from "./components/PraktikumPage/Notifikasi";
 
 //Route Praktikum Orang Pribadi
 import DokumenSaya from "./components/PraktikumPage/OrangPribadi/PortalSaya/DokumenSaya";
@@ -1707,12 +1708,23 @@ const Main = () => {
             </>
           }
         />
+
+        {/* ROUTE BARU BELUM DIMASUKIN */}
           <Route
             path="/admin/praktikum/2/unifikasi"
             element={
               <>
                 <Header />
                 <CreateKonsepUnifikasi />
+              </>
+            }
+          />
+          <Route
+            path="/admin/praktikum/2/notifikasi"
+            element={
+              <>
+                <Header />
+                <Notifikasi />
               </>
             }
           />
