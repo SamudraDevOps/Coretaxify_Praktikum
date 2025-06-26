@@ -23,7 +23,7 @@ import { RxCross1 } from "react-icons/rx";
 import { FaRegCopy } from "react-icons/fa";
 import { useToast } from "@/hooks/use-toast";
 
-const DosenCoretaxify = () => {
+const AdminCoretaxify = () => {
   // State management
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
   const [selectedData, setSelectedData] = useState(null);
@@ -92,7 +92,7 @@ const DosenCoretaxify = () => {
     queryKey: ["tasks"],
     queryFn: async () => {
       const { data } = await axios.get(
-        `${RoutesApi.url}api/lecturer/contract-tasks`,
+        `${RoutesApi.url}api/admin/tasks`,
         {
           headers: {
             Authorization: `Bearer ${cookies.token}`,
@@ -114,12 +114,12 @@ const DosenCoretaxify = () => {
   }, [dataUsers?.data]);
 
   const tasksMap = useMemo(() => {
-    if (!dataTasks) return {};
-    return dataTasks.reduce((acc, task) => {
+    if (!dataTasks?.data) return {};
+    return dataTasks?.data.reduce((acc, task) => {
       acc[task.id] = task;
       return acc;
     }, {});
-  }, [dataTasks]);
+  }, [dataTasks?.data]);
 
   // Mutations
   const createMutation = useMutation({
@@ -144,7 +144,7 @@ const DosenCoretaxify = () => {
       }
 
       const response = await axios.post(
-        `${RoutesApi.url}api/lecturer/assignments`,
+        `${RoutesApi.url}api/admin/assignments`,
         submitData,
         {
           headers: {
@@ -203,7 +203,7 @@ const DosenCoretaxify = () => {
       }
 
       const response = await axios.post(
-        `${RoutesApi.url}api/lecturer/assignments/${id}`,
+        `${RoutesApi.url}api/admin/assignments/${id}`,
         submitData,
         {
           headers: {
@@ -650,7 +650,7 @@ const DosenCoretaxify = () => {
                       className="w-full p-2 border rounded-md"
                     >
                       <option value="">Pilih Soal</option>
-                      {dataTasks?.map((task) => (
+                      {dataTasks?.data.map((task) => (
                         <option key={task.id} value={task.id}>
                           {task.name}
                           {task.file_path && " (Ada File)"}
@@ -938,7 +938,7 @@ const DosenCoretaxify = () => {
                                       className="w-full p-2 border rounded-md"
                                     >
                                       <option value="">Pilih Soal</option>
-                                      {dataTasks?.map((task) => (
+                                      {dataTasks?.data.map((task) => (
                                         <option key={task.id} value={task.id}>
                                           {task.name}
                                           {task.file_path && " (Ada File)"}
@@ -1127,4 +1127,4 @@ const DosenCoretaxify = () => {
   );
 };
 
-export default DosenCoretaxify;
+export default AdminCoretaxify;

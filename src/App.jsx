@@ -22,6 +22,9 @@ import EditMahasiswa from "./components/Dashboard/Admin/Pengguna/Mahasiswa/EditM
 import EditAdmin from "./components/Dashboard/Admin/Pengguna/Admin/EditAdmin";
 import EditKelas from "./components/Dashboard/Admin/Pengguna/Kelas/EditKelas";
 
+// ADMIN
+import AdminCoretaxify from "./components/Dashboard/Admin/Coretaxify/AdminCoretaxify";
+
 // DOSEN
 import DosenCoretaxify from "./components/Dashboard/Dosen/Coretaxify/DosenCoretaxify";
 
@@ -268,7 +271,7 @@ const Main = () => {
         >
           <Route path="/admin" element={<DashboardAdmin />} />
           <Route path="/admin/kontrak" element={<Kontrak />} />
-          <Route path="/admin/coretaxify" element={<CoretaxifyList />} />
+          <Route path="/admin/coretaxify" element={<AdminCoretaxify />} />
           <Route path="/admin/edit-dosen" element={<EditDosen />} />
           <Route path="/admin/upload-soal" element={<UploadSoal />} />
           <Route path="/admin/praktikum" element={<AdminPraktikum />} />

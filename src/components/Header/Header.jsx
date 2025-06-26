@@ -39,9 +39,9 @@ const Header = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["token"]);
   const [isCompanyDropdownOpen, setIsCompanyDropdownOpen] = useState(false);
   const logout = () => {
-    removeCookie("token", { path: "/" });
-    removeCookie("role", { path: "/" });
-    window.location.href = "/login";
+    // removeCookie("token", { path: "/" });
+    // removeCookie("role", { path: "/" });
+    window.location.href = "/";
   };
   const buttonRefs = useRef([]);
   const dropdownRefs = useRef([]);
