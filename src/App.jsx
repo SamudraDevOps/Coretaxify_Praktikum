@@ -55,6 +55,7 @@ import Header from "./components/Header/Header";
 import Home from "./components/Header/Home";
 import CoretaxifyList from "./components/Dashboard/Admin/Coretaxify/CoretaxifyList";
 import CoretaxifySendDetail from "./components/Dashboard/Admin/Coretaxify/CoretaxifySendDetail";
+import Notifikasi from "./components/PraktikumPage/Notifikasi";
 
 //Route Praktikum Orang Pribadi
 import DokumenSaya from "./components/PraktikumPage/OrangPribadi/PortalSaya/DokumenSaya";
@@ -127,6 +128,7 @@ import KonsepSPT from "./components/PraktikumPage/Badan/SPT/KonsepSPT";
 import BuatKonsepSPT from "./components/PraktikumPage/Badan/SPT/BuatKonsepSPT";
 import CreateKonsepSPT from "./components/PraktikumPage/Badan/SPT/CreateKonsepSPT";
 import CreateKonsepPasal from "./components/PraktikumPage/Badan/SPT/CreateKonsepPasal";
+import CreateKonsepUnifikasi from "./components/PraktikumPage/Badan/SPT/CreateKonsepUnifikasi";
 import BupotBulananPegawaiTetap from "./components/PraktikumPage/Badan/BUPOT/BupotBulananPegawaiTetap";
 import BupotBulananPegawaiTetapTelahTerbit from "./components/PraktikumPage/Badan/BUPOT/BupotBulananPegawaiTetapTelahTerbit";
 import BupotBulananPegawaiTetapTidakValid from "./components/PraktikumPage/Badan/BUPOT/BupotBulananPegawaiTetapTidakValid";
@@ -1763,6 +1765,26 @@ const Main = () => {
             </>
           }
         />
+
+        {/* ROUTE BARU BELUM DIMASUKIN */}
+          <Route
+            path="/admin/praktikum/2/unifikasi"
+            element={
+              <>
+                <Header />
+                <CreateKonsepUnifikasi />
+              </>
+            }
+          />
+          <Route
+            path="/admin/praktikum/2/notifikasi"
+            element={
+              <>
+                <Header />
+                <Notifikasi />
+              </>
+            }
+          />
         {/* NOT FOUND ROUTE - LAST REGISTERED ROUTE */}
         <Route path="*" element={<NotFound />} />
       </Routes>
