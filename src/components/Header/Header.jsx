@@ -171,19 +171,18 @@ const Header = () => {
   };
 
   const navigateTo = (path) => {
-    const pathParts = path.split("/");
-    const lastPart = pathParts[pathParts.length - 1];
+    if (!path) return;
 
-    // Construct the new path with the base path and the last part
-    const newPath = `/praktikum/${id}/sistem/${akun}/${lastPart}`;
-
-    // Preserve the viewAs parameter if it exists
-    if (viewAsCompanyId) {
-      navigate(`${newPath}?viewAs=${viewAsCompanyId}`);
+    // Jika path sudah lengkap (misal: /praktikum/1/sistem/1/...), langsung gunakan
+    if (path.startsWith("/")) {
+      navigate(viewAsCompanyId ? `${path}?viewAs=${viewAsCompanyId}` : path);
     } else {
-      navigate(newPath);
+      // Path relatif (misalnya: "e-faktur"), gabungkan manual
+      const newPath = `/praktikum/${id}/sistem/${akun}/${path}`;
+      navigate(viewAsCompanyId ? `${newPath}?viewAs=${viewAsCompanyId}` : newPath);
     }
   };
+  
 
   // Get the currently active company name
   const getActiveCompanyName = () => {
@@ -636,11 +635,7 @@ const Header = () => {
               },
               { label: "Buku Besar", submenu: [] },
             ].map((item, index) => (
-              <li
-                key={index}
-                className="relative"
-                onClick={() => toggleDropdown(item.label)}
-              >
+              <li key={index} className="relative">
                 {item.submenu.length > 0 ? (
                   <button
                     ref={(el) => (buttonRefs.current[index] = el)}
@@ -657,6 +652,7 @@ const Header = () => {
                     {item.label}
                   </button>
                 )}
+
                 {item.submenu.length > 0 && dropdownOpen === item.label && (
                   <ul
                     ref={(el) => (dropdownRefs.current[index] = el)}
@@ -666,40 +662,29 @@ const Header = () => {
                       <li
                         key={subIndex}
                         className="relative px-4 py-4 hover:bg-yellow-500 cursor-pointer whitespace-nowrap"
-                        onClick={() => {
-                          const newPath = sub.links;
-                          if (viewAsCompanyId) {
-                            navigate(`${newPath}?viewAs=${viewAsCompanyId}`);
-                          } else {
-                            navigate(newPath);
-                          }
-                        }}
                       >
                         {typeof sub === "string" ? (
                           <button onClick={() => navigateTo(sub)}>{sub}</button>
                         ) : sub.links ? (
-                          <button className="w-full text-left">
+                          <button onClick={() => navigateTo(sub.links)} className="w-full text-left">
                             {sub.label}
                           </button>
-                        ) : (
+                        ) : sub.submenu ? (
                           <>
                             <button
                               className="flex items-center w-full"
                               onClick={() => toggleSubDropdown(sub.label)}
                             >
-                              {sub.label}{" "}
-                              <ChevronRight className="w-4 h-4 ml-2" />
+                              {sub.label} <ChevronRight className="w-4 h-4 ml-2" />
                             </button>
-                            {sub.submenu && subDropdownOpen === sub.label && (
+                            {subDropdownOpen === sub.label && (
                               <ul className="absolute left-full mx-1 top-0 mt-0 min-w-max bg-blue-900 text-white shadow-md rounded-md text-left z-50">
                                 {sub.submenu.map((nestedSub, nestedIndex) => (
                                   <li
                                     key={nestedIndex}
                                     className="px-4 py-2 hover:bg-yellow-500 cursor-pointer whitespace-nowrap"
                                   >
-                                    <button
-                                      onClick={() => navigateTo(nestedSub)}
-                                    >
+                                    <button onClick={() => navigateTo(nestedSub)}>
                                       {nestedSub}
                                     </button>
                                   </li>
@@ -707,8 +692,9 @@ const Header = () => {
                               </ul>
                             )}
                           </>
-                        )}
+                        ) : null}
                       </li>
+                    
                     ))}
                   </ul>
                 )}
