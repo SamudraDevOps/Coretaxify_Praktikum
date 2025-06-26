@@ -850,7 +850,7 @@ const Main = () => {
           }
         />
         <Route
-          path="/praktikum/:id/sistem/:akun/e-faktur/pajak-keluaran/pdf/:faktur"
+          path="/praktikum/:id/sistem/:akun/e-faktur/pdf/:faktur"
           element={
             <>
               <RoleBasedRenderer
