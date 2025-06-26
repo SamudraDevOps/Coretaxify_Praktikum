@@ -29,6 +29,7 @@ const generateNTPN = () => {
 };
 
 const DaftarKodeBilingBelumBayar = ({ data, sidebar }) => {
+  console.log("data fetched : ", data);
   const { id, akun } = useParams();
   const [openConfirm, setOpenConfirm] = useState(false);
   const [openNTPN, setOpenNTPN] = useState(false);

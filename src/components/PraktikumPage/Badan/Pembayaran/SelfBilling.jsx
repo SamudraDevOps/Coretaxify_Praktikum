@@ -149,7 +149,7 @@ const SelfBilling = ({ data: propData }) => {
     setSelectedYear(value);
     handleFormDataChange("selectedYear", value);
   };
-  console.log(propData);
+  // console.log("reponse :", propData);
 
   const { id, akun } = useParams();
   const [cookies] = useCookies(["token"]);
