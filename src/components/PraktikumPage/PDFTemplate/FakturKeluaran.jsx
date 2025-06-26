@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const FakturPajakKeluaranPdf = () => (
+const FakturPajakKeluaranPdf = ({ data }) => (
   <Document>
     <Page size="A4" style={styles.page}>
       {/* Title */}
@@ -106,20 +106,19 @@ const FakturPajakKeluaranPdf = () => (
       {/* <View style={styles.section}> */}
       <View style={styles.boxContainer}>
         <View style={styles.boxRow}>
-          <Text style={styles.label}>Nama:</Text>
+          <Text style={styles.label}>Nama :</Text>
+          <Text style={styles.value}>{data.akun_pengirim_id.nama_akun}</Text>
+          <Text style={styles.label}>Alamat :</Text>
           <Text style={styles.value}>
-            KANTOR AKUNTAN PUBLIK MOH WILDAN DAN ADI DARMAWAN
+            {data.akun_pengirim_id.alamat_utama_akun}
           </Text>
+          <Text style={styles.label}>NPWP : </Text>
+          <Text style={styles.value}>{data.akun_pengirim_id.npwp_akun}</Text>
         </View>
-        <View style={styles.boxRow}>
-          <Text style={styles.label}>Alamat:</Text>
-          <Text style={styles.value}>
-            PERUMAHAN PONDOK BLIMBING INDAH F4 NO.46, KOTA MALANG
-          </Text>
-        </View>
+        {/* <View style={styles.boxRow}></View> */}
         <View style={styles.boxRow}>
           <Text style={styles.label}>Nomor:</Text>
-          <Text style={styles.value}>#0934274002429000000001</Text>
+          <Text style={styles.value}>{data.nomor_faktur_pajak}</Text>
         </View>
         {/* </View> */}
 
@@ -130,28 +129,22 @@ const FakturPajakKeluaranPdf = () => (
 
         <View style={styles.boxRow}>
           <Text style={{ fontWeight: "bold" }}>Pengusaha Kena Pajak:</Text>
-          <Text>Nama: KANTOR AKUNTAN PUBLIK MOH WILDAN DAN ADI DARMAWAN</Text>
-          <Text>
-            Alamat: JL SOEKARNO HATTA NO.606, RT 001, RW 001, SEKEJATI,
-            BUAHBATU, KOTA BANDUNG, JAWA BARAT 40286
-          </Text>
-          <Text>NPWP: 0934274002429000</Text>
+          <Text>Nama: {data.akun_pengirim_id.nama_akun}</Text>
+          <Text>Alamat: {data.akun_pengirim_id.alamat_utama_akun}</Text>
+          <Text>NPWP: {data.akun_pengirim_id.npwp_akun}</Text>
         </View>
 
         <View style={styles.boxRowLast}>
           <Text style={{ fontWeight: "bold" }}>
             Pembeli Barang Kena Pajak / Penerima Jasa Kena Pajak:
           </Text>
-          <Text>Nama: SUMBER REJEKI TRANSJAYA</Text>
-          <Text>
-            Alamat: JL TANJUNG LAYAR E NO.04, RT 001, RW 011, PERAK BARAT,
-            KREMBANGAN, KOTA SURABAYA, JAWA TIMUR 60177
-          </Text>
-          <Text>NPWP: 0017060815631000</Text>
+          <Text>Nama: {data.akun_penerima_id.nama_akun}</Text>
+          <Text>Alamat: {data.akun_penerima_id.alamat_utama_akun}</Text>
+          <Text>NPWP: {data.akun_penerima_id.npwp_akun}</Text>
           <Text>NIK: -</Text>
           <Text>Nomor Paspor: -</Text>
           <Text>Identitas Lain: -</Text>
-          <Text>Email: pt.sumberrejekitrans@yahoo.com</Text>
+          <Text>Email: {data.akun_penerima_id.email_akun}</Text>
         </View>
       </View>
 
@@ -167,80 +160,189 @@ const FakturPajakKeluaranPdf = () => (
         </View>
 
         {/* Table Items */}
-        <View style={styles.tableRow}>
-          <Text style={{ ...styles.cell, flex: 0.4 }}>1</Text>
-          <Text style={{ ...styles.cell, flex: 0.9 }}>000000</Text>
-          <Text style={{ ...styles.cell, flex: 2 }}>
-            Jasa Audit 2024 Termin II{"\n"}
-            Rp 7.882.883,00 x 1,00 Kegiatan{"\n"}
-            Potongan Harga = Rp 0,00{"\n"}
-            PPnBM (0,00%) = Rp 0,00
-          </Text>
-          <Text style={{ ...styles.cellLast, flex: 1, textAlign: "right" }}>
-            7.882.883,00
-          </Text>
+        <View style={styles.table}>
+          {/* Table Header */}
+          {/* <View style={styles.tableHeader}>
+            <Text style={{ ...styles.cell, flex: 0.4 }}>No.</Text>
+            <Text style={{ ...styles.cell, flex: 0.9 }}>Kode</Text>
+            <Text style={{ ...styles.cell, flex: 2 }}>Nama Barang/Jasa</Text>
+            <Text style={{ ...styles.cellLast, flex: 1 }}>Harga (Rp)</Text>
+          </View> */}
+
+          {/* Table Items - Dynamic mapping */}
+          {data.detail_transaksi &&
+            data.detail_transaksi.map((item, index) => (
+              <View key={index} style={styles.tableRow}>
+                <Text style={{ ...styles.cell, flex: 0.4 }}>{index + 1}</Text>
+                <Text style={{ ...styles.cell, flex: 0.9 }}>{item.kode}</Text>
+                <Text style={{ ...styles.cell, flex: 2 }}>
+                  {item.nama}
+                  {"\n"}
+                  Rp{" "}
+                  {parseFloat(item.harga_satuan).toLocaleString("id-ID", {
+                    minimumFractionDigits: 2,
+                  })}{" "}
+                  x {item.kuantitas} {item.satuan}
+                  {"\n"}
+                  Potongan Harga = Rp{" "}
+                  {parseFloat(item.pemotongan_harga).toLocaleString("id-ID", {
+                    minimumFractionDigits: 2,
+                  })}
+                  {"\n"}
+                  PPnBM ({item.tarif_ppnbm}%) = Rp{" "}
+                  {parseFloat(item.ppnbm).toLocaleString("id-ID", {
+                    minimumFractionDigits: 2,
+                  })}
+                </Text>
+                <Text
+                  style={{ ...styles.cellLast, flex: 1, textAlign: "right" }}
+                >
+                  {parseFloat(item.total_harga).toLocaleString("id-ID", {
+                    minimumFractionDigits: 2,
+                  })}
+                </Text>
+              </View>
+            ))}
+
+          {/* Summary Section - Calculate totals from detail_transaksi */}
+          <View style={styles.tableRow}>
+            <Text style={{ ...styles.cell, flex: 3.5, fontWeight: "bold" }}>
+              Harga Jual / Penggantian / Uang Muka / Termin
+            </Text>
+            <Text style={{ ...styles.cellLast, flex: 1, textAlign: "right" }}>
+              Rp{" "}
+              {data.detail_transaksi
+                ?.reduce((sum, item) => sum + parseFloat(item.total_harga), 0)
+                .toLocaleString("id-ID", { minimumFractionDigits: 2 }) ||
+                "0,00"}
+            </Text>
+          </View>
+
+          <View style={styles.tableRow}>
+            <Text style={{ ...styles.cell, flex: 3.5, fontWeight: "bold" }}>
+              Dikurangi Potongan Harga
+            </Text>
+            <Text style={{ ...styles.cellLast, flex: 1, textAlign: "right" }}>
+              Rp{" "}
+              {data.detail_transaksi
+                ?.reduce(
+                  (sum, item) => sum + parseFloat(item.pemotongan_harga),
+                  0
+                )
+                .toLocaleString("id-ID", { minimumFractionDigits: 2 }) ||
+                "0,00"}
+            </Text>
+          </View>
+
+          <View style={styles.tableRow}>
+            <Text style={{ ...styles.cell, flex: 3.5, fontWeight: "bold" }}>
+              Dikurangi Uang Muka yang telah diterima
+            </Text>
+            <Text style={{ ...styles.cellLast, flex: 1, textAlign: "right" }}>
+              -
+            </Text>
+          </View>
+
+          <View style={styles.tableRow}>
+            <Text style={{ ...styles.cell, flex: 3.5, fontWeight: "bold" }}>
+              Dasar Pengenaan Pajak
+            </Text>
+            <Text style={{ ...styles.cellLast, flex: 1, textAlign: "right" }}>
+              Rp{" "}
+              {data.detail_transaksi
+                ?.reduce((sum, item) => sum + parseFloat(item.dpp), 0)
+                .toLocaleString("id-ID", { minimumFractionDigits: 2 }) ||
+                "0,00"}
+            </Text>
+          </View>
+
+          <View style={styles.tableRow}>
+            <Text style={{ ...styles.cell, flex: 3.5, fontWeight: "bold" }}>
+              Jumlah PPN (Pajak Pertambahan Nilai)
+            </Text>
+            <Text style={{ ...styles.cellLast, flex: 1, textAlign: "right" }}>
+              Rp{" "}
+              {data.detail_transaksi
+                ?.reduce((sum, item) => sum + parseFloat(item.ppn), 0)
+                .toLocaleString("id-ID", { minimumFractionDigits: 2 }) ||
+                "0,00"}
+            </Text>
+          </View>
+
+          {/* <View style={styles.tableRowLast}>
+            <Text style={{ ...styles.cell, flex: 3.5, fontWeight: "bold" }}>
+              Jumlah PPnBM (Pajak Penjualan atas Barang Mewah)
+            </Text>
+            <Text style={{ ...styles.cellLast, flex: 1, textAlign: "right" }}>
+              Rp{" "}
+              {data.detail_transaksi
+                ?.reduce((sum, item) => sum + parseFloat(item.ppnbm), 0)
+                .toLocaleString("id-ID", { minimumFractionDigits: 2 }) ||
+                "0,00"}
+            </Text>
+          </View> */}
         </View>
 
         {/* Summary Section - with left-aligned content but aligned borders */}
-        <View style={styles.tableRow}>
+        {/* <View style={styles.tableRow}>
           <Text style={{ ...styles.cell, flex: 3.5, fontWeight: "bold" }}>
             Harga Jual / Penggantian / Uang Muka / Termin
           </Text>
           <Text style={{ ...styles.cellLast, flex: 1, textAlign: "right" }}>
             Rp 7.882.883,00
           </Text>
-        </View>
+        </View> */}
 
-        <View style={styles.tableRow}>
+        {/* <View style={styles.tableRow}>
           <Text style={{ ...styles.cell, flex: 3.5, fontWeight: "bold" }}>
             Dikurangi Potongan Harga
           </Text>
           <Text style={{ ...styles.cellLast, flex: 1, textAlign: "right" }}>
             Rp 0,00
           </Text>
-        </View>
+        </View> */}
 
-        <View style={styles.tableRow}>
+        {/* <View style={styles.tableRow}>
           <Text style={{ ...styles.cell, flex: 3.5, fontWeight: "bold" }}>
             Dikurangi Uang Muka yang telah diterima
           </Text>
           <Text style={{ ...styles.cellLast, flex: 1, textAlign: "right" }}>
             -
           </Text>
-        </View>
+        </View> */}
 
-        <View style={styles.tableRow}>
+        {/* <View style={styles.tableRow}>
           <Text style={{ ...styles.cell, flex: 3.5, fontWeight: "bold" }}>
             Dasar Pengenaan Pajak
           </Text>
           <Text style={{ ...styles.cellLast, flex: 1, textAlign: "right" }}>
             Rp 7.225.976,00
           </Text>
-        </View>
+        </View> */}
 
-        <View style={styles.tableRow}>
+        {/* <View style={styles.tableRow}>
           <Text style={{ ...styles.cell, flex: 3.5, fontWeight: "bold" }}>
             Jumlah PPN (Pajak Pertambahan Nilai)
           </Text>
           <Text style={{ ...styles.cellLast, flex: 1, textAlign: "right" }}>
             Rp 867.117,00
           </Text>
-        </View>
+        </View> */}
 
-        <View style={styles.tableRowLast}>
+        {/* <View style={styles.tableRowLast}>
           <Text style={{ ...styles.cell, flex: 3.5, fontWeight: "bold" }}>
             Jumlah PPnBM (Pajak Penjualan atas Barang Mewah)
           </Text>
           <Text style={{ ...styles.cellLast, flex: 1, textAlign: "right" }}>
             Rp 0,00
           </Text>
-        </View>
+        </View> */}
       </View>
 
       {/* Signature */}
       <View style={styles.signature}>
-        <Text>KOTA MALANG, 21 April 2025</Text>
-        <Text style={{ marginTop: 20 }}>ADI DARMAWAN ERVANTO</Text>
+        <Text>Tanggal : {data.tanggal_faktur_pajak}</Text>
+        <Text style={{ marginTop: 20 }}>{data.penandatangan}</Text>
         <Text>Ditandatangani secara elektronik</Text>
       </View>
 
@@ -256,9 +358,9 @@ const FakturPajakKeluaranPdf = () => (
           keadaan yang sebenarnya dikenai sanksi sesuai Pasal 14 ayat (4) UU
           KUP.
         </Text>
-        <Text style={{ marginTop: 4 }}>
+        {/* <Text style={{ marginTop: 4 }}>
           Tanggal proses digital: 2025-04-23T16:40:35+0700 (Jakarta-ID)
-        </Text>
+        </Text> */}
       </View>
     </Page>
   </Document>

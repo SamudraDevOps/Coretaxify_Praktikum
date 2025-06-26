@@ -151,7 +151,7 @@ test("test", async ({ page }) => {
   // }
   // Repeat the transaction addition 20 times
   // for (let i = 0; i < 20; i++) {
-  for (let i = 0; i < 1; i++) {
+  for (let i = 0; i < 10; i++) {
     console.log(`Starting iteration ${i + 1}`);
     if (i > 0 && i % 5 === 0) {
       // Check if page is still responsive every 5 iterations

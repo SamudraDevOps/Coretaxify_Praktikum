@@ -261,7 +261,7 @@ const SelfBilling = ({ data: propData }) => {
 
   // Handle Next Step
   const handleNext = () => {
-    if (step === 1 && (!npwp || !name || !address)) {
+    if (step === 1 && (!npwp || !name)) {
       Swal.fire({
         icon: "warning",
         title: "Data Belum Lengkap",
@@ -510,7 +510,7 @@ const SelfBilling = ({ data: propData }) => {
               value={address}
               onChange={setAddress}
               required
-              readOnly={false}
+              readOnly={true}
             />
           </div>
         )}

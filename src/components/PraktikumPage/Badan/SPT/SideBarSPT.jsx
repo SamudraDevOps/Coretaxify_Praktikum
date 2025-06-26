@@ -1,28 +1,45 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useUserType } from "../../../context/UserTypeContext";
+import { useNavigateWithParams } from "@/hooks/useNavigateWithParams";
 
-const SideBarSPT = ({ nama_akun, npwp_akun, akun }) => {
+const SideBarEFakturOP = ({ nama_akun, npwp_akun, akun }) => {
   const { userType } = useUserType();
   const location = useLocation(); // ambil path sekarang
   const userTypeId = userType === "Orang Pribadi" ? 1 : 2;
-
+  // praktikum/1/sistem/2/e-faktur
   const efakturItems = [
-    "SPT Menunggu Pembayaran",
-    "SPT Dilaporkan",
-    "SPT Ditolak",
-    "SPT Dibatalkan ",
+    {
+      label: "SPT Konsep",
+      link: `/praktikum/${akun.id}/sistem/${akun.akun}/surat-pemberitahuan-spt`,
+    },
+    {
+      label: "SPT Menunggu Pembayaran",
+      link: `/praktikum/${akun.id}/sistem/${akun.akun}/surat-pemberitahuan-spt`,
+    },
+    {
+      label: "SPT Menunggu Dilaporkan",
+      link: `/praktikum/${akun.id}/sistem/${akun.akun}/surat-pemberitahuan-spt`,
+    },
+    {
+      label: "SPT Ditolak",
+      link: `/praktikum/${akun.id}/sistem/${akun.akun}/surat-pemberitahuan-spt`,
+    },
   ];
 
   const dokumenLainItems = [
-    "Pajak Keluaran",
-    "Pajak Masukan",
-    "Retur Dokumen Lain Keluaran",
-    "Retur Dokumen Lain Masukan",
+    { label: "SPT Masukan", link: "pajak-keluaran" },
+    { label: "SPT Menunggu Pembayaran", link: "pajak-masukan" },
+    {
+      label: "SPT Menunggu Dilaporkan",
+      link: "retur-dokumen-lain-keluaran",
+    },
+    { label: "SPT Ditolak", link: "retur-dokumen-lain-masukan" },
   ];
 
   const dashboardPath = `/admin/praktikum/${userTypeId}/e-faktur`;
   const isDashboard = location.pathname === dashboardPath;
+  const navigate = useNavigateWithParams();
 
   return (
     <aside className="w-1/6 text-blue-900 px-5 py-5 h-screen bg-white">
@@ -33,21 +50,47 @@ const SideBarSPT = ({ nama_akun, npwp_akun, akun }) => {
       <nav>
         <ul className="space-y-1">
           {/* <li
-                        className={`p-2 rounded-md cursor-pointer ${isDashboard ? "bg-blue-700 text-white" : "hover:bg-blue-700 hover:text-white"
-                            }`}
-                    >
-                        <Link to={dashboardPath} className="block w-full p-2">
-                            <strong>Dashboard</strong>
-                        </Link>
-                    </li> */}
+            className={`p-2 rounded-md cursor-pointer ${
+              isDashboard
+                ? "bg-blue-700 text-white"
+                : "hover:bg-blue-700 hover:text-white"
+            }`}
+          >
+            <Link to={dashboardPath} className="block w-full p-2">
+              <strong>Dashboard</strong>
+            </Link>
+          </li> */}
 
-          <li className="font-bold text-lg mt-4 mb-2 text-start">
-            Surat Pemberitahuan (SPT)
-          </li>
+          <li className="font-bold text-lg mt-4 mb-2 text-start">e-Faktur</li>
           {efakturItems.map((item, index) => {
-            const formattedItem = item.replace(/ /g, "-").toLowerCase();
-            const path = `/admin/praktikum/${userTypeId}/e-faktur/${formattedItem}`;
-            const isActive = location.pathname === path;
+            // const formattedItem = item.replace(/ /g, "-").toLowerCase();
+            // const path = `/admin/praktikum/${userTypeId}/e-faktur/${formattedItem}`;
+            console.log(location.pathname, item.link);
+            const isActive = location.pathname.includes(`/${item.link}`);
+
+            return (
+              <li
+                key={index}
+                className={`p-2 rounded-md cursor-pointer ${
+                  isActive
+                    ? "bg-blue-700 text-white"
+                    : "hover:bg-blue-700 hover:text-white"
+                }`}
+                onClick={() => navigate(item.link)}
+              >
+                {item.label}
+                {/* <Link to={item.link} className="block w-full p-2">
+                  {item.label}
+                </Link> */}
+              </li>
+            );
+          })}
+
+          <li className="font-bold text-lg mt-4 mb-2">Dokumen Lain</li>
+          {dokumenLainItems.map((item, index) => {
+            // const formattedItem = item.replace(/ /g, "-").toLowerCase();
+            // const path = `/admin/praktikum/${userTypeId}/e-faktur/dokumen-lain/${formattedItem}`;
+            const isActive = location.pathname.includes(`/${item.link}`);
 
             return (
               <li
@@ -58,35 +101,16 @@ const SideBarSPT = ({ nama_akun, npwp_akun, akun }) => {
                     : "hover:bg-blue-700 hover:text-white"
                 }`}
               >
-                <Link to={path} className="block w-full p-2">
-                  {item}
+                <Link to={item.link} className="block w-full p-2">
+                  {item.label}
                 </Link>
               </li>
             );
           })}
-
-          {/* <li className="font-bold text-lg mt-4 mb-2">Dokumen Lain</li>
-                    {dokumenLainItems.map((item, index) => {
-                        const formattedItem = item.replace(/ /g, "-").toLowerCase();
-                        const path = `/admin/praktikum/${userTypeId}/e-faktur/dokumen-lain/${formattedItem}`;
-                        const isActive = location.pathname === path;
-
-                        return (
-                            <li
-                                key={index}
-                                className={`p-2 rounded-md cursor-pointer ${isActive ? "bg-blue-700 text-white" : "hover:bg-blue-700 hover:text-white"
-                                    }`}
-                            >
-                                <Link to={path} className="block w-full p-2">
-                                    {item}
-                                </Link>
-                            </li>
-                        );
-                    })} */}
         </ul>
       </nav>
     </aside>
   );
 };
 
-export default SideBarSPT;
+export default SideBarEFakturOP;
