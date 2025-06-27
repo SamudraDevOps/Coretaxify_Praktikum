@@ -29,6 +29,7 @@ const generateNTPN = () => {
 };
 
 const DaftarKodeBilingBelumBayar = ({ data, sidebar }) => {
+  console.log("data fetched : ", data);
   const { id, akun } = useParams();
   const [openConfirm, setOpenConfirm] = useState(false);
   const [openNTPN, setOpenNTPN] = useState(false);
@@ -59,9 +60,10 @@ const DaftarKodeBilingBelumBayar = ({ data, sidebar }) => {
     mutationFn: async (idSpt) => {
       const csrf = await getCsrf();
       const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
+      // alert()
       return axios.put(
         `${RoutesApi.url}api/student/assignments/${id}/sistem/${accountId}/pembayaran/${idSpt}`,
-        // {},
+        {},
         {
           headers: {
             "Content-Type": "application/json",
@@ -90,7 +92,12 @@ const DaftarKodeBilingBelumBayar = ({ data, sidebar }) => {
     },
     onError: (error) => {
       console.error("Error saving data:", error);
-      Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
+      // Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
+      Swal.fire(
+        "Gagal!",
+        `Terjadi kesalahan saat menyimpan data. ${error?.response?.data?.message}`,
+        "error"
+      );
     },
   });
   const totalPembayaran =

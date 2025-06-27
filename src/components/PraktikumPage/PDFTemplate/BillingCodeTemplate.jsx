@@ -201,8 +201,8 @@ const BillingCodePdf = ({ data }) => (
               KAP-KJS
             </Text>
             <Text style={styles.tableHeaderCell}>MASA PAJAK</Text>
-            <Text style={styles.tableHeaderCell}>REF</Text>
-            <Text style={styles.tableHeaderCell}>TAGIHAN</Text>
+            <Text style={styles.tableHeaderCell}>REF/TAGIHAN</Text>
+            {/* <Text style={styles.tableHeaderCell}>TAGIHAN</Text> */}
             <Text style={styles.tableHeaderCell}>NOP</Text>
             <Text style={{ ...styles.tableHeaderCell, ...styles.lastCell }}>
               NOMINAL
@@ -214,8 +214,7 @@ const BillingCodePdf = ({ data }) => (
             <Text style={{ ...styles.tableCell, flex: 1.5 }}>
               {data.kapKjs}
             </Text>
-            <Text style={styles.tableCell}>01122025</Text>
-            <Text style={styles.tableCell}>-</Text>
+            <Text style={styles.tableCell}>{data?.masa_pajak}</Text>
             <Text style={styles.tableCell}>-</Text>
             <Text style={styles.tableCell}>-</Text>
             <Text style={{ ...styles.tableCell, ...styles.lastCell }}>

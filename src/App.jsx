@@ -21,6 +21,16 @@ import DetailTugasPenilaianDosen from "./components/Dashboard/Dosen/Penilaian/De
 import EditMahasiswa from "./components/Dashboard/Admin/Pengguna/Mahasiswa/EditMahasiswa";
 import EditAdmin from "./components/Dashboard/Admin/Pengguna/Admin/EditAdmin";
 import EditKelas from "./components/Dashboard/Admin/Pengguna/Kelas/EditKelas";
+
+// ADMIN
+import AdminCoretaxify from "./components/Dashboard/Admin/Coretaxify/AdminCoretaxify";
+
+// DOSEN
+import DosenCoretaxify from "./components/Dashboard/Dosen/Coretaxify/DosenCoretaxify";
+
+// PSC
+import AdminPscCoretaxify from "./components/Dashboard/AdminPsc/Coretaxify/AdminPscCoretaxify";
+
 import {
   BrowserRouter as Router,
   Routes,
@@ -55,6 +65,7 @@ import Header from "./components/Header/Header";
 import Home from "./components/Header/Home";
 import CoretaxifyList from "./components/Dashboard/Admin/Coretaxify/CoretaxifyList";
 import CoretaxifySendDetail from "./components/Dashboard/Admin/Coretaxify/CoretaxifySendDetail";
+import Notifikasi from "./components/PraktikumPage/Notifikasi";
 
 //Route Praktikum Orang Pribadi
 import DokumenSaya from "./components/PraktikumPage/OrangPribadi/PortalSaya/DokumenSaya";
@@ -127,6 +138,7 @@ import KonsepSPT from "./components/PraktikumPage/Badan/SPT/KonsepSPT";
 import BuatKonsepSPT from "./components/PraktikumPage/Badan/SPT/BuatKonsepSPT";
 import CreateKonsepSPT from "./components/PraktikumPage/Badan/SPT/CreateKonsepSPT";
 import CreateKonsepPasal from "./components/PraktikumPage/Badan/SPT/CreateKonsepPasal";
+import CreateKonsepUnifikasi from "./components/PraktikumPage/Badan/SPT/CreateKonsepUnifikasi";
 import BupotBulananPegawaiTetap from "./components/PraktikumPage/Badan/BUPOT/BupotBulananPegawaiTetap";
 import BupotBulananPegawaiTetapTelahTerbit from "./components/PraktikumPage/Badan/BUPOT/BupotBulananPegawaiTetapTelahTerbit";
 import BupotBulananPegawaiTetapTidakValid from "./components/PraktikumPage/Badan/BUPOT/BupotBulananPegawaiTetapTidakValid";
@@ -169,6 +181,7 @@ import BUPOTCreateWrapper from "./components/PraktikumPage/Badan/BUPOT/BUPOTCrea
 import BUPOTEditWrapper from "./components/PraktikumPage/Badan/BUPOT/BUPOTEditWrapper";
 import BukuBesar from "./components/PraktikumPage/PortalSaya/BukuBesar";
 import MasterAkun from "./components/PraktikumPage/PortalSaya/MasterAkun";
+import FakturViewPDF from "./components/PraktikumPage/Badan/EFaktur/FakturViewPDF";
 
 const Main = () => {
   const [loading, setLoading] = useState(true);
@@ -248,7 +261,8 @@ const Main = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/confirm-otp" element={<ConfirmOTP />} />
-
+        
+        {/* EDIT PROFILE ROUTE */}
         <Route
           element={
             <RoleProtectedRoutes
@@ -275,7 +289,7 @@ const Main = () => {
         >
           <Route path="/admin" element={<DashboardAdmin />} />
           <Route path="/admin/kontrak" element={<Kontrak />} />
-          <Route path="/admin/coretaxify" element={<CoretaxifyList />} />
+          <Route path="/admin/coretaxify" element={<AdminCoretaxify />} />
           <Route path="/admin/edit-dosen" element={<EditDosen />} />
           <Route path="/admin/upload-soal" element={<UploadSoal />} />
           <Route path="/admin/praktikum" element={<AdminPraktikum />} />
@@ -315,6 +329,7 @@ const Main = () => {
             element={<DosenPraktikumKelasMember />}
           />
           <Route path="/dosen/praktikum" element={<Praktikum />} />
+          <Route path="/dosen/coretaxify" element={<DosenCoretaxify />} />
           <Route path="/dosen/penilaian" element={<PenilaianDosen />} />
           <Route
             path="/dosen/penilaian/detail-tugas"
@@ -349,6 +364,7 @@ const Main = () => {
           <Route path="/mahasiswa/praktikum" element={<MahasiswaPraktikum />} />
           <Route path="/mahasiswa/ujian" element={<MahasiswaUjian />} />
         </Route>
+
         {/* PSC ROUTE */}
         <Route
           element={
@@ -356,6 +372,7 @@ const Main = () => {
           }
         >
           <Route path="/psc/" element={<DashboardPsc />} />
+          <Route path="/psc/coretaxify" element={<AdminPscCoretaxify />} />
           <Route path="/psc/master-soal" element={<UploadSoalPsc />} />
           <Route path="/psc/edit-pengajar" element={<EditPengajar />} />
           <Route path="/psc/edit-kelas" element={<EditKelasPsc />} />
@@ -849,6 +866,20 @@ const Main = () => {
           }
         />
         <Route
+          path="/praktikum/:id/sistem/:akun/e-faktur/pdf/:faktur"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/faktur/:faktur`}
+                intent={""}
+                OrangPribadi={FakturViewPDF}
+                Badan={FakturViewPDF}
+                query={""}
+              ></RoleBasedRenderer>
+            </>
+          }
+        />
+        <Route
           path="/praktikum/:id/sistem/:akun/e-faktur/pajak-keluaran/tambah-faktur-keluaran"
           element={
             <>
@@ -1113,8 +1144,15 @@ const Main = () => {
           path="/praktikum/:id/sistem/:akun/buku-besar"
           element={
             <>
-              <Header />
-              <BukuBesar />
+              {/* <Header />
+              <BukuBesar /> */}
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun`}
+                OrangPribadi={BukuBesar}
+                Badan={BukuBesar}
+                intent={""}
+                query={""}
+              />
             </>
           }
         />
@@ -1126,8 +1164,8 @@ const Main = () => {
                 url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/sistem-tambahan`}
                 OrangPribadi={MasterAkun}
                 Badan={MasterAkun}
-                intent={"dynamic"}
-                query={"bupot-edit"}
+                intent={""}
+                query={""}
               />
             </>
           }
@@ -1741,6 +1779,26 @@ const Main = () => {
             </>
           }
         />
+
+        {/* ROUTE BARU BELUM DIMASUKIN */}
+          <Route
+            path="/admin/praktikum/2/unifikasi"
+            element={
+              <>
+                <Header />
+                <CreateKonsepUnifikasi />
+              </>
+            }
+          />
+          <Route
+            path="/admin/praktikum/2/notifikasi"
+            element={
+              <>
+                <Header />
+                <Notifikasi />
+              </>
+            }
+          />
         {/* NOT FOUND ROUTE - LAST REGISTERED ROUTE */}
         <Route path="*" element={<NotFound />} />
       </Routes>

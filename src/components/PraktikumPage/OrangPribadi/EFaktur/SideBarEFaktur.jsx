@@ -1,6 +1,7 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useUserType } from "../../../context/UserTypeContext";
+import { useNavigateWithParams } from "@/hooks/useNavigateWithParams";
 
 const SideBarEFakturOP = ({ nama_akun, npwp_akun, akun }) => {
   const { userType } = useUserType();
@@ -35,6 +36,7 @@ const SideBarEFakturOP = ({ nama_akun, npwp_akun, akun }) => {
 
   const dashboardPath = `/admin/praktikum/${userTypeId}/e-faktur`;
   const isDashboard = location.pathname === dashboardPath;
+  const navigate = useNavigateWithParams();
 
   return (
     <aside className="w-1/6 text-blue-900 px-5 py-5 h-screen bg-white">
@@ -72,10 +74,12 @@ const SideBarEFakturOP = ({ nama_akun, npwp_akun, akun }) => {
                   //   : "hover:bg-blue-700 hover:text-white"
                   "hover:bg-blue-700"
                 }`}
+                onClick={() => navigate(item.link)}
               >
-                <Link to={item.link} className="block w-full p-2">
+                {item.label}
+                {/* <Link to={item.link} className="block w-full p-2">
                   {item.label}
-                </Link>
+                </Link> */}
               </li>
             );
           })}
