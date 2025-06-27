@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/popover";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { RoutesApi } from "@/Routes";
@@ -102,17 +102,64 @@ const SelfBilling = ({ data: propData }) => {
   const [terbilang, setTerbilang] = useState("");
   const [keterangan, setKeterangan] = useState("");
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const viewAsCompanyId = searchParams.get("viewAs");
 
-  console.log(propData);
+  const [formData, setFormData] = useState({
+    currency: "IDR",
+    nilai: "",
+    terbilang: "",
+    keterangan: "",
+    npwp: "",
+    name: "",
+    address: "",
+    kapKjs: "",
+    kapKjsId: "",
+    selectedMonth: null,
+    selectedYear: null,
+  });
+
+  const handleNpwpChange = (value) => {
+    setNpwp(value);
+    handleFormDataChange("npwp", value);
+  };
+
+  const handleNameChange = (value) => {
+    setName(value);
+    handleFormDataChange("name", value);
+  };
+
+  const handleAddressChange = (value) => {
+    setAddress(value);
+    handleFormDataChange("address", value);
+  };
+
+  // For step 2 inputs:
+  const handleKapKjsChange = (value) => {
+    setKapKjs(value);
+    handleFormDataChange("kapKjs", value);
+  };
+
+  const handleMonthChange = (value) => {
+    setSelectedMonth(value);
+    handleFormDataChange("selectedMonth", value);
+  };
+
+  const handleYearChange = (value) => {
+    setSelectedYear(value);
+    handleFormDataChange("selectedYear", value);
+  };
+  // console.log("reponse :", propData);
 
   const { id, akun } = useParams();
   const [cookies] = useCookies(["token"]);
   const { data, isLoading, isError, error, isFetched } = useQuery({
     queryKey: ["account_data"],
     queryFn: async () => {
+      const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
       const data = await axios.get(
         RoutesApi.apiUrl +
-          `student/assignments/${id}/sistem/${id}/informasi-umum/${akun}`,
+          `student/assignments/${id}/sistem/${accountId}/informasi-umum/${akun}`,
         {
           headers: {
             Authorization: `Bearer ${cookies.token}`,
@@ -214,7 +261,7 @@ const SelfBilling = ({ data: propData }) => {
 
   // Handle Next Step
   const handleNext = () => {
-    if (step === 1 && (!npwp || !name || !address)) {
+    if (step === 1 && (!npwp || !name)) {
       Swal.fire({
         icon: "warning",
         title: "Data Belum Lengkap",
@@ -239,14 +286,38 @@ const SelfBilling = ({ data: propData }) => {
   const handleBack = () => setStep((prev) => Math.max(prev - 1, 1));
 
   // Handler untuk input nilai
+  // const handleNilaiChange = (val) => {
+  //   // Hanya angka yang diizinkan
+  //   const sanitized = val.replace(/[^0-9]/g, "");
+  //   setNilaiAsli(sanitized);
+  //   setNilaiTampil(sanitized ? formatRupiah(sanitized) : "");
+  //   setTerbilang(sanitized ? numberToTerbilang(sanitized) + " rupiah" : "");
+  // };
   const handleNilaiChange = (val) => {
     // Hanya angka yang diizinkan
     const sanitized = val.replace(/[^0-9]/g, "");
     setNilaiAsli(sanitized);
-    setNilaiTampil(sanitized ? formatRupiah(sanitized) : "");
-    setTerbilang(sanitized ? numberToTerbilang(sanitized) + " rupiah" : "");
-  };
+    const formatted = sanitized ? formatRupiah(sanitized) : "";
+    const terbilangText = sanitized
+      ? numberToTerbilang(sanitized) + " rupiah"
+      : "";
 
+    setNilaiTampil(formatted);
+    setTerbilang(terbilangText);
+
+    // Update formData
+    setFormData((prev) => ({
+      ...prev,
+      nilai: sanitized,
+      terbilang: terbilangText,
+    }));
+  };
+  const handleFormDataChange = (field, value) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
   // Contoh fungsi submit ke backend
   const handleSubmit = () => {
     // Kirim nilaiAsli ke backend
@@ -260,11 +331,22 @@ const SelfBilling = ({ data: propData }) => {
   const createMandiri = useMutation({
     mutationFn: async () => {
       const csrf = await getCsrf();
-      //   console.log(queryData);
+      const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
+
       return axios.post(
-        `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/pembayaran`,
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${accountId}/pembayaran`,
         {
-          kap_kjs_id: kapKjs,
+          pic_id: akun,
+          kap_kjs_id: formData.kapKjs || kapKjs,
+          // npwp: formData.npwp,
+          // name: formData.name,
+          // address: formData.address,
+          // currency: formData.currency,
+          nilai: formData.nilai,
+          terbilang: formData.terbilang,
+          keterangan: formData.keterangan,
+          masa_bulan: formData.selectedMonth,
+          masa_tahun: formData.selectedYear,
         },
         {
           headers: {
@@ -277,18 +359,15 @@ const SelfBilling = ({ data: propData }) => {
       );
     },
     onSuccess: (data, variables) => {
-      // console.log(data);
-      // const successMessage = variables.isDraft
-      //   ? "Draft Faktur berhasil dibuat"
-      //   : "Faktur berhasil diupload";
-
       Swal.fire("Berhasil!", "Data Berhasil disimpan.", "success").then(
         (result) => {
           if (result.isConfirmed) {
-            // window.location.href = `/praktikum/${id}/sistem/${akun}/daftar-kode-billing-belum-dibayar`;
-            navigate(
-              `/praktikum/${id}/sistem/${akun}/daftar-kode-billing-belum-dibayar`
-            );
+            const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
+            const navigationUrl = `/praktikum/${id}/sistem/${accountId}/daftar-kode-billing-belum-dibayar`;
+            const urlWithViewAs = viewAsCompanyId
+              ? `${navigationUrl}?viewAs=${viewAsCompanyId}`
+              : navigationUrl;
+            navigate(urlWithViewAs);
           }
         }
       );
@@ -412,18 +491,26 @@ const SelfBilling = ({ data: propData }) => {
         {/* Input Field Step 1 */}
         {step === 1 && (
           <div className="text-sm space-y-4">
-            <Input label="NPWP" value={npwp} onChange={setNpwp} required />
+            <Input
+              readOnly={true}
+              label="NPWP"
+              value={npwp}
+              onChange={setNpwp}
+              required
+            />
             <Input
               label="Nama Wajib Pajak"
               value={name}
               onChange={setName}
               required
+              readOnly={true}
             />
             <TextArea
               label="Alamat Wajib Pajak"
               value={address}
               onChange={setAddress}
               required
+              readOnly={true}
             />
           </div>
         )}
@@ -547,8 +634,10 @@ const SelfBilling = ({ data: propData }) => {
                 <select
                   id="currency"
                   className="w-full border rounded px-4 py-2 bg-gray-100 cursor-not-allowed"
-                  value="IDR"
-                  onChange={() => {}}
+                  value={formData.currency}
+                  onChange={(e) =>
+                    handleFormDataChange("currency", e.target.value)
+                  }
                   disabled
                 >
                   <option value="IDR">Rupiah Indonesia</option>
@@ -562,15 +651,18 @@ const SelfBilling = ({ data: propData }) => {
               />
               <Input
                 label="Terbilang"
-                value={terbilang}
+                value={formData.terbilang}
                 onChange={() => {}}
                 required
                 readOnly
               />
               <TextArea
                 label="Keterangan"
-                value={keterangan}
-                onChange={setKeterangan}
+                value={formData.keterangan}
+                onChange={(value) => {
+                  setKeterangan(value);
+                  handleFormDataChange("keterangan", value);
+                }}
               />
             </div>
           </div>
@@ -608,12 +700,13 @@ const SelfBilling = ({ data: propData }) => {
 };
 
 // Helper Components
-const Input = ({ label, value, onChange, required }) => (
+const Input = ({ label, value, onChange, required, readOnly }) => (
   <div>
     <label className="block text-gray-700 font-medium mb-1">
       {label} {required && <span className="text-red-500">*</span>}
     </label>
     <input
+      readOnly={readOnly}
       type="text"
       value={value}
       onChange={(e) => onChange(e.target.value)}
@@ -622,12 +715,13 @@ const Input = ({ label, value, onChange, required }) => (
   </div>
 );
 
-const TextArea = ({ label, value, onChange, required }) => (
+const TextArea = ({ label, value, onChange, required, readOnly }) => (
   <div>
     <label className="block text-gray-700 font-medium mb-1">
       {label} {required && <span className="text-red-500">*</span>}
     </label>
     <textarea
+      readOnly={readOnly}
       value={value}
       onChange={(e) => onChange(e.target.value)}
       rows={3}

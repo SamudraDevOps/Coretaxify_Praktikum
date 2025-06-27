@@ -38,7 +38,7 @@ import { ClipLoader } from "react-spinners";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import Swal from "sweetalert2";
 import Select from "react-select";
-import { NumericFormat } from 'react-number-format';
+import { NumericFormat } from "react-number-format";
 
 const TambahFakturKeluaran = ({ data, sidebar }) => {
   const [editMode, setEditMode] = useState(false);
@@ -113,7 +113,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
       const data = await axios.get(
         // RoutesApiReal.apiUrl + `student/assignments/${id}/sistem/${akun}`,
         RoutesApiReal.apiUrl +
-        `student/assignments/${id}/sistem/${akun}/getAkun`,
+          `student/assignments/${id}/sistem/${akun}/getAkun`,
         {
           headers: {
             Authorization: `Bearer ${cookies.token}`,
@@ -175,10 +175,10 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
         selectedInfo === "A"
           ? "X"
           : selectedInfo === "B"
-            ? "Y"
-            : selectedInfo === "C"
-              ? "Z"
-              : "",
+          ? "Y"
+          : selectedInfo === "C"
+          ? "Z"
+          : "",
       nomorPendukung: "", // reset ketika berubah
     }));
     // Atur nilai Cap Fasilitas secara otomatis
@@ -363,6 +363,78 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
     email: "",
     detail_transaksi: [],
   });
+  const validateFormData = () => {
+    const errors = [];
+
+    // Check required fields in formData
+    if (!formData.kode_transaksi) {
+      errors.push("Kode Transaksi harus dipilih");
+    }
+
+    if (!formData.tanggal_faktur_pajak) {
+      errors.push("Tanggal Faktur Pajak harus diisi");
+    }
+
+    if (!formData.masa_pajak) {
+      errors.push("Masa Pajak harus dipilih");
+    }
+
+    if (!formData.tahun) {
+      errors.push("Tahun harus dipilih");
+    }
+
+    if (!formData.akun_penerima_id) {
+      errors.push("NPWP Pembeli harus dipilih");
+    }
+
+    if (!formData.identification) {
+      errors.push("Jenis Identifikasi harus dipilih");
+    }
+
+    // Check conditional fields based on kode_transaksi
+    if (formData.kode_transaksi === "7" || formData.kode_transaksi === "8") {
+      if (!formData.informasi_tambahan) {
+        errors.push(
+          "Informasi Tambahan harus dipilih untuk kode transaksi ini"
+        );
+      }
+
+      // Check if nomor pendukung is required for specific informasi_tambahan
+      const requiresNomorPendukung = [
+        "1 - untuk Kawasan Bebas",
+        "2 - untuk Tempat Penimbunan Berikat",
+        "8 - untuk Penyerahan jasa kena pajak terkait alat angkutan tertentu",
+        "9 - untuk Penyerahan BKP Tertentu di KEK",
+        "11 - untuk Penyerahan alat angkutan tertentu dan/atau Jasa Kena Pajak terkait alat angkutan tertentu",
+        "12 - untuk Penyerahan kepada Kontraktor Kerja Sama Migas yang mengikuti ketentuan Peraturan Pemerintah Nomor 27 Tahun 2017",
+        "17 - Kawasan Ekonomi Khusus PP nomor 40 Tahun 2021",
+        "18 - Kawasan Bebas PP nomor 41 Tahun 2021",
+        "21 - Penyerahan kepada Kontraktor Kerja Sama Migas yang mengikuti ketentuan Peraturan Pemerintah Nomor 53 Tahun 2017",
+        "25 - BKP dan JKP tertentu",
+        "26 - Penyerahan BKP dan JKP di Ibu Kota Negara baru",
+        "5 - untuk BKP Tertentu yang Bersifat Strategis sesuai PP Nomor 81 Tahun 2015",
+        "8 - Penyerahan BKP tertentu yang bersifat strategis berdasarkan PP 48 Tahun 2020",
+        "9 - Penyerahan kepada Perwakilan Negara Asing dan Badan Internasional serta Pejabatnya",
+        "10 - BKP dan JKP tertentu",
+      ];
+
+      if (
+        requiresNomorPendukung.includes(formData.informasi_tambahan) &&
+        !formData.nomorPendukung
+      ) {
+        errors.push(
+          "Nomor Pendukung harus diisi untuk informasi tambahan yang dipilih"
+        );
+      }
+    }
+
+    // Check if detail_transaksi is not empty
+    if (!formData.detail_transaksi || formData.detail_transaksi.length === 0) {
+      errors.push("Minimal satu detail transaksi harus ditambahkan");
+    }
+
+    return errors;
+  };
 
   const [namaBarang, setNamaBarang] = useState("");
 
@@ -541,7 +613,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
       setPPnBM(transaksiToEdit.ppnbm);
 
       // Show modal or alert dialog
-      document.querySelector(".AlertDialogTrigger").click();
+      // document.querySelector(".AlertDialogTrigger").click();
     }
   };
   const handleCancelEdit = () => {
@@ -647,6 +719,26 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
   // const [namaBarang, setNamaBarang] = useState("");
   const handleSubmit = (e, isDraft = true) => {
     e.preventDefault();
+    const validationErrors = validateFormData();
+
+    if (validationErrors.length > 0) {
+      // Show validation errors using SweetAlert2
+      Swal.fire({
+        icon: "error",
+        title: "Form Tidak Lengkap",
+        html: `
+        <div style="text-align: left;">
+          <p>Mohon lengkapi field berikut:</p>
+          <ul style="margin: 10px 0; padding-left: 20px;">
+            ${validationErrors.map((error) => `<li>${error}</li>`).join("")}
+          </ul>
+        </div>
+      `,
+        confirmButtonText: "OK",
+        confirmButtonColor: "#3085d6",
+      });
+      return;
+    }
 
     // Validasi apakah ada detail transaksi
 
@@ -857,9 +949,9 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
     // Tambahkan total ke formData
     const finalFormData = {
       ...formData,
-      dpp: totalDPP,
-      ppn: totalPPN,
-      ppnbm: totalPPnBM,
+      dpp: Number(totalDPP),
+      ppn: Number(totalPPN),
+      ppnbm: Number(totalPPnBM),
       informasi_tambahan: informasi_tambahan,
       cap_fasilitas: cap_fasilitas,
       akun_penerima_id:
@@ -1541,27 +1633,27 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                           "9 - Penyerahan kepada Perwakilan Negara Asing dan Badan Internasional serta Pejabatnya",
                           "10 - BKP dan JKP tertentu",
                         ].includes(informasi_tambahan))) && (
-                        <div className="space-y-2">
-                          <label className="block text-sm font-medium">
-                            Nomor Pendukung
-                          </label>
-                          <input
-                            type="text"
-                            name="nomorPendukung"
-                            className="p-2 border rounded w-full"
-                            placeholder="Masukkan Nomor Pendukung"
-                            value={formData.nomorPendukung}
-                            onChange={(e) => {
-                              const value = e.target.value;
-                              setNomorPendukung(value);
-                              setFormData((prev) => ({
-                                ...prev,
-                                nomorPendukung: value,
-                              }));
-                            }}
-                          />
-                        </div>
-                      )}
+                      <div className="space-y-2">
+                        <label className="block text-sm font-medium">
+                          Nomor Pendukung
+                        </label>
+                        <input
+                          type="text"
+                          name="nomorPendukung"
+                          className="p-2 border rounded w-full"
+                          placeholder="Masukkan Nomor Pendukung"
+                          value={formData.nomorPendukung}
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            setNomorPendukung(value);
+                            setFormData((prev) => ({
+                              ...prev,
+                              nomorPendukung: value,
+                            }));
+                          }}
+                        />
+                      </div>
+                    )}
                   </>
                 )}
               </div>
@@ -1863,9 +1955,12 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                             onValueChange={({ value }) => {
                               setHarga(value);
                               const numericHarga = parseInt(value, 10) || 0;
-                              const newTotalHarga = numericHarga * (parseInt(kuantitas, 10) || 0);
+                              const newTotalHarga =
+                                numericHarga * (parseInt(kuantitas, 10) || 0);
                               setTotalHarga(newTotalHarga.toString());
-                              const newDPP = newTotalHarga - (parseInt(pemotongan_harga, 10) || 0);
+                              const newDPP =
+                                newTotalHarga -
+                                (parseInt(pemotongan_harga, 10) || 0);
                               setDPP(newDPP.toString());
                               if (!isChecked) setJumlah(newDPP.toString());
                             }}
@@ -1876,7 +1971,6 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                             placeholder="Rp 0"
                             allowNegative={false}
                           />
-
                         </div>
                         <div className="space-y-2">
                           <label className="block text-sm font-medium">
@@ -1915,9 +2009,11 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                             value={pemotongan_harga}
                             onValueChange={({ value }) => {
                               setPotonganHarga(value);
-                              const numericTotalHarga = parseInt(total_harga, 10) || 0;
+                              const numericTotalHarga =
+                                parseInt(total_harga, 10) || 0;
                               const numericPotongan = parseInt(value, 10) || 0;
-                              const newDPP = numericTotalHarga - numericPotongan;
+                              const newDPP =
+                                numericTotalHarga - numericPotongan;
                               setDPP(newDPP.toString());
                               if (!isChecked) setJumlah(newDPP.toString());
                             }}
@@ -1983,7 +2079,6 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                               allowNegative={false}
                               disabled={!isChecked}
                             />
-
                           </div>
                           <div className="space-y-2">
                             <label className="block text-sm font-medium">
@@ -2035,9 +2130,19 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                                 setPPnBM(value);
                                 if (value === "" || value === "0") {
                                   setIsCustomPPnBM(false);
-                                  const numericJumlah = parseInt(jumlah, 10) || 0;
-                                  const numericPPnBM = parseInt(tarif_ppnbm.replace(/\D/g, ""), 10) || 0;
-                                  setPPnBM(((numericJumlah * numericPPnBM) / 100).toString());
+                                  const numericJumlah =
+                                    parseInt(jumlah, 10) || 0;
+                                  const numericPPnBM =
+                                    parseInt(
+                                      tarif_ppnbm.replace(/\D/g, ""),
+                                      10
+                                    ) || 0;
+                                  setPPnBM(
+                                    (
+                                      (numericJumlah * numericPPnBM) /
+                                      100
+                                    ).toString()
+                                  );
                                 }
                               }}
                               thousandSeparator="."
@@ -2123,12 +2228,394 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                             <input type="checkbox" className="w-4 h-4" />
                           </td>
                           <td className="px-1 py-2 border">
-                            <button
-                              className="bg-blue-500 hover:bg-blue-600 text-white py-1 px-2 rounded text-xs"
-                              onClick={() => handleEditTransaksi(item.id)}
-                            >
-                              Edit
-                            </button>
+                            <AlertDialog>
+                              <AlertDialogTrigger asChild>
+                                <button
+                                  className="bg-blue-500 hover:bg-blue-600 text-white py-1 px-2 rounded text-xs"
+                                  onClick={() => handleEditTransaksi(item.id)}
+                                >
+                                  Edit
+                                </button>
+                              </AlertDialogTrigger>
+                              <AlertDialogContent className="bg-white rounded-md shadow-md p-4 !min-w-[1000px]">
+                                <AlertDialogHeader className="text-lg font-semibold ">
+                                  <AlertDialogTitle className="text-lg font-semibold border-b pb-2 w-full">
+                                    Edit Transaksi
+                                  </AlertDialogTitle>
+                                </AlertDialogHeader>
+                                <div className="grid grid-cols-2 gap-6 w-full overflow-auto h-96">
+                                  {/* Kolom Kiri */}
+                                  <div className="space-y-4 h-full">
+                                    <div className="space-y-2">
+                                      <label className="block text-sm font-medium">
+                                        Tipe
+                                      </label>
+                                      <div className="grid grid-cols-2 gap-3">
+                                        <div className="flex items-center gap-2">
+                                          <label className="flex items-center gap-2">
+                                            <input
+                                              type="radio"
+                                              name="tipe"
+                                              value="Barang"
+                                              checked={tipe === "Barang"}
+                                              onChange={handleTipeChange}
+                                            />
+                                            Barang
+                                          </label>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                          <label className="flex items-center gap-2">
+                                            <input
+                                              type="radio"
+                                              name="tipe"
+                                              value="Jasa"
+                                              checked={tipe === "Jasa"}
+                                              onChange={handleTipeChange}
+                                            />
+                                            Jasa
+                                          </label>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    {tipe && (
+                                      <div>
+                                        <label className="block text-sm font-medium mb-1">
+                                          Kode Transaksi
+                                        </label>
+                                        <div className="w-full">
+                                          <Select
+                                            options={options}
+                                            value={options.find(
+                                              (opt) =>
+                                                opt.value === selectedKode
+                                            )}
+                                            onChange={(selected) =>
+                                              setSelectedKode(
+                                                selected?.value || ""
+                                              )
+                                            }
+                                            styles={{
+                                              menu: (provided) => ({
+                                                ...provided,
+                                                width: "full",
+                                              }),
+                                            }}
+                                          />
+                                        </div>
+                                      </div>
+                                    )}
+
+                                    <div className="space-y-2">
+                                      <label className="block text-sm font-medium">
+                                        Nama{" "}
+                                      </label>
+                                      <input
+                                        type="text"
+                                        className="p-2 border rounded w-full"
+                                        value={namaBarang}
+                                        onChange={(e) =>
+                                          setNamaBarang(e.target.value)
+                                        }
+                                        placeholder="Masukkan nama barang/jasa"
+                                      />
+                                    </div>
+                                    {tipe && (
+                                      <div className="space-y-2">
+                                        <label className="block text-sm font-medium">
+                                          Satuan
+                                        </label>
+                                        <select
+                                          className="p-2 border rounded w-full max-w-full"
+                                          value={selectedSatuan}
+                                          onChange={(e) =>
+                                            setSelectedSatuan(e.target.value)
+                                          }
+                                        >
+                                          <option value="">Pilih Satuan</option>
+                                          {listSatuan.map((item) => (
+                                            <option
+                                              key={item.id}
+                                              value={item.satuan}
+                                            >
+                                              {item.satuan}
+                                            </option>
+                                          ))}
+                                        </select>
+                                      </div>
+                                    )}
+                                    <div className="space-y-2">
+                                      <label className="block text-sm font-medium">
+                                        Harga Satuan
+                                      </label>
+                                      <NumericFormat
+                                        value={harga_satuan}
+                                        onValueChange={({ value }) => {
+                                          setHarga(value);
+                                          const numericHarga =
+                                            parseInt(value, 10) || 0;
+                                          const newTotalHarga =
+                                            numericHarga *
+                                            (parseInt(kuantitas, 10) || 0);
+                                          setTotalHarga(
+                                            newTotalHarga.toString()
+                                          );
+                                          const newDPP =
+                                            newTotalHarga -
+                                            (parseInt(pemotongan_harga, 10) ||
+                                              0);
+                                          setDPP(newDPP.toString());
+                                          if (!isChecked)
+                                            setJumlah(newDPP.toString());
+                                        }}
+                                        thousandSeparator="."
+                                        decimalSeparator=","
+                                        prefix="Rp "
+                                        className="p-2 border rounded w-full"
+                                        placeholder="Rp 0"
+                                        allowNegative={false}
+                                      />
+                                    </div>
+                                    <div className="space-y-2">
+                                      <label className="block text-sm font-medium">
+                                        Kuantitas
+                                      </label>
+                                      <input
+                                        type="number"
+                                        className="p-2 border rounded w-full"
+                                        min="0"
+                                        step="1"
+                                        value={kuantitas === 0 ? "" : kuantitas}
+                                        onChange={handleKuantitasChange}
+                                        placeholder="0"
+                                      />
+                                    </div>
+                                    <div className="space-y-2">
+                                      <label className="block text-sm font-medium">
+                                        Total Harga
+                                      </label>
+                                      <NumericFormat
+                                        value={total_harga}
+                                        displayType="input"
+                                        thousandSeparator="."
+                                        decimalSeparator=","
+                                        prefix="Rp "
+                                        className="p-2 border rounded w-full bg-gray-100"
+                                        readOnly
+                                        placeholder="Rp 0"
+                                      />
+                                    </div>
+                                    <div className="space-y-2">
+                                      <label className="block text-sm font-medium">
+                                        Potongan Harga
+                                      </label>
+                                      <NumericFormat
+                                        value={pemotongan_harga}
+                                        onValueChange={({ value }) => {
+                                          setPotonganHarga(value);
+                                          const numericTotalHarga =
+                                            parseInt(total_harga, 10) || 0;
+                                          const numericPotongan =
+                                            parseInt(value, 10) || 0;
+                                          const newDPP =
+                                            numericTotalHarga - numericPotongan;
+                                          setDPP(newDPP.toString());
+                                          if (!isChecked)
+                                            setJumlah(newDPP.toString());
+                                        }}
+                                        thousandSeparator="."
+                                        decimalSeparator=","
+                                        prefix="Rp "
+                                        className="p-2 border rounded w-full"
+                                        placeholder="Rp 0"
+                                        allowNegative={false}
+                                      />
+                                    </div>
+                                  </div>
+
+                                  {/* Kolom Kanan */}
+                                  <div className="space-y-4 h-full ">
+                                    <div className="space-y-2">
+                                      <label className="block text-sm font-medium">
+                                        DPP
+                                      </label>
+                                      <NumericFormat
+                                        value={dpp}
+                                        displayType="input"
+                                        thousandSeparator="."
+                                        decimalSeparator=","
+                                        prefix="Rp "
+                                        className="p-2 border rounded w-full bg-gray-100"
+                                        readOnly
+                                        placeholder="Rp 0"
+                                      />
+                                    </div>
+                                    <div className="space-y-2">
+                                      <div className="flex items-center gap-2 ">
+                                        <input
+                                          type="checkbox"
+                                          className="justify-start p-3 border rounded"
+                                          checked={isChecked}
+                                          onChange={handleCheckboxChange}
+                                          disabled={kode_transaksi === "01"}
+                                        />
+                                        <label className="block text-sm font-medium">
+                                          DPP Nilai Lain / DPP
+                                        </label>
+                                      </div>
+
+                                      <div className="space-y-2">
+                                        <label className="block text-sm font-medium"></label>
+                                        <NumericFormat
+                                          value={jumlah}
+                                          onValueChange={({ value }) => {
+                                            if (isChecked) {
+                                              setJumlah(value);
+                                              updateTarifPPN(value);
+                                            }
+                                          }}
+                                          thousandSeparator="."
+                                          decimalSeparator=","
+                                          prefix="Rp "
+                                          className={`
+p-2 border rounded w-full
+${isChecked ? "" : "bg-gray-100"}
+`}
+                                          placeholder="Rp 0"
+                                          allowNegative={false}
+                                          disabled={!isChecked}
+                                        />
+                                      </div>
+                                      <div className="space-y-2">
+                                        <label className="block text-sm font-medium">
+                                          PPN
+                                        </label>
+                                        <input
+                                          type="text"
+                                          className="p-2 border rounded w-full bg-gray-100"
+                                          value="12%"
+                                          readOnly
+                                        />
+                                      </div>
+                                      <div className="space-y-2">
+                                        <label className="block text-sm font-medium">
+                                          Tarif PPN
+                                        </label>
+                                        <input
+                                          type="text"
+                                          className="p-2 border rounded w-full bg-gray-100"
+                                          value={ppn}
+                                          readOnly
+                                          placeholder="Rp 0"
+                                        />
+                                      </div>
+                                      <div className="space-y-2">
+                                        <label className="block text-sm font-medium">
+                                          Tarif PPnBM (%)
+                                        </label>
+                                        <input
+                                          type="text"
+                                          className="p-2 border rounded w-full"
+                                          value={tarif_ppnbm}
+                                          onChange={handleTarifPPnBMChange}
+                                          placeholder="Masukkan persen"
+                                        />
+                                      </div>
+                                      {/* <div className="space-y-2">
+                                        <label className="block text-sm font-medium">
+                                          PPnBM
+                                        </label>
+                                        <NumericFormat
+                                          value={ppnbm}
+                                          onValueChange={({ value }) => {
+                                            setIsCustomPPnBM(true);
+                                            setPPnBM(value);
+                                            if (value === "" || value === "0") {
+                                              setIsCustomPPnBM(false);
+                                              const numericJumlah =
+                                                parseInt(jumlah, 10) || 0;
+                                              const numericPPnBM =
+                                                parseInt(
+                                                  tarif_ppnbm.replace(
+                                                    /\D/g,
+                                                    ""
+                                                  ),
+                                                  10
+                                                ) || 0;
+                                              setPPnBM(
+                                                (
+                                                  (numericJumlah *
+                                                    numericPPnBM) /
+                                                  100
+                                                ).toString()
+                                              );
+                                            }
+                                          }}
+                                          thousandSeparator="."
+                                          decimalSeparator=","
+                                          prefix="Rp "
+                                          className="p-2 border rounded w-full"
+                                          placeholder="Rp 0"
+                                          allowNegative={false}
+                                        />
+                                      </div> */}
+                                      <div className="space-y-2">
+                                        <label className="block text-sm font-medium">
+                                          PPnBM
+                                        </label>
+                                        <NumericFormat
+                                          value={ppnbm}
+                                          onValueChange={({ value }) => {
+                                            setIsCustomPPnBM(true);
+                                            // Convert to number before setting
+                                            const numericValue =
+                                              parseFloat(value) || 0;
+                                            setPPnBM(numericValue);
+
+                                            if (value === "" || value === "0") {
+                                              setIsCustomPPnBM(false);
+                                              const numericJumlah =
+                                                parseFloat(jumlah) || 0;
+                                              const numericPPnBM =
+                                                parseInt(
+                                                  tarif_ppnbm.replace(
+                                                    /\D/g,
+                                                    ""
+                                                  ),
+                                                  10
+                                                ) || 0;
+                                              const calculatedPPnBM =
+                                                (numericJumlah * numericPPnBM) /
+                                                100;
+                                              setPPnBM(calculatedPPnBM);
+                                            }
+                                          }}
+                                          thousandSeparator="."
+                                          decimalSeparator=","
+                                          prefix="Rp "
+                                          className="p-2 border rounded w-full"
+                                          placeholder="Rp 0"
+                                          allowNegative={false}
+                                        />
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <AlertDialogFooter className="flex justify-end mt-6 space-x-2">
+                                  <AlertDialogCancel
+                                    onClick={handleCancelEdit}
+                                    className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600"
+                                  >
+                                    Batal
+                                  </AlertDialogCancel>
+                                  <AlertDialogAction
+                                    className="bg-blue-900 text-white px-4 py-2 rounded-md hover:bg-blue-950"
+                                    onClick={handleSimpanTransaksi}
+                                  >
+                                    Perbarui
+                                  </AlertDialogAction>
+                                </AlertDialogFooter>
+                              </AlertDialogContent>
+                            </AlertDialog>
                             <button
                               className="bg-red-500 hover:bg-red-600 text-white py-1 px-2 rounded text-xs ml-1"
                               onClick={() => handleHapusTransaksi(item.id)}
@@ -2181,20 +2668,37 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                 (window.location.href = `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran?viewAs=${viewAsCompanyId}`)
               }
               className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded"
+              disabled={createFaktur.isPending}
             >
               Batal
             </button>
             <button
               onClick={(e) => handleSubmit(e, true)}
-              className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded"
+              className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              disabled={createFaktur.isPending}
             >
-              Simpan Draft
+              {createFaktur.isPending ? (
+                <>
+                  <ClipLoader color="#ffffff" size={16} />
+                  Menyimpan...
+                </>
+              ) : (
+                "Simpan Draft"
+              )}
             </button>
             <button
               onClick={(e) => handleSubmit(e, false)}
-              className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded"
+              className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              disabled={createFaktur.isPending}
             >
-              Upload Faktur
+              {createFaktur.isPending ? (
+                <>
+                  <ClipLoader color="#ffffff" size={16} />
+                  Mengupload...
+                </>
+              ) : (
+                "Upload Faktur"
+              )}
             </button>
           </div>
         </div>

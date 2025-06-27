@@ -16,7 +16,7 @@ import { getCsrf } from "@/service/getCsrf";
 import { useMutation } from "@tanstack/react-query";
 import { RoutesApi } from "@/Routes";
 import { useCookies } from "react-cookie";
-import { useParams } from "react-router";
+import { useParams, useSearchParams } from "react-router";
 import Swal from "sweetalert2";
 import { PDFViewer } from "@react-pdf/renderer";
 import BillingCodePdf from "../../PDFTemplate/BillingCodeTemplate";
@@ -29,11 +29,14 @@ const generateNTPN = () => {
 };
 
 const DaftarKodeBilingBelumBayar = ({ data, sidebar }) => {
+  console.log("data fetched : ", data);
   const { id, akun } = useParams();
   const [openConfirm, setOpenConfirm] = useState(false);
   const [openNTPN, setOpenNTPN] = useState(false);
   const [ntpn, setNtpn] = useState("");
   const [copied, setCopied] = useState(false); // Tambahkan state untuk pesan copy
+  const [searchParams, setSearchParams] = useSearchParams();
+  const viewAsCompanyId = searchParams.get("viewAs");
 
   console.log(data);
   const handleBayarClick = () => {
@@ -56,8 +59,10 @@ const DaftarKodeBilingBelumBayar = ({ data, sidebar }) => {
   const paySpt = useMutation({
     mutationFn: async (idSpt) => {
       const csrf = await getCsrf();
+      const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
+      // alert()
       return axios.put(
-        `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/pembayaran/${idSpt}`,
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${accountId}/pembayaran/${idSpt}`,
         {},
         {
           headers: {
@@ -75,17 +80,24 @@ const DaftarKodeBilingBelumBayar = ({ data, sidebar }) => {
       //   ? "Draft Faktur berhasil dibuat"
       //   : "Faktur berhasil diupload";
 
-      Swal.fire("Berhasil!", `Pembayaran SPT berhasil .\n\n Berikut kode NTPN anda "${data.data.ntpn}"`, "success").then(
-        (result) => {
-          if (result.isConfirmed) {
-            window.location.reload();
-          }
+      Swal.fire(
+        "Berhasil!",
+        `Pembayaran SPT berhasil .\n\n Berikut kode NTPN anda "<b>${data.data.ntpn}</b>"`,
+        "success"
+      ).then((result) => {
+        if (result.isConfirmed) {
+          window.location.reload();
         }
-      );
+      });
     },
     onError: (error) => {
       console.error("Error saving data:", error);
-      Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
+      // Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
+      Swal.fire(
+        "Gagal!",
+        `Terjadi kesalahan saat menyimpan data. ${error?.response?.data?.message}`,
+        "error"
+      );
     },
   });
   const totalPembayaran =

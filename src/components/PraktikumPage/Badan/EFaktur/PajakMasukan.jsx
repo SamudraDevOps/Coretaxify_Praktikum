@@ -4,6 +4,7 @@ import { IoDocumentTextOutline } from "react-icons/io5";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { useCookies } from "react-cookie";
 import { useParams } from "react-router";
+import { useNavigateWithParams } from "@/hooks/useNavigateWithParams";
 
 const PajakMasukan = ({
   data,
@@ -56,6 +57,7 @@ const PajakMasukan = ({
     }
     setSelectAll(!selectAll);
   };
+  const navigate = useNavigateWithParams();
 
   return (
     <div className="flex h-screen">
@@ -140,16 +142,26 @@ const PajakMasukan = ({
                     <td className="px-4 py-2 border">
                       {/* Action buttons can go here */}
                       <div className="flex space-x-2">
-                        <a
+                        {/* <a
                           href={`/praktikum/${id}/sistem/${akun}/e-faktur/pajak-masukan/edit/${item.id}`}
                         >
                           <button className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs">
                             Edit
                           </button>
-                        </a>
-                        <button className="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-xs">
-                          Hapus
+                        </a> */}
+                        <button
+                          onClick={() =>
+                            navigate(
+                              `/praktikum/${id}/sistem/${akun}/e-faktur/pdf/${item.id}`
+                            )
+                          }
+                          className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs"
+                        >
+                          Lihat PDF
                         </button>
+                        {/* <button className="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-xs">
+                          Hapus
+                        </button> */}
                       </div>
                     </td>
                     <td className="px-4 py-2 border">

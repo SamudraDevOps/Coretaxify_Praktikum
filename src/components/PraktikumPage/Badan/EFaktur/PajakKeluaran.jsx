@@ -306,6 +306,16 @@ const PajakKeluaran = ({
                         >
                           Edit
                         </button>
+                        <button
+                          onClick={() =>
+                            navigate(
+                              `/praktikum/${id}/sistem/${akun}/e-faktur/pdf/${item.id}`
+                            )
+                          }
+                          className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs"
+                        >
+                          Lihat PDF
+                        </button>
                         {/* </a> */}
                         <button
                           onClick={() => deleteFaktur.mutate(item.id)}
