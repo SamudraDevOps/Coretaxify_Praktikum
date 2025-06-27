@@ -300,7 +300,7 @@ const SidebarAdmin = () => {
             <li
               className={cookies.role != "psc" ? "!hidden " : `menu-item`}
               onClick={() => {
-                window.location.href = `/psc/praktikum`;
+                window.location.href = `/psc/coretaxify`;
               }}
             >
               <FaLaptopCode className="menu-icon" />

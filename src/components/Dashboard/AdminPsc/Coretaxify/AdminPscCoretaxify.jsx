@@ -23,7 +23,7 @@ import { RxCross1 } from "react-icons/rx";
 import { FaRegCopy } from "react-icons/fa";
 import { useToast } from "@/hooks/use-toast";
 
-const AdminCoretaxify = () => {
+const AdminPscCoretaxify = () => {
   // State management
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
   const [selectedData, setSelectedData] = useState(null);
@@ -92,7 +92,7 @@ const AdminCoretaxify = () => {
     queryKey: ["tasks"],
     queryFn: async () => {
       const { data } = await axios.get(
-        `${RoutesApi.url}api/admin/tasks`,
+        `${RoutesApi.url}api/psc/tasks`,
         {
           headers: {
             Authorization: `Bearer ${cookies.token}`,
@@ -144,7 +144,7 @@ const AdminCoretaxify = () => {
       }
 
       const response = await axios.post(
-        `${RoutesApi.url}api/admin/assignments`,
+        `${RoutesApi.url}api/psc/assignments`,
         submitData,
         {
           headers: {
@@ -203,7 +203,7 @@ const AdminCoretaxify = () => {
       }
 
       const response = await axios.post(
-        `${RoutesApi.url}api/admin/assignments/${id}`,
+        `${RoutesApi.url}api/psc/assignments/${id}`,
         submitData,
         {
           headers: {
@@ -1127,4 +1127,4 @@ const AdminCoretaxify = () => {
   );
 };
 
-export default AdminCoretaxify;
+export default AdminPscCoretaxify;

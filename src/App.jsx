@@ -28,6 +28,9 @@ import AdminCoretaxify from "./components/Dashboard/Admin/Coretaxify/AdminCoreta
 // DOSEN
 import DosenCoretaxify from "./components/Dashboard/Dosen/Coretaxify/DosenCoretaxify";
 
+// PSC
+import AdminPscCoretaxify from "./components/Dashboard/AdminPsc/Coretaxify/AdminPscCoretaxify";
+
 import {
   BrowserRouter as Router,
   Routes,
@@ -346,6 +349,7 @@ const Main = () => {
           <Route path="/mahasiswa/praktikum" element={<MahasiswaPraktikum />} />
           <Route path="/mahasiswa/ujian" element={<MahasiswaUjian />} />
         </Route>
+
         {/* PSC ROUTE */}
         <Route
           element={
@@ -353,6 +357,7 @@ const Main = () => {
           }
         >
           <Route path="/psc/" element={<DashboardPsc />} />
+          <Route path="/psc/coretaxify" element={<AdminPscCoretaxify />} />
           <Route path="/psc/master-soal" element={<UploadSoalPsc />} />
           <Route path="/psc/edit-pengajar" element={<EditPengajar />} />
           <Route path="/psc/edit-kelas" element={<EditKelasPsc />} />

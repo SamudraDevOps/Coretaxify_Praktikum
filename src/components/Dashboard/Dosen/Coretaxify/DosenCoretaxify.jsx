@@ -860,7 +860,7 @@ const DosenCoretaxify = () => {
                       {task ? (
                         <div>
                           <span className="font-medium">{task.name}</span>
-                          {task.file_path && (
+                          {/* {task.file_path && (
                             <div className="text-xs text-blue-500 mt-1">
                               <a
                                 href={task.file_path}
@@ -871,7 +871,7 @@ const DosenCoretaxify = () => {
                                 📎 Lihat File Soal
                               </a>
                             </div>
-                          )}
+                          )} */}
                         </div>
                       ) : (
                         <span className="text-gray-400">
