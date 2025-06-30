@@ -11,7 +11,7 @@ import {
 } from "react-icons/fa";
 import { GiPieChart } from "react-icons/gi";
 import Logo from "../../../../assets/images/7.png";
-import ProfileIcon from "../../../../assets/images/wulan.png";
+// import ProfileIcon from "../../../../assets/images/wulan.png"; // Hapus ini
 import { FaPencil } from "react-icons/fa6";
 import { LuDatabaseBackup } from "react-icons/lu";
 import {
@@ -28,7 +28,11 @@ import { CookiesProvider, useCookies } from "react-cookie";
 
 const SidebarAdmin = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["token"]);
+  const [isOpen, setIsOpen] = useState(true);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
 
+  // Tetap gunakan mutation login seperti kode asli Anda
   const mutation = useMutation({
     mutationFn: async () => {
       console.log("button clicked");
@@ -62,9 +66,29 @@ const SidebarAdmin = () => {
     },
   });
 
-  const [isOpen, setIsOpen] = useState(true);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
+  // Ambil data profile user
+  const { data: profileData } = useQuery({
+    queryKey: ["sidebar-profile"],
+    queryFn: async () => {
+      const res = await axios.get(RoutesApi.profile, {
+        headers: {
+          Authorization: `Bearer ${cookies.token}`,
+          Accept: "application/json",
+        },
+      });
+      return res.data.data;
+    },
+    enabled: !!cookies.token,
+    staleTime: 5 * 60 * 1000, // 5 menit
+  });
+
+  // Dapatkan URL gambar profile
+  let profileUrl = "https://ui-avatars.com/api/?name=User&background=random&size=128";
+  if (profileData) {
+    profileUrl = profileData.image_path
+      ? `${RoutesApi.url}storage/${profileData.image_path}`
+      : `https://ui-avatars.com/api/?name=${encodeURIComponent(profileData.name || "User")}&background=random&size=128`;
+  }
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -465,7 +489,15 @@ const SidebarAdmin = () => {
 
       <div className="sidebar-profile mt-auto">
         <div className="profile-header" onClick={toggleProfileDropdown}>
-          <img src={ProfileIcon} alt="Profile" className="profile-icon" />
+          <img
+            src={profileUrl}
+            alt="Profile"
+            className="profile-icon"
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = "https://ui-avatars.com/api/?name=User&background=random&size=128";
+            }}
+          />
           {isOpen && (
             <>
               <span>Profile</span>
