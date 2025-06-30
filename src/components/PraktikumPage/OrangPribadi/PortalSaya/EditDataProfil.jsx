@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import {
   FaCalendarAlt,
@@ -834,13 +835,12 @@ const EditDataProfil = ({ data, sidebar }) => {
   };
 
   return (
-    <div className="flex h-screen bg-gray-100">
-      <SidebarProfilSaya
+<div className="flex items-start bg-gray-100">      <SidebarProfilSaya
         nama_akun={sidebar.nama_akun}
         npwp_akun={sidebar.npwp_akun}
         akun={{ id, akun }}
       />
-      <div className="flex-grow p-6 bg-white  h-full">
+      <div className="w-full flex-grow p-2 pt-5 bg-white h-full">
         <h2 className="text-2xl font-semibold text-gray-800 mb-4">
           Pembaruan Data Wajib Pajak
         </h2>

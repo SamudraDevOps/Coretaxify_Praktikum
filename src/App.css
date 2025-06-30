@@ -108,7 +108,7 @@ input[type='number'] {
 
 .flex {
   display: flex;
-  align-items: center;
+  align-items: flex;
 }
 
 .grid {
