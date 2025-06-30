@@ -65,8 +65,23 @@ export default function BukuBesar({ data }) {
   );
 }
 
-// Reusable DashboardCard component
+// Tambahan Conversi Rupiah dan card dinamis
 const DashboardCard = ({ icon, title, value, highlighted = false }) => {
+
+  const formatCurrency = (number) => {
+
+    const numericValue = typeof number === 'string' ? parseFloat(number.replace(',', '.')) : number;
+
+    if (isNaN(numericValue)) {
+      return value; 
+    }
+    return new Intl.NumberFormat("id-ID", {
+      style: "decimal",
+    }).format(numericValue);
+  };
+  
+  const formattedValue = formatCurrency(value);
+
   return (
     <div
       className={`flex items-center p-4 bg-white rounded-lg shadow-sm transition duration-300 ease-in-out ${
@@ -80,9 +95,12 @@ const DashboardCard = ({ icon, title, value, highlighted = false }) => {
       >
         {icon}
       </div>
-      <div className="ml-4">
+
+      <div className="ml-4 min-w-0">
         <h3 className="text-sm font-medium text-gray-500">{title}</h3>
-        <p className="mt-1 text-lg font-semibold text-gray-900">{value}</p>
+        <p className="mt-1 text-lg font-semibold text-gray-900 break-words">
+          {formattedValue}
+        </p>
       </div>
     </div>
   );
