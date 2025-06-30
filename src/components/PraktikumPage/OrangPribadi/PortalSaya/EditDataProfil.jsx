@@ -491,7 +491,7 @@ const EditDataProfil = ({ data, sidebar }) => {
     mutationFn: async () => {
       const csrf = await getCsrf();
       const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
-      alert(accountId);
+      // alert(accountId);
       return axios.put(
         `${RoutesApi.url}api/student/assignments/${id}/sistem/${accountId}/informasi-umum/${akun}`,
         formData,

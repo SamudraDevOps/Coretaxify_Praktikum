@@ -11,19 +11,19 @@ const SideBarEFakturOP = ({ nama_akun, npwp_akun, akun }) => {
   const efakturItems = [
     {
       label: "Pajak Keluaran",
-      link: `/praktikum/${akun.id}/sistem/${akun.akun}/e-faktur/pajak-keluaran`,
+      link: `/praktikum/${akun?.id}/sistem/${akun?.akun}/e-faktur/pajak-keluaran`,
     },
     {
       label: "Pajak Masukan",
-      link: `/praktikum/${akun.id}/sistem/${akun.akun}/e-faktur/pajak-masukan`,
+      link: `/praktikum/${akun?.id}/sistem/${akun?.akun}/e-faktur/pajak-masukan`,
     },
     {
       label: "Retur Pajak Keluaran",
-      link: `/praktikum/${akun.id}/sistem/${akun.akun}/e-faktur/retur-pajak-keluaran`,
+      link: `/praktikum/${akun?.id}/sistem/${akun?.akun}/e-faktur/retur-pajak-keluaran`,
     },
     {
       label: "Retur Pajak Masukan",
-      link: `/praktikum/${akun.id}/sistem/${akun.akun}/e-faktur/retur-pajak-masukan`,
+      link: `/praktikum/${akun?.id}/sistem/${akun?.akun}/e-faktur/retur-pajak-masukan`,
     },
   ];
 

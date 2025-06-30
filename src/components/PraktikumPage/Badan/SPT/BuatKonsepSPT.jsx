@@ -21,7 +21,7 @@ import Swal from "sweetalert2";
 import { getCsrf } from "@/service/getCsrf";
 import { useNavigateWithParams } from "@/hooks/useNavigateWithParams";
 
-const BuatKonsepSPT = () => {
+const BuatKonsepSPT = ({ sidebar }) => {
   const { id, akun } = useParams();
   const [cookies] = useCookies(["token"]);
 
@@ -378,7 +378,11 @@ const BuatKonsepSPT = () => {
 
   return (
     <div className="flex bg-white h-screen">
-      <SideBarSPT />
+      <SideBarSPT
+        npwp_akun={sidebar.npwp_akun}
+        nama_akun={sidebar.nama_akun}
+        akun={{ id, akun }}
+      />
       <div className="flex-1 p-3 bg-white rounded-md h-full">
         <Card className="w-full bg-gray-100 shadow-sm rounded-none mb-6">
           <CardContent className="flex items-center gap-2 py-4 px-6">
