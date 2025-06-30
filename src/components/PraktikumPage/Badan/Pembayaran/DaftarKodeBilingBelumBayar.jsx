@@ -20,6 +20,7 @@ import { useParams, useSearchParams } from "react-router";
 import Swal from "sweetalert2";
 import { PDFViewer } from "@react-pdf/renderer";
 import BillingCodePdf from "../../PDFTemplate/BillingCodeTemplate";
+import { useNavigateWithParams } from "@/hooks/useNavigateWithParams";
 
 const generateNTPN = () => {
   // 16 digit random number
@@ -55,6 +56,7 @@ const DaftarKodeBilingBelumBayar = ({ data, sidebar }) => {
     setCopied(true);
     setTimeout(() => setCopied(false), 2000); // Pesan hilang setelah 2 detik
   };
+  const navigate = useNavigateWithParams();
   const [cookies] = useCookies(["token"]);
   const paySpt = useMutation({
     mutationFn: async (idSpt) => {
@@ -169,10 +171,21 @@ const DaftarKodeBilingBelumBayar = ({ data, sidebar }) => {
                       {item.masa_bulan} {item.masa_tahun}
                     </td>
                     <td className="py-4 px-4 border-b space-x-2">
+                      <button
+                        className="bg-blue-100 text-blue-600 hover:bg-blue-200 hover:underline rounded px-3 py-1"
+                        onClick={() =>
+                          navigate(
+                            `/praktikum/${id}/sistem/${akun}/daftar-kode-billing-belum-dibayar/pdf/${item.id}`
+                          )
+                        }
+                      >
+                        {" "}
+                        Lihat PDF
+                      </button>
                       {/* <button className="bg-blue-100 text-blue-600 hover:bg-blue-200 hover:underline rounded px-3 py-1">
                         Lihat
                       </button> */}
-                      <AlertDialog>
+                      {/* <AlertDialog>
                         <AlertDialogTrigger>
                           <button className="bg-blue-100 text-blue-600 hover:bg-blue-200 hover:underline rounded px-3 py-1">
                             Lihat PDF
@@ -210,7 +223,7 @@ const DaftarKodeBilingBelumBayar = ({ data, sidebar }) => {
                             </AlertDialogCancel>
                           </AlertDialogFooter>
                         </AlertDialogContent>
-                      </AlertDialog>
+                      </AlertDialog> */}
                       <AlertDialog>
                         <AlertDialogTrigger>
                           <button className="bg-red-100 text-red-600 hover:bg-red-200 hover:underline rounded px-3 py-1">
