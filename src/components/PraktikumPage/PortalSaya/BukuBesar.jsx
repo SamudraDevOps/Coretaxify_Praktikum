@@ -12,7 +12,8 @@ export default function BukuBesar({ data }) {
       </header>
 
       {/* Main Content Area */}
-      <main className="container mx-auto">
+     <main className="container mx-auto">
+  <div className="flex justify-center">
         {/* Print Ledger Button */}
         {/* <div className="flex justify-end mb-4">
           <button className="flex items-center px-4 py-2 bg-blue-800 text-white rounded-md shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75 transition duration-300 ease-in-out">
@@ -22,11 +23,11 @@ export default function BukuBesar({ data }) {
         </div> */}
 
         {/* Total Section */}
-        <div className="bg-white p-6 shadow-md rounded-lg">
+        <div className="bg-white p-6 shadow-md rounded-lg w-auto">
           <h2 className="text-xl font-semibold text-gray-700 mb-4 text-center">
             Total
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+          <div className="flex items-start gap-6">
             {/* Debit Card */}
             <DashboardCard
               icon={<CreditCard className="w-6 h-6 text-gray-600" />} // Lucide CreditCard icon
@@ -59,6 +60,7 @@ export default function BukuBesar({ data }) {
               highlighted={true}
             />
           </div>
+            </div>
         </div>
       </main>
     </div>
@@ -81,6 +83,7 @@ const DashboardCard = ({ icon, title, value, highlighted = false }) => {
   };
   
   const formattedValue = formatCurrency(value);
+  
 
   return (
     <div

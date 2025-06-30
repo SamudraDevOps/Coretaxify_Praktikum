@@ -140,7 +140,7 @@ const PajakKeluaran = ({
         akun={{ id, akun }}
       />
 
-      <div className="flex-auto p-3 bg-white rounded-md h-full">
+      <div className="flex-auto p-3 bg-white rounded-md h-full min-w-0">
         <div className="flex justify-between items-center mb-4 pb-3 border-b">
           <div className="flex items-center">
             <IoDocumentTextOutline className="text-4xl text-blue-900" />
@@ -227,8 +227,8 @@ const PajakKeluaran = ({
           </div>
         </div>
 
-        <div className="w-[1180px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden mt-4">
-          <table className="table-auto border border-gray-300 w-full">
+         <div className="w-full overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden mt-4">
+          <table className="table-auto border border-gray-300 w-full min-w-max">
             <thead className="bg-gray-200">
               <tr>
                 <th className="px-6 py-2 border">No</th>
