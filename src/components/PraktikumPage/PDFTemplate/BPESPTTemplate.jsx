@@ -56,19 +56,19 @@ const BpeSptPdf = () => (
   <Document>
     <Page size="A4" style={styles.page}>
       {/* Header */}
-      <Text style={styles.header}>KEMENTERIAN KEUANGAN REPUBLIK INDONESIA</Text>
-      <Text style={styles.subHeader}>DIREKTORAT JENDERAL PAJAK</Text>
-      <Text style={styles.subHeader}>KANTOR WILAYAH DJP JAWA TIMUR III</Text>
+      <Text style={styles.header}>SAMUDERA EDUKASI </Text>
+      <Text style={styles.subHeader}>TEKNOLOGI</Text>
+      <Text style={styles.subHeader}>KANTOR PIRANHA</Text>
       <Text style={styles.subHeader}>
-        KANTOR PELAYANAN PAJAK PRATAMA MALANG SELATAN
+        JALAN PIRANHA
       </Text>
       <Text style={styles.contactInfo}>
         JALAN MERDEKA UTARA NO. 3, MALANG, 65119 • TELP (0341) 361121, 361971,
         365167 • FAX (0341) 364407 • www.pajak.go.id
       </Text>
       <Text style={styles.contactInfo}>
-        LAYANAN INFORMASI DAN PENGADUAN: KRING PAJAK (021)1500200 • SUREL:
-        pengaduan@pajak.go.id, informasi@pajak.go.id
+        {/* LAYANAN INFORMASI DAN PENGADUAN: KRING PAJAK (021)1500200 • SUREL:
+        pengaduan@pajak.go.id, informasi@pajak.go.id */}
       </Text>
 
       {/* Title */}
@@ -128,10 +128,10 @@ const BpeSptPdf = () => (
 
       {/* Disclaimer */}
       <Text style={styles.footer}>
-        Sesuai dengan ketentuan peraturan perundang-undangan yang berlaku,
+        {/* Sesuai dengan ketentuan peraturan perundang-undangan yang berlaku,
         dokumen ini diproses secara elektronik dan merupakan keputusan
         Direktorat Jenderal Pajak atau pejabat Direktorat Jenderal Pajak yang
-        berwenang sehingga tidak diperlukan tanda tangan.
+        berwenang sehingga tidak diperlukan tanda tangan. */}
       </Text>
 
       <Text style={styles.footer}>Diterima pada: 2025-05-08T07:19:01+0000</Text>

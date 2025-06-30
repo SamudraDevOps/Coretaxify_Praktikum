@@ -349,14 +349,14 @@ const FakturPajakKeluaranPdf = ({ data }) => (
       {/* Footer */}
       <View style={styles.footer}>
         <Text>
-          Faktur Pajak ini telah dilaporkan ke Direktorat Jenderal Pajak dan
+          {/* Faktur Pajak ini telah dilaporkan ke Direktorat Jenderal Pajak dan
           telah memperoleh persetujuan sesuai dengan ketentuan peraturan
-          perpajakan yang berlaku.
+          perpajakan yang berlaku. */}
         </Text>
         <Text style={{ marginTop: 4 }}>
-          PERINGATAN: PKP yang membuat Faktur Pajak yang tidak sesuai dengan
+          {/* PERINGATAN: PKP yang membuat Faktur Pajak yang tidak sesuai dengan
           keadaan yang sebenarnya dikenai sanksi sesuai Pasal 14 ayat (4) UU
-          KUP.
+          KUP. */}
         </Text>
         {/* <Text style={{ marginTop: 4 }}>
           Tanggal proses digital: 2025-04-23T16:40:35+0700 (Jakarta-ID)
