@@ -11,19 +11,19 @@ const SideBarEFakturOP = ({ nama_akun, npwp_akun, akun }) => {
   const efakturItems = [
     {
       label: "SPT Konsep",
-      link: `/praktikum/${akun.id}/sistem/${akun.akun}/surat-pemberitahuan-spt`,
+      link: `/praktikum/${akun?.id}/sistem/${akun?.akun}/surat-pemberitahuan-spt`,
     },
     {
       label: "SPT Menunggu Pembayaran",
-      link: `/praktikum/${akun.id}/sistem/${akun.akun}/surat-pemberitahuan-spt`,
+      link: `/praktikum/${akun?.id}/sistem/${akun?.akun}/surat-pemberitahuan-spt`,
     },
     {
       label: "SPT Menunggu Dilaporkan",
-      link: `/praktikum/${akun.id}/sistem/${akun.akun}/surat-pemberitahuan-spt`,
+      link: `/praktikum/${akun?.id}/sistem/${akun?.akun}/surat-pemberitahuan-spt`,
     },
     {
       label: "SPT Ditolak",
-      link: `/praktikum/${akun.id}/sistem/${akun.akun}/surat-pemberitahuan-spt`,
+      link: `/praktikum/${akun?.id}/sistem/${akun?.akun}/surat-pemberitahuan-spt`,
     },
   ];
 
@@ -65,7 +65,7 @@ const SideBarEFakturOP = ({ nama_akun, npwp_akun, akun }) => {
           {efakturItems.map((item, index) => {
             // const formattedItem = item.replace(/ /g, "-").toLowerCase();
             // const path = `/admin/praktikum/${userTypeId}/e-faktur/${formattedItem}`;
-            console.log(location.pathname, item.link);
+            // console.log(location.pathname, item.link);
             const isActive = location.pathname.includes(`/${item.link}`);
 
             return (

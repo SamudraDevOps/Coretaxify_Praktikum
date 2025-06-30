@@ -148,8 +148,6 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
     return value.replace(/[^0-9]/g, "");
   }
 
-
-
   const handleHargaChange = (e) => {
     const rawValue = e.target.value;
     const numericHarga = parseInt(rawValue.replace(/\D/g, ""), 10) || 0;
@@ -293,9 +291,6 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
       setPPnBM(((numericJumlah * numericPPnBM) / 100).toString());
     }
   };
-
-
-
 
   const handlePPnBMChange = (e) => {
     setIsCustomPPnBM(true); // Tandai bahwa user mengedit manual
@@ -2117,7 +2112,6 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                               onChange={handleTarifPPnBMChange}
                               placeholder="Masukkan persen"
                             />
-
                           </div>
                           <div className="space-y-2">
                             <label className="block text-sm font-medium">

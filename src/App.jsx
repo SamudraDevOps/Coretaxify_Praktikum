@@ -182,6 +182,7 @@ import BUPOTEditWrapper from "./components/PraktikumPage/Badan/BUPOT/BUPOTEditWr
 import BukuBesar from "./components/PraktikumPage/PortalSaya/BukuBesar";
 import MasterAkun from "./components/PraktikumPage/PortalSaya/MasterAkun";
 import FakturViewPDF from "./components/PraktikumPage/Badan/EFaktur/FakturViewPDF";
+import KodeBillingViewPDF from "./components/PraktikumPage/Badan/Pembayaran/KodeBillingViewPDF";
 
 const Main = () => {
   const [loading, setLoading] = useState(true);
@@ -981,6 +982,25 @@ const Main = () => {
           }
         />
         <Route
+          path="/praktikum/:id/sistem/:akun/buat-konsep-spt-pph/:idSpt"
+          // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/spt/:idSpt`}
+                intent={""}
+                OrangPribadi={CreateKonsepPasal}
+                Badan={CreateKonsepPasal}
+                query={""}
+              ></RoleBasedRenderer>
+            </>
+            // <>
+            //   <Header />
+            //   <KonsepSPT />
+            // </>
+          }
+        />
+        <Route
           path="/praktikum/:id/sistem/:akun/layanan-mandiri-kode-billing"
           // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
           element={
@@ -1017,6 +1037,20 @@ const Main = () => {
             //   <Header />
             //   <KonsepSPT />
             // </>
+          }
+        />
+        <Route
+          path="/praktikum/:id/sistem/:akun/daftar-kode-billing-belum-dibayar/pdf/:billing"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/pembayaran/:billing`}
+                intent={""}
+                OrangPribadi={KodeBillingViewPDF}
+                Badan={KodeBillingViewPDF}
+                query={""}
+              ></RoleBasedRenderer>
+            </>
           }
         />
         <Route
