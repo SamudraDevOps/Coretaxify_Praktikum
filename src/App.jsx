@@ -155,6 +155,8 @@ import SelfBilling from "./components/PraktikumPage/Badan/Pembayaran/SelfBilling
 import DaftarKodeBilingBelumBayar from "./components/PraktikumPage/Badan/Pembayaran/DaftarKodeBilingBelumBayar";
 import RiwayatBilling from "./components/PraktikumPage/Badan/Pembayaran/RiwayatBilling";
 import RiwayatPembatalanBilling from "./components/PraktikumPage/Badan/Pembayaran/RiwayatPembatalanBilling";
+import PembuatanKodeBillingAtasPajak from "./components/PraktikumPage/Badan/Pembayaran/PembuatanKodeBillingAtasPajak";
+import PermohonanPemindahBukuan from "./components/PraktikumPage/Badan/Pembayaran/PermohonanPemindahbukuan";
 // Route Badan
 
 import ProtectedRoutes from "./components/Dashboard/Auth/ProtectedRoutes";
@@ -1830,6 +1832,24 @@ const Main = () => {
               <>
                 <Header />
                 <Notifikasi />
+              </>
+            }
+          />
+          <Route
+            path="/admin/praktikum/2/kode-billing-atas-tagihan-pajak"
+            element={
+              <>
+                <Header />
+                <PembuatanKodeBillingAtasPajak />
+              </>
+            }
+          />
+          <Route
+            path="/admin/praktikum/2/permohonan-pemindahbukuan"
+            element={
+              <>
+                <Header />
+                <PermohonanPemindahBukuan />
               </>
             }
           />
