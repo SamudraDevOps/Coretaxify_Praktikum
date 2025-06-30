@@ -88,6 +88,7 @@ const BuatKonsepSPT = ({ sidebar }) => {
       const csrf = await getCsrf();
       console.log(queryData);
       const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
+
       return axios.post(
         `${RoutesApi.url}api/student/assignments/${id}/sistem/${accountId}/spt`,
         queryData,
@@ -140,7 +141,7 @@ const BuatKonsepSPT = ({ sidebar }) => {
     return months[monthName] || "01";
   };
   const formatPeriodDisplay = () => {
-    if (selectedType === "ppn" && selectedMonth && selectedYear) {
+    if (selectedMonth && selectedYear) {
       const monthNumber = getMonthNumber(selectedMonth);
       const date = new Date(`${selectedYear}-${monthNumber}-01`);
       return `${date.toLocaleString("id-ID", {
@@ -191,7 +192,7 @@ const BuatKonsepSPT = ({ sidebar }) => {
 
   const taxTypes = [
     { label: "PPn", value: "ppn" },
-    { label: "PPh Pasal 21/26", value: "pasal" },
+    { label: "PPh Pasal 21/26", value: "pph" },
     { label: "PPh Unifikasi", value: "unifikasi" },
     { label: "PPh Badan", value: "badan" },
   ];
@@ -240,7 +241,7 @@ const BuatKonsepSPT = ({ sidebar }) => {
 
   const getSelectedPeriod = () => {
     if (
-      ["ppn", "pasal", "unifikasi"].includes(selectedType) &&
+      ["ppn", "pph", "unifikasi"].includes(selectedType) &&
       selectedMonth &&
       selectedYear
     ) {
@@ -323,7 +324,7 @@ const BuatKonsepSPT = ({ sidebar }) => {
     switch (selectedType) {
       case "ppn":
         return renderMonthYearForm("Periode dan Tahun Pajak");
-      case "pasal":
+      case "pph":
         return renderMonthYearForm("Masa Pajak PPh Pasal 21/26");
       case "unifikasi":
         return renderMonthYearForm("Periode Unifikasi Pajak");
