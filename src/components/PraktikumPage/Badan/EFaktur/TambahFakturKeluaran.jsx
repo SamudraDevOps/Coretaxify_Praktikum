@@ -1099,7 +1099,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
             {showDokumenTransaksi ? <FaChevronUp /> : <FaChevronDown />}
           </div>
           {showDokumenTransaksi && (
-            <div className="border rounded-md p-4 mb-2 grid grid-cols-3 gap-4 w-[1200px]">
+<div className="border rounded-md p-4 mb-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
               <div className="space-y-2">
                 <label className="block text-sm font-medium">Uang Muka</label>
                 <input
@@ -1128,7 +1128,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                   type="text"
                   className="p-2 border rounded w-full bg-gray-100"
                   disabled
-                  placeholder="Ngelink"
+                  placeholder="Nomor Faktur"
                 />
               </div>
               <div className="space-y-2">
@@ -1678,7 +1678,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                   value={formData.alamat}
                   onChange={handleChange}
                   className="p-2 border rounded w-full"
-                  placeholder="Link Bang, tanya pm jan tanya saia"
+                  placeholder=""
                   disabled
                 />
               </div>
@@ -1840,7 +1840,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
             {showDetailTransaksi ? <FaChevronUp /> : <FaChevronDown />}
           </div>
           {showDetailTransaksi && (
-            <div className="border rounded-md p-4 mb-2 w-[1200px]">
+            <div className="border rounded-md p-4 mb-2 w-full">
               <div className="flex justify-between mb-4 border-b pb-3">
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
