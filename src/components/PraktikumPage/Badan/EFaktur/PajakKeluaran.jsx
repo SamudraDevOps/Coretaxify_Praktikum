@@ -169,7 +169,7 @@ const PajakKeluaran = ({
   console.log(item);
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex h-screen bg-gray-100 ">
       <SideBarEFaktur
         nama_akun={sidebar.nama_akun}
         npwp_akun={sidebar.npwp_akun}
@@ -231,7 +231,7 @@ const PajakKeluaran = ({
             {/* )} */}
           </div>
 
-          {item && (
+          { (
             <div className="flex items-center gap-3">
               <button
                 onClick={() => approveMultipleFaktur.mutate()}
