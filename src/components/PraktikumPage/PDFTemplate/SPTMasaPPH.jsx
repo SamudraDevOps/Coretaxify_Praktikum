@@ -64,8 +64,8 @@ const styles = StyleSheet.create({
 const SptMasaPph21Pdf = () => (
   <Document>
     <Page size="A4" style={styles.page}>
-      <Text style={styles.header}>KEMENTERIAN KEUANGAN REPUBLIK INDONESIA</Text>
-      <Text style={styles.subHeader}>DIREKTORAT JENDERAL PAJAK</Text>
+      <Text style={styles.header}>SAMUDERA EDUKASI</Text>
+      <Text style={styles.subHeader}>TEKNOLOGI</Text>
       <Text style={styles.subHeader}>
         SURAT PEMBERITAHUAN (SPT) MASA{"\n"}
         PAJAK PENGHASILAN (PPh) PASAL 21 DAN/ATAU PASAL 26

@@ -21,7 +21,7 @@ import Swal from "sweetalert2";
 import { getCsrf } from "@/service/getCsrf";
 import { useNavigateWithParams } from "@/hooks/useNavigateWithParams";
 
-const BuatKonsepSPT = () => {
+const BuatKonsepSPT = ({ sidebar }) => {
   const { id, akun } = useParams();
   const [cookies] = useCookies(["token"]);
 
@@ -88,6 +88,7 @@ const BuatKonsepSPT = () => {
       const csrf = await getCsrf();
       console.log(queryData);
       const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
+
       return axios.post(
         `${RoutesApi.url}api/student/assignments/${id}/sistem/${accountId}/spt`,
         queryData,
@@ -140,7 +141,7 @@ const BuatKonsepSPT = () => {
     return months[monthName] || "01";
   };
   const formatPeriodDisplay = () => {
-    if (selectedType === "ppn" && selectedMonth && selectedYear) {
+    if (selectedMonth && selectedYear) {
       const monthNumber = getMonthNumber(selectedMonth);
       const date = new Date(`${selectedYear}-${monthNumber}-01`);
       return `${date.toLocaleString("id-ID", {
@@ -191,7 +192,7 @@ const BuatKonsepSPT = () => {
 
   const taxTypes = [
     { label: "PPn", value: "ppn" },
-    { label: "PPh Pasal 21/26", value: "pasal" },
+    { label: "PPh Pasal 21/26", value: "pph" },
     { label: "PPh Unifikasi", value: "unifikasi" },
     { label: "PPh Badan", value: "badan" },
   ];
@@ -240,7 +241,7 @@ const BuatKonsepSPT = () => {
 
   const getSelectedPeriod = () => {
     if (
-      ["ppn", "pasal", "unifikasi"].includes(selectedType) &&
+      ["ppn", "pph", "unifikasi"].includes(selectedType) &&
       selectedMonth &&
       selectedYear
     ) {
@@ -323,7 +324,7 @@ const BuatKonsepSPT = () => {
     switch (selectedType) {
       case "ppn":
         return renderMonthYearForm("Periode dan Tahun Pajak");
-      case "pasal":
+      case "pph":
         return renderMonthYearForm("Masa Pajak PPh Pasal 21/26");
       case "unifikasi":
         return renderMonthYearForm("Periode Unifikasi Pajak");
@@ -378,7 +379,11 @@ const BuatKonsepSPT = () => {
 
   return (
     <div className="flex bg-white h-screen">
-      <SideBarSPT />
+      <SideBarSPT
+        npwp_akun={sidebar.npwp_akun}
+        nama_akun={sidebar.nama_akun}
+        akun={{ id, akun }}
+      />
       <div className="flex-1 p-3 bg-white rounded-md h-full">
         <Card className="w-full bg-gray-100 shadow-sm rounded-none mb-6">
           <CardContent className="flex items-center gap-2 py-4 px-6">

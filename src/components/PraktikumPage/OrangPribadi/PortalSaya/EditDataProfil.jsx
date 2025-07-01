@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import {
   FaCalendarAlt,
@@ -491,7 +492,7 @@ const EditDataProfil = ({ data, sidebar }) => {
     mutationFn: async () => {
       const csrf = await getCsrf();
       const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
-      alert(accountId);
+      // alert(accountId);
       return axios.put(
         `${RoutesApi.url}api/student/assignments/${id}/sistem/${accountId}/informasi-umum/${akun}`,
         formData,
@@ -834,13 +835,12 @@ const EditDataProfil = ({ data, sidebar }) => {
   };
 
   return (
-    <div className="flex h-screen bg-gray-100">
-      <SidebarProfilSaya
+<div className="flex items-start bg-gray-100">      <SidebarProfilSaya
         nama_akun={sidebar.nama_akun}
         npwp_akun={sidebar.npwp_akun}
         akun={{ id, akun }}
       />
-      <div className="flex-grow p-6 bg-white  h-full">
+      <div className="w-full flex-grow p-2 pt-5 bg-white h-full">
         <h2 className="text-2xl font-semibold text-gray-800 mb-4">
           Pembaruan Data Wajib Pajak
         </h2>
@@ -1550,7 +1550,7 @@ const EditDataProfil = ({ data, sidebar }) => {
                 </AlertDialogContent>
               </AlertDialog>
             </div>
-            <div className=" w-[1050px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden ">
+            <div className=" w-full overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden ">
               <table className="table-auto border border-gray-300 overflow-hidden">
                 <thead>
                   <tr>
@@ -1754,7 +1754,7 @@ const EditDataProfil = ({ data, sidebar }) => {
               </AlertDialog>
             </div>
 
-            <div className="w-[1050px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden">
+            <div className="w-full overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden">
               <table className="table-auto border border-gray-300 w-full">
                 <thead className="bg-gray-200">
                   <tr>
@@ -1786,9 +1786,9 @@ const EditDataProfil = ({ data, sidebar }) => {
                             <AlertDialog>
                               <AlertDialogTrigger
                                 onClick={() => setContactFormData(contact)}
-                                className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"
+                                className="bg-blue-500 hover:bg-blue-600 text-white py-1 px-4 rounded-md"
                               >
-                                Ubah Kontak
+                                edit
                               </AlertDialogTrigger>
                               <AlertDialogContent className="bg-white !min-w-[1000px] rounded-lg shadow-lg ">
                                 <AlertDialogHeader>
@@ -2025,7 +2025,7 @@ const EditDataProfil = ({ data, sidebar }) => {
                 + Tambah
               </button>
             </div>
-            <div className=" w-[1050px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden ">
+            <div className=" w-full overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden ">
               <table className="table-auto border border-gray-300 overflow-hidden">
                 <thead className="bg-gray-200 w-[100px]">
                   <tr>
@@ -2402,7 +2402,7 @@ const EditDataProfil = ({ data, sidebar }) => {
                 </AlertDialogContent>
               </AlertDialog>
             </div>
-            <div className=" w-[1050px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden ">
+            <div className=" w-full overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden ">
               <table className="table-auto border border-gray-300 overflow-hidden">
                 <thead>
                   <tr>
@@ -2706,7 +2706,7 @@ const EditDataProfil = ({ data, sidebar }) => {
                 </AlertDialogContent>
               </AlertDialog>
             </div>
-            <div className=" w-[1050px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden ">
+            <div className=" w-full overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden ">
               <table className="table-auto border border-gray-300 overflow-hidden">
                 <thead>
                   <tr>
@@ -3327,7 +3327,7 @@ const EditDataProfil = ({ data, sidebar }) => {
                 </AlertDialogContent>
               </AlertDialog>
             </div>
-            <div className=" w-[1050px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden ">
+            <div className=" w-full overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden ">
               <table className="table-auto border border-gray-300 overflow-hidden">
                 <thead>
                   <tr>
