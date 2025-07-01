@@ -169,13 +169,13 @@ const PajakKeluaran = ({
   console.log(item);
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex h-screen bg-gray-100 ">
       <SideBarEFaktur
         nama_akun={sidebar.nama_akun}
         npwp_akun={sidebar.npwp_akun}
         akun={{ id, akun }}
       />
-      <div className="flex-auto p-3 bg-white rounded-md h-full">
+      <div className="flex-auto p-3 bg-white rounded-md h-full min-w-0">
         <div className="flex justify-between items-center mb-4 pb-3 border-b">
           <div className="flex items-center">
             <IoDocumentTextOutline className="text-4xl text-blue-900" />
@@ -231,7 +231,7 @@ const PajakKeluaran = ({
             {/* )} */}
           </div>
 
-          {item && (
+          { (
             <div className="flex items-center gap-3">
               <button
                 onClick={() => approveMultipleFaktur.mutate()}
@@ -245,39 +245,52 @@ const PajakKeluaran = ({
               </button>
             </div>
           )}
+          {/* {item && ( */}
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => approveMultipleFaktur.mutate()}
+              disabled={selectedFakturIds.length === 0}
+              className="flex items-center bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded text-sm"
+            >
+              Upload Faktur
+            </button>
+            <button className="flex items-center bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-2 rounded text-sm">
+              Hapus Dokumen
+            </button>
+          </div>
+          {/* )} */}
         </div>
 
-        <div className="w-[1200px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden mt-4">
-          <table className="table-auto border border-gray-300 w-full">
-            <thead className="bg-gray-200">
-              <tr>
-                <th className="px-6 py-2 border">No</th>
-                <th className="px-8 py-2 border">Checklist</th>
-                <th className="px-4 py-2 border">Aksi</th>
-                <th className="px-4 py-2 border">NPWP Pembeli</th>
-                <th className="px-4 py-2 border">Nama Pembeli</th>
-                <th className="px-4 py-2 border">Kode Transaksi</th>
-                <th className="px-4 py-2 border">Nomor Faktur Pajak</th>
-                <th className="px-4 py-2 border">Tanggal Faktur Pajak</th>
-                <th className="px-4 py-2 border">Masa Pajak</th>
-                <th className="px-4 py-2 border">Tahun</th>
-                <th className="px-4 py-2 border">Status</th>
-                <th className="px-4 py-2 border">ESignStatus</th>
-                <th className="px-4 py-2 border">
-                  Harga Jual / Penggantian / DPP
-                </th>
-                <th className="px-4 py-2 border">DPP Nilai Lain / DPP</th>
-                <th className="px-4 py-2 border">PPN</th>
-                <th className="px-4 py-2 border">PPNBM</th>
-                <th className="px-4 py-2 border">PPNBM</th>
-                <th className="px-4 py-2 border">Penandatangan</th>
-                <th className="px-4 py-2 border">Referensi</th>
-                <th className="px-4 py-2 border">Dilaporkan Oleh Penjual</th>
-                <th className="px-4 py-2 border">
-                  Dilaporkan Oleh Pemungut PPN
-                </th>
-              </tr>
-            </thead>
+        <div className="w-full overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden mt-4">
+          <table className="table-auto border border-gray-300 w-full min-w-max">            <thead className="bg-gray-200">
+            <tr>
+              <th className="px-6 py-2 border">No</th>
+              <th className="px-8 py-2 border">Checklist</th>
+              <th className="px-4 py-2 border">Aksi</th>
+              <th className="px-4 py-2 border">NPWP Pembeli</th>
+              <th className="px-4 py-2 border">Nama Pembeli</th>
+              <th className="px-4 py-2 border">Kode Transaksi</th>
+              <th className="px-4 py-2 border">Nomor Faktur Pajak</th>
+              <th className="px-4 py-2 border">Tanggal Faktur Pajak</th>
+              <th className="px-4 py-2 border">Masa Pajak</th>
+              <th className="px-4 py-2 border">Tahun</th>
+              <th className="px-4 py-2 border">Status</th>
+              <th className="px-4 py-2 border">ESignStatus</th>
+              <th className="px-4 py-2 border">
+                Harga Jual / Penggantian / DPP
+              </th>
+              <th className="px-4 py-2 border">DPP Nilai Lain / DPP</th>
+              <th className="px-4 py-2 border">PPN</th>
+              <th className="px-4 py-2 border">PPNBM</th>
+              <th className="px-4 py-2 border">PPNBM</th>
+              <th className="px-4 py-2 border">Penandatangan</th>
+              <th className="px-4 py-2 border">Referensi</th>
+              <th className="px-4 py-2 border">Dilaporkan Oleh Penjual</th>
+              <th className="px-4 py-2 border">
+                Dilaporkan Oleh Pemungut PPN
+              </th>
+            </tr>
+          </thead>
             <tbody className="text-gray-600">
               {data && data.length > 0 ? (
                 data.map((item, index) => (
@@ -389,22 +402,20 @@ const PajakKeluaran = ({
                 <button
                   onClick={() => onPageChange(firstPage)}
                   disabled={!prevPage}
-                  className={`px-3 py-1 rounded ${
-                    !prevPage
-                      ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                      : "bg-blue-500 text-white hover:bg-blue-600"
-                  }`}
+                  className={`px-3 py-1 rounded ${!prevPage
+                    ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                    : "bg-blue-500 text-white hover:bg-blue-600"
+                    }`}
                 >
                   First
                 </button>
                 <button
                   onClick={() => onPageChange(prevPage || 1)}
                   disabled={!prevPage}
-                  className={`px-3 py-1 rounded ${
-                    !prevPage
-                      ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                      : "bg-blue-500 text-white hover:bg-blue-600"
-                  }`}
+                  className={`px-3 py-1 rounded ${!prevPage
+                    ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                    : "bg-blue-500 text-white hover:bg-blue-600"
+                    }`}
                 >
                   <FaChevronLeft className="h-4 w-4" />
                 </button>
@@ -438,11 +449,10 @@ const PajakKeluaran = ({
                           )}
                           <button
                             onClick={() => onPageChange(pageNum)}
-                            className={`px-3 py-1 rounded ${
-                              currentPage === pageNum
-                                ? "bg-blue-600 text-white"
-                                : "bg-gray-200 hover:bg-gray-300"
-                            }`}
+                            className={`px-3 py-1 rounded ${currentPage === pageNum
+                              ? "bg-blue-600 text-white"
+                              : "bg-gray-200 hover:bg-gray-300"
+                              }`}
                           >
                             {pageNum}
                           </button>
@@ -459,22 +469,20 @@ const PajakKeluaran = ({
                 <button
                   onClick={() => onPageChange(nextPage || lastPage)}
                   disabled={!nextPage}
-                  className={`px-3 py-1 rounded ${
-                    !nextPage
-                      ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                      : "bg-blue-500 text-white hover:bg-blue-600"
-                  }`}
+                  className={`px-3 py-1 rounded ${!nextPage
+                    ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                    : "bg-blue-500 text-white hover:bg-blue-600"
+                    }`}
                 >
                   <FaChevronRight className="h-4 w-4" />
                 </button>
                 <button
                   onClick={() => onPageChange(lastPage)}
                   disabled={!nextPage}
-                  className={`px-3 py-1 rounded ${
-                    !nextPage
-                      ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                      : "bg-blue-500 text-white hover:bg-blue-600"
-                  }`}
+                  className={`px-3 py-1 rounded ${!nextPage
+                    ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                    : "bg-blue-500 text-white hover:bg-blue-600"
+                    }`}
                 >
                   Last
                 </button>

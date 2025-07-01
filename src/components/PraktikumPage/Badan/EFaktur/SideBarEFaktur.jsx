@@ -11,19 +11,19 @@ const SideBarEFakturOP = ({ nama_akun, npwp_akun, akun }) => {
   const efakturItems = [
     {
       label: "Pajak Keluaran",
-      link: `/praktikum/${akun.id}/sistem/${akun.akun}/e-faktur/pajak-keluaran`,
+      link: `/praktikum/${akun?.id}/sistem/${akun?.akun}/e-faktur/pajak-keluaran`,
     },
     {
       label: "Pajak Masukan",
-      link: `/praktikum/${akun.id}/sistem/${akun.akun}/e-faktur/pajak-masukan`,
+      link: `/praktikum/${akun?.id}/sistem/${akun?.akun}/e-faktur/pajak-masukan`,
     },
     {
       label: "Retur Pajak Keluaran",
-      link: `/praktikum/${akun.id}/sistem/${akun.akun}/e-faktur/retur-pajak-keluaran`,
+      link: `/praktikum/${akun?.id}/sistem/${akun?.akun}/e-faktur/retur-pajak-keluaran`,
     },
     {
       label: "Retur Pajak Masukan",
-      link: `/praktikum/${akun.id}/sistem/${akun.akun}/e-faktur/retur-pajak-masukan`,
+      link: `/praktikum/${akun?.id}/sistem/${akun?.akun}/e-faktur/retur-pajak-masukan`,
     },
   ];
 
@@ -42,19 +42,18 @@ const SideBarEFakturOP = ({ nama_akun, npwp_akun, akun }) => {
   const navigate = useNavigateWithParams();
 
   return (
-    <aside className="w-1/6 text-blue-900 px-5 py-5 h-screen bg-white">
-      <div className="mb-5 bg-blue-900 text-white p-2 text-center">
+    <aside className="w-64 flex-shrink-0 text-blue-900 px-5 py-5 h-screen bg-white">
+      <div className="mb-5 bg-blue-900 text-white p-2 text-center rounded-md">
         <h2 className="text-lg font-bold mb-5">{npwp_akun}</h2>
         <h3 className="text-md font-semibold mb-5">{nama_akun}</h3>
       </div>
       <nav>
         <ul className="space-y-1">
           <li
-            className={`p-2 rounded-md cursor-pointer ${
-              isDashboard
+            className={`p-2 rounded-md cursor-pointer ${isDashboard
                 ? "bg-blue-700 text-white"
                 : "hover:bg-blue-700 hover:text-white"
-            }`}
+              }`}
           >
             <Link to={dashboardPath} className="block w-full p-2">
               <strong>Dashboard</strong>
@@ -71,11 +70,10 @@ const SideBarEFakturOP = ({ nama_akun, npwp_akun, akun }) => {
             return (
               <li
                 key={index}
-                className={`p-2 rounded-md cursor-pointer ${
-                  isActive
+                className={`p-2 rounded-md cursor-pointer ${isActive
                     ? "bg-blue-700 text-white"
                     : "hover:bg-blue-700 hover:text-white"
-                }`}
+                  }`}
                 onClick={() => navigate(item.link)}
               >
                 {item.label}
@@ -95,11 +93,10 @@ const SideBarEFakturOP = ({ nama_akun, npwp_akun, akun }) => {
             return (
               <li
                 key={index}
-                className={`p-2 rounded-md cursor-pointer ${
-                  isActive
+                className={`p-2 rounded-md cursor-pointer ${isActive
                     ? "bg-blue-700 text-white"
                     : "hover:bg-blue-700 hover:text-white"
-                }`}
+                  }`}
               >
                 <Link to={item.link} className="block w-full p-2">
                   {item.label}

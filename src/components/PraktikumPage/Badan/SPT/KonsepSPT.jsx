@@ -143,11 +143,22 @@ const KonsepSPT = ({
                       <div className="flex gap-2 justify-center">
                         <button
                           className="bg-green-500 hover:bg-green-600 text-white px-2 py-1 rounded text-xs"
-                          onClick={() =>
-                            navigate(
-                              `/praktikum/${id}/sistem/${akun}/buat-konsep-spt/${item.id}`
-                            )
-                          }
+                          onClick={() => {
+                            if (item.jenis_pajak === "PPN") {
+                              navigate(
+                                `/praktikum/${id}/sistem/${akun}/buat-konsep-spt/${item.id}`
+                              );
+                            } else if (item.jenis_pajak === "PPH") {
+                              navigate(
+                                `/praktikum/${id}/sistem/${akun}/buat-konsep-spt-pph/${item.id}`
+                              );
+                            } else {
+                              // Default fallback for other tax types
+                              navigate(
+                                `/praktikum/${id}/sistem/${akun}/buat-konsep-spt/${item.id}`
+                              );
+                            }
+                          }}
                         >
                           Edit
                         </button>

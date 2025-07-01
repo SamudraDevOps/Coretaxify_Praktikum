@@ -155,6 +155,8 @@ import SelfBilling from "./components/PraktikumPage/Badan/Pembayaran/SelfBilling
 import DaftarKodeBilingBelumBayar from "./components/PraktikumPage/Badan/Pembayaran/DaftarKodeBilingBelumBayar";
 import RiwayatBilling from "./components/PraktikumPage/Badan/Pembayaran/RiwayatBilling";
 import RiwayatPembatalanBilling from "./components/PraktikumPage/Badan/Pembayaran/RiwayatPembatalanBilling";
+import PembuatanKodeBillingAtasPajak from "./components/PraktikumPage/Badan/Pembayaran/PembuatanKodeBillingAtasPajak";
+import PermohonanPemindahBukuan from "./components/PraktikumPage/Badan/Pembayaran/PermohonanPemindahbukuan";
 // Route Badan
 
 import ProtectedRoutes from "./components/Dashboard/Auth/ProtectedRoutes";
@@ -182,6 +184,7 @@ import BUPOTEditWrapper from "./components/PraktikumPage/Badan/BUPOT/BUPOTEditWr
 import BukuBesar from "./components/PraktikumPage/PortalSaya/BukuBesar";
 import MasterAkun from "./components/PraktikumPage/PortalSaya/MasterAkun";
 import FakturViewPDF from "./components/PraktikumPage/Badan/EFaktur/FakturViewPDF";
+import KodeBillingViewPDF from "./components/PraktikumPage/Badan/Pembayaran/KodeBillingViewPDF";
 
 const Main = () => {
   const [loading, setLoading] = useState(true);
@@ -981,6 +984,25 @@ const Main = () => {
           }
         />
         <Route
+          path="/praktikum/:id/sistem/:akun/buat-konsep-spt-pph/:idSpt"
+          // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/spt/:idSpt`}
+                intent={""}
+                OrangPribadi={CreateKonsepPasal}
+                Badan={CreateKonsepPasal}
+                query={""}
+              ></RoleBasedRenderer>
+            </>
+            // <>
+            //   <Header />
+            //   <KonsepSPT />
+            // </>
+          }
+        />
+        <Route
           path="/praktikum/:id/sistem/:akun/layanan-mandiri-kode-billing"
           // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
           element={
@@ -1017,6 +1039,20 @@ const Main = () => {
             //   <Header />
             //   <KonsepSPT />
             // </>
+          }
+        />
+        <Route
+          path="/praktikum/:id/sistem/:akun/daftar-kode-billing-belum-dibayar/pdf/:billing"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/pembayaran/:billing`}
+                intent={""}
+                OrangPribadi={KodeBillingViewPDF}
+                Badan={KodeBillingViewPDF}
+                query={""}
+              ></RoleBasedRenderer>
+            </>
           }
         />
         <Route
@@ -1796,6 +1832,24 @@ const Main = () => {
               <>
                 <Header />
                 <Notifikasi />
+              </>
+            }
+          />
+          <Route
+            path="/admin/praktikum/2/kode-billing-atas-tagihan-pajak"
+            element={
+              <>
+                <Header />
+                <PembuatanKodeBillingAtasPajak />
+              </>
+            }
+          />
+          <Route
+            path="/admin/praktikum/2/permohonan-pemindahbukuan"
+            element={
+              <>
+                <Header />
+                <PermohonanPemindahBukuan />
               </>
             }
           />
