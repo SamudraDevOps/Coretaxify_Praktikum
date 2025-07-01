@@ -179,10 +179,11 @@ const Header = () => {
     } else {
       // Path relatif (misalnya: "e-faktur"), gabungkan manual
       const newPath = `/praktikum/${id}/sistem/${akun}/${path}`;
-      navigate(viewAsCompanyId ? `${newPath}?viewAs=${viewAsCompanyId}` : newPath);
+      navigate(
+        viewAsCompanyId ? `${newPath}?viewAs=${viewAsCompanyId}` : newPath
+      );
     }
   };
-  
 
   // Get the currently active company name
   const getActiveCompanyName = () => {
@@ -636,12 +637,12 @@ const Header = () => {
               {
                 label: "Buku Besar",
                 submenu: [],
-                links: `/buku-besar`,
+                links: `/praktikum/${id}/sistem/${akun}/buku-besar`,
               },
               {
                 label: "Master Akun",
                 submenu: [],
-                links: `/master-akun`,
+                links: `/praktikum/${id}/sistem/${akun}/master-akun`,
               },
             ].map((item, index) => (
               <li key={index} className="relative">
@@ -675,7 +676,10 @@ const Header = () => {
                         {typeof sub === "string" ? (
                           <button onClick={() => navigateTo(sub)}>{sub}</button>
                         ) : sub.links ? (
-                          <button onClick={() => navigateTo(sub.links)} className="w-full text-left">
+                          <button
+                            onClick={() => navigateTo(sub.links)}
+                            className="w-full text-left"
+                          >
                             {sub.label}
                           </button>
                         ) : sub.submenu ? (
@@ -684,7 +688,8 @@ const Header = () => {
                               className="flex items-center w-full"
                               onClick={() => toggleSubDropdown(sub.label)}
                             >
-                              {sub.label} <ChevronRight className="w-4 h-4 ml-2" />
+                              {sub.label}{" "}
+                              <ChevronRight className="w-4 h-4 ml-2" />
                             </button>
                             {subDropdownOpen === sub.label && (
                               <ul className="absolute left-full mx-1 top-0 mt-0 min-w-max bg-blue-900 text-white shadow-md rounded-md text-left z-50">
@@ -693,7 +698,9 @@ const Header = () => {
                                     key={nestedIndex}
                                     className="px-4 py-2 hover:bg-yellow-500 cursor-pointer whitespace-nowrap"
                                   >
-                                    <button onClick={() => navigateTo(nestedSub)}>
+                                    <button
+                                      onClick={() => navigateTo(nestedSub)}
+                                    >
                                       {nestedSub}
                                     </button>
                                   </li>
@@ -703,7 +710,6 @@ const Header = () => {
                           </>
                         ) : null}
                       </li>
-                    
                     ))}
                   </ul>
                 )}
