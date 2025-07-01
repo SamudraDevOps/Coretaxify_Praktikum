@@ -345,7 +345,7 @@ const Header = () => {
   return (
     <div className="w-full">
       <header className="bg-slate-100 text-blue-900 flex justify-between items-center px-4 md:px-8 lg:px-12 xl:px-16 py-3 shadow-md w-full overflow-x-auto">
-        <div className="flex items-center space-x-4 -mx-14">
+        <div className="flex items-center space-x-4 -mx-5">
           <img src={Logo} alt="DJP Logo" className="h-10" />
           <h1 className="text-lg font-bold">CORETAXIFY</h1>
         </div>
