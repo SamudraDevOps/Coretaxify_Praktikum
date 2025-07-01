@@ -91,14 +91,11 @@ const AdminPscCoretaxify = () => {
   const { isLoading: isLoadingTasks, data: dataTasks } = useQuery({
     queryKey: ["tasks"],
     queryFn: async () => {
-      const { data } = await axios.get(
-        `${RoutesApi.url}api/psc/tasks`,
-        {
-          headers: {
-            Authorization: `Bearer ${cookies.token}`,
-          },
-        }
-      );
+      const { data } = await axios.get(`${RoutesApi.url}api/psc/tasks`, {
+        headers: {
+          Authorization: `Bearer ${cookies.token}`,
+        },
+      });
       return data;
     },
     staleTime: 10 * 60 * 1000, // 10 minutes
