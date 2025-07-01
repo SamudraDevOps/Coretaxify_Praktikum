@@ -142,8 +142,8 @@ const BillingCodePdf = ({ data }) => {
     <Document>
       <Page size="A4" style={styles.page}>
         {/* Header */}
-        <Text style={styles.header}>KEMENTERIAN KEUANGAN RI</Text>
-        <Text style={styles.subHeader}>DIREKTORAT JENDERAL PAJAK</Text>
+        <Text style={styles.header}>SAMUDERA EDUKASI</Text>
+        <Text style={styles.subHeader}>TEKNOLOGI</Text>
 
         {/* Billing Code */}
         <View style={styles.rightAlignedSection}>
@@ -274,7 +274,7 @@ const BillingCodePdf = ({ data }) => {
 
         {/* Footer */}
         <Text style={styles.footer}>
-          Dokumen ini diproses secara elektronik oleh Direktorat Jenderal Pajak.
+          Dokumen ini diproses secara elektronik oleh Samudera Edukasi.
         </Text>
       </Page>
     </Document>
