@@ -62,7 +62,7 @@ const CreateKonsepSPT = ({ data }) => {
   const { id, akun, idSpt } = useParams();
   const [activeTab, setActiveTab] = useState("induk");
   const [activeTabContent, setActiveTabContent] = useState("A1");
-  const [showHeaderInduk, setShowHeaderInduk] = useState(false);
+  const [showHeaderInduk, setShowHeaderInduk] = useState(true);
   const [showPenyerahanBarangJasa, setShowPenyerahanBarangJasa] =
     useState(false);
   const [showPerolehanBarangJasa, setShowPerolehanBarangJasa] = useState(false);

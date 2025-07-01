@@ -683,13 +683,13 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
     );
   }
   return (
-    <div className="flex h-screen bg-gray-100">
-      <SidebarProfilSayaBadan
+<div className="flex items-start bg-gray-100">  
+        <SidebarProfilSayaBadan
         nama_akun={sidebar.nama_akun}
         npwp_akun={sidebar.npwp_akun}
         akun={{ id, akun }}
       />
-      <div className="flex-grow p-6 bg-white  h-full">
+      <div className="w-full flex-grow p-2 pt-5 bg-white h-full">
         <h2 className="text-2xl font-semibold text-gray-800 mb-4">
           Pembaruan Data Wajib Pajak
         </h2>
@@ -1350,7 +1350,7 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
               </AlertDialog>
             </div>
 
-            <div className="w-[1050px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden">
+            <div className="w-full overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden">
               <table className="table-auto border border-gray-300 w-full">
                 <thead className="bg-gray-200">
                   <tr>
@@ -1621,7 +1621,7 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                 + Tambah
               </button>
             </div>
-            <div className=" w-[1050px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden ">
+            <div className=" w-full overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden ">
               <table className="table-auto border border-gray-300 overflow-hidden">
                 <thead className="bg-gray-200 w-[100px]">
                   <tr>
@@ -2233,7 +2233,7 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                 </AlertDialogContent>
               </AlertDialog>
             </div>
-            <div className=" w-[1050px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden ">
+            <div className=" w-full overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden ">
               <table className="table-auto border border-gray-300 overflow-hidden">
                 <thead>
                   <tr>
@@ -2537,7 +2537,7 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                 </AlertDialogContent>
               </AlertDialog>
             </div>
-            <div className=" w-[1050px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden ">
+            <div className=" w-full overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden ">
               <table className="table-auto border border-gray-300 overflow-hidden">
                 <thead>
                   <tr>
@@ -2842,11 +2842,11 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                     <AlertDialogAction className="bg-blue-900 text-white px-4 py-2 rounded-md hover:bg-blue-950">
                       Simpan
                     </AlertDialogAction>
-                  </AlertDialogFooter>
+                </AlertDialogFooter>
                 </AlertDialogContent>
               </AlertDialog>
             </div>
-            <div className=" w-[1050px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden ">
+            <div className=" w-full overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden ">
               <table className="table-auto border border-gray-300 overflow-hidden">
                 <thead>
                   <tr>

@@ -64,7 +64,7 @@ const PajakMasukanOP = ({
         nama_akun={sidebar.nama_akun}
         akun={{ id, akun }}
       />
-      <div className="flex-1 p-3 bg-white rounded-md h-full">
+      <div className="flex-auto p-3 bg-white rounded-md h-full min-w-0">
         <div className="flex justify-between items-center mb-4 pb-3 border-b">
           <div className="flex items-center">
             <IoDocumentTextOutline className="text-4xl text-blue-900" />
