@@ -13,6 +13,8 @@ import {
 import { AlertDialogTrigger } from "@radix-ui/react-alert-dialog";
 import { PDFViewer } from "@react-pdf/renderer";
 import BillingCodePdf from "../../PDFTemplate/BillingCodeTemplate";
+import { useNavigateWithParams } from "@/hooks/useNavigateWithParams";
+import { useParams } from "react-router";
 
 const generateNTPN = () => {
   // 16 digit random number
@@ -38,6 +40,8 @@ const RiwayatBilling = ({ data, sidebar }) => {
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
+  const navigate = useNavigateWithParams();
+  const { id, akun } = useParams();
 
   return (
     <div className="m-4 rounded-md">
@@ -148,7 +152,17 @@ const RiwayatBilling = ({ data, sidebar }) => {
                         </AlertDialogFooter>
                       </AlertDialogContent>
                     </AlertDialog>
-                    <AlertDialog>
+                    <button
+                      onClick={() =>
+                        navigate(
+                          `/praktikum/${id}/sistem/${akun}/daftar-kode-billing-belum-dibayar/pdf/${item.id}`
+                        )
+                      }
+                      className="bg-blue-100 text-blue-600 hover:bg-blue-200 hover:underline rounded px-3 py-1"
+                    >
+                      Lihat PDF
+                    </button>
+                    {/* <AlertDialog>
                       <AlertDialogTrigger>
                         <button className="bg-blue-100 text-blue-600 hover:bg-blue-200 hover:underline rounded px-3 py-1">
                           Lihat PDF
@@ -186,7 +200,7 @@ const RiwayatBilling = ({ data, sidebar }) => {
                           </AlertDialogCancel>
                         </AlertDialogFooter>
                       </AlertDialogContent>
-                    </AlertDialog>
+                    </AlertDialog> */}
                     {item.is_paid === 0 && (
                       <button className="bg-red-100 text-red-600 hover:bg-red-200 hover:underline rounded px-3 py-1">
                         Bayar
