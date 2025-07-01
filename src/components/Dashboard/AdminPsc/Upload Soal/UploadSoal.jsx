@@ -26,18 +26,19 @@ export default function UploadSoal() {
   // Form data state for creating/editing soal
   const [formData, setFormData] = useState({
     name: "",
-    import_file: null
+    import_file: null,
   });
 
   // Fetch tasks data
   const { isLoading, isError, data, error, refetch } = useQuery({
     queryKey: ["soal_data", url],
+
     queryFn: async () => {
       const { data } = await axios.get(url, {
         headers: {
           Authorization: `Bearer ${cookies.token}`,
           Accept: "application/json",
-        }
+        },
       });
       return data;
     },
@@ -131,64 +132,60 @@ export default function UploadSoal() {
 
   // Download file mutation
   // Updated download mutation with proper filename extraction
-// Updated download mutation with proper filename extraction
-const downloadMutation = useMutation({
-  mutationFn: async (id) => {
-    try {
-      const response = await axios.get(
-        `${RoutesApi.psc.tasks.url}/${id}`,
-        {
+  // Updated download mutation with proper filename extraction
+  const downloadMutation = useMutation({
+    mutationFn: async (id) => {
+      try {
+        const response = await axios.get(`${RoutesApi.psc.tasks.url}/${id}`, {
           headers: {
             Authorization: `Bearer ${cookies.token}`,
             Accept: "application/octet-stream",
           },
           params: {
-            intent: IntentEnum.API_USER_DOWNLOAD_SOAL
+            intent: IntentEnum.API_USER_DOWNLOAD_SOAL,
           },
-          responseType: 'blob'
-        }
-      );
-      
-      // Create a blob URL
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement('a');
-      link.href = url;
-      
-      // Extract filename from Content-Disposition header
-      const contentDisposition = response.headers['content-disposition'];
-      console.log(response.headers);
-      let filename = 'soal.xlsx'; // Default fallback
-      
-      if (contentDisposition) {
-        // Extract filename from the header
-        const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
-        const matches = filenameRegex.exec(contentDisposition);
-        if (matches != null && matches[1]) {
-          // Remove quotes if present
-          filename = matches[1].replace(/['"]/g, '');
-        }
-      }
-      
-      link.setAttribute('download', filename);
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      
-      return response;
-    } catch (error) {
-      console.error("Download error:", error);
-      Swal.fire("Gagal!", "Gagal mengunduh file", "error");
-      throw error;
-    }
-  }
-});
+          responseType: "blob",
+        });
 
+        // Create a blob URL
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement("a");
+        link.href = url;
+
+        // Extract filename from Content-Disposition header
+        const contentDisposition = response.headers["content-disposition"];
+        console.log(response.headers);
+        let filename = "soal.xlsx"; // Default fallback
+
+        if (contentDisposition) {
+          // Extract filename from the header
+          const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+          const matches = filenameRegex.exec(contentDisposition);
+          if (matches != null && matches[1]) {
+            // Remove quotes if present
+            filename = matches[1].replace(/['"]/g, "");
+          }
+        }
+
+        link.setAttribute("download", filename);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        return response;
+      } catch (error) {
+        console.error("Download error:", error);
+        Swal.fire("Gagal!", "Gagal mengunduh file", "error");
+        throw error;
+      }
+    },
+  });
 
   const handleEdit = (soal) => {
     setSelectedSoal(soal);
     setFormData({
       name: soal.name,
-      import_file: null // File can't be pre-filled
+      import_file: null, // File can't be pre-filled
     });
     setIsUpdateOpen(true);
   };
@@ -196,7 +193,7 @@ const downloadMutation = useMutation({
   const handleCreate = () => {
     setFormData({
       name: "",
-      import_file: null
+      import_file: null,
     });
     setIsCreateOpen(true);
   };
@@ -250,9 +247,10 @@ const downloadMutation = useMutation({
   }
 
   // Filter data based on search
-  const filteredData = data?.data?.filter(item => 
-    item.name?.toLowerCase().includes(search.toLowerCase())
-  ) || [];
+  const filteredData =
+    data?.data?.filter((item) =>
+      item.name?.toLowerCase().includes(search.toLowerCase())
+    ) || [];
 
   return (
     <div className="soal-container">
@@ -270,10 +268,7 @@ const downloadMutation = useMutation({
             onChange={handleSearchChange}
           />
         </div>
-        <button
-          className="add-button"
-          onClick={handleCreate}
-        >
+        <button className="add-button" onClick={handleCreate}>
           Tambah Soal
         </button>
       </div>
@@ -345,7 +340,9 @@ const downloadMutation = useMutation({
         </table>
         <div className="pagination-container">
           <div className="pagination-info">
-            {data?.meta ? `Showing ${data.meta.from} to ${data.meta.to} of ${data.meta.total} entries` : "No data available"}
+            {data?.meta
+              ? `Showing ${data.meta.from} to ${data.meta.to} of ${data.meta.total} entries`
+              : "No data available"}
           </div>
           <div className="pagination">
             <button
@@ -357,7 +354,9 @@ const downloadMutation = useMutation({
             >
               &lt;
             </button>
-            <button className="page-item active">{data?.meta?.current_page || 1}</button>
+            <button className="page-item active">
+              {data?.meta?.current_page || 1}
+            </button>
             <button
               className="page-item"
               onClick={() => {
@@ -385,7 +384,9 @@ const downloadMutation = useMutation({
       <UpdateSoalPopup
         isOpen={isUpdateOpen}
         onClose={() => setIsUpdateOpen(false)}
-        onSave={() => mutation.mutate({ id: selectedSoal.id, action: "update" })}
+        onSave={() =>
+          mutation.mutate({ id: selectedSoal.id, action: "update" })
+        }
         formData={formData}
         setFormData={setFormData}
         isLoading={mutation.isPending}

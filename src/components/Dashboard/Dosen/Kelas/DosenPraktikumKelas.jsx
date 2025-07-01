@@ -34,6 +34,7 @@ import { getCookie } from "@/service";
 import { RxCross1 } from "react-icons/rx";
 import { FaRegCopy } from "react-icons/fa";
 import { useToast } from "@/hooks/use-toast";
+import { useLocation } from "react-router-dom";
 
 export default function DosenPraktikumKelas() {
   const [isOpen, setIsOpen] = useState(false);
@@ -46,6 +47,24 @@ export default function DosenPraktikumKelas() {
   const [updateUrl, setUpdateUrl] = useState("");
   const [filePreview, setFilePreview] = useState(null);
   const { toast } = useToast();
+  const location = useLocation();
+
+  const getRoute = () => {
+    const pathSegments = location.pathname.split("/");
+    const currentRoute = pathSegments.find((segment) =>
+      ["penilaian"].includes(segment)
+    );
+
+    switch (currentRoute) {
+      case "penilaian":
+        return "penilaian";
+      default:
+        return "kelas";
+    }
+  };
+
+  const pathRoute = getRoute();
+
   const [formData, setFormData] = useState({
     name: "",
     // assignment_code: "",
@@ -150,8 +169,16 @@ export default function DosenPraktikumKelas() {
       setFormData({
         name: dataOne.data.name,
         task_id: dataOne.data.task_id,
-        start_period: dataOne.data.start_period.split(" ")[0].split("-").reverse().join("-"),
-        end_period: dataOne.data.end_period.split(" ")[0].split("-").reverse().join("-"),
+        start_period: dataOne.data.start_period
+          .split(" ")[0]
+          .split("-")
+          .reverse()
+          .join("-"),
+        end_period: dataOne.data.end_period
+          .split(" ")[0]
+          .split("-")
+          .reverse()
+          .join("-"),
       });
     }
   }, [dataOne]);
@@ -205,7 +232,13 @@ export default function DosenPraktikumKelas() {
               })
             }
           >
-            <div className="bg-blue-800 p-2 rounded-lg text-white">
+            <div
+              className={
+                pathRoute === "penilaian"
+                  ? "hidden"
+                  : "bg-blue-800 p-2 rounded-lg text-white"
+              }
+            >
               + Tambah Praktikum
             </div>
           </AlertDialogTrigger>
@@ -406,7 +439,9 @@ export default function DosenPraktikumKelas() {
                   <AlertDialog>
                     <AlertDialogTrigger>
                       <div
-                        className="action-button"
+                        className={
+                          pathRoute === "penilaian" ? "hidden" : "action-button"
+                        }
                         onClick={() => setUpdateUrl(item.id)}
                       >
                         Edit
@@ -469,9 +504,7 @@ export default function DosenPraktikumKelas() {
                                       name="start_period"
                                       onChange={handleChange}
                                       // className="bg-red-400"
-                                      value={
-                                        formData.start_period
-                                      }
+                                      value={formData.start_period}
                                       // value={formData.start_period
                                       //   .split("-")
                                       //   .reverse()
@@ -491,9 +524,7 @@ export default function DosenPraktikumKelas() {
                                       type="date"
                                       name="end_period"
                                       onChange={handleChange}
-                                      value={
-                                        formData.end_period
-                                      }
+                                      value={formData.end_period}
                                       // value={formData.end_period
                                       //   .split("-")
                                       //   .reverse()
@@ -584,7 +615,11 @@ export default function DosenPraktikumKelas() {
                     </AlertDialogContent>
                   </AlertDialog>
                   <button
-                    className="action-button delete"
+                    className={
+                      pathRoute === "penilaian"
+                        ? "hidden"
+                        : "action-button delete"
+                    }
                     onClick={() => {
                       Swal.fire({
                         title: "Hapus Praktikum?",
@@ -614,9 +649,9 @@ export default function DosenPraktikumKelas() {
                     )}
                   </button>
                   <button
-                    className="action-button"
+                    className={"action-button"}
                     onClick={() => {
-                      window.location.href = `/dosen/kelas/${data.data.id}/praktikum/${item.id}`;
+                      window.location.href = pathRoute === "penilaian" ? `/dosen/penilaian/${data.data.id}/praktikum/${item.id}` : `/dosen/kelas/${data.data.id}/praktikum/${item.id}`;
                     }}
                   >
                     Detail

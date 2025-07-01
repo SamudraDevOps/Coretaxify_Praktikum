@@ -21,6 +21,8 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { RoutesApi } from "@/Routes";
 import { ClipLoader } from "react-spinners";
 import { useParams } from "react-router";
+import { IntentEnum } from "@/enums/IntentEnum";
+import { FaDownload, FaEdit, FaTrash } from "react-icons/fa";
 
 export default function MahasiswaPraktikumKelas() {
   const [isOpen, setIsOpen] = useState(false);
@@ -91,6 +93,11 @@ export default function MahasiswaPraktikumKelas() {
     // Logic to save the data
     onClose();
   };
+
+  const handleDownload = (groupId, assignmentId) => {
+    downloadMutation.mutate({ groupId, assignmentId });
+  };
+
   const [file, setFile] = useState();
   function handleChangeFile(e) {
     console.log(e.target.files);
@@ -145,6 +152,57 @@ export default function MahasiswaPraktikumKelas() {
     },
     onError: (error) => {
       console.log(error);
+    },
+  });
+
+  const downloadMutation = useMutation({
+    mutationFn: async ({ groupId, assignmentId }) => {
+      try {
+        const response = await axios.get(
+          `${RoutesApi.lecturer.groups.url}/${groupId}/assignments/${assignmentId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${cookies.token}`,
+              Accept: "application/octet-stream",
+            },
+            params: {
+              intent: IntentEnum.API_USER_DOWNLOAD_SOAL,
+            },
+            responseType: "blob",
+          }
+        );
+
+        // Create a blob URL
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement("a");
+        link.href = url;
+
+        // Extract filename from Content-Disposition header
+        const contentDisposition = response.headers["content-disposition"];
+        console.log(response.headers);
+        let filename = "soal.xlsx"; // Default fallback
+
+        if (contentDisposition) {
+          // Extract filename from the header
+          const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+          const matches = filenameRegex.exec(contentDisposition);
+          if (matches != null && matches[1]) {
+            // Remove quotes if present
+            filename = matches[1].replace(/['"]/g, "");
+          }
+        }
+
+        link.setAttribute("download", filename);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        return response;
+      } catch (error) {
+        console.error("Download error:", error);
+        Swal.fire("Gagal!", "Gagal mengunduh file", "error");
+        throw error;
+      }
     },
   });
 
@@ -210,7 +268,19 @@ export default function MahasiswaPraktikumKelas() {
                 <td className="max-w-5">{index + 1}</td>
                 <td>{item.name}</td>
                 <td className="max-w-5">
-                  <a href={item.supporting_file_url}>Download</a>
+                  {item.supporting_file ? (
+                    <button
+                      onClick={() => handleDownload(id, item.id)}
+                      className="download-button"
+                      disabled={downloadMutation.isPending}
+                    >
+                      <FaDownload className="download-icon" />
+                      {downloadMutation.isPending ? "Loading..." : "Download"}
+                    </button>
+                  ) : (
+                    "-"
+                  )}
+
                   {/* <p className="truncate">{item.supporting_file_url}</p> */}
                 </td>
                 {/* <td>

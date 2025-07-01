@@ -333,14 +333,14 @@ const Main = () => {
           />
           <Route path="/dosen/praktikum" element={<Praktikum />} />
           <Route path="/dosen/coretaxify" element={<DosenCoretaxify />} />
-          <Route path="/dosen/penilaian" element={<PenilaianDosen />} />
+          <Route path="/dosen/penilaian" element={<DosenKelas />} />
           <Route
-            path="/dosen/penilaian/detail-tugas"
-            element={<DetailTugasPenilaianDosen />}
+            path="/dosen/penilaian/kelas/:id"
+            element={<DosenPraktikumKelas />}
           />
           <Route
-            path="/dosen/penilaian/detail-tugas/detail-penilaian"
-            element={<DetailPenilaian />}
+            path="/dosen/penilaian/:id/praktikum/:idpraktikum"
+            element={<DosenPraktikumKelasMember />}
           />
           <Route path="/dosen/ujian" element={<UjianDosen />} />
           <Route
