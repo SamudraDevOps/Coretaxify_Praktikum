@@ -231,20 +231,6 @@ const PajakKeluaran = ({
             {/* )} */}
           </div>
 
-          { (
-            <div className="flex items-center gap-3">
-              <button
-                onClick={() => approveMultipleFaktur.mutate()}
-                disabled={selectedFakturIds.length === 0}
-                className="flex items-center bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded text-sm"
-              >
-                Upload Faktur
-              </button>
-              <button className="flex items-center bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-2 rounded text-sm">
-                Hapus Dokumen
-              </button>
-            </div>
-          )}
           {/* {item && ( */}
           <div className="flex items-center gap-3">
             <button
