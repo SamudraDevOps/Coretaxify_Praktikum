@@ -1,5 +1,6 @@
 import React from "react";
 import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
+import { numberToTerbilang } from "@/hooks/numberToTerbilang";
 
 // Styles
 const styles = StyleSheet.create({
@@ -123,7 +124,8 @@ const formatCurrency = (value) => {
 const numberToWords = (num) => {
   if (!num || num === 0) return "Nol Rupiah";
   // This is a simplified version - you might want to implement a full number-to-words converter
-  return "Dua Puluh Ribu Rupiah"; // Placeholder
+  return numberToTerbilang(num);
+  // return "Dua Puluh Ribu Rupiah"; // Placeholder
 };
 
 const BillingCodePdf = ({ data }) => {

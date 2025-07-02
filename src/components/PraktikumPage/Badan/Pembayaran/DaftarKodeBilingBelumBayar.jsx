@@ -166,7 +166,10 @@ const DaftarKodeBilingBelumBayar = ({ data, sidebar }) => {
                     </td>
                     <td className="py-4 px-4 border-b">{item.kapKjs}</td>
                     <td className="py-4 px-4 border-b">IDR</td>
-                    <td className="py-4 px-4 border-b">{item.nilai}</td>
+                    {/* <td className="py-4 px-4 border-b">{item.nilai}</td> */}
+                    <td className="py-4 px-4 border-b">
+                      {formatCurrency(item.nilai)}
+                    </td>
                     <td className="py-4 px-4 border-b">
                       {item.masa_bulan} {item.masa_tahun}
                     </td>
