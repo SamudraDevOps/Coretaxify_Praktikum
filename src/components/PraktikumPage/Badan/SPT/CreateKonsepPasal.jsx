@@ -27,7 +27,9 @@ import {
 
 import Swal from "sweetalert2";
 import { RoutesApi } from "@/Routes";
+import { useNavigateWithParams } from "@/hooks/useNavigateWithParams";
 const CreateKonsepPasal = ({ data }) => {
+  const navigate = useNavigateWithParams();
   console.log(data);
   const [cookies] = useCookies(["token"]);
   const { id, akun, idSpt } = useParams();

@@ -173,7 +173,7 @@ const CreateKonsepSPT = ({ data }) => {
 
         case "penyerahan": // Row B (cl_1b_*)
           newData.cl_1b_dpp = totals.hargaJual?.toString() || "0";
-          break;
+      useCookies
 
         default:
           break;
