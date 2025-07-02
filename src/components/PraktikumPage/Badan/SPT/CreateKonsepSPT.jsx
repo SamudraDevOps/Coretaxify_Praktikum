@@ -173,7 +173,7 @@ const CreateKonsepSPT = ({ data }) => {
 
         case "penyerahan": // Row B (cl_1b_*)
           newData.cl_1b_dpp = totals.hargaJual?.toString() || "0";
-      useCookies
+          useCookies;
 
         default:
           break;
@@ -1181,7 +1181,7 @@ const CreateKonsepSPT = ({ data }) => {
                             <input
                               // type="number"
                               name="cl_1a6_dpp_lain"
-                              className="w-full p-1 border rounded-md text-right text-sm"
+                              className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={data.detail_spt.cl_1a6_dpp_lain}
                               readOnly
                             />
@@ -1190,7 +1190,7 @@ const CreateKonsepSPT = ({ data }) => {
                             <input
                               // type="number"
                               name="cl_1a6_ppn"
-                              className="w-full p-1 border rounded-md text-right text-sm"
+                              className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={data.detail_spt.cl_1a6_ppn}
                               readOnly
                             />
@@ -1314,7 +1314,7 @@ const CreateKonsepSPT = ({ data }) => {
                             <input
                               name="cl_1a9_dpp_lain"
                               // type="number"
-                              className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
+                              className="w-full p-1 border rounded-md text-right text-sm "
                               value={formData.cl_1a9_dpp_lain}
                               onChange={handleChange}
                             />
@@ -1323,7 +1323,7 @@ const CreateKonsepSPT = ({ data }) => {
                             <input
                               name="cl_1a9_ppn"
                               // type="number"
-                              className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
+                              className="w-full p-1 border rounded-md text-right text-sm "
                               value={formData.cl_1a9_ppn}
                               onChange={handleChange}
                             />
@@ -1436,7 +1436,7 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2 flex items-center gap-2">
                             <input
                               // type="number"
-                              className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
+                              className="w-full p-1 border rounded-md text-right text-sm "
                               value={formData.cl_1b_jumlah_dpp}
                               onChange={handleChange}
                               name="cl_1b_jumlah_dpp"
@@ -1729,7 +1729,7 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2">
                             <input
                               // type="number"
-                              className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
+                              className="w-full p-1 border rounded-md text-right text-sm "
                               value={formData.cl_2e_ppn}
                               onChange={handleChange}
                               name="cl_2e_ppn"
@@ -1940,7 +1940,7 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2">
                             <input
                               // type="number"
-                              className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
+                              className="w-full p-1 border rounded-md text-right text-sm "
                               name="cl_3b_ppn"
                               value={formData.cl_3b_ppn}
                               onChange={handleChange}
@@ -1980,7 +1980,7 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2">
                             <input
                               // type="number"
-                              className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
+                              className="w-full p-1 border rounded-md text-right text-sm "
                               defaultValue="0"
                               name="cl_3d_ppn"
                               value={formData.cl_3d_ppn}
@@ -2022,7 +2022,7 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2">
                             <input
                               // type="number"
-                              className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
+                              className="w-full p-1 border rounded-md text-right text-sm "
                               defaultValue="0"
                               name="cl_3f_ppn"
                               value={formData.cl_3f_ppn}
@@ -2246,7 +2246,7 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2">
                             <input
                               type="text"
-                              className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
+                              className="w-full p-1 border rounded-md text-right text-sm"
                               name="cl_5_ppn_wajib"
                               value={formData.cl_5_ppn_wajib}
                               onChange={handleChange}
@@ -2626,7 +2626,7 @@ const CreateKonsepSPT = ({ data }) => {
                             <input
                               name="cl_8a_dpp"
                               // type="number"
-                              className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
+                              className="w-full p-1 border rounded-md text-right text-sm "
                               value={formData.cl_8a_dpp}
                               onChange={handleChange}
                             />
@@ -2635,7 +2635,7 @@ const CreateKonsepSPT = ({ data }) => {
                             <input
                               name="cl_8a_dpp_lain"
                               // type="number"
-                              className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
+                              className="w-full p-1 border rounded-md text-right text-sm "
                               value={formData.cl_8a_dpp_lain}
                               onChange={handleChange}
                             />
@@ -2644,7 +2644,7 @@ const CreateKonsepSPT = ({ data }) => {
                             <input
                               name="cl_8a_ppn"
                               // type="number"
-                              className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
+                              className="w-full p-1 border rounded-md text-right text-sm "
                               value={formData.cl_8a_ppn}
                               onChange={handleChange}
                             />
@@ -2670,7 +2670,7 @@ const CreateKonsepSPT = ({ data }) => {
                             <input
                               type="text"
                               name="cl_8b_dpp"
-                              className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
+                              className="w-full p-1 border rounded-md text-right text-sm"
                               value={formData.cl_8b_dpp}
                               onChange={handleChange}
                             />
@@ -2679,7 +2679,7 @@ const CreateKonsepSPT = ({ data }) => {
                             <input
                               type="text"
                               name="cl_8b_dpp_lain"
-                              className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
+                              className="w-full p-1 border rounded-md text-right text-sm"
                               value={formData.cl_8b_dpp_lain}
                               onChange={handleChange}
                             />
@@ -2688,7 +2688,7 @@ const CreateKonsepSPT = ({ data }) => {
                             <input
                               type="text"
                               name="cl_8b_ppn"
-                              className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
+                              className="w-full p-1 border rounded-md text-right text-sm"
                               value={formData.cl_8b_ppn}
                               onChange={handleChange}
                             />
