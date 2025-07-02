@@ -179,25 +179,37 @@ const FakturPajakKeluaranPdf = ({ data }) => (
                   {item.nama}
                   {"\n"}
                   Rp{" "}
-                  {parseFloat(item.harga_satuan).toLocaleString("id-ID", {
+                  {(isNaN(parseFloat(item.harga_satuan))
+                    ? 0
+                    : parseFloat(item.harga_satuan)
+                  ).toLocaleString("id-ID", {
                     minimumFractionDigits: 2,
                   })}{" "}
                   x {item.kuantitas} {item.satuan}
                   {"\n"}
                   Potongan Harga = Rp{" "}
-                  {parseFloat(item.pemotongan_harga).toLocaleString("id-ID", {
+                  {(isNaN(parseFloat(item.pemotongan_harga))
+                    ? 0
+                    : parseFloat(item.pemotongan_harga)
+                  ).toLocaleString("id-ID", {
                     minimumFractionDigits: 2,
                   })}
                   {"\n"}
                   PPnBM ({item.tarif_ppnbm}%) = Rp{" "}
-                  {parseFloat(item.ppnbm).toLocaleString("id-ID", {
+                  {(isNaN(parseFloat(item.ppnbm))
+                    ? 0
+                    : parseFloat(item.ppnbm)
+                  ).toLocaleString("id-ID", {
                     minimumFractionDigits: 2,
                   })}
                 </Text>
                 <Text
                   style={{ ...styles.cellLast, flex: 1, textAlign: "right" }}
                 >
-                  {parseFloat(item.total_harga).toLocaleString("id-ID", {
+                  {(isNaN(parseFloat(item.total_harga))
+                    ? 0
+                    : parseFloat(item.total_harga)
+                  ).toLocaleString("id-ID", {
                     minimumFractionDigits: 2,
                   })}
                 </Text>
@@ -226,7 +238,11 @@ const FakturPajakKeluaranPdf = ({ data }) => (
               Rp{" "}
               {data.detail_transaksi
                 ?.reduce(
-                  (sum, item) => sum + parseFloat(item.pemotongan_harga),
+                  (sum, item) =>
+                    sum +
+                    (isNaN(parseFloat(item.pemotongan_harga))
+                      ? 0
+                      : parseFloat(item.pemotongan_harga)),
                   0
                 )
                 .toLocaleString("id-ID", { minimumFractionDigits: 2 }) ||
