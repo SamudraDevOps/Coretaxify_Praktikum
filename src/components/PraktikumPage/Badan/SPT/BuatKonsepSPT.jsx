@@ -193,7 +193,7 @@ const BuatKonsepSPT = ({ sidebar }) => {
   const taxTypes = [
     { label: "PPn", value: "ppn" },
     { label: "PPh Pasal 21/26", value: "pph" },
-    { label: "PPh Unifikasi", value: "unifikasi" },
+    { label: "PPh Unifikasi", value: "pphunifikasi" },
     { label: "PPh Badan", value: "badan" },
   ];
 
@@ -241,7 +241,7 @@ const BuatKonsepSPT = ({ sidebar }) => {
 
   const getSelectedPeriod = () => {
     if (
-      ["ppn", "pph", "unifikasi"].includes(selectedType) &&
+      ["ppn", "pph", "pphunifikasi"].includes(selectedType) &&
       selectedMonth &&
       selectedYear
     ) {
@@ -326,7 +326,7 @@ const BuatKonsepSPT = ({ sidebar }) => {
         return renderMonthYearForm("Periode dan Tahun Pajak");
       case "pph":
         return renderMonthYearForm("Masa Pajak PPh Pasal 21/26");
-      case "unifikasi":
+      case "pphunifikasi":
         return renderMonthYearForm("Periode Unifikasi Pajak");
       case "badan":
         return (
