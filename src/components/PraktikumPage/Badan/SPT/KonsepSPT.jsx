@@ -152,6 +152,10 @@ const KonsepSPT = ({
                               navigate(
                                 `/praktikum/${id}/sistem/${akun}/buat-konsep-spt-pph/${item.id}`
                               );
+                            } else if (item.jenis_pajak === "PPHUNIFIKASI") {
+                              navigate(
+                                `/praktikum/${id}/sistem/${akun}/buat-konsep-spt-unifikasi/${item.id}`
+                              );
                             } else {
                               // Default fallback for other tax types
                               navigate(

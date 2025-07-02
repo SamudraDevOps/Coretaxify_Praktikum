@@ -264,7 +264,7 @@ const Main = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/confirm-otp" element={<ConfirmOTP />} />
-        
+
         {/* EDIT PROFILE ROUTE */}
         <Route
           element={
@@ -993,6 +993,25 @@ const Main = () => {
                 intent={""}
                 OrangPribadi={CreateKonsepPasal}
                 Badan={CreateKonsepPasal}
+                query={""}
+              ></RoleBasedRenderer>
+            </>
+            // <>
+            //   <Header />
+            //   <KonsepSPT />
+            // </>
+          }
+        />
+        <Route
+          path="/praktikum/:id/sistem/:akun/buat-konsep-spt-unifikasi/:idSpt"
+          // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/spt/:idSpt`}
+                intent={""}
+                OrangPribadi={CreateKonsepUnifikasi}
+                Badan={CreateKonsepUnifikasi}
                 query={""}
               ></RoleBasedRenderer>
             </>
@@ -1817,42 +1836,42 @@ const Main = () => {
         />
 
         {/* ROUTE BARU BELUM DIMASUKIN */}
-          <Route
-            path="/admin/praktikum/2/unifikasi"
-            element={
-              <>
-                <Header />
-                <CreateKonsepUnifikasi />
-              </>
-            }
-          />
-          <Route
-            path="/admin/praktikum/2/notifikasi"
-            element={
-              <>
-                <Header />
-                <Notifikasi />
-              </>
-            }
-          />
-          <Route
-            path="/admin/praktikum/2/kode-billing-atas-tagihan-pajak"
-            element={
-              <>
-                <Header />
-                <PembuatanKodeBillingAtasPajak />
-              </>
-            }
-          />
-          <Route
-            path="/admin/praktikum/2/permohonan-pemindahbukuan"
-            element={
-              <>
-                <Header />
-                <PermohonanPemindahBukuan />
-              </>
-            }
-          />
+        <Route
+          path="/admin/praktikum/2/unifikasi"
+          element={
+            <>
+              <Header />
+              <CreateKonsepUnifikasi />
+            </>
+          }
+        />
+        <Route
+          path="/admin/praktikum/2/notifikasi"
+          element={
+            <>
+              <Header />
+              <Notifikasi />
+            </>
+          }
+        />
+        <Route
+          path="/admin/praktikum/2/kode-billing-atas-tagihan-pajak"
+          element={
+            <>
+              <Header />
+              <PembuatanKodeBillingAtasPajak />
+            </>
+          }
+        />
+        <Route
+          path="/admin/praktikum/2/permohonan-pemindahbukuan"
+          element={
+            <>
+              <Header />
+              <PermohonanPemindahBukuan />
+            </>
+          }
+        />
         {/* NOT FOUND ROUTE - LAST REGISTERED ROUTE */}
         <Route path="*" element={<NotFound />} />
       </Routes>
