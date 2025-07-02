@@ -273,11 +273,11 @@ const EditProfile = () => {
     }
 
     // Validate password length if provided
-    if (profile.password && profile.password.length < 8) {
+    if (profile.password && profile.password.length < 4) {
       Swal.fire({
         icon: "error",
         title: "Gagal",
-        text: "Password minimal 8 karakter.",
+        text: "Password minimal 4 karakter.",
       });
       return;
     }
@@ -551,11 +551,11 @@ const EditProfile = () => {
                       required
                       autoComplete="email"
                       disabled={mutation.isLoading}
-                      minLength={8}
+                      minLength={4}
                     />
                   </div>
                   <p className="text-xs text-gray-500 mt-1">
-                    Email harus minimal 8 karakter dan unik
+                    Email harus minimal 4 karakter dan unik
                   </p>
                 </div>
 
@@ -581,7 +581,7 @@ const EditProfile = () => {
                       placeholder="Kosongkan jika tidak ingin mengubah"
                       autoComplete="new-password"
                       disabled={mutation.isLoading}
-                      minLength={8}
+                      minLength={4}
                     />
                     <button
                       type="button"
@@ -594,7 +594,7 @@ const EditProfile = () => {
                     </button>
                   </div>
                   <p className="text-xs text-gray-500 mt-1">
-                    Password minimal 8 karakter
+                    Password minimal 4 karakter
                   </p>
                 </div>
 

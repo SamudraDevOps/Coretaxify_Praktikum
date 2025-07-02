@@ -33,6 +33,7 @@ export const IntentEnum = {
     // Data Retrieval
     API_GET_GROUP_ALL: 'api.get.group.all',
     API_GET_ASSIGNMENT_ALL: 'api.get.assignment.all',
+    API_GET_SELF_ASSIGNMENT_ALL: 'api.get.self.assignment.all',
     API_GET_GROUP_WITH_ASSIGNMENTS: 'api.get.group.with.assignments',
     API_GET_GROUP_WITH_MEMBERS: 'api.get.group.with.members',
     API_GET_GROUP_BY_ROLES: 'api.get.group.by.roles',

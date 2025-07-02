@@ -39,9 +39,9 @@ const Header = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["token"]);
   const [isCompanyDropdownOpen, setIsCompanyDropdownOpen] = useState(false);
   const logout = () => {
-    removeCookie("token", { path: "/" });
-    removeCookie("role", { path: "/" });
-    window.location.href = "/login";
+    // removeCookie("token", { path: "/" });
+    // removeCookie("role", { path: "/" });
+    window.location.href = "/";
   };
   const buttonRefs = useRef([]);
   const dropdownRefs = useRef([]);
@@ -171,17 +171,17 @@ const Header = () => {
   };
 
   const navigateTo = (path) => {
-    const pathParts = path.split("/");
-    const lastPart = pathParts[pathParts.length - 1];
+    if (!path) return;
 
-    // Construct the new path with the base path and the last part
-    const newPath = `/praktikum/${id}/sistem/${akun}/${lastPart}`;
-
-    // Preserve the viewAs parameter if it exists
-    if (viewAsCompanyId) {
-      navigate(`${newPath}?viewAs=${viewAsCompanyId}`);
+    // Jika path sudah lengkap (misal: /praktikum/1/sistem/1/...), langsung gunakan
+    if (path.startsWith("/")) {
+      navigate(viewAsCompanyId ? `${path}?viewAs=${viewAsCompanyId}` : path);
     } else {
-      navigate(newPath);
+      // Path relatif (misalnya: "e-faktur"), gabungkan manual
+      const newPath = `/praktikum/${id}/sistem/${akun}/${path}`;
+      navigate(
+        viewAsCompanyId ? `${newPath}?viewAs=${viewAsCompanyId}` : newPath
+      );
     }
   };
 
@@ -345,13 +345,16 @@ const Header = () => {
   return (
     <div className="w-full">
       <header className="bg-slate-100 text-blue-900 flex justify-between items-center px-4 md:px-8 lg:px-12 xl:px-16 py-3 shadow-md w-full overflow-x-auto">
-        <div className="flex items-center space-x-4 -mx-14">
+        <div className="flex items-center space-x-4 -mx-5">
           <img src={Logo} alt="DJP Logo" className="h-10" />
           <h1 className="text-lg font-bold">CORETAXIFY</h1>
         </div>
         <div className="flex items-center space-x-6 mr-1">
           <FileText className="w-6 h-6 cursor-pointer" />
-          <Bell className="w-6 h-6 cursor-pointer" />
+          <Bell
+            className="w-6 h-6 cursor-pointer"
+            onClick={() => navigate("/admin/praktikum/2/notifikasi")}
+          />
           {representedCompanies &&
             representedCompanies.data &&
             representedCompanies.data.length > 0 && (
@@ -634,19 +637,15 @@ const Header = () => {
               {
                 label: "Buku Besar",
                 submenu: [],
-                links: `/buku-besar`,
+                links: `/praktikum/${id}/sistem/${akun}/buku-besar`,
               },
               {
                 label: "Master Akun",
                 submenu: [],
-                links: `/master-akun`,
+                links: `/praktikum/${id}/sistem/${akun}/master-akun`,
               },
             ].map((item, index) => (
-              <li
-                key={index}
-                className="relative"
-                onClick={() => toggleDropdown(item.label)}
-              >
+              <li key={index} className="relative">
                 {item.submenu.length > 0 ? (
                   <button
                     ref={(el) => (buttonRefs.current[index] = el)}
@@ -663,6 +662,7 @@ const Header = () => {
                     {item.label}
                   </button>
                 )}
+
                 {item.submenu.length > 0 && dropdownOpen === item.label && (
                   <ul
                     ref={(el) => (dropdownRefs.current[index] = el)}
@@ -672,22 +672,17 @@ const Header = () => {
                       <li
                         key={subIndex}
                         className="relative px-4 py-4 hover:bg-yellow-500 cursor-pointer whitespace-nowrap"
-                        onClick={() => {
-                          const newPath = sub.links;
-                          if (viewAsCompanyId) {
-                            navigate(`${newPath}?viewAs=${viewAsCompanyId}`);
-                          } else {
-                            navigate(newPath);
-                          }
-                        }}
                       >
                         {typeof sub === "string" ? (
                           <button onClick={() => navigateTo(sub)}>{sub}</button>
                         ) : sub.links ? (
-                          <button className="w-full text-left">
+                          <button
+                            onClick={() => navigateTo(sub.links)}
+                            className="w-full text-left"
+                          >
                             {sub.label}
                           </button>
-                        ) : (
+                        ) : sub.submenu ? (
                           <>
                             <button
                               className="flex items-center w-full"
@@ -696,7 +691,7 @@ const Header = () => {
                               {sub.label}{" "}
                               <ChevronRight className="w-4 h-4 ml-2" />
                             </button>
-                            {sub.submenu && subDropdownOpen === sub.label && (
+                            {subDropdownOpen === sub.label && (
                               <ul className="absolute left-full mx-1 top-0 mt-0 min-w-max bg-blue-900 text-white shadow-md rounded-md text-left z-50">
                                 {sub.submenu.map((nestedSub, nestedIndex) => (
                                   <li
@@ -713,7 +708,7 @@ const Header = () => {
                               </ul>
                             )}
                           </>
-                        )}
+                        ) : null}
                       </li>
                     ))}
                   </ul>

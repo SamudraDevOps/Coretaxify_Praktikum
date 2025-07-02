@@ -34,6 +34,7 @@ import { AlertCircle } from "lucide-react";
 import { RxCross1 } from "react-icons/rx";
 import { FaRegCopy } from "react-icons/fa";
 import { useToast } from "@/hooks/use-toast";
+import { useLocation } from "react-router-dom";
 
 export default function DosenKelas() {
   const [isOpen, setIsOpen] = useState(false);
@@ -46,6 +47,23 @@ export default function DosenKelas() {
   const [cookies, setCookie] = useCookies(["user"]);
   const [filePreview, setFilePreview] = useState(null);
   const { toast } = useToast();
+  const location = useLocation();
+
+  const getRoute = () => {
+    const pathSegments = location.pathname.split("/");
+    const currentRoute = pathSegments.find((segment) =>
+      ["penilaian"].includes(segment)
+    );
+
+    switch (currentRoute) {
+      case "penilaian":
+        return "penilaian";
+      default:
+        return "kelas";
+    }
+  };
+
+  const pathRoute = getRoute();
 
   const { isLoading, isError, data, error, refetch } = useQuery({
     queryKey: ["kelas_dosen", url],
@@ -341,7 +359,11 @@ export default function DosenKelas() {
           />
         </div>
         <button
-          className="bg-blue-800 p-2 rounded-md text-white hover:bg-blue-900"
+          className={
+            pathRoute === "penilaian"
+              ? "hidden"
+              : "bg-blue-800 p-2 rounded-md text-white hover:bg-blue-900"
+          }
           onClick={() => {
             setIsAddOpen(true);
             setFormData({ ...formData, kodeKelas: generateRandomCode() });
@@ -368,7 +390,7 @@ export default function DosenKelas() {
             <a
               key={item.id}
               className="relative  shadow-lg rounded-lg w-100 md:min-w-96 p-4 cursor-pointer"
-              href={`/dosen/kelas/praktikum/${item.id}`}
+              href={pathRoute === "penilaian" ? `/dosen/penilaian/kelas/${item.id}` : `/dosen/kelas/praktikum/${item.id}`}
             >
               <div className="bg-purple-700 flex justify-between text-white p-4 rounded-t-lg w-150 relative">
                 <div className="">
@@ -382,63 +404,68 @@ export default function DosenKelas() {
                     e.preventDefault();
                   }}
                 >
-                  <Menubar
-                    className="bg-transparent"
-                    onClick={(e) => {
-                      e.stopPropagation();
+                  {pathRoute === "penilaian" ? (
+                    ""
+                  ) : (
+                    <Menubar
+                      className="bg-transparent"
+                      onClick={(e) => {
+                        e.stopPropagation();
 
-                      e.preventDefault();
-                    }}
-                  >
-                    <MenubarMenu className="">
-                      <MenubarTrigger
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          e.preventDefault();
-                        }}
-                        className=""
-                      >
-                        <HiDotsVertical />
-                      </MenubarTrigger>
-                      <MenubarContent>
-                        <MenubarItem>
-                          <AlertDialogTrigger
-                            onClick={(e) => {
-                              handleEdit(item);
-                              e.stopPropagation();
-                            }}
-                            className="text-start w-full"
-                          >
-                            Edit
-                          </AlertDialogTrigger>
-                          {/* Edit Kelas */}
-                        </MenubarItem>
-                        <MenubarSeparator />
-                        <MenubarItem
-                          onClick={() => {
-                            Swal.fire({
-                              title: "Hapus Kelas?",
-                              text: "Kelas akan dihapus secara permanen!",
-                              icon: "warning",
-                              showCancelButton: true,
-                              confirmButtonText: "Ya, hapus!",
-                              cancelButtonText: "Batal",
-                              dangerMode: true,
-                            }).then((result) => {
-                              if (result.isConfirmed) {
-                                mutation.mutate({
-                                  id: item.id,
-                                  action: "delete",
-                                });
-                              }
-                            });
+                        e.preventDefault();
+                      }}
+                    >
+                      <MenubarMenu className="">
+                        <MenubarTrigger
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            e.preventDefault();
                           }}
+                          className=""
                         >
-                          Hapus Kelas
-                        </MenubarItem>
-                      </MenubarContent>
-                    </MenubarMenu>
-                  </Menubar>
+                          <HiDotsVertical />
+                        </MenubarTrigger>
+
+                        <MenubarContent>
+                          <MenubarItem>
+                            <AlertDialogTrigger
+                              onClick={(e) => {
+                                handleEdit(item);
+                                e.stopPropagation();
+                              }}
+                              className="text-start w-full"
+                            >
+                              Edit
+                            </AlertDialogTrigger>
+                            {/* Edit Kelas */}
+                          </MenubarItem>
+                          <MenubarSeparator />
+                          <MenubarItem
+                            onClick={() => {
+                              Swal.fire({
+                                title: "Hapus Kelas?",
+                                text: "Kelas akan dihapus secara permanen!",
+                                icon: "warning",
+                                showCancelButton: true,
+                                confirmButtonText: "Ya, hapus!",
+                                cancelButtonText: "Batal",
+                                dangerMode: true,
+                              }).then((result) => {
+                                if (result.isConfirmed) {
+                                  mutation.mutate({
+                                    id: item.id,
+                                    action: "delete",
+                                  });
+                                }
+                              });
+                            }}
+                          >
+                            Hapus Kelas
+                          </MenubarItem>
+                        </MenubarContent>
+                      </MenubarMenu>
+                    </Menubar>
+                  )}
                   <AlertDialogContent>
                     <AlertDialogHeader>
                       <div className="w-full flex justify-end">

@@ -39,8 +39,8 @@ const SideBarEFakturOP = ({ nama_akun, npwp_akun, akun }) => {
   const navigate = useNavigateWithParams();
 
   return (
-    <aside className="w-1/6 text-blue-900 px-5 py-5 h-screen bg-white">
-      <div className="mb-5 bg-blue-900 text-white p-2 text-center">
+    <aside className="w-64 flex-shrink-0 text-blue-900 px-5 py-5 h-screen bg-white">
+      <div className="mb-5 bg-blue-900 text-white p-2 text-center rounded-md">
         <h2 className="text-lg font-bold mb-5">{npwp_akun}</h2>
         <h3 className="text-md font-semibold mb-5">{nama_akun}</h3>
       </div>
