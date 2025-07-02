@@ -26,12 +26,12 @@ const generateNTPN = () => {
 const RiwayatBilling = ({ data, sidebar }) => {
   console.log(data);
   const [openNTPN, setOpenNTPN] = useState(false);
-  const [ntpn, setNtpn] = useState("");
+  const [selectedItem, setSelectedItem] = useState(null); // Add this to track selected item
   const [copied, setCopied] = useState(false);
 
-  const handleLihatClick = () => {
-    const ntpnBaru = generateNTPN();
-    setNtpn(ntpnBaru);
+  const handleLihatNTPNClick = (item) => {
+    // Modified to accept item parameter
+    setSelectedItem(item); // Store the selected item
     setOpenNTPN(true);
   };
 
@@ -117,10 +117,14 @@ const RiwayatBilling = ({ data, sidebar }) => {
                   <td className="py-4 px-4 border-b">
                     {item.masa_bulan} {item.masa_tahun}
                   </td>
+                  {/* <td className="py-4 px-4 border-b">{item.ntpn}</td> */}
                   <td className="py-4 px-4 border-b space-x-2">
                     <AlertDialog open={openNTPN} onOpenChange={setOpenNTPN}>
                       <AlertDialogTrigger>
-                        <button className="bg-blue-100 text-blue-600 hover:bg-blue-200 hover:underline rounded px-3 py-1">
+                        <button
+                          className="bg-blue-100 text-blue-600 hover:bg-blue-200 hover:underline rounded px-3 py-1"
+                          onClick={() => handleLihatNTPNClick(item)} // Pass the item
+                        >
                           Lihat NTPN
                         </button>
                       </AlertDialogTrigger>
@@ -132,10 +136,13 @@ const RiwayatBilling = ({ data, sidebar }) => {
                           </AlertDialogDescription>
                         </AlertDialogHeader>
                         <div className="flex items-center justify-between bg-gray-100 rounded px-3 py-2 my-4">
-                          <span className="font-mono text-lg">{item.ntpn}</span>
+                          <span className="font-mono text-lg">
+                            {selectedItem?.ntpn}
+                          </span>{" "}
+                          {/* Use selectedItem */}
                           <button
                             className="ml-4 px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
-                            onClick={() => handleCopy(item.ntpn)}
+                            onClick={() => handleCopy(selectedItem?.ntpn)} // Use selectedItem
                           >
                             Copy
                           </button>
@@ -152,6 +159,7 @@ const RiwayatBilling = ({ data, sidebar }) => {
                         </AlertDialogFooter>
                       </AlertDialogContent>
                     </AlertDialog>
+
                     <button
                       onClick={() =>
                         navigate(
