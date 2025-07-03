@@ -11,19 +11,19 @@ const SideBarEFakturOP = ({ nama_akun, npwp_akun, akun }) => {
   const efakturItems = [
     {
       label: "SPT Konsep",
-      link: `/praktikum/${akun?.id}/sistem/${akun?.akun}/surat-pemberitahuan-spt`,
+      link: `/praktikum/${akun?.id}/sistem/${akun?.akun}/surat-pemberitahuan-spt?filter=konsep`,
     },
     {
       label: "SPT Menunggu Pembayaran",
-      link: `/praktikum/${akun?.id}/sistem/${akun?.akun}/surat-pemberitahuan-spt`,
+      link: `/praktikum/${akun?.id}/sistem/${akun?.akun}/surat-pemberitahuan-spt?filter=menunggu-pembayaran`,
     },
     {
-      label: "SPT Menunggu Dilaporkan",
-      link: `/praktikum/${akun?.id}/sistem/${akun?.akun}/surat-pemberitahuan-spt`,
+      label: "SPT Dilaporkan",
+      link: `/praktikum/${akun?.id}/sistem/${akun?.akun}/surat-pemberitahuan-spt?filter=dilaporkan`,
     },
     {
       label: "SPT Ditolak",
-      link: `/praktikum/${akun?.id}/sistem/${akun?.akun}/surat-pemberitahuan-spt`,
+      link: `/praktikum/${akun?.id}/sistem/${akun?.akun}/surat-pemberitahuan-spt?filter=ditolak`,
     },
   ];
 

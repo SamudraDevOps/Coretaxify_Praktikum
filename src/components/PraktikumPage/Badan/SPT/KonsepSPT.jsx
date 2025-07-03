@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import SideBarSPT from "./SideBarSPT";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { FaChevronDown, FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import { useParams } from "react-router";
+import { useParams, useSearchParams } from "react-router";
 import { useNavigateWithParams } from "@/hooks/useNavigateWithParams";
 
 const KonsepSPT = ({
@@ -26,6 +26,15 @@ const KonsepSPT = ({
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const dataFilter = searchParams.get("filter");
+  const filteredData =
+    data && data.length > 0
+      ? data.filter((item) => {
+          if (!dataFilter) return true; // Show all data if no filter
+          return item.status === dataFilter.toUpperCase();
+        })
+      : [];
 
   const navigate = useNavigateWithParams();
 
@@ -133,8 +142,8 @@ const KonsepSPT = ({
               </tr>
             </thead>
             <tbody className="text-gray-600">
-              {data && data.length > 0 ? (
-                data.map((item, index) => (
+              {filteredData && filteredData.length > 0 ? (
+                filteredData.map((item, index) => (
                   <tr key={item.id} className="hover:bg-gray-50">
                     <td className="px-6 py-2 border text-center">
                       {(currentPage - 1) * itemsPerPage + index + 1}
