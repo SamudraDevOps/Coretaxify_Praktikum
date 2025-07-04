@@ -17,8 +17,8 @@ const ProfilSayaBadan = ({ data, sidebar }) => {
         npwp_akun={sidebar.npwp_akun}
         akun={{ id, akun }}
       />
-      <main className="flex-auto p-3 bg-white rounded-md h-full">
-        <div className="flex justify-between items-center mb-6">
+      <main className="flex-auto pt-5 bg-white rounded-md h-full">
+        <div className="flex justify-between items-center mb-6 mx-5">
           <h2 className="text-2xl font-semibold">
             Ikhtisar Profil Wajib Pajak
           </h2>
@@ -31,10 +31,10 @@ const ProfilSayaBadan = ({ data, sidebar }) => {
             defaultValue="profil"
             onValueChange={(val) => setActiveTab(val)}
           >
-            <TabsList className="flex justify-start gap-2 text-blue-700">
+            <TabsList className="flex justify-start gap-2 text-blue-700 flex-wrap">
               <TabsTrigger value="profil">Profil</TabsTrigger>
               <TabsTrigger value="billing">
-                Daftar Kode Billing belum dibayar
+                Daftar Kode Billing 
               </TabsTrigger>
               <TabsTrigger value="saldo">Saldo Saat ini</TabsTrigger>
               <TabsTrigger value="spt">SPT Belum Disampaikan</TabsTrigger>
