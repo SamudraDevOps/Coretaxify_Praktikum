@@ -44,7 +44,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
   const [editMode, setEditMode] = useState(false);
   const [editingTransaksiId, setEditingTransaksiId] = useState(null);
 
-  const [showDokumenTransaksi, setShowDokumenTransaksi] = useState(false);
+  const [showDokumenTransaksi, setShowDokumenTransaksi] = useState(true);
   const [showInformasiPembeli, setShowInformasiPembeli] = useState(false);
   const [showDetailTransaksi, setShowDetailTransaksi] = useState(false);
   const [kode_transaksi, setKodeTransaksi] = useState("");
@@ -1076,13 +1076,13 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
     console.log(""),
     console.log("Rendering TambahFakturKeluaran"),
     (
-      <div className="flex h-screen bg-gray-100">
+      <div className="flex items-start"> 
         <SideBarEFaktur
           nama_akun={sidebar.nama_akun}
           npwp_akun={sidebar.npwp_akun}
           akun={{ id, akun }}
         />
-        <div className="flex-grow p-6 bg-white h-full overflow-y-auto">
+        <div className="w-full flex-grow p-6 bg-white h-full">
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">
             Tambah Data
           </h2>

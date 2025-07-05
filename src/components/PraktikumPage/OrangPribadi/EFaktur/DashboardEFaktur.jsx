@@ -61,7 +61,7 @@ const DashboardEFakturOP = ({ sidebar }) => {
         npwp_akun={sidebar.npwp_akun}
         akun={{ id: id, akun: akun }}
       />
-      <div className="flex-1 p-3  h-[100%] w-[100%]">
+      <div className="flex-1 pl-3 pt-6 h-[100%] w-[100%]">
         <div className="bg-blue-900 text-white p-4 rounded-md mb-5 w-full">
           <h2 className="text-xl font-bold">Dasbor e-Faktur</h2>
         </div>
@@ -72,7 +72,7 @@ const DashboardEFakturOP = ({ sidebar }) => {
               <Pie data={pieData} className="mb-2 h-[90%]" />
             </div>
           </div>
-          <div className="bg-white p-4 rounded-md shadow ">
+          <div className="bg-white p-4 rounded-md shadow h-[100%]">
             <h3 className="font-bold mb-3">
               Dasbor Pembayaran dan Pelaporan PPN
             </h3>
