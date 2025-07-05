@@ -1012,7 +1012,7 @@ const Main = () => {
                 intent={""}
                 OrangPribadi={CreateKonsepUnifikasi}
                 Badan={CreateKonsepUnifikasi}
-                query={""}
+                query={"buat-konsep-spt-unifikasi"}
               ></RoleBasedRenderer>
             </>
             // <>
@@ -1032,7 +1032,7 @@ const Main = () => {
                 intent={""}
                 OrangPribadi={SelfBilling}
                 Badan={SelfBilling}
-                query={""}
+                query={"layanan-mandiri-kode-billing"}
               ></RoleBasedRenderer>
             </>
             // <>
@@ -1051,7 +1051,7 @@ const Main = () => {
                 intent={""}
                 OrangPribadi={DaftarKodeBilingBelumBayar}
                 Badan={DaftarKodeBilingBelumBayar}
-                query={""}
+                query={"daftar-kode-billing-belum-dibayar"}
               ></RoleBasedRenderer>
             </>
             // <>
@@ -1069,7 +1069,7 @@ const Main = () => {
                 intent={""}
                 OrangPribadi={KodeBillingViewPDF}
                 Badan={KodeBillingViewPDF}
-                query={""}
+                query={"pdf-billing"}
               ></RoleBasedRenderer>
             </>
           }
@@ -1084,7 +1084,7 @@ const Main = () => {
                 intent={"api.get.sudah.pembayaran"}
                 OrangPribadi={RiwayatBilling}
                 Badan={RiwayatBilling}
-                query={""}
+                query={"riwayat-pembayaran"}
               ></RoleBasedRenderer>
             </>
             // <>
