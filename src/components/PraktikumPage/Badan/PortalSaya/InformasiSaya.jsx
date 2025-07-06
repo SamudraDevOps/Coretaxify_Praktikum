@@ -33,15 +33,15 @@ const InformasiSayaBadan = ({ data, sidebar }) => {
         npwp_akun={sidebar.npwp_akun}
         akun={{ id, akun }}
       />
-      <main className="flex-auto p-3 bg-white rounded-md h-full">
+      <main className="flex-auto p-3 bg-white rounded-md h-full min-w-0">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-semibold">Informasi Umum Wajib Pajak</h2>
           <a href={`/praktikum/${id}/sistem/${akun}/edit-informasi-umum`}>
             <button
               className="px-4 py-2 bg-yellow-300 hover:bg-yellow-400 text-blue-900 rounded-md"
-              // onClick={() =>
-              //   (window.location.href = `/admin/praktikum/${getUserTypePath()}/profil-saya/informasi-umum/edit-data-profil`)
-              // }
+            // onClick={() =>
+            //   (window.location.href = `/admin/praktikum/${getUserTypePath()}/profil-saya/informasi-umum/edit-data-profil`)
+            // }
             >
               Edit
             </button>
@@ -59,7 +59,7 @@ const InformasiSayaBadan = ({ data, sidebar }) => {
             </TabsList>
 
             <TabsContent value="general">
-              <div className="p-6 grid grid-cols-2 gap-4 w-full border-r-0 border-gray-500">
+              <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 w-full">
                 <div className="space-y-2">
                   {[
                     ["Nomor Pokok Wajib Pajak", data.npwp_akun],
@@ -107,11 +107,11 @@ const InformasiSayaBadan = ({ data, sidebar }) => {
                   ].map(([label, value], index) => (
                     <div
                       key={index}
-                      className="grid grid-cols-[250px_10px_auto]"
+                      className="grid grid-cols-[minmax(0,_1fr)_auto_minmax(0,_1.5fr)] items-start gap-x-2"
                     >
-                      <p className="font-bold text-gray-800">{label}</p>
-                      <p className="text-center">:</p>
-                      <p>{value}</p>
+                      <p className="font-bold text-gray-800 break-words">{label}</p>
+                      <p>:</p>
+                      <p className="break-words">{value || "-"}</p>
                     </div>
                   ))}
                 </div>
@@ -136,11 +136,11 @@ const InformasiSayaBadan = ({ data, sidebar }) => {
                   ].map(([label, value], index) => (
                     <div
                       key={index}
-                      className="grid grid-cols-[250px_10px_auto]"
+                      className="grid grid-cols-[minmax(0,_1fr)_auto_minmax(0,_1.5fr)] items-start gap-x-2"
                     >
-                      <p className="font-bold text-gray-800">{label}</p>
-                      <p className="text-center">:</p>
-                      <p>{value}</p>
+                      <p className="font-bold text-gray-800 break-words">{label}</p>
+                      <p>:</p>
+                      <p className="break-words">{value || ""}</p>
                     </div>
                   ))}
                 </div>
@@ -154,46 +154,45 @@ const InformasiSayaBadan = ({ data, sidebar }) => {
                 </button>
               </div>
 
-              <div className="w-[1050px]">
-                <div className="w-[100%] overflow-x-auto">
-                  <table className="table-auto border border-gray-300 w-full">
-                    <thead className="bg-purple-700 text-white">
-                      <tr>
-                        {[
-                          "Jenis Bendera",
-                          "Jenis Surat Pemberitahuan Pajak",
-                          "Masa Pajak",
-                          "Tanggal Penunjukan",
-                          "Nomor Penunjukkan",
-                          "Nomor Kasus",
-                          "Berlaku Sejak",
-                          "Tanggal Berakhir",
-                        ].map((header, index) => (
-                          <th
-                            key={index}
-                            className="px-4 py-2 border text-left"
-                          >
-                            {header}
-                          </th>
+
+              <div className="overflow-x-auto">
+                <table className="table-auto border border-gray-300 w-full">
+                  <thead className="bg-purple-700 text-white">
+                    <tr>
+                      {[
+                        "Jenis Bendera",
+                        "Jenis Surat Pemberitahuan Pajak",
+                        "Masa Pajak",
+                        "Tanggal Penunjukan",
+                        "Nomor Penunjukkan",
+                        "Nomor Kasus",
+                        "Berlaku Sejak",
+                        "Tanggal Berakhir",
+                      ].map((header, index) => (
+                        <th
+                          key={index}
+                          className="px-4 py-2 border text-left"
+                        >
+                          {header}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      {Array(8)
+                        .fill()
+                        .map((_, index) => (
+                          <td key={index} className="px-4 py-2 border">
+                            <input
+                              type="text"
+                              className="px-2 w-full h-8 border rounded"
+                            />
+                          </td>
                         ))}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        {Array(8)
-                          .fill()
-                          .map((_, index) => (
-                            <td key={index} className="px-4 py-2 border">
-                              <input
-                                type="text"
-                                className="px-2 w-full h-8 border rounded"
-                              />
-                            </td>
-                          ))}
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </TabsContent>
           </Tabs>

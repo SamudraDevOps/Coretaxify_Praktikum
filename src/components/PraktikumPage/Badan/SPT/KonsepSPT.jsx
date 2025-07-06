@@ -2,8 +2,14 @@ import React, { useState, useRef, useEffect } from "react";
 import SideBarSPT from "./SideBarSPT";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { FaChevronDown, FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import { useParams } from "react-router";
+import { useParams, useSearchParams } from "react-router";
 import { useNavigateWithParams } from "@/hooks/useNavigateWithParams";
+import { getCsrf } from "@/service/getCsrf";
+import axios from "axios";
+import { RoutesApi } from "@/Routes";
+import { useCookies } from "react-cookie";
+import Swal from "sweetalert2";
+import { useMutation } from "@tanstack/react-query";
 
 const KonsepSPT = ({
   data,
@@ -15,6 +21,7 @@ const KonsepSPT = ({
   const { id, akun } = useParams();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const [cookies] = useCookies(["token"]);
 
   const handleClickOutside = (event) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -26,8 +33,63 @@ const KonsepSPT = ({
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const dataFilter = searchParams.get("filter");
+  const viewAsCompanyId = searchParams.get("viewAs");
+
+  const filteredData =
+    data && data.length > 0
+      ? data.filter((item) => {
+          if (!dataFilter) return true; // Show all data if no filter
+          return item.status === dataFilter.toUpperCase();
+        })
+      : [];
 
   const navigate = useNavigateWithParams();
+
+  const deleteSPT = useMutation({
+    mutationFn: async (idSpt) => {
+      const csrf = await getCsrf();
+
+      const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
+      // return axios.put(
+      //   `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/spt/${idSpt}/calculate-spt`,
+      //   sptData,
+
+      return axios.delete(
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${accountId}/spt/${idSpt}`,
+        // {},
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": csrf,
+            Authorization: `Bearer ${cookies.token}`,
+          },
+        }
+      );
+    },
+    onSuccess: (data, variables) => {
+      console.log(data);
+      Swal.fire("Berhasil!", "Konsep SPT berhasil dihapus.", "success").then(
+        (result) => {
+          if (result.isConfirmed) {
+            window.location.reload();
+          }
+          // navigate(`/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt`);
+        }
+      );
+    },
+    onError: (error) => {
+      console.error("Error saving data:", error);
+      Swal.fire("Gagal!", "Terjadi kesalahan saat menghapus data.", "error");
+      // Swal.fire(
+      //   "Gagal!",
+      //   `Terjadi kesalahan saat menyimpan data. ${error?.response?.data?.message}`,
+      //   "error"
+      // );
+    },
+  });
 
   // Extract page numbers from pagination URLs
   const getPageFromUrl = (url) => {
@@ -67,8 +129,8 @@ const KonsepSPT = ({
         npwp_akun={sidebar.npwp_akun}
         akun={{ id: id, akun: akun }}
       />
-      <div className="flex-auto p-3 bg-white rounded-md h-full">
-        <div className="flex justify-between items-center mb-4 pb-3 border-b">
+<div className="flex-auto p-3 bg-white rounded-md h-full min-w-0">
+          <div className="flex justify-between items-center mb-4 pb-3 border-b">
           <div className="flex items-center">
             <IoDocumentTextOutline className="text-4xl text-blue-900" />
             <h1 className="text-lg font-bold text-blue-900 ml-2">Konsep SPT</h1>
@@ -112,7 +174,7 @@ const KonsepSPT = ({
           </div>
         </div>
 
-        <div className="w-[1200px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden mt-4">
+        <div className="w-full overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden mt-4">
           <table className="table-auto w-full border border-gray-300 overflow-x-auto">
             <thead className="bg-gray-200">
               <tr>
@@ -133,8 +195,8 @@ const KonsepSPT = ({
               </tr>
             </thead>
             <tbody className="text-gray-600">
-              {data && data.length > 0 ? (
-                data.map((item, index) => (
+              {filteredData && filteredData.length > 0 ? (
+                filteredData.map((item, index) => (
                   <tr key={item.id} className="hover:bg-gray-50">
                     <td className="px-6 py-2 border text-center">
                       {(currentPage - 1) * itemsPerPage + index + 1}
@@ -152,6 +214,10 @@ const KonsepSPT = ({
                               navigate(
                                 `/praktikum/${id}/sistem/${akun}/buat-konsep-spt-pph/${item.id}`
                               );
+                            } else if (item.jenis_pajak === "PPHUNIFIKASI") {
+                              navigate(
+                                `/praktikum/${id}/sistem/${akun}/buat-konsep-spt-unifikasi/${item.id}`
+                              );
                             } else {
                               // Default fallback for other tax types
                               navigate(
@@ -161,6 +227,15 @@ const KonsepSPT = ({
                           }}
                         >
                           Edit
+                        </button>
+                        <button
+                          onClick={() => deleteSPT.mutate(item.id)}
+                          disabled={deleteSPT.isPending}
+                          className={`bg-red-500 hover:bg-red-600 disabled:bg-red-300 disabled:cursor-not-allowed text-white px-2 py-1 rounded text-xs ${
+                            item.status != "KONSEP" ? "hidden" : ""
+                          }`}
+                        >
+                          {deleteSPT.isPending ? "Menghapus..." : "Hapus"}
                         </button>
                       </div>
                     </td>
