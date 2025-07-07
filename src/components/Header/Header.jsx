@@ -27,11 +27,13 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { useNavigateWithParams } from "@/hooks/useNavigateWithParams";
 
 const Header = () => {
   // == Query ==
   const { id, akun } = useParams();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
+  const navigate = useNavigateWithParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const viewAsCompanyId = searchParams.get("viewAs");
 
@@ -45,6 +47,7 @@ const Header = () => {
   };
   const buttonRefs = useRef([]);
   const dropdownRefs = useRef([]);
+  const userId = searchParams.get('user_id');
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -74,6 +77,9 @@ const Header = () => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
+          params: {
+            ...(userId && { user_id: userId}),
+          },
         }
       );
 
@@ -94,7 +100,7 @@ const Header = () => {
     error: errorCompanies,
     refetch: refetchCompanies,
   } = useQuery({
-    queryKey: ["representedCompanies", id, akun],
+    queryKey: ["representedCompanies", id, akun, userId],
     queryFn: async () => {
       try {
         const response = await axios.get(
@@ -102,6 +108,9 @@ const Header = () => {
           {
             headers: {
               Authorization: `Bearer ${token}`,
+            },
+            params: {
+              ...(userId && { user_id: userId}),
             },
           }
         );
