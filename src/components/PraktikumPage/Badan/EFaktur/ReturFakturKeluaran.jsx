@@ -4,54 +4,11 @@ import { IoDocumentTextOutline } from "react-icons/io5";
 import { FaChevronDown, FaEdit, FaFilePdf } from "react-icons/fa";
 import { TiDeleteOutline } from "react-icons/ti";
 
-
-const [selectAll, setSelectAll] = useState(false);
-const [selectedItems, setSelectedItems] = useState([]);
-
-const handleClickOutside = (event) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsDropdownOpen(false);
-    }
-};
-
-React.useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-}, []);
-const handleSelectAll = () => {
-    if (selectAll) {
-        setSelectedItems([]);
-        setSelectAll(false);
-    } else {
-        setSelectedItems(data.map(item => item.id));
-        setSelectAll(true);
-    }
-};
-
-// Select single item handler
-const handleSelectItem = (itemId) => {
-    if (selectedItems.includes(itemId)) {
-        setSelectedItems(selectedItems.filter(id => id !== itemId));
-        setSelectAll(false);
-    } else {
-        setSelectedItems([itemId]);
-        setSelectAll(false);
-    }
-};
-
-React.useEffect(() => {
-        if (selectedItems.length === data.length && data.length > 0) {
-            setSelectAll(true);
-        } else {
-            setSelectAll(false);
-        }
-    }, [selectedItems]);
-
 const ReturFakturKeluaran = () => {
     return (
         <div className='flex h-screen bg-gray-100'>
             <SideBarEFaktur />
-            <div className="flex-auto p-3 bg-white rounded-md h-full">
+            <div className="flex-auto p-3 bg-white rounded-md h-full w-min-0">
                 <div className="flex justify-between items-center mb-4 pb-3 border-b">
                     <div className="flex items-center">
                         <IoDocumentTextOutline className="text-4xl text-blue-900" />
@@ -64,25 +21,35 @@ const ReturFakturKeluaran = () => {
                         Batalkan Retur
                     </button>
                 </div>
-            </div>
-            <div className="w-[1050px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden mx-4">
-                <table className='table-auto border border-gray-300 overflow-hidden'>
-                    <thead className="bg-gray-200">
-                        <tr>
-                            <th className='border border-gray-300 px-1 py-2'>No</th>
-                            <th className="border border-gray-300 px-4 py-2">
-                                <div className="flex items-center">
-                                    <input
-                                        type="checkbox"
-                                        checked={selectAll}
-                                        onChange={handleSelectAll}
-                                    />
-                                    <span className="ml-2">Nomor Faktur</span>
-                                </div>
-                            </th>
-                        </tr>
-                    </thead>
-                </table>
+                <div className="w-full overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden mx-4">
+                    <table className='table-auto border border-gray-300 overflow-hidden'>
+                        <thead className="bg-gray-200">
+                            <tr>
+                                <th className='border border-gray-300 px-1 py-2'>No</th>
+                                <th className="px-4 py-2 border">NPWP Pembeli</th>
+                                <th className="px-4 py-2 border">Nama Pembeli</th>
+                                <th className="px-4 py-2 border">Kode Transaksi</th>
+                                <th className="px-4 py-2 border">Nomor Faktur Pajak</th>
+                                <th className="px-4 py-2 border">Tanggal Faktur Pajak</th>
+                                <th className="px-4 py-2 border">Masa Pajak</th>
+                                <th className="px-4 py-2 border">Tahun</th>
+                                <th className="px-4 py-2 border">Status Faktur</th>
+                                <th className="px-4 py-2 border">ESignStatus</th>
+                                <th className="px-4 py-2 border">Harga Jual / Penggantian / DPP</th>
+                                <th className="px-4 py-2 border">DPP Nilai Lain / DPP</th>
+                                <th className="px-4 py-2 border">PPN</th>
+                                <th className="px-4 py-2 border">PPnMB</th>
+                                <th className="px-4 py-2 border">Penandatanganan</th>
+                                <th className="px-4 py-2 border">Referensi</th>
+                                <th className="px-4 py-2 border">Dilaporkan Oleh Pengguna</th>
+                                <th className="px-4 py-2 border">Dilaporkan Oleh Pemungut PPN</th>
+                            </tr>
+                        </thead>
+                        <tbody className="text-gray-600">
+                            
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     )
