@@ -57,6 +57,26 @@ const CreateKonsepUnifikasi = ({ data }) => {
   const [showHeaderc, setShowHeaderc] = useState(false);
 
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const formatRupiah = (number) => {
+    if (typeof number !== "number" && typeof number !== "string") return "";
+
+    // Normalize "0.00" to "0"
+    const normalizedNumber = number === "0.00" ? "0" : number;
+
+    const numericValue =
+      typeof normalizedNumber === "string"
+        ? Number(normalizedNumber.replace(/[^0-9.-]/g, "")) // Allow negative sign and decimal point
+        : normalizedNumber;
+
+    if (isNaN(numericValue)) return "";
+
+    // Use US locale for consistent comma thousands separator
+    return new Intl.NumberFormat("en-US", {
+      style: "decimal",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(numericValue);
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -456,16 +476,16 @@ const CreateKonsepUnifikasi = ({ data }) => {
                             Pasal 4 Ayat 2
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_a_pasal4}
+                            {formatRupiah(data.detail_spt.cl_a_pasal4)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_b_pasal4}
+                            {formatRupiah(data.detail_spt.cl_b_pasal4)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_c_pasal4}
+                            {formatRupiah(data.detail_spt.cl_c_pasal4)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_d_pasal4}
+                            {formatRupiah(data.detail_spt.cl_d_pasal4)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
                             0
@@ -479,16 +499,16 @@ const CreateKonsepUnifikasi = ({ data }) => {
                             KJS 411128-100
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_a_1}
+                            {formatRupiah(data.detail_spt.cl_a_1)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_b_1}
+                            {formatRupiah(data.detail_spt.cl_b_1)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_c_1}
+                            {formatRupiah(data.detail_spt.cl_c_1)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_d_1}
+                            {formatRupiah(data.detail_spt.cl_d_1)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
                             0
@@ -502,16 +522,16 @@ const CreateKonsepUnifikasi = ({ data }) => {
                             KJS 411128-402
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_a_2}
+                            {formatRupiah(data.detail_spt.cl_a_2)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_b_2}
+                            {formatRupiah(data.detail_spt.cl_b_2)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_c_2}
+                            {formatRupiah(data.detail_spt.cl_c_2)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_d_2}
+                            {formatRupiah(data.detail_spt.cl_d_2)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
                             0
@@ -525,16 +545,16 @@ const CreateKonsepUnifikasi = ({ data }) => {
                             KJS 411128-403
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_a_3}
+                            {formatRupiah(data.detail_spt.cl_a_3)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_b_3}
+                            {formatRupiah(data.detail_spt.cl_b_3)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_c_3}
+                            {formatRupiah(data.detail_spt.cl_c_3)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_d_3}
+                            {formatRupiah(data.detail_spt.cl_d_3)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
                             0
@@ -556,16 +576,16 @@ const CreateKonsepUnifikasi = ({ data }) => {
                             Pasal 15
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_a_pasal15}
+                            {formatRupiah(data.detail_spt.cl_a_pasal15)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_b_pasal15}
+                            {formatRupiah(data.detail_spt.cl_b_pasal15)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_c_pasal15}
+                            {formatRupiah(data.detail_spt.cl_c_pasal15)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_d_pasal15}
+                            {formatRupiah(data.detail_spt.cl_d_pasal15)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
                             0
@@ -579,16 +599,16 @@ const CreateKonsepUnifikasi = ({ data }) => {
                             KJS 411128-600
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_a_4}
+                            {formatRupiah(data.detail_spt.cl_a_4)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_b_4}
+                            {formatRupiah(data.detail_spt.cl_b_4)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_c_4}
+                            {formatRupiah(data.detail_spt.cl_c_4)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_d_4}
+                            {formatRupiah(data.detail_spt.cl_d_4)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
                             0
@@ -602,16 +622,16 @@ const CreateKonsepUnifikasi = ({ data }) => {
                             KJS 411129-600
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_a_5}
+                            {formatRupiah(data.detail_spt.cl_a_5)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_b_5}
+                            {formatRupiah(data.detail_spt.cl_b_5)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_c_5}
+                            {formatRupiah(data.detail_spt.cl_c_5)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_d_5}
+                            {formatRupiah(data.detail_spt.cl_d_5)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
                             0
@@ -633,16 +653,16 @@ const CreateKonsepUnifikasi = ({ data }) => {
                             Pasal 22
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_a_pasal22}
+                            {formatRupiah(data.detail_spt.cl_a_pasal22)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_b_pasal22}
+                            {formatRupiah(data.detail_spt.cl_b_pasal22)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_c_pasal22}
+                            {formatRupiah(data.detail_spt.cl_c_pasal22)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_d_pasal22}
+                            {formatRupiah(data.detail_spt.cl_d_pasal22)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
                             0
@@ -656,16 +676,16 @@ const CreateKonsepUnifikasi = ({ data }) => {
                             KJS 411122-100
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_a_6}
+                            {formatRupiah(data.detail_spt.cl_a_6)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_b_6}
+                            {formatRupiah(data.detail_spt.cl_b_6)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_c_6}
+                            {formatRupiah(data.detail_spt.cl_c_6)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_d_6}
+                            {formatRupiah(data.detail_spt.cl_d_6)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
                             0
@@ -679,16 +699,16 @@ const CreateKonsepUnifikasi = ({ data }) => {
                             KJS 411122-900
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_a_7}
+                            {formatRupiah(data.detail_spt.cl_a_7)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_b_7}
+                            {formatRupiah(data.detail_spt.cl_b_7)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_c_7}
+                            {formatRupiah(data.detail_spt.cl_c_7)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_d_7}
+                            {formatRupiah(data.detail_spt.cl_d_7)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
                             0
@@ -702,16 +722,16 @@ const CreateKonsepUnifikasi = ({ data }) => {
                             KJS 411122-910
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_a_8}
+                            {formatRupiah(data.detail_spt.cl_a_8)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_b_8}
+                            {formatRupiah(data.detail_spt.cl_b_8)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_c_8}
+                            {formatRupiah(data.detail_spt.cl_c_8)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_d_8}
+                            {formatRupiah(data.detail_spt.cl_d_8)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
                             0
@@ -733,16 +753,16 @@ const CreateKonsepUnifikasi = ({ data }) => {
                             Pasal 23
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_a_pasal23}
+                            {formatRupiah(data.detail_spt.cl_a_pasal23)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_b_pasal23}
+                            {formatRupiah(data.detail_spt.cl_b_pasal23)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_c_pasal23}
+                            {formatRupiah(data.detail_spt.cl_c_pasal23)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_d_pasal23}
+                            {formatRupiah(data.detail_spt.cl_d_pasal23)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
                             0
@@ -756,16 +776,16 @@ const CreateKonsepUnifikasi = ({ data }) => {
                             KJS 411124-100
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_a_9}
+                            {formatRupiah(data.detail_spt.cl_a_9)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_b_9}
+                            {formatRupiah(data.detail_spt.cl_b_9)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_c_9}
+                            {formatRupiah(data.detail_spt.cl_c_9)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_d_9}
+                            {formatRupiah(data.detail_spt.cl_d_9)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
                             0
@@ -787,16 +807,16 @@ const CreateKonsepUnifikasi = ({ data }) => {
                             Pasal 26
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_a_pasal26}
+                            {formatRupiah(data.detail_spt.cl_a_pasal26)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_b_pasal26}
+                            {formatRupiah(data.detail_spt.cl_b_pasal26)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_c_pasal26}
+                            {formatRupiah(data.detail_spt.cl_c_pasal26)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_d_pasal26}
+                            {formatRupiah(data.detail_spt.cl_d_pasal26)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
                             0
@@ -810,16 +830,16 @@ const CreateKonsepUnifikasi = ({ data }) => {
                             KJS 411127-110
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_a_10}
+                            {formatRupiah(data.detail_spt.cl_a_10)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_b_10}
+                            {formatRupiah(data.detail_spt.cl_b_10)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_c_10}
+                            {formatRupiah(data.detail_spt.cl_c_10)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_d_10}
+                            {formatRupiah(data.detail_spt.cl_d_10)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
                             0
@@ -838,20 +858,18 @@ const CreateKonsepUnifikasi = ({ data }) => {
                             TOTAL OF INCOME TAX
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_total_setor}
+                            {formatRupiah(data.detail_spt.cl_total_setor)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_total_potong}
+                            {formatRupiah(data.detail_spt.cl_total_potong)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_total_tanggung}
+                            {formatRupiah(data.detail_spt.cl_total_tanggung)}
                           </td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
-                            {data.detail_spt.cl_total_bayar}
+                            {formatRupiah(data.detail_spt.cl_total_bayar)}
                           </td>
-                          <td className="border border-gray-300 px-2 py-1 text-right">
-                            0
-                          </td>
+                          <td className="border border-gray-300 px-2 py-1 text-right"></td>
                           <td className="border border-gray-300 px-2 py-1 text-right">
                             0
                           </td>
