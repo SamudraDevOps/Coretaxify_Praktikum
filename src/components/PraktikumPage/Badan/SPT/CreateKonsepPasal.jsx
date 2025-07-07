@@ -33,17 +33,50 @@ const CreateKonsepPasal = ({ data }) => {
   console.log(data);
   const [cookies] = useCookies(["token"]);
   const { id, akun, idSpt } = useParams();
+  // const [form, setForm] = useState({
+  //   cl_bp1_2: "",
+  //   cl_bp1_3: "",
+  //   cl_bp1_5: "",
+  //   cl_bp1_4: "0.00", // calculated
+  //   cl_bp1_6: "0.00", // calculated
+  //   cl_bp2_2: "",
+  //   cl_bp2_3: "",
+  //   cl_bp2_5: "",
+  //   cl_bp2_4: "0.00", // calculated
+  //   cl_bp2_6: "0.00",
+  // });
+  const formatRupiah = (number) => {
+    if (typeof number !== "number" && typeof number !== "string") return "";
+
+    // Normalize "0.00" to "0"
+    const normalizedNumber = number === "0.00" ? "0" : number;
+
+    const numericValue =
+      typeof normalizedNumber === "string"
+        ? Number(normalizedNumber.replace(/[^0-9.-]/g, "")) // Allow negative sign and decimal point
+        : normalizedNumber;
+
+    if (isNaN(numericValue)) return "";
+
+    // Use US locale for consistent comma thousands separator
+    return new Intl.NumberFormat("en-US", {
+      style: "decimal",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(numericValue);
+  };
+
   const [form, setForm] = useState({
-    cl_bp1_2: "",
-    cl_bp1_3: "",
-    cl_bp1_5: "",
-    cl_bp1_4: "0.00", // calculated
-    cl_bp1_6: "0.00", // calculated
-    cl_bp2_2: "",
-    cl_bp2_3: "",
-    cl_bp2_5: "",
-    cl_bp2_4: "0.00", // calculated
-    cl_bp2_6: "0.00",
+    cl_bp1_2: formatRupiah(data.detail_spt.cl_bp1_2) || 0,
+    cl_bp1_3: formatRupiah(data.detail_spt.cl_bp1_3) || 0,
+    cl_bp1_5: formatRupiah(data.detail_spt.cl_bp1_5) || 0,
+    cl_bp1_4: formatRupiah(data.detail_spt.cl_bp1_4) || 0, // calculated
+    cl_bp1_6: formatRupiah(data.detail_spt.cl_bp1_6) || 0, // calculated
+    cl_bp2_2: formatRupiah(data.detail_spt.cl_bp2_2) || 0,
+    cl_bp2_3: formatRupiah(data.detail_spt.cl_bp2_3) || 0,
+    cl_bp2_5: formatRupiah(data.detail_spt.cl_bp2_5) || 0,
+    cl_bp2_4: formatRupiah(data.detail_spt.cl_bp2_4) || 0, // calculated
+    cl_bp2_6: formatRupiah(data.detail_spt.cl_bp2_6) || 0,
   });
 
   const handleChange = (e) => {
@@ -56,50 +89,99 @@ const CreateKonsepPasal = ({ data }) => {
     };
 
     // --- PASAL 21 ---
-    const cl_bp1_1 = parseFloat(data.detail_spt.cl_bp1_1) || 0;
+    const cl_bp1_1 =
+      parseFloat(String(data.detail_spt.cl_bp1_1).replace(/[^0-9.-]/g, "")) ||
+      0;
     const cl_bp1_2 =
-      parseFloat(name === "cl_bp1_2" ? value : form.cl_bp1_2) || 0;
+      parseFloat(
+        String(name === "cl_bp1_2" ? value : form.cl_bp1_2).replace(
+          /[^0-9.-]/g,
+          ""
+        )
+      ) || 0;
     const cl_bp1_3 =
-      parseFloat(name === "cl_bp1_3" ? value : form.cl_bp1_3) || 0;
+      parseFloat(
+        String(name === "cl_bp1_3" ? value : form.cl_bp1_3).replace(
+          /[^0-9.-]/g,
+          ""
+        )
+      ) || 0;
     const cl_bp1_5 =
-      parseFloat(name === "cl_bp1_5" ? value : form.cl_bp1_5) || 0;
+      parseFloat(
+        String(name === "cl_bp1_5" ? value : form.cl_bp1_5).replace(
+          /[^0-9.-]/g,
+          ""
+        )
+      ) || 0;
 
     const cl_bp1_4 = (cl_bp1_1 - cl_bp1_2 - cl_bp1_3).toFixed(2);
     const cl_bp1_6 = (cl_bp1_4 - cl_bp1_5).toFixed(2);
 
-    updatedForm.cl_bp1_4 = cl_bp1_4;
-    updatedForm.cl_bp1_6 = cl_bp1_6;
+    updatedForm.cl_bp1_4 = formatRupiah(cl_bp1_4);
+    updatedForm.cl_bp1_6 = formatRupiah(cl_bp1_6);
 
     // --- PASAL 26 ---
-    const cl_bp2_1 = parseFloat(data.detail_spt.cl_bp2_1) || 0;
+    const cl_bp2_1 =
+      parseFloat(String(data.detail_spt.cl_bp2_1).replace(/[^0-9.-]/g, "")) ||
+      0;
     const cl_bp2_2 =
-      parseFloat(name === "cl_bp2_2" ? value : form.cl_bp2_2) || 0;
+      parseFloat(
+        String(name === "cl_bp2_2" ? value : form.cl_bp2_2).replace(
+          /[^0-9.-]/g,
+          ""
+        )
+      ) || 0;
     const cl_bp2_3 =
-      parseFloat(name === "cl_bp2_3" ? value : form.cl_bp2_3) || 0;
+      parseFloat(
+        String(name === "cl_bp2_3" ? value : form.cl_bp2_3).replace(
+          /[^0-9.-]/g,
+          ""
+        )
+      ) || 0;
     const cl_bp2_5 =
-      parseFloat(name === "cl_bp2_5" ? value : form.cl_bp2_5) || 0;
+      parseFloat(
+        String(name === "cl_bp2_5" ? value : form.cl_bp2_5).replace(
+          /[^0-9.-]/g,
+          ""
+        )
+      ) || 0;
 
     const cl_bp2_4 = (cl_bp2_1 - cl_bp2_2 - cl_bp2_3).toFixed(2);
     const cl_bp2_6 = (cl_bp2_4 - cl_bp2_5).toFixed(2);
 
-    updatedForm.cl_bp2_4 = cl_bp2_4;
-    updatedForm.cl_bp2_6 = cl_bp2_6;
+    updatedForm.cl_bp2_4 = formatRupiah(cl_bp2_4);
+    updatedForm.cl_bp2_6 = formatRupiah(cl_bp2_6);
 
     // Set the updated form state
     setForm(updatedForm);
   };
 
   const calculateClBp1_4 = () => {
-    const a = parseFloat(data.detail_spt.cl_bp1_1) || 0;
-    const b = parseFloat(form.cl_bp1_2) || 0;
-    const c = parseFloat(form.cl_bp1_3) || 0;
-    return (a - b - c).toFixed(2);
+    // Strip formatting and parse to numbers
+    const a =
+      parseFloat(String(data.detail_spt.cl_bp1_1).replace(/[^0-9.-]/g, "")) ||
+      0;
+    const b = parseFloat(String(form.cl_bp1_2).replace(/[^0-9.-]/g, "")) || 0;
+    const c = parseFloat(String(form.cl_bp1_3).replace(/[^0-9.-]/g, "")) || 0;
+
+    // Calculate the result
+    const result = (a - b - c).toFixed(2);
+
+    // Apply formatRupiah to the result
+    return formatRupiah(result);
   };
 
   const calculateClBp1_6 = () => {
-    const d = parseFloat(calculateClBp1_4()) || 0;
-    const e = parseFloat(form.cl_bp1_5) || 0;
-    return (d - e).toFixed(2);
+    // Strip formatting and parse to numbers
+    const d =
+      parseFloat(String(calculateClBp1_4()).replace(/[^0-9.-]/g, "")) || 0;
+    const e = parseFloat(String(form.cl_bp1_5).replace(/[^0-9.-]/g, "")) || 0;
+
+    // Calculate the result
+    const result = (d - e).toFixed(2);
+
+    // Apply formatRupiah to the result
+    return formatRupiah(result);
   };
 
   const [activeTab, setActiveTab] = useState("induk");
@@ -425,7 +507,9 @@ const CreateKonsepPasal = ({ data }) => {
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm bg-yellow-100"
                               name="cl_bp1_1"
-                              defaultValue={data.detail_spt.cl_bp1_1}
+                              defaultValue={formatRupiah(
+                                data.detail_spt.cl_bp1_1
+                              )}
                               disabled
                             />
                           </td>
@@ -446,7 +530,7 @@ const CreateKonsepPasal = ({ data }) => {
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm"
                               name="cl_bp1_2"
-                              value={form.cl_bp1_2}
+                              value={formatRupiah(form.cl_bp1_2)}
                               onChange={handleChange}
                             />
                           </td>
@@ -467,7 +551,7 @@ const CreateKonsepPasal = ({ data }) => {
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm"
                               name="cl_bp1_3"
-                              value={form.cl_bp1_3}
+                              value={formatRupiah(form.cl_bp1_3)}
                               onChange={handleChange}
                             />
                           </td>
@@ -490,7 +574,7 @@ const CreateKonsepPasal = ({ data }) => {
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm bg-cyan-100"
                               name="cl_bp1_4"
-                              value={form.cl_bp1_4}
+                              value={formatRupiah(form.cl_bp1_4)}
                               disabled
                             />
                           </td>
@@ -511,8 +595,11 @@ const CreateKonsepPasal = ({ data }) => {
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm bg-yellow-100"
                               name="cl_bp1_5"
-                              defaultValue={data.detail_spt.cl_bp1_5}
+                              defaultValue={formatRupiah(
+                                data.detail_spt.cl_bp1_5
+                              )}
                               onChange={handleChange}
+                              readOnly
                             />
                           </td>
                         </tr>
@@ -570,7 +657,9 @@ const CreateKonsepPasal = ({ data }) => {
                             <input
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              defaultValue={data.detail_spt.cl_bp1_7}
+                              defaultValue={formatRupiah(
+                                data.detail_spt.cl_bp1_7
+                              )}
                               disabled
                             />
                           </td>
@@ -621,7 +710,9 @@ const CreateKonsepPasal = ({ data }) => {
                               name="cl_bp2_1"
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm bg-yellow-100"
-                              defaultValue={data.detail_spt.cl_bp2_1}
+                              defaultValue={formatRupiah(
+                                data.detail_spt.cl_bp2_1
+                              )}
                               disabled
                             />
                           </td>
@@ -642,7 +733,7 @@ const CreateKonsepPasal = ({ data }) => {
                               name="cl_bp2_2"
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm"
-                              value={form.cl_bp2_2}
+                              value={formatRupiah(form.cl_bp2_2)}
                               onChange={handleChange}
                             />
                           </td>
@@ -663,7 +754,7 @@ const CreateKonsepPasal = ({ data }) => {
                               name="cl_bp2_3"
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm"
-                              value={form.cl_bp2_3}
+                              value={formatRupiah(form.cl_bp2_3)}
                               onChange={handleChange}
                             />
                           </td>
@@ -686,7 +777,7 @@ const CreateKonsepPasal = ({ data }) => {
                               name="cl_bp2_4"
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm bg-cyan-100"
-                              value={form.cl_bp2_4}
+                              value={formatRupiah(form.cl_bp2_4)}
                               disabled
                             />
                           </td>
@@ -707,7 +798,7 @@ const CreateKonsepPasal = ({ data }) => {
                               name="cl_bp2_5"
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm"
-                              value={data.detail_spt.cl_bp2_5}
+                              value={formatRupiah(data.detail_spt.cl_bp2_5)}
                               disabled
                             />
                           </td>
@@ -729,7 +820,7 @@ const CreateKonsepPasal = ({ data }) => {
                               name="cl_bp2_6"
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm bg-cyan-100"
-                              value={form.cl_bp2_6}
+                              value={formatRupiah(form.cl_bp2_6)}
                               disabled
                             />
                           </td>
@@ -766,7 +857,9 @@ const CreateKonsepPasal = ({ data }) => {
                             <input
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              defaultValue={data.detail_spt.cl_bp2_7}
+                              defaultValue={formatRupiah(
+                                data.detail_spt.cl_bp2_7
+                              )}
                               disabled
                             />
                           </td>
