@@ -642,7 +642,7 @@ const CreateKonsepSPT = ({ data }) => {
       Swal.fire("Berhasil!", "SPT berhasil dibayar.", "success").then(
         (result) => {
           if (result.isConfirmed) {
-            navigate(`/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt`);
+            navigate(`/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt/konsep`);
           }
         }
       );
@@ -691,7 +691,9 @@ const CreateKonsepSPT = ({ data }) => {
       ).then((result) => {
         if (result.isConfirmed) {
           // window.location.href = `/praktikum/${id}/sistem/${akun}/buat-konsep-spt/${idSpt}`;
-          navigate(`/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt`);
+          navigate(
+            `/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt/konsep`
+          );
         }
       });
     },

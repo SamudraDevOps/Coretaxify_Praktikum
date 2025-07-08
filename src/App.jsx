@@ -1058,6 +1058,20 @@ const Main = () => {
           }
         />
         <Route
+          path="/praktikum/:id/sistem/:akun/surat-pemberitahuan-spt/"
+          element={
+            <Navigate
+              to={`/praktikum/${
+                window.location.pathname.split("/")[2]
+              }/sistem/${
+                window.location.pathname.split("/")[4]
+              }/surat-pemberitahuan-spt/konsep`}
+              replace
+            />
+          }
+        />
+
+        <Route
           path="/praktikum/:id/sistem/:akun/buat-konsep-spt"
           // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
           element={

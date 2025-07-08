@@ -111,7 +111,7 @@ const BuatKonsepSPT = ({ sidebar }) => {
       Swal.fire("Berhasil!", "Konsep SPT berhasil dibuat.", "success").then(
         (result) => {
           if (result.isConfirmed) {
-            navigate(`/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt`);
+            navigate(`/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt/konsep`);
             // window.location.href = `/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt`;
           }
         }

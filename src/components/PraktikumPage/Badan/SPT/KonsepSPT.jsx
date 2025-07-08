@@ -18,6 +18,7 @@ const KonsepSPT = ({
   onPageChange,
   currentPage = 1,
 }) => {
+  // console.log(window.location.href);
   const { id, akun } = useParams();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -210,6 +211,10 @@ const KonsepSPT = ({
                               navigate(
                                 `/praktikum/${id}/sistem/${akun}/buat-konsep-spt/${item.id}`
                               );
+        <Route
+          path="/praktikum/:id/sistem/:akun/surat-pemberitahuan-spt/"
+          element={<Navigate to="../surat-pemberitahuan-spt/konsep" replace />}
+        />
                             } else if (item.jenis_pajak === "PPH") {
                               navigate(
                                 `/praktikum/${id}/sistem/${akun}/buat-konsep-spt-pph/${item.id}`
@@ -228,6 +233,29 @@ const KonsepSPT = ({
                         >
                           Edit
                         </button>
+                        {item.status === "DILAPORKAN" && (
+                          <button
+                            className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs"
+                            onClick={() => {
+                              if (item.jenis_pajak === "PPN") {
+                                navigate(
+                                  `/praktikum/${id}/sistem/${akun}/spt/pdf/${item.id}`
+                                );
+                              } else if (item.jenis_pajak === "PPH") {
+                                navigate(
+                                  `/praktikum/${id}/sistem/${akun}/spt-pph/pdf/${item.id}`
+                                );
+                              } else if (item.jenis_pajak === "PPHUNIFIKASI") {
+                                navigate(
+                                  `/praktikum/${id}/sistem/${akun}/spt-unifikasi/pdf/${item.id}`
+                                );
+                              }
+                            }}
+                          >
+                            Lihat PDF
+                          </button>
+                        )}
+
                         <button
                           onClick={() => deleteSPT.mutate(item.id)}
                           disabled={deleteSPT.isPending}
