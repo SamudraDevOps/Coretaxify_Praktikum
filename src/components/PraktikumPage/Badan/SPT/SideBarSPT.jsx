@@ -11,19 +11,19 @@ const SideBarEFakturOP = ({ nama_akun, npwp_akun, akun }) => {
   const efakturItems = [
     {
       label: "SPT Konsep",
-      link: `/praktikum/${akun?.id}/sistem/${akun?.akun}/surat-pemberitahuan-spt?filter=konsep`,
+      link: `/praktikum/${akun?.id}/sistem/${akun?.akun}/surat-pemberitahuan-spt/konsep`,
     },
     {
       label: "SPT Menunggu Pembayaran",
-      link: `/praktikum/${akun?.id}/sistem/${akun?.akun}/surat-pemberitahuan-spt?filter=menunggu pembayaran`,
+      link: `/praktikum/${akun?.id}/sistem/${akun?.akun}/surat-pemberitahuan-spt/menunggu pembayaran`,
     },
     {
       label: "SPT Dilaporkan",
-      link: `/praktikum/${akun?.id}/sistem/${akun?.akun}/surat-pemberitahuan-spt?filter=dilaporkan`,
+      link: `/praktikum/${akun?.id}/sistem/${akun?.akun}/surat-pemberitahuan-spt/dilaporkan`,
     },
     {
       label: "SPT Ditolak",
-      link: `/praktikum/${akun?.id}/sistem/${akun?.akun}/surat-pemberitahuan-spt?filter=ditolak`,
+      link: `/praktikum/${akun?.id}/sistem/${akun?.akun}/surat-pemberitahuan-spt/ditolak`,
     },
   ];
 
@@ -61,7 +61,9 @@ const SideBarEFakturOP = ({ nama_akun, npwp_akun, akun }) => {
             </Link>
           </li> */}
 
-          <li className="font-bold text-lg mt-4 mb-2 text-start">e-Faktur</li>
+          <li className="font-bold text-lg mt-4 mb-2 text-start">
+            Surat Pemberitahuan
+          </li>
           {efakturItems.map((item, index) => {
             // const formattedItem = item.replace(/ /g, "-").toLowerCase();
             // const path = `/admin/praktikum/${userTypeId}/e-faktur/${formattedItem}`;

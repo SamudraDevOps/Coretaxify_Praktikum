@@ -47,7 +47,7 @@ export default function RoleBasedRenderer({
   }
 
   // First query - get user data (always for the actual user, not the viewed company)
-  // This should run regardless of URL to determine user type
+  // This should dibuatdless of URL to determine user type
   const {
     data: userData,
     isLoading: userLoading,
