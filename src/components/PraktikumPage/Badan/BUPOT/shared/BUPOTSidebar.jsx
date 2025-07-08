@@ -31,31 +31,37 @@ const BUPOTSidebar = ({ type, title }) => {
   ];
 
   return (
-    <div className="w-64 bg-white shadow-md p-4 min-h-screen">
-      <div className="bg-blue-900 h-10 w-full mb-4 rounded-md"></div>
-      <h2 className="text-lg font-semibold mb-4">
-        {title || type.toUpperCase()}
-      </h2>
-      <ul className="space-y-1">
-        {menuItems.map((item, index) => {
-          const isActive = location.pathname === item.path;
-          return (
-            <li
-              key={index}
-              className={`p-2 rounded-md cursor-pointer ${
-                isActive
-                  ? "bg-blue-700 text-white"
-                  : "hover:bg-blue-700 hover:text-white"
-              }`}
-            >
-              <button onClick={() => navigate(item.path)} className="block w-full p-2">
-                {item.label}
-              </button>
-            </li>
-          );
-        })}
-      </ul>
-    </div>
+    <aside className="w-64 flex-shrink-0 text-blue-900 px-5 py-5 h-screen bg-white">
+      <div className="mb-5 bg-blue-900 text-white p-2 text-center rounded-md">
+        <h2 className="text-lg font-bold mb-5">test</h2>
+        <h3 className="text-md font-semibold mb-5">Test</h3>
+      </div>
+      <nav className="border border-gray-200 rounded-md text-left text-blue-900 overflow-hidden">
+        <ul className="divide-gray-200">
+          <li className="font-bold text-md mt-4 mb-2 text-start pl-2">
+            {title || type.toUpperCase()}
+          </li>
+          {menuItems.map((item, index) => {
+            const isActive = location.pathname === item.path;
+         return (
+              <li
+                key={index}
+                className={`border-t border-gray-200 p-2 rounded-sm cursor-pointer hover:bg-blue-700 hover:text-white ${
+                  isActive
+                    ? "bg-blue-900 text-white"
+                    : "hover:bg-blue-700 hover:text-white"
+                }`}
+                onClick={() => navigate(item.path)}
+              >
+                <Link to={item.path} className="block w-full p-2">
+                  {item.label}
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      </nav>
+    </aside>
   );
 };
 

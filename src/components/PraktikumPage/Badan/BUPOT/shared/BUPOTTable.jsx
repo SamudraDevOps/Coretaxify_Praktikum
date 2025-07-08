@@ -61,7 +61,7 @@ const BUPOTTable = ({
   const colSpan = tableColumns.length;
 
   return (
-    <div className="bg-white p-4 border rounded w-[1220px] overflow-x-auto">
+    <div className="bg-white p-4 border rounded w-full overflow-x-auto">
       <table className="table-auto border-collapse">
         <thead>
           <tr className="bg-blue-800 text-gray-700 text-left">
