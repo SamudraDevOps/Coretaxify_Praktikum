@@ -191,7 +191,7 @@ const BuatKonsepSPT = ({ sidebar }) => {
   };
 
   const taxTypes = [
-    { label: "PPn", value: "ppn" },
+    { label: "PPN", value: "ppn" },
     { label: "PPh Pasal 21/26", value: "pph" },
     { label: "PPh Unifikasi", value: "pphunifikasi" },
     { label: "PPh Badan", value: "badan" },
