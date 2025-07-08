@@ -517,8 +517,9 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
       pemotongan_harga,
       dpp,
       jumlah,
-      ppn: parseInt("12%".replace(/\D/g, ""), 10) || 0,
-      ppnNominal: ppn,
+      ppn: ppn,
+      ppnNominal: parseInt("12%".replace(/\D/g, ""), 10) || 0,
+      // ppnNominal: ppn,
       tarif_ppnbm: parseInt(tarif_ppnbm.replace(/\D/g, ""), 10) || 0,
       ppnbm,
     };
@@ -646,6 +647,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
     mutationFn: async ({ data, isDraft }) => {
       const csrf = await getCsrf();
       const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
+      console.log("data sent:", data);
       return axios.post(
         `${RoutesApiReal.url}api/student/assignments/${id}/sistem/${accountId}/faktur`,
         data,
@@ -954,7 +956,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
       pic_id: akun,
     };
 
-    console.log(finalFormData);
+    console.log("final form :", finalFormData);
     createFaktur.mutate({ data: finalFormData, isDraft });
   };
 
@@ -1076,7 +1078,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
     console.log(""),
     console.log("Rendering TambahFakturKeluaran"),
     (
-      <div className="flex items-start"> 
+      <div className="flex items-start">
         <SideBarEFaktur
           nama_akun={sidebar.nama_akun}
           npwp_akun={sidebar.npwp_akun}
@@ -1094,7 +1096,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
             {showDokumenTransaksi ? <FaChevronUp /> : <FaChevronDown />}
           </div>
           {showDokumenTransaksi && (
-<div className="border rounded-md p-4 mb-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
+            <div className="border rounded-md p-4 mb-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
               <div className="space-y-2">
                 <label className="block text-sm font-medium">Uang Muka</label>
                 <input
