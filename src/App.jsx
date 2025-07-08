@@ -188,6 +188,8 @@ import KodeBillingViewPDF from "./components/PraktikumPage/Badan/Pembayaran/Kode
 import SptPpnPdf from "./components/PraktikumPage/PDFTemplate/SPTPPN";
 import SPTViewPDF from "./components/PraktikumPage/Badan/SPT/SPTViewPDF";
 import SPTPPHViewPDF from "./components/PraktikumPage/Badan/SPT/SPTPPHViewPDF";
+import SPTUnifikasiPDF from "./components/PraktikumPage/PDFTemplate/SPTUnifikasiTemplate";
+import SPTUnifikasiViewPDF from "./components/PraktikumPage/Badan/SPT/SPTUnifikasiViewPDF";
 
 const Main = () => {
   const [loading, setLoading] = useState(true);
@@ -1063,6 +1065,25 @@ const Main = () => {
           }
         />
         <Route
+          path="/praktikum/:id/sistem/:akun/spt-unifikasi/pdf/:idSpt"
+          // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/spt/:idSpt`}
+                intent={""}
+                OrangPribadi={SPTUnifikasiViewPDF}
+                Badan={SPTUnifikasiViewPDF}
+                query={""}
+              ></RoleBasedRenderer>
+            </>
+            // <>
+            //   <Header />
+            //   <KonsepSPT />
+            // </>
+          }
+        />
+        <Route
           path="/praktikum/:id/sistem/:akun/layanan-mandiri-kode-billing"
           // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
           element={
@@ -1141,6 +1162,16 @@ const Main = () => {
             <>
               <div className="w-full h-screen">
                 <ViewerPDF document={<FakturPajakKeluaranPdf />} />
+              </div>
+            </>
+          }
+        />
+        <Route
+          path="/pdf/spt-unifikasi"
+          element={
+            <>
+              <div className="w-full h-screen">
+                <ViewerPDF document={<SPTUnifikasiPDF />} />
               </div>
             </>
           }
