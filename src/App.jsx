@@ -185,6 +185,8 @@ import BukuBesar from "./components/PraktikumPage/PortalSaya/BukuBesar";
 import MasterAkun from "./components/PraktikumPage/PortalSaya/MasterAkun";
 import FakturViewPDF from "./components/PraktikumPage/Badan/EFaktur/FakturViewPDF";
 import KodeBillingViewPDF from "./components/PraktikumPage/Badan/Pembayaran/KodeBillingViewPDF";
+import SptPpnPdf from "./components/PraktikumPage/PDFTemplate/SPTPPN";
+import SPTViewPDF from "./components/PraktikumPage/Badan/SPT/SPTViewPDF";
 
 const Main = () => {
   const [loading, setLoading] = useState(true);
@@ -984,6 +986,25 @@ const Main = () => {
           }
         />
         <Route
+          path="/praktikum/:id/sistem/:akun/spt/pdf/:idSpt"
+          // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/spt/:idSpt`}
+                intent={""}
+                OrangPribadi={SPTViewPDF}
+                Badan={SPTViewPDF}
+                query={""}
+              ></RoleBasedRenderer>
+            </>
+            // <>
+            //   <Header />
+            //   <KonsepSPT />
+            // </>
+          }
+        />
+        <Route
           path="/praktikum/:id/sistem/:akun/buat-konsep-spt-pph/:idSpt"
           // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
           element={
@@ -1030,6 +1051,7 @@ const Main = () => {
                 // url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/spt`}
                 url={`${RoutesApi.apiUrl}kap-kjs`}
                 intent={""}
+                // ppn: parseInt("12%".replace(/\D/g, ""), 10) || 0,
                 OrangPribadi={SelfBilling}
                 Badan={SelfBilling}
                 query={"layanan-mandiri-kode-billing"}
@@ -1109,6 +1131,16 @@ const Main = () => {
             <>
               <div className="w-full h-screen">
                 <ViewerPDF document={<BpeSptPdf />} />
+              </div>
+            </>
+          }
+        />
+        <Route
+          path="/pdf/sptppn"
+          element={
+            <>
+              <div className="w-full h-screen">
+                <ViewerPDF document={<SptPpnPdf />} />
               </div>
             </>
           }
