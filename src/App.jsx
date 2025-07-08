@@ -187,6 +187,7 @@ import FakturViewPDF from "./components/PraktikumPage/Badan/EFaktur/FakturViewPD
 import KodeBillingViewPDF from "./components/PraktikumPage/Badan/Pembayaran/KodeBillingViewPDF";
 import SptPpnPdf from "./components/PraktikumPage/PDFTemplate/SPTPPN";
 import SPTViewPDF from "./components/PraktikumPage/Badan/SPT/SPTViewPDF";
+import SPTPPHViewPDF from "./components/PraktikumPage/Badan/SPT/SPTPPHViewPDF";
 
 const Main = () => {
   const [loading, setLoading] = useState(true);
@@ -1014,6 +1015,25 @@ const Main = () => {
                 intent={""}
                 OrangPribadi={CreateKonsepPasal}
                 Badan={CreateKonsepPasal}
+                query={""}
+              ></RoleBasedRenderer>
+            </>
+            // <>
+            //   <Header />
+            //   <KonsepSPT />
+            // </>
+          }
+        />
+        <Route
+          path="/praktikum/:id/sistem/:akun/spt-pph/pdf/:idSpt"
+          // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/spt/:idSpt`}
+                intent={""}
+                OrangPribadi={SPTPPHViewPDF}
+                Badan={SPTPPHViewPDF}
                 query={""}
               ></RoleBasedRenderer>
             </>
