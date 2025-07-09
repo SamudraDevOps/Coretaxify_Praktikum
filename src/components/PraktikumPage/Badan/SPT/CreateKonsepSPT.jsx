@@ -642,7 +642,9 @@ const CreateKonsepSPT = ({ data }) => {
       Swal.fire("Berhasil!", "SPT berhasil dibayar.", "success").then(
         (result) => {
           if (result.isConfirmed) {
-            navigate(`/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt/konsep`);
+            navigate(
+              `/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt/konsep`
+            );
           }
         }
       );
@@ -1018,7 +1020,7 @@ const CreateKonsepSPT = ({ data }) => {
                               type="number"
                               name="cl_1a3_dpp"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              // value={data.detail_spt.cl_1a3_dpp}
+                              value={formatRupiah(data.detail_spt.cl_1a3_dpp)}
                               readOnly
                             />
                           </td>
@@ -1049,7 +1051,7 @@ const CreateKonsepSPT = ({ data }) => {
                               defaultValue="0"
                               disabled
                               name="cl_3a_ppn"
-                              value={formatRupiah(data.detail_spt.cl_3a_ppn)}
+                              value={formatRupiah(data.detail_spt.cl_1a3_ppnbm)}
                             />
                           </td>
                         </tr>
