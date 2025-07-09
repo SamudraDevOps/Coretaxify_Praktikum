@@ -107,6 +107,7 @@ const CreateKonsepSPT = ({ data }) => {
 
   const [searchParams, setSearchParams] = useSearchParams();
   const viewAsCompanyId = searchParams.get("viewAs");
+  const userId = searchParams.get("user_id");
   // const formatRupiah = (number) => {
   //   if (typeof number !== "number") return "";
   //   return new Intl.NumberFormat("id-ID", {
@@ -1146,6 +1147,7 @@ const CreateKonsepSPT = ({ data }) => {
                                       );
                                       setOpenUpload(false);
                                     }}
+                                    className={userId ? "hidden" : ""}
                                   >
                                     Simpan
                                   </AlertDialogAction>
@@ -1373,7 +1375,7 @@ const CreateKonsepSPT = ({ data }) => {
                                       );
                                       setOpenLampiran(false);
                                     }}
-                                    className="bg-blue-600 text-white"
+                                    className={userId ? "hidden" : "bg-blue-600 text-white"}
                                   >
                                     Simpan
                                   </AlertDialogAction>
@@ -1482,7 +1484,7 @@ const CreateKonsepSPT = ({ data }) => {
                                       );
                                       setOpenPenyerahan(false);
                                     }}
-                                    className="bg-blue-600 text-white"
+                                    className={userId ? "hidden" : "bg-blue-600 text-white"}
                                   >
                                     Simpan
                                   </AlertDialogAction>
@@ -3011,7 +3013,7 @@ const CreateKonsepSPT = ({ data }) => {
                       className={`py-2 px-4 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-sm flex items-center justify-center ${
                         saveConcept.isPending
                           ? "bg-blue-400 text-white cursor-not-allowed"
-                          : "bg-blue-700 text-white hover:bg-blue-800"
+                          : userId ? "hidden" : "bg-blue-700 text-white hover:bg-blue-800"
                       }`}
                     >
                       {saveConcept.isPending ? (
@@ -3056,7 +3058,7 @@ const CreateKonsepSPT = ({ data }) => {
                           payDeposit.isPending ||
                           payBilling.isPending
                             ? "bg-blue-400 text-white cursor-not-allowed"
-                            : "bg-blue-700 text-white hover:bg-blue-800"
+                            : userId ? "hidden" : "bg-blue-700 text-white hover:bg-blue-800"
                         }`}
                       >
                         {saveConcept.isPending ||

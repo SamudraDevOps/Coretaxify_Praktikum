@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import {
   FaCalendarAlt,
@@ -60,6 +59,7 @@ const EditDataProfil = ({ data, sidebar }) => {
 
   const [searchParams, setSearchParams] = useSearchParams();
   const viewAsCompanyId = searchParams.get("viewAs");
+  const userId = searchParams.get("user_id");
 
   const { id, akun } = useParams();
   const token = getCookieToken();
@@ -835,7 +835,9 @@ const EditDataProfil = ({ data, sidebar }) => {
   };
 
   return (
-<div className="flex items-start bg-gray-100">      <SidebarProfilSaya
+    <div className="flex items-start bg-gray-100">
+      {" "}
+      <SidebarProfilSaya
         nama_akun={sidebar.nama_akun}
         npwp_akun={sidebar.npwp_akun}
         akun={{ id, akun }}
@@ -1178,7 +1180,7 @@ const EditDataProfil = ({ data, sidebar }) => {
             <div className="flex justify-end mt-4">
               <button
                 type="submit"
-                className="px-4 py-2 bg-blue-500 text-white rounded-md"
+                className={userId ? "hidden" : "px-4 py-2 bg-blue-500 text-white rounded-md"}
                 onClick={() => updateInformasiUmum.mutate()}
                 // onClick={() => console.log(formData)}
               >
@@ -1198,7 +1200,7 @@ const EditDataProfil = ({ data, sidebar }) => {
           <div className="border rounded-md p-4 mb-4">
             <div className="flex justify-between items-center mb-4">
               <AlertDialog>
-                <AlertDialogTrigger className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md">
+                <AlertDialogTrigger className={userId ? "hidden" : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"}>
                   Tambah
                 </AlertDialogTrigger>
                 <AlertDialogContent className="bg-white !min-w-[1000px] rounded-lg shadow-lg ">
@@ -1575,13 +1577,13 @@ const EditDataProfil = ({ data, sidebar }) => {
                 <tbody className="text-gray-600">
                   <tr className="bg-gray-100">
                     <td className="px-1 py-4 border">
-                      <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-2 rounded">
+                      <button className={userId ? "hidden" : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-2 rounded"}>
                         Edit
                       </button>
                       <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-2 rounded ml-2">
                         Lihat
                       </button>
-                      <button className="bg-red-500 hover:bg-red-600 text-white py-2 px-2 rounded ml-2">
+                      <button className={userId ? "hidden" : "bg-red-500 hover:bg-red-600 text-white py-2 px-2 rounded ml-2"}>
                         Hapus
                       </button>
                     </td>
@@ -1610,7 +1612,7 @@ const EditDataProfil = ({ data, sidebar }) => {
           <div className="border rounded-md p-4 mb-4">
             <div className="flex justify-between items-center mb-4">
               <AlertDialog>
-                <AlertDialogTrigger className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md">
+                <AlertDialogTrigger className={userId ? "hidden" : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"}>
                   + Tambah Kontak
                 </AlertDialogTrigger>
                 <AlertDialogContent className="bg-white !min-w-[1000px] rounded-lg shadow-lg ">
@@ -1786,7 +1788,7 @@ const EditDataProfil = ({ data, sidebar }) => {
                             <AlertDialog>
                               <AlertDialogTrigger
                                 onClick={() => setContactFormData(contact)}
-                                className="bg-blue-500 hover:bg-blue-600 text-white py-1 px-4 rounded-md"
+                                className={userId ? "hidden" : "bg-blue-500 hover:bg-blue-600 text-white py-1 px-4 rounded-md"}
                               >
                                 edit
                               </AlertDialogTrigger>
@@ -1949,7 +1951,7 @@ const EditDataProfil = ({ data, sidebar }) => {
                               </AlertDialogContent>
                             </AlertDialog>
                             <button
-                              className="action-button delete"
+                              className={userId ? "hidden" : "action-button delete"}
                               onClick={() => {
                                 Swal.fire({
                                   title: "Hapus Kontak?",
@@ -2019,7 +2021,7 @@ const EditDataProfil = ({ data, sidebar }) => {
           <div className="border rounded-md p-4 mb-4 ">
             <div className="flex justify-between items-center mb-4">
               <button
-                className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-2 rounded"
+                className={userId ? "hidden" : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-2 rounded"}
                 onClick={openModal}
               >
                 + Tambah
@@ -2327,7 +2329,7 @@ const EditDataProfil = ({ data, sidebar }) => {
           <div className="border rounded-md p-4 mb-4">
             <div className="flex justify-between items-center mb-4">
               <AlertDialog>
-                <AlertDialogTrigger className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md">
+                <AlertDialogTrigger className={userId ? "hidden" : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"}>
                   + Tambah
                 </AlertDialogTrigger>
                 <AlertDialogContent className="bg-white !min-w-[1000px] rounded-lg shadow-lg ">
@@ -2427,7 +2429,7 @@ const EditDataProfil = ({ data, sidebar }) => {
                           <AlertDialog>
                             <AlertDialogTrigger
                               onClick={() => setTkuFormData(tku)}
-                              className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"
+                              className={userId ? "hidden" : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"}
                             >
                               Edit
                             </AlertDialogTrigger>
@@ -2507,7 +2509,7 @@ const EditDataProfil = ({ data, sidebar }) => {
                           </button>
                           <button
                             onClick={() => deleteTku.mutate(tku.id)}
-                            className="bg-red-500 hover:bg-red-600 text-white py-2 px-2 rounded ml-2"
+                            className={userId ? "hidden" : "bg-red-500 hover:bg-red-600 text-white py-2 px-2 rounded ml-2"}
                           >
                             Hapus
                           </button>
@@ -2535,7 +2537,7 @@ const EditDataProfil = ({ data, sidebar }) => {
           <div className="border rounded-md p-4 mb-4">
             <div className="flex justify-between items-center mb-4">
               <AlertDialog>
-                <AlertDialogTrigger className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md">
+                <AlertDialogTrigger className={userId ? "hidden" : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"}>
                   + Tambah
                 </AlertDialogTrigger>
                 <AlertDialogContent className="bg-white !min-w-[1000px] rounded-lg shadow-lg ">
@@ -2738,7 +2740,7 @@ const EditDataProfil = ({ data, sidebar }) => {
                         <AlertDialog>
                           <AlertDialogTrigger
                             onClick={() => setBankFormData(bank)}
-                            className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"
+                            className={userId ? "hidden" : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"}
                           >
                             Edit
                           </AlertDialogTrigger>
@@ -2997,7 +2999,7 @@ const EditDataProfil = ({ data, sidebar }) => {
               </div>
               <div className="flex justify-end">
                 <button
-                  className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                  className={userId ? "hidden" : "px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"}
                   onClick={() => updateExternalId.mutate()}
                 >
                   {updateExternalId.isLoading ? (
@@ -3127,7 +3129,7 @@ const EditDataProfil = ({ data, sidebar }) => {
           <div className="border rounded-md p-4 mb-4">
             <div className="flex justify-between items-center mb-4">
               <AlertDialog>
-                <AlertDialogTrigger className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md">
+                <AlertDialogTrigger className={userId ? "hidden" : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"}>
                   + Tambah
                 </AlertDialogTrigger>
                 <AlertDialogContent className="bg-white !min-w-[1000px] rounded-lg shadow-lg ">
@@ -3374,7 +3376,7 @@ const EditDataProfil = ({ data, sidebar }) => {
                             <AlertDialog>
                               <AlertDialogTrigger
                                 onClick={() => setFamilyUnitFormData(family)}
-                                className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"
+                                className={userId ? "hidden" : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"}
                               >
                                 Edit
                               </AlertDialogTrigger>
@@ -3598,7 +3600,7 @@ const EditDataProfil = ({ data, sidebar }) => {
                                   }
                                 });
                               }}
-                              className="bg-red-500 hover:bg-red-600 text-white py-2 px-2 rounded ml-2"
+                              className={userId ? "hidden" : "bg-red-500 hover:bg-red-600 text-white py-2 px-2 rounded ml-2"}
                             >
                               Hapus
                             </button>

@@ -8,11 +8,14 @@ import axios from "axios";
 import { ClipLoader } from "react-spinners";
 import { RoutesApi } from "@/Routes";
 import { Sidebar } from "react-pro-sidebar";
+import { useSearchParams } from "react-router-dom";
 
 const ProfilSaya = ({ data, sidebar }) => {
   const [activeTab, setActiveTab] = useState("profil");
   const { id, akun } = useParams();
   const token = getCookieToken();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const userId = searchParams.get("user_id");
   // const { isLoading, isError, data, error, refetch } = useQuery({
   //   queryKey: ["getportal", id],
   //   queryFn: async () => {

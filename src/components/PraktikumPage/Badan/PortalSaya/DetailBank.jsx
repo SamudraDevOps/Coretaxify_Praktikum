@@ -26,6 +26,7 @@ const DetailBank = ({ data, sidebar }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const viewAsCompanyId = searchParams.get("viewAs");
   const [cookies] = useCookies(["token"]);
+  const userId = searchParams.get("user_id");
   const [bankFormData, setBankFormData] = useState({
     nama_bank: "",
     nomor_rekening_bank: "",
@@ -160,7 +161,7 @@ const DetailBank = ({ data, sidebar }) => {
                       <AlertDialog>
                         <AlertDialogTrigger
                           onClick={() => setBankFormData(bank)}
-                          className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"
+                          className={userId ? "hidden" : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"}
                         >
                           Edit
                         </AlertDialogTrigger>
@@ -335,7 +336,7 @@ const DetailBank = ({ data, sidebar }) => {
                       </AlertDialog>
                       <button
                         onClick={() => deleteDetailBank.mutate(bank.id)}
-                        className="bg-red-500 hover:bg-red-600 text-white py-2 px-2 rounded ml-2"
+                        className={userId ? "hidden" : "bg-red-500 hover:bg-red-600 text-white py-2 px-2 rounded ml-2"}
                       >
                         Hapus
                       </button>

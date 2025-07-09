@@ -77,6 +77,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
   const { id, akun } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const viewAsCompanyId = searchParams.get("viewAs");
+  const userId = searchParams.get("user_id");
   const [cookies] = useCookies(["token"]);
 
   const RoutesApi = {
@@ -1083,7 +1084,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
           akun={{ id, akun }}
         />
         <div className="flex-grow p-6 bg-white h-full overflow-y-auto">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+          <h2 className={userId ? "hidden" : "text-2xl font-semibold text-gray-800 mb-4"}>
             Tambah Data
           </h2>
           <div
@@ -1839,7 +1840,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
               <div className="flex justify-between mb-4 border-b pb-3">
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
-                    <button className="flex items-center bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded">
+                    <button className={userId ? "hidden" : "flex items-center bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded"}>
                       {editMode ? "Edit Transaksi" : "Tambah Transaksi"}
                     </button>
                   </AlertDialogTrigger>
@@ -2225,7 +2226,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                             <AlertDialog>
                               <AlertDialogTrigger asChild>
                                 <button
-                                  className="bg-blue-500 hover:bg-blue-600 text-white py-1 px-2 rounded text-xs"
+                                  className={userId ? "hidden" : "bg-blue-500 hover:bg-blue-600 text-white py-1 px-2 rounded text-xs"}
                                   onClick={() => handleEditTransaksi(item.id)}
                                 >
                                   Edit
@@ -2668,7 +2669,7 @@ ${isChecked ? "" : "bg-gray-100"}
             </button>
             <button
               onClick={(e) => handleSubmit(e, true)}
-              className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              className={userId ? "hidden" : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"}
               disabled={createFaktur.isPending}
             >
               {createFaktur.isPending ? (
@@ -2682,7 +2683,7 @@ ${isChecked ? "" : "bg-gray-100"}
             </button>
             <button
               onClick={(e) => handleSubmit(e, false)}
-              className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              className={userId ? "hidden" : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"}
               disabled={createFaktur.isPending}
             >
               {createFaktur.isPending ? (

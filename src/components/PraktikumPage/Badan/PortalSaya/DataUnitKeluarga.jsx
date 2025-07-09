@@ -22,6 +22,7 @@ const DataUnitKeluarga = ({ data, sidebar }) => {
   const { id, akun } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const viewAsCompanyId = searchParams.get("viewAs");
+  const userId = searchParams.get("user_id");
   const [familyUnitFormData, setFamilyUnitFormData] = useState({
     nik_anggota_keluarga: "",
     jenis_kelamin: "Pria",
@@ -173,7 +174,7 @@ const DataUnitKeluarga = ({ data, sidebar }) => {
                       <AlertDialog>
                         <AlertDialogTrigger
                           onClick={() => setFamilyUnitFormData(family)}
-                          className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"
+                          className={userId ? "hidden" : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"}
                         >
                           Edit
                         </AlertDialogTrigger>
@@ -385,7 +386,7 @@ const DataUnitKeluarga = ({ data, sidebar }) => {
                             }
                           });
                         }}
-                        className="bg-red-500 hover:bg-red-600 text-white py-2 px-2 rounded ml-2"
+                        className={userId ? "hidden" : "bg-red-500 hover:bg-red-600 text-white py-2 px-2 rounded ml-2"}
                       >
                         Hapus
                       </button>

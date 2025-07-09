@@ -104,6 +104,7 @@ const SelfBilling = ({ data: propData }) => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const viewAsCompanyId = searchParams.get("viewAs");
+  const userId = searchParams.get("user_id");
 
   const [formData, setFormData] = useState({
     currency: "IDR",
@@ -686,7 +687,7 @@ const SelfBilling = ({ data: propData }) => {
                 handleNext();
               }
             }}
-            className={cn(
+            className={userId ? "hidden" : cn(
               "bg-blue-600 hover:bg-blue-700 text-white",
               step === steps.length && "bg-green-600 hover:bg-green-700"
             )}

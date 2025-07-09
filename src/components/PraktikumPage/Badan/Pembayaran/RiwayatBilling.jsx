@@ -14,7 +14,7 @@ import { AlertDialogTrigger } from "@radix-ui/react-alert-dialog";
 import { PDFViewer } from "@react-pdf/renderer";
 import BillingCodePdf from "../../PDFTemplate/BillingCodeTemplate";
 import { useNavigateWithParams } from "@/hooks/useNavigateWithParams";
-import { useParams } from "react-router";
+import { useParams, useSearchParams } from "react-router";
 
 const generateNTPN = () => {
   // 16 digit random number
@@ -28,6 +28,8 @@ const RiwayatBilling = ({ data, sidebar }) => {
   const [openNTPN, setOpenNTPN] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null); // Add this to track selected item
   const [copied, setCopied] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const userId = searchParams.get("user_id");
 
   const handleLihatNTPNClick = (item) => {
     // Modified to accept item parameter
@@ -210,7 +212,7 @@ const RiwayatBilling = ({ data, sidebar }) => {
                       </AlertDialogContent>
                     </AlertDialog> */}
                     {item.is_paid === 0 && (
-                      <button className="bg-red-100 text-red-600 hover:bg-red-200 hover:underline rounded px-3 py-1">
+                      <button className={userId ? "hidden" : "bg-red-100 text-red-600 hover:bg-red-200 hover:underline rounded px-3 py-1"}>
                         Bayar
                       </button>
                     )}
