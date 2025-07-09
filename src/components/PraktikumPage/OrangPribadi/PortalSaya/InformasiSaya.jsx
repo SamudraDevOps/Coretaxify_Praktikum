@@ -11,6 +11,7 @@ import { getCookieToken } from "@/service";
 import axios from "axios";
 import { ClipLoader } from "react-spinners";
 import { RoutesApi } from "@/Routes";
+import { useNavigateWithParams } from "@/hooks/useNavigateWithParams";
 
 const InformasiSaya = ({ data, sidebar }) => {
   const [activeTab, setActiveTab] = useState("general");
@@ -76,6 +77,7 @@ const InformasiSaya = ({ data, sidebar }) => {
   // }
   console.log("pls gel");
   console.log(data, "sidebar", sidebar);
+  const navigate = useNavigateWithParams();
   return (
     <div className="flex h-screen bg-gray-100">
       <SidebarProfilSaya
@@ -86,16 +88,17 @@ const InformasiSaya = ({ data, sidebar }) => {
       <main className="flex-auto p-3 bg-white rounded-md h-full">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-semibold">Informasi Umum Wajib Pajak</h2>
-          <a href={`/praktikum/${id}/sistem/${akun}/edit-informasi-umum`}>
-            <button
-              className="px-4 py-2 bg-yellow-300 hover:bg-yellow-400 text-blue-900 rounded-md"
-              // onClick={() =>
-              //   (window.location.href = `/admin/praktikum/${getUserTypePath()}/profil-saya/informasi-umum/edit-data-profil`)
-              // }
-            >
-              Edit
-            </button>
-          </a>
+          {/* <a href={`/praktikum/${id}/sistem/${akun}/edit-informasi-umum`}> */}
+          <button
+            className="px-4 py-2 bg-yellow-300 hover:bg-yellow-400 text-blue-900 rounded-md"
+            onClick={() =>
+              navigate(`/praktikum/${id}/sistem/${akun}/edit-informasi-umum`)
+            }
+            // (window.location.href = `/admin/praktikum/${getUserTypePath()}/profil-saya/informasi-umum/edit-data-profil`)
+          >
+            Edit
+          </button>
+          {/* </a> */}
         </div>
 
         <div className="w-full p-2 ml-0 border-t">
