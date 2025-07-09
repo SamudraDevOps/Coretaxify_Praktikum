@@ -27,44 +27,45 @@ const SideBarEFakturOP = ({ nama_akun, npwp_akun, akun }) => {
     },
   ];
 
-  const dokumenLainItems = [
-    { label: "SPT Masukan", link: "pajak-keluaran" },
-    { label: "SPT Menunggu Pembayaran", link: "pajak-masukan" },
-    {
-      label: "SPT Menunggu Dilaporkan",
-      link: "retur-dokumen-lain-keluaran",
-    },
-    { label: "SPT Ditolak", link: "retur-dokumen-lain-masukan" },
-  ];
+  // const dokumenLainItems = [
+  //   { label: "SPT Masukan", link: "pajak-keluaran" },
+  //   { label: "SPT Menunggu Pembayaran", link: "pajak-masukan" },
+  //   {
+  //     label: "SPT Menunggu Dilaporkan",
+  //     link: "retur-dokumen-lain-keluaran",
+  //   },
+  //   { label: "SPT Ditolak", link: "retur-dokumen-lain-masukan" },
+  // ];
 
   const dashboardPath = `/admin/praktikum/${userTypeId}/e-faktur`;
   const isDashboard = location.pathname === dashboardPath;
   const navigate = useNavigateWithParams();
 
   return (
-    <aside className="w-1/6 text-blue-900 px-5 py-5 h-screen bg-white">
-      <div className="mb-5 bg-blue-900 text-white p-2 text-center">
+    <aside className="w-64 flex-shrink-0 text-blue-900 px-5 py-5 h-screen bg-white">
+      <div className="mb-5 bg-blue-900 text-white p-2 text-center rounded-md">
         <h2 className="text-lg font-bold mb-5">{npwp_akun}</h2>
         <h3 className="text-md font-semibold mb-5">{nama_akun}</h3>
       </div>
-      <nav>
-        <ul className="space-y-1">
-          {/* <li
-            className={`p-2 rounded-md cursor-pointer ${
+      <nav className="border border-gray-200 rounded-md text-left text-blue-900 overflow-hidden">
+        <ul className="divide-gray-200">
+          {/* { <li
+            className={`p-2 rounded-md cursor-pointer border-b border-gray-200${
               isDashboard
-                ? "bg-blue-700 text-white"
+                ? "bg-blue-900 text-white"
                 : "hover:bg-blue-700 hover:text-white"
             }`}
           >
             <Link to={dashboardPath} className="block w-full p-2">
               <strong>Dashboard</strong>
             </Link>
-          </li> */}
+          </li> 
+          } */}
 
-          <li className="font-bold text-lg mt-4 mb-2 text-start">
-            Surat Pemberitahuan
-          </li>
+          <li className="font-bold text-md mt-4 mb-2 text-start pl-2">Surat Pemberitahuan (SPT)</li>
           {efakturItems.map((item, index) => {
+            const currentPath = location.pathname;
+            // const linkPath = item.link.split('?')[0];
             // const formattedItem = item.replace(/ /g, "-").toLowerCase();
             // const path = `/admin/praktikum/${userTypeId}/e-faktur/${formattedItem}`;
             // console.log(location.pathname, item.link);
@@ -73,23 +74,26 @@ const SideBarEFakturOP = ({ nama_akun, npwp_akun, akun }) => {
             return (
               <li
                 key={index}
-                className={`p-2 rounded-md cursor-pointer ${
+                className={`border-t border-gray-200 p-2 rounded-sm cursor-pointer hover:bg-blue-700 hover:text-white ${
                   isActive
-                    ? "bg-blue-700 text-white"
+                    ? "bg-blue-900 text-white"
                     : "hover:bg-blue-700 hover:text-white"
                 }`}
                 onClick={() => navigate(item.link)}
               >
-                {item.label}
-                {/* <Link to={item.link} className="block w-full p-2">
+                
+                {/* {item.label} */}
+                <Link to={item.link} className="block w-full p-2">
                   {item.label}
-                </Link> */}
+                </Link>
               </li>
             );
           })}
 
-          <li className="font-bold text-lg mt-4 mb-2">Dokumen Lain</li>
+          {/* <li className="font-bold text-lg mt-4 mb-2">Dokumen Lain</li>
           {dokumenLainItems.map((item, index) => {
+                const currentPath = location.pathname;
+            const linkPath = item.link.split('?')[0];
             // const formattedItem = item.replace(/ /g, "-").toLowerCase();
             // const path = `/admin/praktikum/${userTypeId}/e-faktur/dokumen-lain/${formattedItem}`;
             const isActive = location.pathname.includes(`/${item.link}`);
@@ -108,7 +112,7 @@ const SideBarEFakturOP = ({ nama_akun, npwp_akun, akun }) => {
                 </Link>
               </li>
             );
-          })}
+          })} */}
         </ul>
       </nav>
     </aside>

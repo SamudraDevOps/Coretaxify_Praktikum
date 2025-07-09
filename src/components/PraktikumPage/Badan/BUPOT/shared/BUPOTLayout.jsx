@@ -43,7 +43,7 @@ const BUPOTLayout = ({
     <div className="flex">
       <BUPOTSidebar type={type} title={sidebarTitle} />
 
-      <div className="w-full p-6 bg-gray-50 min-h-screen">
+      <div className="w-full p-6 bg-gray-50 min-h-screen min-w-0">
         {customActionBar || (
           <BUPOTActionBar type={type} status={status} title={tableTitle} selectedItems={selectedItems} onActionComplete={handleActionComplete} />
         )}
