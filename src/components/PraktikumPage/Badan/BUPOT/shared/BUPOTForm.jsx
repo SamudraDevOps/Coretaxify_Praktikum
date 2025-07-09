@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { useParams } from "react-router";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import countryData from "../../../../../../src/all.json";
 // import Select from "react-select";
 import {
@@ -29,6 +29,8 @@ const BUPOTForm = ({
 }) => {
   const location = useLocation();
   const navigate = useNavigateWithParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const monitoredUserId = searchParams.get('user_id');
 
   // State for accordion sections
   const [openSections, setOpenSections] = useState({
@@ -3534,7 +3536,7 @@ const BUPOTForm = ({
         <div className="flex justify-end mt-4">
           {isEditing && (
             <button
-              className="bg-blue-500 text-white px-4 py-2 rounded-md mr-2"
+              className={monitoredUserId ? "hidden" : "bg-blue-500 text-white px-4 py-2 rounded-md mr-2"}
               disabled={isLoading}
               onClick={() => handleEditSubmit("save")}
             >
@@ -3544,14 +3546,14 @@ const BUPOTForm = ({
           {location.pathname.includes("/create") && (
             <>
               <button
-                className="bg-blue-500 text-white px-4 py-2 rounded-md mr-2"
+                className={monitoredUserId ? "hidden" : "bg-blue-500 text-white px-4 py-2 rounded-md mr-2"}
                 onClick={() => handleSubmit("save")}
                 disabled={isLoading}
               >
                 {isLoading ? "Menyimpan..." : "Simpan"}
               </button>
               <button
-                className="bg-blue-500 text-white px-4 py-2 rounded-md mr-2"
+                className={monitoredUserId ? "hidden" : "bg-blue-500 text-white px-4 py-2 rounded-md mr-2"}
                 disabled={isLoading}
                 onClick={() => {
                   handleSubmit("draft");
@@ -3562,7 +3564,7 @@ const BUPOTForm = ({
             </>
           )}
           <button
-            className="bg-gray-300 text-gray-700 px-4 py-2 rounded-md"
+            className={monitoredUserId ? "hidden" : "bg-gray-300 text-gray-700 px-4 py-2 rounded-md"}
             onClick={() => handleSubmit("cancel")}
           >
             Batalkan

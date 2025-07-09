@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import { useNavigateWithParams } from "@/hooks/useNavigateWithParams";
 
 const BUPOTTable = ({
@@ -13,6 +13,8 @@ const BUPOTTable = ({
 }) => {
   const { id, akun } = useParams();
   const navigate = useNavigateWithParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const userId = searchParams.get('user_id');
 
   // handle select all
   const handleSelectAll = (e) => {
@@ -90,7 +92,7 @@ const BUPOTTable = ({
                       <div className="flex pace-x-2">
                         <button 
                           onClick={() => navigate(`/praktikum/${id}/sistem/${akun}/bupot/${type}/${row.id}/edit`)}
-                          className="bg-blue-500 text-white px-2 py-1 rounded text-sm hover:bg-blue-600"
+                          className={userId ? "hidden" : "bg-blue-500 text-white px-2 py-1 rounded text-sm hover:bg-blue-600"}
                         >
                           Edit
                         </button>

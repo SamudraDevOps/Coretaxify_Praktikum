@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 import { RoutesApi } from "@/Routes";
@@ -18,6 +18,8 @@ const BUPOTActionBar = ({
   const [cookies] = useCookies(["token"]);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigateWithParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const userId = searchParams.get("user_id");
 
   // Map types to their creation routes
   const createPaths = {
@@ -152,32 +154,33 @@ const BUPOTActionBar = ({
       </h1>
       <div className="flex space-x-2">
         {showCreateButton && isDraft && (
-          
-            <button className="bg-blue-700 text-white px-4 py-2 rounded" onClick={() => navigate(createPaths[type])}>
-              + Create eBupot {type.toUpperCase()}
-            </button>
-          
+          <button
+            className={userId ? "hidden" : "bg-blue-700 text-white px-4 py-2 rounded"}
+            onClick={() => navigate(createPaths[type])}
+          >
+            + Create eBupot {type.toUpperCase()}
+          </button>
         )}
 
         {isDraft && (
           <>
             <button
-              className={`px-4 py-2 rounded ${
+              className={userId ? "hidden" : (`px-4 py-2 rounded ${
                 selectedItems.length > 0 && !isLoading
                   ? "bg-green-600 text-white hover:bg-green-700"
                   : "bg-gray-300 text-gray-700"
-              }`}
+              }`)}
               onClick={handlePublish}
               disabled={selectedItems.length === 0 || isLoading}
             >
               {isLoading ? "Menerbitkan..." : "Terbitkan"}
             </button>
             <button
-              className={`px-4 py-2 rounded ${
+              className={userId ? "hidden" : (`px-4 py-2 rounded ${
                 selectedItems.length > 0 && !isLoading
                   ? "bg-red-600 text-white hover:bg-red-700"
                   : "bg-gray-300 text-gray-700"
-              }`}
+              }`)}
               onClick={handleDelete}
               disabled={selectedItems.length === 0 || isLoading}
             >
@@ -194,17 +197,19 @@ const BUPOTActionBar = ({
                 : "bg-gray-300 text-gray-700"
             }`}
             onClick={handleDelete}
-            disabled={selectedItems.length === 0 || isLoading}
+            disabled={selectedItems.length === 0 || isLoading || !!userId}
           >
             {isLoading ? "Menghapus..." : "Hapus"}
           </button>
         )}
 
-        <button className="bg-white border px-4 py-2 rounded">
+        <button className={userId ? "hidden" : "bg-white border px-4 py-2 rounded"}>
           XML Monitoring
         </button>
         <div className="relative">
-          <button className="bg-white border px-4 py-2 rounded">
+          <button
+            className={userId ? "hidden" : "bg-white border px-4 py-2 rounded"}
+          >
             Impor Data ▾
           </button>
         </div>
