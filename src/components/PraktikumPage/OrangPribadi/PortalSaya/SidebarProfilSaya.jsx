@@ -8,7 +8,8 @@ const SidebarProfilSaya = ({ nama_akun, npwp_akun, akun }) => {
   const userTypeId = userType === "Orang Pribadi" ? 1 : 2;
   const [searchParams, setSearchParams] = useSearchParams();
   const viewAsCompanyId = searchParams.get("viewAs");
-  const navigate = useNavigateWithParams();
+    const navigate = useNavigateWithParams();
+
 
   const menuItems = [
     {
@@ -82,28 +83,35 @@ const SidebarProfilSaya = ({ nama_akun, npwp_akun, akun }) => {
   ];
 
   return (
-     <aside className="w-1/6 text-blue-900 px-2 py-5 bg-white">
+    <aside className="w-64 flex-shrink-0 text-blue-900 px-5 py-5 h-screen bg-white">
       <div className="mb-5 bg-blue-900 text-white p-2 text-center rounded-md">
         <h2 className="text-lg font-bold mb-5">{npwp_akun}</h2>
         <h3 className="text-md font-semibold mb-5">{nama_akun}</h3>
       </div>
 
-      <nav>
-              <ul className="space-y-1">
-                {menuItems.map((item, index) => {
-                  return (
-                    <li
-                      key={index}
-                      className="p-2 hover:bg-blue-700 hover:text-white rounded-md cursor-pointer"
-                    >
-                      <div onClick={() => navigate(item.link)} className="block w-full p-2">
-                        {item.label}
-                      </div>
-                    </li>
-                  );
-                })}
-              </ul>
-            </nav>
+      <nav className="border border-gray-200 rounded-md text-left text-blue-900 overflow-hidden">
+        <ul className="space-y-1">
+          {menuItems.map((item, index) => {
+            const isActive = location.pathname === item.link;
+            return (  
+              <li
+                key={index}
+                className={`border-t border-gray-200 p-1 rounded-sm cursor-pointer
+                     ${isActive
+                    ? "bg-blue-900 text-white"
+                    : "hover:bg-blue-700 hover:text-white"
+                  }`}
+              >
+                {/* <Link to={item.link} className="flex items-center w-full h-full px-2 py-3"> */}
+                <div onClick={() => navigate(item.link)} className="block w-full p-2">
+
+                  {item.label}
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+      </nav>
     </aside>
   );
 };

@@ -4,6 +4,12 @@ import { IoDocumentTextOutline } from "react-icons/io5";
 import { FaChevronDown, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { useParams, useSearchParams } from "react-router";
 import { useNavigateWithParams } from "@/hooks/useNavigateWithParams";
+import { getCsrf } from "@/service/getCsrf";
+import axios from "axios";
+import { RoutesApi } from "@/Routes";
+import { useCookies } from "react-cookie";
+import Swal from "sweetalert2";
+import { useMutation } from "@tanstack/react-query";
 
 const KonsepSPT = ({
   data,
@@ -12,9 +18,11 @@ const KonsepSPT = ({
   onPageChange,
   currentPage = 1,
 }) => {
+  // console.log(window.location.href);
   const { id, akun } = useParams();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const [cookies] = useCookies(["token"]);
 
   const handleClickOutside = (event) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -28,6 +36,8 @@ const KonsepSPT = ({
   }, []);
   const [searchParams, setSearchParams] = useSearchParams();
   const dataFilter = searchParams.get("filter");
+  const viewAsCompanyId = searchParams.get("viewAs");
+
   const filteredData =
     data && data.length > 0
       ? data.filter((item) => {
@@ -37,6 +47,50 @@ const KonsepSPT = ({
       : [];
 
   const navigate = useNavigateWithParams();
+
+  const deleteSPT = useMutation({
+    mutationFn: async (idSpt) => {
+      const csrf = await getCsrf();
+
+      const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
+      // return axios.put(
+      //   `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/spt/${idSpt}/calculate-spt`,
+      //   sptData,
+
+      return axios.delete(
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${accountId}/spt/${idSpt}`,
+        // {},
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": csrf,
+            Authorization: `Bearer ${cookies.token}`,
+          },
+        }
+      );
+    },
+    onSuccess: (data, variables) => {
+      console.log(data);
+      Swal.fire("Berhasil!", "Konsep SPT berhasil dihapus.", "success").then(
+        (result) => {
+          if (result.isConfirmed) {
+            window.location.reload();
+          }
+          // navigate(`/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt`);
+        }
+      );
+    },
+    onError: (error) => {
+      console.error("Error saving data:", error);
+      Swal.fire("Gagal!", "Terjadi kesalahan saat menghapus data.", "error");
+      // Swal.fire(
+      //   "Gagal!",
+      //   `Terjadi kesalahan saat menyimpan data. ${error?.response?.data?.message}`,
+      //   "error"
+      // );
+    },
+  });
 
   // Extract page numbers from pagination URLs
   const getPageFromUrl = (url) => {
@@ -157,6 +211,10 @@ const KonsepSPT = ({
                               navigate(
                                 `/praktikum/${id}/sistem/${akun}/buat-konsep-spt/${item.id}`
                               );
+        <Route
+          path="/praktikum/:id/sistem/:akun/surat-pemberitahuan-spt/"
+          element={<Navigate to="../surat-pemberitahuan-spt/konsep" replace />}
+        />
                             } else if (item.jenis_pajak === "PPH") {
                               navigate(
                                 `/praktikum/${id}/sistem/${akun}/buat-konsep-spt-pph/${item.id}`
@@ -174,6 +232,38 @@ const KonsepSPT = ({
                           }}
                         >
                           Edit
+                        </button>
+                        {item.status === "DILAPORKAN" && (
+                          <button
+                            className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs"
+                            onClick={() => {
+                              if (item.jenis_pajak === "PPN") {
+                                navigate(
+                                  `/praktikum/${id}/sistem/${akun}/spt/pdf/${item.id}`
+                                );
+                              } else if (item.jenis_pajak === "PPH") {
+                                navigate(
+                                  `/praktikum/${id}/sistem/${akun}/spt-pph/pdf/${item.id}`
+                                );
+                              } else if (item.jenis_pajak === "PPHUNIFIKASI") {
+                                navigate(
+                                  `/praktikum/${id}/sistem/${akun}/spt-unifikasi/pdf/${item.id}`
+                                );
+                              }
+                            }}
+                          >
+                            Lihat PDF
+                          </button>
+                        )}
+
+                        <button
+                          onClick={() => deleteSPT.mutate(item.id)}
+                          disabled={deleteSPT.isPending}
+                          className={`bg-red-500 hover:bg-red-600 disabled:bg-red-300 disabled:cursor-not-allowed text-white px-2 py-1 rounded text-xs ${
+                            item.status != "KONSEP" ? "hidden" : ""
+                          }`}
+                        >
+                          {deleteSPT.isPending ? "Menghapus..." : "Hapus"}
                         </button>
                       </div>
                     </td>

@@ -112,7 +112,7 @@ const BuatKonsepSPT = ({ sidebar }) => {
       Swal.fire("Berhasil!", "Konsep SPT berhasil dibuat.", "success").then(
         (result) => {
           if (result.isConfirmed) {
-            navigate(`/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt`);
+            navigate(`/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt/konsep`);
             // window.location.href = `/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt`;
           }
         }
@@ -192,7 +192,7 @@ const BuatKonsepSPT = ({ sidebar }) => {
   };
 
   const taxTypes = [
-    { label: "PPn", value: "ppn" },
+    { label: "PPN", value: "ppn" },
     { label: "PPh Pasal 21/26", value: "pph" },
     { label: "PPh Unifikasi", value: "pphunifikasi" },
     { label: "PPh Badan", value: "badan" },

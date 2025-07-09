@@ -658,7 +658,7 @@ const Header = () => {
                 submenu: [
                   {
                     label: "Surat Pemberitahuan (SPT)",
-                    links: `/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt`,
+                    links: `/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt/konsep`,
                   },
                   "Pencatatan",
                   "Dasbor Kompensasi",

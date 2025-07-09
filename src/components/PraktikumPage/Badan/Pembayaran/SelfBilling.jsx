@@ -16,6 +16,7 @@ import { RoutesApi } from "@/Routes";
 import { useCookies } from "react-cookie";
 import { ClipLoader } from "react-spinners";
 import { getCsrf } from "@/service/getCsrf";
+import { useNavigateWithParams } from "@/hooks/useNavigateWithParams";
 
 // Fungsi konversi angka ke terbilang (versi sederhana, bisa dikembangkan)
 function numberToTerbilang(n) {
@@ -101,7 +102,7 @@ const SelfBilling = ({ data: propData }) => {
   const [nilaiAsli, setNilaiAsli] = useState("");
   const [terbilang, setTerbilang] = useState("");
   const [keterangan, setKeterangan] = useState("");
-  const navigate = useNavigate();
+  const navigate = useNavigateWithParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const viewAsCompanyId = searchParams.get("viewAs");
   const userId = searchParams.get("user_id");
@@ -363,12 +364,15 @@ const SelfBilling = ({ data: propData }) => {
       Swal.fire("Berhasil!", "Data Berhasil disimpan.", "success").then(
         (result) => {
           if (result.isConfirmed) {
-            const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
-            const navigationUrl = `/praktikum/${id}/sistem/${accountId}/daftar-kode-billing-belum-dibayar`;
-            const urlWithViewAs = viewAsCompanyId
-              ? `${navigationUrl}?viewAs=${viewAsCompanyId}`
-              : navigationUrl;
-            navigate(urlWithViewAs);
+            // const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
+            // const navigationUrl = `/praktikum/${id}/sistem/${accountId}/daftar-kode-billing-belum-dibayar`;
+            // const urlWithViewAs = viewAsCompanyId
+            //   ? `${navigationUrl}?viewAs=${viewAsCompanyId}`
+            //   : navigationUrl;
+            // navigate(urlWithViewAs);
+            navigate(
+              `/praktikum/${id}/sistem/${akun}/daftar-kode-billing-belum-dibayar`
+            );
           }
         }
       );
@@ -687,12 +691,27 @@ const SelfBilling = ({ data: propData }) => {
                 handleNext();
               }
             }}
+            disabled={step === steps.length && createMandiri.isPending}
             className={userId ? "hidden" : cn(
               "bg-blue-600 hover:bg-blue-700 text-white",
-              step === steps.length && "bg-green-600 hover:bg-green-700"
+              step === steps.length && "bg-green-600 hover:bg-green-700",
+              step === steps.length &&
+                createMandiri.isPending &&
+                "opacity-50 cursor-not-allowed"
             )}
           >
-            {step === steps.length ? "Selesai" : "Lanjut"}
+            {step === steps.length ? (
+              createMandiri.isPending ? (
+                <div className="flex items-center">
+                  <ClipLoader color="#ffffff" size={16} className="mr-2" />
+                  Memproses...
+                </div>
+              ) : (
+                "Selesai"
+              )
+            ) : (
+              "Lanjut"
+            )}
           </Button>
         </div>
       </div>

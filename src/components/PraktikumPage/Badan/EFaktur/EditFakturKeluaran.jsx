@@ -2296,7 +2296,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                           </div>
                           <div className="space-y-2">
                             <label className="block text-sm font-medium">
-                              PPN
+                              Tarif PPN
                             </label>
                             <input
                               // readOnly
@@ -2308,7 +2308,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                           </div>
                           <div className="space-y-2">
                             <label className="block text-sm font-medium">
-                              Tarif PPN
+                              PPN
                             </label>
                             <input
                               type="text"

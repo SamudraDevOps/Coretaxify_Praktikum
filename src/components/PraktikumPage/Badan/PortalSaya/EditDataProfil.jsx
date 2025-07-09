@@ -684,7 +684,7 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
     );
   }
   return (
-<div className="flex items-start bg-gray-100">  
+<div className="flex items-start">  
         <SidebarProfilSayaBadan
         nama_akun={sidebar.nama_akun}
         npwp_akun={sidebar.npwp_akun}

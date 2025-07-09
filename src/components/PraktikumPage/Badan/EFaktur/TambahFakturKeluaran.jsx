@@ -44,7 +44,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
   const [editMode, setEditMode] = useState(false);
   const [editingTransaksiId, setEditingTransaksiId] = useState(null);
 
-  const [showDokumenTransaksi, setShowDokumenTransaksi] = useState(false);
+  const [showDokumenTransaksi, setShowDokumenTransaksi] = useState(true);
   const [showInformasiPembeli, setShowInformasiPembeli] = useState(false);
   const [showDetailTransaksi, setShowDetailTransaksi] = useState(false);
   const [kode_transaksi, setKodeTransaksi] = useState("");
@@ -518,8 +518,9 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
       pemotongan_harga,
       dpp,
       jumlah,
-      ppn: parseInt("12%".replace(/\D/g, ""), 10) || 0,
-      ppnNominal: ppn,
+      ppn: ppn,
+      ppnNominal: parseInt("12%".replace(/\D/g, ""), 10) || 0,
+      // ppnNominal: ppn,
       tarif_ppnbm: parseInt(tarif_ppnbm.replace(/\D/g, ""), 10) || 0,
       ppnbm,
     };
@@ -647,6 +648,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
     mutationFn: async ({ data, isDraft }) => {
       const csrf = await getCsrf();
       const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
+      console.log("data sent:", data);
       return axios.post(
         `${RoutesApiReal.url}api/student/assignments/${id}/sistem/${accountId}/faktur`,
         data,
@@ -955,7 +957,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
       pic_id: akun,
     };
 
-    console.log(finalFormData);
+    console.log("final form :", finalFormData);
     createFaktur.mutate({ data: finalFormData, isDraft });
   };
 
@@ -1077,13 +1079,13 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
     console.log(""),
     console.log("Rendering TambahFakturKeluaran"),
     (
-      <div className="flex h-screen bg-gray-100">
+      <div className="flex items-start">
         <SideBarEFaktur
           nama_akun={sidebar.nama_akun}
           npwp_akun={sidebar.npwp_akun}
           akun={{ id, akun }}
         />
-        <div className="flex-grow p-6 bg-white h-full overflow-y-auto">
+        <div className="w-full flex-grow p-6 bg-white h-full">
           <h2 className={userId ? "hidden" : "text-2xl font-semibold text-gray-800 mb-4"}>
             Tambah Data
           </h2>
@@ -1095,7 +1097,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
             {showDokumenTransaksi ? <FaChevronUp /> : <FaChevronDown />}
           </div>
           {showDokumenTransaksi && (
-<div className="border rounded-md p-4 mb-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
+            <div className="border rounded-md p-4 mb-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
               <div className="space-y-2">
                 <label className="block text-sm font-medium">Uang Muka</label>
                 <input
@@ -2078,7 +2080,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                           </div>
                           <div className="space-y-2">
                             <label className="block text-sm font-medium">
-                              PPN
+                              Tarif PPN
                             </label>
                             <input
                               type="text"
@@ -2089,7 +2091,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                           </div>
                           <div className="space-y-2">
                             <label className="block text-sm font-medium">
-                              Tarif PPN
+                              PPN
                             </label>
                             <NumericFormat
                               value={ppn}

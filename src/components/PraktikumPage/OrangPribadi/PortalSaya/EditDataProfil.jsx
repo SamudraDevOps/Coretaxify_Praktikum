@@ -835,8 +835,7 @@ const EditDataProfil = ({ data, sidebar }) => {
   };
 
   return (
-    <div className="flex items-start bg-gray-100">
-      {" "}
+    <div className="flex items-start">
       <SidebarProfilSaya
         nama_akun={sidebar.nama_akun}
         npwp_akun={sidebar.npwp_akun}
@@ -2020,12 +2019,12 @@ const EditDataProfil = ({ data, sidebar }) => {
         {showPihakTerkait && (
           <div className="border rounded-md p-4 mb-4 ">
             <div className="flex justify-between items-center mb-4">
-              <button
+              {/* <button
                 className={userId ? "hidden" : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-2 rounded"}
                 onClick={openModal}
               >
                 + Tambah
-              </button>
+              </button> */}
             </div>
             <div className=" w-full overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden ">
               <table className="table-auto border border-gray-300 overflow-hidden">

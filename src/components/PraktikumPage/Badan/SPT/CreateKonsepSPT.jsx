@@ -116,13 +116,31 @@ const CreateKonsepSPT = ({ data }) => {
   //     minimumFractionDigits: 0,
   //   }).format(number);
   // };
+  // const formatRupiah = (number) => {
+  //   if (typeof number !== "number" && typeof number !== "string") return "";
+  //   const numericValue =
+  //     typeof number === "string"
+  //       ? Number(number.replace(/[^0-9]/g, ""))
+  //       : number;
+  //   if (isNaN(numericValue)) return "";
+  //   return new Intl.NumberFormat("id-ID", {
+  //     style: "decimal",
+  //     minimumFractionDigits: 0,
+  //   }).format(numericValue);
+  // };
   const formatRupiah = (number) => {
     if (typeof number !== "number" && typeof number !== "string") return "";
+
+    // Normalize "0.00" to "0"
+    const normalizedNumber = number === "0.00" ? "0" : number;
+
     const numericValue =
-      typeof number === "string"
-        ? Number(number.replace(/[^0-9]/g, ""))
-        : number;
+      typeof normalizedNumber === "string"
+        ? Number(normalizedNumber.replace(/[^0-9.-]/g, "")) // Allow negative sign and decimal point
+        : normalizedNumber;
+
     if (isNaN(numericValue)) return "";
+
     return new Intl.NumberFormat("id-ID", {
       style: "decimal",
       minimumFractionDigits: 0,
@@ -133,6 +151,10 @@ const CreateKonsepSPT = ({ data }) => {
     // Remove all dots from the string
     return value.toString().replace(/\./g, "");
   };
+  // const formatRupiah = (value) => {
+  //   if (value === "0.00") return "0";
+  //   return value || "0";
+  // };
 
   // Add this function to calculate totals from the table
   const calculateTableTotals = (tableRows, columns) => {
@@ -621,7 +643,9 @@ const CreateKonsepSPT = ({ data }) => {
       Swal.fire("Berhasil!", "SPT berhasil dibayar.", "success").then(
         (result) => {
           if (result.isConfirmed) {
-            navigate(`/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt`);
+            navigate(
+              `/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt/konsep`
+            );
           }
         }
       );
@@ -670,7 +694,9 @@ const CreateKonsepSPT = ({ data }) => {
       ).then((result) => {
         if (result.isConfirmed) {
           // window.location.href = `/praktikum/${id}/sistem/${akun}/buat-konsep-spt/${idSpt}`;
-          navigate(`/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt`);
+          navigate(
+            `/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt/konsep`
+          );
         }
       });
     },
@@ -927,7 +953,9 @@ const CreateKonsepSPT = ({ data }) => {
                               // type="number"
                               name="cl_1a1_dpp"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_1a1_dpp}
+                              value={formatRupiah(
+                                formatRupiah(data.detail_spt.cl_1a1_dpp)
+                              )}
                               onChange={handleChange}
                               readOnly
                             />
@@ -946,7 +974,7 @@ const CreateKonsepSPT = ({ data }) => {
 
                               name="cl_1a2_dpp"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_1a2_dpp}
+                              value={formatRupiah(data.detail_spt.cl_1a2_dpp)}
                               readOnly
                             />
                           </td>
@@ -955,7 +983,9 @@ const CreateKonsepSPT = ({ data }) => {
                               // type="number"
                               name="cl_1a2_dpp_nilai_lain"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_1a2_dpp_lain}
+                              value={formatRupiah(
+                                data.detail_spt.cl_1a2_dpp_lain
+                              )}
                               readOnly
                             />
                           </td>
@@ -964,7 +994,7 @@ const CreateKonsepSPT = ({ data }) => {
                               // type="number"
                               name="cl_1a2_ppn"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_1a2_ppn}
+                              value={formatRupiah(data.detail_spt.cl_1a2_ppn)}
                               readOnly
                             />
                           </td>
@@ -973,7 +1003,7 @@ const CreateKonsepSPT = ({ data }) => {
                               // type="number"
                               name="cl_1a2_ppnbm"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_1a2_ppnbm}
+                              value={formatRupiah(data.detail_spt.cl_1a2_ppnbm)}
                               readOnly
                             />
                           </td>
@@ -991,7 +1021,7 @@ const CreateKonsepSPT = ({ data }) => {
                               type="number"
                               name="cl_1a3_dpp"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              // value={data.detail_spt.cl_1a3_dpp}
+                              value={formatRupiah(data.detail_spt.cl_1a3_dpp)}
                               readOnly
                             />
                           </td>
@@ -1000,7 +1030,9 @@ const CreateKonsepSPT = ({ data }) => {
                               // type="number"
                               name="cl_1a3_dpp_lain"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_1a3_dpp_lain}
+                              value={formatRupiah(
+                                data.detail_spt.cl_1a3_dpp_lain
+                              )}
                               readOnly
                             />
                           </td>
@@ -1009,7 +1041,7 @@ const CreateKonsepSPT = ({ data }) => {
                               // type="number"
                               name="cl_1a3_ppn"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_1a3_ppn}
+                              value={formatRupiah(data.detail_spt.cl_1a3_ppn)}
                               readOnly
                             />
                           </td>
@@ -1020,7 +1052,7 @@ const CreateKonsepSPT = ({ data }) => {
                               defaultValue="0"
                               disabled
                               name="cl_3a_ppn"
-                              value={data.detail_spt.cl_3a_ppn}
+                              value={formatRupiah(data.detail_spt.cl_1a3_ppnbm)}
                             />
                           </td>
                         </tr>
@@ -1037,7 +1069,7 @@ const CreateKonsepSPT = ({ data }) => {
                               // type="number"
                               name="cl_1a4_dpp"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_1a4_dpp}
+                              value={formatRupiah(data.detail_spt.cl_1a4_dpp)}
                               readOnly
                             />
                           </td>
@@ -1049,7 +1081,7 @@ const CreateKonsepSPT = ({ data }) => {
                               // type="number"
                               name="cl_1a4_ppn"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_1a4_ppn}
+                              value={formatRupiah(data.detail_spt.cl_1a4_ppn)}
                               readOnly
                             />
                           </td>
@@ -1058,7 +1090,7 @@ const CreateKonsepSPT = ({ data }) => {
                               // type="number"
                               name="cl_1a4_ppnbm"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_1a4_ppnbm}
+                              value={formatRupiah(data.detail_spt.cl_1a4_ppnbm)}
                               readOnly
                             />
                           </td>
@@ -1175,7 +1207,7 @@ const CreateKonsepSPT = ({ data }) => {
                               // type="number"
                               name="cl_1a6_dpp"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_1a6_dpp}
+                              value={formatRupiah(data.detail_spt.cl_1a6_dpp)}
                               readOnly
                             />
                           </td>
@@ -1184,7 +1216,9 @@ const CreateKonsepSPT = ({ data }) => {
                               // type="number"
                               name="cl_1a6_dpp_lain"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_1a6_dpp_lain}
+                              value={formatRupiah(
+                                data.detail_spt.cl_1a6_dpp_lain
+                              )}
                               readOnly
                             />
                           </td>
@@ -1193,7 +1227,7 @@ const CreateKonsepSPT = ({ data }) => {
                               // type="number"
                               name="cl_1a6_ppn"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_1a6_ppn}
+                              value={formatRupiah(data.detail_spt.cl_1a6_ppn)}
                               readOnly
                             />
                           </td>
@@ -1202,7 +1236,7 @@ const CreateKonsepSPT = ({ data }) => {
                               // type="number"
                               name="cl_1a6_ppnbm"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_1a6_ppnbm}
+                              value={formatRupiah(data.detail_spt.cl_1a6_ppnbm)}
                               readOnly
                             />
                           </td>
@@ -1219,7 +1253,7 @@ const CreateKonsepSPT = ({ data }) => {
                               // type="number"
                               name="cl_1a7_dpp"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_1a7_dpp}
+                              value={formatRupiah(data.detail_spt.cl_1a7_dpp)}
                               readOnly
                             />
                           </td>
@@ -1228,7 +1262,9 @@ const CreateKonsepSPT = ({ data }) => {
                               // type="number"
                               name="cl_1a7_dpp_lain"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_1a7_dpp_lain}
+                              value={formatRupiah(
+                                data.detail_spt.cl_1a7_dpp_lain
+                              )}
                               readOnly
                             />
                           </td>
@@ -1237,7 +1273,7 @@ const CreateKonsepSPT = ({ data }) => {
                               // type="number"
                               name="cl_1a7_ppn"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_1a7_ppn}
+                              value={formatRupiah(data.detail_spt.cl_1a7_ppn)}
                               readOnly
                             />
                           </td>
@@ -1246,7 +1282,7 @@ const CreateKonsepSPT = ({ data }) => {
                               // type="number"
                               name="cl_1a7_ppnbm"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_1a7_ppnbm}
+                              value={formatRupiah(data.detail_spt.cl_1a7_ppnbm)}
                               readOnly
                             />
                           </td>
@@ -1263,7 +1299,7 @@ const CreateKonsepSPT = ({ data }) => {
                               // type="number"
                               name="cl_1a8_dpp"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_1a8_dpp}
+                              value={formatRupiah(data.detail_spt.cl_1a8_dpp)}
                               readOnly
                             />
                           </td>
@@ -1272,7 +1308,9 @@ const CreateKonsepSPT = ({ data }) => {
                               // type="number"
                               name="cl_1a8_dpp_lain"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_1a8_dpp_lain}
+                              value={formatRupiah(
+                                data.detail_spt.cl_1a8_dpp_lain
+                              )}
                               readOnly
                             />
                           </td>
@@ -1281,7 +1319,7 @@ const CreateKonsepSPT = ({ data }) => {
                               // type="number"
                               name="cl_1a8_ppn"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_1a8_ppn}
+                              value={formatRupiah(data.detail_spt.cl_1a8_ppn)}
                               readOnly
                             />
                           </td>
@@ -1290,7 +1328,7 @@ const CreateKonsepSPT = ({ data }) => {
                               // type="number"
                               name="cl_1a8_ppnbm"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_1a8_ppnbm}
+                              value={formatRupiah(data.detail_spt.cl_1a8_ppnbm)}
                               readOnly
                             />
                           </td>
@@ -1403,7 +1441,9 @@ const CreateKonsepSPT = ({ data }) => {
                               // type="number"
                               readOnly
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_1a_jumlah_dpp}
+                              value={formatRupiah(
+                                data.detail_spt.cl_1a_jumlah_dpp
+                              )}
                               onChange={handleChange}
                             />
                           </td>
@@ -1414,7 +1454,9 @@ const CreateKonsepSPT = ({ data }) => {
                               // type="number"
                               readOnly
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_1a_jumlah_ppn}
+                              value={formatRupiah(
+                                data.detail_spt.cl_1a_jumlah_ppn
+                              )}
                               onChange={handleChange}
                             />
                           </td>
@@ -1424,7 +1466,9 @@ const CreateKonsepSPT = ({ data }) => {
                               // type="number"
                               readOnly
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_1a_jumlah_ppnbm}
+                              value={formatRupiah(
+                                data.detail_spt.cl_1a_jumlah_ppnbm
+                              )}
                               onChange={handleChange}
                             />
                           </td>
@@ -1510,7 +1554,9 @@ const CreateKonsepSPT = ({ data }) => {
                               // type="number"
                               readOnly
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_1c_jumlah_dpp}
+                              value={formatRupiah(
+                                data.detail_spt.cl_1c_jumlah_dpp
+                              )}
                               onChange={handleChange}
                               name="cl_1c_jumlah_dpp"
                             />
@@ -1566,7 +1612,7 @@ const CreateKonsepSPT = ({ data }) => {
                               // type="number"
                               readOnly
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_2a_dpp}
+                              value={formatRupiah(data.detail_spt.cl_2a_dpp)}
                               onChange={handleChange}
                             />
                           </td>
@@ -1577,7 +1623,7 @@ const CreateKonsepSPT = ({ data }) => {
                               // type="number"
                               readOnly
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_2a_ppn}
+                              value={formatRupiah(data.detail_spt.cl_2a_ppn)}
                               onChange={handleChange}
                             />
                           </td>
@@ -1587,7 +1633,7 @@ const CreateKonsepSPT = ({ data }) => {
                               // type="number"
                               readOnly
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_2a_ppnbm}
+                              value={formatRupiah(data.detail_spt.cl_2a_ppnbm)}
                               onChange={handleChange}
                             />
                           </td>
@@ -1606,7 +1652,7 @@ const CreateKonsepSPT = ({ data }) => {
                               name="cl_2b_dpp"
                               // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_2b_dpp}
+                              value={formatRupiah(data.detail_spt.cl_2b_dpp)}
                               readOnly
                             />
                           </td>
@@ -1615,7 +1661,9 @@ const CreateKonsepSPT = ({ data }) => {
                               name="cl_2b_dpp_lain"
                               // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_2b_dpp_lain}
+                              value={formatRupiah(
+                                data.detail_spt.cl_2b_dpp_lain
+                              )}
                               readOnly
                             />
                           </td>
@@ -1624,7 +1672,7 @@ const CreateKonsepSPT = ({ data }) => {
                               name="cl_2b_ppn"
                               // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_2b_ppn}
+                              value={formatRupiah(data.detail_spt.cl_2b_ppn)}
                               readOnly
                             />
                           </td>
@@ -1633,7 +1681,7 @@ const CreateKonsepSPT = ({ data }) => {
                               name="cl_2b_ppnbm"
                               // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_2b_ppnbm}
+                              value={formatRupiah(data.detail_spt.cl_2b_ppnbm)}
                               readOnly
                             />
                           </td>
@@ -1651,7 +1699,7 @@ const CreateKonsepSPT = ({ data }) => {
                               name="cl_2c_dpp"
                               // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_2c_dpp}
+                              value={formatRupiah(data.detail_spt.cl_2c_dpp)}
                               readOnly
                             />
                           </td>
@@ -1661,7 +1709,7 @@ const CreateKonsepSPT = ({ data }) => {
                               name="cl_2c_ppn"
                               // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_2c_ppn}
+                              value={formatRupiah(data.detail_spt.cl_2c_ppn)}
                               readOnly
                             />
                           </td>
@@ -1670,7 +1718,7 @@ const CreateKonsepSPT = ({ data }) => {
                               name="cl_2c_ppnbm"
                               // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_2c_ppnbm}
+                              value={formatRupiah(data.detail_spt.cl_2c_ppnbm)}
                               readOnly
                             />
                           </td>
@@ -1688,7 +1736,7 @@ const CreateKonsepSPT = ({ data }) => {
                               name="cl_2d_dpp"
                               // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_2d_dpp}
+                              value={formatRupiah(data.detail_spt.cl_2d_dpp)}
                               readOnly
                             />
                           </td>
@@ -1697,7 +1745,9 @@ const CreateKonsepSPT = ({ data }) => {
                               name="cl_2d_dpp_lain"
                               // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_2d_dpp_lain}
+                              value={formatRupiah(
+                                data.detail_spt.cl_2d_dpp_lain
+                              )}
                               readOnly
                             />
                           </td>
@@ -1706,7 +1756,7 @@ const CreateKonsepSPT = ({ data }) => {
                               name="cl_2d_ppn"
                               // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_2d_ppn}
+                              value={formatRupiah(data.detail_spt.cl_2d_ppn)}
                               readOnly
                             />
                           </td>
@@ -1715,7 +1765,7 @@ const CreateKonsepSPT = ({ data }) => {
                               name="cl_2d_ppnbm"
                               // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_2d_ppnbm}
+                              value={formatRupiah(data.detail_spt.cl_2d_ppnbm)}
                               readOnly
                             />
                           </td>
@@ -1771,7 +1821,7 @@ const CreateKonsepSPT = ({ data }) => {
                               // type="number"
                               readOnly
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_2g_dpp}
+                              value={formatRupiah(data.detail_spt.cl_2g_dpp)}
                               onChange={handleChange}
                               name="cl_2g_dpp"
                             />
@@ -1782,7 +1832,7 @@ const CreateKonsepSPT = ({ data }) => {
                               // type="number"
                               readOnly
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_2g_ppn}
+                              value={formatRupiah(data.detail_spt.cl_2g_ppn)}
                               onChange={handleChange}
                               name="cl_2g_ppn"
                             />
@@ -1804,7 +1854,7 @@ const CreateKonsepSPT = ({ data }) => {
                               // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               // value={formData.cl_2h_dpp}
-                              value={data.detail_spt.cl_2h_dpp}
+                              value={formatRupiah(data.detail_spt.cl_2h_dpp)}
                               onChange={handleChange}
                             />
                           </td>
@@ -1814,7 +1864,9 @@ const CreateKonsepSPT = ({ data }) => {
                               // type="number"
                               readOnly
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_2h_dpp_lain}
+                              value={formatRupiah(
+                                data.detail_spt.cl_2h_dpp_lain
+                              )}
                               onChange={handleChange}
                             />
                           </td>
@@ -1824,7 +1876,7 @@ const CreateKonsepSPT = ({ data }) => {
                               // type="number"
                               readOnly
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_2h_ppn}
+                              value={formatRupiah(data.detail_spt.cl_2h_ppn)}
                               onChange={handleChange}
                             />
                           </td>
@@ -1834,7 +1886,7 @@ const CreateKonsepSPT = ({ data }) => {
                               // type="number"
                               readOnly
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_2h_ppnbm}
+                              value={formatRupiah(data.detail_spt.cl_2h_ppnbm)}
                               onChange={handleChange}
                             />
                           </td>
@@ -1871,7 +1923,7 @@ const CreateKonsepSPT = ({ data }) => {
                             <input
                               // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_2j_dpp}
+                              value={formatRupiah(data.detail_spt.cl_2j_dpp)}
                               onChange={handleChange}
                               name="cl_2j_dpp"
                             />
@@ -1925,7 +1977,7 @@ const CreateKonsepSPT = ({ data }) => {
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               defaultValue="0"
                               name="cl_3a_ppn"
-                              value={data.detail_spt.cl_3a_ppn}
+                              value={formatRupiah(data.detail_spt.cl_3a_ppn)}
                               disabled
                             />
                           </td>
@@ -1966,7 +2018,7 @@ const CreateKonsepSPT = ({ data }) => {
                               defaultValue="0"
                               disabled
                               name="cl_3c_ppn"
-                              value={data.detail_spt.cl_3c_ppn}
+                              value={formatRupiah(data.detail_spt.cl_3c_ppn)}
                             />
                           </td>
                           <td className="p-2"></td>
@@ -2004,7 +2056,11 @@ const CreateKonsepSPT = ({ data }) => {
                             <input
                               // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_3e_ppn}
+                              // value={formatRupiah(
+                              //   formatRupiah(data.detail_spt.cl_3e_ppn)
+                              // )}
+                              value={formatRupiah(data.detail_spt.cl_3e_ppn)}
+                              // value={data.detail_spt.cl_3e_ppn}
                               name="cl_3e_ppn"
                               readOnly
                               // onChange={handleChange}
@@ -2046,7 +2102,7 @@ const CreateKonsepSPT = ({ data }) => {
                             <input
                               // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_3g_ppn}
+                              value={formatRupiah(data.detail_spt.cl_3g_ppn)}
                               disabled
                               name="cl_3g_ppn"
                             />
@@ -2196,7 +2252,7 @@ const CreateKonsepSPT = ({ data }) => {
                             <input
                               // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_4_ppn_terutang}
+                              value={formatRupiah(formData.cl_4_ppn_terutang)}
                               disabled
                               name="cl_4_ppn_terutang"
                             />
@@ -2303,7 +2359,7 @@ const CreateKonsepSPT = ({ data }) => {
                             <input
                               // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_6a_ppnbm}
+                              value={formatRupiah(formData.cl_6a_ppnbm)}
                               disabled
                               name="cl_6a_ppnbm"
                             />
@@ -2340,7 +2396,7 @@ const CreateKonsepSPT = ({ data }) => {
                             <input
                               // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_6c_ppnbm}
+                              value={formatRupiah(formData.cl_6c_ppnbm)}
                               disabled
                               name="cl_6c_ppnbm"
                             />
@@ -2379,7 +2435,7 @@ const CreateKonsepSPT = ({ data }) => {
                             <input
                               // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm BG-gray-100"
-                              value={data.detail_spt.cl_6e_ppnbm}
+                              value={formatRupiah(formData.cl_6e_ppnbm)}
                               disabled
                               name="cl_6e_ppnbm"
                             />
@@ -2539,7 +2595,7 @@ const CreateKonsepSPT = ({ data }) => {
                               name="cl_7c_dpp"
                               // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_7c_dpp}
+                              value={formatRupiah(data.detail_spt.cl_7c_dpp)}
                               disabled
                             />
                           </td>
@@ -2548,7 +2604,9 @@ const CreateKonsepSPT = ({ data }) => {
                               name="cl_7c_dpp_lain"
                               // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_7c_dpp_lain}
+                              value={formatRupiah(
+                                data.detail_spt.cl_7c_dpp_lain
+                              )}
                               disabled
                             />
                           </td>
@@ -2557,7 +2615,7 @@ const CreateKonsepSPT = ({ data }) => {
                               name="cl_7c_ppn"
                               // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_7c_ppn}
+                              value={formatRupiah(data.detail_spt.cl_7c_ppn)}
                               disabled
                             />
                           </td>
@@ -2566,7 +2624,7 @@ const CreateKonsepSPT = ({ data }) => {
                               name="cl_7c_ppnbm"
                               // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_7c_ppnbm}
+                              value={formatRupiah(data.detail_spt.cl_7c_ppnbm)}
                               disabled
                             />
                           </td>
@@ -2717,7 +2775,7 @@ const CreateKonsepSPT = ({ data }) => {
                               type="text"
                               name="cl_8c_dpp"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_8c_dpp}
+                              value={formatRupiah(data.detail_spt.cl_8c_dpp)}
                               disabled
                             />
                           </td>
@@ -2726,7 +2784,9 @@ const CreateKonsepSPT = ({ data }) => {
                               type="text"
                               name="cl_8c_dpp_lain"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_8c_dpp_lain}
+                              value={formatRupiah(
+                                data.detail_spt.cl_8c_dpp_lain
+                              )}
                               disabled
                             />
                           </td>
@@ -2735,7 +2795,7 @@ const CreateKonsepSPT = ({ data }) => {
                               type="text"
                               name="cl_8c_ppn"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_8c_ppn}
+                              value={formatRupiah(data.detail_spt.cl_8c_ppn)}
                               disabled
                             />
                           </td>
@@ -2744,7 +2804,7 @@ const CreateKonsepSPT = ({ data }) => {
                               type="text"
                               name="cl_8c_ppnbm"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              value={data.detail_spt.cl_8c_ppnbm}
+                              value={formatRupiah(data.detail_spt.cl_8c_ppnbm)}
                               disabled
                             />
                           </td>
