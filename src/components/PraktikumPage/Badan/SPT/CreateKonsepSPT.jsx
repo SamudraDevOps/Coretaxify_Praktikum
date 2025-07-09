@@ -1069,7 +1069,7 @@ const CreateKonsepSPT = ({ data }) => {
                           </td>
                           <td className="p-2">
                             <input
-                              type="number"
+                              type=""
                               name="cl_1a3_dpp"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={formatRupiah(data.detail_spt.cl_1a3_dpp)}
