@@ -505,6 +505,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
       alert("Mohon lengkapi semua data transaksi");
       return;
     }
+    
 
     const transactionData = {
       id: editMode ? editingTransaksiId : Date.now(),
@@ -519,6 +520,8 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
       dpp,
       jumlah,
       ppn: ppn,
+      dpp_lain: isChecked ? jumlah : 0,
+
       ppnNominal: parseInt("12%".replace(/\D/g, ""), 10) || 0,
       // ppnNominal: ppn,
       tarif_ppnbm: parseInt(tarif_ppnbm.replace(/\D/g, ""), 10) || 0,
