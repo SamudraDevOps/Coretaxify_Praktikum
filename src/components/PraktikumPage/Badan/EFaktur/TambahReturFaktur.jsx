@@ -35,6 +35,8 @@ const TambahReturFaktur = () => {
     const [tarifPPnBM, setTarifPPnBM] = useState("");
     const [ppnbm, setPPnBM] = useState("");
     const [isChecked, setIsChecked] = useState(false);
+    const [dppRetur, setDppRetur] = useState('');
+    const [ppnRetur, setPpnRetur] = useState('');
 
     function formatRupiah(value) {
         const numberString = value?.toString().replace(/[^0-9]/g, "") || "0";
@@ -480,11 +482,9 @@ const TambahReturFaktur = () => {
                                                                         allowNegative={false}
                                                                     />
                                                                 </div>
-                                                            </div>
-                                                            <div className="grid grid-cols-2 gap-4">
                                                                 <div className="space-y-2">
                                                                     <label className="block text-sm font-medium">
-                                                                        PPN diretur
+                                                                        DPP Nilai Lain diretur
                                                                     </label>
                                                                     <NumericFormat
                                                                         className="p-2 border rounded w-full"
@@ -493,11 +493,17 @@ const TambahReturFaktur = () => {
                                                                         decimalSeparator=","
                                                                         prefix="Rp "
                                                                         allowNegative={false}
+                                                                        value={dppRetur}
+                                                                        onValueChange={({ value }) => {
+                                                                            setDppRetur(value);
+                                                                            const dppNumber = parseInt(value || '0', 10);
+                                                                            setPpnRetur((dppNumber * 0.12).toString());
+                                                                        }}
                                                                     />
                                                                 </div>
                                                                 <div className="space-y-2">
-                                                                    <label className="block text-sm font-medium">
-                                                                        PPN
+                                                                    <label className="">
+                                                                        DPP Nilai Lain/DPP
                                                                     </label>
                                                                     <NumericFormat
                                                                         className="p-2 border rounded w-full"
@@ -518,6 +524,40 @@ const TambahReturFaktur = () => {
                                                                     value="12%"
                                                                     readOnly
                                                                 />
+                                                            </div>
+                                                            <div className="grid grid-cols-2 gap-4">
+                                                                <div className="space-y-2">
+                                                                    <label className="block text-sm font-medium">
+                                                                        PPN diretur
+                                                                    </label>
+                                                                    <NumericFormat
+                                                                        className="p-2 border rounded w-full"
+                                                                        placeholder="0"
+                                                                        thousandSeparator="."
+                                                                        decimalSeparator=","
+                                                                        prefix="Rp "
+                                                                        allowNegative={false}
+                                                                        value={ppnRetur}
+                                                                        displayType="input"
+                                                                        readOnly
+                                                                    />
+                                                                </div>
+                                                                <div className="space-y-2">
+                                                                    <label className="block text-sm font-medium">
+                                                                        PPN
+                                                                    </label>
+                                                                    <NumericFormat
+                                                                        className="p-2 border rounded w-full"
+                                                                        placeholder="0"
+                                                                        thousandSeparator="."
+                                                                        decimalSeparator=","
+                                                                        prefix="Rp "
+                                                                        allowNegative={false}
+                                                                        value={ppnRetur}
+                                                                        displayType="input"
+                                                                        readOnly
+                                                                    />
+                                                                </div>
                                                             </div>
                                                             <div className="grid grid-cols-2 gap-4">
                                                                 <div className="space-y-2">
@@ -586,11 +626,14 @@ const TambahReturFaktur = () => {
                                                         </div>
                                                     </div>
                                                     <AlertDialogFooter>
-                                                        <AlertDialogCancel>Batal</AlertDialogCancel>
-                                                        <AlertDialogAction>Simpan</AlertDialogAction>
+                                                        <AlertDialogCancel className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600">Batal</AlertDialogCancel>
+                                                        <AlertDialogAction className="bg-blue-900 text-white px-4 py-2 rounded-md hover:bg-blue-950">Simpan</AlertDialogAction>
                                                     </AlertDialogFooter>
                                                 </AlertDialogContent>
                                             </AlertDialog>
+                                        </td>
+                                        <td colSpan={14} className="text-gray-400">
+                                            lanjut bang
                                         </td>
                                     </tr>
                                 </tbody>
@@ -598,6 +641,15 @@ const TambahReturFaktur = () => {
                         </div>
                     </div>
                 )}
+                <div className="flex space-x-4 mt-4">
+                    <button className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
+                        Simpan Konsep
+                    </button>
+                    <button className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
+                        Upload Retur
+                    </button>
+                </div>
+
             </div>
         </div>
     )
