@@ -1,10 +1,11 @@
 import React, { useState, useRef } from 'react';
 import SideBarEFaktur from "./SideBarEFaktur";
 import { IoDocumentTextOutline } from "react-icons/io5";
-import { FaChevronDown, FaEdit, FaFilePdf } from "react-icons/fa";
+import { FaChevronDown, FaEdit, FaFilePdf, FaPlus } from "react-icons/fa";
 import { TiDeleteOutline } from "react-icons/ti";
+import { Link } from 'react-router';
 
-const ReturFakturKeluaran = () => {
+const ReturFakturMasukan = () => {
     return (
         <div className='flex h-screen bg-gray-100'>
             <SideBarEFaktur />
@@ -12,16 +13,26 @@ const ReturFakturKeluaran = () => {
                 <div className="flex justify-between items-center mb-4 pb-3 border-b">
                     <div className="flex items-center">
                         <IoDocumentTextOutline className="text-4xl text-blue-900" />
-                        <h1 className="text-lg font-bold text-blue-900 ml-2">Retur Pajak Keluaran</h1>
+                        <h1 className="text-lg font-bold text-blue-900 ml-2">Retur Pajak Masukan </h1>
                     </div>
                 </div>
-                <div className="flex justify-end mb-4 border-b pb-3">
+                <div className="flex justify-between mb-4 border-b pb-3">
+                    <div className="flex justify-between gap-2">
+                        <Link to="/admin/praktikum/2/tambah-retur-faktur" className="flex items-center bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded" >
+                            <FaPlus className="text-lg text-white mr-2" />
+                            Buat Retur
+                        </Link>
+                        <button className="flex items-center bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded">
+                            Import Data
+                            <FaChevronDown className="text-lg text-white ml-2" />
+                        </button>
+                    </div>
                     <button className="flex items-center bg-red-800 hover:bg-red-900 text-white font-bold py-2 px-2 rounded">
                         <TiDeleteOutline className="text-2xl text-white mr-2" />
                         Batalkan Retur
                     </button>
                 </div>
-                <div className="w-[1040px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden mx-4">
+                <div className="w-[1040px]   overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden mx-4">
                     <table className='table-auto border border-gray-300 overflow-hidden'>
                         <thead className="bg-gray-200">
                             <tr>
@@ -55,6 +66,7 @@ const ReturFakturKeluaran = () => {
             </div>
         </div>
     )
+
 }
 
-export default ReturFakturKeluaran;
+export default ReturFakturMasukan
