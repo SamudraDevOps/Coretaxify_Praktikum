@@ -27,8 +27,13 @@ export const useNavigateWithParams = () => {
         const finalPath = currentParamsString
           ? `${path}?${currentParamsString}`
           : path;
-        return navigate(finalPath, options);
+        // return navigate(finalPath, options);
+        navigate(finalPath, options);
+        setTimeout(() => {
+          window.location.reload();
+        }, 0);
       }
+      return navigateWithParams;
     }
 
     // If 'to' is an object with pathname/search
