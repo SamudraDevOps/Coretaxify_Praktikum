@@ -33,6 +33,7 @@ export default function MasterAkun({
   const { id, akun } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const viewAsCompanyId = searchParams.get("viewAs");
+  const userId = searchParams.get("user_id");
   const [cookies] = useCookies(["token"]);
   const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
   const [formData, setFormData] = useState({
@@ -360,7 +361,7 @@ export default function MasterAkun({
               <div className="flex  text-left text-sm" ref={dropdownRef}>
                 <button
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                  className="flex items-center bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-2 rounded"
+                  className={userId ? "hidden" : "flex items-center bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-2 rounded"}
                 >
                   Import <FaChevronDown className="ml-2" />
                 </button>
@@ -369,11 +370,11 @@ export default function MasterAkun({
                     <div className="py-1">
                       <a
                         href="/template-import-pajak-keluaran.xlsx"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        className={userId ? "hidden" : "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"}
                       >
                         Download Template
                       </a>
-                      <a className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">
+                      <a className={userId ? "hidden" : "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"}>
                         Import Dokumen
                       </a>
                     </div>
@@ -400,7 +401,7 @@ export default function MasterAkun({
             </button> */}
             <AlertDialog>
               <AlertDialogTrigger asChild>
-                <button className="bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded text-sm">
+                <button className={userId ? "hidden" : "bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded text-sm"}>
                   Tambah
                 </button>
               </AlertDialogTrigger>
@@ -599,7 +600,7 @@ export default function MasterAkun({
                           <AlertDialogTrigger asChild>
                             <button
                               onClick={() => populateEditForm(item)}
-                              className="bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded text-sm"
+                              className={userId ? "hidden" : "bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded text-sm"}
                             >
                               Edit
                             </button>

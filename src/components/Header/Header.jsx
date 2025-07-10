@@ -27,11 +27,14 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { useNavigateWithParams } from "@/hooks/useNavigateWithParams";
 
 const Header = () => {
   // == Query ==
   const { id, akun } = useParams();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
+  const regularNavigate = useNavigate();
+  const navigate = useNavigateWithParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const viewAsCompanyId = searchParams.get("viewAs");
 
@@ -45,6 +48,7 @@ const Header = () => {
   };
   const buttonRefs = useRef([]);
   const dropdownRefs = useRef([]);
+  const userId = searchParams.get('user_id');
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -74,6 +78,9 @@ const Header = () => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
+          params: {
+            ...(userId && { user_id: userId}),
+          },
         }
       );
 
@@ -94,7 +101,7 @@ const Header = () => {
     error: errorCompanies,
     refetch: refetchCompanies,
   } = useQuery({
-    queryKey: ["representedCompanies", id, akun],
+    queryKey: ["representedCompanies", id, akun, userId],
     queryFn: async () => {
       try {
         const response = await axios.get(
@@ -102,6 +109,9 @@ const Header = () => {
           {
             headers: {
               Authorization: `Bearer ${token}`,
+            },
+            params: {
+              ...(userId && { user_id: userId}),
             },
           }
         );
@@ -118,40 +128,82 @@ const Header = () => {
   });
 
   // Function to handle company switching
+  // const handleCompanyChange = (companyId, companyName, companyType) => {
+  //   // Update URL with viewAs parameter
+  //   if (companyId) {
+  //     const currentPath = window.location.pathname;
+
+  //     // If we're on a specific feature page, preserve that
+  //     const basePathParts = currentPath.split("/").slice(0, 5); // Get /praktikum/:id/sistem/:akun
+  //     const basePath = basePathParts.join("/");
+
+  //     // Get the remaining path segments (features, etc.)
+  //     const featureParts = currentPath.split("/").slice(5);
+  //     const featurePath =
+  //       featureParts.length > 0 ? `/${featureParts.join("/")}` : "/profil-saya";
+
+  //     // Set the viewAs parameter and redirect
+  //     searchParams.set("viewAs", companyId);
+  //     navigate(`${basePath}${featurePath}?${searchParams.toString()}`);
+  //   } else {
+  //     // Remove viewAs parameter when switching back to personal account
+  //     searchParams.delete("viewAs");
+
+  //     // Get the current path but go back to the base user account
+  //     const currentPath = window.location.pathname;
+  //     const basePathParts = currentPath.split("/").slice(0, 5); // Get /praktikum/:id/sistem/:akun
+  //     const basePath = basePathParts.join("/");
+
+  //     // Get the remaining path segments (features, etc.)
+  //     const featureParts = currentPath.split("/").slice(5);
+  //     const featurePath =
+  //       featureParts.length > 0 ? `/${featureParts.join("/")}` : "/profil-saya";
+
+  //     navigate(`${basePath}${featurePath}`);
+  //   }
+  //   setIsCompanyDropdownOpen(false);
+  // };
+
   const handleCompanyChange = (companyId, companyName, companyType) => {
-    // Update URL with viewAs parameter
+    const currentPath = window.location.pathname;
+    const basePathParts = currentPath.split("/").slice(0, 5);
+    const basePath = basePathParts.join("/");
+    const featureParts = currentPath.split("/").slice(5);
+    const featurePath = featureParts.length > 0 ? `/${featureParts.join("/")}` : "/profil-saya";
+
+    // Create new search params from current ones
+    const newSearchParams = new URLSearchParams(searchParams);
+    
     if (companyId) {
-      const currentPath = window.location.pathname;
-
-      // If we're on a specific feature page, preserve that
-      const basePathParts = currentPath.split("/").slice(0, 5); // Get /praktikum/:id/sistem/:akun
-      const basePath = basePathParts.join("/");
-
-      // Get the remaining path segments (features, etc.)
-      const featureParts = currentPath.split("/").slice(5);
-      const featurePath =
-        featureParts.length > 0 ? `/${featureParts.join("/")}` : "/profil-saya";
-
-      // Set the viewAs parameter and redirect
-      searchParams.set("viewAs", companyId);
-      navigate(`${basePath}${featurePath}?${searchParams.toString()}`);
+      // Set viewAs parameter (keep other params like user_id)
+      newSearchParams.set("viewAs", companyId);
     } else {
-      // Remove viewAs parameter when switching back to personal account
-      searchParams.delete("viewAs");
-
-      // Get the current path but go back to the base user account
-      const currentPath = window.location.pathname;
-      const basePathParts = currentPath.split("/").slice(0, 5); // Get /praktikum/:id/sistem/:akun
-      const basePath = basePathParts.join("/");
-
-      // Get the remaining path segments (features, etc.)
-      const featureParts = currentPath.split("/").slice(5);
-      const featurePath =
-        featureParts.length > 0 ? `/${featureParts.join("/")}` : "/profil-saya";
-
-      navigate(`${basePath}${featurePath}`);
+      // Remove ONLY viewAs parameter (keep other params like user_id)
+      newSearchParams.delete("viewAs");
     }
+    
+    const queryString = newSearchParams.toString();
+    const finalUrl = `${basePath}${featurePath}${queryString ? `?${queryString}` : ""}`;
+    
+    // Use regular navigate to avoid parameter preservation behavior
+    regularNavigate(finalUrl);
     setIsCompanyDropdownOpen(false);
+  };
+
+  // For account switching dropdown
+  const handleAccountSwitch = (accountId) => {
+    const newPath = `/praktikum/${id}/sistem/${accountId}/profil-saya`;
+    
+    // Create new search params and remove ONLY viewAs (keep user_id if it exists)
+    const newSearchParams = new URLSearchParams(searchParams);
+    newSearchParams.delete("viewAs");
+    
+    const queryString = newSearchParams.toString();
+    const finalUrl = `${newPath}${queryString ? `?${queryString}` : ""}`;
+    
+    // Use regular navigate
+    regularNavigate(finalUrl);
+    setIsDropdownOpen(false);
   };
 
   const [dropdownOpen, setDropdownOpen] = useState(null);
@@ -433,12 +485,13 @@ const Header = () => {
                     <li
                       key={item.id}
                       className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
-                      onClick={() => {
-                        // When switching accounts, remove viewAs parameter and navigate
-                        const newPath = `/praktikum/${id}/sistem/${item.id}/profil-saya`;
-                        navigate(newPath);
-                        setIsDropdownOpen(false);
-                      }}
+                      // onClick={() => {
+                      //   // When switching accounts, remove viewAs parameter and navigate
+                      //   const newPath = `/praktikum/${id}/sistem/${item.id}/profil-saya`;
+                      //   navigate(newPath);
+                      //   setIsDropdownOpen(false);
+                      // }}
+                      onClick={() => handleAccountSwitch(item.id)}
                     >
                       {item.nama_akun}
                     </li>
@@ -453,12 +506,13 @@ const Header = () => {
                     <li
                       key={item.id}
                       className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
-                      onClick={() => {
-                        // When switching accounts, remove viewAs parameter and navigate
-                        const newPath = `/praktikum/${id}/sistem/${item.id}/profil-saya`;
-                        navigate(newPath);
-                        setIsDropdownOpen(false);
-                      }}
+                      // onClick={() => {
+                      //   // When switching accounts, remove viewAs parameter and navigate
+                      //   const newPath = `/praktikum/${id}/sistem/${item.id}/profil-saya`;
+                      //   navigate(newPath);
+                      //   setIsDropdownOpen(false);
+                      // }}
+                      onClick={() => handleAccountSwitch(item.id)}
                     >
                       {item.nama_akun}
                     </li>
@@ -604,7 +658,7 @@ const Header = () => {
                 submenu: [
                   {
                     label: "Surat Pemberitahuan (SPT)",
-                    links: `/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt`,
+                    links: `/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt/konsep`,
                   },
                   "Pencatatan",
                   "Dasbor Kompensasi",

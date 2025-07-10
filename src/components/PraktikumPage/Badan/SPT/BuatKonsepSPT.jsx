@@ -37,6 +37,7 @@ const BuatKonsepSPT = ({ sidebar }) => {
   const navigate = useNavigateWithParams();
 
   const viewAsCompanyId = searchParams.get("viewAs");
+  const userId = searchParams.get("user_id");
   const generateQuery = () => {
     const query = {
       jenis_pajak: selectedType.toUpperCase(),
@@ -111,7 +112,7 @@ const BuatKonsepSPT = ({ sidebar }) => {
       Swal.fire("Berhasil!", "Konsep SPT berhasil dibuat.", "success").then(
         (result) => {
           if (result.isConfirmed) {
-            navigate(`/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt`);
+            navigate(`/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt/konsep`);
             // window.location.href = `/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt`;
           }
         }
@@ -191,7 +192,7 @@ const BuatKonsepSPT = ({ sidebar }) => {
   };
 
   const taxTypes = [
-    { label: "PPn", value: "ppn" },
+    { label: "PPN", value: "ppn" },
     { label: "PPh Pasal 21/26", value: "pph" },
     { label: "PPh Unifikasi", value: "pphunifikasi" },
     { label: "PPh Badan", value: "badan" },
@@ -644,6 +645,8 @@ const BuatKonsepSPT = ({ sidebar }) => {
                       "w-full md:w-auto",
                       selectedModelSPT && !createSpt.isPending
                         ? "bg-yellow-400 hover:bg-yellow-500"
+                        : userId
+                        ? "hidden" 
                         : "bg-gray-300 text-white cursor-not-allowed text-normal"
                     )}
                     // onClick={() => (window.location.href = getRedirectUrl())}

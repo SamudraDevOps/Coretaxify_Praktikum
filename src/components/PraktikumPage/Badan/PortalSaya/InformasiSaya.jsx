@@ -2,15 +2,18 @@ import React, { useState, useEffect } from "react";
 import SidebarProfilSayaBadan from "./SidebarProfilSaya";
 import { BsFiletypeXls } from "react-icons/bs";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { useUserType } from "@/components/context/userTypeContext";
 import { useParams } from "react-router";
+import { useNavigateWithParams } from "@/hooks/useNavigateWithParams";
 
 const InformasiSayaBadan = ({ data, sidebar }) => {
   const [activeTab, setActiveTab] = useState("general");
   const { userType } = useUserType();
   const [userTypeFromStorage, setUserTypeFromStorage] = useState("");
   const { id, akun } = useParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const userId = searchParams.get("user_id");
 
   useEffect(() => {
     const storedUserType = localStorage.getItem("userType");
@@ -26,6 +29,7 @@ const InformasiSayaBadan = ({ data, sidebar }) => {
 
   console.log("halo");
   console.log(data, sidebar);
+  const navigate = useNavigateWithParams();
   return (
     <div className="flex h-screen bg-gray-100">
       <SidebarProfilSayaBadan
@@ -36,16 +40,19 @@ const InformasiSayaBadan = ({ data, sidebar }) => {
       <main className="flex-auto p-3 bg-white rounded-md h-full min-w-0">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-semibold">Informasi Umum Wajib Pajak</h2>
-          <a href={`/praktikum/${id}/sistem/${akun}/edit-informasi-umum`}>
-            <button
-              className="px-4 py-2 bg-yellow-300 hover:bg-yellow-400 text-blue-900 rounded-md"
+          {/* <a href={`/praktikum/${id}/sistem/${akun}/edit-informasi-umum`}> */}
+          <button
+            className={userId ? "hidden" : "px-4 py-2 bg-yellow-300 hover:bg-yellow-400 text-blue-900 rounded-md"}
             // onClick={() =>
             //   (window.location.href = `/admin/praktikum/${getUserTypePath()}/profil-saya/informasi-umum/edit-data-profil`)
             // }
-            >
-              Edit
-            </button>
-          </a>
+            onClick={() =>
+              navigate(`/praktikum/${id}/sistem/${akun}/edit-informasi-umum`)
+            }
+          >
+            Edit
+          </button>
+          {/* </a> */}
         </div>
 
         <div className="w-full p-2 ml-0 border-t">

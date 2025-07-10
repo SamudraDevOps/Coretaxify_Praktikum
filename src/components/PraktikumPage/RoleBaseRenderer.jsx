@@ -24,6 +24,7 @@ export default function RoleBasedRenderer({
   // Get the viewAs parameter if it exists, otherwise use the account ID
   const viewAsCompanyId = searchParams.get("viewAs");
   const effectiveCompanyId = viewAsCompanyId || params.akun;
+  const userId = searchParams.get('user_id');
 
   function fillPath(template, params) {
     if (!template) return "";
@@ -47,7 +48,7 @@ export default function RoleBasedRenderer({
   }
 
   // First query - get user data (always for the actual user, not the viewed company)
-  // This should run regardless of URL to determine user type
+  // This should dibuatdless of URL to determine user type
   const {
     data: userData,
     isLoading: userLoading,
@@ -65,6 +66,7 @@ export default function RoleBasedRenderer({
           },
           params: {
             intent: "api.get.sistem.ikhtisar.profil",
+            ...(userId && { user_id: userId}),
           },
         }
       );
@@ -84,6 +86,9 @@ export default function RoleBasedRenderer({
             headers: {
               Authorization: `Bearer ${cookies.token}`,
               Accept: "application/json",
+            },
+            params: {
+              ...(userId && { user_id: userId}),
             },
           }
         );
@@ -114,6 +119,7 @@ export default function RoleBasedRenderer({
           params: {
             intent: intent,
             page: currentPage,
+            ...(userId && { user_id: userId}),
           },
         });
         console.log("Response data:", data);
