@@ -1102,7 +1102,6 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
           </div>
           {showDokumenTransaksi && (
             <div className="border rounded-md p-4 mb-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
-            <div className="border rounded-md p-4 mb-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
               <div className="space-y-2">
                 <label className="block text-sm font-medium">Uang Muka</label>
                 <input
@@ -1695,7 +1694,6 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                 />
               </div>
             </div>
-          </div>
           )}
 
           <div
