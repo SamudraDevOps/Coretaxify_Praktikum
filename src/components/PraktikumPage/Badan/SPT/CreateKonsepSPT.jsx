@@ -61,6 +61,14 @@ const initialRowUpload = {
 const CreateKonsepSPT = ({ data }) => {
   const { id, akun, idSpt } = useParams();
   const [activeTab, setActiveTab] = useState("induk");
+  const tabToApiParamMap = {
+    "a-1": "A1",
+    "a-2": "A2",
+    "b-1": "B1",
+    "b-2": "B2",
+    "b-3": "B3",
+    c: "C",
+  };
   const [activeTabContent, setActiveTabContent] = useState("A1");
   const [showHeaderInduk, setShowHeaderInduk] = useState(true);
   const [showPenyerahanBarangJasa, setShowPenyerahanBarangJasa] =
@@ -375,16 +383,63 @@ const CreateKonsepSPT = ({ data }) => {
   const penyerahanBarangJasaTable = useDynamicTableRows(initialRowUpload);
   const [rows, setRows] = useState([{ ...initialRowUpload }]);
 
+  // const {
+  //   data: sptOther,
+  //   isLoading: isLoadingOther,
+  //   isError: isErrorOther,
+  //   error: sptError,
+  // } = useQuery({
+  //   queryKey: [activeTabContent],
+  //   queryFn: async () => {
+  //     const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
+  //     const data = await axios.get(
+  //       RoutesApi.apiUrl +
+  //         `student/assignments/${id}/sistem/${accountId}/spt/${idSpt}/show-faktur-ppn`,
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${cookies.token}`,
+  //         },
+  //         params: {
+  //           jenis_spt_ppn: activeTabContent,
+  //         },
+  //       }
+  //     );
+  //     console.log(data.data);
+  //     return data.data;
+  //   },
+  //   enabled: activeTabContent !== null && activeTabContent !== undefined,
+  //   // Add these options to prevent unnecessary refetches
+  //   staleTime: 5 * 60 * 1000, // 5 minutes
+  //   cacheTime: 10 * 60 * 1000, // 10 minutes
+  //   refetchOnWindowFocus: false,
+  // });
+  // const [activeTab, setActiveTab] = useState("induk");
+
+  // // Map tab values to their corresponding API parameter values
+  // const tabToApiParamMap = {
+  //   "a-1": "a-1",
+  //   "a-2": "a-2",
+  //   "b-1": "b-1",
+  //   "b-2": "b-2",
+  //   "b-3": "b-3",
+  //   c: "c",
+  // };
+
+  const handleTabChange = (value) => {
+    setActiveTab(value);
+  };
+
+  // Single query that refetches when activeTab changes
   const {
     data: sptOther,
     isLoading: isLoadingOther,
     isError: isErrorOther,
     error: sptError,
   } = useQuery({
-    queryKey: [activeTabContent],
+    queryKey: ["spt-other-data", activeTab],
     queryFn: async () => {
       const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
-      const data = await axios.get(
+      const response = await axios.get(
         RoutesApi.apiUrl +
           `student/assignments/${id}/sistem/${accountId}/spt/${idSpt}/show-faktur-ppn`,
         {
@@ -392,17 +447,15 @@ const CreateKonsepSPT = ({ data }) => {
             Authorization: `Bearer ${cookies.token}`,
           },
           params: {
-            jenis_spt_ppn: activeTabContent,
+            jenis_spt_ppn: tabToApiParamMap[activeTab],
           },
         }
       );
-      console.log(data.data);
-      return data.data;
+      console.log("sptOther", response.data);
+      return response.data;
     },
-    enabled: activeTabContent !== null && activeTabContent !== undefined,
-    // Add these options to prevent unnecessary refetches
-    staleTime: 5 * 60 * 1000, // 5 minutes
-    cacheTime: 10 * 60 * 1000, // 10 minutes
+    enabled: activeTab !== "induk" && tabToApiParamMap[activeTab] !== undefined,
+    staleTime: 0, // Force refetch on tab change
     refetchOnWindowFocus: false,
   });
 
@@ -736,30 +789,30 @@ const CreateKonsepSPT = ({ data }) => {
   //   //   icon: "info",
   //   // });
   // };
-  const handleTabChange = (value) => {
-    // Prevent any default behavior if this is called from an event
-    if (value?.preventDefault) {
-      value.preventDefault();
-      return;
-    }
+  // const handleTabChange = (value) => {
+  //   // Prevent any default behavior if this is called from an event
+  //   if (value?.preventDefault) {
+  //     value.preventDefault();
+  //     return;
+  //   }
 
-    setActiveTab(value);
+  //   setActiveTab(value);
 
-    // First handle letter-number format (a-1, b-2, etc.)
-    let formattedValue = value.replace(
-      /([a-z])-(\d+)/i,
-      (match, letter, number) => {
-        console.log(letter.toUpperCase() + number);
-        return letter.toUpperCase() + number;
-      }
-    );
+  //   // First handle letter-number format (a-1, b-2, etc.)
+  //   let formattedValue = value.replace(
+  //     /([a-z])-(\d+)/i,
+  //     (match, letter, number) => {
+  //       console.log(letter.toUpperCase() + number);
+  //       return letter.toUpperCase() + number;
+  //     }
+  //   );
 
-    // Then handle single letters (a, b, c, etc.)
-    formattedValue = formattedValue.replace(/^([a-z])$/i, (match, letter) => {
-      console.log(letter.toUpperCase());
-      return letter.toUpperCase();
-    });
-  };
+  //   // Then handle single letters (a, b, c, etc.)
+  //   formattedValue = formattedValue.replace(/^([a-z])$/i, (match, letter) => {
+  //     console.log(letter.toUpperCase());
+  //     return letter.toUpperCase();
+  //   });
+  // };
 
   // if (isLoadingOther) {
   //   return (
