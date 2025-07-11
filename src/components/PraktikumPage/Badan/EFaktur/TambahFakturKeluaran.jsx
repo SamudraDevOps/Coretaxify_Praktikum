@@ -1082,7 +1082,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
     console.log(""),
     console.log("Rendering TambahFakturKeluaran"),
     (
-      <div className="flex items-start">
+      
       <div className="flex items-start">
         <SideBarEFaktur
           nama_akun={sidebar.nama_akun}
@@ -1695,7 +1695,9 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                 />
               </div>
             </div>
+          </div>
           )}
+
           <div
             className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100"
             onClick={() => setShowInformasiPembeli(!showInformasiPembeli)}
