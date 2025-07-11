@@ -157,6 +157,9 @@ import RiwayatBilling from "./components/PraktikumPage/Badan/Pembayaran/RiwayatB
 import RiwayatPembatalanBilling from "./components/PraktikumPage/Badan/Pembayaran/RiwayatPembatalanBilling";
 import PembuatanKodeBillingAtasPajak from "./components/PraktikumPage/Badan/Pembayaran/PembuatanKodeBillingAtasPajak";
 import PermohonanPemindahBukuan from "./components/PraktikumPage/Badan/Pembayaran/PermohonanPemindahbukuan";
+import ReturFakturKeluaran from "./components/PraktikumPage/Badan/EFaktur/ReturFakturKeluaran";
+import ReturFakturMasukan from "./components/PraktikumPage/Badan/EFaktur/ReturFakturMasukan";
+import TambahReturFaktur from "./components/PraktikumPage/Badan/EFaktur/TambahReturFaktur";
 // Route Badan
 
 import ProtectedRoutes from "./components/Dashboard/Auth/ProtectedRoutes";
@@ -2076,6 +2079,34 @@ const Main = () => {
             </>
           }
         />
+        <Route
+          path="/admin/praktikum/2/retur-faktur-keluaran"
+          element={
+            <>
+              <Header />
+              <ReturFakturKeluaran />
+            </>
+          }
+        />
+        <Route
+          path="/admin/praktikum/2/retur-faktur-masukan"
+          element={
+            <>
+              <Header />
+              <ReturFakturMasukan />
+            </>
+          }
+        />
+        <Route
+          path="/admin/praktikum/2/tambah-retur-faktur"
+          element={
+            <>
+              <Header />
+              <TambahReturFaktur />
+            </>
+          }
+        />
+
         {/* NOT FOUND ROUTE - LAST REGISTERED ROUTE */}
         <Route path="*" element={<NotFound />} />
       </Routes>

@@ -114,7 +114,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
       const data = await axios.get(
         // RoutesApiReal.apiUrl + `student/assignments/${id}/sistem/${akun}`,
         RoutesApiReal.apiUrl +
-          `student/assignments/${id}/sistem/${akun}/getAkun`,
+        `student/assignments/${id}/sistem/${akun}/getAkun`,
         {
           headers: {
             Authorization: `Bearer ${cookies.token}`,
@@ -174,10 +174,10 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
         selectedInfo === "A"
           ? "X"
           : selectedInfo === "B"
-          ? "Y"
-          : selectedInfo === "C"
-          ? "Z"
-          : "",
+            ? "Y"
+            : selectedInfo === "C"
+              ? "Z"
+              : "",
       nomorPendukung: "", // reset ketika berubah
     }));
     // Atur nilai Cap Fasilitas secara otomatis
@@ -505,6 +505,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
       alert("Mohon lengkapi semua data transaksi");
       return;
     }
+    
 
     const transactionData = {
       id: editMode ? editingTransaksiId : Date.now(),
@@ -519,6 +520,8 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
       dpp,
       jumlah,
       ppn: ppn,
+      dpp_lain: isChecked ? jumlah : 0,
+
       ppnNominal: parseInt("12%".replace(/\D/g, ""), 10) || 0,
       // ppnNominal: ppn,
       tarif_ppnbm: parseInt(tarif_ppnbm.replace(/\D/g, ""), 10) || 0,
@@ -1079,6 +1082,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
     console.log(""),
     console.log("Rendering TambahFakturKeluaran"),
     (
+      
       <div className="flex items-start">
         <SideBarEFaktur
           nama_akun={sidebar.nama_akun}
@@ -1631,27 +1635,27 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                           "9 - Penyerahan kepada Perwakilan Negara Asing dan Badan Internasional serta Pejabatnya",
                           "10 - BKP dan JKP tertentu",
                         ].includes(informasi_tambahan))) && (
-                      <div className="space-y-2">
-                        <label className="block text-sm font-medium">
-                          Nomor Pendukung
-                        </label>
-                        <input
-                          type="text"
-                          name="nomorPendukung"
-                          className="p-2 border rounded w-full"
-                          placeholder="Masukkan Nomor Pendukung"
-                          value={formData.nomorPendukung}
-                          onChange={(e) => {
-                            const value = e.target.value;
-                            setNomorPendukung(value);
-                            setFormData((prev) => ({
-                              ...prev,
-                              nomorPendukung: value,
-                            }));
-                          }}
-                        />
-                      </div>
-                    )}
+                        <div className="space-y-2">
+                          <label className="block text-sm font-medium">
+                            Nomor Pendukung
+                          </label>
+                          <input
+                            type="text"
+                            name="nomorPendukung"
+                            className="p-2 border rounded w-full"
+                            placeholder="Masukkan Nomor Pendukung"
+                            value={formData.nomorPendukung}
+                            onChange={(e) => {
+                              const value = e.target.value;
+                              setNomorPendukung(value);
+                              setFormData((prev) => ({
+                                ...prev,
+                                nomorPendukung: value,
+                              }));
+                            }}
+                          />
+                        </div>
+                      )}
                   </>
                 )}
               </div>
@@ -1691,6 +1695,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
               </div>
             </div>
           )}
+
           <div
             className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100"
             onClick={() => setShowInformasiPembeli(!showInformasiPembeli)}
