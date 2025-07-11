@@ -37,6 +37,7 @@ const KonsepSPT = ({
   const [searchParams, setSearchParams] = useSearchParams();
   const dataFilter = searchParams.get("filter");
   const viewAsCompanyId = searchParams.get("viewAs");
+  const userId = searchParams.get("user_id");
 
   const filteredData =
     data && data.length > 0
@@ -141,7 +142,7 @@ const KonsepSPT = ({
         <div className="flex justify-between items-start mb-4 pb-3 border-b">
           <div className="flex items-center gap-3">
             <button
-              className="flex items-center bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-4 rounded"
+              className={userId ? "hidden" : "flex items-center bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-4 rounded"}
               onClick={() =>
                 navigate(`/praktikum/${id}/sistem/${akun}/buat-konsep-spt`)
               }
@@ -151,7 +152,7 @@ const KonsepSPT = ({
             <div className="flex text-left text-sm" ref={dropdownRef}>
               <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="flex items-center bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded text-base"
+                className={userId ? "hidden" : "flex items-center bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded text-base"}
               >
                 Import <FaChevronDown className="ml-2" />
               </button>
@@ -161,11 +162,11 @@ const KonsepSPT = ({
                   <div className="py-1">
                     <a
                       href="/template-import-pajak-keluaran.xlsx"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      className={userId ? "hidden" : "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"}
                     >
                       Download Template
                     </a>
-                    <a className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">
+                    <a className={userId ? "hidden" : "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"}>
                       Import Dokumen
                     </a>
                   </div>
