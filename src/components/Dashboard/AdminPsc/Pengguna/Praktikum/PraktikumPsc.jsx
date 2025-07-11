@@ -11,7 +11,7 @@ import { ClipLoader } from "react-spinners";
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 import { IntentEnum } from "@/enums/IntentEnum";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const PraktikumPsc = () => {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
@@ -21,7 +21,24 @@ const PraktikumPsc = () => {
   const [cookies] = useCookies(["user"]);
   const [url, setUrl] = useState(RoutesApi.psc.assignments.index().url);
   const [search, setSearch] = useState("");
+  const location = useLocation();
   const navigate = useNavigate();
+
+  const getRoute = () => {
+    const pathSegments = location.pathname.split("/");
+    const currentRoute = pathSegments.find((segment) =>
+      ["penilaian"].includes(segment)
+    );
+
+    switch (currentRoute) {
+      case "penilaian":
+        return "penilaian";
+      default:
+        return "praktikum";
+    }
+  };
+
+  const pathRoute = getRoute();
 
   // Add a new query to fetch groups by role
   const { data: groupsData, isLoading: groupsLoading } = useQuery({
@@ -358,7 +375,10 @@ const PraktikumPsc = () => {
   };
 
   const handleViewMembers = (assignmentId) => {
-    navigate(`/psc/praktikum/${assignmentId}/members`);
+    navigate(pathRoute === "penilaian" 
+      ? `/psc/penilaian/${assignmentId}/members`
+      : `/psc/praktikum/${assignmentId}/members`
+    );
   };
 
   const handleDownload = (id) => {
@@ -433,7 +453,7 @@ const PraktikumPsc = () => {
             onChange={handleSearchChange}
           />
         </div>
-        <button className="add-button" onClick={handleCreate}>
+        <button className={pathRoute === "penilaian" ? "hidden" : "add-button"} onClick={handleCreate}>
           Tambah Praktikum
         </button>
       </div>
@@ -494,13 +514,13 @@ const PraktikumPsc = () => {
                 </td>
                 <td>
                   <button
-                    className="action-button edit"
+                    className={pathRoute === "penilaian" ? "hidden" : "action-button edit"}
                     onClick={() => handleEdit(item)}
                   >
                     Edit
                   </button>
                   <button
-                    className="action-button delete"
+                    className={pathRoute === "penilaian" ? "hidden" : "action-button delete"}
                     onClick={() => {
                       Swal.fire({
                         title: "Hapus Praktikum?",
