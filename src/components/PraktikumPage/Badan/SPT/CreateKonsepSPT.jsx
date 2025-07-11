@@ -706,6 +706,36 @@ const CreateKonsepSPT = ({ data }) => {
     },
   });
 
+  // const handleTabChange = (value) => {
+  //   // Prevent any default behavior if this is called from an event
+  //   if (value?.preventDefault) {
+  //     value.preventDefault();
+  //     return;
+  //   }
+
+  //   setActiveTab(value);
+  //   const formattedValue = value.replace(
+  //     /([a-z])-(\d+)/i,
+  //     (match, letter, number) => {
+  //       console.log(letter.toUpperCase() + number);
+  //       return letter.toUpperCase() + number;
+  //     }
+  //   );
+
+  //   // Use a callback to ensure state is updated before query runs
+  //   setActiveTabContent(formattedValue);
+
+  //   // Optional: Add a small delay to ensure state is updated
+  //   // setTimeout(() => {
+  //   //   setActiveTabContent(formattedValue);
+  //   // }, 0);
+
+  //   // Swal.fire({
+  //   //   title: "Tab Changed",
+  //   //   text: `Current tab: ${formattedValue}`,
+  //   //   icon: "info",
+  //   // });
+  // };
   const handleTabChange = (value) => {
     // Prevent any default behavior if this is called from an event
     if (value?.preventDefault) {
@@ -714,26 +744,21 @@ const CreateKonsepSPT = ({ data }) => {
     }
 
     setActiveTab(value);
-    const formattedValue = value.replace(
+
+    // First handle letter-number format (a-1, b-2, etc.)
+    let formattedValue = value.replace(
       /([a-z])-(\d+)/i,
       (match, letter, number) => {
+        console.log(letter.toUpperCase() + number);
         return letter.toUpperCase() + number;
       }
     );
 
-    // Use a callback to ensure state is updated before query runs
-    setActiveTabContent(formattedValue);
-
-    // Optional: Add a small delay to ensure state is updated
-    // setTimeout(() => {
-    //   setActiveTabContent(formattedValue);
-    // }, 0);
-
-    // Swal.fire({
-    //   title: "Tab Changed",
-    //   text: `Current tab: ${formattedValue}`,
-    //   icon: "info",
-    // });
+    // Then handle single letters (a, b, c, etc.)
+    formattedValue = formattedValue.replace(/^([a-z])$/i, (match, letter) => {
+      console.log(letter.toUpperCase());
+      return letter.toUpperCase();
+    });
   };
 
   // if (isLoadingOther) {
@@ -1413,7 +1438,11 @@ const CreateKonsepSPT = ({ data }) => {
                                       );
                                       setOpenLampiran(false);
                                     }}
-                                    className={userId ? "hidden" : "bg-blue-600 text-white"}
+                                    className={
+                                      userId
+                                        ? "hidden"
+                                        : "bg-blue-600 text-white"
+                                    }
                                   >
                                     Simpan
                                   </AlertDialogAction>
@@ -1528,7 +1557,11 @@ const CreateKonsepSPT = ({ data }) => {
                                       );
                                       setOpenPenyerahan(false);
                                     }}
-                                    className={userId ? "hidden" : "bg-blue-600 text-white"}
+                                    className={
+                                      userId
+                                        ? "hidden"
+                                        : "bg-blue-600 text-white"
+                                    }
                                   >
                                     Simpan
                                   </AlertDialogAction>
@@ -3073,7 +3106,9 @@ const CreateKonsepSPT = ({ data }) => {
                       className={`py-2 px-4 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-sm flex items-center justify-center ${
                         saveConcept.isPending
                           ? "bg-blue-400 text-white cursor-not-allowed"
-                          : userId ? "hidden" : "bg-blue-700 text-white hover:bg-blue-800"
+                          : userId
+                          ? "hidden"
+                          : "bg-blue-700 text-white hover:bg-blue-800"
                       }`}
                     >
                       {saveConcept.isPending ? (
@@ -3118,7 +3153,9 @@ const CreateKonsepSPT = ({ data }) => {
                           payDeposit.isPending ||
                           payBilling.isPending
                             ? "bg-blue-400 text-white cursor-not-allowed"
-                            : userId ? "hidden" : "bg-blue-700 text-white hover:bg-blue-800"
+                            : userId
+                            ? "hidden"
+                            : "bg-blue-700 text-white hover:bg-blue-800"
                         }`}
                       >
                         {saveConcept.isPending ||
@@ -3464,8 +3501,8 @@ const CreateKonsepSPT = ({ data }) => {
                           </tr>
                         </thead>
                         <tbody className="text-gray-600 text-center">
-                          {sptOther.data.length > 0 ? (
-                            sptOther.data.map((item, index) => (
+                          {sptOther?.data.length > 0 ? (
+                            sptOther?.data.map((item, index) => (
                               <tr key={index}>
                                 <td className="p-2 border-b text-center">
                                   {index + 1}
@@ -3624,8 +3661,8 @@ const CreateKonsepSPT = ({ data }) => {
                           </tr>
                         </thead>
                         <tbody className="text-gray-600 text-center">
-                          {sptOther.data.length > 0 ? (
-                            sptOther.data.map((item, index) => (
+                          {sptOther?.data.length > 0 ? (
+                            sptOther?.data.map((item, index) => (
                               <tr key={index}>
                                 <td className="p-2 border-b text-center">
                                   {index + 1}
@@ -3793,8 +3830,8 @@ const CreateKonsepSPT = ({ data }) => {
                           </tr>
                         </thead>
                         <tbody className="text-gray-600 text-center">
-                          {sptOther.data.length > 0 ? (
-                            sptOther.data.map((item, index) => (
+                          {sptOther?.data.length > 0 ? (
+                            sptOther?.data.map((item, index) => (
                               <tr key={index}>
                                 <td className="p-2 border-b text-center">
                                   {index + 1}
@@ -3962,8 +3999,8 @@ const CreateKonsepSPT = ({ data }) => {
                           </tr>
                         </thead>
                         <tbody className="text-gray-600 text-center">
-                          {sptOther.data.length > 0 ? (
-                            sptOther.data.map((item, index) => (
+                          {sptOther?.data.length > 0 ? (
+                            sptOther?.data.map((item, index) => (
                               <tr key={index}>
                                 <td className="p-2 border-b text-center">
                                   {index + 1}
@@ -4142,8 +4179,8 @@ const CreateKonsepSPT = ({ data }) => {
                           </tr>
                         </thead>
                         <tbody className="text-gray-600 text-center">
-                          {sptOther.data.length > 0 ? (
-                            sptOther.data.map((item, index) => (
+                          {sptOther?.data.length > 0 ? (
+                            sptOther?.data.map((item, index) => (
                               <tr key={index}>
                                 <td className="p-2 border-b text-center">
                                   {index + 1}
