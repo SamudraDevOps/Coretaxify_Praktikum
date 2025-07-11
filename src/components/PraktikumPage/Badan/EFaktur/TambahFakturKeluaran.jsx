@@ -114,7 +114,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
       const data = await axios.get(
         // RoutesApiReal.apiUrl + `student/assignments/${id}/sistem/${akun}`,
         RoutesApiReal.apiUrl +
-          `student/assignments/${id}/sistem/${akun}/getAkun`,
+        `student/assignments/${id}/sistem/${akun}/getAkun`,
         {
           headers: {
             Authorization: `Bearer ${cookies.token}`,
@@ -174,10 +174,10 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
         selectedInfo === "A"
           ? "X"
           : selectedInfo === "B"
-          ? "Y"
-          : selectedInfo === "C"
-          ? "Z"
-          : "",
+            ? "Y"
+            : selectedInfo === "C"
+              ? "Z"
+              : "",
       nomorPendukung: "", // reset ketika berubah
     }));
     // Atur nilai Cap Fasilitas secara otomatis
@@ -1083,6 +1083,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
     console.log("Rendering TambahFakturKeluaran"),
     (
       <div className="flex items-start">
+      <div className="flex items-start">
         <SideBarEFaktur
           nama_akun={sidebar.nama_akun}
           npwp_akun={sidebar.npwp_akun}
@@ -1100,6 +1101,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
             {showDokumenTransaksi ? <FaChevronUp /> : <FaChevronDown />}
           </div>
           {showDokumenTransaksi && (
+            <div className="border rounded-md p-4 mb-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
             <div className="border rounded-md p-4 mb-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
               <div className="space-y-2">
                 <label className="block text-sm font-medium">Uang Muka</label>
@@ -1634,27 +1636,27 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                           "9 - Penyerahan kepada Perwakilan Negara Asing dan Badan Internasional serta Pejabatnya",
                           "10 - BKP dan JKP tertentu",
                         ].includes(informasi_tambahan))) && (
-                      <div className="space-y-2">
-                        <label className="block text-sm font-medium">
-                          Nomor Pendukung
-                        </label>
-                        <input
-                          type="text"
-                          name="nomorPendukung"
-                          className="p-2 border rounded w-full"
-                          placeholder="Masukkan Nomor Pendukung"
-                          value={formData.nomorPendukung}
-                          onChange={(e) => {
-                            const value = e.target.value;
-                            setNomorPendukung(value);
-                            setFormData((prev) => ({
-                              ...prev,
-                              nomorPendukung: value,
-                            }));
-                          }}
-                        />
-                      </div>
-                    )}
+                        <div className="space-y-2">
+                          <label className="block text-sm font-medium">
+                            Nomor Pendukung
+                          </label>
+                          <input
+                            type="text"
+                            name="nomorPendukung"
+                            className="p-2 border rounded w-full"
+                            placeholder="Masukkan Nomor Pendukung"
+                            value={formData.nomorPendukung}
+                            onChange={(e) => {
+                              const value = e.target.value;
+                              setNomorPendukung(value);
+                              setFormData((prev) => ({
+                                ...prev,
+                                nomorPendukung: value,
+                              }));
+                            }}
+                          />
+                        </div>
+                      )}
                   </>
                 )}
               </div>
