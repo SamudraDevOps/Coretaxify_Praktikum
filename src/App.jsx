@@ -398,6 +398,11 @@ const Main = () => {
             path="/psc/praktikum/:assignmentId/members"
             element={<AssignmentPscMember />}
           />
+          <Route path="/psc/penilaian" element={<PraktikumPsc />} />
+          <Route
+            path="/psc/penilaian/:assignmentId/members"
+            element={<AssignmentPscMember />}
+          />
           <Route path="/psc/ujian" element={<ExamPsc />} />
           <Route
             path="/psc/ujian/:examId/members"
