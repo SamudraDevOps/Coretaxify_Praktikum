@@ -17,6 +17,7 @@ import {
     AlertDialogCancel,
 } from "@/components/ui/alert-dialog";
 import { NumericFormat } from "react-number-format";
+import { FiX } from "react-icons/fi";
 
 const TambahReturFaktur = () => {
     const [showDokumenTransaksi, setShowDokumenTransaksi] = useState(true);
@@ -642,12 +643,60 @@ const TambahReturFaktur = () => {
                     </div>
                 )}
                 <div className="flex space-x-4 mt-4">
-                    <button className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
-                        Simpan Konsep
+                    <button className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600">
+                        Batalkan Konsep
                     </button>
-                    <button className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
-                        Upload Retur
-                    </button>
+                    <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                            <button className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
+                                Upload Konsep
+                            </button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent className="bg-white rounded-md shadow-md p-4 !min-w-[1000px]">
+                            <AlertDialogHeader className="flex flex-row items-center justify-between gap-4">
+                                <AlertDialogTitle className="text-lg font-semibold">
+                                    Tanda Tangan Dokumen
+                                </AlertDialogTitle>
+                                <AlertDialogCancel asChild>
+                                    <button
+                                        className="text-gray-500 hover:text-gray-700 text-2xl font-bold px-2 py-0 rounded-md focus:outline-none"
+                                        aria-label="Close"
+                                    >
+                                        <FiX />
+                                    </button>
+                                </AlertDialogCancel>
+                            </AlertDialogHeader>
+                            <div className="p-2 border rounded-md">
+                                <div className="block text-sm font-bold">Tanda Tangan</div>
+                                <div className=" p-2 rounded-md border">
+                                    <div className="space-y-2 grid grid-cols-2 items-center">
+                                        <label className="block text-sm font-medium">Jenis Penandatanganan *</label>
+                                        <input type="text"
+                                            className="w-full p-2 border rounded-md bg-gray-100" readOnly />
+                                    </div>
+                                    <div className="space-y-2 grid grid-cols-2 items-center">
+                                        <label className="block text-sm font-medium">Penyedia Penandatangan *</label>
+                                        <input type="text"
+                                            className="w-full p-2 border rounded-md bg-gray-100" readOnly />
+                                    </div>
+                                    <div className="space-y-2 grid grid-cols-2 items-center">
+                                        <label className="block text-sm font-medium">ID Penandatangan *</label>
+                                        <input type="text"
+                                            className="w-full p-2 border rounded-md bg-gray-100" readOnly />
+                                    </div>
+                                    <div className="space-y-2 grid grid-cols-2 items-center">
+                                        <label className="block text-sm font-medium">Kata Sandi Penandatangan *</label>
+                                        <input type="text"
+                                            className="w-full p-2 border rounded-md " />
+                                    </div>
+                                </div>
+                            </div>
+                            <AlertDialogFooter>
+                                <AlertDialogAction className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Simpan</AlertDialogAction>
+                                <AlertDialogAction className="bg-blue-900 text-white px-4 py-2 rounded-md hover:bg-blue-950">Konfirmasi Tanda Tangan</AlertDialogAction>
+                            </AlertDialogFooter>
+                        </AlertDialogContent>
+                    </AlertDialog>
                 </div>
 
             </div>
