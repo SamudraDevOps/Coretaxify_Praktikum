@@ -34,7 +34,6 @@ export default function UjianDosen() {
   const [cookies] = useCookies(["token"]);
   const navigate = useNavigate();
   const { user } = useOutletContext();
-  console.log("data user: ", user.data.id);
 
   const [selectedData, setSelectedData] = useState({
     name: "",

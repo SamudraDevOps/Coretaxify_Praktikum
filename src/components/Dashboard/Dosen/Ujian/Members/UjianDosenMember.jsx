@@ -17,7 +17,7 @@ const UjianDosenMember = () => {
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
   const [cookies] = useCookies(["token"]);
   const [url, setUrl] = useState(
-    `${RoutesApi.lecturer.exams.url}/${examId}/members`
+    `${RoutesApi.lecturer.assignments.url}/${examId}/members`
   );
   const [search, setSearch] = useState("");
 
@@ -25,7 +25,7 @@ const UjianDosenMember = () => {
   const { data: examData } = useQuery({
     queryKey: ["exam_detail", examId],
     queryFn: async () => {
-      const { data } = await axios.get(`${RoutesApi.lecturer.exams.url}/${examId}`, {
+      const { data } = await axios.get(`${RoutesApi.lecturer.assignments.url}/${examId}`, {
         headers: {
           Authorization: `Bearer ${cookies.token}`,
           Accept: "application/json",
@@ -65,7 +65,7 @@ const UjianDosenMember = () => {
       axios.defaults.headers.common["X-CSRF-TOKEN"] = response.data.token;
 
       return await axios.delete(
-        `${RoutesApi.lecturer.exams.url}/${examId}/members/${memberId}`,
+        `${RoutesApi.lecturer.assignments.url}/${examId}/members/${memberId}`,
         {
           headers: {
             "X-CSRF-TOKEN": response.data.token,
