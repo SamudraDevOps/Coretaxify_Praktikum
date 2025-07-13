@@ -8,7 +8,7 @@ import { ClipLoader } from "react-spinners";
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 import { format } from "date-fns";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 
 import { IoReload } from "react-icons/io5";
 import {
@@ -27,17 +27,19 @@ import { CookiesProvider, useCookies } from "react-cookie";
 export default function UjianDosen() {
   const [isOpen, setIsOpen] = useState(false);
   const [isAddOpen, setIsAddOpen] = useState(false);
-  const [url, setUrl] = useState(RoutesApi.lecturer.exams.index().url);
+  const [url, setUrl] = useState(RoutesApi.lecturer.assignments.index().url);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const [cookies] = useCookies(["token"]);
   const navigate = useNavigate();
+  const { user } = useOutletContext();
+  console.log("data user: ", user.data.id);
 
   const [selectedData, setSelectedData] = useState({
     name: "",
     task_id: "",
-    exam_code: "",
+    assignment_code: "",
     supporting_file: null,
     start_period: "",
     end_period: "",
@@ -51,6 +53,12 @@ export default function UjianDosen() {
         headers: {
           Authorization: `Bearer ${cookies.token}`,
           Accept: "application/json",
+        },
+        params: {
+          column_filters: {
+            tipe: "exam",
+            user_id: user.data.id
+          },
         },
       });
       return data;
@@ -73,7 +81,7 @@ export default function UjianDosen() {
   const downloadMutation = useMutation({
     mutationFn: async (id) => {
       try {
-        const showEndpoint = RoutesApi.lecturer.exams.show(id);
+        const showEndpoint = RoutesApi.lecturer.assignments.show(id);
         const response = await axios.get(showEndpoint.url, {
           headers: {
             Authorization: `Bearer ${cookies.token}`,
@@ -135,7 +143,7 @@ export default function UjianDosen() {
         formDataObj.append("name", examFormData.name);
         formDataObj.append("task_id", examFormData.task_id);
         formDataObj.append("duration", examFormData.duration);
-        formDataObj.append("exam_code", examFormData.exam_code);
+        formDataObj.append("assignment_code", examFormData.assignment_code);
 
         if (examFormData.supporting_file) {
           formDataObj.append("supporting_file", examFormData.supporting_file);
@@ -156,7 +164,7 @@ export default function UjianDosen() {
         }
 
         return await axios.post(
-          RoutesApi.lecturer.exams.store().url,
+          RoutesApi.lecturer.assignments.store().url,
           formDataObj,
           {
             headers: {
@@ -200,7 +208,7 @@ export default function UjianDosen() {
 
         formDataObj.append("_method", "PUT");
 
-        const updateEndpoint = RoutesApi.lecturer.exams.update(id);
+        const updateEndpoint = RoutesApi.lecturer.assignments.update(id);
         return await axios.post(updateEndpoint.url, formDataObj, {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -210,7 +218,7 @@ export default function UjianDosen() {
           },
         });
       } else if (action === "delete" && id) {
-        const deleteEndpoint = RoutesApi.lecturer.exams.destroy(id);
+        const deleteEndpoint = RoutesApi.lecturer.assignments.destroy(id);
         return await axios.delete(deleteEndpoint.url, {
           headers: {
             Accept: "application/json",
@@ -285,7 +293,7 @@ export default function UjianDosen() {
   const [formData, setFormData] = useState({
     name: "",
     task_id: "",
-    exam_code: "",
+    assignment_code: "",
     start_period: "",
     end_period: "",
     duration: "",
@@ -357,7 +365,7 @@ export default function UjianDosen() {
   };
 
   const handleReloadCode = () => {
-    setFormData({ ...formData, exam_code: generateRandomCode() });
+    setFormData({ ...formData, assignment_code: generateRandomCode() });
   };
 
   const handleSort = (key) => {
@@ -373,7 +381,7 @@ export default function UjianDosen() {
       id: item.id,
       name: item.name || "",
       task_id: item.task_id?.toString() || "",
-      exam_code: item.exam_code || "",
+      assignment_code: item.assignment_code || "",
       start_period: formatDateForInput(item.start_period) || "",
       end_period: formatDateForInput(item.end_period) || "",
       duration: item.duration?.toString() || "",
@@ -464,7 +472,7 @@ export default function UjianDosen() {
               end_period: "",
               duration: "",
               supporting_file: null,
-              exam_code: generateRandomCode(),
+              assignment_code: generateRandomCode(),
             });
           }}
         >
@@ -499,7 +507,7 @@ export default function UjianDosen() {
                 <tr key={item.id}>
                   <td>{index + 1}</td>
                   <td>{item.name}</td>
-                  <td>{item.exam_code}</td>
+                  <td>{item.assignment_code}</td>
                   <td>{getTaskName(item.task_id)}</td>
                   <td>{formatDate(item.start_period)}</td>
                   <td>{formatDate(item.end_period)}</td>
@@ -641,8 +649,8 @@ export default function UjianDosen() {
                     <div className="flex items-center gap-2">
                       <input
                         className="text-black"
-                        name="exam_code"
-                        value={formData.exam_code}
+                        name="assignment_code"
+                        value={formData.assignment_code}
                         onChange={handleChange}
                         readOnly
                       />
@@ -659,7 +667,7 @@ export default function UjianDosen() {
                     <label>Tanggal Mulai:</label>
                     <input
                       type="datetime-local"
-                      name="                      start_period"
+                      name="start_period"
                       value={formData.start_period}
                       onChange={handleChange}
                       required
@@ -781,8 +789,8 @@ export default function UjianDosen() {
                     <label>Kode Ujian:</label>
                     <input
                       className="text-black"
-                      name="exam_code"
-                      value={selectedData.exam_code}
+                      name="assignment_code"
+                      value={selectedData.assignment_code}
                       readOnly
                     />
                     <small>Kode ujian tidak dapat diubah</small>
