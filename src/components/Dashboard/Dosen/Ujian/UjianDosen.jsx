@@ -515,10 +515,10 @@ export default function UjianDosen() {
                         // e.stopPropagation();
 
                         e.preventDefault();
-                        navigator.clipboard.writeText(item.class_code);
+                        navigator.clipboard.writeText(item.assignment_code);
                         toast({
                           title: "Copy berhasil",
-                          description: "Kode Kelas berhasil dicopy",
+                          description: "Kode Ujian berhasil dicopy",
                         });
                         // alert("miaw");
                       }}
