@@ -9,8 +9,9 @@ import { Alert, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 import { format } from "date-fns";
 import { useNavigate, useOutletContext } from "react-router-dom";
-
+import { useToast } from "@/hooks/use-toast";
 import { IoReload } from "react-icons/io5";
+import { FaRegCopy } from "react-icons/fa";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -33,6 +34,7 @@ export default function UjianDosen() {
   const itemsPerPage = 10;
   const [cookies] = useCookies(["token"]);
   const navigate = useNavigate();
+  const { toast } = useToast();
   const { user } = useOutletContext();
 
   const [selectedData, setSelectedData] = useState({
@@ -56,7 +58,7 @@ export default function UjianDosen() {
         params: {
           column_filters: {
             tipe: "exam",
-            user_id: user.data.id
+            user_id: user.data.id,
           },
         },
       });
@@ -506,7 +508,24 @@ export default function UjianDosen() {
                 <tr key={item.id}>
                   <td>{index + 1}</td>
                   <td>{item.name}</td>
-                  <td>{item.assignment_code}</td>
+                  <td className="flex gap-2">
+                    <div>{item.assignment_code}</div>
+                    <FaRegCopy
+                      onClick={(e) => {
+                        // e.stopPropagation();
+
+                        e.preventDefault();
+                        navigator.clipboard.writeText(item.class_code);
+                        toast({
+                          title: "Copy berhasil",
+                          description: "Kode Kelas berhasil dicopy",
+                        });
+                        // alert("miaw");
+                      }}
+                      className="hover:bg-slate-300 p-1 rounded-md"
+                      size={25}
+                    />
+                  </td>
                   <td>{getTaskName(item.task_id)}</td>
                   <td>{formatDate(item.start_period)}</td>
                   <td>{formatDate(item.end_period)}</td>
