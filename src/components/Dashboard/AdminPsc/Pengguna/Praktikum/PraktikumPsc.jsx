@@ -11,7 +11,7 @@ import { ClipLoader } from "react-spinners";
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 import { IntentEnum } from "@/enums/IntentEnum";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useOutletContext } from "react-router-dom";
 
 const PraktikumPsc = () => {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
@@ -23,6 +23,7 @@ const PraktikumPsc = () => {
   const [search, setSearch] = useState("");
   const location = useLocation();
   const navigate = useNavigate();
+  const { user } = useOutletContext();
 
   const getRoute = () => {
     const pathSegments = location.pathname.split("/");
@@ -90,6 +91,12 @@ const PraktikumPsc = () => {
           Authorization: `Bearer ${cookies.token}`,
           Accept: "application/json",
         },
+        params: {
+          column_filters: {
+            tipe: "assignment",
+            user_id: user.data.id
+          }
+        }
       });
       return data;
     },
