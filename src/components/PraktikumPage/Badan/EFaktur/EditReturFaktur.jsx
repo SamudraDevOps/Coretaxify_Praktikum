@@ -18,10 +18,20 @@ import {
 } from "@/components/ui/alert-dialog";
 import { NumericFormat } from "react-number-format";
 import { FiX } from "react-icons/fi";
-import { useParams } from "react-router";
+import { useParams, useSearchParams } from "react-router";
+import Select from "react-select";
+import { useMutation } from "@tanstack/react-query";
+import { getCsrf } from "@/service/getCsrf";
+import axios from "axios";
+import { RoutesApi } from "@/Routes";
+import { useCookies } from "react-cookie";
+import Swal from "sweetalert2";
 
 const EditReturFaktur = ({ data, sidebar }) => {
-  const { id, akun } = useParams();
+  const { id, akun, idFaktur } = useParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const viewAsCompanyId = searchParams.get("viewAs");
+  const [cookies] = useCookies(["token"]);
   const [showDokumenTransaksi, setShowDokumenTransaksi] = useState(true);
   const [showDetailTransaksi, setShowDetailTransaksi] = useState(true);
   const [tipe, setTipe] = useState("");
@@ -56,6 +66,86 @@ const EditReturFaktur = ({ data, sidebar }) => {
     ppnbm_retur: "",
     tarif_ppnbm: "",
   });
+
+  const [tanggalRetur, setTanggalRetur] = useState("");
+  // useEffect(() => {
+  //   if (data?.tanggal_retur) {
+  //     // Convert from DD-M-YYYY to YYYY-MM-DD format for date input
+  //     const dateParts = data.tanggal_retur.split("-");
+  //     const day = dateParts[0].padStart(2, "0");
+  //     const month = dateParts[1].padStart(2, "0");
+  //     const year = dateParts[2];
+  //     setTanggalRetur(`${year}-${month}-${day}`);
+  //   }
+  // }, [data?.tanggal_retur]);
+  // Add this helper function at the top of your component
+  const convertDateFormat = (dateString) => {
+    if (!dateString) return "";
+
+    // Check if it's already in YYYY-MM-DD format
+    if (dateString.match(/^\d{4}-\d{2}-\d{2}$/)) {
+      return dateString;
+    }
+
+    // Handle DD-M-YYYY or DD-MM-YYYY format
+    const dateParts = dateString.split("-");
+    if (dateParts.length === 3) {
+      const day = dateParts[0].padStart(2, "0");
+      const month = dateParts[1].padStart(2, "0");
+      const year = dateParts[2];
+
+      // Validate year is 4 digits
+      if (year.length === 4) {
+        return `${year}-${month}-${day}`;
+      }
+    }
+
+    console.error("Invalid date format:", dateString);
+    return "";
+  };
+
+  // Update the useEffect
+  useEffect(() => {
+    if (data?.tanggal_retur) {
+      const convertedDate = convertDateFormat(data.tanggal_retur);
+      setTanggalRetur(convertedDate);
+    }
+  }, [data?.tanggal_retur]);
+
+  // Helper function to convert back to DD-M-YYYY format when needed
+  const formatDateToOriginal = (dateString) => {
+    if (!dateString) return "";
+    const dateParts = dateString.split("-");
+    const year = dateParts[0];
+    const month = parseInt(dateParts[1], 10); // Remove leading zero
+    const day = parseInt(dateParts[2], 10); // Remove leading zero
+    return `${day}-${month}-${year}`;
+  };
+  const [jumlahBarangDiretur, setJumlahBarangDiretur] = useState(0);
+  const [jumlahBarangDireturInput, setJumlahBarangDireturInput] = useState("");
+  const [pemotonganHargaDiretur, setPemotonganHargaDiretur] = useState("");
+  const [ppnReturEdit, setPpnReturEdit] = useState("");
+  const [dppLainReturEdit, setDppLainReturEdit] = useState("");
+  const [ppnbmReturEdit, setPpnbmReturEdit] = useState("");
+
+  // const handleEditTransaction = (transaction) => {
+  //   setSelectedTransaction(transaction);
+  //   setEditingTransaction({
+  //     tipe: transaction.tipe || "",
+  //     nama: transaction.nama || "",
+  //     kode: transaction.kode || "",
+  //     satuan: transaction.satuan || "",
+  //     harga_satuan: transaction.harga_satuan || "",
+  //     kuantitas: transaction.kuantitas || 0,
+  //     total_harga: transaction.total_harga || "",
+  //     pemotongan_harga: transaction.pemotongan_harga || "",
+  //     dpp: transaction.dpp || "",
+  //     ppn_retur: transaction.ppn_retur || "",
+  //     dpp_lain_retur: transaction.dpp_lain_retur || "",
+  //     ppnbm_retur: transaction.ppnbm_retur || "",
+  //     tarif_ppnbm: transaction.tarif_ppnbm || "",
+  //   });
+  // };
   const handleEditTransaction = (transaction) => {
     setSelectedTransaction(transaction);
     setEditingTransaction({
@@ -73,8 +163,126 @@ const EditReturFaktur = ({ data, sidebar }) => {
       ppnbm_retur: transaction.ppnbm_retur || "",
       tarif_ppnbm: transaction.tarif_ppnbm || "",
     });
+
+    // Set the specific fields for editing
+    setJumlahBarangDiretur(0); // Reset to 0 for new edit
+    setPemotonganHargaDiretur("");
+    setPpnReturEdit("");
+    setDppLainReturEdit("");
+    setPpnbmReturEdit("");
   };
 
+  const updateDetailTransaksi = useMutation({
+    mutationFn: async ({ idTransaksi }) => {
+      const csrf = await getCsrf();
+      const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
+      const formatCurrencyForDB = (value) => {
+        if (!value) return "0";
+        return value.toString().replace(/[^\d]/g, "");
+      };
+      return axios.put(
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${accountId}/faktur/${idFaktur}/detail-transaksi/${idTransaksi}`,
+        {
+          jumlah_barang_diretur: jumlahBarangDiretur,
+          pemotongan_harga_diretur: formatCurrencyForDB(pemotonganHargaDiretur),
+          ppn_retur: formatCurrencyForDB(ppnReturEdit),
+          dpp_lain_retur: formatCurrencyForDB(dppLainReturEdit),
+          ppnbm_retur: formatCurrencyForDB(ppnbmReturEdit),
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": csrf,
+            Authorization: `Bearer ${cookies.token}`,
+          },
+          params: {
+            intent: "api.update.detail.transaksi.faktur.retur.masukan",
+          },
+        }
+      );
+    },
+    onSuccess: (data, variables) => {
+      // console.log(data);
+      // const successMessage = variables.isDraft
+      //   ? "Draft Faktur berhasil dibuat"
+      //   : "Faktur berhasil diupload";
+
+      Swal.fire(
+        "Berhasil!",
+        "Detail Transaksi berhasil ditambahkan",
+        "success"
+      ).then((result) => {
+        if (result.isConfirmed) {
+          window.location.reload();
+          // window.location.href = `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran?viewAs=${viewAsCompanyId}`;
+        }
+      });
+    },
+    onError: (error) => {
+      console.error("Error saving data:", error);
+      Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
+    },
+  });
+  const updateFakturRetur = useMutation({
+    mutationFn: async () => {
+      const csrf = await getCsrf();
+      const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
+      // const formattedDate = formatDateToOriginal(tanggalRetur);
+      return axios.put(
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${accountId}/faktur/${idFaktur}`,
+        {
+          // tanggal_retur: formattedDate,
+          tanggal_retur: tanggalRetur,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": csrf,
+            Authorization: `Bearer ${cookies.token}`,
+          },
+          params: {
+            intent: "api.update.faktur.retur.masukan",
+          },
+        }
+      );
+    },
+    onSuccess: (data, variables) => {
+      // console.log(data);
+      // const successMessage = variables.isDraft
+      //   ? "Draft Faktur berhasil dibuat"
+      //   : "Faktur berhasil diupload";
+
+      Swal.fire("Berhasil!", "Faktur Retur berhasil disimpan", "success").then(
+        (result) => {
+          if (result.isConfirmed) {
+            window.location.reload();
+            // window.location.href = `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran?viewAs=${viewAsCompanyId}`;
+          }
+        }
+      );
+    },
+    onError: (error) => {
+      console.error("Error saving data:", error);
+      Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
+    },
+  });
+  const handleUploadKonsep = () => {
+    // Validation for tanggal retur
+    if (!tanggalRetur || tanggalRetur.trim() === "") {
+      Swal.fire({
+        title: "Error!",
+        text: "Tanggal Retur harus diisi",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+      return;
+    }
+
+    // If validation passes, proceed with mutation
+    updateFakturRetur.mutate();
+  };
   function formatRupiah(value) {
     const numberString = value?.toString().replace(/[^0-9]/g, "") || "0";
     return new Intl.NumberFormat("id-ID", {
@@ -228,9 +436,22 @@ const EditReturFaktur = ({ data, sidebar }) => {
                 <label className="block text-sm font-medium">
                   Tanggal Retur
                 </label>
-                <input
+                {/* <input
                   readOnly
                   value={data?.tanggal_retur}
+                  className="border rounded-md p-2 w-full"
+                /> */}
+                {/* <input
+                  type="text"
+                  value={tanggalRetur}
+                  onChange={(e) => setTanggalRetur(e.target.value)}
+                  className="border rounded-md p-2 w-full"
+                  placeholder="DD-M-YYYY"
+                /> */}
+                <input
+                  type="date"
+                  value={tanggalRetur}
+                  onChange={(e) => setTanggalRetur(e.target.value)}
                   className="border rounded-md p-2 w-full"
                 />
               </div>
@@ -383,9 +604,7 @@ const EditReturFaktur = ({ data, sidebar }) => {
                       <td className="border border-gray-300 px-2 py-2">
                         <AlertDialog>
                           <AlertDialogTrigger asChild>
-                            <button
-                              onClick={() => handleEditTransaction(transaction)}
-                            >
+                            <button>
                               <FaSquarePen className="text-lg text-blue-900" />
                             </button>
                           </AlertDialogTrigger>
@@ -407,15 +626,8 @@ const EditReturFaktur = ({ data, sidebar }) => {
                                         type="radio"
                                         name="tipe"
                                         value="Barang"
-                                        checked={
-                                          editingTransaction.tipe === "Barang"
-                                        }
-                                        onChange={() =>
-                                          setEditingTransaction({
-                                            ...editingTransaction,
-                                            tipe: "Barang",
-                                          })
-                                        }
+                                        checked={tipe === "Barang"}
+                                        onChange={() => setTipe("Barang")}
                                       />
                                       Barang
                                     </label>
@@ -424,15 +636,8 @@ const EditReturFaktur = ({ data, sidebar }) => {
                                         type="radio"
                                         name="tipe"
                                         value="Jasa"
-                                        checked={
-                                          editingTransaction.tipe === "Jasa"
-                                        }
-                                        onChange={() =>
-                                          setEditingTransaction({
-                                            ...editingTransaction,
-                                            tipe: "Jasa",
-                                          })
-                                        }
+                                        checked={tipe === "Jasa"}
+                                        onChange={() => setTipe("Jasa")}
                                       />
                                       Jasa
                                     </label>
@@ -442,17 +647,9 @@ const EditReturFaktur = ({ data, sidebar }) => {
                                   <label className="block text-sm font-medium">
                                     Kode
                                   </label>
-                                  <input
-                                    type="text"
-                                    className="p-2 border rounded-md w-full"
-                                    value={editingTransaction.kode}
-                                    onChange={(e) =>
-                                      setEditingTransaction({
-                                        ...editingTransaction,
-                                        kode: e.target.value,
-                                      })
-                                    }
-                                    placeholder="Masukkan kode barang/jasa"
+                                  <Select
+                                    placeholder="Pilih kode barang/jasa"
+                                    className="w-full"
                                   />
                                 </div>
                                 <div className="space-y-2">
@@ -461,15 +658,33 @@ const EditReturFaktur = ({ data, sidebar }) => {
                                   </label>
                                   <input
                                     type="text"
-                                    className="p-2 border rounded w-full"
-                                    value={editingTransaction.nama}
+                                    className="p-2 border rounded w-full bg-gray-100"
+                                    value={transaction.nama}
                                     onChange={(e) =>
-                                      setEditingTransaction({
-                                        ...editingTransaction,
-                                        nama: e.target.value,
-                                      })
+                                      setNamaBarang(e.target.value)
                                     }
-                                    placeholder="Masukkan nama barang/jasa"
+                                    placeholder="Galeh Ganteng Serigala"
+                                    readOnly
+                                  />
+                                </div>
+                                <div className="space-y-2">
+                                  <label className="block text-sm font-medium">
+                                    Satuan
+                                  </label>
+                                  {/* <select
+                                    id=""
+                                    className="p-2 border rounded w-full bg-gray-100"
+                                  ></select> */}
+
+                                  <input
+                                    type="text"
+                                    className="p-2 border rounded w-full bg-gray-100"
+                                    value={transaction.satuan}
+                                    onChange={(e) =>
+                                      setNamaBarang(e.target.value)
+                                    }
+                                    placeholder="Galeh Ganteng Serigala"
+                                    readOnly
                                   />
                                 </div>
                                 <div className="space-y-2">
@@ -477,45 +692,133 @@ const EditReturFaktur = ({ data, sidebar }) => {
                                     Harga Satuan
                                   </label>
                                   <NumericFormat
-                                    value={editingTransaction.harga_satuan}
+                                    value={transaction.harga_satuan}
                                     onValueChange={({ value }) =>
-                                      setEditingTransaction({
-                                        ...editingTransaction,
-                                        harga_satuan: value,
-                                      })
+                                      handleHargaSatuanChange(value)
                                     }
                                     thousandSeparator="."
                                     decimalSeparator=","
                                     prefix="Rp "
-                                    className="p-2 border rounded w-full"
+                                    className="p-2 border rounded w-full bg-gray-100"
                                     placeholder="Rp 0"
                                     allowNegative={false}
+                                    readOnly
                                   />
+                                </div>
+                                {/* <div className="space-y-2">
+                                                                <label className="block text-sm font-medium">Kuantitas</label>
+                                                                <input
+                                                                    type="number"
+                                                                    className="p-2 border rounded w-full"
+                                                                    min="0"
+                                                                    step="1"
+                                                                    value={kuantitas === 0 ? "" : kuantitas}
+                                                                    onChange={e => handleKuantitasChange(e.target.value)}
+                                                                    placeholder="0"
+                                                                />
+                                                            </div> */}
+                                <div className="grid grid-cols-2 gap-4">
+                                  <div className="space-y-2">
+                                    <label className="block text-sm font-medium">
+                                      Jumlah Barang Diretur
+                                    </label>
+                                    {/* <input
+                                      // type="number"
+                                      // value={transaction.kuantitas}
+                                      className="p-2 border rounded w-full bg-white"
+                                      placeholder="0"
+                                      // readOnly
+                                    /> */}
+                                    <input
+                                      type="number"
+                                      value={jumlahBarangDiretur}
+                                      // onChange={(e) =>
+                                      //   setJumlahBarangDiretur(
+                                      //     parseInt(e.target.value) || 0
+                                      //   )
+                                      // }
+                                      onFocus={(e) => {
+                                        // Clear the field if it's 0 when user focuses
+                                        if (jumlahBarangDiretur === 0) {
+                                          setJumlahBarangDiretur("");
+                                        }
+                                      }}
+                                      onChange={(e) => {
+                                        const value = e.target.value;
+                                        if (value === "") {
+                                          setJumlahBarangDiretur("");
+                                        } else {
+                                          setJumlahBarangDiretur(
+                                            parseInt(value, 10) || 0
+                                          );
+                                        }
+                                      }}
+                                      onBlur={(e) => {
+                                        // Set back to 0 if empty when user leaves the field
+                                        if (e.target.value === "") {
+                                          setJumlahBarangDiretur(0);
+                                        }
+                                      }}
+                                      className="p-2 border rounded w-full bg-white"
+                                    />
+                                  </div>
+                                  <div className="space-y-2">
+                                    <label className="block text-sm font-medium">
+                                      KUANTITAS
+                                    </label>
+                                    <input
+                                      className="p-2 border rounded w-full bg-gray-100"
+                                      // type="number"
+                                      value={transaction.kuantitas}
+                                      placeholder="0"
+                                      readOnly
+                                    />
+                                  </div>
                                 </div>
                                 <div className="space-y-2">
                                   <label className="block text-sm font-medium">
-                                    Kuantitas
+                                    Total Harga
                                   </label>
                                   <input
-                                    type="number"
-                                    className="p-2 border rounded w-full"
-                                    min="0"
-                                    step="1"
-                                    value={
-                                      editingTransaction.kuantitas === 0
-                                        ? ""
-                                        : editingTransaction.kuantitas
-                                    }
-                                    onChange={(e) =>
-                                      setEditingTransaction({
-                                        ...editingTransaction,
-                                        kuantitas: e.target.value,
-                                      })
-                                    }
-                                    placeholder="0"
+                                    // type="number"
+                                    value={formatRupiah(
+                                      transaction.total_harga
+                                    )}
+                                    className="p-2 border rounded w-full bg-gray-100"
+                                    readOnly
                                   />
                                 </div>
-                                {/* Add more fields as needed */}
+                                <div className="grid grid-cols-2 gap-4">
+                                  <div className="space-y-2">
+                                    <label className="block text-sm font-medium">
+                                      Potongan Harga Diretur
+                                    </label>
+                                    <input
+                                      type="number"
+                                      onValueChange={({ value }) =>
+                                        setPemotonganHargaDiretur(value)
+                                      }
+                                      thousandSeparator="."
+                                      decimalSeparator=","
+                                      prefix="Rp "
+                                      className="p-2 border rounded w-full bg-white"
+                                      placeholder="Rp 0"
+                                      allowNegative={false}
+                                      // readOnly
+                                    />
+                                  </div>
+                                  <div className="space-y-2">
+                                    <label className="block text-sm font-medium">
+                                      Potongan Harga
+                                    </label>
+                                    <input
+                                      className="p-2 border rounded w-full bg-gray-100"
+                                      type="number"
+                                      placeholder="0"
+                                      readOnly
+                                    />
+                                  </div>
+                                </div>
                               </div>
                               <div className="space-y-4 h-full">
                                 <div className="text-center">PPN dan PPnBM</div>
@@ -525,18 +828,25 @@ const EditReturFaktur = ({ data, sidebar }) => {
                                       DPP diretur
                                     </label>
                                     <NumericFormat
-                                      className="p-2 border rounded w-full"
-                                      value={editingTransaction.dpp}
-                                      onValueChange={({ value }) =>
-                                        setEditingTransaction({
-                                          ...editingTransaction,
-                                          dpp: value,
-                                        })
-                                      }
+                                      className="p-2 border rounded w-full bg-gray-100"
+                                      placeholder="0"
                                       thousandSeparator="."
                                       decimalSeparator=","
                                       prefix="Rp "
                                       allowNegative={false}
+                                      readOnly
+                                    />
+                                  </div>
+                                  <div className="space-y-2">
+                                    <label className="">DPP</label>
+                                    <NumericFormat
+                                      className="p-2 border rounded w-full bg-gray-100"
+                                      placeholder="0"
+                                      thousandSeparator="."
+                                      decimalSeparator=","
+                                      prefix="Rp "
+                                      allowNegative={false}
+                                      readOnly
                                     />
                                   </div>
                                   <div className="space-y-2">
@@ -545,17 +855,92 @@ const EditReturFaktur = ({ data, sidebar }) => {
                                     </label>
                                     <NumericFormat
                                       className="p-2 border rounded w-full"
-                                      value={editingTransaction.dpp_lain_retur}
-                                      onValueChange={({ value }) =>
-                                        setEditingTransaction({
-                                          ...editingTransaction,
-                                          dpp_lain_retur: value,
-                                        })
-                                      }
+                                      placeholder="0"
                                       thousandSeparator="."
                                       decimalSeparator=","
                                       prefix="Rp "
                                       allowNegative={false}
+                                      value={dppRetur}
+                                      // onValueChange={({ value }) => {
+                                      //   setDppRetur(value);
+                                      //   const dppNumber = parseInt(
+                                      //     value || "0",
+                                      //     10
+                                      //   );
+                                      //   setPpnRetur(
+                                      //     (dppNumber * 0.12).toString()
+                                      //   );
+                                      // }}
+                                      onValueChange={({ value }) => {
+                                        setDppLainReturEdit(value);
+                                        const dppNumber = parseInt(
+                                          value || "0",
+                                          10
+                                        );
+                                        setPpnReturEdit(
+                                          (dppNumber * 0.12).toString()
+                                        );
+                                      }}
+                                    />
+                                  </div>
+                                  <div className="space-y-2">
+                                    <label className="">
+                                      DPP Nilai Lain/DPP
+                                    </label>
+                                    <NumericFormat
+                                      className="p-2 border rounded w-full bg-gray-100"
+                                      placeholder="0"
+                                      thousandSeparator="."
+                                      decimalSeparator=","
+                                      prefix="Rp "
+                                      allowNegative={false}
+                                      readOnly
+                                    />
+                                  </div>
+                                </div>
+                                <div className="space-y-2">
+                                  <label className="block text-sm font-medium">
+                                    Tarif PPN
+                                  </label>
+                                  <input
+                                    type="text"
+                                    className="p-2 rounded-md border w-full bg-gray-100"
+                                    value="12%"
+                                    readOnly
+                                  />
+                                </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                  <div className="space-y-2">
+                                    <label className="block text-sm font-medium">
+                                      PPN diretur
+                                    </label>
+                                    <NumericFormat
+                                      className="p-2 border rounded w-full bg-gray-100"
+                                      placeholder="0"
+                                      thousandSeparator="."
+                                      decimalSeparator=","
+                                      prefix="Rp "
+                                      allowNegative={false}
+                                      // value={ppnRetur}
+                                      value={ppnReturEdit}
+                                      displayType="input"
+                                      readOnly
+                                    />
+                                  </div>
+                                  <div className="space-y-2">
+                                    <label className="block text-sm font-medium">
+                                      PPN
+                                    </label>
+                                    <NumericFormat
+                                      className="p-2 border rounded w-full bg-gray-100"
+                                      placeholder="0"
+                                      thousandSeparator="."
+                                      decimalSeparator=","
+                                      prefix="Rp "
+                                      allowNegative={false}
+                                      value={ppnRetur}
+                                      displayType="input"
+                                      readOnly
                                     />
                                   </div>
                                 </div>
@@ -565,37 +950,70 @@ const EditReturFaktur = ({ data, sidebar }) => {
                                       PPN diretur
                                     </label>
                                     <NumericFormat
+                                      className="p-2 border rounded w-full bg-gray-100"
+                                      placeholder="0"
+                                      thousandSeparator="."
+                                      decimalSeparator=","
+                                      prefix="Rp "
+                                      allowNegative={false}
+                                      readOnly
+                                    />
+                                  </div>
+                                  <div className="space-y-2">
+                                    <label className="block text-sm font-medium">
+                                      PPN
+                                    </label>
+                                    <NumericFormat
                                       className="p-2 border rounded w-full"
-                                      value={editingTransaction.ppn_retur}
-                                      onValueChange={({ value }) =>
-                                        setEditingTransaction({
-                                          ...editingTransaction,
-                                          ppn_retur: value,
-                                        })
-                                      }
+                                      placeholder="0"
                                       thousandSeparator="."
                                       decimalSeparator=","
                                       prefix="Rp "
                                       allowNegative={false}
                                     />
                                   </div>
+                                </div>
+                                <div className="space-y-2">
+                                  <label className="block text-sm font-medium">
+                                    Tarif PPnBM (%)
+                                  </label>
+                                  <input
+                                    type="text"
+                                    className="p-2 rounded-md border w-full bg-gray-100"
+                                    value={transaction.tarif_ppnbm}
+                                    readOnly
+                                  />
+                                </div>
+                                <div className="grid grid-cols-2 gap-4">
                                   <div className="space-y-2">
                                     <label className="block text-sm font-medium">
                                       PPnBM diretur
                                     </label>
                                     <NumericFormat
-                                      className="p-2 border rounded w-full"
-                                      value={editingTransaction.ppnbm_retur}
-                                      onValueChange={({ value }) =>
-                                        setEditingTransaction({
-                                          ...editingTransaction,
-                                          ppnbm_retur: value,
-                                        })
-                                      }
+                                      className="p-2 border rounded w-full bg-white"
+                                      placeholder="0"
                                       thousandSeparator="."
                                       decimalSeparator=","
                                       prefix="Rp "
                                       allowNegative={false}
+                                      value={ppnbmReturEdit}
+                                      onValueChange={({ value }) =>
+                                        setPpnbmReturEdit(value)
+                                      }
+                                    />
+                                  </div>
+                                  <div className="space-y-2">
+                                    <label className="block text-sm font-medium">
+                                      PPnBM
+                                    </label>
+                                    <NumericFormat
+                                      className="p-2 border rounded w-full bg-gray-100"
+                                      placeholder="0"
+                                      thousandSeparator="."
+                                      decimalSeparator=","
+                                      prefix="Rp "
+                                      allowNegative={false}
+                                      readOnly
                                     />
                                   </div>
                                 </div>
@@ -605,7 +1023,14 @@ const EditReturFaktur = ({ data, sidebar }) => {
                               <AlertDialogCancel className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600">
                                 Batal
                               </AlertDialogCancel>
-                              <AlertDialogAction className="bg-blue-900 text-white px-4 py-2 rounded-md hover:bg-blue-950">
+                              <AlertDialogAction
+                                onClick={() =>
+                                  updateDetailTransaksi.mutate({
+                                    idTransaksi: transaction.id,
+                                  })
+                                }
+                                className="bg-blue-900 text-white px-4 py-2 rounded-md hover:bg-blue-950"
+                              >
                                 Simpan
                               </AlertDialogAction>
                             </AlertDialogFooter>
@@ -663,7 +1088,26 @@ const EditReturFaktur = ({ data, sidebar }) => {
           <button className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600">
             Batalkan Konsep
           </button>
-          <AlertDialog>
+          <button
+            onClick={handleUploadKonsep}
+            disabled={updateFakturRetur.isPending}
+            className={`px-4 py-2 rounded-md text-white ${
+              updateFakturRetur.isPending
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-blue-500 hover:bg-blue-600"
+            }`}
+          >
+            {updateFakturRetur.isPending ? (
+              <div className="flex items-center gap-2">
+                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                Loading...
+              </div>
+            ) : (
+              "Upload Konsep"
+            )}
+          </button>
+
+          {/* <AlertDialog>
             <AlertDialogTrigger asChild>
               <button className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
                 Upload Konsep
@@ -736,7 +1180,7 @@ const EditReturFaktur = ({ data, sidebar }) => {
                 </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
-          </AlertDialog>
+          </AlertDialog> */}
         </div>
       </div>
     </div>
