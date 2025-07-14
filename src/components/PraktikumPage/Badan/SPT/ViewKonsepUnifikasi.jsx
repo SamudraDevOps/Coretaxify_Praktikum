@@ -29,7 +29,7 @@ import { useCookies } from "react-cookie";
 import { useNavigateWithParams } from "@/hooks/useNavigateWithParams";
 import { ClipLoader } from "react-spinners";
 
-const CreateKonsepUnifikasi = ({ data }) => {
+const LihatKonsepUnifikasi = ({ data }) => {
   console.log(data);
   const { id, akun, idSpt } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -209,7 +209,9 @@ const CreateKonsepUnifikasi = ({ data }) => {
       Swal.fire("Berhasil!", "SPT berhasil dibayar.", "success").then(
         (result) => {
           if (result.isConfirmed) {
-            navigate(`/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt/konsep`);
+            navigate(
+              `/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt/konsep`
+            );
           }
         }
       );
@@ -965,7 +967,7 @@ const CreateKonsepUnifikasi = ({ data }) => {
                     Bayar dan Lapor
                   </button> */}
                   <AlertDialog>
-                    <button
+                    {/* <button
                       onClick={() => saveConcept.mutate()}
                       disabled={saveConcept.isPending}
                       className={`py-2 px-4 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-sm flex items-center justify-center ${
@@ -1001,9 +1003,9 @@ const CreateKonsepUnifikasi = ({ data }) => {
                       ) : (
                         "Simpan Konsep"
                       )}
-                    </button>
+                    </button> */}
 
-                    <AlertDialogTrigger asChild>
+                    {/* <AlertDialogTrigger asChild>
                       <button
                         // onClick={() => saveConcept.mutate()}
                         disabled={
@@ -1051,7 +1053,7 @@ const CreateKonsepUnifikasi = ({ data }) => {
                           "Bayar dan Lapor"
                         )}
                       </button>
-                    </AlertDialogTrigger>
+                    </AlertDialogTrigger> */}
                     <AlertDialogContent className="max-w-xl">
                       <AlertDialogHeader>
                         <AlertDialogTitle className="text-lg font-semibold ">
@@ -2148,4 +2150,4 @@ const CreateKonsepUnifikasi = ({ data }) => {
   );
 };
 
-export default CreateKonsepUnifikasi;
+export default LihatKonsepUnifikasi;
