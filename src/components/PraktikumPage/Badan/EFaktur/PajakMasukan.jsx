@@ -3,7 +3,7 @@ import SideBarEFaktur from "./SideBarEFaktur";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { useCookies } from "react-cookie";
-import { useParams } from "react-router";
+import { useParams, useSearchParams } from "react-router";
 import { useNavigateWithParams } from "@/hooks/useNavigateWithParams";
 
 const PajakMasukan = ({
@@ -17,6 +17,8 @@ const PajakMasukan = ({
   const [cookies] = useCookies(["token"]);
   const [selectedItems, setSelectedItems] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const userId = searchParams.get("user_id");
 
   // Extract page numbers from pagination URLs
   const getPageFromUrl = (url) => {
@@ -76,7 +78,7 @@ const PajakMasukan = ({
           </div>
         </div>
         <div className="flex justify-between mb-4 border-b pb-3">
-          <button className="flex items-center bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-2 rounded text-sm">
+          <button className={userId ? "hidden" : "flex items-center bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-2 rounded text-sm"}>
             Import Excel
           </button>
           <div className="flex items-center gap-3 ">

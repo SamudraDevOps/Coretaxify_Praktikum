@@ -38,6 +38,7 @@ const DaftarKodeBilingBelumBayar = ({ data, sidebar }) => {
   const [copied, setCopied] = useState(false); // Tambahkan state untuk pesan copy
   const [searchParams, setSearchParams] = useSearchParams();
   const viewAsCompanyId = searchParams.get("viewAs");
+  const userId = searchParams.get("user_id");
 
   console.log(data);
   const handleBayarClick = () => {
@@ -229,7 +230,7 @@ const DaftarKodeBilingBelumBayar = ({ data, sidebar }) => {
                       </AlertDialog> */}
                       <AlertDialog>
                         <AlertDialogTrigger>
-                          <button className="bg-red-100 text-red-600 hover:bg-red-200 hover:underline rounded px-3 py-1">
+                          <button className={userId ? "hidden" : "bg-red-100 text-red-600 hover:bg-red-200 hover:underline rounded px-3 py-1"}>
                             Bayar
                           </button>
                         </AlertDialogTrigger>

@@ -34,6 +34,7 @@ const CreateKonsepUnifikasi = ({ data }) => {
   const { id, akun, idSpt } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const viewAsCompanyId = searchParams.get("viewAs");
+  const userId = searchParams.get("user_id");
   const [cookies] = useCookies(["token"]);
   const navigate = useNavigateWithParams();
 
@@ -970,7 +971,7 @@ const CreateKonsepUnifikasi = ({ data }) => {
                       className={`py-2 px-4 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-sm flex items-center justify-center ${
                         saveConcept.isPending
                           ? "bg-blue-400 text-white cursor-not-allowed"
-                          : "bg-blue-700 text-white hover:bg-blue-800"
+                          : userId ? "hidden" : "bg-blue-700 text-white hover:bg-blue-800"
                       }`}
                     >
                       {saveConcept.isPending ? (
@@ -1015,7 +1016,7 @@ const CreateKonsepUnifikasi = ({ data }) => {
                           payDeposit.isPending ||
                           payBilling.isPending
                             ? "bg-blue-400 text-white cursor-not-allowed"
-                            : "bg-blue-700 text-white hover:bg-blue-800"
+                            : userId ? "hidden" : "bg-blue-700 text-white hover:bg-blue-800"
                         }`}
                       >
                         {saveConcept.isPending ||

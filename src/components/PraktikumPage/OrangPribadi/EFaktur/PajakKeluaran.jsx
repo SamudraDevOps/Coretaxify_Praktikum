@@ -21,6 +21,7 @@ const PajakKeluaran = ({
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const viewAsCompanyId = searchParams.get("viewAs");
+  const userId = searchParams.get("user_id");
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isCompanyDropdownOpen, setIsCompanyDropdownOpen] = useState(false);
@@ -196,7 +197,7 @@ const PajakKeluaran = ({
             <div className="flex text-left text-sm" ref={dropdownRef}>
               <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="flex items-center bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-2 rounded"
+                className={userId ? "hidden" : "flex items-center bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-2 rounded"}
               >
                 Import <FaChevronDown className="ml-2" />
               </button>
@@ -205,11 +206,11 @@ const PajakKeluaran = ({
                   <div className="py-1">
                     <a
                       href="/template-import-pajak-keluaran.xlsx"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      className={userId ? "hidden" : "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"}
                     >
                       Download Template
                     </a>
-                    <a className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">
+                    <a className={userId ? "hidden" : "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"}>
                       Import Dokumen
                     </a>
                   </div>
@@ -218,10 +219,10 @@ const PajakKeluaran = ({
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <button className="flex items-center bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded text-sm">
+            <button className={userId ? "hidden" : "flex items-center bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded text-sm"}>
               Upload Faktur
             </button>
-            <button className="flex items-center bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-2 rounded text-sm">
+            <button className={userId ? "hidden" : "flex items-center bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-2 rounded text-sm"}>
               Hapus Dokumen
             </button>
           </div>

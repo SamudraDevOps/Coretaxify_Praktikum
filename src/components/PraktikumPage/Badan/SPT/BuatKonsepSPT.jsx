@@ -37,6 +37,7 @@ const BuatKonsepSPT = ({ sidebar }) => {
   const navigate = useNavigateWithParams();
 
   const viewAsCompanyId = searchParams.get("viewAs");
+  const userId = searchParams.get("user_id");
   const generateQuery = () => {
     const query = {
       jenis_pajak: selectedType.toUpperCase(),
@@ -644,6 +645,8 @@ const BuatKonsepSPT = ({ sidebar }) => {
                       "w-full md:w-auto",
                       selectedModelSPT && !createSpt.isPending
                         ? "bg-yellow-400 hover:bg-yellow-500"
+                        : userId
+                        ? "hidden" 
                         : "bg-gray-300 text-white cursor-not-allowed text-normal"
                     )}
                     // onClick={() => (window.location.href = getRedirectUrl())}

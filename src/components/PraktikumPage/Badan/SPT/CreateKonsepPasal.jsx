@@ -202,6 +202,7 @@ const CreateKonsepPasal = ({ data }) => {
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const viewAsCompanyId = searchParams.get("viewAs");
+  const userId = searchParams.get("user_id");
 
   useEffect(() => {
     const handleScroll = () => {
@@ -1004,7 +1005,7 @@ const CreateKonsepPasal = ({ data }) => {
                       className={`py-2 px-4 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-sm flex items-center justify-center ${
                         saveConcept.isPending
                           ? "bg-blue-400 text-white cursor-not-allowed"
-                          : "bg-blue-700 text-white hover:bg-blue-800"
+                          : userId ? "hidden" : "bg-blue-700 text-white hover:bg-blue-800"
                       }`}
                     >
                       {saveConcept.isPending ? (
@@ -1049,7 +1050,7 @@ const CreateKonsepPasal = ({ data }) => {
                           payDeposit.isPending ||
                           payBilling.isPending
                             ? "bg-blue-400 text-white cursor-not-allowed"
-                            : "bg-blue-700 text-white hover:bg-blue-800"
+                            : userId ? "hidden" : "bg-blue-700 text-white hover:bg-blue-800"
                         }`}
                       >
                         {saveConcept.isPending ||

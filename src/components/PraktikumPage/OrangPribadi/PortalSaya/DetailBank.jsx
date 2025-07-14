@@ -26,6 +26,7 @@ const DetailBank = ({ data, sidebar }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const viewAsCompanyId = searchParams.get("viewAs");
   const [cookies] = useCookies(["token"]);
+  const userId = searchParams.get("user_id");
   const [bankFormData, setBankFormData] = useState({
     nama_bank: "",
     nomor_rekening_bank: "",
@@ -115,7 +116,7 @@ const DetailBank = ({ data, sidebar }) => {
         npwp_akun={sidebar.npwp_akun}
         akun={{ id, akun }}
       />
-      <div className="flex-auto p-3 bg-white rounded-md h-full">
+      <div className="flex-auto p-3 bg-white rounded-md h-full min-w-0">
         <div className="flex justify-between items-center mb-4 pb-3 border-b">
           <div className="flex items-center">
             <IoDocumentTextOutline className="text-4xl text-blue-900" />
@@ -129,7 +130,7 @@ const DetailBank = ({ data, sidebar }) => {
             <BsFiletypeXls className="text-2xl text-white" />
           </button>
         </div>
-        <div className=" w-[1050px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden ">
+        <div className=" w-full overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden ">
           <table className="table-auto border border-gray-300 overflow-hidden">
             <thead>
               <tr>
@@ -160,7 +161,7 @@ const DetailBank = ({ data, sidebar }) => {
                       <AlertDialog>
                         <AlertDialogTrigger
                           onClick={() => setBankFormData(bank)}
-                          className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"
+                          className={userId ? "hidden" : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"}
                         >
                           Edit
                         </AlertDialogTrigger>

@@ -23,6 +23,7 @@ const PajakKeluaran = ({
   const { id, akun } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const viewAsCompanyId = searchParams.get("viewAs");
+  const userId = searchParams.get("user_id");
   const [cookies] = useCookies(["token"]);
   const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
   // return axios.post(
@@ -199,7 +200,7 @@ const PajakKeluaran = ({
               <div className="flex  text-left text-sm" ref={dropdownRef}>
                 <button
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                  className="flex items-center bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-2 rounded"
+                  className={userId ? "hidden" : "flex items-center bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-2 rounded"}
                 >
                   Import <FaChevronDown className="ml-2" />
                 </button>
@@ -208,21 +209,22 @@ const PajakKeluaran = ({
                     <div className="py-1">
                       <a
                         href="/template-import-pajak-keluaran.xlsx"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        className={userId ? "hidden" : "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"}
                       >
                         Download Template
                       </a>
-                      <a className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">
+                      <a className={userId ? "hidden" : "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"}>
                         Import Dokumen
                       </a>
                     </div>
                   </div>
                 )}
+                
               </div>
             )}
             {/* {item && ( */}
             <button
-              className="flex items-center bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded text-sm"
+              className={userId ? "hidden" : "flex items-center bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded text-sm"}
               // onClick={
               //   () =>
               //     (window.location.href = `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran/tambah-faktur-keluaran`)
@@ -245,11 +247,11 @@ const PajakKeluaran = ({
             <button
               onClick={() => approveMultipleFaktur.mutate()}
               disabled={selectedFakturIds.length === 0}
-              className="flex items-center bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded text-sm"
+              className={userId ? "hidden" : "flex items-center bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded text-sm"}
             >
               Upload Faktur
             </button>
-            <button className="flex items-center bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-2 rounded text-sm">
+            <button className={userId ? "hidden" : "flex items-center bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-2 rounded text-sm"}>
               Hapus Dokumen
             </button>
           </div>
@@ -312,7 +314,7 @@ const PajakKeluaran = ({
                               `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran/edit-faktur-keluaran/${item.id}`
                             )
                           }
-                          className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs"
+                          className={userId ? "hidden" : "bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs"}
                         >
                           Edit
                         </button>
@@ -333,7 +335,7 @@ const PajakKeluaran = ({
                           className={`px-2 py-1 rounded text-xs text-white ${
                             deleteFaktur.isPending
                               ? "bg-gray-400 cursor-not-allowed"
-                              : "bg-red-500 hover:bg-red-600"
+                              : userId ? "hidden" : "bg-red-500 hover:bg-red-600"
                           }`}
                         >
                           {deleteFaktur.isPending ? "Menghapus..." : "Hapus"}

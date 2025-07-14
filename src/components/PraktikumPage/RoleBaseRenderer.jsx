@@ -24,6 +24,7 @@ export default function RoleBasedRenderer({
   // Get the viewAs parameter if it exists, otherwise use the account ID
   const viewAsCompanyId = searchParams.get("viewAs");
   const effectiveCompanyId = viewAsCompanyId || params.akun;
+  const userId = searchParams.get("user_id");
 
   function fillPath(template, params) {
     if (!template) return "";
@@ -65,12 +66,18 @@ export default function RoleBasedRenderer({
           },
           params: {
             intent: "api.get.sistem.ikhtisar.profil",
+            ...(userId && { user_id: userId }),
           },
         }
       );
       return data;
     },
     enabled: !!params.id && !!params.akun && !!cookies.token,
+    staleTime: 0,
+    cacheTime: 0,
+    refetchOnMount: "always",
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
   });
 
   // Query to get represented companies this user can act as
@@ -85,6 +92,9 @@ export default function RoleBasedRenderer({
               Authorization: `Bearer ${cookies.token}`,
               Accept: "application/json",
             },
+            params: {
+              ...(userId && { user_id: userId }),
+            },
           }
         );
         return data;
@@ -94,6 +104,11 @@ export default function RoleBasedRenderer({
       }
     },
     enabled: !!params.id && !!params.akun && !!cookies.token,
+    staleTime: 0,
+    cacheTime: 0,
+    refetchOnMount: "always",
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
   });
 
   // Content data query using the effective company ID - only if URL is provided
@@ -114,6 +129,7 @@ export default function RoleBasedRenderer({
           params: {
             intent: intent,
             page: currentPage,
+            ...(userId && { user_id: userId }),
           },
         });
         console.log("Response data:", data);
@@ -133,6 +149,11 @@ export default function RoleBasedRenderer({
       }
     },
     enabled: hasValidUrl, // Only run this query if URL is provided and path is valid
+    staleTime: 0,
+    cacheTime: 0,
+    refetchOnMount: "always",
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
   });
   // Function to handle switching between companies
   const handleCompanyChange = (companyId) => {

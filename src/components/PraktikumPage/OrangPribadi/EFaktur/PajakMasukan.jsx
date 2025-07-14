@@ -3,7 +3,7 @@ import SideBarEFaktur from "./SideBarEFaktur";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { useCookies } from "react-cookie";
-import { useParams } from "react-router";
+import { useParams, useSearchParams } from "react-router";
 
 const PajakMasukanOP = ({
   data,
@@ -16,6 +16,8 @@ const PajakMasukanOP = ({
   const [cookies] = useCookies(["token"]);
   const [selectedItems, setSelectedItems] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const userId = searchParams.get("user_id");
 
   // Extract page numbers from pagination URLs
   const getPageFromUrl = (url) => {
@@ -74,7 +76,7 @@ const PajakMasukanOP = ({
           </div>
         </div>
         <div className="flex justify-between mb-4 border-b pb-3">
-          <button className="flex items-center bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-2 rounded text-sm">
+          <button className={userId ? "hidden" : "flex items-center bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-2 rounded text-sm"}>
             Import Excel
           </button>
           <div className="flex items-center gap-3 ">
@@ -143,11 +145,11 @@ const PajakMasukanOP = ({
                         <a
                           href={`/praktikum/${id}/sistem/${akun}/e-faktur/pajak-masukan/edit/${item.id}`}
                         >
-                          <button className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs">
+                          <button className={userId ? "hidden" : "bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs"}>
                             Edit
                           </button>
                         </a>
-                        <button className="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-xs">
+                        <button className={userId ? "hidden" : "bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-xs"}>
                           Hapus
                         </button>
                       </div>

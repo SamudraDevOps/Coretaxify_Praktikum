@@ -105,6 +105,21 @@ const SelfBilling = ({ data: propData }) => {
   const navigate = useNavigateWithParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const viewAsCompanyId = searchParams.get("viewAs");
+  const userId = searchParams.get("user_id");
+  const indonesianMonths = [
+    "Januari",
+    "Februari",
+    "Maret",
+    "April",
+    "Mei",
+    "Juni",
+    "Juli",
+    "Agustus",
+    "September",
+    "Oktober",
+    "November",
+    "Desember",
+  ];
 
   const [formData, setFormData] = useState({
     currency: "IDR",
@@ -185,7 +200,7 @@ const SelfBilling = ({ data: propData }) => {
       console.log("Loading data:", data);
       setNpwp(data.data.npwp || "");
       setName(data.data.name || data.data.nama || "");
-      setAddress(data.data.address || data.data.alamat || "");
+      setAddress(data.data.address || data.data.alamat_wajib_pajak || "");
       //   hasLoadedData.current = true;
     }
   }, [isFetched, data]);
@@ -237,14 +252,22 @@ const SelfBilling = ({ data: propData }) => {
           type: "month",
           required: true,
           value: selectedMonth,
-          onChange: setSelectedMonth,
+          // onChange: setSelectedMonth,
+          onChange: (value) => {
+            setSelectedMonth(value);
+            handleFormDataChange("selectedMonth", value);
+          },
         },
         {
           label: "Tahun Pajak",
           type: "year",
           required: true,
           value: selectedYear,
-          onChange: setSelectedYear,
+          // onChange: setSelectedYear,
+          onChange: (value) => {
+            setSelectedYear(value);
+            handleFormDataChange("selectedYear", value);
+          },
         },
       ],
     },
@@ -333,7 +356,7 @@ const SelfBilling = ({ data: propData }) => {
     mutationFn: async () => {
       const csrf = await getCsrf();
       const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
-
+      console.log("form data sent", formData);
       return axios.post(
         `${RoutesApi.url}api/student/assignments/${id}/sistem/${accountId}/pembayaran`,
         {
@@ -568,13 +591,25 @@ const SelfBilling = ({ data: propData }) => {
                   <MonthYearPicker
                     label="Bulan Pajak"
                     selected={selectedMonth}
-                    onChange={setSelectedMonth}
+                    onChange={(value) => {
+                      setSelectedMonth(value);
+                      // Extract Indonesian month name using custom mapping
+                      const monthName = value
+                        ? indonesianMonths[value.getMonth()]
+                        : null;
+                      handleFormDataChange("selectedMonth", monthName);
+                    }}
                   />
                 ) : field.type === "year" ? (
                   <MonthYearPicker
                     label="Tahun Pajak"
                     selected={selectedYear}
-                    onChange={setSelectedYear}
+                    onChange={(value) => {
+                      setSelectedYear(value);
+                      // Extract year (e.g., 2025)
+                      const yearNumber = value ? value.getFullYear() : null;
+                      handleFormDataChange("selectedYear", yearNumber);
+                    }}
                     showYearOnly
                   />
                 ) : null}
@@ -619,9 +654,13 @@ const SelfBilling = ({ data: propData }) => {
                 <div className="font-semibold text-gray-700">
                   Periode dan Tahun Pajak
                 </div>
-                <div>
+                {/* <div>
                   :{" "}
                   {selectedMonth?.toLocaleString("default", { month: "long" })}{" "}
+                  {selectedYear?.getFullYear()}
+                </div> */}
+                <div>
+                  : {selectedMonth?.toLocaleString("id-ID", { month: "long" })}{" "}
                   {selectedYear?.getFullYear()}
                 </div>
               </div>
@@ -691,13 +730,17 @@ const SelfBilling = ({ data: propData }) => {
               }
             }}
             disabled={step === steps.length && createMandiri.isPending}
-            className={cn(
-              "bg-blue-600 hover:bg-blue-700 text-white",
-              step === steps.length && "bg-green-600 hover:bg-green-700",
-              step === steps.length &&
-                createMandiri.isPending &&
-                "opacity-50 cursor-not-allowed"
-            )}
+            className={
+              userId
+                ? "hidden"
+                : cn(
+                    "bg-blue-600 hover:bg-blue-700 text-white",
+                    step === steps.length && "bg-green-600 hover:bg-green-700",
+                    step === steps.length &&
+                      createMandiri.isPending &&
+                      "opacity-50 cursor-not-allowed"
+                  )
+            }
           >
             {step === steps.length ? (
               createMandiri.isPending ? (

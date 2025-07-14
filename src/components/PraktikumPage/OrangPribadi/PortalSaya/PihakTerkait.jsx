@@ -15,7 +15,7 @@ const PihakTerkait = ({ data, sidebar }) => {
           nama_akun={sidebar.nama_akun}
           npwp_akun={sidebar.npwp_akun}
         />
-        <div className="flex-auto p-3 bg-white rounded-md h-full">
+        <div className="flex-auto p-3 bg-white rounded-md h-full min-w-0">
           <div className="flex justify-between items-center mb-4 pb-3 border-b">
             <div className="flex items-center">
               <IoDocumentTextOutline className="text-4xl text-blue-900" />
@@ -29,9 +29,9 @@ const PihakTerkait = ({ data, sidebar }) => {
               <BsFiletypeXls className="text-2xl text-white" />
             </button>
           </div>
-          <div className=" w-[1050px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden ">
+          <div className=" w-full overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden ">
             <table className="table-auto border border-gray-300 overflow-hidden">
-              <thead className="bg-gray-200 w-[100px]">
+              <thead className="">
                 <tr>
                   <th className="px-6 py-2 border">Aksi</th>
                   <th className="px-8 py-2 border">Jenis Kontak</th>
@@ -47,7 +47,7 @@ const PihakTerkait = ({ data, sidebar }) => {
               </thead>
               <tbody className="text-gray-600">
                 {data.length === 0 ? (
-                  <tr className="bg-gray-100">
+                  <tr className="">
                     <td colSpan="10" className="text-center p-4 border">
                       Belum ada data
                     </td>

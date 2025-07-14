@@ -23,7 +23,7 @@ import { ClipLoader } from "react-spinners";
 import { useParams } from "react-router";
 import { deleteMemberPraktikum } from "@/hooks/dashboard";
 import { getCookie } from "@/service";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { RxCross1 } from "react-icons/rx";
 
 export default function DosenPraktikumKelasMember() {
@@ -39,6 +39,7 @@ export default function DosenPraktikumKelasMember() {
   const [selectedUser, setSelectedUser] = useState(null);
   const [scoreValue, setScoreValue] = useState("");
   const location = useLocation();
+  const navigate = useNavigate();
 
   const getRoute = () => {
     const pathSegments = location.pathname.split("/");
@@ -244,7 +245,9 @@ export default function DosenPraktikumKelasMember() {
               <th className="w-[2rem]">NIM </th>
               {pathRoute === "penilaian" ? (
                 <th className="w-[2rem]">Nilai </th>
-              ) : ""}
+              ) : (
+                ""
+              )}
               <th className="w-[2rem]">Email </th>
               <th className="w-[2rem]">Aksi</th>
             </tr>
@@ -255,93 +258,101 @@ export default function DosenPraktikumKelasMember() {
                 <td className="max-w-5">{index + 1}</td>
                 <td>{item.name}</td>
                 <td></td>
-                {pathRoute === "penilaian" ? (
-                  <td>{item.pivot.score}</td>
-                ) : ""}
+                {pathRoute === "penilaian" ? <td>{item.pivot.score}</td> : ""}
                 <td>{item.email}</td>
                 <td>
                   {pathRoute === "penilaian" ? (
-                    <AlertDialog>
-                      <AlertDialogTrigger asChild>
-                        <button
-                          className="action-button score bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded"
-                          onClick={() => {
-                            setSelectedUser(item);
-                            setScoreValue("");
-                          }}
-                        >
-                          Beri Nilai
-                        </button>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <div className="w-full flex justify-end">
-                            <AlertDialogCancel className="border-none shadow-none">
-                              <RxCross1 className="text-2xl text-black hover:cursor-pointer" />
-                            </AlertDialogCancel>
-                          </div>
-                          <AlertDialogTitle>Beri Nilai</AlertDialogTitle>
-                          <AlertDialogDescription className="w-full">
-                            <div className="">
-                              <p className="mb-4">
-                                Beri nilai untuk: <strong>{item.name}</strong>
-                              </p>
-                              <div className="edit-form-group-mahasiswa">
-                                <label>Nilai (0-100):</label>
-                                <input
-                                  type="number"
-                                  min="0"
-                                  max="100"
-                                  step="0.01"
-                                  value={scoreValue}
-                                  onChange={(e) =>
-                                    setScoreValue(e.target.value)
-                                  }
-                                  className="text-black"
-                                  placeholder="Masukkan nilai..."
-                                />
-                              </div>
-                            </div>
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel className="bg-red-600 text-white hover:bg-red-800 hover:text-white">
-                            Batal
-                          </AlertDialogCancel>
-                          <AlertDialogAction
-                            className="bg-green-600"
+                    <>
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <button
+                            className="action-button score bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded"
                             onClick={() => {
-                              if (
-                                !scoreValue ||
-                                scoreValue < 0 ||
-                                scoreValue > 100
-                              ) {
-                                Swal.fire({
-                                  title: "Error!",
-                                  text: "Nilai harus antara 0-100",
-                                  icon: "error",
-                                });
-                                return;
-                              }
-                              scoreMutation.mutate({
-                                userId: item.id,
-                                score: scoreValue,
-                              });
+                              setSelectedUser(item);
+                              setScoreValue("");
                             }}
                           >
-                            {scoreMutation.status === "pending" ? (
-                              <p>Loading...</p>
-                            ) : (
-                              <>Simpan Nilai</>
-                            )}
-                          </AlertDialogAction>
-                        </AlertDialogFooter>
-                        <div className="text-xs mt-2 text-red-700">
-                          {scoreMutation.isError &&
-                            scoreMutation.error.response?.data.message}
-                        </div>
-                      </AlertDialogContent>
-                    </AlertDialog>
+                            Beri Nilai
+                          </button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <div className="w-full flex justify-end">
+                              <AlertDialogCancel className="border-none shadow-none">
+                                <RxCross1 className="text-2xl text-black hover:cursor-pointer" />
+                              </AlertDialogCancel>
+                            </div>
+                            <AlertDialogTitle>Beri Nilai</AlertDialogTitle>
+                            <AlertDialogDescription className="w-full">
+                              <div className="">
+                                <p className="mb-4">
+                                  Beri nilai untuk: <strong>{item.name}</strong>
+                                </p>
+                                <div className="edit-form-group-mahasiswa">
+                                  <label>Nilai (0-100):</label>
+                                  <input
+                                    type="number"
+                                    min="0"
+                                    max="100"
+                                    step="0.01"
+                                    value={scoreValue}
+                                    onChange={(e) =>
+                                      setScoreValue(e.target.value)
+                                    }
+                                    className="text-black"
+                                    placeholder="Masukkan nilai..."
+                                  />
+                                </div>
+                              </div>
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel className="bg-red-600 text-white hover:bg-red-800 hover:text-white">
+                              Batal
+                            </AlertDialogCancel>
+                            <AlertDialogAction
+                              className="bg-green-600"
+                              onClick={() => {
+                                if (
+                                  !scoreValue ||
+                                  scoreValue < 0 ||
+                                  scoreValue > 100
+                                ) {
+                                  Swal.fire({
+                                    title: "Error!",
+                                    text: "Nilai harus antara 0-100",
+                                    icon: "error",
+                                  });
+                                  return;
+                                }
+                                scoreMutation.mutate({
+                                  userId: item.id,
+                                  score: scoreValue,
+                                });
+                              }}
+                            >
+                              {scoreMutation.status === "pending" ? (
+                                <p>Loading...</p>
+                              ) : (
+                                <>Simpan Nilai</>
+                              )}
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                          <div className="text-xs mt-2 text-red-700">
+                            {scoreMutation.isError &&
+                              scoreMutation.error.response?.data.message}
+                          </div>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                      <button 
+                        className="action-button edit bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 transition-colors"
+                        onClick={() => {
+                            navigate(`/praktikum/${idpraktikum}?user_id=${item.id}`);
+                        }}
+                      >
+                        Cek Pengerjaan
+                      </button>
+                    </>
                   ) : (
                     <button
                       className="action-button delete"

@@ -2,10 +2,13 @@ import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import SidebarProfilSayaBadan from "./SidebarProfilSaya";
 import { useParams } from "react-router";
+import { useSearchParams } from "react-router-dom";
 
 const ProfilSayaBadan = ({ data, sidebar }) => {
   const [activeTab, setActiveTab] = useState("profil");
   const { id, akun } = useParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const userId = searchParams.get("user_id");
 
   console.log(data);
 
