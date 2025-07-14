@@ -193,6 +193,7 @@ import SPTViewPDF from "./components/PraktikumPage/Badan/SPT/SPTViewPDF";
 import SPTPPHViewPDF from "./components/PraktikumPage/Badan/SPT/SPTPPHViewPDF";
 import SPTUnifikasiPDF from "./components/PraktikumPage/PDFTemplate/SPTUnifikasiTemplate";
 import SPTUnifikasiViewPDF from "./components/PraktikumPage/Badan/SPT/SPTUnifikasiViewPDF";
+import ViewKonsepSPT from "./components/PraktikumPage/Badan/SPT/ViewKonsepSPT";
 
 const Main = () => {
   const [loading, setLoading] = useState(true);
@@ -1108,6 +1109,25 @@ const Main = () => {
                 intent={""}
                 OrangPribadi={CreateKonsepSPT}
                 Badan={CreateKonsepSPT}
+                query={""}
+              ></RoleBasedRenderer>
+            </>
+            // <>
+            //   <Header />
+            //   <KonsepSPT />
+            // </>
+          }
+        />
+        <Route
+          path="/praktikum/:id/sistem/:akun/lihat-konsep-spt/:idSpt"
+          // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/spt/:idSpt`}
+                intent={""}
+                OrangPribadi={ViewKonsepSPT}
+                Badan={ViewKonsepSPT}
                 query={""}
               ></RoleBasedRenderer>
             </>
