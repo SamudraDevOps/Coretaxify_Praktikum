@@ -29,7 +29,7 @@ import Swal from "sweetalert2";
 import { RoutesApi } from "@/Routes";
 import { useNavigateWithParams } from "@/hooks/useNavigateWithParams";
 import { ClipLoader } from "react-spinners";
-const CreateKonsepPasal = ({ data }) => {
+const LihatKonsepPasal = ({ data }) => {
   const navigate = useNavigateWithParams();
   console.log(data);
   const [cookies] = useCookies(["token"]);
@@ -591,6 +591,7 @@ const CreateKonsepPasal = ({ data }) => {
                               name="cl_bp1_2"
                               value={formatRupiah(form.cl_bp1_2)}
                               onChange={handleChange}
+                              readOnly
                             />
                           </td>
                         </tr>
@@ -607,6 +608,7 @@ const CreateKonsepPasal = ({ data }) => {
                           </td>
                           <td className="p-2">
                             <input
+                              readOnly
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm"
                               name="cl_bp1_3"
@@ -789,6 +791,7 @@ const CreateKonsepPasal = ({ data }) => {
                           </td>
                           <td className="p-2">
                             <input
+                              readOnly
                               name="cl_bp2_2"
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm"
@@ -810,6 +813,7 @@ const CreateKonsepPasal = ({ data }) => {
                           </td>
                           <td className="p-2">
                             <input
+                              readOnly
                               name="cl_bp2_3"
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm"
@@ -937,7 +941,7 @@ const CreateKonsepPasal = ({ data }) => {
                 {showPernyataan && (
                   <div className="border rounded-md p-4 mb-4">
                     <div className="text-sm font-bold italic">
-                      <input type="checkbox" className="m-2" />
+                      <input readOnly type="checkbox" className="m-2" />
                       PERNYATAAN : DENGAN MENYADARI SEPENUHNYA AKAN SEGALA
                       AKIBATNYA, SAYA MENYATAKAN BAHWA APA YANG TELAH SAYA
                       BERITAHUKAN DI ATAS BESERTA LAMPIRAN-LAMPIRANNYA ADALAH
@@ -999,13 +1003,15 @@ const CreateKonsepPasal = ({ data }) => {
                 )}
                 <div className="flex justify-start mt-4 gap-2">
                   <AlertDialog>
-                    <button
+                    {/* <button
                       onClick={() => saveConcept.mutate()}
                       disabled={saveConcept.isPending}
                       className={`py-2 px-4 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-sm flex items-center justify-center ${
                         saveConcept.isPending
                           ? "bg-blue-400 text-white cursor-not-allowed"
-                          : userId ? "hidden" : "bg-blue-700 text-white hover:bg-blue-800"
+                          : userId
+                          ? "hidden"
+                          : "bg-blue-700 text-white hover:bg-blue-800"
                       }`}
                     >
                       {saveConcept.isPending ? (
@@ -1035,9 +1041,9 @@ const CreateKonsepPasal = ({ data }) => {
                       ) : (
                         "Simpan Konsep"
                       )}
-                    </button>
+                    </button> */}
 
-                    <AlertDialogTrigger asChild>
+                    {/* <AlertDialogTrigger asChild>
                       <button
                         // onClick={() => saveConcept.mutate()}
                         disabled={
@@ -1050,7 +1056,9 @@ const CreateKonsepPasal = ({ data }) => {
                           payDeposit.isPending ||
                           payBilling.isPending
                             ? "bg-blue-400 text-white cursor-not-allowed"
-                            : userId ? "hidden" : "bg-blue-700 text-white hover:bg-blue-800"
+                            : userId
+                            ? "hidden"
+                            : "bg-blue-700 text-white hover:bg-blue-800"
                         }`}
                       >
                         {saveConcept.isPending ||
@@ -1085,7 +1093,7 @@ const CreateKonsepPasal = ({ data }) => {
                           "Bayar dan Lapor"
                         )}
                       </button>
-                    </AlertDialogTrigger>
+                    </AlertDialogTrigger> */}
                     <AlertDialogContent className="max-w-xl">
                       <AlertDialogHeader>
                         <AlertDialogTitle className="text-lg font-semibold ">
@@ -1158,7 +1166,7 @@ const CreateKonsepPasal = ({ data }) => {
                   </div>
                   <div className="mt-4">
                     <div
-                      className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
+                      className="border rounded-md p-4 mb-2 cu{data.npwp}sor-pointer flex justify-between items-center bg-gray-100 w-full"
                       onClick={() => setShowHeadera1(!showHeadera1)}
                     >
                       <h3 className="text-lg font-semibold">Header</h3>
@@ -1174,7 +1182,7 @@ const CreateKonsepPasal = ({ data }) => {
                             <input
                               type="text"
                               readOnly
-                              value="2002909301990"
+                              value={data.npwp}
                               className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
                             />
                           </div>
@@ -2366,4 +2374,4 @@ const CreateKonsepPasal = ({ data }) => {
   );
 };
 
-export default CreateKonsepPasal;
+export default LihatKonsepPasal;
