@@ -196,6 +196,7 @@ import SPTUnifikasiViewPDF from "./components/PraktikumPage/Badan/SPT/SPTUnifika
 import ViewKonsepSPT from "./components/PraktikumPage/Badan/SPT/ViewKonsepSPT";
 import LihatKonsepPasal from "./components/PraktikumPage/Badan/SPT/ViewKonsepPasal";
 import LihatKonsepUnifikasi from "./components/PraktikumPage/Badan/SPT/ViewKonsepUnifikasi";
+import EditReturFaktur from "./components/PraktikumPage/Badan/EFaktur/EditReturFaktur";
 
 const Main = () => {
   const [loading, setLoading] = useState(true);
@@ -936,6 +937,20 @@ const Main = () => {
                 OrangPribadi={PajakMasukanOP}
                 Badan={PajakMasukan}
                 query={"edit-info"}
+              ></RoleBasedRenderer>
+            </>
+          }
+        />
+        <Route
+          path="/praktikum/:id/sistem/:akun/e-faktur/retur-pajak/:idFaktur"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/faktur/:idFaktur`}
+                intent={"api.get.faktur.retur.masukan"}
+                OrangPribadi={EditReturFaktur}
+                Badan={EditReturFaktur}
+                query={"edit-retur"}
               ></RoleBasedRenderer>
             </>
           }
