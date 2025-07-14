@@ -505,7 +505,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
       alert("Mohon lengkapi semua data transaksi");
       return;
     }
-    
+
 
     const transactionData = {
       id: editMode ? editingTransaksiId : Date.now(),
@@ -1082,7 +1082,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
     console.log(""),
     console.log("Rendering TambahFakturKeluaran"),
     (
-      
+
       <div className="flex items-start">
         <SideBarEFaktur
           nama_akun={sidebar.nama_akun}
@@ -2489,7 +2489,7 @@ ${isChecked ? "" : "bg-gray-100"}
                                       </div>
                                       <div className="space-y-2">
                                         <label className="block text-sm font-medium">
-                                          PPN
+                                          Tarif PPN
                                         </label>
                                         <input
                                           type="text"
@@ -2500,7 +2500,7 @@ ${isChecked ? "" : "bg-gray-100"}
                                       </div>
                                       <div className="space-y-2">
                                         <label className="block text-sm font-medium">
-                                          Tarif PPN
+                                          PPN
                                         </label>
                                         <input
                                           type="text"
