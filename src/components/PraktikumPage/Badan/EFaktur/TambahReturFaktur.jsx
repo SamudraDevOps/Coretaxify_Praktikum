@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { NumericFormat } from "react-number-format";
 import { FiX } from "react-icons/fi";
+import Select from "react-select";
 
 const TambahReturFaktur = () => {
     const [showDokumenTransaksi, setShowDokumenTransaksi] = useState(true);
@@ -357,24 +358,28 @@ const TambahReturFaktur = () => {
                                                                 <label className="block text-sm font-medium">
                                                                     Kode
                                                                 </label>
-                                                                <input type="text"
-                                                                    className="p-2 border rounded-md w-full"
-                                                                    value={kode}
-                                                                    onChange={e => setKode(e.target.value)}
-                                                                    placeholder="Masukkan kode barang/jasa"
+                                                                <Select
+                                                                    placeholder="Pilih kode barang/jasa"
+                                                                    className="w-full"
                                                                 />
                                                             </div>
                                                             <div className="space-y-2">
                                                                 <label className="block text-sm font-medium">Nama</label>
                                                                 <input
                                                                     type="text"
-                                                                    className="p-2 border rounded w-full"
+                                                                    className="p-2 border rounded w-full bg-gray-100"
                                                                     value={namaBarang}
                                                                     onChange={e => setNamaBarang(e.target.value)}
-                                                                    placeholder="Masukkan nama barang/jasa"
+                                                                    placeholder="Galeh Ganteng Serigala"
+                                                                    readOnly
                                                                 />
                                                             </div>
-
+                                                            <div className="space-y-2">
+                                                                <label className="block text-sm font-medium">Satuan</label>
+                                                                <select id=""
+                                                                    className="p-2 border rounded w-full bg-gray-100"
+                                                                ></select>
+                                                            </div>
                                                             <div className="space-y-2">
                                                                 <label className="block text-sm font-medium">Harga Satuan</label>
                                                                 <NumericFormat
@@ -383,12 +388,13 @@ const TambahReturFaktur = () => {
                                                                     thousandSeparator="."
                                                                     decimalSeparator=","
                                                                     prefix="Rp "
-                                                                    className="p-2 border rounded w-full"
+                                                                    className="p-2 border rounded w-full bg-gray-100"
                                                                     placeholder="Rp 0"
                                                                     allowNegative={false}
+                                                                    readOnly
                                                                 />
                                                             </div>
-                                                            <div className="space-y-2">
+                                                            {/* <div className="space-y-2">
                                                                 <label className="block text-sm font-medium">Kuantitas</label>
                                                                 <input
                                                                     type="number"
@@ -399,7 +405,7 @@ const TambahReturFaktur = () => {
                                                                     onChange={e => handleKuantitasChange(e.target.value)}
                                                                     placeholder="0"
                                                                 />
-                                                            </div>
+                                                            </div> */}
                                                             <div className="grid grid-cols-2 gap-4">
                                                                 <div className="space-y-2">
                                                                     <label className="block text-sm font-medium">
@@ -407,17 +413,19 @@ const TambahReturFaktur = () => {
                                                                     </label>
                                                                     <input
                                                                         type="number"
-                                                                        className="p-2 border rounded w-full"
+                                                                        className="p-2 border rounded w-full bg-gray-100"
                                                                         placeholder="0"
+                                                                        readOnly
                                                                     />
                                                                 </div>
                                                                 <div className="space-y-2">
                                                                     <label className="block text-sm font-medium">
                                                                         KUANTITAS
                                                                     </label>
-                                                                    <input className="p-2 border rounded w-full"
+                                                                    <input className="p-2 border rounded w-full bg-gray-100"
                                                                         type="number"
                                                                         placeholder="0"
+                                                                        readOnly
                                                                     />
                                                                 </div>
                                                             </div>
@@ -427,7 +435,8 @@ const TambahReturFaktur = () => {
                                                                 </label>
                                                                 <input
                                                                     type="number"
-                                                                    className="p-2 border rounded w-full"
+                                                                    className="p-2 border rounded w-full bg-gray-100"
+                                                                    readOnly
                                                                 />
                                                             </div>
                                                             <div className="grid grid-cols-2 gap-4">
@@ -437,17 +446,19 @@ const TambahReturFaktur = () => {
                                                                     </label>
                                                                     <input
                                                                         type="number"
-                                                                        className="p-2 border rounded w-full"
+                                                                        className="p-2 border rounded w-full bg-gray-100"
                                                                         placeholder="0"
+                                                                        readOnly
                                                                     />
                                                                 </div>
                                                                 <div className="space-y-2">
                                                                     <label className="block text-sm font-medium">
                                                                         Potongan Harga
                                                                     </label>
-                                                                    <input className="p-2 border rounded w-full"
+                                                                    <input className="p-2 border rounded w-full bg-gray-100"
                                                                         type="number"
                                                                         placeholder="0"
+                                                                        readOnly
                                                                     />
                                                                 </div>
                                                             </div>
@@ -462,12 +473,13 @@ const TambahReturFaktur = () => {
                                                                         DPP diretur
                                                                     </label>
                                                                     <NumericFormat
-                                                                        className="p-2 border rounded w-full"
+                                                                        className="p-2 border rounded w-full bg-gray-100"
                                                                         placeholder="0"
                                                                         thousandSeparator="."
                                                                         decimalSeparator=","
                                                                         prefix="Rp "
                                                                         allowNegative={false}
+                                                                        readOnly
                                                                     />
                                                                 </div>
                                                                 <div className="space-y-2">
@@ -475,12 +487,13 @@ const TambahReturFaktur = () => {
                                                                         DPP
                                                                     </label>
                                                                     <NumericFormat
-                                                                        className="p-2 border rounded w-full"
+                                                                        className="p-2 border rounded w-full bg-gray-100"
                                                                         placeholder="0"
                                                                         thousandSeparator="."
                                                                         decimalSeparator=","
                                                                         prefix="Rp "
                                                                         allowNegative={false}
+                                                                        readOnly
                                                                     />
                                                                 </div>
                                                                 <div className="space-y-2">
@@ -500,6 +513,7 @@ const TambahReturFaktur = () => {
                                                                             const dppNumber = parseInt(value || '0', 10);
                                                                             setPpnRetur((dppNumber * 0.12).toString());
                                                                         }}
+                                                                        
                                                                     />
                                                                 </div>
                                                                 <div className="space-y-2">
@@ -507,12 +521,13 @@ const TambahReturFaktur = () => {
                                                                         DPP Nilai Lain/DPP
                                                                     </label>
                                                                     <NumericFormat
-                                                                        className="p-2 border rounded w-full"
+                                                                        className="p-2 border rounded w-full bg-gray-100"
                                                                         placeholder="0"
                                                                         thousandSeparator="."
                                                                         decimalSeparator=","
                                                                         prefix="Rp "
                                                                         allowNegative={false}
+                                                                        readOnly
                                                                     />
                                                                 </div>
                                                             </div>
@@ -532,7 +547,7 @@ const TambahReturFaktur = () => {
                                                                         PPN diretur
                                                                     </label>
                                                                     <NumericFormat
-                                                                        className="p-2 border rounded w-full"
+                                                                        className="p-2 border rounded w-full bg-gray-100"
                                                                         placeholder="0"
                                                                         thousandSeparator="."
                                                                         decimalSeparator=","
@@ -548,7 +563,7 @@ const TambahReturFaktur = () => {
                                                                         PPN
                                                                     </label>
                                                                     <NumericFormat
-                                                                        className="p-2 border rounded w-full"
+                                                                        className="p-2 border rounded w-full bg-gray-100"
                                                                         placeholder="0"
                                                                         thousandSeparator="."
                                                                         decimalSeparator=","
@@ -566,12 +581,13 @@ const TambahReturFaktur = () => {
                                                                         PPN diretur
                                                                     </label>
                                                                     <NumericFormat
-                                                                        className="p-2 border rounded w-full"
+                                                                        className="p-2 border rounded w-full bg-gray-100"
                                                                         placeholder="0"
                                                                         thousandSeparator="."
                                                                         decimalSeparator=","
                                                                         prefix="Rp "
                                                                         allowNegative={false}
+                                                                        readOnly
                                                                     />
                                                                 </div>
                                                                 <div className="space-y-2">
@@ -593,7 +609,8 @@ const TambahReturFaktur = () => {
                                                                     Tarif PPnBM (%)
                                                                 </label>
                                                                 <input type="text"
-                                                                    className="p-2 rounded-md border w-full"
+                                                                    className="p-2 rounded-md border w-full bg-gray-100"
+                                                                    readOnly
                                                                 />
                                                             </div>
                                                             <div className="grid grid-cols-2 gap-4">
@@ -602,12 +619,13 @@ const TambahReturFaktur = () => {
                                                                         PPnBM diretur
                                                                     </label>
                                                                     <NumericFormat
-                                                                        className="p-2 border rounded w-full"
+                                                                        className="p-2 border rounded w-full bg-gray-100"
                                                                         placeholder="0"
                                                                         thousandSeparator="."
                                                                         decimalSeparator=","
                                                                         prefix="Rp "
                                                                         allowNegative={false}
+                                                                        readOnly
                                                                     />
                                                                 </div>
                                                                 <div className="space-y-2">
@@ -615,12 +633,13 @@ const TambahReturFaktur = () => {
                                                                         PPnBM
                                                                     </label>
                                                                     <NumericFormat
-                                                                        className="p-2 border rounded w-full"
+                                                                        className="p-2 border rounded w-full bg-gray-100"
                                                                         placeholder="0"
                                                                         thousandSeparator="."
                                                                         decimalSeparator=","
                                                                         prefix="Rp "
                                                                         allowNegative={false}
+                                                                        readOnly
                                                                     />
                                                                 </div>
                                                             </div>
