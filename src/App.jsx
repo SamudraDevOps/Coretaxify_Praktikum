@@ -955,6 +955,34 @@ const Main = () => {
             </>
           }
         />
+        <Route
+          path="/praktikum/:id/sistem/:akun/e-faktur/retur-pajak-keluaran/"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/faktur`}
+                intent={"api.get.faktur.retur.masukan"}
+                OrangPribadi={ReturFakturKeluaran}
+                Badan={ReturFakturKeluaran}
+                query={"retur-keluaran"}
+              ></RoleBasedRenderer>
+            </>
+          }
+        />
+        <Route
+          path="/praktikum/:id/sistem/:akun/e-faktur/retur-pajak-masukan/"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/faktur`}
+                intent={"api.get.faktur.retur.masukan"}
+                OrangPribadi={ReturFakturMasukan}
+                Badan={ReturFakturMasukan}
+                query={"retur-keluaran"}
+              ></RoleBasedRenderer>
+            </>
+          }
+        />
         {/* SPT */}
 
         <Route
