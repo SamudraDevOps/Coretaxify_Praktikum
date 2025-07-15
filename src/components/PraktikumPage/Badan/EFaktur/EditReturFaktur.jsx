@@ -283,13 +283,51 @@ const EditReturFaktur = ({ data, sidebar }) => {
     // If validation passes, proceed with mutation
     updateFakturRetur.mutate();
   };
+  // function formatRupiah(value) {
+  //   const numberString = value?.toString().replace(/[^0-9]/g, "") || "0";
+  //   return new Intl.NumberFormat("id-ID", {
+  //     style: "currency",
+  //     currency: "IDR",
+  //     minimumFractionDigits: 0,
+  //   }).format(numberString || 0);
+  // }
+  // function formatRupiah(value) {
+  //   if (!value) return "Rp 0";
+
+  //   // Allow numbers and decimal point, remove other characters
+  //   const cleanValue = value.toString().replace(/[^0-9.]/g, "");
+  //   const numericValue = parseFloat(cleanValue) || 0;
+
+  //   return new Intl.NumberFormat("id-ID", {
+  //     style: "currency",
+  //     currency: "IDR",
+  //     minimumFractionDigits: 0,
+  //   }).format(numericValue);
+  // }
   function formatRupiah(value) {
-    const numberString = value?.toString().replace(/[^0-9]/g, "") || "0";
-    return new Intl.NumberFormat("id-ID", {
+    // console.log("formatRupiah input:", value, "type:", typeof value);
+
+    if (!value && value !== 0) {
+      // console.log("formatRupiah returning Rp 0 - no value");
+      return "Rp 0";
+    }
+
+    const numericValue = parseFloat(value);
+    // console.log("formatRupiah parsed value:", numericValue);
+
+    if (isNaN(numericValue)) {
+      // console.log("formatRupiah returning Rp 0 - NaN");
+      return "Rp 0";
+    }
+
+    const formatted = new Intl.NumberFormat("id-ID", {
       style: "currency",
       currency: "IDR",
       minimumFractionDigits: 0,
-    }).format(numberString || 0);
+    }).format(numericValue);
+
+    // console.log("formatRupiah final result:", formatted);
+    return formatted;
   }
 
   function updatePPN(newJumlah) {
@@ -726,7 +764,7 @@ const EditReturFaktur = ({ data, sidebar }) => {
                                       type="number"
                                       value={jumlahBarangDiretur}
                                       min="0"
-                                      max={transaction.kuantitas}
+                                      max={transaction.kuantitas_asli}
                                       onFocus={(e) => {
                                         // Clear the field if it's 0 when user focuses
                                         if (jumlahBarangDiretur === 0) {
@@ -743,7 +781,7 @@ const EditReturFaktur = ({ data, sidebar }) => {
                                           // Ensure the value doesn't exceed kuantitas
                                           if (
                                             numericValue <=
-                                            transaction.kuantitas
+                                            transaction.kuantitas_asli
                                           ) {
                                             setJumlahBarangDiretur(
                                               numericValue
@@ -761,7 +799,7 @@ const EditReturFaktur = ({ data, sidebar }) => {
                                     />
                                     {/* Optional: Add a helper text to show the maximum allowed value */}
                                     <p className="text-xs text-gray-500">
-                                      Maksimal: {transaction.kuantitas}
+                                      Maksimal: {transaction.kuantitas_asli}
                                     </p>
                                   </div>
                                   <div className="space-y-2">
@@ -770,7 +808,7 @@ const EditReturFaktur = ({ data, sidebar }) => {
                                     </label>
                                     <input
                                       className="p-2 border rounded w-full bg-gray-100"
-                                      value={transaction.kuantitas}
+                                      value={transaction.kuantitas_asli}
                                       placeholder="0"
                                       readOnly
                                     />
@@ -824,7 +862,8 @@ const EditReturFaktur = ({ data, sidebar }) => {
                                         const { floatValue } = values;
                                         const maxValue =
                                           parseInt(
-                                            transaction.pemotongan_harga || "0",
+                                            transaction.potongan_harga_asli ||
+                                              "0",
                                             10
                                           ) || 0;
                                         return (
@@ -836,7 +875,7 @@ const EditReturFaktur = ({ data, sidebar }) => {
                                     <p className="text-xs text-gray-500">
                                       Maksimal:{" "}
                                       {formatRupiah(
-                                        transaction.pemotongan_harga
+                                        transaction.potongan_harga_asli
                                       )}
                                     </p>
                                   </div>
@@ -844,15 +883,40 @@ const EditReturFaktur = ({ data, sidebar }) => {
                                     <label className="block text-sm font-medium">
                                       Potongan Harga
                                     </label>
-                                    <input
+                                    <NumericFormat
+                                      value={transaction.potongan_harga_asli}
+                                      // onValueChange={({ value }) => {
+                                      //   const numericValue =
+                                      //     parseInt(value || "0", 10) || 0;
+                                      //   const maxValue =
+                                      //     parseInt(
+                                      //       transaction.pemotongan_harga || "0",
+                                      //       10
+                                      //     ) || 0;
+
+                                      //   // Ensure the value doesn't exceed the original pemotongan_harga
+                                      //   if (numericValue <= maxValue) {
+                                      //     setPemotonganHargaDiretur(value);
+                                      //   }
+                                      // }}
+                                      thousandSeparator="."
+                                      decimalSeparator=","
+                                      prefix="Rp "
+                                      className="p-2 border rounded w-full bg-gray-100"
+                                      placeholder="Rp 0"
+                                      allowNegative={false}
+                                      disabled
+                                    />
+                                    {/* <input
                                       className="p-2 border rounded w-full bg-gray-100"
                                       type="number"
                                       placeholder="0"
-                                      value={formatRupiah(
-                                        transaction.pemotongan_harga
-                                      )}
+                                      // value={transaction.potongan_harga_asli}
+                                      // value={formatRupiah(
+                                      //   transaction.potongan_harga_asli
+                                      // )}
                                       readOnly
-                                    />
+                                    /> */}
                                     <p className="text-xs text-gray-500">
                                       Potongan Harga Faktur
                                     </p>
@@ -874,6 +938,7 @@ const EditReturFaktur = ({ data, sidebar }) => {
                                       prefix="Rp "
                                       allowNegative={false}
                                       readOnly
+                                      value={formatRupiah(transaction.dpp)}
                                     />
                                   </div>
                                   <div className="space-y-2">
@@ -886,6 +951,7 @@ const EditReturFaktur = ({ data, sidebar }) => {
                                       prefix="Rp "
                                       allowNegative={false}
                                       readOnly
+                                      value={formatRupiah(transaction.dpp_asli)}
                                     />
                                   </div>
                                   <div className="space-y-2">
@@ -893,34 +959,55 @@ const EditReturFaktur = ({ data, sidebar }) => {
                                       DPP Nilai Lain diretur
                                     </label>
                                     <NumericFormat
-                                      className="p-2 border rounded w-full"
+                                      className="p-2 border rounded w-full bg-white"
                                       placeholder="0"
                                       thousandSeparator="."
                                       decimalSeparator=","
                                       prefix="Rp "
                                       allowNegative={false}
-                                      value={dppRetur}
-                                      // onValueChange={({ value }) => {
-                                      //   setDppRetur(value);
-                                      //   const dppNumber = parseInt(
-                                      //     value || "0",
-                                      //     10
-                                      //   );
-                                      //   setPpnRetur(
-                                      //     (dppNumber * 0.12).toString()
-                                      //   );
-                                      // }}
+                                      value={
+                                        dppLainReturEdit ||
+                                        transaction.dpp_lain_retur
+                                      }
                                       onValueChange={({ value }) => {
-                                        setDppLainReturEdit(value);
-                                        const dppNumber = parseInt(
-                                          value || "0",
-                                          10
-                                        );
-                                        setPpnReturEdit(
-                                          (dppNumber * 0.12).toString()
+                                        const numericValue =
+                                          parseInt(value || "0", 10) || 0;
+                                        const maxValue =
+                                          parseInt(
+                                            transaction.dpp_lain_asli || "0",
+                                            10
+                                          ) || 0;
+
+                                        // Only allow input if it doesn't exceed maximum
+                                        if (numericValue <= maxValue) {
+                                          setDppLainReturEdit(value);
+                                          const dppNumber = parseInt(
+                                            value || "0",
+                                            10
+                                          );
+                                          setPpnReturEdit(
+                                            (dppNumber * 0.12).toString()
+                                          );
+                                        }
+                                      }}
+                                      isAllowed={(values) => {
+                                        const { floatValue } = values;
+                                        const maxValue =
+                                          parseInt(
+                                            transaction.dpp_lain_asli || "0",
+                                            10
+                                          ) || 0;
+                                        // Strictly enforce maximum during typing
+                                        return (
+                                          !floatValue || floatValue <= maxValue
                                         );
                                       }}
                                     />
+                                    {/* Helper text to show maximum allowed value */}
+                                    <p className="text-xs text-gray-500">
+                                      Maksimal:{" "}
+                                      {formatRupiah(transaction.dpp_lain_asli)}
+                                    </p>
                                   </div>
                                   <div className="space-y-2">
                                     <label className="">
@@ -931,10 +1018,16 @@ const EditReturFaktur = ({ data, sidebar }) => {
                                       placeholder="0"
                                       thousandSeparator="."
                                       decimalSeparator=","
+                                      value={formatRupiah(
+                                        transaction.dpp_lain_asli
+                                      )}
                                       prefix="Rp "
                                       allowNegative={false}
                                       readOnly
                                     />
+                                    <p className="text-xs text-gray-500">
+                                      DPP Faktur
+                                    </p>
                                   </div>
                                 </div>
                                 <div className="space-y-2">
@@ -970,13 +1063,10 @@ const EditReturFaktur = ({ data, sidebar }) => {
                                             10
                                           ) || 0;
 
-                                        // Allow users to manually edit, but warn if exceeds maximum
-                                        setPpnReturEdit(value);
-
-                                        // Optional: If you want to enforce the limit strictly, uncomment below:
-                                        // if (numericValue <= maxValue) {
-                                        //   setPpnReturEdit(value);
-                                        // }
+                                        // Only allow input if it doesn't exceed maximum
+                                        if (numericValue <= maxValue) {
+                                          setPpnReturEdit(value);
+                                        }
                                       }}
                                       isAllowed={(values) => {
                                         const { floatValue } = values;
@@ -985,28 +1075,17 @@ const EditReturFaktur = ({ data, sidebar }) => {
                                             transaction.ppn_retur || "0",
                                             10
                                           ) || 0;
-                                        // Optional: Uncomment to strictly enforce maximum during typing
-                                        // return !floatValue || floatValue <= maxValue;
-                                        return true; // Allow typing, validation will show warning
+                                        // Strictly enforce maximum during typing
+                                        return (
+                                          !floatValue || floatValue <= maxValue
+                                        );
                                       }}
                                     />
                                     {/* Helper text to show maximum allowed value */}
-                                    <div className="flex justify-between">
-                                      <p className="text-xs text-gray-500">
-                                        Maksimal:{" "}
-                                        {formatRupiah(transaction.ppn_retur)}
-                                      </p>
-                                      {parseInt(ppnReturEdit || "0", 10) >
-                                        parseInt(
-                                          transaction.ppn_retur || "0",
-                                          10
-                                        ) && (
-                                        <p className="text-xs text-red-500">
-                                          Nilai melebihi maksimal yang diizinkan
-                                        </p>
-                                      )}
-                                      {/* Warning if value exceeds maximum */}
-                                    </div>
+                                    <p className="text-xs text-gray-500">
+                                      Maksimal:{" "}
+                                      {formatRupiah(transaction.ppn_retur)}
+                                    </p>
                                   </div>
                                   <div className="space-y-2">
                                     <label className="block text-sm font-medium">
@@ -1031,14 +1110,87 @@ const EditReturFaktur = ({ data, sidebar }) => {
 
                                 <div className="space-y-2">
                                   <label className="block text-sm font-medium">
-                                    Tarif PPnBM (%)
+                                    Tarif PPnBM
                                   </label>
                                   <input
                                     type="text"
                                     className="p-2 rounded-md border w-full bg-gray-100"
-                                    value={transaction.tarif_ppnbm}
+                                    value={formatRupiah(
+                                      transaction.tarif_ppnbm_asli
+                                    )}
                                     readOnly
                                   />
+                                </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                  <div className="space-y-2">
+                                    <label className="block text-sm font-medium">
+                                      PPnBM diretur
+                                    </label>
+                                    <NumericFormat
+                                      className="p-2 border rounded w-full bg-white"
+                                      placeholder="0"
+                                      thousandSeparator="."
+                                      decimalSeparator=","
+                                      prefix="Rp "
+                                      allowNegative={false}
+                                      value={
+                                        ppnbmReturEdit ||
+                                        transaction.ppnbm_retur
+                                      }
+                                      onValueChange={({ value }) => {
+                                        const numericValue =
+                                          parseInt(value || "0", 10) || 0;
+                                        const maxValue =
+                                          parseInt(
+                                            transaction.ppnbm_asli || "0",
+                                            10
+                                          ) || 0;
+
+                                        // Only allow input if it doesn't exceed maximum
+                                        if (numericValue <= maxValue) {
+                                          setPpnbmReturEdit(value);
+                                        }
+                                      }}
+                                      isAllowed={(values) => {
+                                        const { floatValue } = values;
+                                        const maxValue =
+                                          parseInt(
+                                            transaction.ppnbm_asli || "0",
+                                            10
+                                          ) || 0;
+                                        // Strictly enforce maximum during typing
+                                        return (
+                                          !floatValue || floatValue <= maxValue
+                                        );
+                                      }}
+                                    />
+                                    {/* Helper text to show maximum allowed value */}
+                                    <p className="text-xs text-gray-500">
+                                      Maksimal:{" "}
+                                      {formatRupiah(transaction.ppnbm_asli)}
+                                    </p>
+                                  </div>
+                                  <div className="space-y-2">
+                                    <label className="block text-sm font-medium">
+                                      PPnBM
+                                    </label>
+                                    <NumericFormat
+                                      className="p-2 border rounded w-full bg-gray-100"
+                                      placeholder="0"
+                                      thousandSeparator="."
+                                      decimalSeparator=","
+                                      prefix="Rp "
+                                      allowNegative={false}
+                                      value={formatRupiah(
+                                        transaction.ppnbm_asli
+                                      )}
+                                      displayType="input"
+                                      readOnly
+                                    />
+                                    <p className="text-xs text-gray-500">
+                                      PPnBM Faktur
+                                    </p>
+                                  </div>
                                 </div>
                               </div>
                             </div>
@@ -1098,7 +1250,7 @@ const EditReturFaktur = ({ data, sidebar }) => {
                         {formatRupiah(transaction.ppnbm_retur)}
                       </td>
                       <td className="border border-gray-300 px-4 py-2">
-                        {transaction.tarif_ppnbm}%
+                        {transaction.tarif_ppnbm}
                       </td>
                     </tr>
                   ))}
