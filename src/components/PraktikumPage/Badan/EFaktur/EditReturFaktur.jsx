@@ -28,7 +28,9 @@ import { useCookies } from "react-cookie";
 import Swal from "sweetalert2";
 
 const EditReturFaktur = ({ data, sidebar }) => {
+  console.log(data);
   const { id, akun, idFaktur } = useParams();
+  const [periodeRetur, setPeriodeRetur] = useState("");
   const [searchParams, setSearchParams] = useSearchParams();
   const viewAsCompanyId = searchParams.get("viewAs");
   const [cookies] = useCookies(["token"]);
@@ -79,6 +81,49 @@ const EditReturFaktur = ({ data, sidebar }) => {
   //   }
   // }, [data?.tanggal_retur]);
   // Add this helper function at the top of your component
+  const formatDateToPeriode = (dateString) => {
+    if (!dateString) return "";
+
+    const date = new Date(dateString);
+    const months = [
+      "Januari",
+      "Februari",
+      "Maret",
+      "April",
+      "Mei",
+      "Juni",
+      "Juli",
+      "Agustus",
+      "September",
+      "Oktober",
+      "November",
+      "Desember",
+    ];
+
+    const month = months[date.getMonth()];
+    const year = date.getFullYear();
+
+    return `${month} ${year}`;
+  };
+  useEffect(() => {
+    if (data?.tanggal_retur) {
+      const convertedDate = convertDateFormat(data.tanggal_retur);
+      setTanggalRetur(convertedDate);
+
+      // Set periode retur based on tanggal retur
+      const periode = formatDateToPeriode(convertedDate);
+      setPeriodeRetur(periode);
+    }
+  }, [data?.tanggal_retur]);
+  const handleTanggalReturChange = (e) => {
+    const selectedDate = e.target.value;
+    setTanggalRetur(selectedDate);
+
+    // Automatically update periode retur when tanggal retur changes
+    const periode = formatDateToPeriode(selectedDate);
+    setPeriodeRetur(periode);
+  };
+
   const convertDateFormat = (dateString) => {
     if (!dateString) return "";
 
@@ -470,23 +515,23 @@ const EditReturFaktur = ({ data, sidebar }) => {
               </div>
               <div className="space-y-2"></div>
               <div className="space-y-2"></div>
-              <div className="space-y-2">
+              {/* <div className="space-y-2">
                 <label className="block text-sm font-medium">
                   Tanggal Retur
-                </label>
-                {/* <input
+                </label> */}
+              {/* <input
                   readOnly
                   value={data?.tanggal_retur}
                   className="border rounded-md p-2 w-full"
                 /> */}
-                {/* <input
+              {/* <input
                   type="text"
                   value={tanggalRetur}
                   onChange={(e) => setTanggalRetur(e.target.value)}
                   className="border rounded-md p-2 w-full"
                   placeholder="DD-M-YYYY"
                 /> */}
-                <input
+              {/* <input
                   type="date"
                   value={tanggalRetur}
                   onChange={(e) => setTanggalRetur(e.target.value)}
@@ -496,11 +541,34 @@ const EditReturFaktur = ({ data, sidebar }) => {
               <div className="space-y-2">
                 <label className="block text-sm font-medium">
                   Periode Retur
-                </label>
-                {/* <input type="month" className="border rounded-md p-2 w-full" /> */}
-                <p className="border rounded-md p-2 w-full">
+                </label> */}
+              {/* <input type="month" className="border rounded-md p-2 w-full" /> */}
+              {/* <p className="border rounded-md p-2 w-full">
                   {data?.masa_pajak} {data?.tahun}
                 </p>
+              </div> */}
+              <div className="space-y-2">
+                <label className="block text-sm font-medium">
+                  Tanggal Retur
+                </label>
+                <input
+                  type="date"
+                  value={tanggalRetur}
+                  onChange={handleTanggalReturChange}
+                  className="border rounded-md p-2 w-full"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="block text-sm font-medium">
+                  Periode Retur
+                </label>
+                <input
+                  type="text"
+                  value={periodeRetur}
+                  className="border rounded-md p-2 w-full bg-gray-100"
+                  readOnly
+                  placeholder="Periode akan terisi otomatis"
+                />
               </div>
               <div className="space-y-2"></div>
             </div>
@@ -1255,6 +1323,175 @@ const EditReturFaktur = ({ data, sidebar }) => {
                     </tr>
                   ))}
                 </tbody>
+                <tfoot>
+                  <tr className="bg-gray-50 font-medium">
+                    <td className="border border-gray-300 px-2 py-2"></td>
+                    <td className="border border-gray-300 px-2 py-2"></td>
+                    <td className="border border-gray-300 px-4 py-2"></td>
+                    <td className="border border-gray-300 px-4 py-2"></td>
+                    <td className="border border-gray-300 px-4 py-2"></td>
+                    <td className="border border-gray-300 px-4 py-2"></td>
+                    <td className="border border-gray-300 px-4 py-2"></td>
+                    <td className="border border-gray-300 px-4 py-2 text-right font-semibold">
+                      RETUR
+                    </td>
+                    <td className="border border-gray-300 px-4 py-2">
+                      {/* {formatRupiah(
+                        data?.detail_transaksi?.reduce(
+                          (sum, transaction) =>
+                            sum +
+                            (parseInt(transaction.total_harga || "0", 10) || 0),
+                          0
+                        )
+                      )} */}
+                    </td>
+                    <td className="border border-gray-300 px-4 py-2">
+                      {/* {formatRupiah(
+                        data?.detail_transaksi?.reduce(
+                          (sum, transaction) =>
+                            sum +
+                            (parseInt(
+                              transaction.pemotongan_harga || "0",
+                              10
+                            ) || 0),
+                          0
+                        )
+                      )} */}
+                    </td>
+                    <td className="border border-gray-300 px-4 py-2"></td>
+                    <td className="border border-gray-300 px-4 py-2">
+                      {/* {formatRupiah(
+                        data?.detail_transaksi?.reduce(
+                          (sum, transaction) =>
+                            sum + (parseInt(transaction.dpp || "0", 10) || 0),
+                          0
+                        )
+                      )} */}
+                      {formatRupiah(data.jumlah_dpp_retur)}
+                    </td>
+                    <td className="border border-gray-300 px-4 py-2">
+                      {/* {formatRupiah(
+                        data?.detail_transaksi?.reduce(
+                          (sum, transaction) =>
+                            sum +
+                            (parseInt(transaction.ppn_retur || "0", 10) || 0),
+                          0
+                        )
+                      )} */}
+                      {formatRupiah(data.jumlah_ppn_retur)}
+                    </td>
+                    <td className="border border-gray-300 px-4 py-2">
+                      {/* {formatRupiah(
+                        data?.detail_transaksi?.reduce(
+                          (sum, transaction) =>
+                            sum +
+                            (parseInt(transaction.dpp_lain_retur || "0", 10) ||
+                              0),
+                          0
+                        )
+                      )} */}
+
+                      {formatRupiah(data.jumlah_dpp_lain_retur)}
+                    </td>
+                    <td className="border border-gray-300 px-4 py-2">
+                      {/* {formatRupiah(
+                        data?.detail_transaksi?.reduce(
+                          (sum, transaction) =>
+                            sum +
+                            (parseInt(transaction.ppnbm_retur || "0", 10) || 0),
+                          0
+                        )
+                      )} */}
+                      {formatRupiah(data.jumlah_ppnbm_retur)}
+                    </td>
+                    <td className="border border-gray-300 px-4 py-2"></td>
+                  </tr>
+                  <tr className="bg-gray-100 font-bold">
+                    <td className="border border-gray-300 px-2 py-2"></td>
+                    <td className="border border-gray-300 px-2 py-2"></td>
+                    <td className="border border-gray-300 px-4 py-2"></td>
+                    <td className="border border-gray-300 px-4 py-2"></td>
+                    <td className="border border-gray-300 px-4 py-2"></td>
+                    <td className="border border-gray-300 px-4 py-2"></td>
+                    <td className="border border-gray-300 px-4 py-2"></td>
+                    <td className="border border-gray-300 px-4 py-2 text-right font-bold">
+                      JUMLAH
+                    </td>
+                    <td className="border border-gray-300 px-4 py-2 font-bold">
+                      {/* {formatRupiah(
+                        data?.detail_transaksi?.reduce(
+                          (sum, transaction) =>
+                            sum +
+                            (parseInt(transaction.total_harga || "0", 10) || 0),
+                          0
+                        )
+                      )} */}
+
+                      {formatRupiah(data.jumlah_total_bayar_retur)}
+                    </td>
+                    <td className="border border-gray-300 px-4 py-2 font-bold">
+                      {/* {formatRupiah(
+                        data?.detail_transaksi?.reduce(
+                          (sum, transaction) =>
+                            sum +
+                            (parseInt(
+                              transaction.pemotongan_harga || "0",
+                              10
+                            ) || 0),
+                          0
+                        )
+                      )} */}
+                      {formatRupiah(data.jumlah_pemotongan_harga_retur)}
+                    </td>
+                    <td className="border border-gray-300 px-4 py-2"></td>
+                    <td className="border border-gray-300 px-4 py-2 font-bold">
+                      {/* {formatRupiah(
+                        data?.detail_transaksi?.reduce(
+                          (sum, transaction) =>
+                            sum + (parseInt(transaction.dpp || "0", 10) || 0),
+                          0
+                        )
+                      )} */}
+
+                      {formatRupiah(data.dpp)}
+                    </td>
+                    <td className="border border-gray-300 px-4 py-2 font-bold">
+                      {/* {formatRupiah(
+                        data?.detail_transaksi?.reduce(
+                          (sum, transaction) =>
+                            sum +
+                            (parseInt(transaction.ppn_retur || "0", 10) || 0),
+                          0
+                        )
+                      )} */}
+                      {formatRupiah(data.ppn)}
+                    </td>
+                    <td className="border border-gray-300 px-4 py-2 font-bold">
+                      {/* {formatRupiah(
+                        data?.detail_transaksi?.reduce(
+                          (sum, transaction) =>
+                            sum +
+                            (parseInt(transaction.dpp_lain_retur || "0", 10) ||
+                              0),
+                          0
+                        )
+                      )} */}
+                      {formatRupiah(data.dpp_nilai)}
+                    </td>
+                    <td className="border border-gray-300 px-4 py-2 font-bold">
+                      {/* {formatRupiah(
+                        data?.detail_transaksi?.reduce(
+                          (sum, transaction) =>
+                            sum +
+                            (parseInt(transaction.ppnbm_retur || "0", 10) || 0),
+                          0
+                        )
+                      )} */}
+                      {formatRupiah(data.ppnbm)}
+                    </td>
+                    <td className="border border-gray-300 px-4 py-2"></td>
+                  </tr>
+                </tfoot>
               </table>
             </div>
           </div>
