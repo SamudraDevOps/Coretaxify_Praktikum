@@ -19,9 +19,12 @@ const SideBarEFakturOP = ({ nama_akun, npwp_akun, akun }) => {
     },
     {
       label: "Retur Pajak Keluaran",
-      link: `/praktikum/${akun.id}/sistem/${akun.akun}/retur-pajak-keluaran`,
+      link: `/praktikum/${akun?.id}/sistem/${akun?.akun}/e-faktur/retur-pajak-keluaran`,
     },
-    { label: "Retur Pajak Masukan", link: "retur-pajak-masukan" },
+    {
+      label: "Retur Pajak Masukan",
+      link: `/praktikum/${akun?.id}/sistem/${akun?.akun}/e-faktur/retur-pajak-masukan`,
+    },
   ];
 
   const dokumenLainItems = [
@@ -47,20 +50,23 @@ const SideBarEFakturOP = ({ nama_akun, npwp_akun, akun }) => {
       <nav className="border border-gray-200 rounded-md text-left text-blue-900 overflow-hidden">
         <ul className="divide-gray-200">
           <li
-            className={`p-2 rounded-md cursor-pointer border-b border-gray-200 ${isDashboard
-              ? "bg-blue-700 text-white"
-              : "hover:bg-blue-700 hover:text-white"
-              }`}
+            className={`p-2 rounded-md cursor-pointer border-b border-gray-200 ${
+              isDashboard
+                ? "bg-blue-700 text-white"
+                : "hover:bg-blue-700 hover:text-white"
+            }`}
           >
             <Link to={dashboardPath} className="block w-full p-2 ">
               <strong>Dashboard</strong>
             </Link>
           </li>
 
-          <li className="font-bold text-lg mt-4 mb-2 text-start pl-2">e-Faktur</li>
+          <li className="font-bold text-lg mt-4 mb-2 text-start pl-2">
+            e-Faktur
+          </li>
           {efakturItems.map((item, index) => {
             const currentPath = location.pathname;
-            const linkPath = item.link.split('?')[0];
+            const linkPath = item.link.split("?")[0];
             const isActive = currentPath === linkPath;
             // const formattedItem = item.replace(/ /g, "-").toLowerCase();
             // const path = `/admin/praktikum/${userTypeId}/e-faktur/${formattedItem}`;
@@ -70,10 +76,11 @@ const SideBarEFakturOP = ({ nama_akun, npwp_akun, akun }) => {
             return (
               <li
                 key={index}
-                className={`border-t border-gray-200 p-3 rounded-sm cursor-pointer hover:bg-blue-700 hover:text-white ${isActive
+                className={`border-t border-gray-200 p-3 rounded-sm cursor-pointer hover:bg-blue-700 hover:text-white ${
+                  isActive
                     ? "bg-blue-900 text-white"
                     : "hover:bg-blue-700 hover:text-white"
-                  }`}
+                }`}
                 onClick={() => navigate(item.link)}
               >
                 {item.label}
@@ -84,10 +91,12 @@ const SideBarEFakturOP = ({ nama_akun, npwp_akun, akun }) => {
             );
           })}
 
-          <li className="font-bold text-lg border-t border-gray-200 text-start flex items-center py-4 px-2">Dokumen Lain</li>
+          <li className="font-bold text-lg border-t border-gray-200 text-start flex items-center py-4 px-2">
+            Dokumen Lain
+          </li>
           {dokumenLainItems.map((item, index) => {
             const currentPath = location.pathname;
-            const linkPath = item.link.split('?')[0];
+            const linkPath = item.link.split("?")[0];
             const isActive = currentPath === linkPath;
             // const formattedItem = item.replace(/ /g, "-").toLowerCase();
             // const path = `/admin/praktikum/${userTypeId}/e-faktur/dokumen-lain/${formattedItem}`;
@@ -102,7 +111,7 @@ const SideBarEFakturOP = ({ nama_akun, npwp_akun, akun }) => {
                   //   ? "bg-blue-700 text-white"
                   //   : "hover:bg-blue-700 hover:text-white"
                   "hover:bg-blue-700"
-                  }`}
+                }`}
               >
                 <Link to={item.link} className="block w-full p-2">
                   {item.label}
