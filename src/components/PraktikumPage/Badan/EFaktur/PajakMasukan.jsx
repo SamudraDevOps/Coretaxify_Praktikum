@@ -55,6 +55,7 @@ const PajakMasukan = ({
     } else {
       setSelectedItems([...selectedItems, itemId]);
     }
+    // alert(selectedItems)
   };
 
   // Handle select all checkbox
@@ -71,10 +72,10 @@ const PajakMasukan = ({
     mutationFn: async () => {
       const csrf = await getCsrf();
       const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
-      return axios.put(
-        `${RoutesApi.apiUrl}student/assignments/${id}/sistem/${accountId}/faktur/approve-multiple`,
+      return axios.post(
+        `${RoutesApi.apiUrl}student/assignments/${id}/sistem/${accountId}/faktur/kreditkan-multiple`,
         {
-          faktur_ids: selectedFakturIds,
+          faktur_ids: selectedItems,
         },
         {
           headers: {
@@ -83,9 +84,9 @@ const PajakMasukan = ({
             "X-CSRF-TOKEN": csrf,
             Authorization: `Bearer ${cookies.token}`,
           },
-          params: {
-            intent: api.update.faktur.kreditkan,
-          },
+          // params: {
+          //   intent: "api.update.faktur.kreditkan",
+          // },
         }
       );
     },
@@ -98,6 +99,46 @@ const PajakMasukan = ({
           }
         }
       );
+    },
+    onError: (error) => {
+      console.error("Error deleting data:", error);
+      Swal.fire("Gagal!", "Terjadi kesalahan saat mengupload data.", "error");
+    },
+  });
+
+  const tidakKreditkanFaktur = useMutation({
+    mutationFn: async () => {
+      const csrf = await getCsrf();
+      const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
+      return axios.post(
+        `${RoutesApi.apiUrl}student/assignments/${id}/sistem/${accountId}/faktur/unkreditkan-multiple`,
+        {
+          faktur_ids: selectedItems,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": csrf,
+            Authorization: `Bearer ${cookies.token}`,
+          },
+          // params: {
+          //   intent: "api.update.faktur.kreditkan",
+          // },
+        }
+      );
+    },
+    onSuccess: (data) => {
+      console.log(data);
+      Swal.fire(
+        "Berhasil!",
+        "Faktur berhasil di Tidak Kreditkan",
+        "success"
+      ).then((result) => {
+        if (result.isConfirmed) {
+          window.location.reload();
+        }
+      });
     },
     onError: (error) => {
       console.error("Error deleting data:", error);
@@ -132,14 +173,27 @@ const PajakMasukan = ({
             Import Excel
           </button>
           <div className="flex items-center gap-3 ">
-            <button className="flex items-center bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded text-sm">
-              Kreditan Faktur
+            <button
+              onClick={() => kreditkanFaktur.mutate()}
+              disabled={selectedItems.length === 0}
+              className={`flex items-center font-bold py-2 px-2 rounded text-sm ${
+                selectedItems.length === 0
+                  ? "bg-gray-400 text-gray-600 cursor-not-allowed"
+                  : "bg-blue-500 hover:bg-blue-600 text-white"
+              }`}
+            >
+              Kreditkan Faktur
             </button>
-            <button className="flex items-center bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded text-sm">
+            <button
+              onClick={() => tidakKreditkanFaktur.mutate()}
+              disabled={selectedItems.length === 0}
+              className={`flex items-center font-bold py-2 px-2 rounded text-sm ${
+                selectedItems.length === 0
+                  ? "bg-gray-400 text-gray-600 cursor-not-allowed"
+                  : "bg-blue-500 hover:bg-blue-600 text-white"
+              }`}
+            >
               Tidak Kreditan Faktur
-            </button>
-            <button className="flex items-center bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded text-sm">
-              Kembali Ke Status Approved
             </button>
           </div>
         </div>
