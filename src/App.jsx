@@ -961,7 +961,7 @@ const Main = () => {
             <>
               <RoleBasedRenderer
                 url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/faktur`}
-                intent={"api.get.faktur.retur.masukan"}
+                intent={"api.get.faktur.retur.keluaran"}
                 OrangPribadi={ReturFakturKeluaran}
                 Badan={ReturFakturKeluaran}
                 query={"retur-keluaran"}
@@ -979,6 +979,20 @@ const Main = () => {
                 OrangPribadi={ReturFakturMasukan}
                 Badan={ReturFakturMasukan}
                 query={"retur-keluaran"}
+              ></RoleBasedRenderer>
+            </>
+          }
+        />
+        <Route
+          path="/praktikum/:id/sistem/:akun/e-faktur/buat-retur/"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/faktur`}
+                intent={"api.get.faktur.masukan.by.nomor.faktur"}
+                OrangPribadi={TambahReturFaktur}
+                Badan={TambahReturFaktur}
+                query={"buat-retur"}
               ></RoleBasedRenderer>
             </>
           }
