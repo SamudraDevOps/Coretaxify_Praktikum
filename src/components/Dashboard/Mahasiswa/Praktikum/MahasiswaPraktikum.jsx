@@ -28,7 +28,7 @@ export default function MahasiswaPraktikum() {
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
   const [selectedData, setSelectedData] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = 20;
   const [cookies, setCookie] = useCookies(["user"]);
   // const [url, setUrl] = useState(`${RoutesApi.url}api/student/assignments`);
   const [url, setUrl] = useState(`${RoutesApi.url}api/student/assignment-user`);

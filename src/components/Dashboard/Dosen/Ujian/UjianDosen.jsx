@@ -508,23 +508,25 @@ export default function UjianDosen() {
                 <tr key={item.id}>
                   <td>{index + 1}</td>
                   <td>{item.name}</td>
-                  <td className="flex gap-2">
-                    <div>{item.assignment_code}</div>
-                    <FaRegCopy
-                      onClick={(e) => {
-                        // e.stopPropagation();
+                  <td className="">
+                    <div className="flex gap-2 justify-center">
+                      {item.assignment_code}
+                      <FaRegCopy
+                        onClick={(e) => {
+                          // e.stopPropagation();
 
-                        e.preventDefault();
-                        navigator.clipboard.writeText(item.assignment_code);
-                        toast({
-                          title: "Copy berhasil",
-                          description: "Kode Ujian berhasil dicopy",
-                        });
-                        // alert("miaw");
-                      }}
-                      className="hover:bg-slate-300 p-1 rounded-md"
-                      size={25}
-                    />
+                          e.preventDefault();
+                          navigator.clipboard.writeText(item.assignment_code);
+                          toast({
+                            title: "Copy berhasil",
+                            description: "Kode Ujian berhasil dicopy",
+                          });
+                          // alert("miaw");
+                        }}
+                        className="hover:bg-slate-300 p-1 rounded-md"
+                        size={25}
+                      />
+                    </div>
                   </td>
                   <td>{getTaskName(item.task_id)}</td>
                   <td>{formatDate(item.start_period)}</td>

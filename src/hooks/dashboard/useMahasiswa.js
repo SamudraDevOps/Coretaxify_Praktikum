@@ -71,6 +71,53 @@ export const joinAssignmentMahasiswa = (cookie, formData, refetch) =>
     },
   });
 
+  export const joinExamMahasiswa = (cookie, formData, refetch) =>
+  useMutation({
+    mutationFn: async () => {
+      console.log("button clicked");
+      const csrf = getCsrf();
+      const data = await axios.post(
+        `${RoutesApi.url}api/student/assignments`,
+        {
+          assignment_code: formData.assignment_code,
+        },
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": csrf,
+            Authorization: `Bearer ${cookie.token}`,
+          },
+          params: {
+            intent: IntentEnum.API_USER_JOIN_EXAM,
+          },
+        }
+      );
+      return data;
+    },
+    onSuccess: (data) => {
+      console.log(data);
+      Swal.fire(
+        "Berhasil!",
+        "Berhasil bergabung dengan Ujian!",
+        "success"
+      ).then((result) => {
+        if (result.isConfirmed) {
+          refetch();
+          // window.location.reload();
+        }
+      });
+
+      //   window.location.href = "/" + cookie.role;
+    },
+
+    onError: (error) => {
+      console.log("hello!");
+      console.log(error);
+      Swal.fire("Gagal !", error.response.data.message, "error");
+    },
+  });
+
 export const deleteMahasiswa = (cookie) =>
   useMutation({
     mutationFn: async (id) => {
