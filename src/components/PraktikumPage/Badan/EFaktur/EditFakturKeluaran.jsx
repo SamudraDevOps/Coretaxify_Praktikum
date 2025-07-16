@@ -2771,19 +2771,30 @@ ${isChecked ? "" : "bg-gray-100"}
                                         <label className="block text-sm font-medium">
                                           PPN
                                         </label>
-                                        <input
+                                        <NumericFormat
+                                          value={ppn}
+                                          displayType="input"
+                                          thousandSeparator="."
+                                          decimalSeparator=","
+                                          prefix="Rp "
+                                          className="p-2 border rounded w-full bg-gray-100"
+                                          readOnly
+                                          placeholder="Rp 0"
+                                        />
+                                        {/* <input
                                           type="text"
                                           className="p-2 border rounded w-full bg-gray-100"
                                           value={ppn}
                                           // readOnly
                                           placeholder="Rp 0"
-                                        />
+                                        /> */}
                                       </div>
                                       <div className="space-y-2">
                                         <label className="block text-sm font-medium">
                                           Tarif PPnBM (%)
                                         </label>
                                         <input
+                                          // readOnly
                                           type="text"
                                           className="p-2 border rounded w-full"
                                           value={tarif_ppnbm}
