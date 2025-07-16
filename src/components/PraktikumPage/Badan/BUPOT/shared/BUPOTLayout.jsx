@@ -20,6 +20,7 @@ const BUPOTLayout = ({
   customTable,
   customActionBar,
   onDataRefresh,
+  sidebar
 }) => {
   const [selectedItems, setSelectedItems] = useState([]);
 
@@ -51,7 +52,7 @@ const BUPOTLayout = ({
 
   return (
     <div className="flex">
-      <BUPOTSidebar type={type} title={sidebarTitle} />
+      <BUPOTSidebar type={type} title={sidebarTitle} sidebar={sidebar}/>
 
       <div className="w-full p-6 bg-gray-50 min-h-screen min-w-0">
         {customActionBar || (

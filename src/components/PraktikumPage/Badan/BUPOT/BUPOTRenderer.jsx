@@ -19,6 +19,7 @@ const BUPOTRenderer = ({
   queryKey,
   titles = {},
   data = null, // For when data is passed from RoleBasedRenderer
+  sidebar
 }) => {
   const { id, akun, status } = useParams();
   const [cookies] = useCookies(["token"]);
@@ -179,6 +180,7 @@ const BUPOTRenderer = ({
             }
             sidebarTitle={titles.sidebar || type.toUpperCase()}
             onDataRefresh={handleDataRefresh}
+            sidebar={sidebar}
           />
         );
       case "invalid":
@@ -198,6 +200,7 @@ const BUPOTRenderer = ({
             }
             sidebarTitle={titles.sidebar || type.toUpperCase()}
             onDataRefresh={handleDataRefresh}
+            sidebar={sidebar}
           />
         );
       default:
@@ -217,6 +220,7 @@ const BUPOTRenderer = ({
             }
             sidebarTitle={titles.sidebar || type.toUpperCase()}
             onDataRefresh={handleDataRefresh}
+            sidebar={sidebar}
           />
         );
     }
