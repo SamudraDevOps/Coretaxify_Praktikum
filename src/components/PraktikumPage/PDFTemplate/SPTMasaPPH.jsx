@@ -63,6 +63,14 @@ const styles = StyleSheet.create({
 
 const SptMasaPph21Pdf = ({ data }) => {
   console.log("pdf data : ", data);
+  function formatRupiah(value) {
+    const numberString = value?.toString().replace(/[^0-9]/g, "") || "0";
+    return new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
+      minimumFractionDigits: 0,
+    }).format(numberString || 0);
+  }
   return (
     <Document>
       <Page size="A4" style={styles.page}>
@@ -73,8 +81,8 @@ const SptMasaPph21Pdf = ({ data }) => {
           PAJAK PENGHASILAN (PPh) PASAL 21 DAN/ATAU PASAL 26
         </Text>
 
-        <Text style={styles.sectionTitle}>INDUK</Text>
-        <View style={styles.tableRow}>
+        {/* <Text style={styles.sectionTitle}>INDUK</Text> */}
+        {/* <View style={styles.tableRow}>
           <Text style={{ ...styles.cell, fontWeight: "bold" }}>Masa Pajak</Text>
           <Text style={{ ...styles.cell, fontWeight: "bold" }}>
             Tahun Pajak
@@ -85,6 +93,30 @@ const SptMasaPph21Pdf = ({ data }) => {
           <Text style={styles.cell}>4</Text>
           <Text style={styles.cell}>2025</Text>
           <Text style={styles.cell}>NORMAL</Text>
+        </View> */}
+        <View
+          style={{
+            flexDirection: "row",
+            fontSize: 9,
+            marginTop: 6,
+            borderWidth: 1,
+            borderColor: "#000",
+          }}
+        >
+          <View style={{ width: "33.3%", padding: 4, borderRight: 1 }}>
+            <Text>Masa Pajak</Text>
+            <Text>
+              {data.masa_bulan} {data.masa_tahun}
+            </Text>
+          </View>
+          <View style={{ width: "33.3%", padding: 4, borderRight: 1 }}>
+            <Text>Tahun Pajak</Text>
+            <Text>{data.masa_tahun}</Text>
+          </View>
+          <View style={{ width: "33.3%", padding: 4 }}>
+            <Text>Normal/Pembetulan</Text>
+            <Text>{data.model}</Text>
+          </View>
         </View>
 
         <Text style={styles.sectionTitle}>A. IDENTITAS PEMOTONG</Text>
@@ -120,39 +152,53 @@ const SptMasaPph21Pdf = ({ data }) => {
         <View style={styles.tableRow}>
           <Text style={styles.cell}>1. PPh 21 Dipotong</Text>
           <Text style={styles.cell}>411121-100</Text>
-          <Text style={styles.cell}>{data?.detail_spt?.cl_bp1_1}</Text>
+          <Text style={styles.cell}>
+            {formatRupiah(data?.detail_spt?.cl_bp1_1)}
+          </Text>
         </View>
         <View style={styles.tableRow}>
           <Text style={styles.cell}>2. Kelebihan Penyetoran</Text>
           <Text style={styles.cell}></Text>
-          <Text style={styles.cell}>{data?.detail_spt?.cl_bp1_2}</Text>
+          <Text style={styles.cell}>
+            {formatRupiah(data?.detail_spt?.cl_bp1_2)}
+          </Text>
         </View>
         <View style={styles.tableRow}>
           <Text style={styles.cell}>3. SP2D (Instansi Pemerintah)</Text>
           <Text style={styles.cell}></Text>
-          <Text style={styles.cell}>{data?.detail_spt?.cl_bp1_3}</Text>
+          <Text style={styles.cell}>
+            {formatRupiah(data?.detail_spt?.cl_bp1_3)}
+          </Text>
         </View>
         <View style={styles.tableRow}>
           <Text style={styles.cell}>4. Kurang/Lebih Disetor (1-2-3)</Text>
           <Text style={styles.cell}></Text>
-          <Text style={styles.cell}>{data?.detail_spt?.cl_bp1_4}</Text>
+          <Text style={styles.cell}>
+            {formatRupiah(data?.detail_spt?.cl_bp1_4)}
+          </Text>
         </View>
         <View style={styles.tableRow}>
           <Text style={styles.cell}>5. SPT yang Dibetulkan</Text>
           <Text style={styles.cell}></Text>
-          <Text style={styles.cell}>{data?.detail_spt?.cl_bp1_5}</Text>
+          <Text style={styles.cell}>
+            {formatRupiah(data?.detail_spt?.cl_bp1_5)}
+          </Text>
         </View>
         <View style={styles.tableRow}>
           <Text style={styles.cell}>6. Karena Pembetulan (4-5)</Text>
           <Text style={styles.cell}></Text>
-          <Text style={styles.cell}>{data?.detail_spt?.cl_bp1_6}</Text>
+          <Text style={styles.cell}>
+            {formatRupiah(data?.detail_spt?.cl_bp1_6)}
+          </Text>
         </View>
 
         <Text style={{ marginTop: 6 }}>II. Ditanggung Pemerintah</Text>
         <View style={styles.tableRow}>
           <Text style={styles.cell}>1. PPh 21 Ditanggung Pemerintah</Text>
           <Text style={styles.cell}>411121-100</Text>
-          <Text style={styles.cell}>{data?.detail_spt?.cl_bp1_7}</Text>
+          <Text style={styles.cell}>
+            {formatRupiah(data?.detail_spt?.cl_bp1_7)}
+          </Text>
         </View>
 
         <Text style={styles.sectionTitle}>C. PAJAK PENGHASILAN PASAL 26</Text>
@@ -161,39 +207,53 @@ const SptMasaPph21Pdf = ({ data }) => {
         <View style={styles.tableRow}>
           <Text style={styles.cell}>1. PPh 26 Dipotong</Text>
           <Text style={styles.cell}>411127-100</Text>
-          <Text style={styles.cell}>{data?.detail_spt?.cl_bp2_1}</Text>
+          <Text style={styles.cell}>
+            {formatRupiah(data?.detail_spt?.cl_bp2_1)}
+          </Text>
         </View>
         <View style={styles.tableRow}>
           <Text style={styles.cell}>2. Kelebihan Penyetoran</Text>
           <Text style={styles.cell}></Text>
-          <Text style={styles.cell}>{data?.detail_spt?.cl_bp2_2}</Text>
+          <Text style={styles.cell}>
+            {formatRupiah(data?.detail_spt?.cl_bp2_2)}
+          </Text>
         </View>
         <View style={styles.tableRow}>
           <Text style={styles.cell}>3. SP2D (Instansi Pemerintah)</Text>
           <Text style={styles.cell}></Text>
-          <Text style={styles.cell}>{data?.detail_spt?.cl_bp2_3}</Text>
+          <Text style={styles.cell}>
+            {formatRupiah(data?.detail_spt?.cl_bp2_3)}
+          </Text>
         </View>
         <View style={styles.tableRow}>
           <Text style={styles.cell}>4. Kurang/Lebih Disetor (1-2-3)</Text>
           <Text style={styles.cell}></Text>
-          <Text style={styles.cell}>{data?.detail_spt?.cl_bp2_4}</Text>
+          <Text style={styles.cell}>
+            {formatRupiah(data?.detail_spt?.cl_bp2_4)}
+          </Text>
         </View>
         <View style={styles.tableRow}>
           <Text style={styles.cell}>5. SPT yang Dibetulkan</Text>
           <Text style={styles.cell}></Text>
-          <Text style={styles.cell}>{data?.detail_spt?.cl_bp2_5}</Text>
+          <Text style={styles.cell}>
+            {formatRupiah(data?.detail_spt?.cl_bp2_5)}
+          </Text>
         </View>
         <View style={styles.tableRow}>
           <Text style={styles.cell}>6. Karena Pembetulan (4-5)</Text>
           <Text style={styles.cell}></Text>
-          <Text style={styles.cell}>{data?.detail_spt?.cl_bp2_6}</Text>
+          <Text style={styles.cell}>
+            {formatRupiah(data?.detail_spt?.cl_bp2_6)}
+          </Text>
         </View>
 
         <Text style={{ marginTop: 6 }}>II. Ditanggung Pemerintah</Text>
         <View style={styles.tableRow}>
           <Text style={styles.cell}>1. PPh 26 Ditanggung Pemerintah</Text>
           <Text style={styles.cell}>411127-100</Text>
-          <Text style={styles.cell}>{data?.detail_spt?.cl_bp2_7}</Text>
+          <Text style={styles.cell}>
+            {formatRupiah(data?.detail_spt?.cl_bp2_7)}
+          </Text>
         </View>
 
         <Text style={styles.sectionTitle}>
@@ -201,13 +261,13 @@ const SptMasaPph21Pdf = ({ data }) => {
         </Text>
         <View style={styles.row}>
           <Text style={styles.label}>Wajib Pajak</Text>
-          <Text style={{ width: "2%" }}>:</Text>
-          <Text style={{ width: "58%" }}>✔</Text>
+          {/* <Text style={{ width: "2%" }}>:</Text>
+          <Text style={{ width: "58%" }}>✔</Text> */}
         </View>
         <View style={styles.row}>
           <Text style={styles.label}>Kuasa</Text>
-          <Text style={{ width: "2%" }}>:</Text>
-          <Text style={{ width: "58%" }}></Text>
+          {/* <Text style={{ width: "2%" }}>:</Text>
+          <Text style={{ width: "58%" }}></Text> */}
         </View>
         <View style={styles.row}>
           <Text style={styles.label}>Nama</Text>
