@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useParams, useLocation, useSearchParams } from "react-router-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
@@ -25,6 +25,7 @@ const BUPOTRenderer = ({
   const location = useLocation();
   const queryClient = useQueryClient();
   const [searchParams] = useSearchParams();
+  const [currentPage, setCurrentPage] = useState(1);
 
   const getBupot = () => {
     const pathSegments = location.pathname.split("/");
@@ -111,6 +112,7 @@ const BUPOTRenderer = ({
             tipe_bupot: currentBupot,
             pembuat_id: currentPembuat
           },
+          page: currentPage,
         },
       });
       console.log("BUPOT Response:", data);
@@ -126,6 +128,11 @@ const BUPOTRenderer = ({
   // Function to refresh data after actions
   const handleDataRefresh = () => {
     refetch();
+  };
+
+  // Handle page change
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
   };
 
   if (isLoading && !fetchedData) {
@@ -163,6 +170,10 @@ const BUPOTRenderer = ({
             type={type}
             status={currentStatus}
             data={bupotData?.data || []}
+            pagination={bupotData?.meta}
+            links={bupotData?.links}
+            currentPage={currentPage}
+            onPageChange={handlePageChange}
             tableTitle={
               titles.published || `EBUPOT ${type.toUpperCase()} ISSUED`
             }
@@ -178,6 +189,10 @@ const BUPOTRenderer = ({
             type={type}
             status={currentStatus}
             data={bupotData?.data || []}
+            pagination={bupotData?.meta}
+            links={bupotData?.links}
+            currentPage={currentPage}
+            onPageChange={handlePageChange}
             tableTitle={
               titles.invalid || `EBUPOT ${type.toUpperCase()} INVALID`
             }
@@ -193,6 +208,10 @@ const BUPOTRenderer = ({
             type={type}
             status={currentStatus}
             data={bupotData?.data || []}
+            pagination={bupotData?.meta}
+            links={bupotData?.links}
+            currentPage={currentPage}
+            onPageChange={handlePageChange}
             tableTitle={
               titles.belumTerbit || `EBUPOT ${type.toUpperCase()} NOT ISSUED`
             }
