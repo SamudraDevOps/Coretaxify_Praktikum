@@ -193,6 +193,10 @@ import SPTViewPDF from "./components/PraktikumPage/Badan/SPT/SPTViewPDF";
 import SPTPPHViewPDF from "./components/PraktikumPage/Badan/SPT/SPTPPHViewPDF";
 import SPTUnifikasiPDF from "./components/PraktikumPage/PDFTemplate/SPTUnifikasiTemplate";
 import SPTUnifikasiViewPDF from "./components/PraktikumPage/Badan/SPT/SPTUnifikasiViewPDF";
+import ViewKonsepSPT from "./components/PraktikumPage/Badan/SPT/ViewKonsepSPT";
+import LihatKonsepPasal from "./components/PraktikumPage/Badan/SPT/ViewKonsepPasal";
+import LihatKonsepUnifikasi from "./components/PraktikumPage/Badan/SPT/ViewKonsepUnifikasi";
+import EditReturFaktur from "./components/PraktikumPage/Badan/EFaktur/EditReturFaktur";
 
 const Main = () => {
   const [loading, setLoading] = useState(true);
@@ -937,6 +941,62 @@ const Main = () => {
             </>
           }
         />
+        <Route
+          path="/praktikum/:id/sistem/:akun/e-faktur/retur-pajak/:idFaktur"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/faktur/:idFaktur`}
+                intent={"api.get.faktur.retur.masukan"}
+                OrangPribadi={EditReturFaktur}
+                Badan={EditReturFaktur}
+                query={"edit-retur"}
+              ></RoleBasedRenderer>
+            </>
+          }
+        />
+        <Route
+          path="/praktikum/:id/sistem/:akun/e-faktur/retur-pajak-keluaran/"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/faktur`}
+                intent={"api.get.faktur.retur.keluaran"}
+                OrangPribadi={ReturFakturKeluaran}
+                Badan={ReturFakturKeluaran}
+                query={"retur-keluaran"}
+              ></RoleBasedRenderer>
+            </>
+          }
+        />
+        <Route
+          path="/praktikum/:id/sistem/:akun/e-faktur/retur-pajak-masukan/"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/faktur`}
+                intent={"api.get.faktur.retur.masukan"}
+                OrangPribadi={ReturFakturMasukan}
+                Badan={ReturFakturMasukan}
+                query={"retur-keluaran"}
+              ></RoleBasedRenderer>
+            </>
+          }
+        />
+        <Route
+          path="/praktikum/:id/sistem/:akun/e-faktur/buat-retur/"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/faktur`}
+                intent={"api.get.faktur.masukan.by.nomor.faktur"}
+                OrangPribadi={TambahReturFaktur}
+                Badan={TambahReturFaktur}
+                query={"buat-retur"}
+              ></RoleBasedRenderer>
+            </>
+          }
+        />
         {/* SPT */}
 
         <Route
@@ -1118,6 +1178,25 @@ const Main = () => {
           }
         />
         <Route
+          path="/praktikum/:id/sistem/:akun/lihat-konsep-spt/:idSpt"
+          // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/spt/:idSpt`}
+                intent={""}
+                OrangPribadi={ViewKonsepSPT}
+                Badan={ViewKonsepSPT}
+                query={""}
+              ></RoleBasedRenderer>
+            </>
+            // <>
+            //   <Header />
+            //   <KonsepSPT />
+            // </>
+          }
+        />
+        <Route
           path="/praktikum/:id/sistem/:akun/spt/pdf/:idSpt"
           // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
           element={
@@ -1156,6 +1235,25 @@ const Main = () => {
           }
         />
         <Route
+          path="/praktikum/:id/sistem/:akun/lihat-konsep-spt-pph/:idSpt"
+          // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/spt/:idSpt`}
+                intent={""}
+                OrangPribadi={LihatKonsepPasal}
+                Badan={LihatKonsepPasal}
+                query={""}
+              ></RoleBasedRenderer>
+            </>
+            // <>
+            //   <Header />
+            //   <KonsepSPT />
+            // </>
+          }
+        />
+        <Route
           path="/praktikum/:id/sistem/:akun/spt-pph/pdf/:idSpt"
           // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
           element={
@@ -1184,6 +1282,25 @@ const Main = () => {
                 intent={""}
                 OrangPribadi={CreateKonsepUnifikasi}
                 Badan={CreateKonsepUnifikasi}
+                query={"buat-konsep-spt-unifikasi"}
+              ></RoleBasedRenderer>
+            </>
+            // <>
+            //   <Header />
+            //   <KonsepSPT />
+            // </>
+          }
+        />
+        <Route
+          path="/praktikum/:id/sistem/:akun/lihat-konsep-spt-unifikasi/:idSpt"
+          // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/spt/:idSpt`}
+                intent={""}
+                OrangPribadi={LihatKonsepUnifikasi}
+                Badan={LihatKonsepUnifikasi}
                 query={"buat-konsep-spt-unifikasi"}
               ></RoleBasedRenderer>
             </>

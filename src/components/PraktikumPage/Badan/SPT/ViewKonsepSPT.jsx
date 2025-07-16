@@ -58,7 +58,7 @@ const initialRowUpload = {
 //     return Number(val);
 // };
 
-const CreateKonsepSPT = ({ data }) => {
+const ViewKonsepSPT = ({ data }) => {
   const { id, akun, idSpt } = useParams();
   const [activeTab, setActiveTab] = useState("induk");
   const tabToApiParamMap = {
@@ -1019,12 +1019,12 @@ const CreateKonsepSPT = ({ data }) => {
                     </div>
 
                     <div className="mt-4 flex items-center gap-4">
-                      <button
+                      {/* <button
                         onClick={() => calculateSpt.mutate()}
                         className="bg-yellow-500 text-white px-4 py-2 rounded-md shadow-sm hover:bg-yellow-600 transition"
                       >
                         Posting SPT
-                      </button>
+                      </button> */}
                       {/* <p className="text-sm text-gray-500">
                         Last prefiling Returnsheet is on{" "}
                         <strong>12 April 2025 23:24:46</strong>
@@ -1477,6 +1477,7 @@ const CreateKonsepSPT = ({ data }) => {
                               // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm"
                               value={formData.cl_1a9_dpp}
+                              readOnly
                               onChange={handleChange}
                             />
                           </td>
@@ -1487,12 +1488,14 @@ const CreateKonsepSPT = ({ data }) => {
                               className="w-full p-1 border rounded-md text-right text-sm "
                               value={formData.cl_1a9_dpp_lain}
                               onChange={handleChange}
+                              readOnly
                             />
                           </td>
                           <td className="p-2">
                             <input
                               name="cl_1a9_ppn"
                               // type="number"
+                              readOnly
                               className="w-full p-1 border rounded-md text-right text-sm "
                               value={formData.cl_1a9_ppn}
                               onChange={handleChange}
@@ -1504,6 +1507,7 @@ const CreateKonsepSPT = ({ data }) => {
                               // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm"
                               value={formData.cl_1a9_ppnbm}
+                              readOnly
                               onChange={handleChange}
                             />
                             <AlertDialog
@@ -1618,6 +1622,7 @@ const CreateKonsepSPT = ({ data }) => {
                               // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm "
                               value={formData.cl_1b_jumlah_dpp}
+                              readOnly
                               onChange={handleChange}
                               name="cl_1b_jumlah_dpp"
                             />
@@ -1921,6 +1926,7 @@ const CreateKonsepSPT = ({ data }) => {
                               // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm "
                               value={formData.cl_2e_ppn}
+                              readOnly
                               onChange={handleChange}
                               name="cl_2e_ppn"
                             />
@@ -1941,6 +1947,7 @@ const CreateKonsepSPT = ({ data }) => {
                               // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm"
                               value={formData.cl_2f_ppn}
+                              readOnly
                               onChange={handleChange}
                               name="cl_2f_ppn"
                             />
@@ -2042,6 +2049,7 @@ const CreateKonsepSPT = ({ data }) => {
                               // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm"
                               value={formData.cl_2i_dpp}
+                              readOnly
                               onChange={handleChange}
                               name="cl_2i_dpp"
                             />
@@ -2135,6 +2143,7 @@ const CreateKonsepSPT = ({ data }) => {
                               className="w-full p-1 border rounded-md text-right text-sm "
                               name="cl_3b_ppn"
                               value={formData.cl_3b_ppn}
+                              readOnly
                               onChange={handleChange}
                             />
                           </td>
@@ -2176,6 +2185,7 @@ const CreateKonsepSPT = ({ data }) => {
                               defaultValue="0"
                               name="cl_3d_ppn"
                               value={formData.cl_3d_ppn}
+                              readOnly
                               onChange={handleChange}
                             />
                           </td>
@@ -2222,6 +2232,7 @@ const CreateKonsepSPT = ({ data }) => {
                               defaultValue="0"
                               name="cl_3f_ppn"
                               value={formData.cl_3f_ppn}
+                              readOnly
                               onChange={handleChange}
                             />
                           </td>
@@ -2259,6 +2270,7 @@ const CreateKonsepSPT = ({ data }) => {
                                   name="cl_3h_diminta"
                                   value="1"
                                   checked={formData.cl_3h_diminta === "1"}
+                                  readOnly
                                   onChange={handleChange}
                                   className="form-radio"
                                 />
@@ -2270,6 +2282,7 @@ const CreateKonsepSPT = ({ data }) => {
                                   name="cl_3h_diminta"
                                   value="2"
                                   checked={formData.cl_3h_diminta === "2"}
+                                  readOnly
                                   onChange={handleChange}
                                   className="form-radio"
                                 />
@@ -2284,6 +2297,7 @@ const CreateKonsepSPT = ({ data }) => {
                                   name="cl_3h_diminta"
                                   value="3"
                                   checked={formData.cl_3h_diminta === "3"}
+                                  readOnly
                                   onChange={handleChange}
                                   className="form-radio"
                                 />
@@ -2311,6 +2325,7 @@ const CreateKonsepSPT = ({ data }) => {
                                   name="cl_3h_nomor_rekening"
                                   className="w-full p-1 border rounded-md text-sm ml-7 mt-1"
                                   value={formData.cl_3h_nomor_rekening}
+                                  readOnly
                                   onChange={handleChange}
                                 />
                               </label>
@@ -2321,6 +2336,7 @@ const CreateKonsepSPT = ({ data }) => {
                                   name="cl_3h_nama_bank"
                                   className="w-full p-1 border rounded-md text-sm ml-16 mt-1"
                                   value={formData.cl_3h_nama_bank}
+                                  readOnly
                                   onChange={handleChange}
                                 />
                               </label>
@@ -2331,6 +2347,7 @@ const CreateKonsepSPT = ({ data }) => {
                                   name="cl_3h_nama_pemilik_bank"
                                   className="w-full p-1 border rounded-md text-sm ml-3 mt-1"
                                   value={formData.cl_3h_nama_pemilik_bank}
+                                  readOnly
                                   onChange={handleChange}
                                 />
                               </label>
@@ -2382,6 +2399,7 @@ const CreateKonsepSPT = ({ data }) => {
                               className="w-full p-1 border rounded-md text-right text-sm"
                               defaultValue="0"
                               value={formData.cl_4_ppn_terutang_dpp}
+                              readOnly
                               onChange={handleChange}
                               name="cl_4_ppn_terutang_dpp"
                             />
@@ -2445,6 +2463,7 @@ const CreateKonsepSPT = ({ data }) => {
                               className="w-full p-1 border rounded-md text-right text-sm"
                               name="cl_5_ppn_wajib"
                               value={formData.cl_5_ppn_wajib}
+                              readOnly
                               onChange={handleChange}
                             />
                           </td>
@@ -2519,6 +2538,7 @@ const CreateKonsepSPT = ({ data }) => {
                               name="cl_6b_ppnbm"
                               value={formData.cl_6b_ppnbm}
                               onChange={handleChange}
+                              readOnly
                             />
                           </td>
                         </tr>
@@ -2533,7 +2553,7 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2">
                             <input
                               // type="number"
-                              className="w-full p-1 border rounded-md text-right text-sm"
+                              className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
                               value={formatRupiah(data.detail_spt.cl_6c_ppnbm)}
                               disabled
                               name="cl_6c_ppnbm"
@@ -2557,6 +2577,7 @@ const CreateKonsepSPT = ({ data }) => {
                               name="cl_6d_ppnbm"
                               value={formData.cl_6d_ppnbm}
                               onChange={handleChange}
+                              readOnly
                             />
                           </td>
                         </tr>
@@ -2572,10 +2593,11 @@ const CreateKonsepSPT = ({ data }) => {
                           <td className="p-2">
                             <input
                               // type="number"
-                              className="w-full p-1 border rounded-md text-right text-sm"
+                              className="w-full p-1 border rounded-md text-right text-sm BG-gray-100"
                               value={formatRupiah(data.detail_spt.cl_6e_ppnbm)}
                               disabled
                               name="cl_6e_ppnbm"
+                              readOnly
                             />
                           </td>
                         </tr>
@@ -2644,6 +2666,8 @@ const CreateKonsepSPT = ({ data }) => {
                             <input
                               name="cl_7a_dpp"
                               // type="number"
+
+                              readOnly
                               className="w-full p-1 border rounded-md text-right text-sm"
                               value={formData.cl_7a_dpp}
                               onChange={handleChange}
@@ -2656,6 +2680,7 @@ const CreateKonsepSPT = ({ data }) => {
                               className="w-full p-1 border rounded-md text-right text-sm"
                               value={formData.cl_7a_dpp_lain}
                               onChange={handleChange}
+                              readOnly
                             />
                           </td>
                           <td className="p-2">
@@ -2665,6 +2690,7 @@ const CreateKonsepSPT = ({ data }) => {
                               className="w-full p-1 border rounded-md text-right text-sm"
                               value={formData.cl_7a_ppn}
                               onChange={handleChange}
+                              readOnly
                             />
                           </td>
                           <td className="p-2">
@@ -2674,6 +2700,7 @@ const CreateKonsepSPT = ({ data }) => {
                               className="w-full p-1 border rounded-md text-right text-sm"
                               value={formData.cl_7a_ppnbm}
                               onChange={handleChange}
+                              readOnly
                             />
                           </td>
                         </tr>
@@ -2691,6 +2718,7 @@ const CreateKonsepSPT = ({ data }) => {
                               className="w-full p-1 border rounded-md text-right text-sm"
                               value={formData.cl_7b_dpp}
                               onChange={handleChange}
+                              readOnly
                             />
                           </td>
                           <td className="p-2">
@@ -2699,6 +2727,7 @@ const CreateKonsepSPT = ({ data }) => {
                               // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm"
                               value={formData.cl_7b_dpp_lain}
+                              readOnly
                               onChange={handleChange}
                             />
                           </td>
@@ -2708,6 +2737,7 @@ const CreateKonsepSPT = ({ data }) => {
                               // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm"
                               value={formData.cl_7b_ppn}
+                              readOnly
                               onChange={handleChange}
                             />
                           </td>
@@ -2717,6 +2747,7 @@ const CreateKonsepSPT = ({ data }) => {
                               // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm"
                               value={formData.cl_7b_ppnbm}
+                              readOnly
                               onChange={handleChange}
                             />
                           </td>
@@ -2826,6 +2857,7 @@ const CreateKonsepSPT = ({ data }) => {
                               // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm "
                               value={formData.cl_8a_dpp}
+                              readOnly
                               onChange={handleChange}
                             />
                           </td>
@@ -2835,6 +2867,7 @@ const CreateKonsepSPT = ({ data }) => {
                               // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm "
                               value={formData.cl_8a_dpp_lain}
+                              readOnly
                               onChange={handleChange}
                             />
                           </td>
@@ -2844,6 +2877,7 @@ const CreateKonsepSPT = ({ data }) => {
                               // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm "
                               value={formData.cl_8a_ppn}
+                              readOnly
                               onChange={handleChange}
                             />
                           </td>
@@ -2853,6 +2887,7 @@ const CreateKonsepSPT = ({ data }) => {
                               // type="number"
                               className="w-full p-1 border rounded-md text-right text-sm"
                               value={formData.cl_8a_ppnbm}
+                              readOnly
                               onChange={handleChange}
                             />
                           </td>
@@ -2870,6 +2905,7 @@ const CreateKonsepSPT = ({ data }) => {
                               name="cl_8b_dpp"
                               className="w-full p-1 border rounded-md text-right text-sm"
                               value={formData.cl_8b_dpp}
+                              readOnly
                               onChange={handleChange}
                             />
                           </td>
@@ -2879,6 +2915,7 @@ const CreateKonsepSPT = ({ data }) => {
                               name="cl_8b_dpp_lain"
                               className="w-full p-1 border rounded-md text-right text-sm"
                               value={formData.cl_8b_dpp_lain}
+                              readOnly
                               onChange={handleChange}
                             />
                           </td>
@@ -2888,6 +2925,7 @@ const CreateKonsepSPT = ({ data }) => {
                               name="cl_8b_ppn"
                               className="w-full p-1 border rounded-md text-right text-sm"
                               value={formData.cl_8b_ppn}
+                              readOnly
                               onChange={handleChange}
                             />
                           </td>
@@ -2897,6 +2935,7 @@ const CreateKonsepSPT = ({ data }) => {
                               name="cl_8b_ppnbm"
                               className="w-full p-1 border rounded-md text-right text-sm"
                               value={formData.cl_8b_ppnbm}
+                              readOnly
                               onChange={handleChange}
                             />
                           </td>
@@ -3197,6 +3236,7 @@ const CreateKonsepSPT = ({ data }) => {
                             className="rounded w-full bg-white border-grey-300 border text-sm p-2 flex-1"
                             onChange={handleChange}
                             value={formData.cl_10_batas_waktu}
+                            readOnly
                           />
                         </div>
                       </div>
@@ -3205,7 +3245,7 @@ const CreateKonsepSPT = ({ data }) => {
                 )}
                 <div className="flex justify-start mt-4 gap-2">
                   <AlertDialog>
-                    <button
+                    {/* <button
                       onClick={() => saveConcept.mutate()}
                       disabled={saveConcept.isPending}
                       className={`py-2 px-4 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-sm flex items-center justify-center ${
@@ -3243,9 +3283,9 @@ const CreateKonsepSPT = ({ data }) => {
                       ) : (
                         "Simpan Konsep"
                       )}
-                    </button>
+                    </button> */}
 
-                    <AlertDialogTrigger asChild>
+                    {/* <AlertDialogTrigger asChild>
                       <button
                         // onClick={() => saveConcept.mutate()}
                         disabled={
@@ -3295,7 +3335,7 @@ const CreateKonsepSPT = ({ data }) => {
                           "Bayar dan Lapor"
                         )}
                       </button>
-                    </AlertDialogTrigger>
+                    </AlertDialogTrigger> */}
                     <AlertDialogContent className="max-w-xl">
                       <AlertDialogHeader>
                         <AlertDialogTitle className="text-lg font-semibold ">
@@ -4356,4 +4396,4 @@ const CreateKonsepSPT = ({ data }) => {
   );
 };
 
-export default CreateKonsepSPT;
+export default ViewKonsepSPT;
