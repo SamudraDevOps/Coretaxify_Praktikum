@@ -1,10 +1,16 @@
 import React, { useState } from "react";
 import SideBarEFaktur from "./SideBarEFaktur";
+import { GoArrowSwitch } from "react-icons/go";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { useCookies } from "react-cookie";
 import { useParams, useSearchParams } from "react-router";
 import { useNavigateWithParams } from "@/hooks/useNavigateWithParams";
+import { useMutation } from "@tanstack/react-query";
+import { getCsrf } from "@/service/getCsrf";
+import axios from "axios";
+import { RoutesApi } from "@/Routes";
+import Swal from "sweetalert2";
 
 const PajakMasukan = ({
   data,
@@ -18,6 +24,7 @@ const PajakMasukan = ({
   const [selectedItems, setSelectedItems] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
+  const viewAsCompanyId = searchParams.get("viewAs");
   const userId = searchParams.get("user_id");
 
   // Extract page numbers from pagination URLs
@@ -48,6 +55,7 @@ const PajakMasukan = ({
     } else {
       setSelectedItems([...selectedItems, itemId]);
     }
+    // alert(selectedItems)
   };
 
   // Handle select all checkbox
@@ -60,6 +68,83 @@ const PajakMasukan = ({
     setSelectAll(!selectAll);
   };
   const navigate = useNavigateWithParams();
+  const kreditkanFaktur = useMutation({
+    mutationFn: async () => {
+      const csrf = await getCsrf();
+      const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
+      return axios.post(
+        `${RoutesApi.apiUrl}student/assignments/${id}/sistem/${accountId}/faktur/kreditkan-multiple`,
+        {
+          faktur_ids: selectedItems,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": csrf,
+            Authorization: `Bearer ${cookies.token}`,
+          },
+          // params: {
+          //   intent: "api.update.faktur.kreditkan",
+          // },
+        }
+      );
+    },
+    onSuccess: (data) => {
+      console.log(data);
+      Swal.fire("Berhasil!", "Faktur berhasil dikreditkan", "success").then(
+        (result) => {
+          if (result.isConfirmed) {
+            window.location.reload();
+          }
+        }
+      );
+    },
+    onError: (error) => {
+      console.error("Error deleting data:", error);
+      Swal.fire("Gagal!", "Terjadi kesalahan saat mengupload data.", "error");
+    },
+  });
+
+  const tidakKreditkanFaktur = useMutation({
+    mutationFn: async () => {
+      const csrf = await getCsrf();
+      const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
+      return axios.post(
+        `${RoutesApi.apiUrl}student/assignments/${id}/sistem/${accountId}/faktur/unkreditkan-multiple`,
+        {
+          faktur_ids: selectedItems,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": csrf,
+            Authorization: `Bearer ${cookies.token}`,
+          },
+          // params: {
+          //   intent: "api.update.faktur.kreditkan",
+          // },
+        }
+      );
+    },
+    onSuccess: (data) => {
+      console.log(data);
+      Swal.fire(
+        "Berhasil!",
+        "Faktur berhasil di Tidak Kreditkan",
+        "success"
+      ).then((result) => {
+        if (result.isConfirmed) {
+          window.location.reload();
+        }
+      });
+    },
+    onError: (error) => {
+      console.error("Error deleting data:", error);
+      Swal.fire("Gagal!", "Terjadi kesalahan saat mengupload data.", "error");
+    },
+  });
 
   return (
     <div className="flex h-screen">
@@ -78,25 +163,44 @@ const PajakMasukan = ({
           </div>
         </div>
         <div className="flex justify-between mb-4 border-b pb-3">
-          <button className={userId ? "hidden" : "flex items-center bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-2 rounded text-sm"}>
+          <button
+            className={
+              userId
+                ? "hidden"
+                : "flex items-center bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-2 rounded text-sm"
+            }
+          >
             Import Excel
           </button>
           <div className="flex items-center gap-3 ">
-            <button className="flex items-center bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded text-sm">
-              Kreditan Faktur
+            <button
+              onClick={() => kreditkanFaktur.mutate()}
+              disabled={selectedItems.length === 0}
+              className={`flex items-center font-bold py-2 px-2 rounded text-sm ${
+                selectedItems.length === 0
+                  ? "bg-gray-400 text-gray-600 cursor-not-allowed"
+                  : "bg-blue-500 hover:bg-blue-600 text-white"
+              }`}
+            >
+              Kreditkan Faktur
             </button>
-            <button className="flex items-center bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded text-sm">
+            <button
+              onClick={() => tidakKreditkanFaktur.mutate()}
+              disabled={selectedItems.length === 0}
+              className={`flex items-center font-bold py-2 px-2 rounded text-sm ${
+                selectedItems.length === 0
+                  ? "bg-gray-400 text-gray-600 cursor-not-allowed"
+                  : "bg-blue-500 hover:bg-blue-600 text-white"
+              }`}
+            >
               Tidak Kreditan Faktur
-            </button>
-            <button className="flex items-center bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded text-sm">
-              Kembali Ke Status Approved
             </button>
           </div>
         </div>
         {/* <div className="w-auto overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden mt-4">
           <table className="table-auto border border-gray-300 w-full"> */}
-            <div className="w-full overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden mt-4">
-          <table className="table-auto border border-gray-300 w-full min-w-max"> 
+        <div className="w-full overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden mt-4">
+          <table className="table-auto border border-gray-300 w-full min-w-max">
             <thead className="bg-gray-200">
               <tr>
                 <th className="px-6 py-2 border">No</th>
@@ -162,6 +266,16 @@ const PajakMasukan = ({
                           className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs"
                         >
                           Lihat PDF
+                        </button>
+                        <button
+                          onClick={() =>
+                            navigate(
+                              `/praktikum/${id}/sistem/${akun}/e-faktur/retur-pajak/${item.id}`
+                            )
+                          }
+                          className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs"
+                        >
+                          <GoArrowSwitch></GoArrowSwitch>
                         </button>
                         {/* <button className="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-xs">
                           Hapus

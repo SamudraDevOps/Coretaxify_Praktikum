@@ -114,7 +114,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
       const data = await axios.get(
         // RoutesApiReal.apiUrl + `student/assignments/${id}/sistem/${akun}`,
         RoutesApiReal.apiUrl +
-        `student/assignments/${id}/sistem/${akun}/getAkun`,
+          `student/assignments/${id}/sistem/${akun}/getAkun`,
         {
           headers: {
             Authorization: `Bearer ${cookies.token}`,
@@ -174,10 +174,10 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
         selectedInfo === "A"
           ? "X"
           : selectedInfo === "B"
-            ? "Y"
-            : selectedInfo === "C"
-              ? "Z"
-              : "",
+          ? "Y"
+          : selectedInfo === "C"
+          ? "Z"
+          : "",
       nomorPendukung: "", // reset ketika berubah
     }));
     // Atur nilai Cap Fasilitas secara otomatis
@@ -505,7 +505,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
       alert("Mohon lengkapi semua data transaksi");
       return;
     }
-    
+
 
     const transactionData = {
       id: editMode ? editingTransaksiId : Date.now(),
@@ -948,6 +948,42 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
     }, 0);
 
     // Tambahkan total ke formData
+    // const finalFormData = {
+    //   ...formData,
+    //   dpp: Number(totalDPP),
+    //   ppn: Number(totalPPN),
+    //   ppnbm: Number(totalPPnBM),
+    //   informasi_tambahan: informasi_tambahan,
+    //   cap_fasilitas: cap_fasilitas,
+    //   akun_penerima_id:
+    //     formData.akun_penerima_id?.id || formData.akun_penerima_id,
+    //   pic_id: akun,
+    // };
+
+    // console.log("final form :", finalFormData);
+    // createFaktur.mutate({ data: finalFormData, isDraft });
+    // Modified version of your posting logic (lines 951-964)
+    // const finalFormData = {
+    //   ...formData,
+    //   dpp: Number(totalDPP),
+    //   ppn: Number(totalPPN),
+    //   ppnbm: Number(totalPPnBM),
+    //   informasi_tambahan: informasi_tambahan,
+    //   cap_fasilitas: cap_fasilitas,
+    //   akun_penerima_id:
+    //     formData.akun_penerima_id?.id || formData.akun_penerima_id,
+    //   // Add is_akun_tambahan field for backend differentiation
+    //   is_akun_tambahan: formData.akun_penerima_id?.is_akun_tambahan || false,
+    //   // Optional: Add composite key for additional validation
+    //   akun_penerima_composite_key:
+    //     formData.akun_penerima_id?.id &&
+    //     formData.akun_penerima_id?.is_akun_tambahan !== undefined
+    //       ? `${formData.akun_penerima_id.id}_${
+    //           formData.akun_penerima_id.is_akun_tambahan ? "additional" : "main"
+    //         }`
+    //       : null,
+    //   pic_id: akun,
+    // };
     const finalFormData = {
       ...formData,
       dpp: Number(totalDPP),
@@ -957,6 +993,10 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
       cap_fasilitas: cap_fasilitas,
       akun_penerima_id:
         formData.akun_penerima_id?.id || formData.akun_penerima_id,
+      // Include is_akun_tambahan for backend differentiation
+      is_akun_tambahan: formData.akun_penerima_id?.is_akun_tambahan ?? false,
+      // Include account type for additional context
+      tipe_akun_penerima: formData.akun_penerima_id?.tipe_akun || null,
       pic_id: akun,
     };
 
@@ -1082,7 +1122,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
     console.log(""),
     console.log("Rendering TambahFakturKeluaran"),
     (
-      
+
       <div className="flex items-start">
         <SideBarEFaktur
           nama_akun={sidebar.nama_akun}
@@ -1090,7 +1130,11 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
           akun={{ id, akun }}
         />
         <div className="w-full flex-grow p-6 bg-white h-full">
-          <h2 className={userId ? "hidden" : "text-2xl font-semibold text-gray-800 mb-4"}>
+          <h2
+            className={
+              userId ? "hidden" : "text-2xl font-semibold text-gray-800 mb-4"
+            }
+          >
             Tambah Data
           </h2>
           <div
@@ -1635,27 +1679,27 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                           "9 - Penyerahan kepada Perwakilan Negara Asing dan Badan Internasional serta Pejabatnya",
                           "10 - BKP dan JKP tertentu",
                         ].includes(informasi_tambahan))) && (
-                        <div className="space-y-2">
-                          <label className="block text-sm font-medium">
-                            Nomor Pendukung
-                          </label>
-                          <input
-                            type="text"
-                            name="nomorPendukung"
-                            className="p-2 border rounded w-full"
-                            placeholder="Masukkan Nomor Pendukung"
-                            value={formData.nomorPendukung}
-                            onChange={(e) => {
-                              const value = e.target.value;
-                              setNomorPendukung(value);
-                              setFormData((prev) => ({
-                                ...prev,
-                                nomorPendukung: value,
-                              }));
-                            }}
-                          />
-                        </div>
-                      )}
+                      <div className="space-y-2">
+                        <label className="block text-sm font-medium">
+                          Nomor Pendukung
+                        </label>
+                        <input
+                          type="text"
+                          name="nomorPendukung"
+                          className="p-2 border rounded w-full"
+                          placeholder="Masukkan Nomor Pendukung"
+                          value={formData.nomorPendukung}
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            setNomorPendukung(value);
+                            setFormData((prev) => ({
+                              ...prev,
+                              nomorPendukung: value,
+                            }));
+                          }}
+                        />
+                      </div>
+                    )}
                   </>
                 )}
               </div>
@@ -1707,10 +1751,28 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
             <div className="border rounded-md p-4 mb-2 grid grid-cols-3 gap-4 w-full">
               <div className="space-y-2">
                 <label className="block text-sm font-medium">NPWP </label>
-                <select
+                {/* <select
                   name="akun_penerima_id"
                   value={formData.akun_penerima_id}
                   // onChange={handleChange}
+                  // onChange={(e) => {
+                  //   const selectedId = e.target.value;
+                  //   const selectedItem = npwp_faktur.data.find(
+                  //     (item) => item.id.toString() == selectedId
+                  //   );
+
+                  //   console.log(selectedItem);
+
+                  //   setFormData((prev) => ({
+                  //     ...prev,
+                  //     akun_penerima_id: selectedItem?.id,
+                  //     nama: selectedItem?.nama_akun || "",
+                  //     alamat: selectedItem?.alamat_utama_akun || "",
+                  //     negara: selectedItem?.negara_asal,
+                  //     email: selectedItem?.email_akun,
+                  //   }));
+                  // }}
+                  // Find the select handler around line 520-540 and modify it like this:
                   onChange={(e) => {
                     const selectedId = e.target.value;
                     const selectedItem = npwp_faktur.data.find(
@@ -1721,7 +1783,19 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
 
                     setFormData((prev) => ({
                       ...prev,
-                      akun_penerima_id: selectedItem?.id,
+                      // Store the full object instead of just the ID
+                      akun_penerima_id: selectedItem
+                        ? {
+                            id: selectedItem.id,
+                            is_akun_tambahan:
+                              selectedItem.is_akun_tambahan || false,
+                            nama_akun: selectedItem.nama_akun,
+                            alamat_utama_akun: selectedItem.alamat_utama_akun,
+                            negara_asal: selectedItem.negara_asal,
+                            email_akun: selectedItem.email_akun,
+                            npwp_akun: selectedItem.npwp_akun,
+                          }
+                        : null,
                       nama: selectedItem?.nama_akun || "",
                       alamat: selectedItem?.alamat_utama_akun || "",
                       negara: selectedItem?.negara_asal,
@@ -1739,6 +1813,106 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                         {item.nama_akun}
                       </option>
                     ))}
+                </select> */}
+                {/* // Around line 520 in the NPWP select dropdown: */}
+                <select
+                  name="akun_penerima_id"
+                  value={
+                    formData.akun_penerima_id?.id &&
+                    formData.akun_penerima_id?.is_akun_tambahan !== undefined
+                      ? `${formData.akun_penerima_id.id}_${formData.akun_penerima_id.is_akun_tambahan}`
+                      : ""
+                  }
+                  onChange={(e) => {
+                    const compositeValue = e.target.value;
+                    if (!compositeValue) {
+                      setFormData((prev) => ({
+                        ...prev,
+                        akun_penerima_id: null,
+                        nama: "",
+                        alamat: "",
+                        negara: "",
+                        email: "",
+                      }));
+                      return;
+                    }
+
+                    const [selectedId, isAkunTambahanStr] =
+                      compositeValue.split("_");
+                    const isAkunTambahan = isAkunTambahanStr === "true";
+
+                    const selectedItem = npwp_faktur.data.find(
+                      (item) =>
+                        item.id.toString() === selectedId &&
+                        item.is_akun_tambahan === isAkunTambahan
+                    );
+
+                    console.log("Selected item:", selectedItem);
+
+                    if (selectedItem) {
+                      setFormData((prev) => ({
+                        ...prev,
+                        akun_penerima_id: {
+                          id: selectedItem.id,
+                          is_akun_tambahan: selectedItem.is_akun_tambahan,
+                          nama_akun: selectedItem.nama_akun,
+                          alamat_utama_akun: selectedItem.alamat_utama_akun,
+                          negara_asal: selectedItem.negara_asal,
+                          email_akun: selectedItem.email_akun,
+                          npwp_akun: selectedItem.npwp_akun,
+                          tipe_akun: selectedItem.tipe_akun,
+                        },
+                        nama: selectedItem.nama_akun || "",
+                        alamat: selectedItem.alamat_utama_akun || "",
+                        negara: selectedItem.negara_asal || "",
+                        email: selectedItem.email_akun || "",
+                      }));
+                    }
+                  }}
+                  className="p-2 border rounded w-full"
+                >
+                  <option value="">Pilih NPWP</option>
+                  {!isLoading && npwp_faktur && (
+                    <>
+                      {/* Main Accounts */}
+                      {npwp_faktur.data.filter((item) => !item.is_akun_tambahan)
+                        .length > 0 && (
+                        <optgroup label="Main Accounts">
+                          {npwp_faktur.data
+                            .filter((item) => !item.is_akun_tambahan)
+                            .map((item, index) => (
+                              <option
+                                key={`${item.id}_false_${index}`}
+                                value={`${item.id}_false`}
+                              >
+                                {item.npwp_akun || "NPWP tidak tersedia"} -{" "}
+                                {item.nama_akun}
+                                {item.tipe_akun ? ` (${item.tipe_akun})` : ""}
+                              </option>
+                            ))}
+                        </optgroup>
+                      )}
+
+                      {/* Additional Accounts */}
+                      {npwp_faktur.data.filter((item) => item.is_akun_tambahan)
+                        .length > 0 && (
+                        <optgroup label="Additional Accounts">
+                          {npwp_faktur.data
+                            .filter((item) => item.is_akun_tambahan)
+                            .map((item, index) => (
+                              <option
+                                key={`${item.id}_true_${index}`}
+                                value={`${item.id}_true`}
+                              >
+                                {item.npwp_akun || "NPWP tidak tersedia"} -{" "}
+                                {item.nama_akun}
+                                {item.tipe_akun ? ` (${item.tipe_akun})` : ""}
+                              </option>
+                            ))}
+                        </optgroup>
+                      )}
+                    </>
+                  )}
                 </select>
                 {isLoading && (
                   <div className="text-sm text-gray-500">
@@ -1847,7 +2021,13 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
               <div className="flex justify-between mb-4 border-b pb-3">
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
-                    <button className={userId ? "hidden" : "flex items-center bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded"}>
+                    <button
+                      className={
+                        userId
+                          ? "hidden"
+                          : "flex items-center bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded"
+                      }
+                    >
                       {editMode ? "Edit Transaksi" : "Tambah Transaksi"}
                     </button>
                   </AlertDialogTrigger>
@@ -2233,7 +2413,11 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                             <AlertDialog>
                               <AlertDialogTrigger asChild>
                                 <button
-                                  className={userId ? "hidden" : "bg-blue-500 hover:bg-blue-600 text-white py-1 px-2 rounded text-xs"}
+                                  className={
+                                    userId
+                                      ? "hidden"
+                                      : "bg-blue-500 hover:bg-blue-600 text-white py-1 px-2 rounded text-xs"
+                                  }
                                   onClick={() => handleEditTransaksi(item.id)}
                                 >
                                   Edit
@@ -2489,7 +2673,7 @@ ${isChecked ? "" : "bg-gray-100"}
                                       </div>
                                       <div className="space-y-2">
                                         <label className="block text-sm font-medium">
-                                          PPN
+                                          Tarif PPN
                                         </label>
                                         <input
                                           type="text"
@@ -2500,7 +2684,7 @@ ${isChecked ? "" : "bg-gray-100"}
                                       </div>
                                       <div className="space-y-2">
                                         <label className="block text-sm font-medium">
-                                          Tarif PPN
+                                          PPN
                                         </label>
                                         <input
                                           type="text"
@@ -2676,7 +2860,11 @@ ${isChecked ? "" : "bg-gray-100"}
             </button>
             <button
               onClick={(e) => handleSubmit(e, true)}
-              className={userId ? "hidden" : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"}
+              className={
+                userId
+                  ? "hidden"
+                  : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              }
               disabled={createFaktur.isPending}
             >
               {createFaktur.isPending ? (
@@ -2690,7 +2878,11 @@ ${isChecked ? "" : "bg-gray-100"}
             </button>
             <button
               onClick={(e) => handleSubmit(e, false)}
-              className={userId ? "hidden" : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"}
+              className={
+                userId
+                  ? "hidden"
+                  : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              }
               disabled={createFaktur.isPending}
             >
               {createFaktur.isPending ? (

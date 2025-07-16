@@ -139,7 +139,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
       const data = await axios.get(
         // RoutesApiReal.apiUrl + `student/assignments/${id}/sistem/${akun}`,
         RoutesApiReal.apiUrl +
-          `student/assignments/${id}/sistem/${akun}/getAkun`,
+        `student/assignments/${id}/sistem/${akun}/getAkun`,
         {
           headers: {
             Authorization: `Bearer ${cookies.token}`,
@@ -397,10 +397,10 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
         selectedInfo === "A"
           ? "X"
           : selectedInfo === "B"
-          ? "Y"
-          : selectedInfo === "C"
-          ? "Z"
-          : "",
+            ? "Y"
+            : selectedInfo === "C"
+              ? "Z"
+              : "",
       nomorPendukung: "", // reset ketika berubah
     }));
     // Atur nilai Cap Fasilitas secara otomatis
@@ -1855,28 +1855,28 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                           "9 - Penyerahan kepada Perwakilan Negara Asing dan Badan Internasional serta Pejabatnya",
                           "10 - BKP dan JKP tertentu",
                         ].includes(informasi_tambahan))) && (
-                      <div className="space-y-2">
-                        <label className="block text-sm font-medium">
-                          Nomor Pendukung
-                        </label>
-                        <input
-                          readOnly
-                          type="text"
-                          name="nomorPendukung"
-                          className="p-2 border rounded w-full"
-                          placeholder="Masukkan Nomor Pendukung"
-                          value={formData.nomorPendukung}
-                          onChange={(e) => {
-                            const value = e.target.value;
-                            setNomorPendukung(value);
-                            setFormData((prev) => ({
-                              ...prev,
-                              nomorPendukung: value,
-                            }));
-                          }}
-                        />
-                      </div>
-                    )}
+                        <div className="space-y-2">
+                          <label className="block text-sm font-medium">
+                            Nomor Pendukung
+                          </label>
+                          <input
+                            readOnly
+                            type="text"
+                            name="nomorPendukung"
+                            className="p-2 border rounded w-full"
+                            placeholder="Masukkan Nomor Pendukung"
+                            value={formData.nomorPendukung}
+                            onChange={(e) => {
+                              const value = e.target.value;
+                              setNomorPendukung(value);
+                              setFormData((prev) => ({
+                                ...prev,
+                                nomorPendukung: value,
+                              }));
+                            }}
+                          />
+                        </div>
+                      )}
                   </>
                 )}
               </div>
@@ -2192,13 +2192,32 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                           <label className="block text-sm font-medium">
                             Harga Satuan
                           </label>
-                          <input
-                            // readOnly
-                            type="text"
-                            className="p-2 border rounded w-full"
+                          <NumericFormat
                             value={harga_satuan}
-                            onChange={handleHargaChange}
+                            onValueChange={({ value }) => {
+                              setHarga(value);
+                              const numericHarga =
+                                parseInt(value, 10) || 0;
+                              const newTotalHarga =
+                                numericHarga *
+                                (parseInt(kuantitas, 10) || 0);
+                              setTotalHarga(
+                                newTotalHarga.toString()
+                              );
+                              const newDPP =
+                                newTotalHarga -
+                                (parseInt(pemotongan_harga, 10) ||
+                                  0);
+                              setDPP(newDPP.toString());
+                              if (!isChecked)
+                                setJumlah(newDPP.toString());
+                            }}
+                            thousandSeparator="."
+                            decimalSeparator=","
+                            prefix="Rp "
+                            className="p-2 border rounded w-full"
                             placeholder="Rp 0"
+                            allowNegative={false}
                           />
                         </div>
                         <div className="space-y-2">
@@ -2220,12 +2239,14 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                           <label className="block text-sm font-medium">
                             Total Harga
                           </label>
-                          <input
-                            // readOnly
-                            type="text"
-                            className="p-2 border rounded w-full bg-gray-100"
+                          <NumericFormat
                             value={total_harga}
-                            // readOnly
+                            displayType="input"
+                            thousandSeparator="."
+                            decimalSeparator=","
+                            prefix="Rp "
+                            className="p-2 border rounded w-full bg-gray-100"
+                            readOnly
                             placeholder="Rp 0"
                           />
                         </div>
@@ -2233,13 +2254,26 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                           <label className="block text-sm font-medium">
                             Potongan Harga
                           </label>
-                          <input
-                            // readOnly
-                            type="text"
-                            className="p-2 border rounded w-full"
+                          <NumericFormat
                             value={pemotongan_harga}
-                            onChange={handlePotonganHargaChange}
+                            onValueChange={({ value }) => {
+                              setPotonganHarga(value);
+                              const numericTotalHarga =
+                                parseInt(total_harga, 10) || 0;
+                              const numericPotongan =
+                                parseInt(value, 10) || 0;
+                              const newDPP =
+                                numericTotalHarga - numericPotongan;
+                              setDPP(newDPP.toString());
+                              if (!isChecked)
+                                setJumlah(newDPP.toString());
+                            }}
+                            thousandSeparator="."
+                            decimalSeparator=","
+                            prefix="Rp "
+                            className="p-2 border rounded w-full"
                             placeholder="Rp 0"
+                            allowNegative={false}
                           />
                         </div>
                       </div>
@@ -2250,13 +2284,14 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                           <label className="block text-sm font-medium">
                             DPP
                           </label>
-                          <input
-                            // readOnly
-                            type="text"
-                            className="p-2 border rounded w-full bg-gray-100"
+                          <NumericFormat
                             value={dpp}
-                            onChange={handleDppChange}
-                            // readOnly
+                            displayType="input"
+                            thousandSeparator="."
+                            decimalSeparator=","
+                            prefix="Rp "
+                            className="p-2 border rounded w-full bg-gray-100"
+                            readOnly
                             placeholder="Rp 0"
                           />
                         </div>
@@ -2277,21 +2312,24 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
 
                           <div className="space-y-2">
                             <label className="block text-sm font-medium"></label>
-                            <input
-                              // readOnly
-                              type="text"
-                              className={`
-                                                            p-2 border rounded w-full
-                                                            ${
-                                                              isChecked
-                                                                ? ""
-                                                                : "bg-gray-100"
-                                                            }
-                                                        `}
+                            <NumericFormat
                               value={jumlah}
-                              onChange={handleJumlahChange}
-                              disabled={!isChecked}
+                              onValueChange={({ value }) => {
+                                if (isChecked) {
+                                  setJumlah(value);
+                                  updateTarifPPN(value);
+                                }
+                              }}
+                              thousandSeparator="."
+                              decimalSeparator=","
+                              prefix="Rp "
+                              className={`
+                            p-2 border rounded w-full
+                            ${isChecked ? "" : "bg-gray-100"}
+                            `}
                               placeholder="Rp 0"
+                              allowNegative={false}
+                              disabled={!isChecked}
                             />
                           </div>
                           <div className="space-y-2">
@@ -2303,7 +2341,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                               type="text"
                               className="p-2 border rounded w-full bg-gray-100"
                               value="12%"
-                              // readOnly
+                            // readOnly
                             />
                           </div>
                           <div className="space-y-2">
@@ -2335,13 +2373,39 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                             <label className="block text-sm font-medium">
                               PPnBM
                             </label>
-                            <input
-                              // readOnly
-                              type="text"
-                              className="p-2 border rounded w-full"
+                            <NumericFormat
                               value={ppnbm}
-                              onChange={handlePPnBMChange}
+                              onValueChange={({ value }) => {
+                                setIsCustomPPnBM(true);
+                                // Convert to number before setting
+                                const numericValue =
+                                  parseFloat(value) || 0;
+                                setPPnBM(numericValue);
+
+                                if (value === "" || value === "0") {
+                                  setIsCustomPPnBM(false);
+                                  const numericJumlah =
+                                    parseFloat(jumlah) || 0;
+                                  const numericPPnBM =
+                                    parseInt(
+                                      tarif_ppnbm.replace(
+                                        /\D/g,
+                                        ""
+                                      ),
+                                      10
+                                    ) || 0;
+                                  const calculatedPPnBM =
+                                    (numericJumlah * numericPPnBM) /
+                                    100;
+                                  setPPnBM(calculatedPPnBM);
+                                }
+                              }}
+                              thousandSeparator="."
+                              decimalSeparator=","
+                              prefix="Rp "
+                              className="p-2 border rounded w-full"
                               placeholder="Rp 0"
+                              allowNegative={false}
                             />
                           </div>
                         </div>
@@ -2362,8 +2426,8 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                         {addDetailTransaksi.isPending
                           ? "Menyimpan..."
                           : editMode
-                          ? "Perbarui"
-                          : "Simpan"}
+                            ? "Perbarui"
+                            : "Simpan"}
                       </AlertDialogAction>
                     </AlertDialogFooter>
                   </AlertDialogContent>
@@ -2694,18 +2758,18 @@ ${isChecked ? "" : "bg-gray-100"}
                                       </div>
                                       <div className="space-y-2">
                                         <label className="block text-sm font-medium">
-                                          PPN
+                                          Tarif PPN
                                         </label>
                                         <input
                                           type="text"
                                           className="p-2 border rounded w-full bg-gray-100"
                                           value="12%"
-                                          // readOnly
+                                        // readOnly
                                         />
                                       </div>
                                       <div className="space-y-2">
                                         <label className="block text-sm font-medium">
-                                          Tarif PPN
+                                          PPN
                                         </label>
                                         <input
                                           type="text"
