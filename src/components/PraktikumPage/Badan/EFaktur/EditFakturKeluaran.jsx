@@ -368,8 +368,8 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
   }
 
   function formatPersen(value) {
-    const numberString = value.replace(/[^0-9]/g, ""); // Hanya angka
-    return numberString ? `${numberString}%` : "";
+    // Hanya angka, tanpa persen
+    return value.replace(/[^0-9]/g, "");
   }
 
   const handleHargaChange = (e) => {
@@ -2348,11 +2348,14 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                             <label className="block text-sm font-medium">
                               PPN
                             </label>
-                            <input
-                              type="text"
-                              className="p-2 border rounded w-full bg-gray-100"
+                            <NumericFormat
                               value={ppn}
-                              // readOnly
+                              displayType="input"
+                              thousandSeparator="."
+                              decimalSeparator=","
+                              prefix="Rp "
+                              className="p-2 border rounded w-full bg-gray-100"
+                              readOnly
                               placeholder="Rp 0"
                             />
                           </div>
