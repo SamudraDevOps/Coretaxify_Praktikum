@@ -20,7 +20,10 @@ const BUPOTLayout = ({
   customTable,
   customActionBar,
   onDataRefresh,
-  sidebar
+  sidebar,
+  statusPenerbitan,
+  tipeBupot,
+  sistemId,
 }) => {
   const [selectedItems, setSelectedItems] = useState([]);
 
@@ -62,6 +65,9 @@ const BUPOTLayout = ({
             title={tableTitle}
             selectedItems={selectedItems}
             onActionComplete={handleActionComplete}
+            statusPenerbitan={statusPenerbitan}
+            tipeBupot={tipeBupot}
+            sistemId={sistemId}
           />
         )}
 
