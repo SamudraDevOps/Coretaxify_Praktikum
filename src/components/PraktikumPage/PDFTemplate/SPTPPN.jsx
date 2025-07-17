@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Image,
 } from "@react-pdf/renderer";
+import qrImage from "../../../assets/images/qr-web.png";
 import kopImage from "../../../assets/images/KOP PDF.jpg";
 
 const styles = StyleSheet.create({
@@ -1567,6 +1568,12 @@ const SptPpnPdf = ({ data }) => {
           <Text style={{ marginTop: 20, ...styles.tableCellText }}>
             {data.nama_pic}
           </Text>
+          <View style={{ alignItems: "flex-end" }}>
+            <Image
+              style={{ width: "15%", height: "auto", marginBottom: 5 }}
+              src={qrImage}
+            />
+          </View>
           <Text style={styles.tableCellText}>
             Ditandatangani secara elektronik
           </Text>

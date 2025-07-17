@@ -8,6 +8,7 @@ import {
   Image,
 } from "@react-pdf/renderer";
 import kopImage from "../../../assets/images/KOP PDF.jpg";
+import qrImage from "../../../assets/images/qr-web.png";
 
 const styles = StyleSheet.create({
   page: {
@@ -293,6 +294,12 @@ const SptMasaPph21Pdf = ({ data }) => {
           <Text style={{ width: "2%" }}>:</Text>
           <Text style={{ width: "58%" }}>{data?.tanggal_dibuat}</Text>
         </View>
+        <View style={{ width: "100%", textAlign: "center" }}>
+          <Image
+            style={{ width: "10%", height: "auto", marginBottom: 5 }}
+            src={qrImage}
+          />
+        </View>
 
         <Text style={{ marginTop: 4 }}>
           Dengan menyadari sepenuhnya atas segala akibatnya termasuk
@@ -301,9 +308,9 @@ const SptMasaPph21Pdf = ({ data }) => {
           lampiran-lampirannya adalah benar, lengkap dan jelas.
         </Text>
 
-        <View style={styles.signature}>
+        {/* <View style={styles.signature}>
           <Text>Ditandatangani secara elektronik</Text>
-        </View>
+        </View> */}
 
         {/* <Text style={styles.disclaimer}>
           Dokumen ini telah dibubuhkan sertifikat elektronik yang diterbitkan

@@ -10,6 +10,7 @@ import {
   Image,
 } from "@react-pdf/renderer";
 import kopImage from "../../../assets/images/KOP PDF.jpg";
+import qrImage from "../../../assets/images/qr-web.png";
 
 // Styles
 const styles = StyleSheet.create({
@@ -403,6 +404,12 @@ const SPTUnifikasiPDF = ({ data }) => {
           <Text style={styles.bold}>PERNYATAAN DAN TANDA TANGAN</Text>
           <Text style={styles.text}>Nama: {data?.nama_pic}</Text>
           <Text style={styles.text}>Tanggal: {data?.tanggal_dibuat}</Text>
+          <View style={{ width: "100%", textAlign: "center" }}>
+            <Image
+              style={{ width: "15%", height: "auto", marginBottom: 5 }}
+              src={qrImage}
+            />
+          </View>
           <Text style={styles.text}>
             Dengan menyadari sepenuhnya akan segala akibatnya termasuk
             sanksi-sanksi sesuai dengan ketentuan perundang-undangan yang
