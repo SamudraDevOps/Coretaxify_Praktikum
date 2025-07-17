@@ -1,5 +1,13 @@
 import React from "react";
-import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
+import {
+  Document,
+  Page,
+  Text,
+  View,
+  StyleSheet,
+  Image,
+} from "@react-pdf/renderer";
+import kopImage from "../../../assets/images/KOP PDF.jpg";
 
 const styles = StyleSheet.create({
   page: { fontSize: 10, padding: 30, fontFamily: "Helvetica", lineHeight: 1.5 },
@@ -81,11 +89,17 @@ const SptPpnPdf = ({ data }) => {
   return (
     <Document>
       <Page size="A4" style={styles.page}>
-        <Text style={styles.header}>SAMUDERA EDUKASI TEKNOLOGI</Text>
+        {/* <View style={{ width: "20%" }}>
+          <Image
+            style={{ width: 50, height: 50 }}
+            src={kopImage} // Update with actual logo path
+          />
+        </View> */}
+        {/* <Text style={styles.header}>SAMUDERA EDUKASI TEKNOLOGI</Text>
         <Text style={styles.subHeader}>CORETAXIFY</Text>
         <Text style={styles.subHeader}>
           SURAT PEMBERITAHUAN MASA PAJAK PERTAMBAHAN NILAI (SPT MASA PPN)
-        </Text>
+        </Text> */}
 
         {/* <View style={styles.row}>
           <Text style={styles.label}>Nama PKP:</Text>
@@ -109,17 +123,12 @@ const SptPpnPdf = ({ data }) => {
           <Text style={styles.label}>Alamat:</Text>
           <Text style={styles.value}>{data.alamat}</Text>
         </View> */}
+
         <View style={{ border: "1px solid black", padding: 6 }}>
-          {/* Top Header */}
-          <View
+          {/* <View
             style={{ flexDirection: "row", justifyContent: "space-between" }}
           >
-            <View style={{ width: "20%" }}>
-              {/* <Image
-                style={{ width: 50, height: 50 }}
-                src="/path-to-your-logo.png" // Update with actual logo path
-              /> */}
-            </View>
+            <View style={{ width: "20%" }}></View>
             <View style={{ width: "60%", textAlign: "center" }}>
               <Text style={{ fontSize: 10, fontWeight: "bold" }}>
                 KEMENTERIAN KEUANGAN REPUBLIK INDONESIA
@@ -138,19 +147,18 @@ const SptPpnPdf = ({ data }) => {
             <View
               style={{
                 width: "20%",
-                // backgroundColor: "yellow",
                 textAlign: "center",
                 justifyContent: "center",
               }}
-            >
-              {/* <Text style={{ fontSize: 10, fontWeight: "bold" }}>INDUK</Text>
-              <Text style={{ fontSize: 10, fontWeight: "bold" }}>
-                Halaman 1
-              </Text> */}
-            </View>
+            ></View>
+          </View> */}
+          <View style={{ width: "100%", textAlign: "center" }}>
+            <Image
+              style={{ width: "100%", height: "auto", marginBottom: 5 }}
+              src={kopImage}
+            />
           </View>
 
-          {/* Info Table */}
           <View
             style={{
               flexDirection: "row",
@@ -176,35 +184,6 @@ const SptPpnPdf = ({ data }) => {
             </View>
           </View>
 
-          {/* Detail Info */}
-          {/* <View style={{ marginTop: 6 }}>
-            <View style={styles.row}>
-              <Text style={styles.label}>NAMA PKP</Text>
-              <Text style={styles.value}>: {data.nama_pengusaha}</Text>
-            </View>
-            <View style={styles.row}>
-              <Text style={styles.label}>NPWP</Text>
-              <Text style={styles.value}>: {data.npwp}</Text>
-            </View>
-            <View style={styles.row}>
-              <Text style={styles.label}>ALAMAT</Text>
-              <Text style={styles.value}>: {data.alamat}</Text>
-            </View>
-            <View style={styles.row}>
-              <Text style={styles.label}>KLU</Text>
-              <Text style={styles.value}>
-                : AKTIVITAS AKUNTANSI, PEMBUKUAN DAN PEMERIKSA
-              </Text>
-            </View>
-            <View style={styles.row}>
-              <Text style={styles.label}>TELEPON</Text>
-              <Text style={styles.value}>: {data.telepon}</Text>
-            </View>
-            <View style={styles.row}>
-              <Text style={styles.label}>HP</Text>
-              <Text style={styles.value}>: {data.hp}</Text>
-            </View>
-          </View> */}
           <View
             style={{
               flexDirection: "row",
@@ -214,7 +193,6 @@ const SptPpnPdf = ({ data }) => {
               backgroundColor: "#eee",
             }}
           >
-            {/* Left Column - 58% */}
             <View style={{ width: "58%", paddingRight: 6 }}>
               <View
                 style={{
@@ -251,7 +229,6 @@ const SptPpnPdf = ({ data }) => {
               </View>
             </View>
 
-            {/* Right Column - 42% */}
             <View style={{ width: "42%" }}>
               <View
                 style={{

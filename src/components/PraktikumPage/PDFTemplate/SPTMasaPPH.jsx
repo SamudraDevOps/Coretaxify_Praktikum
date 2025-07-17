@@ -1,5 +1,13 @@
 import React from "react";
-import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
+import {
+  Document,
+  Page,
+  Text,
+  View,
+  StyleSheet,
+  Image,
+} from "@react-pdf/renderer";
+import kopImage from "../../../assets/images/KOP PDF.jpg";
 
 const styles = StyleSheet.create({
   page: {
@@ -74,12 +82,18 @@ const SptMasaPph21Pdf = ({ data }) => {
   return (
     <Document>
       <Page size="A4" style={styles.page}>
-        <Text style={styles.header}>SAMUDERA EDUKASI</Text>
+        {/* <Text style={styles.header}>SAMUDERA EDUKASI</Text>
         <Text style={styles.subHeader}>TEKNOLOGI</Text>
         <Text style={styles.subHeader}>
           SURAT PEMBERITAHUAN (SPT) MASA{"\n"}
           PAJAK PENGHASILAN (PPh) PASAL 21 DAN/ATAU PASAL 26
-        </Text>
+        </Text> */}
+        <View style={{ width: "100%", textAlign: "center" }}>
+          <Image
+            style={{ width: "100%", height: "auto", marginBottom: 5 }}
+            src={kopImage}
+          />
+        </View>
 
         {/* <Text style={styles.sectionTitle}>INDUK</Text> */}
         {/* <View style={styles.tableRow}>

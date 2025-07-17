@@ -7,7 +7,9 @@ import {
   Document,
   StyleSheet,
   Font,
+  Image,
 } from "@react-pdf/renderer";
+import kopImage from "../../../assets/images/KOP PDF.jpg";
 
 // Styles
 const styles = StyleSheet.create({
@@ -331,9 +333,15 @@ const SPTUnifikasiPDF = ({ data }) => {
   return (
     <Document>
       <Page size="A4" style={styles.page}>
-        <Text style={styles.header}>
+        {/* <Text style={styles.header}>
           SURAT PEMBERITAHUAN MASA PPH UNIFIKASI
-        </Text>
+        </Text> */}
+        <View style={{ width: "100%", textAlign: "center" }}>
+          <Image
+            style={{ width: "100%", height: "auto", marginBottom: 5 }}
+            src={kopImage}
+          />
+        </View>
 
         <View style={styles.section}>
           <Text style={styles.bold}>
