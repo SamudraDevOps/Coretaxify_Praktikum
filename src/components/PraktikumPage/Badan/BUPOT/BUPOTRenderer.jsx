@@ -99,7 +99,7 @@ const BUPOTRenderer = ({
     error,
     refetch,
   } = useQuery({
-    queryKey: [queryKey || `bupot-${type}`, id, akun, currentStatus],
+    queryKey: [queryKey || `bupot-${type}`, id, akun, currentStatus, currentPage],
     queryFn: async () => {
       const url = `${RoutesApi.apiUrl}student/assignments/${id}/sistem/${akun}/bupot`;
       const { data } = await axios.get(url, {
