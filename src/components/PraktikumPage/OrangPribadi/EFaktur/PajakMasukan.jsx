@@ -10,6 +10,7 @@ import { getCsrf } from "@/service/getCsrf";
 import { RoutesApi } from "@/Routes";
 import Swal from "sweetalert2";
 import { useNavigateWithParams } from "@/hooks/useNavigateWithParams";
+import FakturPenilaian from "../../Badan/EFaktur/FakturPenilaian";
 
 const PajakMasukanOP = ({
   data,
@@ -174,22 +175,22 @@ const PajakMasukanOP = ({
             <button
               onClick={() => kreditkanFaktur.mutate()}
               disabled={selectedItems.length === 0}
-              className={`flex items-center font-bold py-2 px-2 rounded text-sm ${
+              className={userId ? "hidden" : (`flex items-center font-bold py-2 px-2 rounded text-sm ${
                 selectedItems.length === 0
                   ? "bg-gray-400 text-gray-600 cursor-not-allowed"
                   : "bg-blue-500 hover:bg-blue-600 text-white"
-              }`}
+              }`)}
             >
               Kreditkan Faktur
             </button>
             <button
               onClick={() => tidakKreditkanFaktur.mutate()}
               disabled={selectedItems.length === 0}
-              className={`flex items-center font-bold py-2 px-2 rounded text-sm ${
+              className={userId ? "hidden" : (`flex items-center font-bold py-2 px-2 rounded text-sm ${
                 selectedItems.length === 0
                   ? "bg-gray-400 text-gray-600 cursor-not-allowed"
                   : "bg-blue-500 hover:bg-blue-600 text-white"
-              }`}
+              }`)}
             >
               Tidak Kreditan Faktur
             </button>

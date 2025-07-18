@@ -11,6 +11,7 @@ import { getCsrf } from "@/service/getCsrf";
 import axios from "axios";
 import { RoutesApi } from "@/Routes";
 import Swal from "sweetalert2";
+import FakturPenilaian from "./FakturPenilaian";
 
 const PajakMasukan = ({
   data,
@@ -161,6 +162,13 @@ const PajakMasukan = ({
               Pajak Masukan
             </h1>
           </div>
+          {userId ? (
+            <FakturPenilaian
+              tipeFaktur="Faktur Masukan"
+            />
+          ) : (
+            ""
+          )}
         </div>
         <div className="flex justify-between mb-4 border-b pb-3">
           <button
@@ -176,22 +184,22 @@ const PajakMasukan = ({
             <button
               onClick={() => kreditkanFaktur.mutate()}
               disabled={selectedItems.length === 0}
-              className={`flex items-center font-bold py-2 px-2 rounded text-sm ${
+              className={userId ? "hidden" : (`flex items-center font-bold py-2 px-2 rounded text-sm ${
                 selectedItems.length === 0
                   ? "bg-gray-400 text-gray-600 cursor-not-allowed"
                   : "bg-blue-500 hover:bg-blue-600 text-white"
-              }`}
+              }`)}
             >
               Kreditkan Faktur
             </button>
             <button
               onClick={() => tidakKreditkanFaktur.mutate()}
               disabled={selectedItems.length === 0}
-              className={`flex items-center font-bold py-2 px-2 rounded text-sm ${
+              className={userId ? "hidden" : (`flex items-center font-bold py-2 px-2 rounded text-sm ${
                 selectedItems.length === 0
                   ? "bg-gray-400 text-gray-600 cursor-not-allowed"
                   : "bg-blue-500 hover:bg-blue-600 text-white"
-              }`}
+              }`)}
             >
               Tidak Kreditan Faktur
             </button>

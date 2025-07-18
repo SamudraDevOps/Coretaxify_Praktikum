@@ -4,11 +4,13 @@ import { IoDocumentTextOutline } from "react-icons/io5";
 import { FaChevronDown, FaEdit, FaFilePdf } from "react-icons/fa";
 import { TiDeleteOutline } from "react-icons/ti";
 import { useParams, useSearchParams } from "react-router";
+import FakturPenilaian from "./FakturPenilaian";
 
 const ReturFakturKeluaran = ({ data, sidebar }) => {
   const { id, akun } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const viewAsCompanyId = searchParams.get("viewAs");
+  const userId = searchParams.get("user_id");
   return (
     <div className="flex h-screen bg-gray-100">
       <SideBarEFaktur
@@ -24,9 +26,16 @@ const ReturFakturKeluaran = ({ data, sidebar }) => {
               Retur Pajak Keluaran
             </h1>
           </div>
+          {userId ? (
+            <FakturPenilaian
+              tipeFaktur="Retur Faktur Keluaran"
+            />
+          ) : (
+            ""
+          )}
         </div>
         <div className="flex justify-end mb-4 border-b pb-3">
-          <button className="flex items-center bg-red-800 hover:bg-red-900 text-white font-bold py-2 px-2 rounded">
+          <button className={userId ? "hidden" : "flex items-center bg-red-800 hover:bg-red-900 text-white font-bold py-2 px-2 rounded"}>
             <TiDeleteOutline className="text-2xl text-white mr-2" />
             Batalkan Retur
           </button>

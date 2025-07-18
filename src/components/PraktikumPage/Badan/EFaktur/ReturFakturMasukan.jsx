@@ -10,6 +10,7 @@ const ReturFakturMasukan = ({ data, sidebar }) => {
   const { id, akun } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const viewAsCompanyId = searchParams.get("viewAs");
+  const userId = searchParams.get("user_id");
   const navigate = useNavigateWithParams();
   console.log("retur masukan :", data);
   return (
@@ -27,6 +28,13 @@ const ReturFakturMasukan = ({ data, sidebar }) => {
               Retur Pajak Masukan{" "}
             </h1>
           </div>
+          {userId ? (
+            <FakturPenilaian
+              tipeFaktur="Retur Faktur Masukan"
+            />
+          ) : (
+            ""
+          )}
         </div>
         <div className="flex justify-between mb-4 border-b pb-3">
           <div className="flex justify-between gap-2">
@@ -41,17 +49,17 @@ const ReturFakturMasukan = ({ data, sidebar }) => {
               onClick={() =>
                 navigate(`/praktikum/${id}/sistem/${akun}/e-faktur/buat-retur`)
               }
-              className="flex items-center bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-2 rounded"
+              className={userId ? "hidden" : "flex items-center bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-2 rounded"}
             >
               Buat Retur
               <FaPlus className="text-lg text-white mr-2" />
             </button>
-            <button className="flex items-center bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-2 rounded">
+            <button className={userId ? "hidden" : "flex items-center bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-2 rounded"}>
               Import Data
               <FaChevronDown className="text-lg text-white ml-2" />
             </button>
           </div>
-          <button className="flex items-center bg-red-800 hover:bg-red-900 text-white font-bold py-2 px-2 rounded">
+          <button className={userId ? "hidden" : "flex items-center bg-red-800 hover:bg-red-900 text-white font-bold py-2 px-2 rounded"}>
             <TiDeleteOutline className="text-2xl text-white mr-2" />
             Batalkan Retur
           </button>
