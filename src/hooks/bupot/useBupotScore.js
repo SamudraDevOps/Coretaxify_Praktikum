@@ -34,8 +34,6 @@ export const useBupotScore = (
         },
       });
 
-      console.log("Response data:", response.data);
-
       if (
         response.data &&
         response.data.data &&
@@ -54,7 +52,6 @@ export const useBupotScore = (
   };
 
   const createScore = async (scorePayload) => {
-    console.log("scorePayload:", scorePayload);
     setIsCreating(true);
     try {
       const csrfResponse = await axios.get(`${RoutesApi.apiUrl}csrf-token`, {
@@ -89,8 +86,6 @@ export const useBupotScore = (
   };
 
   const updateScore = async (scoreId, scorePayload) => {
-    console.log("updateScore called with scoreId:", scoreId);
-    console.log("scorePayload:", scorePayload);
     setIsUpdating(true);
     try {
       const csrfResponse = await axios.get(`${RoutesApi.apiUrl}csrf-token`, {
