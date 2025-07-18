@@ -1005,7 +1005,9 @@ const CreateKonsepPasal = ({ data }) => {
                       className={`py-2 px-4 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-sm flex items-center justify-center ${
                         saveConcept.isPending
                           ? "bg-blue-400 text-white cursor-not-allowed"
-                          : userId ? "hidden" : "bg-blue-700 text-white hover:bg-blue-800"
+                          : userId
+                          ? "hidden"
+                          : "bg-blue-700 text-white hover:bg-blue-800"
                       }`}
                     >
                       {saveConcept.isPending ? (
@@ -1050,7 +1052,9 @@ const CreateKonsepPasal = ({ data }) => {
                           payDeposit.isPending ||
                           payBilling.isPending
                             ? "bg-blue-400 text-white cursor-not-allowed"
-                            : userId ? "hidden" : "bg-blue-700 text-white hover:bg-blue-800"
+                            : userId
+                            ? "hidden"
+                            : "bg-blue-700 text-white hover:bg-blue-800"
                         }`}
                       >
                         {saveConcept.isPending ||
@@ -1961,7 +1965,7 @@ const CreateKonsepPasal = ({ data }) => {
                             {sptOther?.data ? (
                               sptOther.data
                                 .filter(
-                                  (item) => item.jenis_pajak === "PPh Pasal 21"
+                                  (item) => item.jenis_pajak === "Pasal 21"
                                 )
                                 .map((item, index) => (
                                   <tr key={item.id}>
@@ -1988,7 +1992,7 @@ const CreateKonsepPasal = ({ data }) => {
                                       {item.kode_objek_pajak || "-"}
                                     </td>
                                     <td className="p-2 border-b">
-                                      {item.status || "-"}
+                                      {item.tipe_bupot || "-"}
                                     </td>
                                     <td className="p-2 border-b">
                                       {item.dasar_pengenaan_pajak
@@ -2048,7 +2052,9 @@ const CreateKonsepPasal = ({ data }) => {
                                       sptOther.data
                                         .filter(
                                           (item) =>
-                                            item.jenis_pajak === "PPh Pasal 21"
+                                            item.jenis_pajak === "Pasal 21" &&
+                                            item.fasilitas_pajak ===
+                                              "pph_ditanggung_pemerintah"
                                         )
                                         .reduce(
                                           (total, item) =>
@@ -2067,7 +2073,9 @@ const CreateKonsepPasal = ({ data }) => {
                                       sptOther.data
                                         .filter(
                                           (item) =>
-                                            item.jenis_pajak === "PPh Pasal 21"
+                                            item.jenis_pajak === "Pasal 21" &&
+                                            item.fasilitas_pajak ===
+                                              "pph_ditanggung_pemerintah"
                                         )
                                         .reduce(
                                           (total, item) =>
@@ -2095,7 +2103,9 @@ const CreateKonsepPasal = ({ data }) => {
                                       sptOther.data
                                         .filter(
                                           (item) =>
-                                            item.jenis_pajak === "PPh Pasal 21"
+                                            item.jenis_pajak === "Pasal 21" &&
+                                            item.fasilitas_pajak !==
+                                              "pph_ditanggung_pemerintah"
                                         )
                                         .reduce(
                                           (total, item) =>
@@ -2114,7 +2124,9 @@ const CreateKonsepPasal = ({ data }) => {
                                       sptOther.data
                                         .filter(
                                           (item) =>
-                                            item.jenis_pajak === "PPh Pasal 21"
+                                            item.jenis_pajak === "Pasal 21" &&
+                                            item.fasilitas_pajak !==
+                                              "pph_ditanggung_pemerintah"
                                         )
                                         .reduce(
                                           (total, item) =>
