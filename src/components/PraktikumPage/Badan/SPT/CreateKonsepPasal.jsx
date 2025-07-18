@@ -401,7 +401,7 @@ const CreateKonsepPasal = ({ data }) => {
 
   return (
     <div className="flex h-screen bg-gray-100">
-      <div className="flex-auto p-3 bg-white rounded-md h-full">
+      <div className="flex-auto p-3 bg-white rounded-md h-full min-w-0">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-3xl font-light text-yellow-500 mt-4">
             PEMOTONGAN PPH PASAL 21 DAN ATAU PASAL 26
@@ -1193,30 +1193,30 @@ const CreateKonsepPasal = ({ data }) => {
                       </div>
                     )}
                     <div className="border rounded-md p-4 mb-4">
-                      <div className="w-[1450px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden">
+                      <div className=" overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden">
                         <table className="table-auto text-sm text-left border overflow-hidden">
                           <thead className="bg-purple-700 text-white text-center">
                             <tr>
                               <th className="p-2 border-b ">No</th>
-                              <th className="p-2 border-b min-w-[200px]">
+                              <th className="p-2 border-b ">
                                 NIK/NPWP
                               </th>
-                              <th className="p-2  border-b min-w-[150px]">
+                              <th className="p-2  border-]">
                                 Nama
                               </th>
-                              <th className="p-2 border-b min-w-[150px]">
+                              <th className="p-2 border-b w-auto">
                                 Nomor Bukti Potong{" "}
                               </th>
-                              <th className="p-2 border-b min-w-[150px]">
+                              <th className="p-2 border-b w-auto">
                                 Tanggal Bukti Pemotongan{" "}
                               </th>
-                              <th className="p-2 border-b min-w-[150px]">
+                              <th className="p-2 border-b w-auto">
                                 Kode Objek Pajak
                               </th>
-                              <th className="p-2 border-b min-w-[150px]">
+                              <th className="p-2 border-b w-auto">
                                 Penghasilan Bruto (Rp)
                               </th>
-                              <th className="p-2 border-b min-w-[150px]">
+                              <th className="p-2 border-b w-auto">
                                 Pajak Penghasilan (Rp)
                               </th>
                             </tr>
@@ -1451,11 +1451,11 @@ const CreateKonsepPasal = ({ data }) => {
                         </div>
                       </div>
                     )}
-                    <div className="border rounded-md p-4 mb-4">
+                    <div className="border rounded-md p-4 mb-4 min-w-0 ">
                       <div className="border rounded-md p-4 mb-4 font-semibold">
                         BPA1
                       </div>
-                      <div className="w-[1400px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden">
+                      <div className="w-full overflow-x-auto bg-white shadow-md rounded-lg ">
                         <table className="table-auto text-sm text-left border overflow-hidden">
                           <thead className="bg-purple-700 text-white text-center">
                             <tr>
@@ -1541,7 +1541,7 @@ const CreateKonsepPasal = ({ data }) => {
                       <div className="border rounded-md p-4 mb-4 font-semibold">
                         BPA2
                       </div>
-                      <div className="w-[1400px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden">
+                      <div className="w-full overflow-x-auto bg-white shadow-md rounded-lg ">
                         <table className="table-auto text-sm text-left border overflow-hidden">
                           <thead className="bg-purple-700 text-white text-center">
                             <tr>
@@ -1695,7 +1695,7 @@ const CreateKonsepPasal = ({ data }) => {
                       <div className="border rounded-md p-4 mb-4 font-semibold">
                         BPA1
                       </div>
-                      <div className="w-[1400px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden">
+                         <div className="w-full overflow-x-auto bg-white shadow-md rounded-lg ">
                         <table className="table-auto text-sm text-left border overflow-hidden">
                           <thead className="bg-purple-700 text-white text-center">
                             <tr>
@@ -1781,7 +1781,7 @@ const CreateKonsepPasal = ({ data }) => {
                       <div className="border rounded-md p-4 mb-4 font-semibold">
                         BPA2
                       </div>
-                      <div className="w-[1400px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden">
+                          <div className="w-full overflow-x-auto bg-white shadow-md rounded-lg ">
                         <table className="table-auto text-sm text-left border overflow-hidden">
                           <thead className="bg-purple-700 text-white text-center">
                             <tr>
@@ -1908,7 +1908,7 @@ const CreateKonsepPasal = ({ data }) => {
                       <div className="border rounded-md p-4 mb-4 font-semibold">
                         BP21
                       </div>
-                      <div className="w-[1400px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden">
+                        <div className="w-full overflow-x-auto bg-white shadow-md rounded-lg ">
                         <table className="table-auto text-sm text-left border overflow-hidden">
                           <thead className="bg-purple-700 text-white text-center">
                             <tr>
@@ -2136,7 +2136,7 @@ const CreateKonsepPasal = ({ data }) => {
                       <div className="border rounded-md p-4 mb-4 font-semibold">
                         BP26
                       </div>
-                      <div className="w-[1400px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden">
+                        <div className="w-full overflow-x-auto bg-white shadow-md rounded-lg ">
                         <table className="table-auto text-sm text-left border overflow-hidden">
                           <thead className="bg-purple-700 text-white text-center">
                             <tr>
