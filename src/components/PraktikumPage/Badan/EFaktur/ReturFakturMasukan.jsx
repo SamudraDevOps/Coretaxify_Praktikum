@@ -20,6 +20,7 @@ const ReturFakturMasukan = ({ data, sidebar }) => {
         akun={{ id, akun }}
       />
       <div className="flex-auto p-3 bg-white rounded-md h-full min-w-0">
+      <div className="flex-auto p-3 bg-white rounded-md h-full min-w-0">
         <div className="flex justify-between items-center mb-4 pb-3 border-b">
           <div className="flex items-center">
             <IoDocumentTextOutline className="text-4xl text-blue-900" />
@@ -44,11 +45,11 @@ const ReturFakturMasukan = ({ data, sidebar }) => {
               className="flex items-center bg-blue-900 hover:bg-blue-600 text-white font-bold py-2 px-2 rounded"
             >
               Buat Retur
-              <FaPlus className="text-lg text-white ml-4" />
+              <FaPlus className="text-lg text-white ml-3 " />
             </button>
             <button className="flex items-center bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-2 rounded">
               Import Data
-              <FaChevronDown className="text-lg text-white ml-4" />
+              <FaChevronDown className="text-lg text-white ml-3" />
             </button>
           </div>
           <button className="flex items-center bg-red-800 hover:bg-red-900 text-white font-bold py-2 px-2 rounded">
@@ -56,8 +57,8 @@ const ReturFakturMasukan = ({ data, sidebar }) => {
             Batalkan Retur
           </button>
         </div>
-        <div className="w-full overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden">
-          <table className="table-auto border border-gray-300 overflow-hidden">
+        <div className="w-full overflow-x-auto bg-white shadow-md rounded-lg ">
+          <table className="table-auto border border-gray-300 ">
             <thead className="bg-gray-200">
               <tr>
                 <th className="border border-gray-300 py-2">No</th>
