@@ -19,7 +19,7 @@ const ExamPscMembers = () => {
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
   const [cookies] = useCookies(["user"]);
   const [url, setUrl] = useState(
-    `${RoutesApi.psc.exams.url}/${examId}/members`
+    `${RoutesApi.psc.assignments.url}/${examId}/members`
   );
   const [search, setSearch] = useState("");
 
@@ -27,7 +27,7 @@ const ExamPscMembers = () => {
   const { data: examData } = useQuery({
     queryKey: ["exam_detail", examId],
     queryFn: async () => {
-      const { data } = await axios.get(`${RoutesApi.psc.exams.url}/${examId}`, {
+      const { data } = await axios.get(`${RoutesApi.psc.assignments.url}/${examId}`, {
         headers: {
           Authorization: `Bearer ${cookies.token}`,
           Accept: "application/json",
@@ -67,7 +67,7 @@ const ExamPscMembers = () => {
       axios.defaults.headers.common["X-CSRF-TOKEN"] = response.data.token;
 
       return await axios.delete(
-        `${RoutesApi.psc.exams.url}/${examId}/members/${memberId}`,
+        `${RoutesApi.psc.assignments.url}/${examId}/members/${memberId}`,
         {
           headers: {
             "X-CSRF-TOKEN": response.data.token,
@@ -98,7 +98,7 @@ const ExamPscMembers = () => {
   // const memberDetailMutation = useMutation({
   //   mutationFn: async (memberId) => {
   //     return await axios.get(
-  //       `${RoutesApi.psc.exams.url}/${examId}/members/${memberId}`,
+  //       `${RoutesApi.psc.assignments.url}/${examId}/members/${memberId}`,
   //       {
   //         headers: {
   //           Authorization: `Bearer ${cookies.token}`,

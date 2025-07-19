@@ -13,12 +13,12 @@ import ExamPscMembers from "./Members/ExamPscMembers";
 import Swal from "sweetalert2";
 import "./examPsc.css";
 import { format } from "date-fns";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 
 const ExamPsc = () => {
   const [cookies] = useCookies(["token"]);
   const [search, setSearch] = useState("");
-  const [url, setUrl] = useState(RoutesApi.psc.exams.index().url);
+  const [url, setUrl] = useState(RoutesApi.psc.assignments.index().url);
   const [isCreateExamOpen, setIsCreateExamOpen] = useState(false);
   const [isUpdateExamOpen, setIsUpdateExamOpen] = useState(false);
   const [selectedExam, setSelectedExam] = useState(null);
@@ -27,6 +27,7 @@ const ExamPsc = () => {
   const [isViewMembersOpen, setIsViewMembersOpen] = useState(false);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
   const navigate = useNavigate();
+  const { user } = useOutletContext();
 
   const { isLoading, isError, data, error, refetch } = useQuery({
     queryKey: ["exam_data", url],
@@ -35,6 +36,12 @@ const ExamPsc = () => {
         headers: {
           Authorization: `Bearer ${cookies.token}`,
           Accept: "application/json",
+        },
+        params: {
+          column_filters: {
+            tipe: "exam",
+            user_id: user.data.id
+          },
         },
       });
       return data;
@@ -57,7 +64,7 @@ const ExamPsc = () => {
   const downloadMutation = useMutation({
     mutationFn: async (id) => {
       try {
-        const showEndpoint = RoutesApi.psc.exams.show(id);
+        const showEndpoint = RoutesApi.psc.assignments.show(id);
         const response = await axios.get(showEndpoint.url, {
           headers: {
             Authorization: `Bearer ${cookies.token}`,
@@ -123,7 +130,7 @@ const ExamPsc = () => {
         formDataObj.append("name", examFormData.name);
         formDataObj.append("task_id", examFormData.task_id);
         formDataObj.append("duration", examFormData.duration);
-        formDataObj.append("exam_code", examFormData.exam_code);
+        formDataObj.append("assignment_code", examFormData.assignment_code);
 
         if (examFormData.supporting_file) {
           formDataObj.append("supporting_file", examFormData.supporting_file);
@@ -143,7 +150,7 @@ const ExamPsc = () => {
           );
         }
 
-        return await axios.post(RoutesApi.psc.exams.store().url, formDataObj, {
+        return await axios.post(RoutesApi.psc.assignments.store().url, formDataObj, {
           headers: {
             "Content-Type": "multipart/form-data",
             Accept: "application/json",
@@ -179,7 +186,7 @@ const ExamPsc = () => {
 
         formDataObj.append("_method", "PUT");
 
-        const updateEndpoint = RoutesApi.psc.exams.update(id);
+        const updateEndpoint = RoutesApi.psc.assignments.update(id);
         return await axios.post(updateEndpoint.url, formDataObj, {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -190,7 +197,7 @@ const ExamPsc = () => {
         });
       } else if (action === "delete" && id) {
         // Delete existing exam
-        const deleteEndpoint = RoutesApi.psc.exams.destroy(id);
+        const deleteEndpoint = RoutesApi.psc.assignments.destroy(id);
         return await axios.delete(deleteEndpoint.url, {
           headers: {
             "X-CSRF-TOKEN": response.data.token,
@@ -334,9 +341,9 @@ const ExamPsc = () => {
     ) || [];
 
   // Apply sorting if sortConfig is set
-  const sortedExams = [...filteredData];
+  const sortedassignments = [...filteredData];
   if (sortConfig.key) {
-    sortedExams.sort((a, b) => {
+    sortedassignments.sort((a, b) => {
       if (a[sortConfig.key] < b[sortConfig.key]) {
         return sortConfig.direction === "ascending" ? -1 : 1;
       }
@@ -395,12 +402,12 @@ const ExamPsc = () => {
             </tr>
           </thead>
           <tbody>
-            {sortedExams.length > 0 ? (
-              sortedExams.map((exam, index) => (
+            {sortedassignments.length > 0 ? (
+              sortedassignments.map((exam, index) => (
                 <tr key={exam.id}>
                   <td>{index + 1}</td>
                   <td>{exam.name}</td>
-                  <td>{exam.exam_code}</td>
+                  <td>{exam.assignment_code}</td>
                   <td>{getTaskName(exam.task_id)}</td>
                   <td>{formatDate(exam.start_period)}</td>
                   <td>{formatDate(exam.end_period)}</td>

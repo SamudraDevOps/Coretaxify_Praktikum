@@ -2,7 +2,7 @@ import React from "react";
 import { Link, Navigate, useLocation, useParams } from "react-router-dom";
 import { useNavigateWithParams } from "@/hooks/useNavigateWithParams";
 
-const BUPOTSidebar = ({ type, title }) => {
+const BUPOTSidebar = ({ type, title, sidebar }) => {
   const location = useLocation();
   const { id, akun } = useParams(); // Get current assignment parameters
   const navigate = useNavigateWithParams();
@@ -33,8 +33,8 @@ const BUPOTSidebar = ({ type, title }) => {
   return (
     <aside className="w-64 flex-shrink-0 text-blue-900 px-5 py-5 h-screen bg-white">
       <div className="mb-5 bg-blue-900 text-white p-2 text-center rounded-md">
-        <h2 className="text-lg font-bold mb-5">test</h2>
-        <h3 className="text-md font-semibold mb-5">Test</h3>
+        <h2 className="text-lg font-bold mb-5">{sidebar.nama_akun}</h2>
+        <h3 className="text-md font-semibold mb-5">{sidebar.npwp_akun}</h3>
       </div>
       <nav className="border border-gray-200 rounded-md text-left text-blue-900 overflow-hidden">
         <ul className="divide-gray-200">

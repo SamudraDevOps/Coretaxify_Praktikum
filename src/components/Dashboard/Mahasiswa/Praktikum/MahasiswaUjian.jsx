@@ -1,9 +1,7 @@
-// import React from "react";
 import React, { useState } from "react";
 // import "../Pengguna/Mahasiswa/editMahasiswa.css";
 // import EditPopupMahasiswa from "../Pengguna/Mahasiswa/EditPopupMahasiswa";
 import Swal from "sweetalert2";
-
 import {
   AlertDialog,
   AlertDialogAction,
@@ -16,41 +14,91 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { CookiesProvider, useCookies } from "react-cookie";
+import axios from "axios";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { RoutesApi } from "@/Routes";
+import { ClipLoader } from "react-spinners";
+import { joinExamMahasiswa } from "@/hooks/dashboard/useMahasiswa";
+import { getCookie } from "@/service";
+import { getCsrf } from "@/service/getCsrf";
+import { useOutletContext } from "react-router-dom";
 
 export default function MahasiswaUjian() {
   const [isOpen, setIsOpen] = useState(false);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
   const [selectedData, setSelectedData] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = 20;
   const [cookies, setCookie] = useCookies(["user"]);
+  const [url, setUrl] = useState(`${RoutesApi.url}api/student/assignment-user`);
+  const { user } = useOutletContext();
 
-  const [data, setData] = useState([
-    {
-      namaUjian: "Ujian Pajak Bumi Bangunan",
-      kodeUjian: "xAE12",
-      file: "98",
-      tanggal: "25-Januari-2024",
+  const { isLoading, isError, data, error, refetch } = useQuery({
+    queryKey: ["exam", url],
+    queryFn: async () => {
+      const { data } = await axios.get(url, {
+        headers: {
+          Authorization: `Bearer ${cookies.token}`,
+          Accept: "application/json",
+        },
+        params: {
+          relation_column_filters: {
+            assignment: {
+              tipe: "exam",
+            },
+          },
+          column_filters: {
+            user_id: user.data.id,
+          },
+        },
+      });
+      console.log("data ujian: ", data);
+      return data;
     },
-    {
-      namaUjian: "Ujian Pajak Bumi Makanan",
-      kodeUjian: "xAE12",
-      file: "98",
-      tanggal: "25-Januari-2024",
+  });
+
+  const downloadMutation = useMutation({
+    mutationFn: async (id) => {
+      try {
+        const showEndpoint = RoutesApi.student.assignments.show(id);
+        const response = await axios.get(showEndpoint.url, {
+          headers: {
+            Authorization: `Bearer ${cookies.token}`,
+            Accept: "*/*",
+          },
+          params: {
+            intent: IntentEnum.API_USER_DOWNLOAD_FILE,
+          },
+          responseType: "blob",
+        });
+
+        let filename = "file.pdf";
+        const contentDisposition = response.headers["content-disposition"];
+
+        if (contentDisposition) {
+          const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+          const matches = filenameRegex.exec(contentDisposition);
+          if (matches !== null && matches[1]) {
+            filename = matches[1].replace(/['"]/g, "");
+          }
+        }
+
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", filename);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        return response;
+      } catch (error) {
+        console.error("Download error:", error);
+        Swal.fire("Gagal!", "Gagal mengunduh file", "error");
+        throw error;
+      }
     },
-    {
-      namaUjian: "Ujian Pajak Bumi Bangunan",
-      kodeUjian: "xAE12",
-      file: "98",
-      tanggal: "25-Januari-2024",
-    },
-    {
-      namaUjian: "Ujian Pajak Bumi Bangunan",
-      kodeUjian: "xAE12",
-      file: "98",
-      tanggal: "25-Januari-2024",
-    },
-  ]);
+  });
 
   const handleSort = (key) => {
     let direction = "ascending";
@@ -78,26 +126,29 @@ export default function MahasiswaUjian() {
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
+  // const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const [formData, setFormData] = useState({
-    namaUjian: "",
-    kodeUjian: "",
-    nilai: "",
-    tanggal: "",
+    assignment_code: "",
   });
+
+  const resetForm = () => {
+    setFormData({
+      assignment_code: "",
+    });
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSave = () => {
-    // Logic to save the data
-    onClose();
+  const handleDownload = (id) => {
+    downloadMutation.mutate(id);
   };
+
   const [file, setFile] = useState();
   function handleChangeFile(e) {
     console.log(e.target.files);
@@ -105,14 +156,15 @@ export default function MahasiswaUjian() {
   }
   const [search, setSearch] = useState("");
 
-  const processedData = data.map((item) => ({
-    ...item,
-    highlight:
-      search &&
-      Object.values(item).some((value) =>
-        String(value).toLowerCase().includes(search.toLowerCase())
-      ),
-  }));
+  const mutation = joinExamMahasiswa(getCookie(), formData, refetch);
+  if (isLoading) {
+    return (
+      <div className="loading">
+        <ClipLoader color="#7502B5" size={50} />
+      </div>
+      // <div className="h-full w-full text-2xl italic font-bold text-center flex items-center justify-center">Loading...</div>
+    );
+  }
 
   return (
     <div className="kontrak-container">
@@ -125,8 +177,8 @@ export default function MahasiswaUjian() {
           </li>
         ))} */}
       </div>
-      <div className="search-add-container">
-        <div className="search-input-container">
+      <div className="search-add-container flex justify-between">
+        <div className="search-input-container flex justify-between pr-7 w-full">
           <input
             type="text"
             id="search"
@@ -134,13 +186,49 @@ export default function MahasiswaUjian() {
             placeholder="Cari Ujian   🔎"
             onChange={(e) => setSearch(e.target.value)}
           />
+          <AlertDialog>
+            <AlertDialogTrigger
+              className="bg-blue-800 p-2 rounded-md text-white hover:bg-blue-900"
+              onClick={() => resetForm()}
+            >
+              Tambah Ujian
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <div className="edit-form-group-mahasiswa">
+                <label className="!text-black">Kode Ujian :</label>
+                <div className="flex items-center gap-2">
+                  <input
+                    className="text-black"
+                    name="assignment_code"
+                    value={formData.assignment_code}
+                    onChange={handleChange}
+                    // readOnly
+                  />
+                </div>
+              </div>
+              <AlertDialogFooter>
+                <AlertDialogCancel className="bg-red-600 text-white hover:bg-red-800 hover:text-white">
+                  Batal
+                </AlertDialogCancel>
+                <AlertDialogAction
+                  className="bg-green-600"
+                  // onClick={handleSave}
+                  onClick={() => {
+                    mutation.mutate();
+                  }}
+                >
+                  Gabung Ujian
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       </div>
       <div className="table-container">
         <table>
           <thead>
             <tr>
-              <th className="">No Ujian</th>
+              <th className="">No</th>
               <th onClick={() => handleSort("namaUjian")}>
                 Judul Ujian{" "}
                 {sortConfig.key === "namaUjian"
@@ -153,23 +241,43 @@ export default function MahasiswaUjian() {
               </th>
               <th className="">Kode Ujian</th>
               <th className="">File Ujian</th>
+              <th className="">Durasi Ujian</th>
               <th className="">Deadline Ujian</th>
               <th>Aksi</th>
             </tr>
           </thead>
           <tbody>
-            {data.map((item, index) => (
+            {data.data.map((item, index) => (
               <tr key={index}>
                 <td>{index + 1}</td>
-                <td>{item.namaUjian}</td>
-                <td className="max-w-5">
-                  <p className="truncate">{item.kodeUjian}</p>
+                <td>{item.assignment.name}</td>
+                <td>{item.assignment.assignment_code}</td>
+                <td>
+                  {item.supporting_file ? (
+                    <button
+                      onClick={() => handleDownload(item.id)}
+                      className="download-button"
+                      disabled={downloadMutation.isPending}
+                    >
+                      {downloadMutation.isPending ? "Loading..." : "Download"}
+                    </button>
+                  ) : (
+                    <span>-</span>
+                  )}
                 </td>
-                <td className="max-w-5">
-                  Download
-                  {/* <p className="">{item.tanggal}</p> */}
+                <td>
+                  {item.assignment.duration ? (
+                    <span>{item.assignment.duration}</span>
+                  ) : (
+                    <span>-</span>
+                  )}
                 </td>
-                <td className="max-w-5">
+                <td>
+                  {item.assignment.end_period ? (
+                    <span>{item.assignment.end_period}</span>
+                  ) : (
+                    <span>-</span>
+                  )}
                   <p className="">{item.tanggal}</p>
                 </td>
                 <td>

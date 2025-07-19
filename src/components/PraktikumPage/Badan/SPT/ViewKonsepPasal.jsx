@@ -29,7 +29,7 @@ import Swal from "sweetalert2";
 import { RoutesApi } from "@/Routes";
 import { useNavigateWithParams } from "@/hooks/useNavigateWithParams";
 import { ClipLoader } from "react-spinners";
-const CreateKonsepPasal = ({ data }) => {
+const LihatKonsepPasal = ({ data }) => {
   const navigate = useNavigateWithParams();
   console.log(data);
   const [cookies] = useCookies(["token"]);
@@ -186,7 +186,7 @@ const CreateKonsepPasal = ({ data }) => {
   };
 
   const [activeTab, setActiveTab] = useState("induk");
-  const [showHeaderInduk, setShowHeaderInduk] = useState(true);
+  const [showHeaderInduk, setShowHeaderInduk] = useState(false);
   const [showIdentitasPemotong, setShowIdentitasPemotong] = useState(false);
   const [showPajakPenghasilan21, setShowPajakPenghasilan21] = useState(false);
   const [showPajakPenghasilan26, setShowPajakPenghasilan26] = useState(false);
@@ -401,7 +401,7 @@ const CreateKonsepPasal = ({ data }) => {
 
   return (
     <div className="flex h-screen bg-gray-100">
-      <div className="flex-auto p-3 bg-white rounded-md h-full min-w-0">
+      <div className="flex-auto p-3 bg-white rounded-md h-full">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-3xl font-light text-yellow-500 mt-4">
             PEMOTONGAN PPH PASAL 21 DAN ATAU PASAL 26
@@ -591,6 +591,7 @@ const CreateKonsepPasal = ({ data }) => {
                               name="cl_bp1_2"
                               value={formatRupiah(form.cl_bp1_2)}
                               onChange={handleChange}
+                              readOnly
                             />
                           </td>
                         </tr>
@@ -607,6 +608,7 @@ const CreateKonsepPasal = ({ data }) => {
                           </td>
                           <td className="p-2">
                             <input
+                              readOnly
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm"
                               name="cl_bp1_3"
@@ -789,6 +791,7 @@ const CreateKonsepPasal = ({ data }) => {
                           </td>
                           <td className="p-2">
                             <input
+                              readOnly
                               name="cl_bp2_2"
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm"
@@ -810,6 +813,7 @@ const CreateKonsepPasal = ({ data }) => {
                           </td>
                           <td className="p-2">
                             <input
+                              readOnly
                               name="cl_bp2_3"
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm"
@@ -937,7 +941,7 @@ const CreateKonsepPasal = ({ data }) => {
                 {showPernyataan && (
                   <div className="border rounded-md p-4 mb-4">
                     <div className="text-sm font-bold italic">
-                      <input type="checkbox" className="m-2" />
+                      <input readOnly type="checkbox" className="m-2" />
                       PERNYATAAN : DENGAN MENYADARI SEPENUHNYA AKAN SEGALA
                       AKIBATNYA, SAYA MENYATAKAN BAHWA APA YANG TELAH SAYA
                       BERITAHUKAN DI ATAS BESERTA LAMPIRAN-LAMPIRANNYA ADALAH
@@ -999,7 +1003,7 @@ const CreateKonsepPasal = ({ data }) => {
                 )}
                 <div className="flex justify-start mt-4 gap-2">
                   <AlertDialog>
-                    <button
+                    {/* <button
                       onClick={() => saveConcept.mutate()}
                       disabled={saveConcept.isPending}
                       className={`py-2 px-4 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-sm flex items-center justify-center ${
@@ -1037,9 +1041,9 @@ const CreateKonsepPasal = ({ data }) => {
                       ) : (
                         "Simpan Konsep"
                       )}
-                    </button>
+                    </button> */}
 
-                    <AlertDialogTrigger asChild>
+                    {/* <AlertDialogTrigger asChild>
                       <button
                         // onClick={() => saveConcept.mutate()}
                         disabled={
@@ -1089,7 +1093,7 @@ const CreateKonsepPasal = ({ data }) => {
                           "Bayar dan Lapor"
                         )}
                       </button>
-                    </AlertDialogTrigger>
+                    </AlertDialogTrigger> */}
                     <AlertDialogContent className="max-w-xl">
                       <AlertDialogHeader>
                         <AlertDialogTitle className="text-lg font-semibold ">
@@ -1162,7 +1166,7 @@ const CreateKonsepPasal = ({ data }) => {
                   </div>
                   <div className="mt-4">
                     <div
-                      className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
+                      className="border rounded-md p-4 mb-2 cu{data.npwp}sor-pointer flex justify-between items-center bg-gray-100 w-full"
                       onClick={() => setShowHeadera1(!showHeadera1)}
                     >
                       <h3 className="text-lg font-semibold">Header</h3>
@@ -1178,7 +1182,7 @@ const CreateKonsepPasal = ({ data }) => {
                             <input
                               type="text"
                               readOnly
-                              value="2002909301990"
+                              value={data.npwp}
                               className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
                             />
                           </div>
@@ -1197,30 +1201,30 @@ const CreateKonsepPasal = ({ data }) => {
                       </div>
                     )}
                     <div className="border rounded-md p-4 mb-4">
-                      <div className=" overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden">
+                      <div className="w-[1450px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden">
                         <table className="table-auto text-sm text-left border overflow-hidden">
                           <thead className="bg-purple-700 text-white text-center">
                             <tr>
                               <th className="p-2 border-b ">No</th>
-                              <th className="p-2 border-b ">
+                              <th className="p-2 border-b min-w-[200px]">
                                 NIK/NPWP
                               </th>
-                              <th className="p-2  border-]">
+                              <th className="p-2  border-b min-w-[150px]">
                                 Nama
                               </th>
-                              <th className="p-2 border-b w-auto">
+                              <th className="p-2 border-b min-w-[150px]">
                                 Nomor Bukti Potong{" "}
                               </th>
-                              <th className="p-2 border-b w-auto">
+                              <th className="p-2 border-b min-w-[150px]">
                                 Tanggal Bukti Pemotongan{" "}
                               </th>
-                              <th className="p-2 border-b w-auto">
+                              <th className="p-2 border-b min-w-[150px]">
                                 Kode Objek Pajak
                               </th>
-                              <th className="p-2 border-b w-auto">
+                              <th className="p-2 border-b min-w-[150px]">
                                 Penghasilan Bruto (Rp)
                               </th>
-                              <th className="p-2 border-b w-auto">
+                              <th className="p-2 border-b min-w-[150px]">
                                 Pajak Penghasilan (Rp)
                               </th>
                             </tr>
@@ -1455,11 +1459,11 @@ const CreateKonsepPasal = ({ data }) => {
                         </div>
                       </div>
                     )}
-                    <div className="border rounded-md p-4 mb-4 min-w-0 ">
+                    <div className="border rounded-md p-4 mb-4">
                       <div className="border rounded-md p-4 mb-4 font-semibold">
                         BPA1
                       </div>
-                      <div className="w-full overflow-x-auto bg-white shadow-md rounded-lg ">
+                      <div className="w-[1400px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden">
                         <table className="table-auto text-sm text-left border overflow-hidden">
                           <thead className="bg-purple-700 text-white text-center">
                             <tr>
@@ -1545,7 +1549,7 @@ const CreateKonsepPasal = ({ data }) => {
                       <div className="border rounded-md p-4 mb-4 font-semibold">
                         BPA2
                       </div>
-                      <div className="w-full overflow-x-auto bg-white shadow-md rounded-lg ">
+                      <div className="w-[1400px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden">
                         <table className="table-auto text-sm text-left border overflow-hidden">
                           <thead className="bg-purple-700 text-white text-center">
                             <tr>
@@ -1699,7 +1703,7 @@ const CreateKonsepPasal = ({ data }) => {
                       <div className="border rounded-md p-4 mb-4 font-semibold">
                         BPA1
                       </div>
-                         <div className="w-full overflow-x-auto bg-white shadow-md rounded-lg ">
+                      <div className="w-[1400px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden">
                         <table className="table-auto text-sm text-left border overflow-hidden">
                           <thead className="bg-purple-700 text-white text-center">
                             <tr>
@@ -1785,7 +1789,7 @@ const CreateKonsepPasal = ({ data }) => {
                       <div className="border rounded-md p-4 mb-4 font-semibold">
                         BPA2
                       </div>
-                          <div className="w-full overflow-x-auto bg-white shadow-md rounded-lg ">
+                      <div className="w-[1400px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden">
                         <table className="table-auto text-sm text-left border overflow-hidden">
                           <thead className="bg-purple-700 text-white text-center">
                             <tr>
@@ -1912,7 +1916,7 @@ const CreateKonsepPasal = ({ data }) => {
                       <div className="border rounded-md p-4 mb-4 font-semibold">
                         BP21
                       </div>
-                        <div className="w-full overflow-x-auto bg-white shadow-md rounded-lg ">
+                      <div className="w-[1400px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden">
                         <table className="table-auto text-sm text-left border overflow-hidden">
                           <thead className="bg-purple-700 text-white text-center">
                             <tr>
@@ -1965,7 +1969,7 @@ const CreateKonsepPasal = ({ data }) => {
                             {sptOther?.data ? (
                               sptOther.data
                                 .filter(
-                                  (item) => item.jenis_pajak === "Pasal 21"
+                                  (item) => item.jenis_pajak === "PPh Pasal 21"
                                 )
                                 .map((item, index) => (
                                   <tr key={item.id}>
@@ -1992,7 +1996,7 @@ const CreateKonsepPasal = ({ data }) => {
                                       {item.kode_objek_pajak || "-"}
                                     </td>
                                     <td className="p-2 border-b">
-                                      {item.tipe_bupot || "-"}
+                                      {item.status || "-"}
                                     </td>
                                     <td className="p-2 border-b">
                                       {item.dasar_pengenaan_pajak
@@ -2052,9 +2056,7 @@ const CreateKonsepPasal = ({ data }) => {
                                       sptOther.data
                                         .filter(
                                           (item) =>
-                                            item.jenis_pajak === "Pasal 21" &&
-                                            item.fasilitas_pajak ===
-                                              "pph_ditanggung_pemerintah"
+                                            item.jenis_pajak === "PPh Pasal 21"
                                         )
                                         .reduce(
                                           (total, item) =>
@@ -2073,9 +2075,7 @@ const CreateKonsepPasal = ({ data }) => {
                                       sptOther.data
                                         .filter(
                                           (item) =>
-                                            item.jenis_pajak === "Pasal 21" &&
-                                            item.fasilitas_pajak ===
-                                              "pph_ditanggung_pemerintah"
+                                            item.jenis_pajak === "PPh Pasal 21"
                                         )
                                         .reduce(
                                           (total, item) =>
@@ -2103,9 +2103,7 @@ const CreateKonsepPasal = ({ data }) => {
                                       sptOther.data
                                         .filter(
                                           (item) =>
-                                            item.jenis_pajak === "Pasal 21" &&
-                                            item.fasilitas_pajak !==
-                                              "pph_ditanggung_pemerintah"
+                                            item.jenis_pajak === "PPh Pasal 21"
                                         )
                                         .reduce(
                                           (total, item) =>
@@ -2124,9 +2122,7 @@ const CreateKonsepPasal = ({ data }) => {
                                       sptOther.data
                                         .filter(
                                           (item) =>
-                                            item.jenis_pajak === "Pasal 21" &&
-                                            item.fasilitas_pajak !==
-                                              "pph_ditanggung_pemerintah"
+                                            item.jenis_pajak === "PPh Pasal 21"
                                         )
                                         .reduce(
                                           (total, item) =>
@@ -2148,7 +2144,7 @@ const CreateKonsepPasal = ({ data }) => {
                       <div className="border rounded-md p-4 mb-4 font-semibold">
                         BP26
                       </div>
-                        <div className="w-full overflow-x-auto bg-white shadow-md rounded-lg ">
+                      <div className="w-[1400px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden">
                         <table className="table-auto text-sm text-left border overflow-hidden">
                           <thead className="bg-purple-700 text-white text-center">
                             <tr>
@@ -2378,4 +2374,4 @@ const CreateKonsepPasal = ({ data }) => {
   );
 };
 
-export default CreateKonsepPasal;
+export default LihatKonsepPasal;

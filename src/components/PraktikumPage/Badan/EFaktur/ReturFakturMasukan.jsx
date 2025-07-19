@@ -42,14 +42,14 @@ const ReturFakturMasukan = ({ data, sidebar }) => {
               onClick={() =>
                 navigate(`/praktikum/${id}/sistem/${akun}/e-faktur/buat-retur`)
               }
-              className="flex items-center bg-blue-900 hover:bg-blue-600 text-white font-bold py-2 px-2 rounded"
+              className="flex items-center bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-2 rounded"
             >
               Buat Retur
               <FaPlus className="text-lg text-white ml-3 " />
             </button>
             <button className="flex items-center bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-2 rounded">
               Import Data
-              <FaChevronDown className="text-lg text-white ml-3" />
+              <FaChevronDown className="text-lg text-white ml-2" />
             </button>
           </div>
           <button className="flex items-center bg-red-800 hover:bg-red-900 text-white font-bold py-2 px-2 rounded">
@@ -61,7 +61,7 @@ const ReturFakturMasukan = ({ data, sidebar }) => {
           <table className="table-auto border border-gray-300 ">
             <thead className="bg-gray-200">
               <tr>
-                <th className="border border-gray-300 py-2">No</th>
+                <th className="border border-gray-300 px-1 py-2">No</th>
                 <th className="px-4 py-2 border">NPWP Pembeli</th>
                 <th className="px-4 py-2 border">Nama Pembeli</th>
                 <th className="px-4 py-2 border">Kode Transaksi</th>

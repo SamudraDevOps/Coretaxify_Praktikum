@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import BUPOTSidebar from "./BUPOTSidebar";
 import BUPOTActionBar from "./BUPOTActionBar";
 import BUPOTTable from "./BUPOTTable";
+import BUPOTPagination from "./BUPOTPagination";
 
 const BUPOTLayout = ({
   type,
@@ -10,11 +11,16 @@ const BUPOTLayout = ({
   tableTitle,
   sidebarTitle,
   data = [],
+  pagination,
+  links,
+  currentPage,
+  onPageChange,
   columns,
   children,
   customTable,
   customActionBar,
   onDataRefresh,
+  sidebar
 }) => {
   const [selectedItems, setSelectedItems] = useState([]);
 
@@ -39,13 +45,24 @@ const BUPOTLayout = ({
     onDataRefresh?.();
   };
 
+  const handlePageChange = (page) => {
+    setSelectedItems([]); // Clear selections when changing pages
+    onPageChange?.(page);
+  };
+
   return (
     <div className="flex">
-      <BUPOTSidebar type={type} title={sidebarTitle} />
+      <BUPOTSidebar type={type} title={sidebarTitle} sidebar={sidebar}/>
 
       <div className="w-full p-6 bg-gray-50 min-h-screen min-w-0">
         {customActionBar || (
-          <BUPOTActionBar type={type} status={status} title={tableTitle} selectedItems={selectedItems} onActionComplete={handleActionComplete} />
+          <BUPOTActionBar
+            type={type}
+            status={status}
+            title={tableTitle}
+            selectedItems={selectedItems}
+            onActionComplete={handleActionComplete}
+          />
         )}
 
         {customTable || (
@@ -56,6 +73,22 @@ const BUPOTLayout = ({
             selectedItems={selectedItems}
             onSelectionChange={setSelectedItems}
             type={type}
+            currentPage={currentPage}
+            pagination={pagination}
+          />
+        )}
+
+        {/* Pagination Component */}
+        {pagination && (
+          <BUPOTPagination
+            currentPage={currentPage}
+            totalPages={pagination.last_page}
+            totalItems={pagination.total}
+            itemsPerPage={pagination.per_page}
+            from={pagination.from}
+            to={pagination.to}
+            links={links}
+            onPageChange={handlePageChange}
           />
         )}
 

@@ -10,16 +10,18 @@ const BUPOTTable = ({
   selectedItems = [],
   onSelectionChange,
   type,
+  currentPage = 1,
+  pagination,
 }) => {
   const { id, akun } = useParams();
   const navigate = useNavigateWithParams();
   const [searchParams, setSearchParams] = useSearchParams();
-  const userId = searchParams.get('user_id');
+  const userId = searchParams.get("user_id");
 
   // handle select all
   const handleSelectAll = (e) => {
     if (e.target.checked) {
-      const allIds = data.map(item => item.id);
+      const allIds = data.map((item) => item.id);
       onSelectionChange(allIds);
     } else {
       onSelectionChange([]);
@@ -30,20 +32,30 @@ const BUPOTTable = ({
     if (checked) {
       onSelectionChange([...selectedItems, itemId]);
     } else {
-      onSelectionChange(selectedItems.filter(id => id !== itemId));
+      onSelectionChange(selectedItems.filter((id) => id !== itemId));
     }
   };
 
+  // Calculate row number based on current page and pagination
+  const getRowNumber = (index) => {
+    if (pagination && pagination.from) {
+      return pagination.from + index;
+    }
+    return (currentPage - 1) * (pagination?.per_page || 20) + index + 1;
+  };
   // Different columns for "Telah Terbit" status
   const getColumns = () => {
     const baseColumns = [
-      { key: "checkbox", label: (
-        <input
-          type="checkbox"
-          checked={selectedItems.length === data.length && data.length > 0}
-          onChange={handleSelectAll}
-        />
-      ) },
+      {
+        key: "checkbox",
+        label: (
+          <input
+            type="checkbox"
+            checked={selectedItems.length === data.length && data.length > 0}
+            onChange={handleSelectAll}
+          />
+        ),
+      },
       { key: "actions", label: "Actions" },
       ...columns,
     ];
@@ -84,15 +96,25 @@ const BUPOTTable = ({
                       <input
                         type="checkbox"
                         checked={selectedItems.includes(row.id)}
-                        onChange={(e) => handleSelectItem(row.id, e.target.checked)}
+                        onChange={(e) =>
+                          handleSelectItem(row.id, e.target.checked)
+                        }
                       />
                     ) : column.key === "no" ? (
-                      rowIndex + 1
+                      getRowNumber(rowIndex)
                     ) : column.key === "actions" ? (
                       <div className="flex pace-x-2">
-                        <button 
-                          onClick={() => navigate(`/praktikum/${id}/sistem/${akun}/bupot/${type}/${row.id}/edit`)}
-                          className={userId ? "hidden" : "bg-blue-500 text-white px-2 py-1 rounded text-sm hover:bg-blue-600"}
+                        <button
+                          onClick={() =>
+                            navigate(
+                              `/praktikum/${id}/sistem/${akun}/bupot/${type}/${row.id}/edit`
+                            )
+                          }
+                          className={
+                            userId
+                              ? "hidden"
+                              : "bg-blue-500 text-white px-2 py-1 rounded text-sm hover:bg-blue-600"
+                          }
                         >
                           Edit
                         </button>
