@@ -160,6 +160,13 @@ const PajakMasukanOP = ({
               Pajak Masukan
             </h1>
           </div>
+          {userId ? (
+            <FakturPenilaian
+              tipeFaktur="Retur Faktur Masukan"
+            />
+          ) : (
+            ""
+          )}
         </div>
         <div className="flex justify-between mb-4 border-b pb-3">
           <button
