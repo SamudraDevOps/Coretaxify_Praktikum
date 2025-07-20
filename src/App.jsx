@@ -1001,12 +1001,12 @@ const Main = () => {
         />
 
         <Route
-          path="/praktikum/:id/sistem/:akun/retur-faktur/pdf/:faktur"
+          path="/praktikum/:id/sistem/:akun/retur-faktur/pdf/:idFaktur"
           element={
             <>
               <RoleBasedRenderer
-                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/faktur/:faktur`}
-                intent={""}
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/faktur/:idFaktur`}
+                intent={"api.get.faktur.retur.keluaran"}
                 OrangPribadi={ReturFakturViewPDF}
                 Badan={ReturFakturViewPDF}
                 query={""}
