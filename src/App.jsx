@@ -197,6 +197,7 @@ import ViewKonsepSPT from "./components/PraktikumPage/Badan/SPT/ViewKonsepSPT";
 import LihatKonsepPasal from "./components/PraktikumPage/Badan/SPT/ViewKonsepPasal";
 import LihatKonsepUnifikasi from "./components/PraktikumPage/Badan/SPT/ViewKonsepUnifikasi";
 import EditReturFaktur from "./components/PraktikumPage/Badan/EFaktur/EditReturFaktur";
+import BupotViewPDF from "./components/PraktikumPage/Badan/BUPOT/BPPU/BupotViewPDF";
 
 const Main = () => {
   const [loading, setLoading] = useState(true);
@@ -1521,6 +1522,21 @@ const Main = () => {
                 intent={"dynamic"}
                 query={"bupot-edit"}
               />
+            </>
+          }
+        />
+
+        <Route
+          path="/praktikum/:id/sistem/:akun/bupot/pdf"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={``}
+                intent={""}
+                OrangPribadi={BupotViewPDF}
+                Badan={BupotViewPDF}
+                query={"pdf-billing"}
+              ></RoleBasedRenderer>
             </>
           }
         />
