@@ -2647,6 +2647,8 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                                         className="p-2 border rounded w-full"
                                         placeholder="Rp 0"
                                         allowNegative={false}
+                                        decimalScale={0}
+                                        fixedDecimalScale={false}
                                       />
                                     </div>
                                     <div className="space-y-2">
@@ -2672,6 +2674,8 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                                         displayType="input"
                                         thousandSeparator="."
                                         decimalSeparator=","
+                                        decimalScale={0}
+                                        fixedDecimalScale={false}
                                         prefix="Rp "
                                         className="p-2 border rounded w-full bg-gray-100"
                                         // readOnly
@@ -2702,6 +2706,8 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                                         className="p-2 border rounded w-full"
                                         placeholder="Rp 0"
                                         allowNegative={false}
+                                        decimalScale={0}
+                                        fixedDecimalScale={false}
                                       />
                                     </div>
                                   </div>
