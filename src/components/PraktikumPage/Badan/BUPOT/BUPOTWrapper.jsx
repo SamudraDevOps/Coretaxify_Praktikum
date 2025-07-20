@@ -139,6 +139,7 @@ const BUPOTWrapper = (props) => {
       titles={config.titles}
       intent={currentIntent}
       fetchData={fetchData} // Optional custom data fetching function
+      sidebar={props.sidebar}
       
       // You can pass custom components when needed
       // draft={CustomdraftComponent}

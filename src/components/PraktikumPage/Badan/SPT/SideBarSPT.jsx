@@ -15,7 +15,7 @@ const SideBarEFakturOP = ({ nama_akun, npwp_akun, akun }) => {
     },
     {
       label: "SPT Menunggu Pembayaran",
-      link: `/praktikum/${akun?.id}/sistem/${akun?.akun}/surat-pemberitahuan-spt/menunggu pembayaran`,
+      link: `/praktikum/${akun?.id}/sistem/${akun?.akun}/surat-pemberitahuan-spt/menunggu-pembayaran`,
     },
     {
       label: "SPT Dilaporkan",
@@ -64,21 +64,25 @@ const SideBarEFakturOP = ({ nama_akun, npwp_akun, akun }) => {
 
           <li className="font-bold text-md mt-4 mb-2 text-start pl-2">Surat Pemberitahuan (SPT)</li>
           {efakturItems.map((item, index) => {
-            const currentPath = location.pathname;
+            // const currentPath = location.pathname;
+              //  const linkPath = item.link.split('?')[0];
+            // const isActive = currentPath === linkPath || location.pathname.includes(`/${item.link}`) ;
             // const linkPath = item.link.split('?')[0];
             // const formattedItem = item.replace(/ /g, "-").toLowerCase();
             // const path = `/admin/praktikum/${userTypeId}/e-faktur/${formattedItem}`;
             // console.log(location.pathname, item.link);
-            const isActive = location.pathname.includes(`/${item.link}`);
+            // const isActive = location.pathname.includes(`/${item.link}`);
+              const currentPath = location.pathname;
+            const linkPath = item.link.split('?')[0];
+            const isActive = currentPath === linkPath;
 
             return (
-              <li
+                <li
                 key={index}
-                className={`border-t border-gray-200 p-2 rounded-sm cursor-pointer hover:bg-blue-700 hover:text-white ${
-                  isActive
-                    ? "bg-blue-900 text-white"
-                    : "hover:bg-blue-700 hover:text-white"
-                }`}
+                className={`border-t border-gray-200 p-3 rounded-sm cursor-pointer hover:bg-blue-700 hover:text-white ${isActive
+                  ? "bg-blue-900 text-white"
+                  : "hover:bg-blue-700 hover:text-white"
+                  }`}
                 onClick={() => navigate(item.link)}
               >
                 

@@ -273,8 +273,8 @@ const CreateKonsepUnifikasi = ({ data }) => {
   });
 
   return (
-    <div className="flex h-screen bg-gray-100">
-      <div className="flex-auto p-3 bg-white rounded-md h-full">
+    <div className="flex h-screen bg-gray-100 ">
+      <div className="flex-auto p-3 bg-white rounded-md h-full min-w-0">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-3xl font-light text-yellow-500 mt-4">
             SPT MASA PPH UNIFIKASI
@@ -448,13 +448,13 @@ const CreateKonsepUnifikasi = ({ data }) => {
                           </th>
                           <th
                             rowSpan="2"
-                            className="border border-gray-300 px-2 py-1 whitespace-normal max-w-[200px]"
+                            className="border border-gray-300 px-2 py-1 whitespace-normal "
                           >
                             JUMLAH PPh DIBAYAR DARI SPT YANG DIBETULKAN
                           </th>
                           <th
                             rowSpan="2"
-                            className="border border-gray-300 px-2 py-1 whitespace-normal max-w-[200px]"
+                            className="border border-gray-300 px-2 py-1 whitespace-normal "
                           >
                             PPh KURANG BAYAR / LEBIH BAYAR KARENA PEMBETULAN
                           </th>
@@ -1159,8 +1159,8 @@ const CreateKonsepUnifikasi = ({ data }) => {
                         )}
                       </div>
                       {showTabelBPPUnifikasi && (
-                        <div className="border rounded-md p-4 overflow-x-auto w-[1400px]">
-                          <table className="w-[1200px] text-sm text-left border overflow-x-auto">
+                        <div className="border rounded-md p-4 overflow-x-auto ">
+                          <table className=" text-sm text-left border overflow-x-auto">
                             <thead className="bg-purple-700 text-white text-center ">
                               <tr>
                                 <th className="border border-gray-300 px-2 py-1 whitespace-normal">
@@ -1289,8 +1289,8 @@ const CreateKonsepUnifikasi = ({ data }) => {
                           )}
                         </div>
                         {showTabelBPNRUnifikasi && (
-                          <div className="border rounded-md p-4 overflow-x-auto w-[1400px]">
-                            <table className="w-[1200px] text-sm text-left border overflow-x-auto">
+                          <div className="border rounded-md p-4 overflow-x-auto ">
+                            <table className=" text-sm text-left border overflow-x-auto">
                               <thead className="bg-purple-700 text-white text-center ">
                                 <tr>
                                   <th className="border border-gray-300 px-2 py-1 whitespace-normal">
@@ -1580,8 +1580,8 @@ const CreateKonsepUnifikasi = ({ data }) => {
                       {showTabelDaftarPPh ? <FaChevronUp /> : <FaChevronDown />}
                     </div>
                     {showTabelDaftarPPh && (
-                      <div className="border rounded-md p-4 overflow-x-auto w-[1400px]">
-                        <table className="w-[1200px] text-sm text-left border overflow-x-auto">
+                      <div className="border rounded-md p-4 overflow-x-auto ">
+                        <table className=" text-sm text-left border overflow-x-auto">
                           <thead className="bg-purple-700 text-white text-center ">
                             <tr>
                               <th className="border border-gray-300 px-2 py-1 whitespace-normal">
@@ -1781,8 +1781,8 @@ const CreateKonsepUnifikasi = ({ data }) => {
                         )}
                       </div>
                       {showTabelDaftarPajakPenghasilan && (
-                        <div className="border rounded-md p-4 overflow-x-auto w-[1400px]">
-                          <table className="w-[1200px] text-sm text-left border overflow-x-auto">
+                        <div className="border rounded-md p-4 overflow-x-auto">
+                          <table className=" text-sm text-left border overflow-x-auto">
                             <thead className="bg-purple-700 text-white text-center ">
                               <tr>
                                 <th className="border border-gray-300 px-2 py-1 whitespace-normal">
@@ -1975,8 +1975,8 @@ const CreateKonsepUnifikasi = ({ data }) => {
                       <div className="border rounded-md p-4 mb-4 font-semibold">
                         TABEL I. ATC
                       </div>
-                      <div className="border rounded-md p-4 overflow-x-auto w-[1400px]">
-                        <table className="w-[1200px] text-sm text-left border overflow-x-auto">
+                      <div className="border rounded-md p-4 overflow-x-auto ">
+                        <table className="text-sm text-left border overflow-x-auto">
                           <thead className="bg-purple-700 text-white text-center ">
                             <tr>
                               <th className="border border-gray-300 px-2 py-1 whitespace-normal">

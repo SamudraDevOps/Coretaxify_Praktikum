@@ -521,7 +521,7 @@ const CreateKonsepSPT = ({ data }) => {
       const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
       const response = await axios.get(
         RoutesApi.apiUrl +
-          `student/assignments/${id}/sistem/${accountId}/spt/${idSpt}/show-faktur-ppn`,
+        `student/assignments/${id}/sistem/${accountId}/spt/${idSpt}/show-faktur-ppn`,
         {
           headers: {
             Authorization: `Bearer ${cookies.token}`,
@@ -903,8 +903,8 @@ const CreateKonsepSPT = ({ data }) => {
   // }
 
   return (
-    <div className="flex h-screen bg-gray-100">
-      <div className="flex-auto p-3 bg-white rounded-md h-full">
+    <div className="flex h-screen bg-gray-100 ">
+      <div className="flex-auto p-3 bg-white rounded-md h-full min-w-0">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-3xl font-light text-yellow-500 mt-4">
             SURAT PEMBERITAHUAN MASA PAJAK PERTAMBAHAN NILAI (SPT MASA PPN)
@@ -2229,7 +2229,7 @@ const CreateKonsepSPT = ({ data }) => {
                               // value={data.detail_spt.cl_3e_ppn}
                               name="cl_3e_ppn"
                               readOnly
-                              // onChange={handleChange}
+                            // onChange={handleChange}
                             />
                           </td>
                           <td className="p-2 flex items-center gap-2"></td>
@@ -3142,7 +3142,7 @@ const CreateKonsepSPT = ({ data }) => {
                             name="ditandatangani"
                             className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
                             disabled
-                            // value={}
+                          // value={}
                           />
                           <label
                             htmlFor="PKP"
@@ -3236,13 +3236,12 @@ const CreateKonsepSPT = ({ data }) => {
                     <button
                       onClick={() => saveConcept.mutate()}
                       disabled={saveConcept.isPending}
-                      className={`py-2 px-4 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-sm flex items-center justify-center ${
-                        saveConcept.isPending
+                      className={`py-2 px-4 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-sm flex items-center justify-center ${saveConcept.isPending
                           ? "bg-blue-400 text-white cursor-not-allowed"
                           : userId
-                          ? "hidden"
-                          : "bg-blue-700 text-white hover:bg-blue-800"
-                      }`}
+                            ? "hidden"
+                            : "bg-blue-700 text-white hover:bg-blue-800"
+                        }`}
                     >
                       {saveConcept.isPending ? (
                         <>
@@ -3281,19 +3280,18 @@ const CreateKonsepSPT = ({ data }) => {
                           payDeposit.isPending ||
                           payBilling.isPending
                         }
-                        className={`py-2 px-4 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-sm flex items-center justify-center ${
-                          saveConcept.isPending ||
-                          payDeposit.isPending ||
-                          payBilling.isPending
+                        className={`py-2 px-4 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-sm flex items-center justify-center ${saveConcept.isPending ||
+                            payDeposit.isPending ||
+                            payBilling.isPending
                             ? "bg-blue-400 text-white cursor-not-allowed"
                             : userId
-                            ? "hidden"
-                            : "bg-blue-700 text-white hover:bg-blue-800"
-                        }`}
+                              ? "hidden"
+                              : "bg-blue-700 text-white hover:bg-blue-800"
+                          }`}
                       >
                         {saveConcept.isPending ||
-                        payDeposit.isPending ||
-                        payBilling.isPending ? (
+                          payDeposit.isPending ||
+                          payBilling.isPending ? (
                           <>
                             <svg
                               className="animate-spin -ml-1 mr-3 h-4 w-4 text-white"
@@ -3600,8 +3598,8 @@ const CreateKonsepSPT = ({ data }) => {
                         </div>
                       </div>
                     )}
-                    <div className=" w-[1450px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden ">
-                      <table className="table-auto text-sm text-left border overflow-hidden">
+                    <div className="border rounded-md p-4 overflow-x-auto">
+                      <table className="min-w-full text-sm text-left border overflow-x-auto">
                         <thead className="bg-purple-700 text-white text-center">
                           <tr>
                             <th className="p-2 border-b ">No</th>
@@ -3806,8 +3804,8 @@ const CreateKonsepSPT = ({ data }) => {
                         </div>
                       </div>
                     )}
-                    <div className=" w-[1450px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden ">
-                      <table className="table-auto text-sm text-left border overflow-hidden">
+                    <div className="border rounded-md p-4 overflow-x-auto">
+                      <table className="min-w-full text-sm text-left border overflow-x-auto">
                         <thead className="bg-purple-700 text-white text-center">
                           <tr>
                             <th className="p-2 border-b ">No</th>
@@ -4010,8 +4008,8 @@ const CreateKonsepSPT = ({ data }) => {
                         </div>
                       </div>
                     )}
-                    <div className=" w-[1450px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden ">
-                      <table className="table-auto text-sm text-left border overflow-hidden">
+                    <div className="border rounded-md p-4 overflow-x-auto">
+                      <table className="min-w-full text-sm text-left border overflow-x-auto">
                         <thead className="bg-purple-700 text-white text-center">
                           <tr>
                             <th className="p-2 border-b ">No</th>
@@ -4220,8 +4218,8 @@ const CreateKonsepSPT = ({ data }) => {
                         </div>
                       </div>
                     )}
-                    <div className=" w-[1450px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden ">
-                      <table className="table-auto text-sm text-left border overflow-hidden">
+                    <div className="border rounded-md p-4 overflow-x-auto">
+                      <table className="min-w-full text-sm text-left border overflow-x-auto">
                         <thead className="bg-purple-700 text-white text-center">
                           <tr>
                             <th className="p-2 border-b ">No</th>
@@ -4427,8 +4425,8 @@ const CreateKonsepSPT = ({ data }) => {
                         </div>
                       </div>
                     )}
-                    <div className=" w-[1450px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden ">
-                      <table className="table-auto text-sm text-left border overflow-hidden">
+                     <div className="border rounded-md p-4 overflow-x-auto">
+                    <table className="min-w-full text-sm text-left border overflow-x-auto">
                         <thead className="bg-purple-700 text-white text-center">
                           <tr>
                             <th className="p-2 border-b ">No</th>

@@ -1084,7 +1084,7 @@ const Main = () => {
           }
         />
         <Route
-          path="/praktikum/:id/sistem/:akun/surat-pemberitahuan-spt/menunggu pembayaran"
+          path="/praktikum/:id/sistem/:akun/surat-pemberitahuan-spt/menunggu-pembayaran"
           // path="/praktikum/:id/sistem/:akun/surat-pemberitahuan-spt/:filter?"
           // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
           element={
