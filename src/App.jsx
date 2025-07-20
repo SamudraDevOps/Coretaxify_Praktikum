@@ -864,11 +864,11 @@ const Main = () => {
           element={
             <>
               <RoleBasedRenderer
-                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun`}
-                intent={"api.get.sistem.edit.informasi.umum"}
-                OrangPribadi={DashboardEFakturOP}
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/faktur-data-dashboard`}
+                intent={""}
+                OrangPribadi={DashboardEFaktur}
                 Badan={DashboardEFaktur}
-                query={"edit-info"}
+                query={"dashboard-faktur"}
               ></RoleBasedRenderer>
             </>
           }
