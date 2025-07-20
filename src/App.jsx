@@ -1543,12 +1543,15 @@ const Main = () => {
         />
 
         <Route
-          path="/praktikum/:id/sistem/:akun/bupot/pdf"
+          path="/praktikum/:id/sistem/:akun/bupot/bppu/pdf/:bupot"
           element={
             <>
               <RoleBasedRenderer
-                url={``}
-                intent={""}
+                // url={``
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/bupot/:bupot`}
+                // intent={""}
+
+                intent="api.bupot.bppu.show"
                 OrangPribadi={BupotViewPDF}
                 Badan={BupotViewPDF}
                 query={"pdf-billing"}
