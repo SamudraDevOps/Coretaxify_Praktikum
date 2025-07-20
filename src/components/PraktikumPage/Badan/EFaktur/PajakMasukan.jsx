@@ -283,10 +283,10 @@ const PajakMasukan = ({
                       </div>
                     </td>
                     <td className="px-4 py-2 border">
-                      {item.akun_pengirim_id?.npwp_akun || "-"}
+                      {item.akun_penerima_id?.npwp_akun || "-"}
                     </td>
                     <td className="px-4 py-2 border">
-                      {item.akun_pengirim_id?.nama_akun || "-"}
+                      {item.akun_penerima_id?.nama_akun || "-"}
                     </td>
                     <td className="px-4 py-2 border">
                       {item.kode_transaksi || "-"}
