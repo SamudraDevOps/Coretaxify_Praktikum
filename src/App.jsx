@@ -198,6 +198,7 @@ import LihatKonsepPasal from "./components/PraktikumPage/Badan/SPT/ViewKonsepPas
 import LihatKonsepUnifikasi from "./components/PraktikumPage/Badan/SPT/ViewKonsepUnifikasi";
 import EditReturFaktur from "./components/PraktikumPage/Badan/EFaktur/EditReturFaktur";
 import BupotViewPDF from "./components/PraktikumPage/Badan/BUPOT/BPPU/BupotViewPDF";
+import ReturFakturViewPDF from "./components/PraktikumPage/Badan/EFaktur/ReturFakturViewPDF";
 
 const Main = () => {
   const [loading, setLoading] = useState(true);
@@ -994,6 +995,21 @@ const Main = () => {
                 OrangPribadi={TambahReturFaktur}
                 Badan={TambahReturFaktur}
                 query={"buat-retur"}
+              ></RoleBasedRenderer>
+            </>
+          }
+        />
+
+        <Route
+          path="/praktikum/:id/sistem/:akun/retur-faktur/pdf/:faktur"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/faktur/:faktur`}
+                intent={""}
+                OrangPribadi={ReturFakturViewPDF}
+                Badan={ReturFakturViewPDF}
+                query={""}
               ></RoleBasedRenderer>
             </>
           }
