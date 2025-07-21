@@ -2263,7 +2263,15 @@ const Main = () => {
             </>
           }
         />
-
+          <Route
+            path="/admin/praktikum/2/dokumen-lain-keluaran"
+            element={
+              <>
+                <Header />
+                <TambahFakturKeluaranDokumenLain />
+              </>
+            }
+          />
         {/* NOT FOUND ROUTE - LAST REGISTERED ROUTE */}
         <Route path="*" element={<NotFound />} />
       </Routes>
