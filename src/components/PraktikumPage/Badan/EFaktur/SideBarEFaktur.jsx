@@ -55,10 +55,13 @@ const SideBarEFakturOP = ({ nama_akun, npwp_akun, akun }) => {
                 ? "bg-blue-900 text-white"
                 : "hover:bg-blue-700 hover:text-white"
             }`}
+            onClick={() => navigate(dashboardPath)}
           >
-            <Link to={dashboardPath} className="block w-full p-2">
+            {/* <Link to={dashboardPath} className="block w-full p-2">
               <strong>Dashboard</strong>
-            </Link>
+            </Link> */}
+
+            <strong>Dashboard</strong>
           </li>
 
           <li className="font-bold text-lg mt-4 mb-2 text-start pl-2">
