@@ -103,21 +103,40 @@ const BUPOTTable = ({
                     ) : column.key === "no" ? (
                       getRowNumber(rowIndex)
                     ) : column.key === "actions" ? (
-                      <div className="flex pace-x-2">
-                        <button
-                          onClick={() =>
-                            navigate(
-                              `/praktikum/${id}/sistem/${akun}/bupot/${type}/${row.id}/edit`
-                            )
-                          }
-                          className={
-                            userId
-                              ? "hidden"
-                              : "bg-blue-500 text-white px-2 py-1 rounded text-sm hover:bg-blue-600"
-                          }
-                        >
-                          Edit
-                        </button>
+                      <div className="flex gap-2">
+                        <div className="flex pace-x-2">
+                          <button
+                            onClick={() =>
+                              navigate(
+                                `/praktikum/${id}/sistem/${akun}/bupot/${type}/${row.id}/edit`
+                              )
+                            }
+                            className={
+                              userId
+                                ? "hidden"
+                                : "bg-blue-500 text-white px-2 py-1 rounded text-sm hover:bg-blue-600"
+                            }
+                          >
+                            Edit
+                          </button>
+                        </div>
+                        <div className="flex pace-x-2">
+                          <button
+                            onClick={() =>
+                              navigate(
+                                `/praktikum/${id}/sistem/${akun}/bupot/bppu/pdf/${row.id}`
+                              )
+                            }
+                            className={
+                              userId ||
+                              !(status === "published" && type === "bppu")
+                                ? "hidden"
+                                : "bg-blue-500 text-white px-2 py-1 rounded text-sm hover:bg-blue-600"
+                            }
+                          >
+                            Lihat PDF
+                          </button>
+                        </div>
                       </div>
                     ) : (
                       row[column.key]

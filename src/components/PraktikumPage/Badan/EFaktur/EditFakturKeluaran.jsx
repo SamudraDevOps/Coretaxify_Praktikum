@@ -368,8 +368,8 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
   }
 
   function formatPersen(value) {
-    const numberString = value.replace(/[^0-9]/g, ""); // Hanya angka
-    return numberString ? `${numberString}%` : "";
+    // Hanya angka, tanpa persen
+    return value.replace(/[^0-9]/g, "");
   }
 
   const handleHargaChange = (e) => {
@@ -2348,11 +2348,14 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                             <label className="block text-sm font-medium">
                               PPN
                             </label>
-                            <input
-                              type="text"
-                              className="p-2 border rounded w-full bg-gray-100"
+                            <NumericFormat
                               value={ppn}
-                              // readOnly
+                              displayType="input"
+                              thousandSeparator="."
+                              decimalSeparator=","
+                              prefix="Rp "
+                              className="p-2 border rounded w-full bg-gray-100"
+                              readOnly
                               placeholder="Rp 0"
                             />
                           </div>
@@ -2644,6 +2647,8 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                                         className="p-2 border rounded w-full"
                                         placeholder="Rp 0"
                                         allowNegative={false}
+                                        decimalScale={0}
+                                        fixedDecimalScale={false}
                                       />
                                     </div>
                                     <div className="space-y-2">
@@ -2669,6 +2674,8 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                                         displayType="input"
                                         thousandSeparator="."
                                         decimalSeparator=","
+                                        decimalScale={0}
+                                        fixedDecimalScale={false}
                                         prefix="Rp "
                                         className="p-2 border rounded w-full bg-gray-100"
                                         // readOnly
@@ -2699,6 +2706,8 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                                         className="p-2 border rounded w-full"
                                         placeholder="Rp 0"
                                         allowNegative={false}
+                                        decimalScale={0}
+                                        fixedDecimalScale={false}
                                       />
                                     </div>
                                   </div>
@@ -2771,19 +2780,30 @@ ${isChecked ? "" : "bg-gray-100"}
                                         <label className="block text-sm font-medium">
                                           PPN
                                         </label>
-                                        <input
+                                        <NumericFormat
+                                          value={ppn}
+                                          displayType="input"
+                                          thousandSeparator="."
+                                          decimalSeparator=","
+                                          prefix="Rp "
+                                          className="p-2 border rounded w-full bg-gray-100"
+                                          readOnly
+                                          placeholder="Rp 0"
+                                        />
+                                        {/* <input
                                           type="text"
                                           className="p-2 border rounded w-full bg-gray-100"
                                           value={ppn}
                                           // readOnly
                                           placeholder="Rp 0"
-                                        />
+                                        /> */}
                                       </div>
                                       <div className="space-y-2">
                                         <label className="block text-sm font-medium">
                                           Tarif PPnBM (%)
                                         </label>
                                         <input
+                                          // readOnly
                                           type="text"
                                           className="p-2 border rounded w-full"
                                           value={tarif_ppnbm}

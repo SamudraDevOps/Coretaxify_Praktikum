@@ -3646,8 +3646,8 @@ const ViewKonsepSPT = ({ data }) => {
                           </tr>
                         </thead>
                         <tbody className="text-gray-600 text-center">
-                          {sptOther?.data.length > 0 ? (
-                            sptOther?.data.map((item, index) => (
+                          {sptOther?.data?.length > 0 ? (
+                            sptOther?.data?.map((item, index) => (
                               <tr key={index}>
                                 <td className="p-2 border-b text-center">
                                   {index + 1}
@@ -3806,8 +3806,8 @@ const ViewKonsepSPT = ({ data }) => {
                           </tr>
                         </thead>
                         <tbody className="text-gray-600 text-center">
-                          {sptOther?.data.length > 0 ? (
-                            sptOther?.data.map((item, index) => (
+                          {sptOther?.data?.length > 0 ? (
+                            sptOther?.data?.map((item, index) => (
                               <tr key={index}>
                                 <td className="p-2 border-b text-center">
                                   {index + 1}
@@ -3975,8 +3975,8 @@ const ViewKonsepSPT = ({ data }) => {
                           </tr>
                         </thead>
                         <tbody className="text-gray-600 text-center">
-                          {sptOther?.data.length > 0 ? (
-                            sptOther?.data.map((item, index) => (
+                          {sptOther?.data?.length > 0 ? (
+                            sptOther?.data?.map((item, index) => (
                               <tr key={index}>
                                 <td className="p-2 border-b text-center">
                                   {index + 1}
@@ -4144,8 +4144,8 @@ const ViewKonsepSPT = ({ data }) => {
                           </tr>
                         </thead>
                         <tbody className="text-gray-600 text-center">
-                          {sptOther?.data.length > 0 ? (
-                            sptOther?.data.map((item, index) => (
+                          {sptOther?.data?.length > 0 ? (
+                            sptOther?.data?.map((item, index) => (
                               <tr key={index}>
                                 <td className="p-2 border-b text-center">
                                   {index + 1}
@@ -4324,8 +4324,8 @@ const ViewKonsepSPT = ({ data }) => {
                           </tr>
                         </thead>
                         <tbody className="text-gray-600 text-center">
-                          {sptOther?.data.length > 0 ? (
-                            sptOther?.data.map((item, index) => (
+                          {sptOther?.data?.length > 0 ? (
+                            sptOther?.data?.map((item, index) => (
                               <tr key={index}>
                                 <td className="p-2 border-b text-center">
                                   {index + 1}

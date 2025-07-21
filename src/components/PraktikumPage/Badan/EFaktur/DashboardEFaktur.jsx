@@ -5,26 +5,53 @@ import "chart.js/auto";
 import { useParams } from "react-router";
 
 const DashboardEFaktur = ({ data, sidebar }) => {
+  console.log(data.all_faktur);
   const { id, akun } = useParams();
+
+  // Extract data directly from data object (not data.column)
+  const chartData = data || {};
+  const allFaktur = chartData.all_faktur || 0;
+  const fakturKeluaranAmended = chartData.faktur_keluaran_amended || 0;
+  const fakturKeluaranApproved = chartData.faktur_keluaran_approved || 0;
+  const fakturKeluaranCanceled = chartData.faktur_keluaran_canceled || 0;
+  const fakturKeluaranDraft = chartData.faktur_keluaran_draft || 0;
+  const fakturMasukan = chartData.faktur_masukan || 0;
+
+  // Calculate percentages
+  const total = allFaktur || 1; // Avoid division by zero
+  const amendedPercentage = ((fakturKeluaranAmended / total) * 100).toFixed(1);
+  const approvedPercentage = ((fakturKeluaranApproved / total) * 100).toFixed(
+    1
+  );
+  const canceledPercentage = ((fakturKeluaranCanceled / total) * 100).toFixed(
+    1
+  );
+  const draftPercentage = ((fakturKeluaranDraft / total) * 100).toFixed(1);
+  const masukanPercentage = ((fakturMasukan / total) * 100).toFixed(1);
+
   const pieData = {
     labels: [
-      "test (17%)",
-      "4 (33%)",
-      "6 (50%)",
-      "8 (67%)",
-      "10 (83%)",
-      "12 (100%)",
+      `Faktur Masukan (${masukanPercentage}%)`,
+      `Faktur Keluaran Approved (${approvedPercentage}%)`,
+      `Faktur Keluaran Draft (${draftPercentage}%)`,
+      `Faktur Keluaran Amended (${amendedPercentage}%)`,
+      `Faktur Keluaran Canceled (${canceledPercentage}%)`,
     ],
     datasets: [
       {
-        data: [2, 4, 6, 8, 10, 12],
+        data: [
+          fakturMasukan,
+          fakturKeluaranApproved,
+          fakturKeluaranDraft,
+          fakturKeluaranAmended,
+          fakturKeluaranCanceled,
+        ],
         backgroundColor: [
-          "#28A745",
-          "#007BFF",
-          "#6C757D",
-          "#FFC107",
-          "#DC3545",
-          "#17A2B8",
+          "#28A745", // Green for Faktur Masukan
+          "#007BFF", // Blue for Approved
+          "#6C757D", // Gray for Draft
+          "#FFC107", // Yellow for Amended
+          "#DC3545", // Red for Canceled
         ],
         hoverBackgroundColor: [
           "#218838",
@@ -32,7 +59,6 @@ const DashboardEFaktur = ({ data, sidebar }) => {
           "#5A6268",
           "#E0A800",
           "#C82333",
-          "#138496",
         ],
       },
     ],
@@ -69,8 +95,8 @@ const DashboardEFaktur = ({ data, sidebar }) => {
         <div className="grid grid-cols-2 gap-2 mb-6 ">
           <div className="bg-gray-100 p-4 rounded-md shadow h-[100%] border-[1px] border-gray-300">
             <h3 className="font-bold mb-3">Dasbor Faktur Pajak</h3>
-            <div className="h-[90%]">
-              <Pie data={pieData} className="mb-2 h-[90%]" />
+            <div className="h-[30rem]">
+              <Pie data={pieData} className="mb-2 " />
             </div>
           </div>
           <div className="bg-white p-4 rounded-md shadow h-[100%] border-[1px] border-gray-300">
@@ -80,24 +106,6 @@ const DashboardEFaktur = ({ data, sidebar }) => {
             <Bar data={barData} />
           </div>
         </div>
-        {/* <div className="bg-white p-4 rounded-md shadow w-[90%]">
-                    <h3 className="font-bold mb-3">Pembayaran Sebelum Pengisian Dasbor</h3>
-                    <table className="border-collapse w-[80%]">
-                        <thead>
-                            <tr className="bg-yellow-400 text-left">
-                                <th className="p-2">Jenis Pembayaran</th>
-                                <th className="p-2">Nilai</th>
-                                <th className="p-2">Referensi</th>
-                                <th className="p-2">Kode Pembayaran</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td className="p-2" colSpan="4">Tidak ada data untuk ditampilkan.</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div> */}
       </div>
     </div>
   );

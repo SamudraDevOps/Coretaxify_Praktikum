@@ -4,12 +4,14 @@ import { IoDocumentTextOutline } from "react-icons/io5";
 import { FaChevronDown, FaEdit, FaFilePdf } from "react-icons/fa";
 import { TiDeleteOutline } from "react-icons/ti";
 import { useParams, useSearchParams } from "react-router";
+import { useNavigateWithParams } from "@/hooks/useNavigateWithParams";
 import FakturPenilaian from "./FakturPenilaian";
 
 const ReturFakturKeluaran = ({ data, sidebar }) => {
   const { id, akun } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const viewAsCompanyId = searchParams.get("viewAs");
+  const navigate = useNavigateWithParams();
   const userId = searchParams.get("user_id");
   return (
     <div className="flex h-screen bg-gray-100">
@@ -18,7 +20,7 @@ const ReturFakturKeluaran = ({ data, sidebar }) => {
         npwp_akun={sidebar.npwp_akun}
         akun={{ id, akun }}
       />
-      <div className="flex-auto p-3 bg-white rounded-md h-full w-min-0">
+      <div className="flex-auto p-3 bg-white rounded-md h-full min-w-0">
         <div className="flex justify-between items-center mb-4 pb-3 border-b">
           <div className="flex items-center">
             <IoDocumentTextOutline className="text-4xl text-blue-900" />
@@ -40,11 +42,12 @@ const ReturFakturKeluaran = ({ data, sidebar }) => {
             Batalkan Retur
           </button>
         </div>
-        <div className="w-[1040px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden mx-4">
+        <div className="w-full overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden">
           <table className="table-auto border border-gray-300 overflow-hidden">
             <thead className="bg-gray-200">
               <tr>
-                <th className="border border-gray-300 px-1 py-2">No</th>
+                <th className="border border-gray-300 py-2">No</th>
+                <th className="px-4 py-2 border">Aksi</th>
                 <th className="px-4 py-2 border">NPWP Pembeli</th>
                 <th className="px-4 py-2 border">Nama Pembeli</th>
                 <th className="px-4 py-2 border">Kode Transaksi</th>
@@ -74,6 +77,18 @@ const ReturFakturKeluaran = ({ data, sidebar }) => {
                   <tr key={item.id} className="hover:bg-gray-50">
                     <td className="border border-gray-300 px-1 py-2 text-center">
                       {index + 1}
+                    </td>
+                    <td className="px-4 py-2 border">
+                      <button
+                        onClick={() =>
+                          navigate(
+                            `/praktikum/${id}/sistem/${akun}/retur-faktur/pdf/${item.id}`
+                          )
+                        }
+                        className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs"
+                      >
+                        Lihat PDF
+                      </button>
                     </td>
                     <td className="px-4 py-2 border">
                       {item.akun_penerima_id?.npwp_akun || "-"}

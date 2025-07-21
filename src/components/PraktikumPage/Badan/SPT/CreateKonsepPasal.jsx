@@ -401,7 +401,7 @@ const CreateKonsepPasal = ({ data }) => {
 
   return (
     <div className="flex h-screen bg-gray-100">
-      <div className="flex-auto p-3 bg-white rounded-md h-full">
+      <div className="flex-auto p-3 bg-white rounded-md h-full min-w-0">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-3xl font-light text-yellow-500 mt-4">
             PEMOTONGAN PPH PASAL 21 DAN ATAU PASAL 26
@@ -1005,7 +1005,9 @@ const CreateKonsepPasal = ({ data }) => {
                       className={`py-2 px-4 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-sm flex items-center justify-center ${
                         saveConcept.isPending
                           ? "bg-blue-400 text-white cursor-not-allowed"
-                          : userId ? "hidden" : "bg-blue-700 text-white hover:bg-blue-800"
+                          : userId
+                          ? "hidden"
+                          : "bg-blue-700 text-white hover:bg-blue-800"
                       }`}
                     >
                       {saveConcept.isPending ? (
@@ -1050,7 +1052,9 @@ const CreateKonsepPasal = ({ data }) => {
                           payDeposit.isPending ||
                           payBilling.isPending
                             ? "bg-blue-400 text-white cursor-not-allowed"
-                            : userId ? "hidden" : "bg-blue-700 text-white hover:bg-blue-800"
+                            : userId
+                            ? "hidden"
+                            : "bg-blue-700 text-white hover:bg-blue-800"
                         }`}
                       >
                         {saveConcept.isPending ||
@@ -1193,30 +1197,26 @@ const CreateKonsepPasal = ({ data }) => {
                       </div>
                     )}
                     <div className="border rounded-md p-4 mb-4">
-                      <div className="w-[1450px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden">
+                      <div className=" overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden">
                         <table className="table-auto text-sm text-left border overflow-hidden">
                           <thead className="bg-purple-700 text-white text-center">
                             <tr>
                               <th className="p-2 border-b ">No</th>
-                              <th className="p-2 border-b min-w-[200px]">
-                                NIK/NPWP
-                              </th>
-                              <th className="p-2  border-b min-w-[150px]">
-                                Nama
-                              </th>
-                              <th className="p-2 border-b min-w-[150px]">
+                              <th className="p-2 border-b ">NIK/NPWP</th>
+                              <th className="p-2  border-]">Nama</th>
+                              <th className="p-2 border-b w-auto">
                                 Nomor Bukti Potong{" "}
                               </th>
-                              <th className="p-2 border-b min-w-[150px]">
+                              <th className="p-2 border-b w-auto">
                                 Tanggal Bukti Pemotongan{" "}
                               </th>
-                              <th className="p-2 border-b min-w-[150px]">
+                              <th className="p-2 border-b w-auto">
                                 Kode Objek Pajak
                               </th>
-                              <th className="p-2 border-b min-w-[150px]">
+                              <th className="p-2 border-b w-auto">
                                 Penghasilan Bruto (Rp)
                               </th>
-                              <th className="p-2 border-b min-w-[150px]">
+                              <th className="p-2 border-b w-auto">
                                 Pajak Penghasilan (Rp)
                               </th>
                             </tr>
@@ -1451,11 +1451,11 @@ const CreateKonsepPasal = ({ data }) => {
                         </div>
                       </div>
                     )}
-                    <div className="border rounded-md p-4 mb-4">
+                    <div className="border rounded-md p-4 mb-4 min-w-0 ">
                       <div className="border rounded-md p-4 mb-4 font-semibold">
                         BPA1
                       </div>
-                      <div className="w-[1400px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden">
+                      <div className="w-full overflow-x-auto bg-white shadow-md rounded-lg ">
                         <table className="table-auto text-sm text-left border overflow-hidden">
                           <thead className="bg-purple-700 text-white text-center">
                             <tr>
@@ -1541,7 +1541,7 @@ const CreateKonsepPasal = ({ data }) => {
                       <div className="border rounded-md p-4 mb-4 font-semibold">
                         BPA2
                       </div>
-                      <div className="w-[1400px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden">
+                      <div className="w-full overflow-x-auto bg-white shadow-md rounded-lg ">
                         <table className="table-auto text-sm text-left border overflow-hidden">
                           <thead className="bg-purple-700 text-white text-center">
                             <tr>
@@ -1695,7 +1695,7 @@ const CreateKonsepPasal = ({ data }) => {
                       <div className="border rounded-md p-4 mb-4 font-semibold">
                         BPA1
                       </div>
-                      <div className="w-[1400px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden">
+                      <div className="w-full overflow-x-auto bg-white shadow-md rounded-lg ">
                         <table className="table-auto text-sm text-left border overflow-hidden">
                           <thead className="bg-purple-700 text-white text-center">
                             <tr>
@@ -1781,7 +1781,7 @@ const CreateKonsepPasal = ({ data }) => {
                       <div className="border rounded-md p-4 mb-4 font-semibold">
                         BPA2
                       </div>
-                      <div className="w-[1400px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden">
+                      <div className="w-full overflow-x-auto bg-white shadow-md rounded-lg ">
                         <table className="table-auto text-sm text-left border overflow-hidden">
                           <thead className="bg-purple-700 text-white text-center">
                             <tr>
@@ -1908,7 +1908,7 @@ const CreateKonsepPasal = ({ data }) => {
                       <div className="border rounded-md p-4 mb-4 font-semibold">
                         BP21
                       </div>
-                      <div className="w-[1400px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden">
+                      <div className="w-full overflow-x-auto bg-white shadow-md rounded-lg ">
                         <table className="table-auto text-sm text-left border overflow-hidden">
                           <thead className="bg-purple-700 text-white text-center">
                             <tr>
@@ -1961,7 +1961,7 @@ const CreateKonsepPasal = ({ data }) => {
                             {sptOther?.data ? (
                               sptOther.data
                                 .filter(
-                                  (item) => item.jenis_pajak === "PPh Pasal 21"
+                                  (item) => item.jenis_pajak === "Pasal 21"
                                 )
                                 .map((item, index) => (
                                   <tr key={item.id}>
@@ -1988,7 +1988,7 @@ const CreateKonsepPasal = ({ data }) => {
                                       {item.kode_objek_pajak || "-"}
                                     </td>
                                     <td className="p-2 border-b">
-                                      {item.status || "-"}
+                                      {item.tipe_bupot || "-"}
                                     </td>
                                     <td className="p-2 border-b">
                                       {item.dasar_pengenaan_pajak
@@ -2048,7 +2048,9 @@ const CreateKonsepPasal = ({ data }) => {
                                       sptOther.data
                                         .filter(
                                           (item) =>
-                                            item.jenis_pajak === "PPh Pasal 21"
+                                            item.jenis_pajak === "Pasal 21" &&
+                                            item.fasilitas_pajak ===
+                                              "pph_ditanggung_pemerintah"
                                         )
                                         .reduce(
                                           (total, item) =>
@@ -2067,7 +2069,9 @@ const CreateKonsepPasal = ({ data }) => {
                                       sptOther.data
                                         .filter(
                                           (item) =>
-                                            item.jenis_pajak === "PPh Pasal 21"
+                                            item.jenis_pajak === "Pasal 21" &&
+                                            item.fasilitas_pajak ===
+                                              "pph_ditanggung_pemerintah"
                                         )
                                         .reduce(
                                           (total, item) =>
@@ -2095,7 +2099,9 @@ const CreateKonsepPasal = ({ data }) => {
                                       sptOther.data
                                         .filter(
                                           (item) =>
-                                            item.jenis_pajak === "PPh Pasal 21"
+                                            item.jenis_pajak === "Pasal 21" &&
+                                            item.fasilitas_pajak !==
+                                              "pph_ditanggung_pemerintah"
                                         )
                                         .reduce(
                                           (total, item) =>
@@ -2114,7 +2120,9 @@ const CreateKonsepPasal = ({ data }) => {
                                       sptOther.data
                                         .filter(
                                           (item) =>
-                                            item.jenis_pajak === "PPh Pasal 21"
+                                            item.jenis_pajak === "Pasal 21" &&
+                                            item.fasilitas_pajak !==
+                                              "pph_ditanggung_pemerintah"
                                         )
                                         .reduce(
                                           (total, item) =>
@@ -2136,7 +2144,7 @@ const CreateKonsepPasal = ({ data }) => {
                       <div className="border rounded-md p-4 mb-4 font-semibold">
                         BP26
                       </div>
-                      <div className="w-[1400px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden">
+                      <div className="w-full overflow-x-auto bg-white shadow-md rounded-lg ">
                         <table className="table-auto text-sm text-left border overflow-hidden">
                           <thead className="bg-purple-700 text-white text-center">
                             <tr>
@@ -2185,12 +2193,11 @@ const CreateKonsepPasal = ({ data }) => {
                               </th>
                             </tr>
                           </thead>
-
                           <tbody className="text-gray-600 text-center">
                             {sptOther?.data ? (
                               sptOther.data
                                 .filter(
-                                  (item) => item.jenis_pajak === "PPh Pasal 26"
+                                  (item) => item.jenis_pajak === "Pasal 26"
                                 )
                                 .map((item, index) => (
                                   <tr key={item.id}>
@@ -2217,7 +2224,7 @@ const CreateKonsepPasal = ({ data }) => {
                                       {item.kode_objek_pajak || "-"}
                                     </td>
                                     <td className="p-2 border-b">
-                                      {item.status || "-"}
+                                      {item.tipe_bupot || "-"}
                                     </td>
                                     <td className="p-2 border-b">
                                       {item.dasar_pengenaan_pajak
@@ -2243,7 +2250,7 @@ const CreateKonsepPasal = ({ data }) => {
                                     <td className="p-2 border-b">
                                       {item.nitku || "-"}
                                     </td>
-                                    <td className="p-2 border-b">411127-100</td>
+                                    <td className="p-2 border-b">411121-100</td>
                                     <td className="p-2 border-b">
                                       {item.status || "-"}
                                     </td>
@@ -2277,7 +2284,9 @@ const CreateKonsepPasal = ({ data }) => {
                                       sptOther.data
                                         .filter(
                                           (item) =>
-                                            item.jenis_pajak === "PPh Pasal 26"
+                                            item.jenis_pajak === "Pasal 26" &&
+                                            item.fasilitas_pajak ===
+                                              "pph_ditanggung_pemerintah"
                                         )
                                         .reduce(
                                           (total, item) =>
@@ -2290,7 +2299,27 @@ const CreateKonsepPasal = ({ data }) => {
                                     )
                                   : "0"}
                               </td>
-                              <td className="p-2"></td>
+                              <td className="p-2">
+                                {sptOther?.data
+                                  ? formatRupiah(
+                                      sptOther.data
+                                        .filter(
+                                          (item) =>
+                                            item.jenis_pajak === "Pasal 26" &&
+                                            item.fasilitas_pajak ===
+                                              "pph_ditanggung_pemerintah"
+                                        )
+                                        .reduce(
+                                          (total, item) =>
+                                            total +
+                                            (parseFloat(
+                                              item.pajak_penghasilan
+                                            ) || 0),
+                                          0
+                                        )
+                                    )
+                                  : "0"}
+                              </td>
                             </tr>
                             <tr>
                               <td
@@ -2306,7 +2335,9 @@ const CreateKonsepPasal = ({ data }) => {
                                       sptOther.data
                                         .filter(
                                           (item) =>
-                                            item.jenis_pajak === "PPh Pasal 26"
+                                            item.jenis_pajak === "Pasal 26" &&
+                                            item.fasilitas_pajak !==
+                                              "pph_ditanggung_pemerintah"
                                         )
                                         .reduce(
                                           (total, item) =>
@@ -2319,7 +2350,27 @@ const CreateKonsepPasal = ({ data }) => {
                                     )
                                   : "0"}
                               </td>
-                              <td className="p-2"></td>
+                              <td className="p-2">
+                                {sptOther?.data
+                                  ? formatRupiah(
+                                      sptOther.data
+                                        .filter(
+                                          (item) =>
+                                            item.jenis_pajak === "Pasal 26" &&
+                                            item.fasilitas_pajak !==
+                                              "pph_ditanggung_pemerintah"
+                                        )
+                                        .reduce(
+                                          (total, item) =>
+                                            total +
+                                            (parseFloat(
+                                              item.pajak_penghasilan
+                                            ) || 0),
+                                          0
+                                        )
+                                    )
+                                  : "0"}
+                              </td>
                             </tr>
                             <tr>
                               <td
@@ -2336,7 +2387,7 @@ const CreateKonsepPasal = ({ data }) => {
                                       sptOther.data
                                         .filter(
                                           (item) =>
-                                            item.jenis_pajak === "PPh Pasal 26"
+                                            item.jenis_pajak === "Pasal 26"
                                         )
                                         .reduce(
                                           (total, item) =>
@@ -2349,7 +2400,25 @@ const CreateKonsepPasal = ({ data }) => {
                                     )
                                   : "0"}
                               </td>
-                              <td className="p-2"></td>
+                              <td className="p-2">
+                                {sptOther?.data
+                                  ? formatRupiah(
+                                      sptOther.data
+                                        .filter(
+                                          (item) =>
+                                            item.jenis_pajak === "Pasal 26"
+                                        )
+                                        .reduce(
+                                          (total, item) =>
+                                            total +
+                                            (parseFloat(
+                                              item.pajak_penghasilan
+                                            ) || 0),
+                                          0
+                                        )
+                                    )
+                                  : "0"}
+                              </td>
                             </tr>
                           </tfoot>
                         </table>

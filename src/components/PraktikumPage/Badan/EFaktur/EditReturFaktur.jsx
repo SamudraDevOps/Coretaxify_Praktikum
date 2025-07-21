@@ -26,6 +26,7 @@ import axios from "axios";
 import { RoutesApi } from "@/Routes";
 import { useCookies } from "react-cookie";
 import Swal from "sweetalert2";
+import { useNavigateWithParams } from "@/hooks/useNavigateWithParams";
 
 const EditReturFaktur = ({ data, sidebar }) => {
   console.log(data);
@@ -68,6 +69,8 @@ const EditReturFaktur = ({ data, sidebar }) => {
     ppnbm_retur: "",
     tarif_ppnbm: "",
   });
+
+  const navigate = useNavigateWithParams();
 
   const [tanggalRetur, setTanggalRetur] = useState("");
   // useEffect(() => {
@@ -302,7 +305,8 @@ const EditReturFaktur = ({ data, sidebar }) => {
       Swal.fire("Berhasil!", "Faktur Retur berhasil disimpan", "success").then(
         (result) => {
           if (result.isConfirmed) {
-            window.location.reload();
+            navigate(`/praktikum/${id}/sistem/${akun}/e-faktur/pajak-masukan`);
+            // window.location.reload();
             // window.location.href = `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran?viewAs=${viewAsCompanyId}`;
           }
         }

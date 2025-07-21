@@ -37,7 +37,7 @@ const SideBarEFakturOP = ({ nama_akun, npwp_akun, akun }) => {
     { label: "Retur Dokumen Lain Masukan", link: "retur-dokumen-lain-masukan" },
   ];
 
-  const dashboardPath = `/admin/praktikum/${userTypeId}/e-faktur`;
+  const dashboardPath = `/praktikum/${akun?.id}/sistem/${akun?.akun}/e-faktur`;
   const isDashboard = location.pathname === dashboardPath;
   const navigate = useNavigateWithParams();
 

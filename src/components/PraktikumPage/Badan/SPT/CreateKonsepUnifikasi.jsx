@@ -209,7 +209,9 @@ const CreateKonsepUnifikasi = ({ data }) => {
       Swal.fire("Berhasil!", "SPT berhasil dibayar.", "success").then(
         (result) => {
           if (result.isConfirmed) {
-            navigate(`/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt/konsep`);
+            navigate(
+              `/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt/konsep`
+            );
           }
         }
       );
@@ -271,8 +273,8 @@ const CreateKonsepUnifikasi = ({ data }) => {
   });
 
   return (
-    <div className="flex h-screen bg-gray-100">
-      <div className="flex-auto p-3 bg-white rounded-md h-full">
+    <div className="flex h-screen bg-gray-100 ">
+      <div className="flex-auto p-3 bg-white rounded-md h-full min-w-0">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-3xl font-light text-yellow-500 mt-4">
             SPT MASA PPH UNIFIKASI
@@ -446,13 +448,13 @@ const CreateKonsepUnifikasi = ({ data }) => {
                           </th>
                           <th
                             rowSpan="2"
-                            className="border border-gray-300 px-2 py-1 whitespace-normal max-w-[200px]"
+                            className="border border-gray-300 px-2 py-1 whitespace-normal "
                           >
                             JUMLAH PPh DIBAYAR DARI SPT YANG DIBETULKAN
                           </th>
                           <th
                             rowSpan="2"
-                            className="border border-gray-300 px-2 py-1 whitespace-normal max-w-[200px]"
+                            className="border border-gray-300 px-2 py-1 whitespace-normal "
                           >
                             PPh KURANG BAYAR / LEBIH BAYAR KARENA PEMBETULAN
                           </th>
@@ -971,7 +973,9 @@ const CreateKonsepUnifikasi = ({ data }) => {
                       className={`py-2 px-4 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-sm flex items-center justify-center ${
                         saveConcept.isPending
                           ? "bg-blue-400 text-white cursor-not-allowed"
-                          : userId ? "hidden" : "bg-blue-700 text-white hover:bg-blue-800"
+                          : userId
+                          ? "hidden"
+                          : "bg-blue-700 text-white hover:bg-blue-800"
                       }`}
                     >
                       {saveConcept.isPending ? (
@@ -1016,7 +1020,9 @@ const CreateKonsepUnifikasi = ({ data }) => {
                           payDeposit.isPending ||
                           payBilling.isPending
                             ? "bg-blue-400 text-white cursor-not-allowed"
-                            : userId ? "hidden" : "bg-blue-700 text-white hover:bg-blue-800"
+                            : userId
+                            ? "hidden"
+                            : "bg-blue-700 text-white hover:bg-blue-800"
                         }`}
                       >
                         {saveConcept.isPending ||
@@ -1153,8 +1159,8 @@ const CreateKonsepUnifikasi = ({ data }) => {
                         )}
                       </div>
                       {showTabelBPPUnifikasi && (
-                        <div className="border rounded-md p-4 overflow-x-auto w-[1400px]">
-                          <table className="w-[1200px] text-sm text-left border overflow-x-auto">
+                        <div className="border rounded-md p-4 overflow-x-auto ">
+                          <table className=" text-sm text-left border overflow-x-auto">
                             <thead className="bg-purple-700 text-white text-center ">
                               <tr>
                                 <th className="border border-gray-300 px-2 py-1 whitespace-normal">
@@ -1240,7 +1246,7 @@ const CreateKonsepUnifikasi = ({ data }) => {
                                       {item.dasar_pengenaan_pajak || "0"}
                                     </td>
                                     <td className="border border-gray-300 px-2 py-1 text-right">
-                                      {item.tarif || "0"}%
+                                      {item.tarif_pajak || "0"}%
                                     </td>
                                     <td className="border border-gray-300 px-2 py-1 text-right">
                                       {item.pajak_penghasilan || "0"}
@@ -1283,8 +1289,8 @@ const CreateKonsepUnifikasi = ({ data }) => {
                           )}
                         </div>
                         {showTabelBPNRUnifikasi && (
-                          <div className="border rounded-md p-4 overflow-x-auto w-[1400px]">
-                            <table className="w-[1200px] text-sm text-left border overflow-x-auto">
+                          <div className="border rounded-md p-4 overflow-x-auto ">
+                            <table className=" text-sm text-left border overflow-x-auto">
                               <thead className="bg-purple-700 text-white text-center ">
                                 <tr>
                                   <th className="border border-gray-300 px-2 py-1 whitespace-normal">
@@ -1370,7 +1376,7 @@ const CreateKonsepUnifikasi = ({ data }) => {
                                         {item.dasar_pengenaan_pajak || "0"}
                                       </td>
                                       <td className="border border-gray-300 px-2 py-1 text-right">
-                                        {item.tarif || "0"}%
+                                        {item.tarif_pajak || "0"}%
                                       </td>
                                       <td className="border border-gray-300 px-2 py-1 text-right">
                                         {item.pajak_penghasilan || "0"}
@@ -1574,8 +1580,8 @@ const CreateKonsepUnifikasi = ({ data }) => {
                       {showTabelDaftarPPh ? <FaChevronUp /> : <FaChevronDown />}
                     </div>
                     {showTabelDaftarPPh && (
-                      <div className="border rounded-md p-4 overflow-x-auto w-[1400px]">
-                        <table className="w-[1200px] text-sm text-left border overflow-x-auto">
+                      <div className="border rounded-md p-4 overflow-x-auto ">
+                        <table className=" text-sm text-left border overflow-x-auto">
                           <thead className="bg-purple-700 text-white text-center ">
                             <tr>
                               <th className="border border-gray-300 px-2 py-1 whitespace-normal">
@@ -1668,7 +1674,7 @@ const CreateKonsepUnifikasi = ({ data }) => {
                                       : "0"}
                                   </td>
                                   <td className="border border-gray-300 px-2 py-1 text-right">
-                                    {item.tarif || "0"}%
+                                    {item.tarif_pajak || "0"}%
                                   </td>
                                   <td className="border border-gray-300 px-2 py-1 text-right">
                                     {item.pajak_penghasilan
@@ -1775,8 +1781,8 @@ const CreateKonsepUnifikasi = ({ data }) => {
                         )}
                       </div>
                       {showTabelDaftarPajakPenghasilan && (
-                        <div className="border rounded-md p-4 overflow-x-auto w-[1400px]">
-                          <table className="w-[1200px] text-sm text-left border overflow-x-auto">
+                        <div className="border rounded-md p-4 overflow-x-auto">
+                          <table className=" text-sm text-left border overflow-x-auto">
                             <thead className="bg-purple-700 text-white text-center ">
                               <tr>
                                 <th className="border border-gray-300 px-2 py-1 whitespace-normal">
@@ -1869,7 +1875,7 @@ const CreateKonsepUnifikasi = ({ data }) => {
                                         : "0"}
                                     </td>
                                     <td className="border border-gray-300 px-2 py-1 text-right">
-                                      {item.tarif || "0"}%
+                                      {item.tarif_pajak || "0"}%
                                     </td>
                                     <td className="border border-gray-300 px-2 py-1 text-right">
                                       {item.pajak_penghasilan
@@ -1969,8 +1975,8 @@ const CreateKonsepUnifikasi = ({ data }) => {
                       <div className="border rounded-md p-4 mb-4 font-semibold">
                         TABEL I. ATC
                       </div>
-                      <div className="border rounded-md p-4 overflow-x-auto w-[1400px]">
-                        <table className="w-[1200px] text-sm text-left border overflow-x-auto">
+                      <div className="border rounded-md p-4 overflow-x-auto ">
+                        <table className="text-sm text-left border overflow-x-auto">
                           <thead className="bg-purple-700 text-white text-center ">
                             <tr>
                               <th className="border border-gray-300 px-2 py-1 whitespace-normal">

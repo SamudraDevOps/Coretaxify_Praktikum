@@ -197,6 +197,8 @@ import ViewKonsepSPT from "./components/PraktikumPage/Badan/SPT/ViewKonsepSPT";
 import LihatKonsepPasal from "./components/PraktikumPage/Badan/SPT/ViewKonsepPasal";
 import LihatKonsepUnifikasi from "./components/PraktikumPage/Badan/SPT/ViewKonsepUnifikasi";
 import EditReturFaktur from "./components/PraktikumPage/Badan/EFaktur/EditReturFaktur";
+import BupotViewPDF from "./components/PraktikumPage/Badan/BUPOT/BPPU/BupotViewPDF";
+import ReturFakturViewPDF from "./components/PraktikumPage/Badan/EFaktur/ReturFakturViewPDF";
 
 const Main = () => {
   const [loading, setLoading] = useState(true);
@@ -862,11 +864,11 @@ const Main = () => {
           element={
             <>
               <RoleBasedRenderer
-                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun`}
-                intent={"api.get.sistem.edit.informasi.umum"}
-                OrangPribadi={DashboardEFakturOP}
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/faktur-data-dashboard`}
+                intent={""}
+                OrangPribadi={DashboardEFaktur}
                 Badan={DashboardEFaktur}
-                query={"edit-info"}
+                query={"dashboard-faktur"}
               ></RoleBasedRenderer>
             </>
           }
@@ -997,6 +999,21 @@ const Main = () => {
             </>
           }
         />
+
+        <Route
+          path="/praktikum/:id/sistem/:akun/retur-faktur/pdf/:idFaktur"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/faktur/:idFaktur`}
+                intent={"api.get.faktur.retur.keluaran"}
+                OrangPribadi={ReturFakturViewPDF}
+                Badan={ReturFakturViewPDF}
+                query={""}
+              ></RoleBasedRenderer>
+            </>
+          }
+        />
         {/* SPT */}
 
         <Route
@@ -1084,7 +1101,7 @@ const Main = () => {
           }
         />
         <Route
-          path="/praktikum/:id/sistem/:akun/surat-pemberitahuan-spt/menunggu pembayaran"
+          path="/praktikum/:id/sistem/:akun/surat-pemberitahuan-spt/menunggu-pembayaran"
           // path="/praktikum/:id/sistem/:akun/surat-pemberitahuan-spt/:filter?"
           // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
           element={
@@ -1521,6 +1538,24 @@ const Main = () => {
                 intent={"dynamic"}
                 query={"bupot-edit"}
               />
+            </>
+          }
+        />
+
+        <Route
+          path="/praktikum/:id/sistem/:akun/bupot/bppu/pdf/:bupot"
+          element={
+            <>
+              <RoleBasedRenderer
+                // url={``
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/bupot/:bupot`}
+                // intent={""}
+
+                intent="api.bupot.bppu.show"
+                OrangPribadi={BupotViewPDF}
+                Badan={BupotViewPDF}
+                query={"pdf-billing"}
+              ></RoleBasedRenderer>
             </>
           }
         />
@@ -2228,7 +2263,15 @@ const Main = () => {
             </>
           }
         />
-
+          <Route
+            path="/admin/praktikum/2/dokumen-lain-keluaran"
+            element={
+              <>
+                <Header />
+                <TambahFakturKeluaranDokumenLain />
+              </>
+            }
+          />
         {/* NOT FOUND ROUTE - LAST REGISTERED ROUTE */}
         <Route path="*" element={<NotFound />} />
       </Routes>
