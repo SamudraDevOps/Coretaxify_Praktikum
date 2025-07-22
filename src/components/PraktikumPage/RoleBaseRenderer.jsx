@@ -208,7 +208,21 @@ export default function RoleBasedRenderer({
   }
 
   // Also check content data, but only if URL was provided
-  if (hasValidUrl && !contentData?.data) {
+  // if (hasValidUrl && !contentData?.data) {
+  //   return (
+  //     <div className="loading flex items-center justify-center h-screen">
+  //       <ClipLoader color="#7502B5" size={50} />
+  //       <p className="ml-3">Content data not available</p>
+  //     </div>
+  //   );
+  // }
+  // Check if contentData exists and has either direct properties or nested data
+  const hasContentData =
+    contentData &&
+    (contentData.data || // Has nested data structure
+      Object.keys(contentData).length > 0); // Has direct properties (non-empty object)
+
+  if (hasValidUrl && !hasContentData) {
     return (
       <div className="loading flex items-center justify-center h-screen">
         <ClipLoader color="#7502B5" size={50} />
@@ -246,12 +260,39 @@ export default function RoleBasedRenderer({
   //   params: params,
   // };
 
+  // return (
+  //   <>
+  //     <Header />
+  //     {isViewingOrangPribadi ? (
+  //       <OrangPribadi
+  //         data={hasValidUrl ? contentData.data : {}}
+  //         sidebar={userData.data}
+  //         pagination={hasValidUrl ? contentData : emptyContentData}
+  //         onPageChange={handlePageChange}
+  //         currentPage={currentPage}
+  //         onCompanyChange={handleCompanyChange}
+  //         representedCompanies={representedCompanies?.data || []}
+  //       />
+  //     ) : (
+  //       <Badan
+  //         data={hasValidUrl ? contentData.data : {}}
+  //         sidebar={userData.data}
+  //         pagination={hasValidUrl ? contentData : emptyContentData}
+  //         onPageChange={handlePageChange}
+  //         currentPage={currentPage}
+  //         onCompanyChange={handleCompanyChange}
+  //         representedCompanies={representedCompanies?.data || []}
+  //         isViewingAsRepresentative={!!viewAsCompanyId}
+  //       />
+  //     )}
+  //   </>
+  // );
   return (
     <>
       <Header />
       {isViewingOrangPribadi ? (
         <OrangPribadi
-          data={hasValidUrl ? contentData.data : {}}
+          data={hasValidUrl ? contentData.data || contentData : {}}
           sidebar={userData.data}
           pagination={hasValidUrl ? contentData : emptyContentData}
           onPageChange={handlePageChange}
@@ -261,7 +302,7 @@ export default function RoleBasedRenderer({
         />
       ) : (
         <Badan
-          data={hasValidUrl ? contentData.data : {}}
+          data={hasValidUrl ? contentData.data || contentData : {}}
           sidebar={userData.data}
           pagination={hasValidUrl ? contentData : emptyContentData}
           onPageChange={handlePageChange}

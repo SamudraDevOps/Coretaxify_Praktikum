@@ -209,7 +209,9 @@ const CreateKonsepUnifikasi = ({ data }) => {
       Swal.fire("Berhasil!", "SPT berhasil dibayar.", "success").then(
         (result) => {
           if (result.isConfirmed) {
-            navigate(`/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt/konsep`);
+            navigate(
+              `/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt/konsep`
+            );
           }
         }
       );
@@ -971,7 +973,9 @@ const CreateKonsepUnifikasi = ({ data }) => {
                       className={`py-2 px-4 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-sm flex items-center justify-center ${
                         saveConcept.isPending
                           ? "bg-blue-400 text-white cursor-not-allowed"
-                          : userId ? "hidden" : "bg-blue-700 text-white hover:bg-blue-800"
+                          : userId
+                          ? "hidden"
+                          : "bg-blue-700 text-white hover:bg-blue-800"
                       }`}
                     >
                       {saveConcept.isPending ? (
@@ -1016,7 +1020,9 @@ const CreateKonsepUnifikasi = ({ data }) => {
                           payDeposit.isPending ||
                           payBilling.isPending
                             ? "bg-blue-400 text-white cursor-not-allowed"
-                            : userId ? "hidden" : "bg-blue-700 text-white hover:bg-blue-800"
+                            : userId
+                            ? "hidden"
+                            : "bg-blue-700 text-white hover:bg-blue-800"
                         }`}
                       >
                         {saveConcept.isPending ||
@@ -1240,7 +1246,7 @@ const CreateKonsepUnifikasi = ({ data }) => {
                                       {item.dasar_pengenaan_pajak || "0"}
                                     </td>
                                     <td className="border border-gray-300 px-2 py-1 text-right">
-                                      {item.tarif || "0"}%
+                                      {item.tarif_pajak || "0"}%
                                     </td>
                                     <td className="border border-gray-300 px-2 py-1 text-right">
                                       {item.pajak_penghasilan || "0"}
@@ -1370,7 +1376,7 @@ const CreateKonsepUnifikasi = ({ data }) => {
                                         {item.dasar_pengenaan_pajak || "0"}
                                       </td>
                                       <td className="border border-gray-300 px-2 py-1 text-right">
-                                        {item.tarif || "0"}%
+                                        {item.tarif_pajak || "0"}%
                                       </td>
                                       <td className="border border-gray-300 px-2 py-1 text-right">
                                         {item.pajak_penghasilan || "0"}
@@ -1668,7 +1674,7 @@ const CreateKonsepUnifikasi = ({ data }) => {
                                       : "0"}
                                   </td>
                                   <td className="border border-gray-300 px-2 py-1 text-right">
-                                    {item.tarif || "0"}%
+                                    {item.tarif_pajak || "0"}%
                                   </td>
                                   <td className="border border-gray-300 px-2 py-1 text-right">
                                     {item.pajak_penghasilan
@@ -1869,7 +1875,7 @@ const CreateKonsepUnifikasi = ({ data }) => {
                                         : "0"}
                                     </td>
                                     <td className="border border-gray-300 px-2 py-1 text-right">
-                                      {item.tarif || "0"}%
+                                      {item.tarif_pajak || "0"}%
                                     </td>
                                     <td className="border border-gray-300 px-2 py-1 text-right">
                                       {item.pajak_penghasilan

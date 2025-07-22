@@ -7,7 +7,10 @@ import {
   Document,
   StyleSheet,
   Font,
+  Image,
 } from "@react-pdf/renderer";
+import kopImage from "../../../assets/images/KOP PDF.jpg";
+import qrImage from "../../../assets/images/qr-web.png";
 
 // Styles
 const styles = StyleSheet.create({
@@ -57,101 +60,289 @@ const styles = StyleSheet.create({
 const columnWidths = ["5%", "20%", "12%", "12%", "12%", "12%", "12%", "15%"];
 
 // Main Document Component
+function formatRupiah(value) {
+  const numberString = value?.toString().replace(/[^0-9]/g, "") || "0";
+  return new Intl.NumberFormat("id-ID", {
+    style: "currency",
+    currency: "IDR",
+    minimumFractionDigits: 0,
+  }).format(numberString || 0);
+}
 const SPTUnifikasiPDF = ({ data }) => {
+  // const dataRows = [
+  //   [
+  //     "1",
+  //     "PPh Pasal 4 ayat 2",
+  //     data?.detail_spt?.cl_a_pasal4,
+  //     data?.detail_spt?.cl_b_pasal4,
+  //     data?.detail_spt?.cl_c_pasal4,
+  //     data?.detail_spt?.cl_d_pasal4,
+  //     "0",
+  //     "0",
+  //   ],
+
+  //   [
+  //     "2",
+  //     "PPh Pasal 15",
+  //     data?.detail_spt?.cl_a_pasal15,
+  //     data?.detail_spt?.cl_b_pasal15,
+  //     data?.detail_spt?.cl_c_pasal15,
+  //     data?.detail_spt?.cl_d_pasal15,
+  //     "0",
+  //     "0",
+  //   ],
+  //   // [
+  //   //   "3",
+  //   //   "PPh Pasal 21",
+  //   //   data?.detail_spt?.cl_a_pasal21,
+  //   //   data?.detail_spt?.cl_b_pasal21,
+  //   //   data?.detail_spt?.cl_c_pasal21,
+  //   //   data?.detail_spt?.cl_d_pasal21,
+  //   //   "0",
+  //   //   "0",
+  //   // ],
+  //   [
+  //     "3",
+  //     "PPh Pasal 22",
+  //     data?.detail_spt?.cl_a_pasal22,
+  //     data?.detail_spt?.cl_b_pasal22,
+  //     data?.detail_spt?.cl_c_pasal22,
+  //     data?.detail_spt?.cl_d_pasal22,
+  //     "0",
+  //     "0",
+  //   ],
+  //   [
+  //     "4",
+  //     "PPh Pasal 26",
+  //     data?.detail_spt?.cl_a_pasal26,
+  //     data?.detail_spt?.cl_b_pasal26,
+  //     data?.detail_spt?.cl_c_pasal26,
+  //     data?.detail_spt?.cl_d_pasal26,
+  //     "0",
+  //     "0",
+  //   ],
+  //   [
+  //     "6",
+  //     "Total Pajak Penghasilan",
+  //     String(
+  //       (
+  //         parseFloat(data?.detail_spt?.cl_a_pasal4 || 0) +
+  //         parseFloat(data?.detail_spt?.cl_a_pasal15 || 0)
+  //       ).toFixed(3)
+  //     ),
+  //     String(
+  //       (
+  //         parseFloat(data?.detail_spt?.cl_b_pasal4 || 0) +
+  //         parseFloat(data?.detail_spt?.cl_b_pasal15 || 0)
+  //       ).toFixed(3)
+  //     ),
+  //     String(
+  //       (
+  //         parseFloat(data?.detail_spt?.cl_c_pasal4 || 0) +
+  //         parseFloat(data?.detail_spt?.cl_c_pasal15 || 0)
+  //       ).toFixed(3)
+  //     ),
+  //     String(
+  //       (
+  //         parseFloat(data?.detail_spt?.cl_d_pasal4 || 0) +
+  //         parseFloat(data?.detail_spt?.cl_d_pasal15 || 0)
+  //       ).toFixed(3)
+  //     ),
+  //     String(
+  //       (
+  //         parseFloat(data?.detail_spt?.cl_d_pasal4 || 0) +
+  //         parseFloat(data?.detail_spt?.cl_d_pasal15 || 0)
+  //       ).toFixed(3)
+  //     ),
+  //     "0",
+  //   ],
+  // ];
   const dataRows = [
+    // PPh Pasal 4 Ayat 2
     [
       "1",
-      "PPh Pasal 4 ayat 2",
-      data?.detail_spt?.cl_a_pasal4,
-      data?.detail_spt?.cl_b_pasal4,
-      data?.detail_spt?.cl_c_pasal4,
-      data?.detail_spt?.cl_d_pasal4,
+      "Pasal 4 Ayat 2",
+      formatRupiah(data?.detail_spt?.cl_a_pasal4),
+      formatRupiah(data?.detail_spt?.cl_b_pasal4),
+      formatRupiah(data?.detail_spt?.cl_c_pasal4),
+      formatRupiah(data?.detail_spt?.cl_d_pasal4),
+      "0",
+      "0",
+    ],
+    [
+      "",
+      "KJS411128-100",
+      formatRupiah(data?.detail_spt?.cl_a_1),
+      formatRupiah(data?.detail_spt?.cl_b_1),
+      formatRupiah(data?.detail_spt?.cl_c_1),
+      formatRupiah(data?.detail_spt?.cl_d_1),
+      "0",
+      "0",
+    ],
+    [
+      "",
+      "KJS411128-402",
+      formatRupiah(data?.detail_spt?.cl_a_2),
+      formatRupiah(data?.detail_spt?.cl_b_2),
+      formatRupiah(data?.detail_spt?.cl_c_2),
+      formatRupiah(data?.detail_spt?.cl_d_2),
+      "0",
+      "0",
+    ],
+    [
+      "",
+      "KJS411128-403",
+      formatRupiah(data?.detail_spt?.cl_a_3),
+      formatRupiah(data?.detail_spt?.cl_b_3),
+      formatRupiah(data?.detail_spt?.cl_c_3),
+      formatRupiah(data?.detail_spt?.cl_d_3),
       "0",
       "0",
     ],
 
+    // PPh Pasal 15
     [
       "2",
-      "PPh Pasal 15",
-      data?.detail_spt?.cl_a_pasal15,
-      data?.detail_spt?.cl_b_pasal15,
-      data?.detail_spt?.cl_c_pasal15,
-      data?.detail_spt?.cl_d_pasal15,
+      "Pasal 15",
+      formatRupiah(data?.detail_spt?.cl_a_pasal15),
+      formatRupiah(data?.detail_spt?.cl_b_pasal15),
+      formatRupiah(data?.detail_spt?.cl_c_pasal15),
+      formatRupiah(data?.detail_spt?.cl_d_pasal15),
       "0",
       "0",
     ],
-    // [
-    //   "3",
-    //   "PPh Pasal 21",
-    //   data?.detail_spt?.cl_a_pasal21,
-    //   data?.detail_spt?.cl_b_pasal21,
-    //   data?.detail_spt?.cl_c_pasal21,
-    //   data?.detail_spt?.cl_d_pasal21,
-    //   "0",
-    //   "0",
-    // ],
+    [
+      "",
+      "KJS411128-600",
+      formatRupiah(data?.detail_spt?.cl_a_4),
+      formatRupiah(data?.detail_spt?.cl_b_4),
+      formatRupiah(data?.detail_spt?.cl_c_4),
+      formatRupiah(data?.detail_spt?.cl_d_4),
+      "0",
+      "0",
+    ],
+    [
+      "",
+      "KJS411129-600",
+      formatRupiah(data?.detail_spt?.cl_a_5),
+      formatRupiah(data?.detail_spt?.cl_b_5),
+      formatRupiah(data?.detail_spt?.cl_c_5),
+      formatRupiah(data?.detail_spt?.cl_d_5),
+      "0",
+      "0",
+    ],
+
+    // PPh Pasal 22
     [
       "3",
-      "PPh Pasal 22",
-      data?.detail_spt?.cl_a_pasal22,
-      data?.detail_spt?.cl_b_pasal22,
-      data?.detail_spt?.cl_c_pasal22,
-      data?.detail_spt?.cl_d_pasal22,
+      "Pasal 22",
+      formatRupiah(data?.detail_spt?.cl_a_pasal22),
+      formatRupiah(data?.detail_spt?.cl_b_pasal22),
+      formatRupiah(data?.detail_spt?.cl_c_pasal22),
+      formatRupiah(data?.detail_spt?.cl_d_pasal22),
       "0",
       "0",
     ],
+    [
+      "",
+      "KJS411122-100",
+      formatRupiah(data?.detail_spt?.cl_a_6),
+      formatRupiah(data?.detail_spt?.cl_b_6),
+      formatRupiah(data?.detail_spt?.cl_c_6),
+      formatRupiah(data?.detail_spt?.cl_d_6),
+      "0",
+      "0",
+    ],
+    [
+      "",
+      "KJS411122-900",
+      formatRupiah(data?.detail_spt?.cl_a_7),
+      formatRupiah(data?.detail_spt?.cl_b_7),
+      formatRupiah(data?.detail_spt?.cl_c_7),
+      formatRupiah(data?.detail_spt?.cl_d_7),
+      "0",
+      "0",
+    ],
+    [
+      "",
+      "KJS411122-910",
+      formatRupiah(data?.detail_spt?.cl_a_8),
+      formatRupiah(data?.detail_spt?.cl_b_8),
+      formatRupiah(data?.detail_spt?.cl_c_8),
+      formatRupiah(data?.detail_spt?.cl_d_8),
+      "0",
+      "0",
+    ],
+
+    // PPh Pasal 23
     [
       "4",
-      "PPh Pasal 26",
-      data?.detail_spt?.cl_a_pasal26,
-      data?.detail_spt?.cl_b_pasal26,
-      data?.detail_spt?.cl_c_pasal26,
-      data?.detail_spt?.cl_d_pasal26,
+      "Pasal 23",
+      formatRupiah(data?.detail_spt?.cl_a_pasal23),
+      formatRupiah(data?.detail_spt?.cl_b_pasal23),
+      formatRupiah(data?.detail_spt?.cl_c_pasal23),
+      formatRupiah(data?.detail_spt?.cl_d_pasal23),
       "0",
       "0",
     ],
     [
-      "6",
-      "Total Pajak Penghasilan",
-      String(
-        (
-          parseFloat(data?.detail_spt?.cl_a_pasal4 || 0) +
-          parseFloat(data?.detail_spt?.cl_a_pasal15 || 0)
-        ).toFixed(3)
-      ),
-      String(
-        (
-          parseFloat(data?.detail_spt?.cl_b_pasal4 || 0) +
-          parseFloat(data?.detail_spt?.cl_b_pasal15 || 0)
-        ).toFixed(3)
-      ),
-      String(
-        (
-          parseFloat(data?.detail_spt?.cl_c_pasal4 || 0) +
-          parseFloat(data?.detail_spt?.cl_c_pasal15 || 0)
-        ).toFixed(3)
-      ),
-      String(
-        (
-          parseFloat(data?.detail_spt?.cl_d_pasal4 || 0) +
-          parseFloat(data?.detail_spt?.cl_d_pasal15 || 0)
-        ).toFixed(3)
-      ),
-      String(
-        (
-          parseFloat(data?.detail_spt?.cl_d_pasal4 || 0) +
-          parseFloat(data?.detail_spt?.cl_d_pasal15 || 0)
-        ).toFixed(3)
-      ),
+      "",
+      "KJS411124-100",
+      formatRupiah(data?.detail_spt?.cl_a_9),
+      formatRupiah(data?.detail_spt?.cl_b_9),
+      formatRupiah(data?.detail_spt?.cl_c_9),
+      formatRupiah(data?.detail_spt?.cl_d_9),
+      "0",
+      "0",
+    ],
+
+    // PPh Pasal 26
+    [
+      "5",
+      "Pasal 26",
+      formatRupiah(data?.detail_spt?.cl_a_pasal26),
+      formatRupiah(data?.detail_spt?.cl_b_pasal26),
+      formatRupiah(data?.detail_spt?.cl_c_pasal26),
+      formatRupiah(data?.detail_spt?.cl_d_pasal26),
+      "0",
+      "0",
+    ],
+    [
+      "",
+      "KJS411127-110",
+      formatRupiah(data?.detail_spt?.cl_a_10),
+      formatRupiah(data?.detail_spt?.cl_b_10),
+      formatRupiah(data?.detail_spt?.cl_c_10),
+      formatRupiah(data?.detail_spt?.cl_d_10),
+      "0",
+      "0",
+    ],
+
+    // Total Row
+    [
+      "",
+      "TOTAL OF INCOME TAX",
+      formatRupiah(data?.detail_spt?.cl_total_setor),
+      formatRupiah(data?.detail_spt?.cl_total_potong),
+      formatRupiah(data?.detail_spt?.cl_total_tanggung),
+      formatRupiah(data?.detail_spt?.cl_total_bayar),
+      "0",
       "0",
     ],
   ];
+
   return (
     <Document>
       <Page size="A4" style={styles.page}>
-        <Text style={styles.header}>
+        {/* <Text style={styles.header}>
           SURAT PEMBERITAHUAN MASA PPH UNIFIKASI
-        </Text>
+        </Text> */}
+        <View style={{ width: "100%", textAlign: "center" }}>
+          <Image
+            style={{ width: "100%", height: "auto", marginBottom: 5 }}
+            src={kopImage}
+          />
+        </View>
 
         <View style={styles.section}>
           <Text style={styles.bold}>
@@ -213,6 +404,12 @@ const SPTUnifikasiPDF = ({ data }) => {
           <Text style={styles.bold}>PERNYATAAN DAN TANDA TANGAN</Text>
           <Text style={styles.text}>Nama: {data?.nama_pic}</Text>
           <Text style={styles.text}>Tanggal: {data?.tanggal_dibuat}</Text>
+          <View style={{ width: "100%", textAlign: "center" }}>
+            <Image
+              style={{ width: "15%", height: "auto", marginBottom: 5 }}
+              src={qrImage}
+            />
+          </View>
           <Text style={styles.text}>
             Dengan menyadari sepenuhnya akan segala akibatnya termasuk
             sanksi-sanksi sesuai dengan ketentuan perundang-undangan yang

@@ -4,11 +4,13 @@ import { IoDocumentTextOutline } from "react-icons/io5";
 import { FaChevronDown, FaEdit, FaFilePdf } from "react-icons/fa";
 import { TiDeleteOutline } from "react-icons/ti";
 import { useParams, useSearchParams } from "react-router";
+import { useNavigateWithParams } from "@/hooks/useNavigateWithParams";
 
 const ReturFakturKeluaran = ({ data, sidebar }) => {
   const { id, akun } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const viewAsCompanyId = searchParams.get("viewAs");
+  const navigate = useNavigateWithParams();
   return (
     <div className="flex h-screen bg-gray-100">
       <SideBarEFaktur
@@ -36,6 +38,7 @@ const ReturFakturKeluaran = ({ data, sidebar }) => {
             <thead className="bg-gray-200">
               <tr>
                 <th className="border border-gray-300 py-2">No</th>
+                <th className="px-4 py-2 border">Aksi</th>
                 <th className="px-4 py-2 border">NPWP Pembeli</th>
                 <th className="px-4 py-2 border">Nama Pembeli</th>
                 <th className="px-4 py-2 border">Kode Transaksi</th>
@@ -65,6 +68,18 @@ const ReturFakturKeluaran = ({ data, sidebar }) => {
                   <tr key={item.id} className="hover:bg-gray-50">
                     <td className="border border-gray-300 px-1 py-2 text-center">
                       {index + 1}
+                    </td>
+                    <td className="px-4 py-2 border">
+                      <button
+                        onClick={() =>
+                          navigate(
+                            `/praktikum/${id}/sistem/${akun}/retur-faktur/pdf/${item.id}`
+                          )
+                        }
+                        className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs"
+                      >
+                        Lihat PDF
+                      </button>
                     </td>
                     <td className="px-4 py-2 border">
                       {item.akun_penerima_id?.npwp_akun || "-"}
