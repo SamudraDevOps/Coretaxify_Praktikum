@@ -3603,30 +3603,34 @@ const CreateKonsepSPT = ({ data }) => {
                         <thead className="bg-purple-700 text-white text-center">
                           <tr>
                             <th className="p-2 border-b ">No</th>
-                            <th className="p-2 border-b min-w-[200px]">
+                            <th className="p-2 border-b min-w-[200px] break-words">
                               Nama Pembeli BKP/Penerima Manfaat BKP Tidak
                               Berwujud/Penerima JKP
                             </th>
-                            <th className="p-2  border-b min-w-[150px]">
+                            <th className="p-2  border-b min-w-[150px] break-words">
                               NPWP/NIK/Nomor Paspor
                             </th>
-                            <th className="p-2 border-b min-w-[150px]">
+                            <th className="p-2 border-b min-w-[150px] break-words">
                               Faktur Pajak Dokumen Tertentu/Nota Retur/Nota
                               Pembatalan - nomor
                             </th>
-                            <th className="p-2 border-b min-w-[150px]">
+                              <th className="p-2 border-b min-w-[150px] break-words">
+                              Faktur Pajak Dokumen Tertentu/Nota Retur/Nota
+                              Pembatalan - Tanggal
+                            </th>
+                            <th className="p-2 border-b min-w-[150px] break-words">
                               Harga Jual/Pengganti/DPP (Rupiah)
                             </th>
-                            <th className="p-2 border-b min-w-[150px]">
+                            <th className="p-2 border-b min-w-[150px] break-words">
                               DPP Nilai Lain/DPP (Rupiah)
                             </th>
-                            <th className="p-2 border-b min-w-[150px]">
+                            <th className="p-2 border-b min-w-[150px] break-words">
                               PPN (Rupiah)
                             </th>
-                            <th className="p-2 border-b min-w-[150px]">
+                            <th className="p-2 border-b min-w-[150px] break-words">
                               PPnBM (Rupiah)
                             </th>
-                            <th className="p-2 border-b min-w-[150px]">
+                            <th className="p-2 border-b min-w-[150px] break-words">
                               Kode dan Nomor Seri Faktur Pajak Diganti/Diretur
                             </th>
                           </tr>
@@ -3668,7 +3672,7 @@ const CreateKonsepSPT = ({ data }) => {
                             <tr>
                               <td
                                 className="p-2 border-b text-center"
-                                colSpan={6}
+                                colSpan={10}
                               >
                                 No data available
                               </td>
@@ -3679,7 +3683,7 @@ const CreateKonsepSPT = ({ data }) => {
                           <tr>
                             <td
                               className="p-2 text-center min-w-[150px]"
-                              colSpan={4}
+                              colSpan={5}
                             >
                               Jumlah
                             </td>
