@@ -19,6 +19,7 @@ const PajakMasukan = ({
   onPageChange,
   currentPage = 1,
 }) => {
+  console.log(data);
   const { id, akun } = useParams();
   const [cookies] = useCookies(["token"]);
   const [selectedItems, setSelectedItems] = useState([]);

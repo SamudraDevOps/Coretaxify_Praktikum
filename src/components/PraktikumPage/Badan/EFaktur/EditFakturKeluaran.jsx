@@ -881,6 +881,10 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
     mutationFn: async () => {
       const csrf = await getCsrf();
       const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
+      console.log(
+        "tarif ppnbm log",
+        parseInt(tarif_ppnbm.replace(/\D/g, ""), 10) || 0
+      );
       return axios.post(
         `${RoutesApiReal.url}api/student/assignments/${id}/sistem/${accountId}/faktur/${faktur}/detail-transaksi`,
         {
@@ -2658,6 +2662,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                                         className="p-2 border rounded w-full"
                                         placeholder="Rp 0"
                                         allowNegative={false}
+                                        decimalScale={0}
                                       />
                                     </div>
                                     <div className="space-y-2">
@@ -2685,8 +2690,9 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                                         decimalSeparator=","
                                         prefix="Rp "
                                         className="p-2 border rounded w-full bg-gray-100"
-                                        // readOnly
+                                        readOnly
                                         placeholder="Rp 0"
+                                        decimalScale={0}
                                       />
                                     </div>
                                     <div className="space-y-2">
@@ -2713,6 +2719,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                                         className="p-2 border rounded w-full"
                                         placeholder="Rp 0"
                                         allowNegative={false}
+                                        decimalScale={0}
                                       />
                                     </div>
                                   </div>
@@ -2732,6 +2739,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                                         className="p-2 border rounded w-full bg-gray-100"
                                         // readOnly
                                         placeholder="Rp 0"
+                                        decimalScale={0}
                                       />
                                     </div>
                                     <div className="space-y-2">
@@ -2770,6 +2778,7 @@ ${isChecked ? "" : "bg-gray-100"}
                                           placeholder="Rp 0"
                                           allowNegative={false}
                                           disabled={!isChecked}
+                                          decimalScale={0}
                                         />
                                       </div>
                                       <div className="space-y-2">
@@ -2787,13 +2796,24 @@ ${isChecked ? "" : "bg-gray-100"}
                                         <label className="block text-sm font-medium">
                                           PPN
                                         </label>
-                                        <input
+
+                                        <NumericFormat
+                                          value={ppn}
+                                          thousandSeparator="."
+                                          decimalSeparator=","
+                                          prefix="Rp "
+                                          placeholder="Rp 0"
+                                          className="p-2 border rounded w-full bg-gray-100"
+                                          allowNegative={false}
+                                          decimalScale={0}
+                                        />
+                                        {/* <input
                                           type="text"
                                           className="p-2 border rounded w-full bg-gray-100"
                                           value={ppn}
                                           // readOnly
                                           placeholder="Rp 0"
-                                        />
+                                        /> */}
                                       </div>
                                       <div className="space-y-2">
                                         <label className="block text-sm font-medium">
@@ -2886,23 +2906,33 @@ ${isChecked ? "" : "bg-gray-100"}
                           <td className="px-2 py-2 border">{item.kuantitas}</td>
                           <td className="px-2 py-2 border">{item.satuan}</td>
                           <td className="px-2 py-2 border">
-                            {item.harga_satuan}
+                            {formatRupiah(item.harga_satuan)}
                           </td>
                           <td className="px-2 py-2 border">
-                            {item.total_harga}
+                            {formatRupiah(item.total_harga)}
                           </td>
                           <td className="px-2 py-2 border">
-                            {item.pemotongan_harga}
+                            {formatRupiah(item.pemotongan_harga)}
                           </td>
-                          <td className="px-2 py-2 border">{item.ppn}</td>
                           <td className="px-2 py-2 border">
-                            {item.ppnNominal}
+                            {/* {formatRupiah(item.ppn)} */}
+                            12%
                           </td>
-                          <td className="px-2 py-2 border">{item.dpp}</td>
-                          <td className="px-2 py-2 border">{item.jumlah}</td>
-                          <td className="px-2 py-2 border">{item.ppnbm}</td>
                           <td className="px-2 py-2 border">
-                            {item.tarif_ppnbm}
+                            {formatRupiah(item.ppnNominal)}
+                          </td>
+                          <td className="px-2 py-2 border">
+                            {formatRupiah(item.dpp)}
+                          </td>
+
+                          <td className="px-2 py-2 border">
+                            {formatRupiah(item.dpp_lain)}
+                          </td>
+                          <td className="px-2 py-2 border">
+                            {formatRupiah(item.ppnbm)}
+                          </td>
+                          <td className="px-2 py-2 border">
+                            {Number(item.tarif_ppnbm)} %
                           </td>
                         </tr>
                       ))
