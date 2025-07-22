@@ -252,6 +252,7 @@ const PajakMasukan = ({
                 <th className="px-4 py-2 border">Masa Pajak Pengkreditan</th>
                 <th className="px-4 py-2 border">Tahun Pajak Pengkreditan</th>
                 <th className="px-4 py-2 border">Status Faktur</th>
+                <th className="px-4 py-2 border">Status Pengkreditan</th>
                 <th className="px-4 py-2 border">
                   Harga Jual/Pengganti/DPP (Rp)
                 </th>
@@ -335,6 +336,11 @@ const PajakMasukan = ({
                     <td className="px-4 py-2 border">{"-"}</td>
                     <td className="px-4 py-2 border">{"-"}</td>
                     <td className="px-4 py-2 border">{item.status || "-"}</td>
+                    <td className="px-4 py-2 border">
+                      {item.is_kredit === 1
+                        ? "Sudah Dikreditkan"
+                        : "Belum Dikreditkan"}
+                    </td>
                     <td className="px-4 py-2 border">
                       {formatRupiah(item.dpp) || "-"}
                     </td>
