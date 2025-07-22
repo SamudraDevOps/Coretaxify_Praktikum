@@ -42,20 +42,20 @@ const ReturFakturMasukan = ({ data, sidebar }) => {
               onClick={() =>
                 navigate(`/praktikum/${id}/sistem/${akun}/e-faktur/buat-retur`)
               }
-              className="flex items-center bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-2 rounded"
+              className="flex items-center bg-blue-900 hover:bg-blue-600 text-white font-bold py-2 px-2 rounded"
             >
               Buat Retur
               <FaPlus className="text-lg text-white ml-3 " />
             </button>
-            <button className="flex items-center bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-2 rounded">
+            {/* <button className="flex items-center bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-2 rounded">
               Import Data
               <FaChevronDown className="text-lg text-white ml-2" />
-            </button>
+            </button> */}
           </div>
-          <button className="flex items-center bg-red-800 hover:bg-red-900 text-white font-bold py-2 px-2 rounded">
+          {/* <button className="flex items-center bg-red-800 hover:bg-red-900 text-white font-bold py-2 px-2 rounded">
             <TiDeleteOutline className="text-2xl text-white mr-2" />
             Batalkan Retur
-          </button>
+          </button> */}
         </div>
         <div className="w-full overflow-x-auto bg-white shadow-md rounded-lg ">
           <table className="table-auto border border-gray-300 ">
@@ -166,6 +166,7 @@ const ReturFakturMasukan = ({ data, sidebar }) => {
           </table>
         </div>
       </div>
+    </div>
     </div>
   );
 };
