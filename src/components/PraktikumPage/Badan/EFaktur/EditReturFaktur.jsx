@@ -813,6 +813,7 @@ const EditReturFaktur = ({ data, sidebar }) => {
                                     placeholder="Rp 0"
                                     allowNegative={false}
                                     readOnly
+                                    decimalScale={0}
                                   />
                                 </div>
                                 {/* <div className="space-y-2">
@@ -942,6 +943,7 @@ const EditReturFaktur = ({ data, sidebar }) => {
                                           !floatValue || floatValue <= maxValue
                                         );
                                       }}
+                                      decimalScale={0}
                                     />
                                     {/* Optional: Add a helper text to show the maximum allowed value */}
                                     <p className="text-xs text-gray-500">
@@ -978,6 +980,7 @@ const EditReturFaktur = ({ data, sidebar }) => {
                                       placeholder="Rp 0"
                                       allowNegative={false}
                                       disabled
+                                      decimalScale={0}
                                     />
                                     {/* <input
                                       className="p-2 border rounded w-full bg-gray-100"
@@ -1011,6 +1014,7 @@ const EditReturFaktur = ({ data, sidebar }) => {
                                       allowNegative={false}
                                       readOnly
                                       value={formatRupiah(transaction.dpp)}
+                                      decimalScale={0}
                                     />
                                   </div>
                                   <div className="space-y-2">
@@ -1074,6 +1078,7 @@ const EditReturFaktur = ({ data, sidebar }) => {
                                           !floatValue || floatValue <= maxValue
                                         );
                                       }}
+                                      decimalScale={0}
                                     />
                                     {/* Helper text to show maximum allowed value */}
                                     <p className="text-xs text-gray-500">
@@ -1152,6 +1157,7 @@ const EditReturFaktur = ({ data, sidebar }) => {
                                           !floatValue || floatValue <= maxValue
                                         );
                                       }}
+                                      decimalScale={0}
                                     />
                                     {/* Helper text to show maximum allowed value */}
                                     <p className="text-xs text-gray-500">
@@ -1173,6 +1179,7 @@ const EditReturFaktur = ({ data, sidebar }) => {
                                       value={ppnRetur}
                                       displayType="input"
                                       readOnly
+                                      decimalScale={0}
                                     />
                                     <p className="text-xs text-gray-500">
                                       PPN Faktur
@@ -1235,6 +1242,7 @@ const EditReturFaktur = ({ data, sidebar }) => {
                                           !floatValue || floatValue <= maxValue
                                         );
                                       }}
+                                      decimalScale={0}
                                     />
                                     {/* Helper text to show maximum allowed value */}
                                     <p className="text-xs text-gray-500">
@@ -1258,6 +1266,7 @@ const EditReturFaktur = ({ data, sidebar }) => {
                                       )}
                                       displayType="input"
                                       readOnly
+                                      decimalScale={0}
                                     />
                                     <p className="text-xs text-gray-500">
                                       PPnBM Faktur
