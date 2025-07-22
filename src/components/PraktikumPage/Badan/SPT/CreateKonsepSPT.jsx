@@ -4444,11 +4444,11 @@ const CreateKonsepSPT = ({ data }) => {
                               Nomor Identitas Pembeli BKP/Penerima Manfaat BKP
                               Tidak Berwujud/Penerima JKP
                             </th>
-                            <th className="p-2 border-b min-w-[150px]">
+                            {/* <th className="p-2 border-b min-w-[150px]">
                               Nama Pembeli BKP/penerima Manfaat BKP TIdak
                               Berwujud/Penerima JKP
-                            </th>
-                            <th className="p-2 border-b min-w-[150px]">
+                            </th> */}
+                            {/* <th className="p-2 border-b min-w-[150px]">
                               Tipe Transaksi PPN yang Dipungut
                             </th>
                             <th className="p-2 border-b min-w-[150px]">
@@ -4459,7 +4459,7 @@ const CreateKonsepSPT = ({ data }) => {
                             </th>
                             <th className="p-2 border-b min-w-[150px]">
                               Kode dan Nomor Seri Faktur Pajak yang Diganti
-                            </th>
+                            </th> */}
                             <th className="p-2 border-b min-w-[150px]">
                               Harga Jual/DPP (Rupiah)
                             </th>
@@ -4472,9 +4472,9 @@ const CreateKonsepSPT = ({ data }) => {
                             <th className="p-2 border-b min-w-[150px]">
                               PPnBM (Rupiah)
                             </th>
-                            <th className="p-2 border-b min-w-[150px]">
+                            {/* <th className="p-2 border-b min-w-[150px]">
                               Informasi
-                            </th>
+                            </th> */}
                           </tr>
                         </thead>
                         <tbody className="text-gray-600 text-center">
