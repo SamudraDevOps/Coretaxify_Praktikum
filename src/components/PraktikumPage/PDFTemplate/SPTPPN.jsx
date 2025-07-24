@@ -8,7 +8,7 @@ import {
   Image,
 } from "@react-pdf/renderer";
 import qrImage from "../../../assets/images/qr-web.png";
-import kopImage from "../../../assets/images/KOP PDF.jpg";
+import kopImage from "../../../assets/images/KOP/PPN.png";
 
 const styles = StyleSheet.create({
   page: { fontSize: 10, padding: 30, fontFamily: "Helvetica", lineHeight: 1.5 },

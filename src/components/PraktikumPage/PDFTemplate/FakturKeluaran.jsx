@@ -1,5 +1,14 @@
 import React from "react";
-import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
+import {
+  Document,
+  Page,
+  Text,
+  View,
+  StyleSheet,
+  Image,
+} from "@react-pdf/renderer";
+import kopImage from "../../../assets/images/KOP/FAKTURPAJAK.png";
+import qrImage from "../../../assets/images/qr-web.png";
 
 // Styles
 const styles = StyleSheet.create({
@@ -100,7 +109,13 @@ const FakturPajakKeluaranPdf = ({ data }) => (
   <Document>
     <Page size="A4" style={styles.page}>
       {/* Title */}
-      <Text style={styles.title}>Faktur Pajak</Text>
+      {/* <Text style={styles.title}>Faktur Pajak</Text> */}
+      <View style={{ width: "100%", textAlign: "center" }}>
+        <Image
+          style={{ width: "100%", height: "auto", marginBottom: 5 }}
+          src={kopImage}
+        />
+      </View>
 
       {/* Penjual */}
       {/* <View style={styles.section}> */}
@@ -359,6 +374,10 @@ const FakturPajakKeluaranPdf = ({ data }) => (
       <View style={styles.signature}>
         <Text>Tanggal : {data.tanggal_faktur_pajak}</Text>
         <Text style={{ marginTop: 20 }}>{data.penandatangan}</Text>
+        <Image
+          style={{ width: "15%", height: "auto", marginBottom: 5 }}
+          src={qrImage}
+        />
         <Text>Ditandatangani secara elektronik</Text>
       </View>
 

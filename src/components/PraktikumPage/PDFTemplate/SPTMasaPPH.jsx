@@ -7,7 +7,7 @@ import {
   StyleSheet,
   Image,
 } from "@react-pdf/renderer";
-import kopImage from "../../../assets/images/KOP PDF.jpg";
+import kopImage from "../../../assets/images/KOP/PPh 21_26.png";
 import qrImage from "../../../assets/images/qr-web.png";
 
 const styles = StyleSheet.create({
