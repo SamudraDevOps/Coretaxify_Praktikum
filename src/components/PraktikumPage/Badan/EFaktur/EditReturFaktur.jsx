@@ -898,7 +898,7 @@ const EditReturFaktur = ({ data, sidebar }) => {
                                   <input
                                     // type="number"
                                     value={formatRupiah(
-                                      transaction.total_harga
+                                      transaction.total_harga_asli
                                     )}
                                     className="p-2 border rounded w-full bg-gray-100"
                                     readOnly
