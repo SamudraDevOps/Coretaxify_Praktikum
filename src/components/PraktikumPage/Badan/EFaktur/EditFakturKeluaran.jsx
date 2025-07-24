@@ -70,7 +70,10 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
   const [savedTransaksi, setSavedTransaksi] = useState("");
 
   const [isChecked, setIsChecked] = useState(false);
-  const [jumlah, setJumlah] = useState(dpp);
+  // IMPORTANT
+  // const [jumlah, setJumlah] = useState(dpp);
+  const [jumlah, setJumlah] = useState(0); // or "", or null
+
   const [ppn, setTarifPPN] = useState("Rp 0");
   const [tarif_ppnbm, setTarifPPnBM] = useState("");
   const [ppnbm, setPPnBM] = useState("Rp 0");
@@ -87,6 +90,9 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
     satuan: "https://api.coretaxify.com/api/satuan",
   };
 
+  useEffect(() => {
+    console.log("Jumlah updated:", jumlah);
+  }, [jumlah]);
   // const fetchKodeByJenis = async (jenis) => {
   //   try {
   //     // Fetch kode transaksi
@@ -178,7 +184,12 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
       console.log("faktur data :", data);
       return data;
     },
+    staleTime: 0, // always considered stale
+    cacheTime: 0, // prevent caching
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
   });
+
   useEffect(() => {
     if (fakturData && !fakturLoading && !fakturError) {
       console.log("Setting formData from fakturData:", fakturData);
@@ -433,7 +444,6 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
   };
 
   const handleKuantitasChange = (e) => {
-    // alert("Kinti")
     console.log("quantity!");
     const qty = parseInt(e.target.value, 10) || 0;
     setKuantitas(qty);
@@ -790,7 +800,8 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
       setTotalHarga(transaksiToEdit.total_harga);
       setPotonganHarga(transaksiToEdit.pemotongan_harga);
       setDPP(transaksiToEdit.dpp);
-      setJumlah(transaksiToEdit.dpp_lain || 0);
+      setJumlah(transaksiToEdit.dpp_lain);
+      // alert(`setJumlah called ${jumlah}`);
       setTarifPPN(transaksiToEdit.ppn);
       setTarifPPnBM(
         transaksiToEdit.tarif_ppnbm ? `${transaksiToEdit.tarif_ppnbm}%` : ""
@@ -798,7 +809,11 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
       setPPnBM(transaksiToEdit.ppnbm);
 
       // Set checkbox state based on dpp_lain value
+      // IMPORTANT
       setIsChecked(transaksiToEdit.dpp_lain > 0);
+      setTimeout(() => {
+        setJumlah(transaksiToEdit.dpp_lain);
+      }, 0);
 
       // Make sure to fetch the correct options for the selected type
       if (transaksiToEdit.tipe) {
@@ -2761,7 +2776,8 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                                         {/* dpp :{dpp}
                                         jumlah:{jumlah} */}
                                         <NumericFormat
-                                          value={jumlah}
+                                          key={editingTransaksiId}
+                                          value={jumlah ?? 0}
                                           onValueChange={({ value }) => {
                                             if (isChecked) {
                                               setJumlah(value);
