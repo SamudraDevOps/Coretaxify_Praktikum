@@ -2713,7 +2713,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                                         className="p-2 border rounded w-full bg-gray-100"
                                         readOnly
                                         placeholder="Rp 0"
-                                        decimalScale={0}
+                                        
                                       />
                                     </div>
                                     <div className="space-y-2">
