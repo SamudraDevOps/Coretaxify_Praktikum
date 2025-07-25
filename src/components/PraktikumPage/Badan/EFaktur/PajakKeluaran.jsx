@@ -106,6 +106,41 @@ const PajakKeluaran = ({
     },
   });
 
+  const deleteMultipleFaktur = useMutation({
+    mutationFn: async () => {
+      const csrf = await getCsrf();
+      const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
+      return axios.post(
+        `${RoutesApi.apiUrl}student/assignments/${id}/sistem/${accountId}/faktur/delete-multiple`,
+        {
+          faktur_ids: selectedFakturIds,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": csrf,
+            Authorization: `Bearer ${cookies.token}`,
+          },
+        }
+      );
+    },
+    onSuccess: (data) => {
+      console.log(data);
+      Swal.fire("Berhasil!", "Faktur berhasil dihapus", "success").then(
+        (result) => {
+          if (result.isConfirmed) {
+            window.location.reload();
+          }
+        }
+      );
+    },
+    onError: (error) => {
+      console.error("Error deleting data:", error);
+      Swal.fire("Gagal!", "Terjadi kesalahan saat menghapus data.", "error");
+    },
+  });
+
   const handleCheckboxChange = (fakturId) => {
     if (selectedFakturIds.includes(fakturId)) {
       setSelectedFakturIds(selectedFakturIds.filter((id) => id !== fakturId));
@@ -178,6 +213,34 @@ const PajakKeluaran = ({
   const item = localStorage.getItem("selectedCompanyId");
   console.log(item);
 
+  const formatRupiah = (number) => {
+    // If data is null, undefined, or empty string, change it to 0
+    if (number === null || number === undefined || number === "") {
+      number = 0;
+    }
+
+    // Convert to string first to handle both string and number inputs
+    let stringValue = String(number);
+
+    // Normalize "0.00" to "0"
+    if (stringValue === "0.00") stringValue = "0";
+
+    // Remove any non-numeric characters except decimal point and negative sign
+    const cleanedValue = stringValue.replace(/[^0-9.-]/g, "");
+
+    // Convert to number
+    const numericValue = parseFloat(cleanedValue);
+
+    // Check if conversion was successful, if not return "0"
+    if (isNaN(numericValue)) return "0";
+
+    return new Intl.NumberFormat("id-ID", {
+      style: "decimal",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0, // This ensures no decimal places are shown
+    }).format(numericValue);
+  };
+
   return (
     <div className="flex h-screen bg-gray-100 ">
       <SideBarEFaktur
@@ -200,7 +263,11 @@ const PajakKeluaran = ({
               <div className="flex  text-left text-sm" ref={dropdownRef}>
                 <button
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                  className={userId ? "hidden" : "flex items-center bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-2 rounded"}
+                  className={
+                    userId
+                      ? "hidden"
+                      : "flex items-center bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-2 rounded"
+                  }
                 >
                   Import <FaChevronDown className="ml-2" />
                 </button>
@@ -209,22 +276,35 @@ const PajakKeluaran = ({
                     <div className="py-1">
                       <a
                         href="/template-import-pajak-keluaran.xlsx"
-                        className={userId ? "hidden" : "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"}
+                        className={
+                          userId
+                            ? "hidden"
+                            : "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        }
                       >
                         Download Template
                       </a>
-                      <a className={userId ? "hidden" : "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"}>
+                      <a
+                        className={
+                          userId
+                            ? "hidden"
+                            : "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+                        }
+                      >
                         Import Dokumen
                       </a>
                     </div>
                   </div>
                 )}
-                
               </div>
             )}
             {/* {item && ( */}
             <button
-              className={userId ? "hidden" : "flex items-center bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded text-sm"}
+              className={
+                userId
+                  ? "hidden"
+                  : "flex items-center bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded text-sm"
+              }
               // onClick={
               //   () =>
               //     (window.location.href = `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran/tambah-faktur-keluaran`)
@@ -247,12 +327,48 @@ const PajakKeluaran = ({
             <button
               onClick={() => approveMultipleFaktur.mutate()}
               disabled={selectedFakturIds.length === 0}
-              className={userId ? "hidden" : "flex items-center bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded text-sm"}
+              className={
+                userId
+                  ? "hidden"
+                  : "flex items-center bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded text-sm"
+              }
             >
               Upload Faktur
             </button>
-            <button className={userId ? "hidden" : "flex items-center bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-2 rounded text-sm"}>
-              Hapus Dokumen
+            <button
+              onClick={() => {
+                if (selectedFakturIds.length === 0) return;
+
+                Swal.fire({
+                  title: "Apakah Anda yakin?",
+                  text: `Anda akan menghapus ${selectedFakturIds.length} faktur yang dipilih`,
+                  icon: "warning",
+                  showCancelButton: true,
+                  confirmButtonColor: "#d33",
+                  cancelButtonColor: "#3085d6",
+                  confirmButtonText: "Ya, hapus!",
+                  cancelButtonText: "Batal",
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    deleteMultipleFaktur.mutate();
+                  }
+                });
+              }}
+              disabled={
+                selectedFakturIds.length === 0 || deleteMultipleFaktur.isPending
+              }
+              className={`${
+                userId
+                  ? "hidden"
+                  : selectedFakturIds.length === 0 ||
+                    deleteMultipleFaktur.isPending
+                  ? "flex items-center bg-gray-400 cursor-not-allowed text-white font-bold py-2 px-2 rounded text-sm"
+                  : "flex items-center bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-2 rounded text-sm"
+              }`}
+            >
+              {deleteMultipleFaktur.isPending
+                ? "Menghapus..."
+                : "Hapus Dokumen"}
             </button>
           </div>
           {/* )} */}
@@ -264,7 +380,17 @@ const PajakKeluaran = ({
             <thead className="bg-gray-200">
               <tr>
                 <th className="px-6 py-2 border">No</th>
-                <th className="px-8 py-2 border">Checklist</th>
+                <th className="px-8 py-2 border">
+                  <div className="flex items-center justify-center">
+                    <input
+                      type="checkbox"
+                      className="form-checkbox h-5 w-5"
+                      checked={isSelectAll}
+                      onChange={handleSelectAll}
+                    />
+                    <span className="ml-2">Checklist</span>
+                  </div>
+                </th>
                 <th className="px-4 py-2 border">Aksi</th>
                 <th className="px-4 py-2 border">NPWP Pembeli</th>
                 <th className="px-4 py-2 border">Nama Pembeli</th>
@@ -276,12 +402,12 @@ const PajakKeluaran = ({
                 <th className="px-4 py-2 border">Status</th>
                 <th className="px-4 py-2 border">ESignStatus</th>
                 <th className="px-4 py-2 border">
-                  Harga Jual / Penggantian / DPP
+                  Harga Jual / Penggantian / DPP (Rp)
                 </th>
-                <th className="px-4 py-2 border">DPP Nilai Lain / DPP</th>
-                <th className="px-4 py-2 border">PPN</th>
-                <th className="px-4 py-2 border">PPNBM</th>
-                <th className="px-4 py-2 border">PPNBM</th>
+                <th className="px-4 py-2 border">DPP Nilai Lain / DPP (Rp)</th>
+                <th className="px-4 py-2 border">PPN (Rp)</th>
+                <th className="px-4 py-2 border">PPNBM (Rp)</th>
+                {/* <th className="px-4 py-2 border">PPNBM Nilai (Rp)</th> */}
                 <th className="px-4 py-2 border">Penandatangan</th>
                 <th className="px-4 py-2 border">Referensi</th>
                 <th className="px-4 py-2 border">Dilaporkan Oleh Penjual</th>
@@ -314,7 +440,11 @@ const PajakKeluaran = ({
                               `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran/edit-faktur-keluaran/${item.id}`
                             )
                           }
-                          className={userId ? "hidden" : "bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs"}
+                          className={
+                            userId
+                              ? "hidden"
+                              : "bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs"
+                          }
                         >
                           Edit
                         </button>
@@ -335,7 +465,9 @@ const PajakKeluaran = ({
                           className={`px-2 py-1 rounded text-xs text-white ${
                             deleteFaktur.isPending
                               ? "bg-gray-400 cursor-not-allowed"
-                              : userId ? "hidden" : "bg-red-500 hover:bg-red-600"
+                              : userId
+                              ? "hidden"
+                              : "bg-red-500 hover:bg-red-600"
                           }`}
                         >
                           {deleteFaktur.isPending ? "Menghapus..." : "Hapus"}
@@ -365,10 +497,20 @@ const PajakKeluaran = ({
                     <td className="px-4 py-2 border">
                       {item.esign_status || "-"}
                     </td>
-                    <td className="px-4 py-2 border">{item.dpp || "-"}</td>
-                    <td className="px-4 py-2 border">{item.dpp_lain || "-"}</td>
-                    <td className="px-4 py-2 border">{item.ppn || "-"}</td>
-                    <td className="px-4 py-2 border">{item.ppnbm || "-"}</td>
+                    <td className="px-4 py-2 border">
+                      {formatRupiah(item.dpp) || "-"}
+                    </td>
+
+                    {/* <td className="px-4 py-2 border">{item.dpp || "-"}</td> */}
+                    <td className="px-4 py-2 border">
+                      {formatRupiah(item.dpp_lain) || "-"}
+                    </td>
+                    <td className="px-4 py-2 border">
+                      {formatRupiah(item.ppn) || "-"}
+                    </td>
+                    <td className="px-4 py-2 border">
+                      {formatRupiah(item.ppnbm || "-")}
+                    </td>
                     {/* <td className="px-4 py-2 border">
                       {item.ppnbm_nilai || "-"}
                     </td> */}

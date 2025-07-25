@@ -18,6 +18,33 @@ const BUPOTTable = ({
   const [searchParams, setSearchParams] = useSearchParams();
   const userId = searchParams.get("user_id");
 
+  const formatRupiah = (number) => {
+    // If data is null, undefined, or empty string, change it to 0
+    if (number === null || number === undefined || number === "") {
+      number = 0;
+    }
+
+    // Convert to string first to handle both string and number inputs
+    let stringValue = String(number);
+
+    // Normalize "0.00" to "0"
+    if (stringValue === "0.00") stringValue = "0";
+
+    // Remove any non-numeric characters except decimal point and negative sign
+    const cleanedValue = stringValue.replace(/[^0-9.-]/g, "");
+
+    // Convert to number
+    const numericValue = parseFloat(cleanedValue);
+
+    // Check if conversion was successful, if not return "0"
+    if (isNaN(numericValue)) return "0";
+
+    return new Intl.NumberFormat("id-ID", {
+      style: "decimal",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0, // This ensures no decimal places are shown
+    }).format(numericValue);
+  };
   // handle select all
   const handleSelectAll = (e) => {
     if (e.target.checked) {
@@ -138,6 +165,11 @@ const BUPOTTable = ({
                           </button>
                         </div>
                       </div>
+                    ) : // row[column.key]
+                    // <>{row[column.key]}{column.key}</>
+                    column.key === "dasar_pengenaan_pajak" ||
+                      column.key === "pajak_penghasilan" ? (
+                      formatRupiah(row[column.key])
                     ) : (
                       row[column.key]
                     )}

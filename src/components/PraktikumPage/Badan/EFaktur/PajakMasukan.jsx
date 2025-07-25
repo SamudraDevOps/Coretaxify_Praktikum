@@ -20,6 +20,7 @@ const PajakMasukan = ({
   onPageChange,
   currentPage = 1,
 }) => {
+  console.log(data);
   const { id, akun } = useParams();
   const [cookies] = useCookies(["token"]);
   const [selectedItems, setSelectedItems] = useState([]);
@@ -27,6 +28,34 @@ const PajakMasukan = ({
   const [searchParams, setSearchParams] = useSearchParams();
   const viewAsCompanyId = searchParams.get("viewAs");
   const userId = searchParams.get("user_id");
+
+  const formatRupiah = (number) => {
+    // If data is null, undefined, or empty string, change it to 0
+    if (number === null || number === undefined || number === "") {
+      number = 0;
+    }
+
+    // Convert to string first to handle both string and number inputs
+    let stringValue = String(number);
+
+    // Normalize "0.00" to "0"
+    if (stringValue === "0.00") stringValue = "0";
+
+    // Remove any non-numeric characters except decimal point and negative sign
+    const cleanedValue = stringValue.replace(/[^0-9.-]/g, "");
+
+    // Convert to number
+    const numericValue = parseFloat(cleanedValue);
+
+    // Check if conversion was successful, if not return "0"
+    if (isNaN(numericValue)) return "0";
+
+    return new Intl.NumberFormat("id-ID", {
+      style: "decimal",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0, // This ensures no decimal places are shown
+    }).format(numericValue);
+  };
 
   // Extract page numbers from pagination URLs
   const getPageFromUrl = (url) => {
@@ -231,10 +260,13 @@ const PajakMasukan = ({
                 <th className="px-4 py-2 border">Masa Pajak Pengkreditan</th>
                 <th className="px-4 py-2 border">Tahun Pajak Pengkreditan</th>
                 <th className="px-4 py-2 border">Status Faktur</th>
-                <th className="px-4 py-2 border">Harga Jual/Pengganti/DPP</th>
-                <th className="px-4 py-2 border">DPP Nilai Lain / DPP</th>
-                <th className="px-4 py-2 border">PPN</th>
-                <th className="px-4 py-2 border">PPnBM</th>
+                <th className="px-4 py-2 border">Status Pengkreditan</th>
+                <th className="px-4 py-2 border">
+                  Harga Jual/Pengganti/DPP (Rp)
+                </th>
+                <th className="px-4 py-2 border">DPP Nilai Lain / DPP (Rp)</th>
+                <th className="px-4 py-2 border">PPN (Rp)</th>
+                <th className="px-4 py-2 border">PPnBM (Rp)</th>
                 <th className="px-4 py-2 border">Perekam (Pengirim faktur)</th>
                 <th className="px-4 py-2 border">Nomor SP2D</th>
                 <th className="px-4 py-2 border">Valid</th>
@@ -275,7 +307,7 @@ const PajakMasukan = ({
                         >
                           Lihat PDF
                         </button>
-                        <button
+                        {/* <button
                           onClick={() =>
                             navigate(
                               `/praktikum/${id}/sistem/${akun}/e-faktur/retur-pajak/${item.id}`
@@ -284,7 +316,20 @@ const PajakMasukan = ({
                           className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs"
                         >
                           <GoArrowSwitch></GoArrowSwitch>
-                        </button>
+                        </button> */}
+                        {item.is_kredit === 1 && (
+                          <button
+                            onClick={() =>
+                              navigate(
+                                `/praktikum/${id}/sistem/${akun}/e-faktur/retur-pajak/${item.id}`
+                              )
+                            }
+                            className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs"
+                          >
+                            <GoArrowSwitch />
+                          </button>
+                        )}
+
                         {/* <button className="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-xs">
                           Hapus
                         </button> */}
@@ -312,18 +357,34 @@ const PajakMasukan = ({
                     <td className="px-4 py-2 border">{"-"}</td>
                     <td className="px-4 py-2 border">{"-"}</td>
                     <td className="px-4 py-2 border">{item.status || "-"}</td>
-                    <td className="px-4 py-2 border">{item.dpp || "-"}</td>
-                    <td className="px-4 py-2 border">{item.dpp_lain || "-"}</td>
-                    <td className="px-4 py-2 border">{item.ppn || "-"}</td>
-                    <td className="px-4 py-2 border">{item.ppnbm || "-"}</td>
-                    <td className="px-4 py-2 border">{"-"}</td>
-                    <td className="px-4 py-2 border">{"-"}</td>
-                    <td className="px-4 py-2 border">{"-"}</td>
                     <td className="px-4 py-2 border">
-                      {item.dilaporkan_penjual == 1 ? "Ya" : "Tidak"}
+                      {item.is_kredit === 1
+                        ? "Sudah Dikreditkan"
+                        : "Belum Dikreditkan"}
                     </td>
                     <td className="px-4 py-2 border">
-                      {item.dilaporkan_pemungut == 1 ? "Ya" : "Tidak"}
+                      {formatRupiah(item.dpp) || "-"}
+                    </td>
+                    <td className="px-4 py-2 border">
+                      {formatRupiah(item.dpp_lain) || "-"}
+                    </td>
+                    <td className="px-4 py-2 border">
+                      {formatRupiah(item.ppn) || "-"}
+                    </td>
+                    {/* <td className="px-4 py-2 border">{formatRupiah(item.ppn_lain) || "-"}</td> */}
+                    <td className="px-4 py-2 border">
+                      {formatRupiah(item.ppnbm) || "-"}
+                    </td>
+                    <td className="px-4 py-2 border">{"-"}</td>
+                    <td className="px-4 py-2 border">{"-"}</td>
+                    <td className="px-4 py-2 border">
+                      {item.dilaporkan_oleh_penjual == 1 ? "Ya" : "Tidak"}
+                    </td>
+                    <td className="px-4 py-2 border">
+                      {item.dilaporkan_oleh_pemungut_ppn == 1 ? "Ya" : "Tidak"}
+                    </td>
+                    <td className="px-4 py-2 border">
+                      {item.dilaporkan_oleh_penjual == 1 ? "Ya" : "Tidak"}
                     </td>
                   </tr>
                 ))

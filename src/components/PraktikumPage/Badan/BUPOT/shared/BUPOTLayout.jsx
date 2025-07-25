@@ -39,7 +39,7 @@ const BUPOTLayout = ({
     { key: "npwp_akun", label: "NPWP" },
     { key: "nama_akun", label: "Nama" },
     { key: "dasar_pengenaan_pajak", label: "Dasar Pengenaan Pajak (RP)" },
-    { key: "pajak_penghasilan", label: "Pajak Penghasilan" },
+    { key: "pajak_penghasilan", label: "Pajak Penghasilan (RP)" },
     { key: "fasilitas_pajak", label: "Fasilitas Pajak" },
   ];
 

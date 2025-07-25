@@ -9,7 +9,7 @@ import {
   Font,
   Image,
 } from "@react-pdf/renderer";
-import kopImage from "../../../assets/images/KOP PDF.jpg";
+import kopImage from "../../../assets/images/KOP/UNIFIKASI.png";
 import qrImage from "../../../assets/images/qr-web.png";
 
 // Styles

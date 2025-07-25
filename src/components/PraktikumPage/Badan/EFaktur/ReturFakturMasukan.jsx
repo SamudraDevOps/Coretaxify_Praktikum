@@ -14,6 +14,33 @@ const ReturFakturMasukan = ({ data, sidebar }) => {
   const userId = searchParams.get("user_id");
   const navigate = useNavigateWithParams();
   console.log("retur masukan :", data);
+  const formatRupiah = (number) => {
+    // If data is null, undefined, or empty string, change it to 0
+    if (number === null || number === undefined || number === "") {
+      number = 0;
+    }
+
+    // Convert to string first to handle both string and number inputs
+    let stringValue = String(number);
+
+    // Normalize "0.00" to "0"
+    if (stringValue === "0.00") stringValue = "0";
+
+    // Remove any non-numeric characters except decimal point and negative sign
+    const cleanedValue = stringValue.replace(/[^0-9.-]/g, "");
+
+    // Convert to number
+    const numericValue = parseFloat(cleanedValue);
+
+    // Check if conversion was successful, if not return "0"
+    if (isNaN(numericValue)) return "0";
+
+    return new Intl.NumberFormat("id-ID", {
+      style: "decimal",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0, // This ensures no decimal places are shown
+    }).format(numericValue);
+  };
   return (
     <div className="flex h-screen bg-gray-100">
       <SideBarEFaktur
@@ -81,11 +108,11 @@ const ReturFakturMasukan = ({ data, sidebar }) => {
                 <th className="px-4 py-2 border">Status Faktur</th>
                 <th className="px-4 py-2 border">ESignStatus</th>
                 <th className="px-4 py-2 border">
-                  Harga Jual / Penggantian / DPP
+                  Harga Jual / Penggantian / DPP (Rp)
                 </th>
-                <th className="px-4 py-2 border">DPP Nilai Lain / DPP</th>
-                <th className="px-4 py-2 border">PPN</th>
-                <th className="px-4 py-2 border">PPnMB</th>
+                <th className="px-4 py-2 border">DPP Nilai Lain / DPP (Rp)</th>
+                <th className="px-4 py-2 border">PPN (Rp)</th>
+                <th className="px-4 py-2 border">PPnMB (Rp)</th>
                 <th className="px-4 py-2 border">Penandatanganan</th>
                 <th className="px-4 py-2 border">Referensi</th>
                 <th className="px-4 py-2 border">Dilaporkan Oleh Pengguna</th>
@@ -139,15 +166,17 @@ const ReturFakturMasukan = ({ data, sidebar }) => {
                     <td className="px-4 py-2 border">
                       {item.esign_status || "-"}
                     </td>
-                    <td className="px-4 py-2 border">{item.dpp || "-"}</td>
                     <td className="px-4 py-2 border">
-                      {item.dpp_lain_retur || "-"}
+                      {formatRupiah(item.dpp || "-")}
                     </td>
                     <td className="px-4 py-2 border">
-                      {item.ppn_retur || "-"}
+                      {formatRupiah(item.dpp_lain_retur || "-")}
                     </td>
                     <td className="px-4 py-2 border">
-                      {item.ppnbm_retur || "-"}
+                      {formatRupiah(item.ppn_retur || "-")}
+                    </td>
+                    <td className="px-4 py-2 border">
+                      {formatRupiah(item.ppnbm_retur || "-")}
                     </td>
                     <td className="px-4 py-2 border">
                       {item.penandatangan || "-"}
