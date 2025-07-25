@@ -689,9 +689,9 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
         : "Faktur berhasil diupload";
 
       Swal.fire("Berhasil!", successMessage, "success").then((result) => {
-        // if (result.isConfirmed) {
-        //   window.location.href = `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran?viewAs=${viewAsCompanyId}`;
-        // }
+        if (result.isConfirmed) {
+          window.location.href = `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran?viewAs=${viewAsCompanyId}`;
+        }
       });
     },
     onError: (error) => {
