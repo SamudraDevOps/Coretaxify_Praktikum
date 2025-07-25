@@ -22,6 +22,7 @@ import { IntentEnum } from "@/enums/IntentEnum";
 import { RxCross1 } from "react-icons/rx";
 import { FaRegCopy } from "react-icons/fa";
 import { useToast } from "@/hooks/use-toast";
+import { useOutletContext } from "react-router-dom";
 
 const DosenCoretaxify = () => {
   // State management
@@ -31,6 +32,7 @@ const DosenCoretaxify = () => {
   const [search, setSearch] = useState("");
   const [filePreview, setFilePreview] = useState(null);
   const [editFilePreview, setEditFilePreview] = useState(null);
+  const { user } = useOutletContext();
   const [formData, setFormData] = useState({
     name: "",
     task_id: "",
@@ -66,6 +68,16 @@ const DosenCoretaxify = () => {
         headers: {
           Authorization: `Bearer ${cookies.token}`,
         },
+        params: {
+          relation_column_filters: {
+            assignment: {
+              tipe: "assignment",
+            },
+          },
+          column_filters: {
+            user_id: user.data.id
+          }
+        }
       });
       return data;
     },

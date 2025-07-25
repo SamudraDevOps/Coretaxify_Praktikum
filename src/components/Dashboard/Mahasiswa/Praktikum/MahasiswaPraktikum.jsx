@@ -1,9 +1,7 @@
-// import React from "react";
 import React, { useState } from "react";
 // import "../Pengguna/Mahasiswa/editMahasiswa.css";
 // import EditPopupMahasiswa from "../Pengguna/Mahasiswa/EditPopupMahasiswa";
 import Swal from "sweetalert2";
-
 import {
   AlertDialog,
   AlertDialogAction,
@@ -23,16 +21,18 @@ import { ClipLoader } from "react-spinners";
 import { joinAssignmentMahasiswa } from "@/hooks/dashboard/useMahasiswa";
 import { getCookie } from "@/service";
 import { getCsrf } from "@/service/getCsrf";
+import { useOutletContext } from "react-router-dom";
 
 export default function MahasiswaPraktikum() {
   const [isOpen, setIsOpen] = useState(false);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
   const [selectedData, setSelectedData] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = 20;
   const [cookies, setCookie] = useCookies(["user"]);
   // const [url, setUrl] = useState(`${RoutesApi.url}api/student/assignments`);
   const [url, setUrl] = useState(`${RoutesApi.url}api/student/assignment-user`);
+  const { user } = useOutletContext();
 
   const { isLoading, isError, data, error, refetch } = useQuery({
     queryKey: ["praktikum", url],
@@ -42,8 +42,17 @@ export default function MahasiswaPraktikum() {
           Authorization: `Bearer ${cookies.token}`,
           Accept: "application/json",
         },
+        params: {
+          relation_column_filters: {
+            assignment: {
+              tipe: "assignment",
+            },
+          },
+          column_filters: {
+            user_id: user.data.id,
+          },
+        },
       });
-      console.log(data);
       return data;
     },
   });
@@ -183,7 +192,10 @@ export default function MahasiswaPraktikum() {
             onChange={(e) => setSearch(e.target.value)}
           />
           <AlertDialog>
-            <AlertDialogTrigger className="bg-blue-800 p-2 rounded-md text-white hover:bg-blue-900" onClick={() => resetForm()}>
+            <AlertDialogTrigger
+              className="bg-blue-800 p-2 rounded-md text-white hover:bg-blue-900"
+              onClick={() => resetForm()}
+            >
               Tambah Praktikum
             </AlertDialogTrigger>
             <AlertDialogContent>
@@ -241,22 +253,15 @@ export default function MahasiswaPraktikum() {
           <tbody>
             {data.data.map((item, index) => (
               <tr key={index}>
-                <td>{item.assignment.group.name}</td>
-                <td></td>
-                {/* <td>{item.assignment.dosen.name}</td> */}
+                <td>{item.assignment?.group?.name}</td>
+                <td>{item.assignment?.group?.teacher}</td>
                 <td>{item.assignment.name}</td>
-                {/* <td className="max-w-5">
-                  <p className="truncate">{item.assignment.assignment_code}</p>
-                </td> */}
                 <td className="max-w-5">
                   <p className="">{item.assignment.end_period}</p>
                 </td>
                 <td>
                   <button
                     className="action-button"
-                    // onClick={() => {
-                    //   startPraktikum.mutate(item.id);
-                    // }}
                     disabled={startPraktikum.isPending}
                     onClick={() => {
                       if (item.is_start === 1) {

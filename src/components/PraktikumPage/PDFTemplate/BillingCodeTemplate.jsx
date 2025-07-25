@@ -1,7 +1,16 @@
 import React from "react";
-import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
+import {
+  Document,
+  Page,
+  Text,
+  View,
+  StyleSheet,
+  Image,
+} from "@react-pdf/renderer";
 import { numberToTerbilang } from "@/hooks/numberToTerbilang";
 
+import kopImage from "../../../assets/images/KOP/PEMBAYARAN.png";
+import qrImage from "../../../assets/images/qr-web.png";
 // Styles
 const styles = StyleSheet.create({
   page: {
@@ -144,8 +153,14 @@ const BillingCodePdf = ({ data }) => {
     <Document>
       <Page size="A4" style={styles.page}>
         {/* Header */}
-        <Text style={styles.header}>SAMUDERA EDUKASI</Text>
-        <Text style={styles.subHeader}>TEKNOLOGI</Text>
+        {/* <Text style={styles.header}>SAMUDERA EDUKASI</Text>
+        <Text style={styles.subHeader}>TEKNOLOGI</Text> */}
+        <View style={{ width: "100%", textAlign: "center" }}>
+          <Image
+            style={{ width: "100%", height: "auto", marginBottom: 5 }}
+            src={kopImage}
+          />
+        </View>
 
         {/* Billing Code */}
         <View style={styles.rightAlignedSection}>

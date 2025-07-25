@@ -61,7 +61,7 @@ const BpnrTelahTerbit = () => {
                                   <th className="px-4 py-2 border">NPWP</th>
                                   <th className="px-4 py-2 border">Nama</th>
                                   <th className="px-4 py-2 border">Dasar Pengenaan Pajak (RP)</th>
-                                  <th className="px-4 py-2 border">Pajak Penghasilan</th>
+                                  <th className="px-4 py-2 border">Pajak Penghasilan (RP)</th>
                                   <th className="px-4 py-2 border">Fasilitas Pajak</th>
                                   <th className="px-4 py-2 border">Dilaporkan Dalam SPT</th>
                                   <th className="px-4 py-2 border">SPT telah/sedang diperiksa</th>

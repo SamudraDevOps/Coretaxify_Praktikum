@@ -74,9 +74,9 @@ const RiwayatBilling = ({ data, sidebar }) => {
               </th>
               <th className="py-2 px-4 border-b text-center">NPWP</th>
               <th className="py-2 px-4 border-b text-center">Kode Billing</th>
-              <th className="py-2 px-4 border-b text-center">
+              {/* <th className="py-2 px-4 border-b text-center">
                 Returnsheet Type
-              </th>
+              </th> */}
               <th className="py-2 px-4 border-b text-center">Mata Uang</th>
               <th className="py-2 px-4 border-b text-center">Jumlah Total</th>
               <th className="py-2 px-4 border-b text-center">Masa Aktif</th>
@@ -109,9 +109,9 @@ const RiwayatBilling = ({ data, sidebar }) => {
                   <td className="py-4 px-4 border-b">{item.nama}</td>
                   <td className="py-4 px-4 border-b">{item.npwp}</td>
                   <td className="py-4 px-4 border-b">{item.kode_billing}</td>
-                  <td className="py-4 px-4 border-b">
-                    {item.kapKjs || "SPT Masa PPN"}
-                  </td>
+                  {/* <td className="py-4 px-4 border-b">
+                    {item.kapKjs || "-"}
+                  </td> */}
                   <td className="py-4 px-4 border-b">IDR</td>
                   <td className="py-4 px-4 border-b">
                     Rp {parseFloat(item.nilai).toLocaleString("id-ID")}

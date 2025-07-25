@@ -178,6 +178,34 @@ const CreateKonsepSPT = ({ data }) => {
   //     maximumFractionDigits: 0, // This ensures no decimal places are shown
   //   }).format(numericValue);
   // };
+  const formatRupiahRP = (number) => {
+    // If data is null, undefined, or empty string, change it to 0
+    if (number === null || number === undefined || number === "") {
+      number = 0;
+    }
+
+    // Convert to string first to handle both string and number inputs
+    let stringValue = String(number);
+
+    // Remove any non-numeric characters except decimal point and negative sign
+    const cleanedValue = stringValue.replace(/[^0-9.-]/g, "");
+
+    // Convert to number
+    const numericValue = parseFloat(cleanedValue);
+
+    // Check if conversion was successful, if not return "Rp 0"
+    if (isNaN(numericValue)) return "Rp 0";
+
+    // Format the number with Indonesian locale and add Rp prefix
+    const formatted = new Intl.NumberFormat("id-ID", {
+      style: "decimal",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(Math.round(numericValue)); // Round to ensure no decimals
+
+    return `Rp ${formatted}`;
+  };
+
   const formatRupiah = (number) => {
     // If data is null, undefined, or empty string, change it to 0
     if (number === null || number === undefined || number === "") {
@@ -493,7 +521,7 @@ const CreateKonsepSPT = ({ data }) => {
       const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
       const response = await axios.get(
         RoutesApi.apiUrl +
-          `student/assignments/${id}/sistem/${accountId}/spt/${idSpt}/show-faktur-ppn`,
+        `student/assignments/${id}/sistem/${accountId}/spt/${idSpt}/show-faktur-ppn`,
         {
           headers: {
             Authorization: `Bearer ${cookies.token}`,
@@ -875,8 +903,8 @@ const CreateKonsepSPT = ({ data }) => {
   // }
 
   return (
-    <div className="flex h-screen bg-gray-100">
-      <div className="flex-auto p-3 bg-white rounded-md h-full">
+    <div className="flex h-screen bg-gray-100 ">
+      <div className="flex-auto p-3 bg-white rounded-md h-full min-w-0">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-3xl font-light text-yellow-500 mt-4">
             SURAT PEMBERITAHUAN MASA PAJAK PERTAMBAHAN NILAI (SPT MASA PPN)
@@ -2201,7 +2229,7 @@ const CreateKonsepSPT = ({ data }) => {
                               // value={data.detail_spt.cl_3e_ppn}
                               name="cl_3e_ppn"
                               readOnly
-                              // onChange={handleChange}
+                            // onChange={handleChange}
                             />
                           </td>
                           <td className="p-2 flex items-center gap-2"></td>
@@ -3114,7 +3142,7 @@ const CreateKonsepSPT = ({ data }) => {
                             name="ditandatangani"
                             className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
                             disabled
-                            // value={}
+                          // value={}
                           />
                           <label
                             htmlFor="PKP"
@@ -3208,13 +3236,12 @@ const CreateKonsepSPT = ({ data }) => {
                     <button
                       onClick={() => saveConcept.mutate()}
                       disabled={saveConcept.isPending}
-                      className={`py-2 px-4 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-sm flex items-center justify-center ${
-                        saveConcept.isPending
+                      className={`py-2 px-4 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-sm flex items-center justify-center ${saveConcept.isPending
                           ? "bg-blue-400 text-white cursor-not-allowed"
                           : userId
-                          ? "hidden"
-                          : "bg-blue-700 text-white hover:bg-blue-800"
-                      }`}
+                            ? "hidden"
+                            : "bg-blue-700 text-white hover:bg-blue-800"
+                        }`}
                     >
                       {saveConcept.isPending ? (
                         <>
@@ -3253,19 +3280,18 @@ const CreateKonsepSPT = ({ data }) => {
                           payDeposit.isPending ||
                           payBilling.isPending
                         }
-                        className={`py-2 px-4 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-sm flex items-center justify-center ${
-                          saveConcept.isPending ||
-                          payDeposit.isPending ||
-                          payBilling.isPending
+                        className={`py-2 px-4 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-sm flex items-center justify-center ${saveConcept.isPending ||
+                            payDeposit.isPending ||
+                            payBilling.isPending
                             ? "bg-blue-400 text-white cursor-not-allowed"
                             : userId
-                            ? "hidden"
-                            : "bg-blue-700 text-white hover:bg-blue-800"
-                        }`}
+                              ? "hidden"
+                              : "bg-blue-700 text-white hover:bg-blue-800"
+                          }`}
                       >
                         {saveConcept.isPending ||
-                        payDeposit.isPending ||
-                        payBilling.isPending ? (
+                          payDeposit.isPending ||
+                          payBilling.isPending ? (
                           <>
                             <svg
                               className="animate-spin -ml-1 mr-3 h-4 w-4 text-white"
@@ -3572,8 +3598,8 @@ const CreateKonsepSPT = ({ data }) => {
                         </div>
                       </div>
                     )}
-                    <div className=" w-[1450px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden ">
-                      <table className="table-auto text-sm text-left border overflow-hidden">
+                    <div className="border rounded-md p-4 overflow-x-auto">
+                      <table className="min-w-full text-sm text-left border overflow-x-auto">
                         <thead className="bg-purple-700 text-white text-center">
                           <tr>
                             <th className="p-2 border-b ">No</th>
@@ -3606,8 +3632,8 @@ const CreateKonsepSPT = ({ data }) => {
                           </tr>
                         </thead>
                         <tbody className="text-gray-600 text-center">
-                          {sptOther?.data.length > 0 ? (
-                            sptOther?.data.map((item, index) => (
+                          {sptOther?.data?.length > 0 ? (
+                            sptOther?.data?.map((item, index) => (
                               <tr key={index}>
                                 <td className="p-2 border-b text-center">
                                   {index + 1}
@@ -3625,16 +3651,16 @@ const CreateKonsepSPT = ({ data }) => {
                                   {item.faktur_pajak_tanggal || "-"}
                                 </td>
                                 <td className="p-2 border-b">
-                                  {item.dpp || "0"}
+                                  {formatRupiahRP(item.dpp) || "0"}
                                 </td>
                                 <td className="p-2 border-b">
-                                  {item.dpp_lain || "0"}
+                                  {formatRupiahRP(item.dpp_lain) || "0"}
                                 </td>
                                 <td className="p-2 border-b">
-                                  {item.ppn || "0"}
+                                  {formatRupiahRP(item.ppn) || "0"}
                                 </td>
                                 <td className="p-2 border-b">
-                                  {item.ppnbm || "0"}
+                                  {formatRupiahRP(item.ppnbm) || "0"}
                                 </td>
                               </tr>
                             ))
@@ -3657,8 +3683,53 @@ const CreateKonsepSPT = ({ data }) => {
                             >
                               Jumlah
                             </td>
-                            <td className="p-2 text-center">0</td>
-                            <td className="p-2"></td>
+                            <td className="p-2 text-center">
+                              {/* {formatRupiahRP(
+                                sptOther?.data?.reduce(
+                                  (sum, item) =>
+                                    sum +
+                                    (parseFloat(item.faktur_pajak_tanggal) ||
+                                      0),
+                                  0
+                                )
+                              )} */}
+                            </td>
+                            <td className="p-2 text-center">
+                              {formatRupiahRP(
+                                sptOther?.data?.reduce(
+                                  (sum, item) =>
+                                    sum + (parseFloat(item.dpp) || 0),
+                                  0
+                                )
+                              )}
+                            </td>
+                            <td className="p-2 text-center">
+                              {formatRupiahRP(
+                                sptOther?.data?.reduce(
+                                  (sum, item) =>
+                                    sum + (parseFloat(item.dpp_lain) || 0),
+                                  0
+                                )
+                              )}
+                            </td>
+                            <td className="p-2 text-center">
+                              {formatRupiahRP(
+                                sptOther?.data?.reduce(
+                                  (sum, item) =>
+                                    sum + (parseFloat(item.ppn) || 0),
+                                  0
+                                )
+                              )}
+                            </td>
+                            <td className="p-2 text-center">
+                              {formatRupiahRP(
+                                sptOther?.data?.reduce(
+                                  (sum, item) =>
+                                    sum + (parseFloat(item.ppnbm) || 0),
+                                  0
+                                )
+                              )}
+                            </td>
                           </tr>
                         </tfoot>
                       </table>
@@ -3733,8 +3804,8 @@ const CreateKonsepSPT = ({ data }) => {
                         </div>
                       </div>
                     )}
-                    <div className=" w-[1450px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden ">
-                      <table className="table-auto text-sm text-left border overflow-hidden">
+                    <div className="border rounded-md p-4 overflow-x-auto">
+                      <table className="min-w-full text-sm text-left border overflow-x-auto">
                         <thead className="bg-purple-700 text-white text-center">
                           <tr>
                             <th className="p-2 border-b ">No</th>
@@ -3766,8 +3837,8 @@ const CreateKonsepSPT = ({ data }) => {
                           </tr>
                         </thead>
                         <tbody className="text-gray-600 text-center">
-                          {sptOther?.data.length > 0 ? (
-                            sptOther?.data.map((item, index) => (
+                          {sptOther?.data?.length > 0 ? (
+                            sptOther?.data?.map((item, index) => (
                               <tr key={index}>
                                 <td className="p-2 border-b text-center">
                                   {index + 1}
@@ -3785,16 +3856,16 @@ const CreateKonsepSPT = ({ data }) => {
                                   {item.faktur_pajak_tanggal || "-"}
                                 </td>
                                 <td className="p-2 border-b">
-                                  {item.dpp || "0"}
+                                  {formatRupiahRP(item.dpp || "0")}
                                 </td>
                                 <td className="p-2 border-b">
-                                  {item.dpp_lain || "0"}
+                                  {formatRupiahRP(item.dpp_lain || "0")}
                                 </td>
                                 <td className="p-2 border-b">
-                                  {item.ppn || "0"}
+                                  {formatRupiahRP(item.ppn || "0")}
                                 </td>
                                 <td className="p-2 border-b">
-                                  {item.ppnbm || "0"}
+                                  {formatRupiahRP(item.ppnbm || "0")}
                                 </td>
                               </tr>
                             ))
@@ -3817,12 +3888,53 @@ const CreateKonsepSPT = ({ data }) => {
                             >
                               Jumlah
                             </td>
-                            <td className="p-2 text-center">0</td>
-                            <td className="p-2"></td>
-                            <td className="p-2"></td>
-                            <td className="p-2"></td>
-                            <td className="p-2"></td>
-                            <td className="p-2"></td>
+                            <td className="p-2 text-center">
+                              {/* {formatRupiahRP(
+                                sptOther?.data?.reduce(
+                                  (sum, item) =>
+                                    sum +
+                                    (parseFloat(item.faktur_pajak_tanggal) ||
+                                      0),
+                                  0
+                                )
+                              )} */}
+                            </td>
+                            <td className="p-2 text-center">
+                              {formatRupiahRP(
+                                sptOther?.data?.reduce(
+                                  (sum, item) =>
+                                    sum + (parseFloat(item.dpp) || 0),
+                                  0
+                                )
+                              )}
+                            </td>
+                            <td className="p-2 text-center">
+                              {formatRupiahRP(
+                                sptOther?.data?.reduce(
+                                  (sum, item) =>
+                                    sum + (parseFloat(item.dpp_lain) || 0),
+                                  0
+                                )
+                              )}
+                            </td>
+                            <td className="p-2 text-center">
+                              {formatRupiahRP(
+                                sptOther?.data?.reduce(
+                                  (sum, item) =>
+                                    sum + (parseFloat(item.ppn) || 0),
+                                  0
+                                )
+                              )}
+                            </td>
+                            <td className="p-2 text-center">
+                              {formatRupiahRP(
+                                sptOther?.data?.reduce(
+                                  (sum, item) =>
+                                    sum + (parseFloat(item.ppnbm) || 0),
+                                  0
+                                )
+                              )}
+                            </td>
                           </tr>
                         </tfoot>
                       </table>
@@ -3896,8 +4008,8 @@ const CreateKonsepSPT = ({ data }) => {
                         </div>
                       </div>
                     )}
-                    <div className=" w-[1450px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden ">
-                      <table className="table-auto text-sm text-left border overflow-hidden">
+                    <div className="border rounded-md p-4 overflow-x-auto">
+                      <table className="min-w-full text-sm text-left border overflow-x-auto">
                         <thead className="bg-purple-700 text-white text-center">
                           <tr>
                             <th className="p-2 border-b ">No</th>
@@ -3935,8 +4047,8 @@ const CreateKonsepSPT = ({ data }) => {
                           </tr>
                         </thead>
                         <tbody className="text-gray-600 text-center">
-                          {sptOther?.data.length > 0 ? (
-                            sptOther?.data.map((item, index) => (
+                          {sptOther?.data?.length > 0 ? (
+                            sptOther?.data?.map((item, index) => (
                               <tr key={index}>
                                 <td className="p-2 border-b text-center">
                                   {index + 1}
@@ -3954,16 +4066,16 @@ const CreateKonsepSPT = ({ data }) => {
                                   {item.faktur_pajak_tanggal || "-"}
                                 </td>
                                 <td className="p-2 border-b">
-                                  {item.dpp || "0"}
+                                  {formatRupiahRP(item.dpp || "0")}
                                 </td>
                                 <td className="p-2 border-b">
-                                  {item.dpp_lain || "0"}
+                                  {formatRupiahRP(item.dpp_lain || "0")}
                                 </td>
                                 <td className="p-2 border-b">
-                                  {item.ppn || "0"}
+                                  {formatRupiahRP(item.ppn || "0")}
                                 </td>
                                 <td className="p-2 border-b">
-                                  {item.ppnbm || "0"}
+                                  {formatRupiahRP(item.ppnbm || "0")}
                                 </td>
                               </tr>
                             ))
@@ -3986,12 +4098,53 @@ const CreateKonsepSPT = ({ data }) => {
                             >
                               Jumlah
                             </td>
-                            <td className="p-2 text-center">0</td>
-                            <td className="p-2"></td>
-                            <td className="p-2"></td>
-                            <td className="p-2"></td>
-                            <td className="p-2"></td>
-                            <td className="p-2"></td>
+                            <td className="p-2 text-center">
+                              {/* {formatRupiahRP(
+                                sptOther?.data?.reduce(
+                                  (sum, item) =>
+                                    sum +
+                                    (parseFloat(item.faktur_pajak_tanggal) ||
+                                      0),
+                                  0
+                                )
+                              )} */}
+                            </td>
+                            <td className="p-2 text-center">
+                              {formatRupiahRP(
+                                sptOther?.data?.reduce(
+                                  (sum, item) =>
+                                    sum + (parseFloat(item.dpp) || 0),
+                                  0
+                                )
+                              )}
+                            </td>
+                            <td className="p-2 text-center">
+                              {formatRupiahRP(
+                                sptOther?.data?.reduce(
+                                  (sum, item) =>
+                                    sum + (parseFloat(item.dpp_lain) || 0),
+                                  0
+                                )
+                              )}
+                            </td>
+                            <td className="p-2 text-center">
+                              {formatRupiahRP(
+                                sptOther?.data?.reduce(
+                                  (sum, item) =>
+                                    sum + (parseFloat(item.ppn) || 0),
+                                  0
+                                )
+                              )}
+                            </td>
+                            <td className="p-2 text-center">
+                              {formatRupiahRP(
+                                sptOther?.data?.reduce(
+                                  (sum, item) =>
+                                    sum + (parseFloat(item.ppnbm) || 0),
+                                  0
+                                )
+                              )}
+                            </td>
                           </tr>
                         </tfoot>
                       </table>
@@ -4065,8 +4218,8 @@ const CreateKonsepSPT = ({ data }) => {
                         </div>
                       </div>
                     )}
-                    <div className=" w-[1450px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden ">
-                      <table className="table-auto text-sm text-left border overflow-hidden">
+                    <div className="border rounded-md p-4 overflow-x-auto">
+                      <table className="min-w-full text-sm text-left border overflow-x-auto">
                         <thead className="bg-purple-700 text-white text-center">
                           <tr>
                             <th className="p-2 border-b ">No</th>
@@ -4104,8 +4257,8 @@ const CreateKonsepSPT = ({ data }) => {
                           </tr>
                         </thead>
                         <tbody className="text-gray-600 text-center">
-                          {sptOther?.data.length > 0 ? (
-                            sptOther?.data.map((item, index) => (
+                          {sptOther?.data?.length > 0 ? (
+                            sptOther?.data?.map((item, index) => (
                               <tr key={index}>
                                 <td className="p-2 border-b text-center">
                                   {index + 1}
@@ -4123,16 +4276,16 @@ const CreateKonsepSPT = ({ data }) => {
                                   {item.faktur_pajak_tanggal || "-"}
                                 </td>
                                 <td className="p-2 border-b">
-                                  {item.dpp || "0"}
+                                  {formatRupiahRP(item.dpp) || "0"}
                                 </td>
                                 <td className="p-2 border-b">
-                                  {item.dpp_lain || "0"}
+                                  {formatRupiahRP(item.dpp_lain) || "0"}
                                 </td>
                                 <td className="p-2 border-b">
-                                  {item.ppn || "0"}
+                                  {formatRupiahRP(item.ppn) || "0"}
                                 </td>
                                 <td className="p-2 border-b">
-                                  {item.ppnbm || "0"}
+                                  {formatRupiahRP(item.ppnbm) || "0"}
                                 </td>
                               </tr>
                             ))
@@ -4155,12 +4308,53 @@ const CreateKonsepSPT = ({ data }) => {
                             >
                               Jumlah
                             </td>
-                            <td className="p-2 text-center">0</td>
-                            <td className="p-2"></td>
-                            <td className="p-2"></td>
-                            <td className="p-2"></td>
-                            <td className="p-2"></td>
-                            <td className="p-2"></td>
+                            <td className="p-2 text-center">
+                              {/* {formatRupiahRP(
+                                sptOther?.data?.reduce(
+                                  (sum, item) =>
+                                    sum +
+                                    (parseFloat(item.faktur_pajak_tanggal) ||
+                                      0),
+                                  0
+                                )
+                              )} */}
+                            </td>
+                            <td className="p-2 text-center">
+                              {formatRupiahRP(
+                                sptOther?.data?.reduce(
+                                  (sum, item) =>
+                                    sum + (parseFloat(item.dpp) || 0),
+                                  0
+                                )
+                              )}
+                            </td>
+                            <td className="p-2 text-center">
+                              {formatRupiahRP(
+                                sptOther?.data?.reduce(
+                                  (sum, item) =>
+                                    sum + (parseFloat(item.dpp_lain) || 0),
+                                  0
+                                )
+                              )}
+                            </td>
+                            <td className="p-2 text-center">
+                              {formatRupiahRP(
+                                sptOther?.data?.reduce(
+                                  (sum, item) =>
+                                    sum + (parseFloat(item.ppn) || 0),
+                                  0
+                                )
+                              )}
+                            </td>
+                            <td className="p-2 text-center">
+                              {formatRupiahRP(
+                                sptOther?.data?.reduce(
+                                  (sum, item) =>
+                                    sum + (parseFloat(item.ppnbm) || 0),
+                                  0
+                                )
+                              )}
+                            </td>
                           </tr>
                         </tfoot>
                       </table>
@@ -4231,8 +4425,8 @@ const CreateKonsepSPT = ({ data }) => {
                         </div>
                       </div>
                     )}
-                    <div className=" w-[1450px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden ">
-                      <table className="table-auto text-sm text-left border overflow-hidden">
+                     <div className="border rounded-md p-4 overflow-x-auto">
+                    <table className="min-w-full text-sm text-left border overflow-x-auto">
                         <thead className="bg-purple-700 text-white text-center">
                           <tr>
                             <th className="p-2 border-b ">No</th>
@@ -4284,8 +4478,8 @@ const CreateKonsepSPT = ({ data }) => {
                           </tr>
                         </thead>
                         <tbody className="text-gray-600 text-center">
-                          {sptOther?.data.length > 0 ? (
-                            sptOther?.data.map((item, index) => (
+                          {sptOther?.data?.length > 0 ? (
+                            sptOther?.data?.map((item, index) => (
                               <tr key={index}>
                                 <td className="p-2 border-b text-center">
                                   {index + 1}
@@ -4303,16 +4497,16 @@ const CreateKonsepSPT = ({ data }) => {
                                   {item.faktur_pajak_tanggal || "-"}
                                 </td>
                                 <td className="p-2 border-b">
-                                  {item.dpp || "0"}
+                                  {formatRupiahRP(item.dpp || "0")}
                                 </td>
                                 <td className="p-2 border-b">
-                                  {item.dpp_lain || "0"}
+                                  {formatRupiahRP(item.dpp_lain || "0")}
                                 </td>
                                 <td className="p-2 border-b">
-                                  {item.ppn || "0"}
+                                  {formatRupiahRP(item.ppn || "0")}
                                 </td>
                                 <td className="p-2 border-b">
-                                  {item.ppnbm || "0"}
+                                  {formatRupiahRP(item.ppnbm || "0")}
                                 </td>
                               </tr>
                             ))
@@ -4335,12 +4529,53 @@ const CreateKonsepSPT = ({ data }) => {
                             >
                               Jumlah
                             </td>
-                            <td className="p-2 text-center">0</td>
-                            <td className="p-2"></td>
-                            <td className="p-2"></td>
-                            <td className="p-2"></td>
-                            <td className="p-2"></td>
-                            <td className="p-2"></td>
+                            <td className="p-2 text-center">
+                              {/* {formatRupiahRP(
+                                sptOther?.data?.reduce(
+                                  (sum, item) =>
+                                    sum +
+                                    (parseFloat(item.faktur_pajak_tanggal) ||
+                                      0),
+                                  0
+                                )
+                              )} */}
+                            </td>
+                            <td className="p-2 text-center">
+                              {formatRupiahRP(
+                                sptOther?.data?.reduce(
+                                  (sum, item) =>
+                                    sum + (parseFloat(item.dpp) || 0),
+                                  0
+                                )
+                              )}
+                            </td>
+                            <td className="p-2 text-center">
+                              {formatRupiahRP(
+                                sptOther?.data?.reduce(
+                                  (sum, item) =>
+                                    sum + (parseFloat(item.dpp_lain) || 0),
+                                  0
+                                )
+                              )}
+                            </td>
+                            <td className="p-2 text-center">
+                              {formatRupiahRP(
+                                sptOther?.data?.reduce(
+                                  (sum, item) =>
+                                    sum + (parseFloat(item.ppn) || 0),
+                                  0
+                                )
+                              )}
+                            </td>
+                            <td className="p-2 text-center">
+                              {formatRupiahRP(
+                                sptOther?.data?.reduce(
+                                  (sum, item) =>
+                                    sum + (parseFloat(item.ppnbm) || 0),
+                                  0
+                                )
+                              )}
+                            </td>
                           </tr>
                         </tfoot>
                       </table>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useParams, useLocation, useSearchParams } from "react-router-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
@@ -19,12 +19,14 @@ const BUPOTRenderer = ({
   queryKey,
   titles = {},
   data = null, // For when data is passed from RoleBasedRenderer
+  sidebar
 }) => {
   const { id, akun, status } = useParams();
   const [cookies] = useCookies(["token"]);
   const location = useLocation();
   const queryClient = useQueryClient();
   const [searchParams] = useSearchParams();
+  const [currentPage, setCurrentPage] = useState(1);
 
   const getBupot = () => {
     const pathSegments = location.pathname.split("/");
@@ -97,7 +99,7 @@ const BUPOTRenderer = ({
     error,
     refetch,
   } = useQuery({
-    queryKey: [queryKey || `bupot-${type}`, id, akun, currentStatus],
+    queryKey: [queryKey || `bupot-${type}`, id, akun, currentStatus, currentPage],
     queryFn: async () => {
       const url = `${RoutesApi.apiUrl}student/assignments/${id}/sistem/${akun}/bupot`;
       const { data } = await axios.get(url, {
@@ -111,6 +113,7 @@ const BUPOTRenderer = ({
             tipe_bupot: currentBupot,
             pembuat_id: currentPembuat
           },
+          page: currentPage,
         },
       });
       console.log("BUPOT Response:", data);
@@ -126,6 +129,11 @@ const BUPOTRenderer = ({
   // Function to refresh data after actions
   const handleDataRefresh = () => {
     refetch();
+  };
+
+  // Handle page change
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
   };
 
   if (isLoading && !fetchedData) {
@@ -163,11 +171,19 @@ const BUPOTRenderer = ({
             type={type}
             status={currentStatus}
             data={bupotData?.data || []}
+            pagination={bupotData?.meta}
+            links={bupotData?.links}
+            currentPage={currentPage}
+            onPageChange={handlePageChange}
             tableTitle={
               titles.published || `EBUPOT ${type.toUpperCase()} ISSUED`
             }
             sidebarTitle={titles.sidebar || type.toUpperCase()}
             onDataRefresh={handleDataRefresh}
+            sidebar={sidebar}
+            statusPenerbitan={currentStatus}
+            tipeBupot={currentBupot}
+            sistemId={currentPembuat}
           />
         );
       case "invalid":
@@ -178,11 +194,19 @@ const BUPOTRenderer = ({
             type={type}
             status={currentStatus}
             data={bupotData?.data || []}
+            pagination={bupotData?.meta}
+            links={bupotData?.links}
+            currentPage={currentPage}
+            onPageChange={handlePageChange}
             tableTitle={
               titles.invalid || `EBUPOT ${type.toUpperCase()} INVALID`
             }
             sidebarTitle={titles.sidebar || type.toUpperCase()}
             onDataRefresh={handleDataRefresh}
+            sidebar={sidebar}
+            statusPenerbitan={currentStatus}
+            tipeBupot={currentBupot}
+            sistemId={currentPembuat}
           />
         );
       default:
@@ -193,11 +217,19 @@ const BUPOTRenderer = ({
             type={type}
             status={currentStatus}
             data={bupotData?.data || []}
+            pagination={bupotData?.meta}
+            links={bupotData?.links}
+            currentPage={currentPage}
+            onPageChange={handlePageChange}
             tableTitle={
               titles.belumTerbit || `EBUPOT ${type.toUpperCase()} NOT ISSUED`
             }
             sidebarTitle={titles.sidebar || type.toUpperCase()}
             onDataRefresh={handleDataRefresh}
+            sidebar={sidebar}
+            statusPenerbitan={currentStatus}
+            tipeBupot={currentBupot}
+            sistemId={currentPembuat}
           />
         );
     }

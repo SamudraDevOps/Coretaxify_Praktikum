@@ -25,6 +25,8 @@ import { deleteMemberPraktikum } from "@/hooks/dashboard";
 import { getCookie } from "@/service";
 import { useLocation, useNavigate } from "react-router-dom";
 import { RxCross1 } from "react-icons/rx";
+import { IntentEnum } from "@/enums/IntentEnum";
+import TabelNilaiMahasiswa from "./TabelNilaiMahasiswa";
 
 export default function DosenPraktikumKelasMember() {
   const [isOpen, setIsOpen] = useState(false);
@@ -38,6 +40,8 @@ export default function DosenPraktikumKelasMember() {
   const [scoreModal, setScoreModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [scoreValue, setScoreValue] = useState("");
+  const [isTabelNilaiMahasiswaOpen, setIsTabelNilaiMahasiswaOpen] =
+    useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -67,9 +71,9 @@ export default function DosenPraktikumKelasMember() {
             Authorization: `Bearer ${cookies.token}`,
             Accept: "application/json",
           },
-          // params: {
-          //   intent: RoutesApi.classGroup.intent,
-          // },
+          params: {
+            intent: IntentEnum.API_GET_ASSIGNMENT_MEMBERS_WITH_SISTEM_SCORES,
+          },
         }
       );
       console.log(url + `/${id}/assignments/${idpraktikum}/members`);
@@ -95,6 +99,11 @@ export default function DosenPraktikumKelasMember() {
       return 0;
     });
     setData(sortedData);
+  };
+
+  const handleOpenNilai = (sistemScores) => {
+    setSelectedUser(sistemScores);
+    setIsTabelNilaiMahasiswaOpen(true);
   };
 
   const handleEditClick = (index) => {
@@ -139,58 +148,6 @@ export default function DosenPraktikumKelasMember() {
   let { id, idpraktikum } = useParams();
   const mutation = deleteMemberPraktikum(getCookie(), id, idpraktikum);
   console.log("id", id, idpraktikum);
-
-  const scoreMutation = useMutation({
-    mutationFn: async ({ userId, score }) => {
-      const response = await axios.put(
-        `${RoutesApi.classGroup.url}/${id}/assignments/${idpraktikum}/members/${userId}/score`,
-        { score: parseFloat(score) },
-        {
-          headers: {
-            Authorization: `Bearer ${cookies.token}`,
-            Accept: "application/json",
-          },
-        }
-      );
-      return response.data;
-    },
-    onSuccess: () => {
-      Swal.fire({
-        title: "Berhasil!",
-        text: "Nilai berhasil diberikan!",
-        icon: "success",
-      });
-      setScoreModal(false);
-      setScoreValue("");
-      setSelectedUser(null);
-      // Refetch data to update the UI
-      window.location.reload(); // or use react-query's refetch
-    },
-    onError: (error) => {
-      Swal.fire({
-        title: "Error!",
-        text: error.response?.data?.message || "Gagal memberikan nilai",
-        icon: "error",
-      });
-    },
-  });
-
-  // Add this function to handle score submission
-  const handleScoreSubmit = () => {
-    if (!scoreValue || scoreValue < 0 || scoreValue > 100) {
-      Swal.fire({
-        title: "Error!",
-        text: "Nilai harus antara 0-100",
-        icon: "error",
-      });
-      return;
-    }
-
-    scoreMutation.mutate({
-      userId: selectedUser.id,
-      score: scoreValue,
-    });
-  };
 
   if (isLoading) {
     return (
@@ -256,98 +213,37 @@ export default function DosenPraktikumKelasMember() {
             {data.data.map((item, index) => (
               <tr key={index}>
                 <td className="max-w-5">{index + 1}</td>
-                <td>{item.name}</td>
-                <td></td>
-                {pathRoute === "penilaian" ? <td>{item.pivot.score}</td> : ""}
-                <td>{item.email}</td>
+                <td>{item.user.name}</td>
+                <td>
+                  {item.user.unique_id !== null ? item.user.unique_id : "-"}
+                </td>
+                {pathRoute === "penilaian" ? (
+                  <td>
+                    {item.sistem_scores.length > 0 ? (
+                      // <button
+                      //   className="download-button"
+                      //   onClick={() => handleOpenNilai(item.sistem_scores)}
+                      // >
+                      //   Lihat Nilai
+                      // </button>
+                      item.summary.total_scores_across_all_sistems
+                    ) : (
+                      "-"
+                    )}
+                  </td>
+                ) : (
+                  ""
+                )}
+                <td>{item.user.email}</td>
                 <td>
                   {pathRoute === "penilaian" ? (
                     <>
-                      <AlertDialog>
-                        <AlertDialogTrigger asChild>
-                          <button
-                            className="action-button score bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded"
-                            onClick={() => {
-                              setSelectedUser(item);
-                              setScoreValue("");
-                            }}
-                          >
-                            Beri Nilai
-                          </button>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                          <AlertDialogHeader>
-                            <div className="w-full flex justify-end">
-                              <AlertDialogCancel className="border-none shadow-none">
-                                <RxCross1 className="text-2xl text-black hover:cursor-pointer" />
-                              </AlertDialogCancel>
-                            </div>
-                            <AlertDialogTitle>Beri Nilai</AlertDialogTitle>
-                            <AlertDialogDescription className="w-full">
-                              <div className="">
-                                <p className="mb-4">
-                                  Beri nilai untuk: <strong>{item.name}</strong>
-                                </p>
-                                <div className="edit-form-group-mahasiswa">
-                                  <label>Nilai (0-100):</label>
-                                  <input
-                                    type="number"
-                                    min="0"
-                                    max="100"
-                                    step="0.01"
-                                    value={scoreValue}
-                                    onChange={(e) =>
-                                      setScoreValue(e.target.value)
-                                    }
-                                    className="text-black"
-                                    placeholder="Masukkan nilai..."
-                                  />
-                                </div>
-                              </div>
-                            </AlertDialogDescription>
-                          </AlertDialogHeader>
-                          <AlertDialogFooter>
-                            <AlertDialogCancel className="bg-red-600 text-white hover:bg-red-800 hover:text-white">
-                              Batal
-                            </AlertDialogCancel>
-                            <AlertDialogAction
-                              className="bg-green-600"
-                              onClick={() => {
-                                if (
-                                  !scoreValue ||
-                                  scoreValue < 0 ||
-                                  scoreValue > 100
-                                ) {
-                                  Swal.fire({
-                                    title: "Error!",
-                                    text: "Nilai harus antara 0-100",
-                                    icon: "error",
-                                  });
-                                  return;
-                                }
-                                scoreMutation.mutate({
-                                  userId: item.id,
-                                  score: scoreValue,
-                                });
-                              }}
-                            >
-                              {scoreMutation.status === "pending" ? (
-                                <p>Loading...</p>
-                              ) : (
-                                <>Simpan Nilai</>
-                              )}
-                            </AlertDialogAction>
-                          </AlertDialogFooter>
-                          <div className="text-xs mt-2 text-red-700">
-                            {scoreMutation.isError &&
-                              scoreMutation.error.response?.data.message}
-                          </div>
-                        </AlertDialogContent>
-                      </AlertDialog>
-                      <button 
+                      <button
                         className="action-button edit bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 transition-colors"
                         onClick={() => {
-                            navigate(`/praktikum/${idpraktikum}?user_id=${item.id}`);
+                          navigate(
+                            `/praktikum/${idpraktikum}?user_id=${item.user.id}`
+                          );
                         }}
                       >
                         Cek Pengerjaan
@@ -366,7 +262,7 @@ export default function DosenPraktikumKelasMember() {
                           cancelButtonText: "Batal",
                         }).then((result) => {
                           if (result.isConfirmed) {
-                            mutation.mutate(item.id);
+                            mutation.mutate(item.user.id);
                           }
                         });
                       }}
@@ -429,6 +325,12 @@ export default function DosenPraktikumKelasMember() {
         <EditPopupMahasiswa
           onClose={() => setIsOpen(false)}
           data={selectedData}
+        />
+      )}
+      {isTabelNilaiMahasiswaOpen && (
+        <TabelNilaiMahasiswa
+          onClose={() => setIsTabelNilaiMahasiswaOpen(false)}
+          sistemScores={selectedUser}
         />
       )}
     </div>
