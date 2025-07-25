@@ -299,7 +299,7 @@ const PajakMasukan = ({
                         >
                           Lihat PDF
                         </button>
-                        <button
+                        {/* <button
                           onClick={() =>
                             navigate(
                               `/praktikum/${id}/sistem/${akun}/e-faktur/retur-pajak/${item.id}`
@@ -308,7 +308,20 @@ const PajakMasukan = ({
                           className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs"
                         >
                           <GoArrowSwitch></GoArrowSwitch>
-                        </button>
+                        </button> */}
+                        {item.is_kredit === 1 && (
+                          <button
+                            onClick={() =>
+                              navigate(
+                                `/praktikum/${id}/sistem/${akun}/e-faktur/retur-pajak/${item.id}`
+                              )
+                            }
+                            className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs"
+                          >
+                            <GoArrowSwitch />
+                          </button>
+                        )}
+
                         {/* <button className="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-xs">
                           Hapus
                         </button> */}
