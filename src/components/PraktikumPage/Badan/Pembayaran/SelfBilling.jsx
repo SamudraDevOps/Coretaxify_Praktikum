@@ -174,14 +174,16 @@ const SelfBilling = ({ data: propData }) => {
     queryFn: async () => {
       const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
       const data = await axios.get(
-        RoutesApi.apiUrl +
-          `student/assignments/${id}/sistem/${accountId}/informasi-umum/${akun}`,
+        // RoutesApi.apiUrl +
+        //   `student/assignments/${id}/sistem/${accountId}/informasi-umum/${akun}`,
+        // {
+        RoutesApi.apiUrl + `student/assignments/${id}/sistem/${accountId}`,
         {
           headers: {
             Authorization: `Bearer ${cookies.token}`,
           },
           params: {
-            intent: "api.get.sistem.informasi.umum.badan",
+            intent: "api.get.sistem.informasi.umum",
           },
         }
       );
@@ -198,9 +200,9 @@ const SelfBilling = ({ data: propData }) => {
   useEffect(() => {
     if (isFetched && data) {
       console.log("Loading data:", data);
-      setNpwp(data.data.npwp || "");
-      setName(data.data.name || data.data.nama || "");
-      setAddress(data.data.address || data.data.alamat_wajib_pajak || "");
+      setNpwp(data.data.npwp_akun || "");
+      setName(data.data.nama_akun || "");
+      setAddress(data.data.alamat_utama_akun || "");
       //   hasLoadedData.current = true;
     }
   }, [isFetched, data]);
