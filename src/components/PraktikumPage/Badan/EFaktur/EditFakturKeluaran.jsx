@@ -531,10 +531,12 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
   //   }
   // };
   const handleTarifPPnBMChange = (e) => {
+    // alert("L")
     const formattedTarif = formatPersen(e.target.value); // remove % and non-numeric
     setTarifPPnBM(formattedTarif);
 
-    if (!isCustomPPnBM) {
+    if (!isCustomPPnBM || formattedTarif !== "") {
+      // alert("oawk")
       // 🧼 Clean 'jumlah' to get numeric value
       const numericJumlah =
         typeof jumlah === "string"
@@ -546,8 +548,9 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
       const result = (numericJumlah * numericPPnBM) / 100;
       setPPnBM(result);
 
-      // 🧪 Optional: log it
       console.log("=====PPNBMLOG=====");
+      console.log("dpp:", dpp);
+      console.log("jumlah raw:", jumlah);
       console.log("jumlah:", numericJumlah);
       console.log("tarif_ppnbm:", numericPPnBM);
       console.log("Result PPnBM:", result);
@@ -824,19 +827,22 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
       setPotonganHarga(transaksiToEdit.pemotongan_harga);
       setDPP(transaksiToEdit.dpp);
       setJumlah(transaksiToEdit.dpp);
+      updateTarifPPN(transaksiToEdit.dpp);
       // alert(`setJumlah called ${jumlah}`);
       setTarifPPN(transaksiToEdit.ppn);
-      setTarifPPnBM(
-        transaksiToEdit.tarif_ppnbm ? `${transaksiToEdit.tarif_ppnbm}%` : ""
-      );
+      // setTarifPPnBM(
+      //   transaksiToEdit.tarif_ppnbm ? `${transaksiToEdit.tarif_ppnbm}%` : ""
+      // );
+      const tarifInt = parseInt(transaksiToEdit.tarif_ppnbm || 0, 10);
+      setTarifPPnBM(tarifInt.toString());
       setPPnBM(transaksiToEdit.ppnbm);
 
       // Set checkbox state based on dpp_lain value
       // IMPORTANT
       setIsChecked(transaksiToEdit.dpp_lain > 0);
-      setTimeout(() => {
-        setJumlah(transaksiToEdit.dpp_lain);
-      }, 0);
+      // setTimeout(() => {
+      //   setJumlah(transaksiToEdit.dpp);
+      // }, 0);
 
       // Make sure to fetch the correct options for the selected type
       if (transaksiToEdit.tipe) {
@@ -2851,6 +2857,7 @@ ${isChecked ? "" : "bg-gray-100"}
                                           className="p-2 border rounded w-full bg-gray-100"
                                           allowNegative={false}
                                           decimalScale={0}
+                                          
                                         />
                                         {/* <input
                                           type="text"

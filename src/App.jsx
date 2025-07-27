@@ -2293,6 +2293,18 @@ const Main = () => {
         />
         {/* NOT FOUND ROUTE - LAST REGISTERED ROUTE */}
         <Route path="*" element={<NotFound />} />
+        {/* <Route
+          path="*"
+          element={
+            <RoleBasedRenderer
+              url={``}
+              OrangPribadi={NotFound}
+              Badan={NotFound}
+              intent={""}
+              query={""}
+            ></RoleBasedRenderer>
+          }
+        /> */}
       </Routes>
     </Router>
     // </BrowserRouter>
