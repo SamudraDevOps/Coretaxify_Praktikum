@@ -551,12 +551,17 @@ const Header = () => {
       <div className="w-full bg-purple-700 pt-1">
         <nav className="w-full bg-purple-700 pb-2 px-4">
           <ul className="flex space-x-6 text-white">
+            {/* navigate(`/praktikum/${id}/sistem/${akun}/notifikasi`) */}
             {[
               {
                 label: "Portal Saya",
                 submenu: [
                   "Dokumen Saya",
-                  "Notifikasi Saya",
+                  {
+                    label: "Notifikasi Saya",
+                    links: `/praktikum/${id}/sistem/${akun}/notifikasi`,
+                  },
+                  // "Notifikasi Saya",
                   "Kasus Saya",
                   "Kasus Berjalan Saya",
                   {

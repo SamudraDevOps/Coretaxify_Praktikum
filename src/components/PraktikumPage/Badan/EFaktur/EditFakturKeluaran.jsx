@@ -519,15 +519,38 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
     }
   };
 
+  // const handleTarifPPnBMChange = (e) => {
+  //   const formattedTarif = formatPersen(e.target.value);
+  //   setTarifPPnBM(formattedTarif);
+
+  //   // Hitung ulang PPnBM jika PPnBM tidak diedit manual
+  //   if (!isCustomPPnBM) {
+  //     const numericJumlah = parseInt(jumlah.replace(/\D/g, ""), 10) || 0;
+  //     const numericPPnBM = parseInt(formattedTarif.replace(/\D/g, ""), 10) || 0;
+  //     setPPnBM((numericJumlah * numericPPnBM) / 100);
+  //   }
+  // };
   const handleTarifPPnBMChange = (e) => {
-    const formattedTarif = formatPersen(e.target.value);
+    const formattedTarif = formatPersen(e.target.value); // remove % and non-numeric
     setTarifPPnBM(formattedTarif);
 
-    // Hitung ulang PPnBM jika PPnBM tidak diedit manual
     if (!isCustomPPnBM) {
-      const numericJumlah = parseInt(jumlah.replace(/\D/g, ""), 10) || 0;
+      // 🧼 Clean 'jumlah' to get numeric value
+      const numericJumlah =
+        typeof jumlah === "string"
+          ? parseInt(jumlah.replace(/\D/g, ""), 10) || 0
+          : parseFloat(jumlah) || 0;
+
       const numericPPnBM = parseInt(formattedTarif.replace(/\D/g, ""), 10) || 0;
-      setPPnBM((numericJumlah * numericPPnBM) / 100);
+
+      const result = (numericJumlah * numericPPnBM) / 100;
+      setPPnBM(result);
+
+      // 🧪 Optional: log it
+      console.log("=====PPNBMLOG=====");
+      console.log("jumlah:", numericJumlah);
+      console.log("tarif_ppnbm:", numericPPnBM);
+      console.log("Result PPnBM:", result);
     }
   };
 
@@ -800,7 +823,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
       setTotalHarga(transaksiToEdit.total_harga);
       setPotonganHarga(transaksiToEdit.pemotongan_harga);
       setDPP(transaksiToEdit.dpp);
-      setJumlah(transaksiToEdit.dpp_lain);
+      setJumlah(transaksiToEdit.dpp);
       // alert(`setJumlah called ${jumlah}`);
       setTarifPPN(transaksiToEdit.ppn);
       setTarifPPnBM(
