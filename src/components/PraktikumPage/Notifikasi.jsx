@@ -1,6 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FaInbox } from "react-icons/fa6";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 const Notifikasi = ({ data }) => {
   const [notifications, setNotifications] = useState([]);
@@ -94,10 +105,10 @@ function NotificationTable({ notifications, onLihat }) {
       <table className="table-auto w-full border border-gray-300">
         <thead>
           <tr>
-            {/* <th className="border border-gray-300 px-1 py-2">Aksi</th> */}
+            <th className="border border-gray-300 px-1 py-2">Aksi</th>
             <th className="border border-gray-300 px-4 py-2">Pengirim</th>
             <th className="border border-gray-300 px-4 py-2">Subjek</th>
-            <th className="border border-gray-300 px-4 py-2">Isi</th>
+            {/* <th className="border border-gray-300 px-4 py-2">Isi</th> */}
             <th className="border border-gray-300 px-4 py-2">Tanggal Kirim</th>
             {/* <th className="border border-gray-300 px-4 py-2">Prioritas</th>
             <th className="border border-gray-300 px-4 py-2">Status</th> */}
@@ -116,6 +127,74 @@ function NotificationTable({ notifications, onLihat }) {
                 key={notif.id}
                 className={notif.status === "belum" ? "bg-blue-50" : ""}
               >
+                <td>
+                  <AlertDialog>
+                    <AlertDialogTrigger className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs">
+                      Lihat Detail
+                    </AlertDialogTrigger>
+
+                    <AlertDialogContent className="p-2">
+                      {/* <AlertDialogHeader>
+                        <AlertDialogTitle>
+                          Are you absolutely sure?
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                          This action cannot be undone. This will permanently
+                          delete your account and remove your data from our
+                          servers.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader> */}
+                      <div className="bg-white p-6 max-w-4xl ">
+                        <h1 className="text-2xl font-semibold mb-6">
+                          Detail Pesan
+                        </h1>
+
+                        <div className="space-y-6">
+                          {/* Row: Pengirim */}
+                          <div className="grid grid-cols-12 items-start gap-4">
+                            <label className="col-span-3 text-sm font-medium mt-2">
+                              Pengirim
+                            </label>
+                            <input
+                              type="text"
+                              value={notif.sender}
+                              readOnly
+                              className="col-span-9 border border-gray-300 rounded px-3 py-2 bg-gray-100 w-full"
+                            />
+                          </div>
+
+                          {/* Row: Subjek */}
+                          <div className="grid grid-cols-12 items-start gap-4">
+                            <label className="col-span-3 text-sm font-medium mt-2">
+                              Subjek
+                            </label>
+                            <input
+                              type="text"
+                              value={notif.subject}
+                              readOnly
+                              className="col-span-9 border border-gray-300 rounded px-3 py-2 bg-gray-100 w-full"
+                            />
+                          </div>
+
+                          {/* Row: Isi */}
+                          <div className="grid grid-cols-12 items-start gap-4">
+                            <label className="col-span-3 text-sm font-medium mt-2">
+                              Isi
+                            </label>
+                            <div className="col-span-9 border border-gray-300 rounded p-3 bg-gray-50 font-sans text-sm whitespace-pre-line">
+                              {notif.content}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Kembali</AlertDialogCancel>
+                        {/* <AlertDialogAction>Continue</AlertDialogAction> */}
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                </td>
                 {/* <td className="border border-gray-300 px-1 py-2 text-center">
                   <button
                     className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded"
@@ -130,9 +209,9 @@ function NotificationTable({ notifications, onLihat }) {
                 <td className="border border-gray-300 px-4 py-2">
                   {notif.subject}
                 </td>
-                <td className="border border-gray-300 px-4 py-2">
+                {/* <td className="border border-gray-300 px-4 py-2">
                   {notif.content}
-                </td>
+                </td> */}
                 <td className="border border-gray-300 px-4 py-2">
                   {notif.date}
                 </td>
