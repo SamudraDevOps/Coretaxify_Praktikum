@@ -981,7 +981,7 @@ const BUPOTForm = ({
                       <option value="">Please Select</option>
                       {npwp.map((obj) => (
                         <option key={obj.id} value={obj.npwp_akun}>
-                          {obj.npwp_akun}
+                          {obj.npwp_akun} - {obj.nama_akun}
                         </option>
                       ))}
                     </select>
@@ -1983,7 +1983,7 @@ const BUPOTForm = ({
                     <option value="">Please Select</option>
                     {npwp.map((obj) => (
                       <option key={obj.id} value={obj.npwp_akun}>
-                        {obj.npwp_akun}
+                        {obj.npwp_akun} - {obj.nama_akun}
                       </option>
                     ))}
                   </select>
