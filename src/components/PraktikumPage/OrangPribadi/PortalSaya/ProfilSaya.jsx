@@ -105,24 +105,24 @@ const ProfilSaya = ({ data, sidebar }) => {
                   {[
                     ["Nama", data.nama_akun],
                     ["Nomor Pokok Wajib Pajak", data.npwp_akun],
-                    ["Kegiatan Utama", "Kegiatan Penunjang Pendidikan"],
+                    ["Kegiatan Utama", ""],
                     ["Jenis Wajib Pajak", "Orang Pribadi"],
                     ["Kategori Wajib Pajak", data.tipe_akun],
                     ["Status NPWP", "Aktif"],
-                    ["Tanggal Terdaftar", "16 Maret 2024"],
-                    ["Tanggal Aktivasi", "16 Maret 2024"],
+                    ["Tanggal Terdaftar", ""],
+                    ["Tanggal Aktivasi", ""],
                     ["Status Pengusaha Kena Pajak", ""],
                     ["Total Pengukuhan Pengusaha Kena Pajak", ""],
                     [
                       "Kantor Wilayah Direktorat Jenderal Pajak",
-                      "Kantor Wilayah DJP Jawa Timur III",
+                      "Kantor Wilayah DJP ",
                     ],
                     [
                       "Kantor Pelayanan Pajak",
-                      "Kantor Pelayanan Pajak Pratama Banyuwangi",
+                      "",
                     ],
-                    ["Seksi Pengawasan Pajak", "Seksi Pengawasan II"],
-                    ["Tanggal Pembaruan Profil", "20 Februari 2025"],
+                    ["Seksi Pengawasan Pajak", ""],
+                    ["Tanggal Pembaruan Profil", ""],
                   ].map(([label, value], index) => (
                     <div
                       key={index}
@@ -139,13 +139,13 @@ const ProfilSaya = ({ data, sidebar }) => {
                     ["Alamat Utama", data.alamat_utama_akun],
                     [
                       "Kontak Utama",
-                      "Nomor Handphone : 081234567890",
-                      "Email Utama : email@example.com",
+                      "Nomor Handphone ",
+                      "Email Utama  ",
                     ],
                     [
                       "Klasifikasi Lapangan Usaha Utama",
-                      "Kode Klafikasi Lapangan Usaha : Z5000",
-                      "Deskripsi Klafikasi Lapangan Usaha : Pegawai Swasta",
+                      "Kode Klafikasi Lapangan Usaha  ", 
+                      "Deskripsi Klafikasi Lapangan Usaha  ",
                     ],
                   ].map(([label, value, text], index) => (
                     <div
