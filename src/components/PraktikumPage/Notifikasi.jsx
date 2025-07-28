@@ -51,8 +51,8 @@ const Notifikasi = ({ data }) => {
   });
 
   return (
-    <div className="flex h-screen bg-gray-100">
-      <div className="flex-auto p-3 bg-white rounded-md h-full">
+    
+      <div className="flex-auto p-3 bg-white rounded-md h-full  min-w-0">
         <div className="flex justify-between items-center mb-4 pb-3 border-b mt-4">
           <div className="flex items-center">
             <FaInbox className="text-4xl text-blue-900" />
@@ -61,12 +61,12 @@ const Notifikasi = ({ data }) => {
             </h1>
           </div>
           <div className="flex justify-end">
-            <button
+            {/* <button
               className="bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-4 rounded"
               onClick={markAllAsRead}
             >
               Tandai Sudah Dibaca
-            </button>
+            </button> */}
           </div>
         </div>
         <Tabs defaultValue="semua" value={tab} onValueChange={setTab}>
@@ -95,13 +95,13 @@ const Notifikasi = ({ data }) => {
           </TabsContent>
         </Tabs>
       </div>
-    </div>
+   
   );
 };
 
 function NotificationTable({ notifications, onLihat }) {
   return (
-    <div className="w-full overflow-x-auto">
+    <div className="w-full overflow-x-auto ">
       <table className="table-auto w-full border border-gray-300">
         <thead>
           <tr>

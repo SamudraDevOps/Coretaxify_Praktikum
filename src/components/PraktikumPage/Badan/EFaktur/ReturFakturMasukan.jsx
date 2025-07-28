@@ -48,7 +48,7 @@ const ReturFakturMasukan = ({ data, sidebar }) => {
         npwp_akun={sidebar.npwp_akun}
         akun={{ id, akun }}
       />
-      <div className="flex-auto p-3 bg-white rounded-md h-full w-min-0">
+      <div className="flex-auto p-3 bg-white rounded-md h-full min-w-0">
         <div className="flex justify-between items-center mb-4 pb-3 border-b">
           <div className="flex items-center">
             <IoDocumentTextOutline className="text-4xl text-blue-900" />
@@ -77,22 +77,22 @@ const ReturFakturMasukan = ({ data, sidebar }) => {
               onClick={() =>
                 navigate(`/praktikum/${id}/sistem/${akun}/e-faktur/buat-retur`)
               }
-              className={userId ? "hidden" : "flex items-center bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-2 rounded"}
+              className={userId ? "hidden" : "flex items-center bg-blue-900 hover:bg-blue-600 text-white font-bold py-2 px-2 rounded"}
             >
               Buat Retur
-              <FaPlus className="text-lg text-white mr-2" />
+              <FaPlus className="text-lg text-white ml-2" />
             </button>
             <button className={userId ? "hidden" : "flex items-center bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-2 rounded"}>
               Import Data
               <FaChevronDown className="text-lg text-white ml-2" />
             </button>
           </div>
-          <button className={userId ? "hidden" : "flex items-center bg-red-800 hover:bg-red-900 text-white font-bold py-2 px-2 rounded"}>
+          {/* <button className={userId ? "hidden" : "flex items-center bg-red-800 hover:bg-red-900 text-white font-bold py-2 px-2 rounded"}>
             <TiDeleteOutline className="text-2xl text-white mr-2" />
             Batalkan Retur
-          </button>
+          </button> */}
         </div>
-        <div className="w-[1040px]   overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden mx-4">
+        <div className="w-full overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden">
           <table className="table-auto border border-gray-300 overflow-hidden">
             <thead className="bg-gray-200">
               <tr>
