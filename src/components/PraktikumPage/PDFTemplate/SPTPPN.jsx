@@ -78,13 +78,22 @@ const SptPpnPdf = ({ data }) => {
   //   return new Intl.NumberFormat("id-ID").format(number);
   // }
 
+  // function formatRupiah(value) {
+  //   const numberString = value?.toString().replace(/[^0-9]/g, "") || "0";
+  //   return new Intl.NumberFormat("id-ID", {
+  //     style: "currency",
+  //     currency: "IDR",
+  //     minimumFractionDigits: 0,
+  //   }).format(numberString || 0);
+  // }
+
   function formatRupiah(value) {
-    const numberString = value?.toString().replace(/[^0-9]/g, "") || "0";
+    const number = Number(value) || 0;
     return new Intl.NumberFormat("id-ID", {
       style: "currency",
       currency: "IDR",
       minimumFractionDigits: 0,
-    }).format(numberString || 0);
+    }).format(number);
   }
 
   return (

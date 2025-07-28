@@ -206,7 +206,7 @@ const BupotUnifikasiPDF = ({ data }) => {
               textAlign: "center",
             }}
           >
-            {bupotData.tarif_pajak * 100 || 0}
+            {bupotData.tarif_pajak || 0}
           </Text>
           <Text style={{ flex: 2, padding: 4, textAlign: "right" }}>
             {formatRupiah(bupotData.pajak_penghasilan)}

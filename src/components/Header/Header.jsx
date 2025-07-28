@@ -48,7 +48,7 @@ const Header = () => {
   };
   const buttonRefs = useRef([]);
   const dropdownRefs = useRef([]);
-  const userId = searchParams.get('user_id');
+  const userId = searchParams.get("user_id");
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -79,7 +79,7 @@ const Header = () => {
             Authorization: `Bearer ${token}`,
           },
           params: {
-            ...(userId && { user_id: userId}),
+            ...(userId && { user_id: userId }),
           },
         }
       );
@@ -111,7 +111,7 @@ const Header = () => {
               Authorization: `Bearer ${token}`,
             },
             params: {
-              ...(userId && { user_id: userId}),
+              ...(userId && { user_id: userId }),
             },
           }
         );
@@ -169,11 +169,12 @@ const Header = () => {
     const basePathParts = currentPath.split("/").slice(0, 5);
     const basePath = basePathParts.join("/");
     const featureParts = currentPath.split("/").slice(5);
-    const featurePath = featureParts.length > 0 ? `/${featureParts.join("/")}` : "/profil-saya";
+    const featurePath =
+      featureParts.length > 0 ? `/${featureParts.join("/")}` : "/profil-saya";
 
     // Create new search params from current ones
     const newSearchParams = new URLSearchParams(searchParams);
-    
+
     if (companyId) {
       // Set viewAs parameter (keep other params like user_id)
       newSearchParams.set("viewAs", companyId);
@@ -181,10 +182,12 @@ const Header = () => {
       // Remove ONLY viewAs parameter (keep other params like user_id)
       newSearchParams.delete("viewAs");
     }
-    
+
     const queryString = newSearchParams.toString();
-    const finalUrl = `${basePath}${featurePath}${queryString ? `?${queryString}` : ""}`;
-    
+    const finalUrl = `${basePath}${featurePath}${
+      queryString ? `?${queryString}` : ""
+    }`;
+
     // Use regular navigate to avoid parameter preservation behavior
     regularNavigate(finalUrl);
     setIsCompanyDropdownOpen(false);
@@ -193,14 +196,14 @@ const Header = () => {
   // For account switching dropdown
   const handleAccountSwitch = (accountId) => {
     const newPath = `/praktikum/${id}/sistem/${accountId}/profil-saya`;
-    
+
     // Create new search params and remove ONLY viewAs (keep user_id if it exists)
     const newSearchParams = new URLSearchParams(searchParams);
     newSearchParams.delete("viewAs");
-    
+
     const queryString = newSearchParams.toString();
     const finalUrl = `${newPath}${queryString ? `?${queryString}` : ""}`;
-    
+
     // Use regular navigate
     regularNavigate(finalUrl);
     setIsDropdownOpen(false);
@@ -405,7 +408,10 @@ const Header = () => {
           <FileText className="w-6 h-6 cursor-pointer" />
           <Bell
             className="w-6 h-6 cursor-pointer"
-            onClick={() => navigate("/admin/praktikum/2/notifikasi")}
+            onClick={() =>
+              navigate(`/praktikum/${id}/sistem/${akun}/notifikasi`)
+            }
+            // onClick={() => navigate("/admin/praktikum/2/notifikasi")}
           />
           {representedCompanies &&
             representedCompanies.data &&
@@ -545,12 +551,17 @@ const Header = () => {
       <div className="w-full bg-purple-700 pt-1">
         <nav className="w-full bg-purple-700 pb-2 px-4">
           <ul className="flex space-x-6 text-white">
+            {/* navigate(`/praktikum/${id}/sistem/${akun}/notifikasi`) */}
             {[
               {
                 label: "Portal Saya",
                 submenu: [
                   "Dokumen Saya",
-                  "Notifikasi Saya",
+                  {
+                    label: "Notifikasi Saya",
+                    links: `/praktikum/${id}/sistem/${akun}/notifikasi`,
+                  },
+                  // "Notifikasi Saya",
                   "Kasus Saya",
                   "Kasus Berjalan Saya",
                   {

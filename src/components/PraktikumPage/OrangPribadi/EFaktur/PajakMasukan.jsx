@@ -11,6 +11,7 @@ import { RoutesApi } from "@/Routes";
 import Swal from "sweetalert2";
 import { useNavigateWithParams } from "@/hooks/useNavigateWithParams";
 import FakturPenilaian from "../../Badan/EFaktur/FakturPenilaian";
+import { GoArrowSwitch } from "react-icons/go";
 
 const PajakMasukanOP = ({
   data,
@@ -160,13 +161,7 @@ const PajakMasukanOP = ({
               Pajak Masukan
             </h1>
           </div>
-          {userId ? (
-            <FakturPenilaian
-              tipeFaktur="Retur Faktur Masukan"
-            />
-          ) : (
-            ""
-          )}
+          {userId ? <FakturPenilaian tipeFaktur="Retur Faktur Masukan" /> : ""}
         </div>
         <div className="flex justify-between mb-4 border-b pb-3">
           <button
@@ -182,22 +177,30 @@ const PajakMasukanOP = ({
             <button
               onClick={() => kreditkanFaktur.mutate()}
               disabled={selectedItems.length === 0}
-              className={userId ? "hidden" : (`flex items-center font-bold py-2 px-2 rounded text-sm ${
-                selectedItems.length === 0
-                  ? "bg-gray-400 text-gray-600 cursor-not-allowed"
-                  : "bg-blue-500 hover:bg-blue-600 text-white"
-              }`)}
+              className={
+                userId
+                  ? "hidden"
+                  : `flex items-center font-bold py-2 px-2 rounded text-sm ${
+                      selectedItems.length === 0
+                        ? "bg-gray-400 text-gray-600 cursor-not-allowed"
+                        : "bg-blue-500 hover:bg-blue-600 text-white"
+                    }`
+              }
             >
               Kreditkan Faktur
             </button>
             <button
               onClick={() => tidakKreditkanFaktur.mutate()}
               disabled={selectedItems.length === 0}
-              className={userId ? "hidden" : (`flex items-center font-bold py-2 px-2 rounded text-sm ${
-                selectedItems.length === 0
-                  ? "bg-gray-400 text-gray-600 cursor-not-allowed"
-                  : "bg-blue-500 hover:bg-blue-600 text-white"
-              }`)}
+              className={
+                userId
+                  ? "hidden"
+                  : `flex items-center font-bold py-2 px-2 rounded text-sm ${
+                      selectedItems.length === 0
+                        ? "bg-gray-400 text-gray-600 cursor-not-allowed"
+                        : "bg-blue-500 hover:bg-blue-600 text-white"
+                    }`
+              }
             >
               Tidak Kreditan Faktur
             </button>
@@ -289,13 +292,25 @@ const PajakMasukanOP = ({
                         >
                           Lihat PDF
                         </button>
+                        {item.is_kredit === 1 && (
+                          <button
+                            onClick={() =>
+                              navigate(
+                                `/praktikum/${id}/sistem/${akun}/e-faktur/retur-pajak/${item.id}`
+                              )
+                            }
+                            className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs"
+                          >
+                            <GoArrowSwitch />
+                          </button>
+                        )}
                       </div>
                     </td>
                     <td className="px-4 py-2 border">
-                      {item.akun_penerima_id?.npwp_akun || "-"}
+                      {item.akun_pengirim_id?.npwp_akun || "-"}
                     </td>
                     <td className="px-4 py-2 border">
-                      {item.akun_penerima_id?.nama_akun || "-"}
+                      {item.akun_pengirim_id?.nama_akun || "-"}
                     </td>
                     <td className="px-4 py-2 border">
                       {item.kode_transaksi || "-"}

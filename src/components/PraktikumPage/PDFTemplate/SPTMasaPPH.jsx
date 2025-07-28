@@ -72,13 +72,22 @@ const styles = StyleSheet.create({
 
 const SptMasaPph21Pdf = ({ data }) => {
   console.log("pdf data : ", data);
+  // function formatRupiah(value) {
+  //   const numberString = value?.toString().replace(/[^0-9]/g, "") || "0";
+  //   return new Intl.NumberFormat("id-ID", {
+  //     style: "currency",
+  //     currency: "IDR",
+  //     minimumFractionDigits: 0,
+  //   }).format(numberString || 0);
+  // }
+
   function formatRupiah(value) {
-    const numberString = value?.toString().replace(/[^0-9]/g, "") || "0";
+    const number = Number(value) || 0;
     return new Intl.NumberFormat("id-ID", {
       style: "currency",
       currency: "IDR",
       minimumFractionDigits: 0,
-    }).format(numberString || 0);
+    }).format(number);
   }
   return (
     <Document>

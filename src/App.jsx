@@ -1420,6 +1420,25 @@ const Main = () => {
           }
         />
         <Route
+          path="/praktikum/:id/sistem/:akun/notifikasi"
+          // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/notification`}
+                intent={""}
+                OrangPribadi={Notifikasi}
+                Badan={Notifikasi}
+                query={"notifikasi"}
+              ></RoleBasedRenderer>
+            </>
+            // <>
+            //   <Header />
+            //   <KonsepSPT />
+            // </>
+          }
+        />
+        <Route
           path="/pdf/faktur-keluaran"
           element={
             <>
@@ -2263,17 +2282,29 @@ const Main = () => {
             </>
           }
         />
-          <Route
-            path="/admin/praktikum/2/dokumen-lain-keluaran"
-            element={
-              <>
-                <Header />
-                <TambahFakturKeluaranDokumenLain />
-              </>
-            }
-          />
+        <Route
+          path="/admin/praktikum/2/dokumen-lain-keluaran"
+          element={
+            <>
+              <Header />
+              <TambahFakturKeluaranDokumenLain />
+            </>
+          }
+        />
         {/* NOT FOUND ROUTE - LAST REGISTERED ROUTE */}
         <Route path="*" element={<NotFound />} />
+        {/* <Route
+          path="*"
+          element={
+            <RoleBasedRenderer
+              url={``}
+              OrangPribadi={NotFound}
+              Badan={NotFound}
+              intent={""}
+              query={""}
+            ></RoleBasedRenderer>
+          }
+        /> */}
       </Routes>
     </Router>
     // </BrowserRouter>
