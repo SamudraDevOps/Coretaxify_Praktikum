@@ -704,10 +704,21 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
         ? "Draft Faktur berhasil dibuat"
         : "Faktur berhasil diupload";
 
-      Swal.fire("Berhasil!", successMessage, "success").then((result) => {
-        if (result.isConfirmed) {
-          window.location.href = `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran?viewAs=${viewAsCompanyId}`;
-        }
+      // Swal.fire("Berhasil!", successMessage, "success").then((result) => {
+      //   if (result.isConfirmed) {
+      //     window.location.href = `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran?viewAs=${viewAsCompanyId}`;
+      //   }
+      // });
+
+      Swal.fire({
+        title: "Berhasil!",
+        text: successMessage,
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        window.location.href = `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran?viewAs=${viewAsCompanyId}`;
       });
     },
     onError: (error) => {
@@ -2184,7 +2195,9 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                           />
                         </div>
                         <div className="space-y-2">
-                          <label className="block text-sm font-medium">Kuantitas</label>
+                          <label className="block text-sm font-medium">
+                            Kuantitas
+                          </label>
                           <input
                             type="number"
                             className="p-2 border rounded w-full"
@@ -2194,10 +2207,16 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                             onChange={handleKuantitasChange}
                             onWheel={(e) => e.preventDefault()}
                             onFocus={(e) => {
-                              e.target.addEventListener("wheel", (e) => e.preventDefault(), { passive: false });
+                              e.target.addEventListener(
+                                "wheel",
+                                (e) => e.preventDefault(),
+                                { passive: false }
+                              );
                             }}
                             onBlur={(e) => {
-                              e.target.removeEventListener("wheel", (e) => e.preventDefault());
+                              e.target.removeEventListener("wheel", (e) =>
+                                e.preventDefault()
+                              );
                             }}
                             placeholder="0"
                           />
