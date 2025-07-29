@@ -684,8 +684,8 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
     );
   }
   return (
-<div className="flex items-start">  
-        <SidebarProfilSayaBadan
+    <div className="flex items-start">
+      <SidebarProfilSayaBadan
         nama_akun={sidebar.nama_akun}
         npwp_akun={sidebar.npwp_akun}
         akun={{ id, akun }}
@@ -1069,7 +1069,11 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
             </div>
             <div className="flex justify-end mt-4">
               <button
-                className={userId ? "hidden" : "px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"}
+                className={
+                  userId
+                    ? "hidden"
+                    : "px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                }
                 onClick={() => updateInformasiUmum.mutate()}
               >
                 Simpan
@@ -1187,7 +1191,11 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
             </div>
             <div className="flex justify-end mt-4">
               <button
-                className={userId ? "hidden" : "px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"}
+                className={
+                  userId
+                    ? "hidden"
+                    : "px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                }
                 onClick={() => updateDataEkonomi.mutate()}
               >
                 Simpan
@@ -1207,7 +1215,13 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
           <div className="border rounded-md p-4 mb-4">
             <div className="flex justify-between items-center mb-4">
               <AlertDialog>
-                <AlertDialogTrigger className={userId ? "hidden" : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"}>
+                <AlertDialogTrigger
+                  className={
+                    userId
+                      ? "hidden"
+                      : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"
+                  }
+                >
                   + Tambah Kontak
                 </AlertDialogTrigger>
                 <AlertDialogContent className="bg-white !min-w-[1000px] rounded-lg shadow-lg ">
@@ -1383,7 +1397,11 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                             <AlertDialog>
                               <AlertDialogTrigger
                                 onClick={() => setContactFormData(contact)}
-                                className={userId ? "hidden" : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"}
+                                className={
+                                  userId
+                                    ? "hidden"
+                                    : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"
+                                }
                               >
                                 Ubah Kontak
                               </AlertDialogTrigger>
@@ -1546,7 +1564,9 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                               </AlertDialogContent>
                             </AlertDialog>
                             <button
-                              className={userId ? "hidden" : "action-button delete"}
+                              className={
+                                userId ? "hidden" : "action-button delete"
+                              }
                               onClick={() => {
                                 Swal.fire({
                                   title: "Hapus Kelas?",
@@ -1616,7 +1636,11 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
           <div className="border rounded-md p-4 mb-4 ">
             <div className="flex justify-between items-center mb-4">
               <button
-                className={userId ? "hidden" : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-2 rounded"}
+                className={
+                  userId
+                    ? "hidden"
+                    : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-2 rounded"
+                }
                 onClick={openModal}
               >
                 + Tambah
@@ -2038,7 +2062,11 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                                   type="button"
                                   // onClick={() => createRelatedPerson.mutate()}
                                   onClick={() => console.log(formOrangTerkait)}
-                                  className={userId ? "hidden" : "bg-blue-900 text-white px-4 py-2 rounded hover:bg-blue-950"}
+                                  className={
+                                    userId
+                                      ? "hidden"
+                                      : "bg-blue-900 text-white px-4 py-2 rounded hover:bg-blue-950"
+                                  }
                                   // disabled={createRelatedPerson.isPending}
                                 >
                                   {/* {createRelatedPerson.isPending
@@ -2055,12 +2083,25 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                               >
                                 Batal
                               </button>
-                              <button
+                              {/* <button
                                 // onClick={() => console.log(formOrangTerkait)}
                                 onClick={() => createPihakTerkait.mutate()}
                                 className={userId ? "hidden" : "bg-blue-900 text-white px-4 py-2 rounded hover:bg-blue-950"}
                               >
                                 Simpan
+                              </button> */}
+                              <button
+                                onClick={() => createPihakTerkait.mutate()}
+                                className={
+                                  userId
+                                    ? "hidden"
+                                    : "bg-blue-900 text-white px-4 py-2 rounded hover:bg-blue-950 disabled:opacity-50"
+                                }
+                                disabled={createPihakTerkait.isPending} // disable button while pending
+                              >
+                                {createPihakTerkait.isPending
+                                  ? "Menyimpan..."
+                                  : "Simpan"}
                               </button>
                             </div>
                           </>
@@ -2159,7 +2200,13 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
           <div className="border rounded-md p-4 mb-4">
             <div className="flex justify-between items-center mb-4">
               <AlertDialog>
-                <AlertDialogTrigger className={userId ? "hidden" : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"}>
+                <AlertDialogTrigger
+                  className={
+                    userId
+                      ? "hidden"
+                      : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"
+                  }
+                >
                   + Tambah
                 </AlertDialogTrigger>
                 <AlertDialogContent className="bg-white !min-w-[1000px] rounded-lg shadow-lg ">
@@ -2259,7 +2306,11 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                           <AlertDialog>
                             <AlertDialogTrigger
                               onClick={() => setTkuFormData(tku)}
-                              className={userId ? "hidden" : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"}
+                              className={
+                                userId
+                                  ? "hidden"
+                                  : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"
+                              }
                             >
                               Edit
                             </AlertDialogTrigger>
@@ -2339,7 +2390,11 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                           </button>
                           <button
                             onClick={() => deleteTku.mutate(tku.id)}
-                            className={userId ? "hidden" : "bg-red-500 hover:bg-red-600 text-white py-2 px-2 rounded ml-2"}
+                            className={
+                              userId
+                                ? "hidden"
+                                : "bg-red-500 hover:bg-red-600 text-white py-2 px-2 rounded ml-2"
+                            }
                           >
                             Hapus
                           </button>
@@ -2367,7 +2422,13 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
           <div className="border rounded-md p-4 mb-4">
             <div className="flex justify-between items-center mb-4">
               <AlertDialog>
-                <AlertDialogTrigger className={userId ? "hidden" : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"}>
+                <AlertDialogTrigger
+                  className={
+                    userId
+                      ? "hidden"
+                      : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"
+                  }
+                >
                   + Tambah
                 </AlertDialogTrigger>
                 <AlertDialogContent className="bg-white !min-w-[1000px] rounded-lg shadow-lg ">
@@ -2570,7 +2631,11 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                         <AlertDialog>
                           <AlertDialogTrigger
                             onClick={() => setBankFormData(bank)}
-                            className={userId ? "hidden" : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"}
+                            className={
+                              userId
+                                ? "hidden"
+                                : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"
+                            }
                           >
                             Edit
                           </AlertDialogTrigger>
@@ -2743,7 +2808,11 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                         </AlertDialog>
                         <button
                           onClick={() => deleteDetailBank.mutate(bank.id)}
-                          className={userId ? "hidden" : "bg-red-500 hover:bg-red-600 text-white py-2 px-2 rounded ml-2"}
+                          className={
+                            userId
+                              ? "hidden"
+                              : "bg-red-500 hover:bg-red-600 text-white py-2 px-2 rounded ml-2"
+                          }
                         >
                           Hapus
                         </button>
@@ -2784,7 +2853,13 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
           <div className="border rounded-md p-4 mb-4">
             <div className="flex justify-between items-center mb-4">
               <AlertDialog>
-                <AlertDialogTrigger className={userId ? "hidden" : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"}>
+                <AlertDialogTrigger
+                  className={
+                    userId
+                      ? "hidden"
+                      : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"
+                  }
+                >
                   + Tambah
                 </AlertDialogTrigger>
                 <AlertDialogContent className="bg-white !min-w-[1000px] rounded-lg shadow-lg ">
@@ -2843,7 +2918,7 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                     <AlertDialogAction className="bg-blue-900 text-white px-4 py-2 rounded-md hover:bg-blue-950">
                       Simpan
                     </AlertDialogAction>
-                </AlertDialogFooter>
+                  </AlertDialogFooter>
                 </AlertDialogContent>
               </AlertDialog>
             </div>
@@ -2867,13 +2942,25 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                 <tbody className="text-gray-600">
                   <tr className="bg-gray-100">
                     <td className="px-1 py-4 border">
-                      <button className={userId ? "hidden" : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-2 rounded"}>
+                      <button
+                        className={
+                          userId
+                            ? "hidden"
+                            : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-2 rounded"
+                        }
+                      >
                         Edit
                       </button>
                       <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-2 rounded ml-2">
                         Lihat
                       </button>
-                      <button className={userId ? "hidden" : "bg-red-500 hover:bg-red-600 text-white py-2 px-2 rounded ml-2"}>
+                      <button
+                        className={
+                          userId
+                            ? "hidden"
+                            : "bg-red-500 hover:bg-red-600 text-white py-2 px-2 rounded ml-2"
+                        }
+                      >
                         Hapus
                       </button>
                     </td>
