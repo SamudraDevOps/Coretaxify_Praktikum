@@ -146,7 +146,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
       const data = await axios.get(
         // RoutesApiReal.apiUrl + `student/assignments/${id}/sistem/${akun}`,
         RoutesApiReal.apiUrl +
-          `student/assignments/${id}/sistem/${akun}/getAkun`,
+        `student/assignments/${id}/sistem/${akun}/getAkun`,
         {
           headers: {
             Authorization: `Bearer ${cookies.token}`,
@@ -435,10 +435,10 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
         selectedInfo === "A"
           ? "X"
           : selectedInfo === "B"
-          ? "Y"
-          : selectedInfo === "C"
-          ? "Z"
-          : "",
+            ? "Y"
+            : selectedInfo === "C"
+              ? "Z"
+              : "",
       nomorPendukung: "", // reset ketika berubah
     }));
     // Atur nilai Cap Fasilitas secara otomatis
@@ -504,16 +504,32 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
     }
   }, [kode_transaksi]);
 
-  function updateTarifPPN(newJumlah) {
-    // const numericJumlah = parseInt(newJumlah.replace(/\D/g, ""), 10) || 0;
-    const numericJumlah = newJumlah;
-    setTarifPPN(numericJumlah * 0.12); // PPN 12%
+  // function updateTarifPPN(newJumlah) {
+  //   // const numericJumlah = parseInt(newJumlah.replace(/\D/g, ""), 10) || 0;
+  //   const numericJumlah = newJumlah;
+  //   setTarifPPN(numericJumlah * 0.12); // PPN 12%
 
-    // Hitung PPnBM jika PPnBM belum diedit manual
+  //   // Hitung PPnBM jika PPnBM belum diedit manual
+  //   if (!isCustomPPnBM) {
+  //     const numericPPnBM = parseInt(tarif_ppnbm.replace(/\D/g, ""), 10) || 0;
+  //     //   const numericPPnBM = tarif_ppnbm;
+  //     setPPnBM((numericJumlah * numericPPnBM) / 100);
+  //   }
+  // }
+  function updateTarifPPN(newJumlah) {
+    const numericJumlah = parseFloat(newJumlah) || 0;
+
+    // Hitung PPN 12%, bulatkan ke 2 desimal
+    const ppnValue = numericJumlah * 0.12;
+    const roundedPPN = Math.round(ppnValue * 100) / 100;
+    setTarifPPN(roundedPPN);
+
+    // Hitung PPnBM otomatis jika belum di-custom
     if (!isCustomPPnBM) {
-      const numericPPnBM = parseInt(tarif_ppnbm.replace(/\D/g, ""), 10) || 0;
-      //   const numericPPnBM = tarif_ppnbm;
-      setPPnBM((numericJumlah * numericPPnBM) / 100);
+      const ratePPnBM = parseFloat(tarif_ppnbm) || 0;
+      const ppnbmValue = (numericJumlah * ratePPnBM) / 100;
+      const roundedPPnBM = Math.round(ppnbmValue * 100) / 100;
+      setPPnBM(roundedPPnBM);
     }
   }
   const handleCheckboxChange = () => {
@@ -1974,28 +1990,28 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                           "9 - Penyerahan kepada Perwakilan Negara Asing dan Badan Internasional serta Pejabatnya",
                           "10 - BKP dan JKP tertentu",
                         ].includes(informasi_tambahan))) && (
-                      <div className="space-y-2">
-                        <label className="block text-sm font-medium">
-                          Nomor Pendukung
-                        </label>
-                        <input
-                          readOnly
-                          type="text"
-                          name="nomorPendukung"
-                          className="p-2 border rounded w-full"
-                          placeholder="Masukkan Nomor Pendukung"
-                          value={formData.nomorPendukung}
-                          onChange={(e) => {
-                            const value = e.target.value;
-                            setNomorPendukung(value);
-                            setFormData((prev) => ({
-                              ...prev,
-                              nomorPendukung: value,
-                            }));
-                          }}
-                        />
-                      </div>
-                    )}
+                        <div className="space-y-2">
+                          <label className="block text-sm font-medium">
+                            Nomor Pendukung
+                          </label>
+                          <input
+                            readOnly
+                            type="text"
+                            name="nomorPendukung"
+                            className="p-2 border rounded w-full"
+                            placeholder="Masukkan Nomor Pendukung"
+                            value={formData.nomorPendukung}
+                            onChange={(e) => {
+                              const value = e.target.value;
+                              setNomorPendukung(value);
+                              setFormData((prev) => ({
+                                ...prev,
+                                nomorPendukung: value,
+                              }));
+                            }}
+                          />
+                        </div>
+                      )}
                   </>
                 )}
               </div>
@@ -2458,7 +2474,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                               type="text"
                               className="p-2 border rounded w-full bg-gray-100"
                               value="12%"
-                              // readOnly
+                            // readOnly
                             />
                           </div>
                           <div className="space-y-2">
@@ -2540,8 +2556,8 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                         {addDetailTransaksi.isPending
                           ? "Menyimpan..."
                           : editMode
-                          ? "Perbarui"
-                          : "Simpan"}
+                            ? "Perbarui"
+                            : "Simpan"}
                       </AlertDialogAction>
                     </AlertDialogFooter>
                   </AlertDialogContent>
@@ -2795,7 +2811,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                                         className="p-2 border rounded w-full bg-gray-100"
                                         readOnly
                                         placeholder="Rp 0"
-                                        
+
                                       />
                                     </div>
                                     <div className="space-y-2">
@@ -2894,7 +2910,7 @@ ${isChecked ? "" : "bg-gray-100"}
                                           type="text"
                                           className="p-2 border rounded w-full bg-gray-100"
                                           value="12%"
-                                          // readOnly
+                                        // readOnly
                                         />
                                       </div>
                                       <div className="space-y-2">
