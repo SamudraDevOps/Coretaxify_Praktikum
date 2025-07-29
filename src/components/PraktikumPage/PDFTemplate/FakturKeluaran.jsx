@@ -120,30 +120,24 @@ const FakturPajakKeluaranPdf = ({ data }) => (
       {/* Penjual */}
       {/* <View style={styles.section}> */}
       <View style={styles.boxContainer}>
-        <View style={styles.boxRow}>
-          {/* Baris 1: Nama */}
-          
-            <Text style={styles.row}>Nama  : {data.akun_pengirim_id.nama_akun}</Text>
-            {/* <Text style={styles.value}>{data.akun_pengirim_id.nama_akun}</Text> */}
-            {/* </View> */}
+        <View style={{ borderBottomWidth: 1, borderBottomColor: "#000" }}>
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-between" }}
+          >
+            {/* Title aligned to the left */}
+            <Text style={{ fontSize: 12, fontWeight: "bold", padding: 5 }}>
+              {/* Faktur Pajak */}
+            </Text>
 
-            {/* Baris 2: Alamat */}
-            {/* <View style={styles.boxRow}> */}
-            <Text style={styles.row}>Alamat : {data.akun_pengirim_id.alamat_utama_akun}</Text>
-            {/* <Text style={styles.value}>{data.akun_pengirim_id.alamat_utama_akun}</Text> */}
-            {/* </View> */}
-
-            {/* Baris 3: NPWP */}
-            {/* <View style={styles.boxRow}> */}
-            <Text style={styles.row}>NPWP : {data.akun_pengirim_id.npwp_akun} </Text>
-            {/* <Text style={styles.value}>{data.akun_pengirim_id.npwp_akun}</Text> */}
+            {/* Info aligned to the right */}
+            <View style={{ padding: 5, alignItems: "flex-start" }}>
+              <Text>Nama: {data.akun_pengirim_id.nama_akun}</Text>
+              <Text>Alamat: {data.akun_pengirim_id.alamat_utama_akun}</Text>
+              <Text>NPWP : {data.akun_pengirim_id.npwp_akun}</Text>
+            </View>
           </View>
-       
-        {/* <View style={styles.boxRow}></View> */}
-        <View style={styles.boxRow}>
-          <Text style={styles.row}>Kode dan Nomor Seri Faktur Pajak : {data.nomor_faktur_pajak}</Text>
-          {/* <Text style={styles.value}>{data.nomor_faktur_pajak}</Text> */}
         </View>
+
         {/* </View> */}
 
         {/* Faktur Code */}
