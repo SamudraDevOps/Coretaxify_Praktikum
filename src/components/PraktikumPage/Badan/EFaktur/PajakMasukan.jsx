@@ -191,13 +191,7 @@ const PajakMasukan = ({
               Pajak Masukan
             </h1>
           </div>
-          {userId ? (
-            <FakturPenilaian
-              tipeFaktur="Faktur Masukan"
-            />
-          ) : (
-            ""
-          )}
+          {userId ? <FakturPenilaian tipeFaktur="Faktur Masukan" /> : ""}
         </div>
         <div className="flex justify-between mb-4 border-b pb-3">
           <button
@@ -212,25 +206,89 @@ const PajakMasukan = ({
           <div className="flex items-center gap-3 ">
             <button
               onClick={() => kreditkanFaktur.mutate()}
-              disabled={selectedItems.length === 0}
-              className={userId ? "hidden" : (`flex items-center font-bold py-2 px-2 rounded text-sm ${
-                selectedItems.length === 0
-                  ? "bg-gray-400 text-gray-600 cursor-not-allowed"
-                  : "bg-blue-500 hover:bg-blue-600 text-white"
-              }`)}
+              disabled={selectedItems.length === 0 || kreditkanFaktur.isPending}
+              className={
+                userId
+                  ? "hidden"
+                  : `flex items-center justify-center gap-2 font-bold py-2 px-2 rounded text-sm ${
+                      selectedItems.length === 0 || kreditkanFaktur.isPending
+                        ? "bg-gray-400 text-gray-600 cursor-not-allowed"
+                        : "bg-blue-500 hover:bg-blue-600 text-white"
+                    }`
+              }
             >
-              Kreditkan Faktur
+              {kreditkanFaktur.isPending ? (
+                <>
+                  <svg
+                    className="animate-spin h-4 w-4 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                    ></path>
+                  </svg>
+                  Mengkreditkan...
+                </>
+              ) : (
+                "Kreditkan Faktur"
+              )}
             </button>
+
             <button
               onClick={() => tidakKreditkanFaktur.mutate()}
-              disabled={selectedItems.length === 0}
-              className={userId ? "hidden" : (`flex items-center font-bold py-2 px-2 rounded text-sm ${
-                selectedItems.length === 0
-                  ? "bg-gray-400 text-gray-600 cursor-not-allowed"
-                  : "bg-blue-500 hover:bg-blue-600 text-white"
-              }`)}
+              disabled={
+                selectedItems.length === 0 || tidakKreditkanFaktur.isPending
+              }
+              className={
+                userId
+                  ? "hidden"
+                  : `flex items-center justify-center gap-2 font-bold py-2 px-2 rounded text-sm ${
+                      selectedItems.length === 0 ||
+                      tidakKreditkanFaktur.isPending
+                        ? "bg-gray-400 text-gray-600 cursor-not-allowed"
+                        : "bg-blue-500 hover:bg-blue-600 text-white"
+                    }`
+              }
             >
-              Tidak Kreditan Faktur
+              {tidakKreditkanFaktur.isPending ? (
+                <>
+                  <svg
+                    className="animate-spin h-4 w-4 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                    ></path>
+                  </svg>
+                  Mengabaikan...
+                </>
+              ) : (
+                "Tidak Kreditkan Faktur"
+              )}
             </button>
           </div>
         </div>
