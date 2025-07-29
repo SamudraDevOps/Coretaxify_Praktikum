@@ -913,7 +913,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
           params: {
             intent: isDraft
               ? "api.create.faktur.draft"
-              : "api.create.faktur.fix",
+              : "api.update.faktur.fix",
           },
         }
       );
