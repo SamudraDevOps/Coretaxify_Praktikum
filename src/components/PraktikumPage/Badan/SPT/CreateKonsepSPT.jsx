@@ -1053,10 +1053,10 @@ const CreateKonsepSPT = ({ data }) => {
                       >
                         Posting SPT
                       </button>
-                      {/* <p className="text-sm text-gray-500">
-                        Last prefiling Returnsheet is on{" "}
-                        <strong>12 April 2025 23:24:46</strong>
-                      </p> */}
+                      <p className="text-sm text-red-500">
+                        {/* WAJIB DI CLICK{" "} */}
+                        <strong>WAJIB DI CLICK *</strong>
+                      </p>
                     </div>
                   </div>
                 )}

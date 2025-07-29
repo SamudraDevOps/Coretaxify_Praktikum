@@ -121,26 +121,35 @@ const FakturPajakKeluaranPdf = ({ data }) => (
       {/* <View style={styles.section}> */}
       <View style={styles.boxContainer}>
         <View style={styles.boxRow}>
-          <Text style={styles.label}>Nama :</Text>
-          <Text style={styles.value}>{data.akun_pengirim_id.nama_akun}</Text>
-          <Text style={styles.label}>Alamat :</Text>
-          <Text style={styles.value}>
-            {data.akun_pengirim_id.alamat_utama_akun}
-          </Text>
-          <Text style={styles.label}>NPWP : </Text>
-          <Text style={styles.value}>{data.akun_pengirim_id.npwp_akun}</Text>
-        </View>
+          {/* Baris 1: Nama */}
+          
+            <Text style={styles.row}>Nama  : {data.akun_pengirim_id.nama_akun}</Text>
+            {/* <Text style={styles.value}>{data.akun_pengirim_id.nama_akun}</Text> */}
+            {/* </View> */}
+
+            {/* Baris 2: Alamat */}
+            {/* <View style={styles.boxRow}> */}
+            <Text style={styles.row}>Alamat : {data.akun_pengirim_id.alamat_utama_akun}</Text>
+            {/* <Text style={styles.value}>{data.akun_pengirim_id.alamat_utama_akun}</Text> */}
+            {/* </View> */}
+
+            {/* Baris 3: NPWP */}
+            {/* <View style={styles.boxRow}> */}
+            <Text style={styles.row}>NPWP : {data.akun_pengirim_id.npwp_akun} </Text>
+            {/* <Text style={styles.value}>{data.akun_pengirim_id.npwp_akun}</Text> */}
+          </View>
+       
         {/* <View style={styles.boxRow}></View> */}
         <View style={styles.boxRow}>
-          <Text style={styles.label}>Nomor:</Text>
-          <Text style={styles.value}>{data.nomor_faktur_pajak}</Text>
+          <Text style={styles.row}>Kode dan Nomor Seri Faktur Pajak : {data.nomor_faktur_pajak}</Text>
+          {/* <Text style={styles.value}>{data.nomor_faktur_pajak}</Text> */}
         </View>
         {/* </View> */}
 
         {/* Faktur Code */}
-        <View style={styles.boxRow}>
+        {/* <View style={styles.boxRow}>
           <Text>Kode dan Nomor Seri Faktur Pajak: 04002500110910510</Text>
-        </View>
+        </View> */}
 
         <View style={styles.boxRow}>
           <Text style={{ fontWeight: "bold" }}>Pengusaha Kena Pajak:</Text>
