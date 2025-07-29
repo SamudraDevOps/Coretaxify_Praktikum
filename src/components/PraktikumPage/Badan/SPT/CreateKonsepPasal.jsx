@@ -29,6 +29,7 @@ import Swal from "sweetalert2";
 import { RoutesApi } from "@/Routes";
 import { useNavigateWithParams } from "@/hooks/useNavigateWithParams";
 import { ClipLoader } from "react-spinners";
+import { X } from "lucide-react";
 const CreateKonsepPasal = ({ data }) => {
   const navigate = useNavigateWithParams();
   console.log(data);
@@ -1091,6 +1092,10 @@ const CreateKonsepPasal = ({ data }) => {
                       </button>
                     </AlertDialogTrigger>
                     <AlertDialogContent className="max-w-xl">
+                      <AlertDialogCancel className="absolute top-4 right-4 p-1 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-md shadow-none border-none ring-0 focus:outline-none focus:ring-0">
+                        <X className="w-5 h-5" />
+                      </AlertDialogCancel>
+
                       <AlertDialogHeader>
                         <AlertDialogTitle className="text-lg font-semibold ">
                           Pilih Cara Pembayaran
