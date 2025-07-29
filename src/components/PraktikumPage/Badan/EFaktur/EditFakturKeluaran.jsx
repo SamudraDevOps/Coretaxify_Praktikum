@@ -146,7 +146,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
       const data = await axios.get(
         // RoutesApiReal.apiUrl + `student/assignments/${id}/sistem/${akun}`,
         RoutesApiReal.apiUrl +
-        `student/assignments/${id}/sistem/${akun}/getAkun`,
+          `student/assignments/${id}/sistem/${akun}/getAkun`,
         {
           headers: {
             Authorization: `Bearer ${cookies.token}`,
@@ -435,10 +435,10 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
         selectedInfo === "A"
           ? "X"
           : selectedInfo === "B"
-            ? "Y"
-            : selectedInfo === "C"
-              ? "Z"
-              : "",
+          ? "Y"
+          : selectedInfo === "C"
+          ? "Z"
+          : "",
       nomorPendukung: "", // reset ketika berubah
     }));
     // Atur nilai Cap Fasilitas secara otomatis
@@ -940,10 +940,20 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
         ? "Draft Faktur berhasil dibuat"
         : "Faktur berhasil diupload";
 
-      Swal.fire("Berhasil!", successMessage, "success").then((result) => {
-        if (result.isConfirmed) {
-          window.location.href = `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran?viewAs=${viewAsCompanyId}`;
-        }
+      // Swal.fire("Berhasil!", successMessage, "success").then((result) => {
+      //   if (result.isConfirmed) {
+      //     window.location.href = `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran?viewAs=${viewAsCompanyId}`;
+      //   }
+      // });
+      Swal.fire({
+        title: "Berhasil!",
+        text: successMessage,
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        window.location.href = `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran?viewAs=${viewAsCompanyId}`;
       });
     },
     onError: (error) => {
@@ -1016,15 +1026,27 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
       //   ? "Draft Faktur berhasil dibuat"
       //   : "Faktur berhasil diupload";
 
-      Swal.fire(
-        "Berhasil!",
-        "Detail Transaksi berhasil ditambahkan",
-        "success"
-      ).then((result) => {
-        if (result.isConfirmed) {
-          window.location.reload();
-          // window.location.href = `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran?viewAs=${viewAsCompanyId}`;
-        }
+      // Swal.fire(
+      //   "Berhasil!",
+      //   "Detail Transaksi berhasil ditambahkan",
+      //   "success"
+      // ).then((result) => {
+      //   if (result.isConfirmed) {
+      //     window.location.reload();
+      //     // window.location.href = `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran?viewAs=${viewAsCompanyId}`;
+      //   }
+      // });
+
+      Swal.fire({
+        title: "Berhasil!",
+        text: "Detail Transaksi berhasil ditambahkan",
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        // window.location.href = `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran?viewAs=${viewAsCompanyId}`;
+        window.location.reload();
       });
     },
     onError: (error) => {
@@ -1094,15 +1116,27 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
       // const successMessage = variables.isDraft
       //   ? "Draft Faktur berhasil dibuat"
       //   : "Faktur berhasil diupload";
-      Swal.fire(
-        "Berhasil!",
-        "Detail Transaksi berhasil ditambahkan",
-        "success"
-      ).then((result) => {
-        if (result.isConfirmed) {
-          window.location.reload();
-          // window.location.href = `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran?viewAs=${viewAsCompanyId}`;
-        }
+      // Swal.fire(
+      //   "Berhasil!",
+      //   "Detail Transaksi berhasil ditambahkan",
+      //   "success"
+      // ).then((result) => {
+      //   if (result.isConfirmed) {
+      //     window.location.reload();
+      //     // window.location.href = `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran?viewAs=${viewAsCompanyId}`;
+      //   }
+      // });
+
+      Swal.fire({
+        title: "Berhasil!",
+        text: "Detail Transaksi berhasil diubah",
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        // window.location.href = `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran?viewAs=${viewAsCompanyId}`;
+        window.location.reload();
       });
     },
     onError: (error) => {
@@ -1990,28 +2024,28 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                           "9 - Penyerahan kepada Perwakilan Negara Asing dan Badan Internasional serta Pejabatnya",
                           "10 - BKP dan JKP tertentu",
                         ].includes(informasi_tambahan))) && (
-                        <div className="space-y-2">
-                          <label className="block text-sm font-medium">
-                            Nomor Pendukung
-                          </label>
-                          <input
-                            readOnly
-                            type="text"
-                            name="nomorPendukung"
-                            className="p-2 border rounded w-full"
-                            placeholder="Masukkan Nomor Pendukung"
-                            value={formData.nomorPendukung}
-                            onChange={(e) => {
-                              const value = e.target.value;
-                              setNomorPendukung(value);
-                              setFormData((prev) => ({
-                                ...prev,
-                                nomorPendukung: value,
-                              }));
-                            }}
-                          />
-                        </div>
-                      )}
+                      <div className="space-y-2">
+                        <label className="block text-sm font-medium">
+                          Nomor Pendukung
+                        </label>
+                        <input
+                          readOnly
+                          type="text"
+                          name="nomorPendukung"
+                          className="p-2 border rounded w-full"
+                          placeholder="Masukkan Nomor Pendukung"
+                          value={formData.nomorPendukung}
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            setNomorPendukung(value);
+                            setFormData((prev) => ({
+                              ...prev,
+                              nomorPendukung: value,
+                            }));
+                          }}
+                        />
+                      </div>
+                    )}
                   </>
                 )}
               </div>
@@ -2474,7 +2508,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                               type="text"
                               className="p-2 border rounded w-full bg-gray-100"
                               value="12%"
-                            // readOnly
+                              // readOnly
                             />
                           </div>
                           <div className="space-y-2">
@@ -2556,8 +2590,8 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                         {addDetailTransaksi.isPending
                           ? "Menyimpan..."
                           : editMode
-                            ? "Perbarui"
-                            : "Simpan"}
+                          ? "Perbarui"
+                          : "Simpan"}
                       </AlertDialogAction>
                     </AlertDialogFooter>
                   </AlertDialogContent>
@@ -2811,7 +2845,6 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                                         className="p-2 border rounded w-full bg-gray-100"
                                         readOnly
                                         placeholder="Rp 0"
-
                                       />
                                     </div>
                                     <div className="space-y-2">
@@ -2910,7 +2943,7 @@ ${isChecked ? "" : "bg-gray-100"}
                                           type="text"
                                           className="p-2 border rounded w-full bg-gray-100"
                                           value="12%"
-                                        // readOnly
+                                          // readOnly
                                         />
                                       </div>
                                       <div className="space-y-2">
