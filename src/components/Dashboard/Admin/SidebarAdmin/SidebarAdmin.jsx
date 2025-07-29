@@ -27,6 +27,7 @@ import { RoutesApi } from "@/Routes";
 import { CookiesProvider, useCookies } from "react-cookie";
 
 const SidebarAdmin = () => {
+  const [isActive, setIsActive] = useState(false);
   const [cookies, setCookie, removeCookie] = useCookies(["token"]);
   const [isOpen, setIsOpen] = useState(true);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -82,6 +83,7 @@ const SidebarAdmin = () => {
     staleTime: 5 * 60 * 1000, // 5 menit
   });
 
+
   // Dapatkan URL gambar profile
   let profileUrl = "https://ui-avatars.com/api/?name=User&background=random&size=128";
   if (profileData) {
@@ -97,7 +99,11 @@ const SidebarAdmin = () => {
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
-
+  
+  const isSidebarActive = () => {
+    
+  }
+  
   const toggleProfileDropdown = () => {
     setIsProfileDropdownOpen(!isProfileDropdownOpen);
   };
@@ -118,7 +124,7 @@ const SidebarAdmin = () => {
             <img
               src={Logo}
               alt="CTaxify Logo"
-              className="sidebar-logo"
+              className="sidebar-logo m-5"
               onClick={toggleSidebar}
             />
           )}

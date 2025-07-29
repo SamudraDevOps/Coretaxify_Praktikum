@@ -255,16 +255,32 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
     }
   }, [kode_transaksi]);
 
-  function updateTarifPPN(newJumlah) {
-    // const numericJumlah = parseInt(newJumlah.replace(/\D/g, ""), 10) || 0;
-    const numericJumlah = newJumlah;
-    setTarifPPN(numericJumlah * 0.12); // PPN 12%
+  // function updateTarifPPN(newJumlah) {
+  //   // const numericJumlah = parseInt(newJumlah.replace(/\D/g, ""), 10) || 0;
+  //   const numericJumlah = newJumlah;
+  //   setTarifPPN(numericJumlah * 0.12); // PPN 12%
 
-    // Hitung PPnBM jika PPnBM belum diedit manual
+  //   // Hitung PPnBM jika PPnBM belum diedit manual
+  //   if (!isCustomPPnBM) {
+  //     const numericPPnBM = parseInt(tarif_ppnbm.replace(/\D/g, ""), 10) || 0;
+  //     //   const numericPPnBM = tarif_ppnbm;
+  //     setPPnBM((numericJumlah * numericPPnBM) / 100);
+  //   }
+  // }
+  function updateTarifPPN(newJumlah) {
+    const numericJumlah = parseFloat(newJumlah) || 0;
+
+    // Hitung PPN 12%, bulatkan ke 2 desimal
+    const ppnValue = numericJumlah * 0.12;
+    const roundedPPN = Math.round(ppnValue * 100) / 100;
+    setTarifPPN(roundedPPN);
+
+    // Hitung PPnBM otomatis jika belum di-custom
     if (!isCustomPPnBM) {
-      const numericPPnBM = parseInt(tarif_ppnbm.replace(/\D/g, ""), 10) || 0;
-      //   const numericPPnBM = tarif_ppnbm;
-      setPPnBM((numericJumlah * numericPPnBM) / 100);
+      const ratePPnBM = parseFloat(tarif_ppnbm) || 0;
+      const ppnbmValue = (numericJumlah * ratePPnBM) / 100;
+      const roundedPPnBM = Math.round(ppnbmValue * 100) / 100;
+      setPPnBM(roundedPPnBM);
     }
   }
   const handleCheckboxChange = () => {
@@ -2168,9 +2184,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                           />
                         </div>
                         <div className="space-y-2">
-                          <label className="block text-sm font-medium">
-                            Kuantitas
-                          </label>
+                          <label className="block text-sm font-medium">Kuantitas</label>
                           <input
                             type="number"
                             className="p-2 border rounded w-full"
@@ -2178,6 +2192,13 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                             step="1"
                             value={kuantitas === 0 ? "" : kuantitas}
                             onChange={handleKuantitasChange}
+                            onWheel={(e) => e.preventDefault()}
+                            onFocus={(e) => {
+                              e.target.addEventListener("wheel", (e) => e.preventDefault(), { passive: false });
+                            }}
+                            onBlur={(e) => {
+                              e.target.removeEventListener("wheel", (e) => e.preventDefault());
+                            }}
                             placeholder="0"
                           />
                         </div>
