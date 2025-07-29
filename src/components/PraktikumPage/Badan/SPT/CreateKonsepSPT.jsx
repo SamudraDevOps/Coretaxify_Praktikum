@@ -692,14 +692,25 @@ const CreateKonsepSPT = ({ data }) => {
     },
     onSuccess: (data, variables) => {
       console.log(data);
-      Swal.fire("Berhasil!", "Konsep SPT berhasil dihitung.", "success").then(
-        (result) => {
-          if (result.isConfirmed) {
-            window.location.reload();
-          }
-          // navigate(`/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt`);
-        }
-      );
+      // Swal.fire("Berhasil!", "Konsep SPT berhasil dihitung.", "success").then(
+      //   (result) => {
+      //     if (result.isConfirmed) {
+      //       window.location.reload();
+      //     }
+      //     // navigate(`/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt`);
+      //   }
+      // );
+
+      Swal.fire({
+        title: "Berhasil!",
+        text: "Konsep  SPT berhasil dihitung.",
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        window.location.reload();
+      });
     },
     onError: (error) => {
       console.error("Error saving data:", error);
@@ -734,16 +745,28 @@ const CreateKonsepSPT = ({ data }) => {
       //   ? "Draft Faktur berhasil dibuat"
       //   : "Faktur berhasil diupload";
 
-      Swal.fire("Berhasil!", "Konsep SPT berhasil dibuat.", "success").then(
-        (result) => {
-          if (result.isConfirmed) {
-            // window.location.href = `/praktikum/${id}/sistem/${akun}/buat-konsep-spt/${idSpt}`;
-            navigate(
-              `/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt/konsep`
-            );
-          }
-        }
-      );
+      // Swal.fire("Berhasil!", "Konsep SPT berhasil dibuat.", "success").then(
+      //   (result) => {
+      //     if (result.isConfirmed) {
+      //       // window.location.href = `/praktikum/${id}/sistem/${akun}/buat-konsep-spt/${idSpt}`;
+      //       navigate(
+      //         `/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt/konsep`
+      //       );
+      //     }
+      //   }
+      // );
+      Swal.fire({
+        title: "Berhasil!",
+        text: "Konsep SPT berhasil dibuat.",
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        navigate(
+          `/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt/konsep`
+        );
+      });
     },
     onError: (error) => {
       console.error("Error saving data:", error);
@@ -777,15 +800,27 @@ const CreateKonsepSPT = ({ data }) => {
       //   ? "Draft Faktur berhasil dibuat"
       //   : "Faktur berhasil diupload";
 
-      Swal.fire("Berhasil!", "SPT berhasil dibayar.", "success").then(
-        (result) => {
-          if (result.isConfirmed) {
-            navigate(
-              `/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt/konsep`
-            );
-          }
-        }
-      );
+      // Swal.fire("Berhasil!", "SPT berhasil dibayar.", "success").then(
+      //   (result) => {
+      //     if (result.isConfirmed) {
+      //       navigate(
+      //         `/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt/konsep`
+      //       );
+      //     }
+      //   }
+      // );
+      Swal.fire({
+        title: "Berhasil!",
+        text: "SPT berhasil dibayar.",
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        navigate(
+          `/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt/konsep`
+        );
+      });
     },
     onError: (error) => {
       console.error("Error saving data:", error);
@@ -824,17 +859,29 @@ const CreateKonsepSPT = ({ data }) => {
       //   ? "Draft Faktur berhasil dibuat"
       //   : "Faktur berhasil diupload";
 
-      Swal.fire(
-        "Berhasil!",
-        "Kode Billing SPT berhasil dibuat.",
-        "success"
-      ).then((result) => {
-        if (result.isConfirmed) {
-          // window.location.href = `/praktikum/${id}/sistem/${akun}/buat-konsep-spt/${idSpt}`;
-          navigate(
-            `/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt/konsep`
-          );
-        }
+      // Swal.fire(
+      //   "Berhasil!",
+      //   "Kode Billing SPT berhasil dibuat.",
+      //   "success"
+      // ).then((result) => {
+      //   if (result.isConfirmed) {
+      //     // window.location.href = `/praktikum/${id}/sistem/${akun}/buat-konsep-spt/${idSpt}`;
+      //     navigate(
+      //       `/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt/konsep`
+      //     );
+      //   }
+      // });
+      Swal.fire({
+        title: "Berhasil!",
+        text: "Kode Billing SPT berhasil dibuat.",
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        navigate(
+          `/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt/konsep`
+        );
       });
     },
     onError: (error) => {
@@ -1051,12 +1098,50 @@ const CreateKonsepSPT = ({ data }) => {
                     </div>
 
                     <div className="mt-4 flex items-center gap-4">
-                      <button
+                      {/* <button
                         onClick={() => calculateSpt.mutate()}
                         className="bg-yellow-500 text-white px-4 py-2 rounded-md shadow-sm hover:bg-yellow-600 transition"
                       >
                         Posting SPT
+                      </button> */}
+                      <button
+                        onClick={() => calculateSpt.mutate()}
+                        disabled={calculateSpt.isPending}
+                        className={`flex items-center justify-center gap-2 px-4 py-2 rounded-md shadow-sm transition ${
+                          calculateSpt.isPending
+                            ? "bg-yellow-300 text-white cursor-not-allowed"
+                            : "bg-yellow-500 hover:bg-yellow-600 text-white"
+                        }`}
+                      >
+                        {calculateSpt.isPending ? (
+                          <>
+                            <svg
+                              className="animate-spin h-4 w-4 text-white"
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                            >
+                              <circle
+                                className="opacity-25"
+                                cx="12"
+                                cy="12"
+                                r="10"
+                                stroke="currentColor"
+                                strokeWidth="4"
+                              ></circle>
+                              <path
+                                className="opacity-75"
+                                fill="currentColor"
+                                d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                              ></path>
+                            </svg>
+                            Memposting...
+                          </>
+                        ) : (
+                          "Posting SPT"
+                        )}
                       </button>
+
                       <p className="text-sm text-red-500">
                         {/* WAJIB DI CLICK{" "} */}
                         <strong>WAJIB DI CLICK *</strong>
