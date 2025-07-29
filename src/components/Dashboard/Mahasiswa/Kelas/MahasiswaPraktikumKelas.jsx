@@ -269,14 +269,18 @@ export default function MahasiswaPraktikumKelas() {
                 <td>{item.name}</td>
                 <td className="max-w-5">
                   {item.supporting_file ? (
-                    <button
-                      onClick={() => handleDownload(id, item.id)}
-                      className="download-button"
-                      disabled={downloadMutation.isPending}
-                    >
+                    // <button
+                    //   onClick={() => handleDownload(id, item.id)}
+                    //   className="download-button"
+                    //   disabled={downloadMutation.isPending}
+                    // >
+                    //   <FaDownload className="download-icon" />
+                    //   {downloadMutation.isPending ? "Loading..." : "Download"}
+                    // </button>
+                    <a href={item.supporting_file_url} className="download-button">
                       <FaDownload className="download-icon" />
-                      {downloadMutation.isPending ? "Loading..." : "Download"}
-                    </button>
+                      Download
+                    </a>
                   ) : (
                     "-"
                   )}
