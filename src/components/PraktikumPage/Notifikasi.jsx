@@ -133,7 +133,7 @@ function NotificationTable({ notifications, onLihat }) {
                       Lihat Detail
                     </AlertDialogTrigger>
 
-                    <AlertDialogContent className="p-2">
+                    <AlertDialogContent className="p-2 w-full max-w-4xl">
                       {/* <AlertDialogHeader>
                         <AlertDialogTitle>
                           Are you absolutely sure?
