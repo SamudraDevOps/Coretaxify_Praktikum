@@ -1078,16 +1078,16 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
       // const successMessage = variables.isDraft
       //   ? "Draft Faktur berhasil dibuat"
       //   : "Faktur berhasil diupload";
-      // Swal.fire(
-      //   "Berhasil!",
-      //   "Detail Transaksi berhasil ditambahkan",
-      //   "success"
-      // ).then((result) => {
-      //   if (result.isConfirmed) {
-      //     window.location.reload();
-      //     // window.location.href = `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran?viewAs=${viewAsCompanyId}`;
-      //   }
-      // });
+      Swal.fire(
+        "Berhasil!",
+        "Detail Transaksi berhasil ditambahkan",
+        "success"
+      ).then((result) => {
+        if (result.isConfirmed) {
+          window.location.reload();
+          // window.location.href = `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran?viewAs=${viewAsCompanyId}`;
+        }
+      });
     },
     onError: (error) => {
       console.error("Error saving data:", error);
