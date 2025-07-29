@@ -738,6 +738,9 @@ const CreateKonsepSPT = ({ data }) => {
         (result) => {
           if (result.isConfirmed) {
             // window.location.href = `/praktikum/${id}/sistem/${akun}/buat-konsep-spt/${idSpt}`;
+            navigate(
+              `/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt/konsep`
+            );
           }
         }
       );
