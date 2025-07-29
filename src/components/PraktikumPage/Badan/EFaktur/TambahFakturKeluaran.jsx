@@ -1733,7 +1733,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                 <input
                   type="text"
                   name="alamat"
-                  value={formData.alamat}
+                  value={data?.alamat_utama_akun}
                   onChange={handleChange}
                   className="p-2 border rounded w-full"
                   placeholder=""
