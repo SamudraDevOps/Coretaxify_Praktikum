@@ -353,11 +353,25 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
     fetchKodeByJenis(value);
   };
 
+  // const stripCurrencyFormat = (value) => {
+  //   if (typeof value === "string") {
+  //     return parseFloat(value.replace(/[^\d.-]/g, "")) || 0;
+  //   }
+  //   return parseFloat(value) || 0;
+  // };
   const stripCurrencyFormat = (value) => {
     if (typeof value === "string") {
-      return parseFloat(value.replace(/[^\d.-]/g, "")) || 0;
+      // Remove everything except digits, decimal point, and minus sign
+      const numericString = value.replace(/[^\d.-]/g, "");
+      return parseFloat(numericString) || 0;
     }
-    return parseFloat(value) || 0;
+
+    if (typeof value === "number") {
+      return value;
+    }
+
+    // If it's something else (null, undefined, object), return 0 as fallback
+    return 0;
   };
 
   const formatCurrencyForDB = (value) => {
@@ -929,6 +943,25 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
         "tarif ppnbm log",
         parseInt(tarif_ppnbm.replace(/\D/g, ""), 10) || 0
       );
+      // console.log(
+      //   "formdata",
+
+      //   {
+      //     tipe,
+      //     nama: namaBarang,
+      //     kode: selectedKode,
+      //     kuantitas: kuantitas.toString(),
+      //     satuan: selectedSatuan,
+      //     harga_satuan: formatCurrencyForDB(harga_satuan),
+      //     total_harga: formatCurrencyForDB(total_harga),
+      //     pemotongan_harga: formatCurrencyForDB(pemotongan_harga),
+      //     dpp: formatCurrencyForDB(dpp),
+      //     ppn: formatCurrencyForDB(ppn),
+      //     dpp_lain: isChecked ? formatCurrencyForDB(jumlah) : 0,
+      //     ppnbm: formatCurrencyForDB(ppnbm),
+      //     tarif_ppnbm: parseInt(tarif_ppnbm.replace(/\D/g, ""), 10) || 0,
+      //   }
+      // );
       return axios.post(
         `${RoutesApiReal.url}api/student/assignments/${id}/sistem/${accountId}/faktur/${faktur}/detail-transaksi`,
         {
@@ -962,7 +995,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
       );
     },
     onSuccess: (data, variables) => {
-      // console.log(data);
+      console.log(data);
       // const successMessage = variables.isDraft
       //   ? "Draft Faktur berhasil dibuat"
       //   : "Faktur berhasil diupload";
@@ -987,6 +1020,27 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
     mutationFn: async ({ idTransaksi }) => {
       const csrf = await getCsrf();
       const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
+      console.log("id sistem", id);
+      console.log("id akun", accountId);
+      console.log("id faktur", faktur);
+      console.log("idtransaksi", idTransaksi);
+      console.log("formdata update", {
+        tipe,
+        nama: namaBarang,
+        kode: selectedKode,
+        kuantitas: kuantitas.toString(),
+        satuan: selectedSatuan,
+        harga_satuan: formatCurrencyForDB(harga_satuan),
+        total_harga: formatCurrencyForDB(total_harga),
+        pemotongan_harga: formatCurrencyForDB(pemotongan_harga),
+        dpp_raw: dpp,
+        dpp: formatCurrencyForDB(dpp),
+        ppn: formatCurrencyForDB(ppn),
+        dpp_lain_raw: jumlah,
+        dpp_lain: isChecked ? formatCurrencyForDB(jumlah) : 0,
+        ppnbm: formatCurrencyForDB(ppnbm),
+        tarif_ppnbm: parseInt(tarif_ppnbm.replace(/\D/g, ""), 10) || 0,
+      });
       return axios.put(
         `${RoutesApiReal.url}api/student/assignments/${id}/sistem/${accountId}/faktur/${faktur}/detail-transaksi/${idTransaksi}`,
         {
@@ -1024,17 +1078,16 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
       // const successMessage = variables.isDraft
       //   ? "Draft Faktur berhasil dibuat"
       //   : "Faktur berhasil diupload";
-
-      Swal.fire(
-        "Berhasil!",
-        "Detail Transaksi berhasil ditambahkan",
-        "success"
-      ).then((result) => {
-        if (result.isConfirmed) {
-          window.location.reload();
-          // window.location.href = `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran?viewAs=${viewAsCompanyId}`;
-        }
-      });
+      // Swal.fire(
+      //   "Berhasil!",
+      //   "Detail Transaksi berhasil ditambahkan",
+      //   "success"
+      // ).then((result) => {
+      //   if (result.isConfirmed) {
+      //     window.location.reload();
+      //     // window.location.href = `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran?viewAs=${viewAsCompanyId}`;
+      //   }
+      // });
     },
     onError: (error) => {
       console.error("Error saving data:", error);
@@ -2857,7 +2910,6 @@ ${isChecked ? "" : "bg-gray-100"}
                                           className="p-2 border rounded w-full bg-gray-100"
                                           allowNegative={false}
                                           decimalScale={0}
-                                          
                                         />
                                         {/* <input
                                           type="text"
@@ -2972,7 +3024,7 @@ ${isChecked ? "" : "bg-gray-100"}
                             12%
                           </td>
                           <td className="px-2 py-2 border">
-                            {formatRupiah(item.ppnNominal)}
+                            {formatRupiah(item.ppn)}
                           </td>
                           <td className="px-2 py-2 border">
                             {formatRupiah(item.dpp)}

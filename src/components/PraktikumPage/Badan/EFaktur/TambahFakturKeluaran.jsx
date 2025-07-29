@@ -2841,7 +2841,8 @@ ${isChecked ? "" : "bg-gray-100"}
                             12%
                           </td>
                           <td className="px-2 py-2 border">
-                            {formatRupiahUtils(item.ppnNominal)}
+                            {/* {formatRupiahUtils(item.ppnNominal)} */}
+                            {formatRupiahUtils(item.ppn)}
                           </td>
                           <td className="px-2 py-2 border">
                             {formatRupiahUtils(item.dpp)}
