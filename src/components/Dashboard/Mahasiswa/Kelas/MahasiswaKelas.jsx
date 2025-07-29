@@ -21,6 +21,7 @@ import { RoutesApi } from "@/Routes";
 import Wulan from "../../../../assets/images/wulan.png";
 
 export default function MahasiswaKelas() {
+  const defaultProfile = "https://ui-avatars.com/api/?name=User&background=random&size=128";
   const [isOpen, setIsOpen] = useState(false);
   const [url, setUrl] = useState(`${RoutesApi.url}api/student/groups`);
   const [isAddOpen, setIsAddOpen] = useState(false);
@@ -43,6 +44,27 @@ export default function MahasiswaKelas() {
       console.log(data);
       return data;
     },
+  });
+
+  const { data: profileData, isLoading: loadingProfile } = useQuery({
+    queryKey: ["profile"],
+    queryFn: async () => {
+      const res = await axios.get(RoutesApi.profile, {
+        headers: {
+          Authorization: `Bearer ${cookies.token}`,
+          Accept: "application/json",
+        },
+      });
+      const user = res.data.data;
+
+      const photoUrl = user.image_path
+        ? `${RoutesApi.url}storage/${user.image_path}`
+        : `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || "User")}&background=random&size=128&color=auto`;
+
+      return { ...user, photoUrl };
+    },
+    enabled: !!cookies.token, // hanya jalan jika token ada
+    refetchOnWindowFocus: false,
   });
 
   const [formData, setFormData] = useState({
@@ -228,7 +250,7 @@ export default function MahasiswaKelas() {
 
   console.log(cookies.token);
 
-  if (isLoading) {
+  if (isLoading || loadingProfile) {
     return (
       <div className="loading">
         <ClipLoader color="#7502B5" size={50} />
@@ -333,9 +355,14 @@ export default function MahasiswaKelas() {
                 <p className="text-gray-500 p-4"> {item.end_period}</p>
               </div>
               <img
-                src={Wulan}
-                alt="Icon"
-                className="absolute bottom-[200px] right-4 w-14 h-14 rounded-full border-2 border-white shadow-md"
+                src={profileData?.photoUrl}
+                alt="Foto Profil"
+                className="absolute bottom-[200px] right-4 w-14 h-14 rounded-full border-2 border-white shadow-md object-cover"
+                onError={(e) => {
+                  e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(
+                    profileData?.name || "User"
+                  )}&background=random&size=128&color=auto`;
+                }}
               />
             </div>
             // <tr key={item.id}>
@@ -524,7 +551,7 @@ export default function MahasiswaKelas() {
                         name="kodeKelas"
                         value={formData.kodeKelas}
                         onChange={handleChange}
-                        // readOnly
+                      // readOnly
                       />
                     </div>
                   </div>
