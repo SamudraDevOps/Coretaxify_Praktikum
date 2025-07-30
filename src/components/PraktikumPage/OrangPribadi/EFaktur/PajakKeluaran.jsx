@@ -9,6 +9,7 @@ import axios from "axios";
 import { RoutesApi } from "@/Routes";
 import { useQuery } from "@tanstack/react-query";
 import { getCookieToken } from "@/service";
+import FakturPenilaian from "../../Badan/EFaktur/FakturPenilaian";
 
 const PajakKeluaran = ({
   data,
@@ -149,6 +150,13 @@ const PajakKeluaran = ({
               Pajak Keluaran
             </h1>
           </div>
+          {userId ? (
+            <FakturPenilaian
+              tipeFaktur="Faktur Keluaran"
+            />
+          ) : (
+            ""
+          )}
 
           {/* Company Selector - If there are multiple companies, show a dropdown */}
           {/* {representedCompanies.data &&

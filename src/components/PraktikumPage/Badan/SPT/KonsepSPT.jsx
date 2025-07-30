@@ -10,6 +10,7 @@ import { RoutesApi } from "@/Routes";
 import { useCookies } from "react-cookie";
 import Swal from "sweetalert2";
 import { useMutation } from "@tanstack/react-query";
+import PenilaianSPT from "./PenilaianSPT";
 
 const KonsepSPT = ({
   data,
@@ -137,6 +138,13 @@ const KonsepSPT = ({
             <IoDocumentTextOutline className="text-4xl text-blue-900" />
             <h1 className="text-lg font-bold text-blue-900 ml-2">Konsep SPT</h1>
           </div>
+          {userId ? (
+            <PenilaianSPT
+              tipeFaktur="Retur Faktur Masukan"
+            />
+          ) : (
+            ""
+          )}
         </div>
 
         <div className="flex justify-between items-start mb-4 pb-3 border-b">

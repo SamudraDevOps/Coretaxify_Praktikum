@@ -9,7 +9,7 @@ import {
   Font,
   Image,
 } from "@react-pdf/renderer";
-import kopImage from "../../../assets/images/KOP PDF.jpg";
+import kopImage from "../../../assets/images/KOP/UNIFIKASI.png";
 import qrImage from "../../../assets/images/qr-web.png";
 
 // Styles
@@ -60,13 +60,21 @@ const styles = StyleSheet.create({
 const columnWidths = ["5%", "20%", "12%", "12%", "12%", "12%", "12%", "15%"];
 
 // Main Document Component
+// function formatRupiah(value) {
+//   const numberString = value?.toString().replace(/[^0-9]/g, "") || "0";
+//   return new Intl.NumberFormat("id-ID", {
+//     style: "currency",
+//     currency: "IDR",
+//     minimumFractionDigits: 0,
+//   }).format(numberString || 0);
+// }
 function formatRupiah(value) {
-  const numberString = value?.toString().replace(/[^0-9]/g, "") || "0";
+  const number = Number(value) || 0;
   return new Intl.NumberFormat("id-ID", {
     style: "currency",
     currency: "IDR",
     minimumFractionDigits: 0,
-  }).format(numberString || 0);
+  }).format(number);
 }
 const SPTUnifikasiPDF = ({ data }) => {
   // const dataRows = [

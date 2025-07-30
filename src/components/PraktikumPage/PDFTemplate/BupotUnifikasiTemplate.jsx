@@ -1,7 +1,7 @@
 import React from "react";
 import { Document, Page, Text, View, Image } from "@react-pdf/renderer";
 import qrImage from "../../../assets/images/qr-web.png";
-import kopImage from "../../../assets/images/KOP BPPU.jpg";
+import kopImage from "../../../assets/images/KOP/BPPU.png";
 
 // Assume this function exists globally or is imported
 const formatRupiah = (value) =>
@@ -206,7 +206,7 @@ const BupotUnifikasiPDF = ({ data }) => {
               textAlign: "center",
             }}
           >
-            {bupotData.tarif_pajak * 100 || 0}
+            {bupotData.tarif_pajak || 0}
           </Text>
           <Text style={{ flex: 2, padding: 4, textAlign: "right" }}>
             {formatRupiah(bupotData.pajak_penghasilan)}

@@ -1931,7 +1931,7 @@ const EditDataProfilBadan = ({ data, sidebar }) => {
                                   <option value="">-- Pilih NIK --</option>
                                   {orangTerkait?.data?.map((orang) => (
                                     <option key={orang.id} value={orang.id}>
-                                      {orang.npwp_akun}
+                                      {orang.npwp_akun} - {orang.nama_akun}
                                     </option>
                                   ))}
                                 </select>

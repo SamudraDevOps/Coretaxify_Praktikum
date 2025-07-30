@@ -39,9 +39,10 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import Swal from "sweetalert2";
 import Select from "react-select";
 import { NumericFormat } from "react-number-format";
+import { formatRupiahUtils } from "@/hooks/formatRupiah";
 
 const TambahFakturKeluaran = ({ data, sidebar }) => {
-  // console.log("mamamia",data)
+  // console.log("data raw", data);
   const [editMode, setEditMode] = useState(false);
   const [editingTransaksiId, setEditingTransaksiId] = useState(null);
 
@@ -69,7 +70,10 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
   const [savedTransaksi, setSavedTransaksi] = useState("");
 
   const [isChecked, setIsChecked] = useState(false);
-  const [jumlah, setJumlah] = useState(formatRupiah(dpp.toString()));
+  // IMPORTANT
+  // const [jumlah, setJumlah] = useState(dpp);
+  const [jumlah, setJumlah] = useState(0); // or "", or null
+
   const [ppn, setTarifPPN] = useState("Rp 0");
   const [tarif_ppnbm, setTarifPPnBM] = useState("");
   const [ppnbm, setPPnBM] = useState("Rp 0");
@@ -86,6 +90,9 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
     satuan: "https://api.coretaxify.com/api/satuan",
   };
 
+  useEffect(() => {
+    console.log("Jumlah updated:", jumlah);
+  }, [jumlah]);
   // const fetchKodeByJenis = async (jenis) => {
   //   try {
   //     // Fetch kode transaksi
@@ -177,7 +184,12 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
       console.log("faktur data :", data);
       return data;
     },
+    staleTime: 0, // always considered stale
+    cacheTime: 0, // prevent caching
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
   });
+
   useEffect(() => {
     if (fakturData && !fakturLoading && !fakturError) {
       console.log("Setting formData from fakturData:", fakturData);
@@ -341,11 +353,25 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
     fetchKodeByJenis(value);
   };
 
+  // const stripCurrencyFormat = (value) => {
+  //   if (typeof value === "string") {
+  //     return parseFloat(value.replace(/[^\d.-]/g, "")) || 0;
+  //   }
+  //   return parseFloat(value) || 0;
+  // };
   const stripCurrencyFormat = (value) => {
     if (typeof value === "string") {
-      return parseFloat(value.replace(/[^\d.-]/g, "")) || 0;
+      // Remove everything except digits, decimal point, and minus sign
+      const numericString = value.replace(/[^\d.-]/g, "");
+      return parseFloat(numericString) || 0;
     }
-    return parseFloat(value) || 0;
+
+    if (typeof value === "number") {
+      return value;
+    }
+
+    // If it's something else (null, undefined, object), return 0 as fallback
+    return 0;
   };
 
   const formatCurrencyForDB = (value) => {
@@ -358,13 +384,25 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
   //     fetchKodeByJenis(value);
   //   };
 
+  // function formatRupiah(value) {
+  //   const numberString = value.replace(/[^0-9]/g, ""); // Hanya angka
+  //   return new Intl.NumberFormat("id-ID", {
+  //     style: "currency",
+  //     currency: "IDR",
+  //     minimumFractionDigits: 0,
+  //   }).format(numberString || 0);
+  // }
   function formatRupiah(value) {
-    const numberString = value.replace(/[^0-9]/g, ""); // Hanya angka
+    // Convert to number, handling both string and number inputs
+    const numericValue =
+      typeof value === "number" ? value : parseFloat(value) || 0;
+
     return new Intl.NumberFormat("id-ID", {
       style: "currency",
       currency: "IDR",
       minimumFractionDigits: 0,
-    }).format(numberString || 0);
+      maximumFractionDigits: 2,
+    }).format(numericValue);
   }
 
   function formatPersen(value) {
@@ -420,7 +458,6 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
   };
 
   const handleKuantitasChange = (e) => {
-    // alert("Kinti")
     console.log("quantity!");
     const qty = parseInt(e.target.value, 10) || 0;
     setKuantitas(qty);
@@ -467,16 +504,32 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
     }
   }, [kode_transaksi]);
 
-  function updateTarifPPN(newJumlah) {
-    // const numericJumlah = parseInt(newJumlah.replace(/\D/g, ""), 10) || 0;
-    const numericJumlah = newJumlah;
-    setTarifPPN(numericJumlah * 0.12); // PPN 12%
+  // function updateTarifPPN(newJumlah) {
+  //   // const numericJumlah = parseInt(newJumlah.replace(/\D/g, ""), 10) || 0;
+  //   const numericJumlah = newJumlah;
+  //   setTarifPPN(numericJumlah * 0.12); // PPN 12%
 
-    // Hitung PPnBM jika PPnBM belum diedit manual
+  //   // Hitung PPnBM jika PPnBM belum diedit manual
+  //   if (!isCustomPPnBM) {
+  //     const numericPPnBM = parseInt(tarif_ppnbm.replace(/\D/g, ""), 10) || 0;
+  //     //   const numericPPnBM = tarif_ppnbm;
+  //     setPPnBM((numericJumlah * numericPPnBM) / 100);
+  //   }
+  // }
+  function updateTarifPPN(newJumlah) {
+    const numericJumlah = parseFloat(newJumlah) || 0;
+
+    // Hitung PPN 12%, bulatkan ke 2 desimal
+    const ppnValue = numericJumlah * 0.12;
+    const roundedPPN = Math.round(ppnValue * 100) / 100;
+    setTarifPPN(roundedPPN);
+
+    // Hitung PPnBM otomatis jika belum di-custom
     if (!isCustomPPnBM) {
-      const numericPPnBM = parseInt(tarif_ppnbm.replace(/\D/g, ""), 10) || 0;
-      //   const numericPPnBM = tarif_ppnbm;
-      setPPnBM((numericJumlah * numericPPnBM) / 100);
+      const ratePPnBM = parseFloat(tarif_ppnbm) || 0;
+      const ppnbmValue = (numericJumlah * ratePPnBM) / 100;
+      const roundedPPnBM = Math.round(ppnbmValue * 100) / 100;
+      setPPnBM(roundedPPnBM);
     }
   }
   const handleCheckboxChange = () => {
@@ -496,15 +549,41 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
     }
   };
 
+  // const handleTarifPPnBMChange = (e) => {
+  //   const formattedTarif = formatPersen(e.target.value);
+  //   setTarifPPnBM(formattedTarif);
+
+  //   // Hitung ulang PPnBM jika PPnBM tidak diedit manual
+  //   if (!isCustomPPnBM) {
+  //     const numericJumlah = parseInt(jumlah.replace(/\D/g, ""), 10) || 0;
+  //     const numericPPnBM = parseInt(formattedTarif.replace(/\D/g, ""), 10) || 0;
+  //     setPPnBM((numericJumlah * numericPPnBM) / 100);
+  //   }
+  // };
   const handleTarifPPnBMChange = (e) => {
-    const formattedTarif = formatPersen(e.target.value);
+    // alert("L")
+    const formattedTarif = formatPersen(e.target.value); // remove % and non-numeric
     setTarifPPnBM(formattedTarif);
 
-    // Hitung ulang PPnBM jika PPnBM tidak diedit manual
-    if (!isCustomPPnBM) {
-      const numericJumlah = parseInt(jumlah.replace(/\D/g, ""), 10) || 0;
+    if (!isCustomPPnBM || formattedTarif !== "") {
+      // alert("oawk")
+      // 🧼 Clean 'jumlah' to get numeric value
+      const numericJumlah =
+        typeof jumlah === "string"
+          ? parseInt(jumlah.replace(/\D/g, ""), 10) || 0
+          : parseFloat(jumlah) || 0;
+
       const numericPPnBM = parseInt(formattedTarif.replace(/\D/g, ""), 10) || 0;
-      setPPnBM((numericJumlah * numericPPnBM) / 100);
+
+      const result = (numericJumlah * numericPPnBM) / 100;
+      setPPnBM(result);
+
+      console.log("=====PPNBMLOG=====");
+      console.log("dpp:", dpp);
+      console.log("jumlah raw:", jumlah);
+      console.log("jumlah:", numericJumlah);
+      console.log("tarif_ppnbm:", numericPPnBM);
+      console.log("Result PPnBM:", result);
     }
   };
 
@@ -777,15 +856,23 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
       setTotalHarga(transaksiToEdit.total_harga);
       setPotonganHarga(transaksiToEdit.pemotongan_harga);
       setDPP(transaksiToEdit.dpp);
-      setJumlah(transaksiToEdit.dpp_lain || 0);
+      setJumlah(transaksiToEdit.dpp);
+      updateTarifPPN(transaksiToEdit.dpp);
+      // alert(`setJumlah called ${jumlah}`);
       setTarifPPN(transaksiToEdit.ppn);
-      setTarifPPnBM(
-        transaksiToEdit.tarif_ppnbm ? `${transaksiToEdit.tarif_ppnbm}%` : ""
-      );
+      // setTarifPPnBM(
+      //   transaksiToEdit.tarif_ppnbm ? `${transaksiToEdit.tarif_ppnbm}%` : ""
+      // );
+      const tarifInt = parseInt(transaksiToEdit.tarif_ppnbm || 0, 10);
+      setTarifPPnBM(tarifInt.toString());
       setPPnBM(transaksiToEdit.ppnbm);
 
       // Set checkbox state based on dpp_lain value
+      // IMPORTANT
       setIsChecked(transaksiToEdit.dpp_lain > 0);
+      // setTimeout(() => {
+      //   setJumlah(transaksiToEdit.dpp);
+      // }, 0);
 
       // Make sure to fetch the correct options for the selected type
       if (transaksiToEdit.tipe) {
@@ -842,7 +929,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
           params: {
             intent: isDraft
               ? "api.create.faktur.draft"
-              : "api.create.faktur.fix",
+              : "api.update.faktur.fix",
           },
         }
       );
@@ -868,6 +955,29 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
     mutationFn: async () => {
       const csrf = await getCsrf();
       const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
+      console.log(
+        "tarif ppnbm log",
+        parseInt(tarif_ppnbm.replace(/\D/g, ""), 10) || 0
+      );
+      // console.log(
+      //   "formdata",
+
+      //   {
+      //     tipe,
+      //     nama: namaBarang,
+      //     kode: selectedKode,
+      //     kuantitas: kuantitas.toString(),
+      //     satuan: selectedSatuan,
+      //     harga_satuan: formatCurrencyForDB(harga_satuan),
+      //     total_harga: formatCurrencyForDB(total_harga),
+      //     pemotongan_harga: formatCurrencyForDB(pemotongan_harga),
+      //     dpp: formatCurrencyForDB(dpp),
+      //     ppn: formatCurrencyForDB(ppn),
+      //     dpp_lain: isChecked ? formatCurrencyForDB(jumlah) : 0,
+      //     ppnbm: formatCurrencyForDB(ppnbm),
+      //     tarif_ppnbm: parseInt(tarif_ppnbm.replace(/\D/g, ""), 10) || 0,
+      //   }
+      // );
       return axios.post(
         `${RoutesApiReal.url}api/student/assignments/${id}/sistem/${accountId}/faktur/${faktur}/detail-transaksi`,
         {
@@ -901,7 +1011,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
       );
     },
     onSuccess: (data, variables) => {
-      // console.log(data);
+      console.log(data);
       // const successMessage = variables.isDraft
       //   ? "Draft Faktur berhasil dibuat"
       //   : "Faktur berhasil diupload";
@@ -926,6 +1036,27 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
     mutationFn: async ({ idTransaksi }) => {
       const csrf = await getCsrf();
       const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
+      console.log("id sistem", id);
+      console.log("id akun", accountId);
+      console.log("id faktur", faktur);
+      console.log("idtransaksi", idTransaksi);
+      console.log("formdata update", {
+        tipe,
+        nama: namaBarang,
+        kode: selectedKode,
+        kuantitas: kuantitas.toString(),
+        satuan: selectedSatuan,
+        harga_satuan: formatCurrencyForDB(harga_satuan),
+        total_harga: formatCurrencyForDB(total_harga),
+        pemotongan_harga: formatCurrencyForDB(pemotongan_harga),
+        dpp_raw: dpp,
+        dpp: formatCurrencyForDB(dpp),
+        ppn: formatCurrencyForDB(ppn),
+        dpp_lain_raw: jumlah,
+        dpp_lain: isChecked ? formatCurrencyForDB(jumlah) : 0,
+        ppnbm: formatCurrencyForDB(ppnbm),
+        tarif_ppnbm: parseInt(tarif_ppnbm.replace(/\D/g, ""), 10) || 0,
+      });
       return axios.put(
         `${RoutesApiReal.url}api/student/assignments/${id}/sistem/${accountId}/faktur/${faktur}/detail-transaksi/${idTransaksi}`,
         {
@@ -963,7 +1094,6 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
       // const successMessage = variables.isDraft
       //   ? "Draft Faktur berhasil dibuat"
       //   : "Faktur berhasil diupload";
-
       Swal.fire(
         "Berhasil!",
         "Detail Transaksi berhasil ditambahkan",
@@ -1026,6 +1156,9 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
   useEffect(() => {
     const formattedDPP = formatRupiah(dpp.toString());
     setJumlah(formattedDPP);
+
+    // setJumlah(dpp);
+
     updateTarifPPN(dpp.toString());
   }, [dpp]);
   // const [formData, setFormData] = useState({
@@ -1287,6 +1420,8 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
   //   `${RoutesApiReal.apiUrl}student/assignments/${id}/sistem/${vie}/faktur/${faktur}`
   // );
   console.log(viewAsCompanyId);
+  console.log("ppn raw", fakturData.data.ppn);
+  console.log("ppn formatted Hooks", formatRupiahUtils(fakturData.data.ppn));
 
   return (
     console.log(""),
@@ -2082,7 +2217,13 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
               <div className="flex justify-between mb-4 border-b pb-3">
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
-                    <button className={userId ? "hidden" : "flex items-center bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded"}>
+                    <button
+                      className={
+                        userId
+                          ? "hidden"
+                          : "flex items-center bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded"
+                      }
+                    >
                       {editMode ? "Edit Transaksi" : "Tambah Transaksi"}
                     </button>
                   </AlertDialogTrigger>
@@ -2196,21 +2337,15 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                             value={harga_satuan}
                             onValueChange={({ value }) => {
                               setHarga(value);
-                              const numericHarga =
-                                parseInt(value, 10) || 0;
+                              const numericHarga = parseInt(value, 10) || 0;
                               const newTotalHarga =
-                                numericHarga *
-                                (parseInt(kuantitas, 10) || 0);
-                              setTotalHarga(
-                                newTotalHarga.toString()
-                              );
+                                numericHarga * (parseInt(kuantitas, 10) || 0);
+                              setTotalHarga(newTotalHarga.toString());
                               const newDPP =
                                 newTotalHarga -
-                                (parseInt(pemotongan_harga, 10) ||
-                                  0);
+                                (parseInt(pemotongan_harga, 10) || 0);
                               setDPP(newDPP.toString());
-                              if (!isChecked)
-                                setJumlah(newDPP.toString());
+                              if (!isChecked) setJumlah(newDPP.toString());
                             }}
                             thousandSeparator="."
                             decimalSeparator=","
@@ -2260,13 +2395,11 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                               setPotonganHarga(value);
                               const numericTotalHarga =
                                 parseInt(total_harga, 10) || 0;
-                              const numericPotongan =
-                                parseInt(value, 10) || 0;
+                              const numericPotongan = parseInt(value, 10) || 0;
                               const newDPP =
                                 numericTotalHarga - numericPotongan;
                               setDPP(newDPP.toString());
-                              if (!isChecked)
-                                setJumlah(newDPP.toString());
+                              if (!isChecked) setJumlah(newDPP.toString());
                             }}
                             thousandSeparator="."
                             decimalSeparator=","
@@ -2381,25 +2514,19 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                               onValueChange={({ value }) => {
                                 setIsCustomPPnBM(true);
                                 // Convert to number before setting
-                                const numericValue =
-                                  parseFloat(value) || 0;
+                                const numericValue = parseFloat(value) || 0;
                                 setPPnBM(numericValue);
 
                                 if (value === "" || value === "0") {
                                   setIsCustomPPnBM(false);
-                                  const numericJumlah =
-                                    parseFloat(jumlah) || 0;
+                                  const numericJumlah = parseFloat(jumlah) || 0;
                                   const numericPPnBM =
                                     parseInt(
-                                      tarif_ppnbm.replace(
-                                        /\D/g,
-                                        ""
-                                      ),
+                                      tarif_ppnbm.replace(/\D/g, ""),
                                       10
                                     ) || 0;
                                   const calculatedPPnBM =
-                                    (numericJumlah * numericPPnBM) /
-                                    100;
+                                    (numericJumlah * numericPPnBM) / 100;
                                   setPPnBM(calculatedPPnBM);
                                 }
                               }}
@@ -2498,7 +2625,11 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                             <AlertDialog>
                               <AlertDialogTrigger asChild>
                                 <button
-                                  className={userId ? "hidden" : "bg-blue-500 hover:bg-blue-600 text-white py-1 px-2 rounded text-xs"}
+                                  className={
+                                    userId
+                                      ? "hidden"
+                                      : "bg-blue-500 hover:bg-blue-600 text-white py-1 px-2 rounded text-xs"
+                                  }
                                   onClick={() => handleEditTransaksi(item.id)}
                                 >
                                   Edit
@@ -2678,8 +2809,9 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                                         fixedDecimalScale={false}
                                         prefix="Rp "
                                         className="p-2 border rounded w-full bg-gray-100"
-                                        // readOnly
+                                        readOnly
                                         placeholder="Rp 0"
+
                                       />
                                     </div>
                                     <div className="space-y-2">
@@ -2727,6 +2859,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                                         className="p-2 border rounded w-full bg-gray-100"
                                         // readOnly
                                         placeholder="Rp 0"
+                                        decimalScale={0}
                                       />
                                     </div>
                                     <div className="space-y-2">
@@ -2745,8 +2878,11 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
 
                                       <div className="space-y-2">
                                         <label className="block text-sm font-medium"></label>
+                                        {/* dpp :{dpp}
+                                        jumlah:{jumlah} */}
                                         <NumericFormat
-                                          value={jumlah}
+                                          key={editingTransaksiId}
+                                          value={jumlah ?? 0}
                                           onValueChange={({ value }) => {
                                             if (isChecked) {
                                               setJumlah(value);
@@ -2763,6 +2899,7 @@ ${isChecked ? "" : "bg-gray-100"}
                                           placeholder="Rp 0"
                                           allowNegative={false}
                                           disabled={!isChecked}
+                                          decimalScale={0}
                                         />
                                       </div>
                                       <div className="space-y-2">
@@ -2780,15 +2917,16 @@ ${isChecked ? "" : "bg-gray-100"}
                                         <label className="block text-sm font-medium">
                                           PPN
                                         </label>
+
                                         <NumericFormat
                                           value={ppn}
-                                          displayType="input"
                                           thousandSeparator="."
                                           decimalSeparator=","
                                           prefix="Rp "
-                                          className="p-2 border rounded w-full bg-gray-100"
-                                          readOnly
                                           placeholder="Rp 0"
+                                          className="p-2 border rounded w-full bg-gray-100"
+                                          allowNegative={false}
+                                          decimalScale={0}
                                         />
                                         {/* <input
                                           type="text"
@@ -2890,23 +3028,33 @@ ${isChecked ? "" : "bg-gray-100"}
                           <td className="px-2 py-2 border">{item.kuantitas}</td>
                           <td className="px-2 py-2 border">{item.satuan}</td>
                           <td className="px-2 py-2 border">
-                            {item.harga_satuan}
+                            {formatRupiah(item.harga_satuan)}
                           </td>
                           <td className="px-2 py-2 border">
-                            {item.total_harga}
+                            {formatRupiah(item.total_harga)}
                           </td>
                           <td className="px-2 py-2 border">
-                            {item.pemotongan_harga}
+                            {formatRupiah(item.pemotongan_harga)}
                           </td>
-                          <td className="px-2 py-2 border">{item.ppn}</td>
                           <td className="px-2 py-2 border">
-                            {item.ppnNominal}
+                            {/* {formatRupiah(item.ppn)} */}
+                            12%
                           </td>
-                          <td className="px-2 py-2 border">{item.dpp}</td>
-                          <td className="px-2 py-2 border">{item.jumlah}</td>
-                          <td className="px-2 py-2 border">{item.ppnbm}</td>
                           <td className="px-2 py-2 border">
-                            {item.tarif_ppnbm}
+                            {formatRupiah(item.ppn)}
+                          </td>
+                          <td className="px-2 py-2 border">
+                            {formatRupiah(item.dpp)}
+                          </td>
+
+                          <td className="px-2 py-2 border">
+                            {formatRupiah(item.dpp_lain)}
+                          </td>
+                          <td className="px-2 py-2 border">
+                            {formatRupiah(item.ppnbm)}
+                          </td>
+                          <td className="px-2 py-2 border">
+                            {Number(item.tarif_ppnbm)} %
                           </td>
                         </tr>
                       ))
@@ -2934,7 +3082,11 @@ ${isChecked ? "" : "bg-gray-100"}
             </button>
             <button
               onClick={(e) => handleSubmit(e, true)}
-              className={userId ? "hidden" : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"}
+              className={
+                userId
+                  ? "hidden"
+                  : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              }
               disabled={updateFaktur.isPending}
             >
               {updateFaktur.isPending ? (
@@ -2948,7 +3100,11 @@ ${isChecked ? "" : "bg-gray-100"}
             </button>
             <button
               onClick={(e) => handleSubmit(e, false)}
-              className={userId ? "hidden" : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"}
+              className={
+                userId
+                  ? "hidden"
+                  : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              }
               disabled={updateFaktur.isPending}
             >
               {updateFaktur.isPending ? (

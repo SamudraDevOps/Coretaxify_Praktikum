@@ -42,5 +42,7 @@ export const IntentEnum = {
     // Download
     API_USER_DOWNLOAD_SOAL: 'api.user.download.soal',
     API_USER_DOWNLOAD_FILE: 'api.user.download.file',
+
+    API_GET_ASSIGNMENT_MEMBERS_WITH_SISTEM_SCORES: 'api.get.assignment.members.with.sistem.scores',
   };
   

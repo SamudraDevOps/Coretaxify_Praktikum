@@ -5,6 +5,7 @@ import { useCookies } from "react-cookie";
 import { RoutesApi } from "@/Routes";
 import Swal from "sweetalert2";
 import { useNavigateWithParams } from "@/hooks/useNavigateWithParams";
+import BUPOTPenilaian from './BUPOTPenilaian';
 
 const BUPOTActionBar = ({
   type,
@@ -13,6 +14,9 @@ const BUPOTActionBar = ({
   showCreateButton = true,
   selectedItems = [],
   onActionComplete,
+  statusPenerbitan,
+  tipeBupot,
+  sistemId,
 }) => {
   const { id, akun } = useParams();
   const [cookies] = useCookies(["token"]);
@@ -191,16 +195,26 @@ const BUPOTActionBar = ({
 
         {isPublished && (
           <button
-            className={`px-4 py-2 rounded ${
+            className={userId ? "hidden" : (`px-4 py-2 rounded ${
               selectedItems.length > 0 && !isLoading
                 ? "bg-red-600 text-white hover:bg-red-700"
                 : "bg-gray-300 text-gray-700"
-            }`}
+            }`)}
             onClick={handleDelete}
             disabled={selectedItems.length === 0 || isLoading || !!userId}
           >
             {isLoading ? "Menghapus..." : "Hapus"}
           </button>
+        )}
+
+        {userId ? (
+          <BUPOTPenilaian
+              statusPenerbitan={statusPenerbitan}
+              tipeBupot={tipeBupot}
+              sistemId={sistemId}
+          />
+        ) : (
+          ""
         )}
 
         <button className={userId ? "hidden" : "bg-white border px-4 py-2 rounded"}>

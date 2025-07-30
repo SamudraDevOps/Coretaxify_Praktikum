@@ -1,5 +1,14 @@
 import React from "react";
-import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
+import {
+  Document,
+  Page,
+  Text,
+  View,
+  StyleSheet,
+  Image,
+} from "@react-pdf/renderer";
+import kopImage from "../../../assets/images/KOP/FAKTURPAJAK.png";
+import qrImage from "../../../assets/images/qr-web.png";
 
 // Styles
 const styles = StyleSheet.create({
@@ -100,32 +109,46 @@ const FakturPajakKeluaranPdf = ({ data }) => (
   <Document>
     <Page size="A4" style={styles.page}>
       {/* Title */}
-      <Text style={styles.title}>Faktur Pajak</Text>
+      {/* <Text style={styles.title}>Faktur Pajak</Text> */}
+      <View style={{ width: "100%", textAlign: "center" }}>
+        <Image
+          style={{ width: "100%", height: "auto", marginBottom: 5 }}
+          src={kopImage}
+        />
+      </View>
 
       {/* Penjual */}
       {/* <View style={styles.section}> */}
       <View style={styles.boxContainer}>
-        <View style={styles.boxRow}>
-          <Text style={styles.label}>Nama :</Text>
-          <Text style={styles.value}>{data.akun_pengirim_id.nama_akun}</Text>
-          <Text style={styles.label}>Alamat :</Text>
-          <Text style={styles.value}>
-            {data.akun_pengirim_id.alamat_utama_akun}
-          </Text>
-          <Text style={styles.label}>NPWP : </Text>
-          <Text style={styles.value}>{data.akun_pengirim_id.npwp_akun}</Text>
+        <View style={{ borderBottomWidth: 1, borderBottomColor: "#000" }}>
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-between" }}
+          >
+            {/* Title aligned to the left */}
+            <Text style={{ fontSize: 12, fontWeight: "bold", padding: 5 }}>
+              {/* Faktur Pajak */}
+            </Text>
+
+            {/* Info aligned to the right */}
+            <View style={{ padding: 5, alignItems: "flex-start" }}>
+              <Text>Nama: {data.akun_pengirim_id.nama_akun}</Text>
+              <Text>Alamat: {data.akun_pengirim_id.alamat_utama_akun}</Text>
+              <Text>NPWP : {data.akun_pengirim_id.npwp_akun}</Text>
+            </View>
+          </View>
         </View>
-        {/* <View style={styles.boxRow}></View> */}
-        <View style={styles.boxRow}>
-          <Text style={styles.label}>Nomor:</Text>
-          <Text style={styles.value}>{data.nomor_faktur_pajak}</Text>
+
+         <View style={styles.boxRow}>
+          <Text style={styles.row}>Kode dan Nomor Seri Faktur Pajak : {data.nomor_faktur_pajak}</Text>
+          {/* <Text style={styles.value}>{data.nomor_faktur_pajak}</Text> */}
         </View>
+
         {/* </View> */}
 
         {/* Faktur Code */}
-        <View style={styles.boxRow}>
+        {/* <View style={styles.boxRow}>
           <Text>Kode dan Nomor Seri Faktur Pajak: 04002500110910510</Text>
-        </View>
+        </View> */}
 
         <View style={styles.boxRow}>
           <Text style={{ fontWeight: "bold" }}>Pengusaha Kena Pajak:</Text>
@@ -359,6 +382,10 @@ const FakturPajakKeluaranPdf = ({ data }) => (
       <View style={styles.signature}>
         <Text>Tanggal : {data.tanggal_faktur_pajak}</Text>
         <Text style={{ marginTop: 20 }}>{data.penandatangan}</Text>
+        <Image
+          style={{ width: "15%", height: "auto", marginBottom: 5 }}
+          src={qrImage}
+        />
         <Text>Ditandatangani secara elektronik</Text>
       </View>
 

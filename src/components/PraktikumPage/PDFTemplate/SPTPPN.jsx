@@ -8,7 +8,7 @@ import {
   Image,
 } from "@react-pdf/renderer";
 import qrImage from "../../../assets/images/qr-web.png";
-import kopImage from "../../../assets/images/KOP PDF.jpg";
+import kopImage from "../../../assets/images/KOP/PPN.png";
 
 const styles = StyleSheet.create({
   page: { fontSize: 10, padding: 30, fontFamily: "Helvetica", lineHeight: 1.5 },
@@ -78,13 +78,22 @@ const SptPpnPdf = ({ data }) => {
   //   return new Intl.NumberFormat("id-ID").format(number);
   // }
 
+  // function formatRupiah(value) {
+  //   const numberString = value?.toString().replace(/[^0-9]/g, "") || "0";
+  //   return new Intl.NumberFormat("id-ID", {
+  //     style: "currency",
+  //     currency: "IDR",
+  //     minimumFractionDigits: 0,
+  //   }).format(numberString || 0);
+  // }
+
   function formatRupiah(value) {
-    const numberString = value?.toString().replace(/[^0-9]/g, "") || "0";
+    const number = Number(value) || 0;
     return new Intl.NumberFormat("id-ID", {
       style: "currency",
       currency: "IDR",
       minimumFractionDigits: 0,
-    }).format(numberString || 0);
+    }).format(number);
   }
 
   return (

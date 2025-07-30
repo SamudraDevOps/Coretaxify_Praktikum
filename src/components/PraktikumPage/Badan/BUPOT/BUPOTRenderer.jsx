@@ -181,6 +181,9 @@ const BUPOTRenderer = ({
             sidebarTitle={titles.sidebar || type.toUpperCase()}
             onDataRefresh={handleDataRefresh}
             sidebar={sidebar}
+            statusPenerbitan={currentStatus}
+            tipeBupot={currentBupot}
+            sistemId={currentPembuat}
           />
         );
       case "invalid":
@@ -201,6 +204,9 @@ const BUPOTRenderer = ({
             sidebarTitle={titles.sidebar || type.toUpperCase()}
             onDataRefresh={handleDataRefresh}
             sidebar={sidebar}
+            statusPenerbitan={currentStatus}
+            tipeBupot={currentBupot}
+            sistemId={currentPembuat}
           />
         );
       default:
@@ -221,6 +227,9 @@ const BUPOTRenderer = ({
             sidebarTitle={titles.sidebar || type.toUpperCase()}
             onDataRefresh={handleDataRefresh}
             sidebar={sidebar}
+            statusPenerbitan={currentStatus}
+            tipeBupot={currentBupot}
+            sistemId={currentPembuat}
           />
         );
     }
