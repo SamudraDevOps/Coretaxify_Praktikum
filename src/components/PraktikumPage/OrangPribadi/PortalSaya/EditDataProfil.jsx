@@ -200,14 +200,25 @@ const EditDataProfil = ({ data, sidebar }) => {
     },
     onSuccess: (data) => {
       console.log(data);
-      Swal.fire(
-        "Berhasil!",
-        "Data informasi umum berhasil disimpan!",
-        "success"
-      ).then((result) => {
-        if (result.isConfirmed) {
-          window.location.reload();
-        }
+      // Swal.fire(
+      //   "Berhasil!",
+      //   "Data informasi umum berhasil disimpan!",
+      //   "success"
+      // ).then((result) => {
+      //   if (result.isConfirmed) {
+      //     window.location.reload();
+      //   }
+      // });
+
+      Swal.fire({
+        title: "Berhasil!",
+        text: "Data informasi umum berhasil dihapus!",
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        window.location.reload();
       });
     },
     onError: (error) => {
@@ -282,14 +293,25 @@ const EditDataProfil = ({ data, sidebar }) => {
     },
     onSuccess: (data) => {
       console.log(data);
-      Swal.fire(
-        "Berhasil!",
-        "Data tempat kegiatan usaha berhasil disimpan!",
-        "success"
-      ).then((result) => {
-        if (result.isConfirmed) {
-          window.location.reload();
-        }
+      // Swal.fire(
+      //   "Berhasil!",
+      //   "Data tempat kegiatan usaha berhasil disimpan!",
+      //   "success"
+      // ).then((result) => {
+      //   if (result.isConfirmed) {
+      //     window.location.reload();
+      //   }
+      // });
+
+      Swal.fire({
+        title: "Berhasil!",
+        text: "Data tempat kegiatan usaha berhasil disimpan!",
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        window.location.reload();
       });
     },
     onError: (error) => {
@@ -316,14 +338,24 @@ const EditDataProfil = ({ data, sidebar }) => {
     },
     onSuccess: (data) => {
       console.log(data);
-      Swal.fire(
-        "Berhasil!",
-        "Data tempat kegiatan usaha berhasil disimpan!",
-        "success"
-      ).then((result) => {
-        if (result.isConfirmed) {
-          window.location.reload();
-        }
+      // Swal.fire(
+      //   "Berhasil!",
+      //   "Data tempat kegiatan usaha berhasil disimpan!",
+      //   "success"
+      // ).then((result) => {
+      //   if (result.isConfirmed) {
+      //     window.location.reload();
+      //   }
+      // });
+      Swal.fire({
+        title: "Berhasil!",
+        text: "Data tempat kegiatan usaha berhasil disimpan!",
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        window.location.reload();
       });
     },
     onError: (error) => {
@@ -349,13 +381,23 @@ const EditDataProfil = ({ data, sidebar }) => {
     },
     onSuccess: (data) => {
       console.log(data);
-      Swal.fire("Berhasil!", "Data TKU berhasil dihapus!", "success").then(
-        (result) => {
-          if (result.isConfirmed) {
-            window.location.reload();
-          }
-        }
-      );
+      // Swal.fire("Berhasil!", "Data TKU berhasil dihapus!", "success").then(
+      //   (result) => {
+      //     if (result.isConfirmed) {
+      //       window.location.reload();
+      //     }
+      //   }
+      // );
+      Swal.fire({
+        title: "Berhasil!",
+        text: "Data tempat kegiatan usaha berhasil dihapus!",
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        window.location.reload();
+      });
     },
     onError: (error) => {
       console.error("Error saving data:", error);
@@ -400,14 +442,25 @@ const EditDataProfil = ({ data, sidebar }) => {
     },
     onSuccess: (data) => {
       console.log(data);
-      Swal.fire(
-        "Berhasil!",
-        "Data detail bank berhasil disimpan!",
-        "success"
-      ).then((result) => {
-        if (result.isConfirmed) {
-          window.location.reload();
-        }
+      // Swal.fire(
+      //   "Berhasil!",
+      //   "Data detail bank berhasil disimpan!",
+      //   "success"
+      // ).then((result) => {
+      //   if (result.isConfirmed) {
+      //     window.location.reload();
+      //   }
+      // });
+
+      Swal.fire({
+        title: "Berhasil!",
+        text: "Detail Bank berhasil disimpan!",
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        window.location.reload();
       });
     },
     onError: (error) => {
@@ -434,14 +487,25 @@ const EditDataProfil = ({ data, sidebar }) => {
     },
     onSuccess: (data) => {
       console.log(data);
-      Swal.fire(
-        "Berhasil!",
-        "Data detail bank berhasil disimpan!",
-        "success"
-      ).then((result) => {
-        if (result.isConfirmed) {
-          window.location.reload();
-        }
+      // Swal.fire(
+      //   "Berhasil!",
+      //   "Data detail bank berhasil disimpan!",
+      //   "success"
+      // ).then((result) => {
+      //   if (result.isConfirmed) {
+      //     window.location.reload();
+      //   }
+      // });
+
+      Swal.fire({
+        title: "Berhasil!",
+        text: "Data detail bank berhasil disimpan!",
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        window.location.reload();
       });
     },
     onError: (error) => {
@@ -467,13 +531,24 @@ const EditDataProfil = ({ data, sidebar }) => {
     },
     onSuccess: (data) => {
       console.log(data);
-      Swal.fire("Berhasil!", "Bank berhasil dihapus!", "success").then(
-        (result) => {
-          if (result.isConfirmed) {
-            window.location.reload();
-          }
-        }
-      );
+      // Swal.fire("Berhasil!", "Bank berhasil dihapus!", "success").then(
+      //   (result) => {
+      //     if (result.isConfirmed) {
+      //       window.location.reload();
+      //     }
+      //   }
+      // );
+
+      Swal.fire({
+        title: "Berhasil!",
+        text: "Data bank berhasil dihapus!",
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        window.location.reload();
+      });
     },
     onError: (error) => {
       console.error("Error saving data:", error);
@@ -508,14 +583,25 @@ const EditDataProfil = ({ data, sidebar }) => {
     },
     onSuccess: (data) => {
       console.log(data);
-      Swal.fire(
-        "Berhasil!",
-        "Data informasi umum berhasil disimpan!",
-        "success"
-      ).then((result) => {
-        if (result.isConfirmed) {
-          window.location.reload();
-        }
+      // Swal.fire(
+      //   "Berhasil!",
+      //   "Data informasi umum berhasil disimpan!",
+      //   "success"
+      // ).then((result) => {
+      //   if (result.isConfirmed) {
+      //     window.location.reload();
+      //   }
+      // });
+
+      Swal.fire({
+        title: "Berhasil!",
+        text: "Data informasi umum berhasil disimpan!",
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        window.location.reload();
       });
     },
     onError: (error) => {
@@ -561,14 +647,25 @@ const EditDataProfil = ({ data, sidebar }) => {
     },
     onSuccess: (data) => {
       console.log(data);
-      Swal.fire(
-        "Berhasil!",
-        "Data detail kontak berhasil disimpan!",
-        "success"
-      ).then((result) => {
-        if (result.isConfirmed) {
-          window.location.reload();
-        }
+      // Swal.fire(
+      //   "Berhasil!",
+      //   "Data detail kontak berhasil disimpan!",
+      //   "success"
+      // ).then((result) => {
+      //   if (result.isConfirmed) {
+      //     window.location.reload();
+      //   }
+      // });
+
+      Swal.fire({
+        title: "Berhasil!",
+        text: "Data detail kontak berhasil disimpan!",
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        window.location.reload();
       });
     },
     onError: (error) => {
@@ -596,14 +693,24 @@ const EditDataProfil = ({ data, sidebar }) => {
     },
     onSuccess: (data) => {
       console.log(data);
-      Swal.fire(
-        "Berhasil!",
-        "Data detail kontak berhasil diubah!",
-        "success"
-      ).then((result) => {
-        if (result.isConfirmed) {
-          window.location.reload();
-        }
+      // Swal.fire(
+      //   "Berhasil!",
+      //   "Data detail kontak berhasil diubah!",
+      //   "success"
+      // ).then((result) => {
+      //   if (result.isConfirmed) {
+      //     window.location.reload();
+      //   }
+      // });
+      Swal.fire({
+        title: "Berhasil!",
+        text: "Data detail kontak berhasil diubah!",
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        window.location.reload();
       });
     },
     onError: (error) => {
@@ -629,14 +736,24 @@ const EditDataProfil = ({ data, sidebar }) => {
     },
     onSuccess: (data) => {
       console.log(data);
-      Swal.fire(
-        "Berhasil!",
-        "Data detail kontak berhasil dihapus!",
-        "success"
-      ).then((result) => {
-        if (result.isConfirmed) {
-          window.location.reload();
-        }
+      // Swal.fire(
+      //   "Berhasil!",
+      //   "Data detail kontak berhasil dihapus!",
+      //   "success"
+      // ).then((result) => {
+      //   if (result.isConfirmed) {
+      //     window.location.reload();
+      //   }
+      // });
+      Swal.fire({
+        title: "Berhasil!",
+        text: "Data detail kontak berhasil dihapus!",
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        window.location.reload();
       });
     },
     onError: (error) => {
@@ -684,14 +801,15 @@ const EditDataProfil = ({ data, sidebar }) => {
     },
     onSuccess: (data) => {
       console.log(data);
-      Swal.fire(
-        "Berhasil!",
-        "Data unit pajak keluarga berhasil disimpan!",
-        "success"
-      ).then((result) => {
-        if (result.isConfirmed) {
-          window.location.reload();
-        }
+      Swal.fire({
+        title: "Berhasil!",
+        text: "Data unit pajak keluarga berhasil disimpan.",
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        window.location.reload();
       });
     },
     onError: (error) => {
@@ -719,14 +837,24 @@ const EditDataProfil = ({ data, sidebar }) => {
     },
     onSuccess: (data) => {
       console.log(data);
-      Swal.fire(
-        "Berhasil!",
-        "Data unit pajak keluarga berhasil diperbarui!",
-        "success"
-      ).then((result) => {
-        if (result.isConfirmed) {
-          window.location.reload();
-        }
+      // Swal.fire(
+      //   "Berhasil!",
+      //   "Data unit pajak keluarga berhasil diperbarui!",
+      //   "success"
+      // ).then((result) => {
+      //   if (result.isConfirmed) {
+      //     window.location.reload();
+      //   }
+      // });
+      Swal.fire({
+        title: "Berhasil!",
+        text: "Data unit pajak keluarga berhasil diperbarui!",
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        window.location.reload();
       });
     },
     onError: (error) => {
@@ -753,13 +881,24 @@ const EditDataProfil = ({ data, sidebar }) => {
     },
     onSuccess: (data) => {
       console.log(data);
-      Swal.fire("Berhasil!", "Data keluarga berhasil dihapus!", "success").then(
-        (result) => {
-          if (result.isConfirmed) {
-            window.location.reload();
-          }
-        }
-      );
+      // Swal.fire("Berhasil!", "Data keluarga berhasil dihapus!", "success").then(
+      //   (result) => {
+      //     if (result.isConfirmed) {
+      //       window.location.reload();
+      //     }
+      //   }
+      // );
+
+      Swal.fire({
+        title: "Berhasil!",
+        text: "Data keluarga berhasil dihapus!",
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        window.location.reload();
+      });
     },
     onError: (error) => {
       console.error("Error deleting data:", error);
@@ -801,14 +940,25 @@ const EditDataProfil = ({ data, sidebar }) => {
     },
     onSuccess: (data) => {
       console.log(data);
-      Swal.fire(
-        "Berhasil!",
-        "Nomor identifikasi eksternal berhasil disimpan!",
-        "success"
-      ).then((result) => {
-        if (result.isConfirmed) {
-          window.location.reload();
-        }
+      // Swal.fire(
+      //   "Berhasil!",
+      //   "Nomor identifikasi eksternal berhasil disimpan!",
+      //   "success"
+      // ).then((result) => {
+      //   if (result.isConfirmed) {
+      //     window.location.reload();
+      //   }
+      // });
+
+      Swal.fire({
+        title: "Berhasil!",
+        text: "Nomor identifikasi eksternal berhasil disimpan!",
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        window.location.reload();
       });
     },
     onError: (error) => {
@@ -1179,11 +1329,45 @@ const EditDataProfil = ({ data, sidebar }) => {
             <div className="flex justify-end mt-4">
               <button
                 type="submit"
-                className={userId ? "hidden" : "px-4 py-2 bg-blue-500 text-white rounded-md"}
+                disabled={updateInformasiUmum.isPending}
+                className={
+                  userId
+                    ? "hidden"
+                    : `flex items-center justify-center gap-2 px-4 py-2 rounded-md transition ${
+                        updateInformasiUmum.isPending
+                          ? "bg-blue-300 text-white cursor-not-allowed"
+                          : "bg-blue-500 hover:bg-blue-600 text-white"
+                      }`
+                }
                 onClick={() => updateInformasiUmum.mutate()}
-                // onClick={() => console.log(formData)}
               >
-                Simpan
+                {updateInformasiUmum.isPending ? (
+                  <>
+                    <svg
+                      className="animate-spin h-4 w-4 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                      ></path>
+                    </svg>
+                    Menyimpan...
+                  </>
+                ) : (
+                  "Simpan"
+                )}
               </button>
             </div>
           </div>
@@ -1199,7 +1383,13 @@ const EditDataProfil = ({ data, sidebar }) => {
           <div className="border rounded-md p-4 mb-4">
             <div className="flex justify-between items-center mb-4">
               <AlertDialog>
-                <AlertDialogTrigger className={userId ? "hidden" : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"}>
+                <AlertDialogTrigger
+                  className={
+                    userId
+                      ? "hidden"
+                      : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"
+                  }
+                >
                   Tambah
                 </AlertDialogTrigger>
                 <AlertDialogContent className="bg-white !min-w-[1000px] rounded-lg shadow-lg ">
@@ -1576,13 +1766,25 @@ const EditDataProfil = ({ data, sidebar }) => {
                 <tbody className="text-gray-600">
                   <tr className="bg-gray-100">
                     <td className="px-1 py-4 border">
-                      <button className={userId ? "hidden" : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-2 rounded"}>
+                      <button
+                        className={
+                          userId
+                            ? "hidden"
+                            : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-2 rounded"
+                        }
+                      >
                         Edit
                       </button>
                       <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-2 rounded ml-2">
                         Lihat
                       </button>
-                      <button className={userId ? "hidden" : "bg-red-500 hover:bg-red-600 text-white py-2 px-2 rounded ml-2"}>
+                      <button
+                        className={
+                          userId
+                            ? "hidden"
+                            : "bg-red-500 hover:bg-red-600 text-white py-2 px-2 rounded ml-2"
+                        }
+                      >
                         Hapus
                       </button>
                     </td>
@@ -1611,7 +1813,13 @@ const EditDataProfil = ({ data, sidebar }) => {
           <div className="border rounded-md p-4 mb-4">
             <div className="flex justify-between items-center mb-4">
               <AlertDialog>
-                <AlertDialogTrigger className={userId ? "hidden" : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"}>
+                <AlertDialogTrigger
+                  className={
+                    userId
+                      ? "hidden"
+                      : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"
+                  }
+                >
                   + Tambah Kontak
                 </AlertDialogTrigger>
                 <AlertDialogContent className="bg-white !min-w-[1000px] rounded-lg shadow-lg ">
@@ -1787,7 +1995,11 @@ const EditDataProfil = ({ data, sidebar }) => {
                             <AlertDialog>
                               <AlertDialogTrigger
                                 onClick={() => setContactFormData(contact)}
-                                className={userId ? "hidden" : "bg-blue-500 hover:bg-blue-600 text-white py-1 px-4 rounded-md"}
+                                className={
+                                  userId
+                                    ? "hidden"
+                                    : "bg-blue-500 hover:bg-blue-600 text-white py-1 px-4 rounded-md"
+                                }
                               >
                                 edit
                               </AlertDialogTrigger>
@@ -1950,7 +2162,9 @@ const EditDataProfil = ({ data, sidebar }) => {
                               </AlertDialogContent>
                             </AlertDialog>
                             <button
-                              className={userId ? "hidden" : "action-button delete"}
+                              className={
+                                userId ? "hidden" : "action-button delete"
+                              }
                               onClick={() => {
                                 Swal.fire({
                                   title: "Hapus Kontak?",
@@ -2328,7 +2542,13 @@ const EditDataProfil = ({ data, sidebar }) => {
           <div className="border rounded-md p-4 mb-4">
             <div className="flex justify-between items-center mb-4">
               <AlertDialog>
-                <AlertDialogTrigger className={userId ? "hidden" : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"}>
+                <AlertDialogTrigger
+                  className={
+                    userId
+                      ? "hidden"
+                      : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"
+                  }
+                >
                   + Tambah
                 </AlertDialogTrigger>
                 <AlertDialogContent className="bg-white !min-w-[1000px] rounded-lg shadow-lg ">
@@ -2428,7 +2648,11 @@ const EditDataProfil = ({ data, sidebar }) => {
                           <AlertDialog>
                             <AlertDialogTrigger
                               onClick={() => setTkuFormData(tku)}
-                              className={userId ? "hidden" : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"}
+                              className={
+                                userId
+                                  ? "hidden"
+                                  : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"
+                              }
                             >
                               Edit
                             </AlertDialogTrigger>
@@ -2508,7 +2732,11 @@ const EditDataProfil = ({ data, sidebar }) => {
                           </button>
                           <button
                             onClick={() => deleteTku.mutate(tku.id)}
-                            className={userId ? "hidden" : "bg-red-500 hover:bg-red-600 text-white py-2 px-2 rounded ml-2"}
+                            className={
+                              userId
+                                ? "hidden"
+                                : "bg-red-500 hover:bg-red-600 text-white py-2 px-2 rounded ml-2"
+                            }
                           >
                             Hapus
                           </button>
@@ -2536,7 +2764,13 @@ const EditDataProfil = ({ data, sidebar }) => {
           <div className="border rounded-md p-4 mb-4">
             <div className="flex justify-between items-center mb-4">
               <AlertDialog>
-                <AlertDialogTrigger className={userId ? "hidden" : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"}>
+                <AlertDialogTrigger
+                  className={
+                    userId
+                      ? "hidden"
+                      : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"
+                  }
+                >
                   + Tambah
                 </AlertDialogTrigger>
                 <AlertDialogContent className="bg-white !min-w-[1000px] rounded-lg shadow-lg ">
@@ -2739,7 +2973,11 @@ const EditDataProfil = ({ data, sidebar }) => {
                         <AlertDialog>
                           <AlertDialogTrigger
                             onClick={() => setBankFormData(bank)}
-                            className={userId ? "hidden" : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"}
+                            className={
+                              userId
+                                ? "hidden"
+                                : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"
+                            }
                           >
                             Edit
                           </AlertDialogTrigger>
@@ -2998,7 +3236,11 @@ const EditDataProfil = ({ data, sidebar }) => {
               </div>
               <div className="flex justify-end">
                 <button
-                  className={userId ? "hidden" : "px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"}
+                  className={
+                    userId
+                      ? "hidden"
+                      : "px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                  }
                   onClick={() => updateExternalId.mutate()}
                 >
                   {updateExternalId.isLoading ? (
@@ -3128,7 +3370,13 @@ const EditDataProfil = ({ data, sidebar }) => {
           <div className="border rounded-md p-4 mb-4">
             <div className="flex justify-between items-center mb-4">
               <AlertDialog>
-                <AlertDialogTrigger className={userId ? "hidden" : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"}>
+                <AlertDialogTrigger
+                  className={
+                    userId
+                      ? "hidden"
+                      : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"
+                  }
+                >
                   + Tambah
                 </AlertDialogTrigger>
                 <AlertDialogContent className="bg-white !min-w-[1000px] rounded-lg shadow-lg ">
@@ -3375,7 +3623,11 @@ const EditDataProfil = ({ data, sidebar }) => {
                             <AlertDialog>
                               <AlertDialogTrigger
                                 onClick={() => setFamilyUnitFormData(family)}
-                                className={userId ? "hidden" : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"}
+                                className={
+                                  userId
+                                    ? "hidden"
+                                    : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"
+                                }
                               >
                                 Edit
                               </AlertDialogTrigger>
@@ -3599,7 +3851,11 @@ const EditDataProfil = ({ data, sidebar }) => {
                                   }
                                 });
                               }}
-                              className={userId ? "hidden" : "bg-red-500 hover:bg-red-600 text-white py-2 px-2 rounded ml-2"}
+                              className={
+                                userId
+                                  ? "hidden"
+                                  : "bg-red-500 hover:bg-red-600 text-white py-2 px-2 rounded ml-2"
+                              }
                             >
                               Hapus
                             </button>
