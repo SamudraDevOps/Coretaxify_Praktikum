@@ -963,7 +963,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
 
     // Hitung total DPP, PPN, dan PPnBM dari semua transaksi
     const totalDPP = formData.detail_transaksi.reduce((sum, item) => {
-      return sum + item.dpp;
+      return Number(sum) + Number(item.dpp);
     }, 0);
 
     const totalPPN = formData.detail_transaksi.reduce((sum, item) => {
