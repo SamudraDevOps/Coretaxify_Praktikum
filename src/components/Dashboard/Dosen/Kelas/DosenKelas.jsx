@@ -79,6 +79,27 @@ export default function DosenKelas() {
     },
   });
 
+  const { data: profileData, isLoading: loadingProfile } = useQuery({
+      queryKey: ["profile"],
+      queryFn: async () => {
+        const res = await axios.get(RoutesApi.profile, {
+          headers: {
+            Authorization: `Bearer ${cookies.token}`,
+            Accept: "application/json",
+          },
+        });
+        const user = res.data.data;
+  
+        const photoUrl = user.image_path
+          ? `${RoutesApi.url}storage/${user.image_path}`
+          : `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || "User")}&background=random&size=128&color=auto`;
+  
+        return { ...user, photoUrl };
+      },
+      enabled: !!cookies.token, // hanya jalan jika token ada
+      refetchOnWindowFocus: false,
+    });
+
   const [formData, setFormData] = useState({
     namaKelas: "",
     kodeKelas: "",
@@ -295,7 +316,7 @@ export default function DosenKelas() {
 
   const [isChecked, setIsChecked] = useState(false);
 
-  if (isLoading) {
+  if (isLoading || loadingProfile) {
     return (
       <div className="loading">
         <ClipLoader color="#7502B5" size={50} />
@@ -585,9 +606,14 @@ export default function DosenKelas() {
                 <p className="text-gray-500 p-4"> {item.end_period}</p>
               </div>
               <img
-                src={Wulan}
-                alt="Icon"
+                src={profileData?.photoUrl}
+                alt="Foto Profil"
                 className="absolute bottom-[120px] right-4 w-14 h-14 rounded-full border-2 border-white shadow-md"
+                onError={(e) => {
+                  e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(
+                    profileData?.name || "User"
+                  )}&background=random&size=128&color=auto`;
+                }}
               />
             </a>
           ))

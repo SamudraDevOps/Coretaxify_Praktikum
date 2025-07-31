@@ -138,6 +138,11 @@ const FakturPajakKeluaranPdf = ({ data }) => (
           </View>
         </View>
 
+         <View style={styles.boxRow}>
+          <Text style={styles.row}>Kode dan Nomor Seri Faktur Pajak : {data.nomor_faktur_pajak}</Text>
+          {/* <Text style={styles.value}>{data.nomor_faktur_pajak}</Text> */}
+        </View>
+
         {/* </View> */}
 
         {/* Faktur Code */}

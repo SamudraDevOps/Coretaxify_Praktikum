@@ -3721,9 +3721,9 @@ const CreateKonsepSPT = ({ data }) => {
                             <th className="p-2 border-b min-w-[150px]">
                               PPnBM (Rupiah)
                             </th>
-                            <th className="p-2 border-b min-w-[150px]">
+                            {/* <th className="p-2 border-b min-w-[150px]">
                               Kode dan Nomor Seri Faktur Pajak Diganti/Diretur
-                            </th>
+                            </th> */}
                           </tr>
                         </thead>
                         <tbody className="text-gray-600 text-center">
@@ -4135,10 +4135,10 @@ const CreateKonsepSPT = ({ data }) => {
                             <th className="p-2 border-b min-w-[150px]">
                               PPnBM (Rupiah)
                             </th>
-                            <th className="p-2 border-b min-w-[150px]">
+                            {/* <th className="p-2 border-b min-w-[150px]">
                               Kode dan Nomor Seri Faktur Pajak yang
                               Diganti/Diretur
-                            </th>
+                            </th> */}
                           </tr>
                         </thead>
                         <tbody className="text-gray-600 text-center">
@@ -4345,10 +4345,10 @@ const CreateKonsepSPT = ({ data }) => {
                             <th className="p-2 border-b min-w-[150px]">
                               PPnBM (Rupiah)
                             </th>
-                            <th className="p-2 border-b min-w-[150px]">
+                            {/* <th className="p-2 border-b min-w-[150px]">
                               Kode dan Nomor Seri Faktur Pajak yang
                               Diganti/Diretur
-                            </th>
+                            </th> */}
                           </tr>
                         </thead>
                         <tbody className="text-gray-600 text-center">
@@ -4552,9 +4552,9 @@ const CreateKonsepSPT = ({ data }) => {
                             <th className="p-2 border-b min-w-[150px]">
                               Tanggal Faktur Pajak/Dokumen Tertentu
                             </th>
-                            <th className="p-2 border-b min-w-[150px]">
+                            {/* <th className="p-2 border-b min-w-[150px]">
                               Kode dan Nomor Seri Faktur Pajak yang Diganti
-                            </th>
+                            </th> */}
                             <th className="p-2 border-b min-w-[150px]">
                               Harga Jual/DPP (Rupiah)
                             </th>
