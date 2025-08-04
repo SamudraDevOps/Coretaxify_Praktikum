@@ -1433,7 +1433,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
           npwp_akun={sidebar.npwp_akun}
           akun={{ id, akun }}
         />
-        <div className="flex-grow p-6 bg-white h-full overflow-y-auto">
+        <div className="flex-grow p-6 bg-white h-full overflow-y-auto min-w-0">
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">
             Edit Data
           </h2>
@@ -1445,7 +1445,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
             {showDokumenTransaksi ? <FaChevronUp /> : <FaChevronDown />}
           </div>
           {showDokumenTransaksi && (
-            <div className="border rounded-md p-4 mb-2 grid grid-cols-3 gap-4 w-[1200px]">
+            <div className="border rounded-md p-4 mb-2 grid grid-cols-3 gap-4 ">
               <div className="space-y-2">
                 <label className="block text-sm font-medium">Uang Muka</label>
                 <input
@@ -2213,7 +2213,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
             {showDetailTransaksi ? <FaChevronUp /> : <FaChevronDown />}
           </div>
           {showDetailTransaksi && (
-            <div className="border rounded-md p-4 mb-2 w-[1200px]">
+            <div className="border rounded-md p-4 mb-2 ">
               <div className="flex justify-between mb-4 border-b pb-3">
                 <AlertDialog>
                   <AlertDialogTrigger asChild>

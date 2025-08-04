@@ -193,7 +193,7 @@ const CreateKonsepPasal = ({ data }) => {
   const [showPajakPenghasilan26, setShowPajakPenghasilan26] = useState(false);
   const [showPernyataan, setShowPernyataan] = useState(false);
 
-  const [showHeadera1, setShowHeadera1] = useState(false);
+  const [showHeadera1, setShowHeadera1] = useState(true);
   const [showHeadera2, setShowHeadera2] = useState(false);
   const [showHeaderb1, setShowHeaderb1] = useState(false);
   const [showHeaderb2, setShowHeaderb2] = useState(false);

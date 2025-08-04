@@ -82,10 +82,10 @@ const ReturFakturMasukan = ({ data, sidebar }) => {
               Buat Retur
               <FaPlus className="text-lg text-white ml-2" />
             </button>
-            <button className={userId ? "hidden" : "flex items-center bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-2 rounded"}>
+            {/* <button className={userId ? "hidden" : "flex items-center bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-2 rounded"}>
               Import Data
               <FaChevronDown className="text-lg text-white ml-2" />
-            </button> */}
+            </button>  */}
           </div>
           {/* <button className={userId ? "hidden" : "flex items-center bg-red-800 hover:bg-red-900 text-white font-bold py-2 px-2 rounded"}>
             <TiDeleteOutline className="text-2xl text-white mr-2" />
@@ -204,7 +204,7 @@ const ReturFakturMasukan = ({ data, sidebar }) => {
         </div>
       </div>
     </div>
-    </div>
+    
   );
 };
 

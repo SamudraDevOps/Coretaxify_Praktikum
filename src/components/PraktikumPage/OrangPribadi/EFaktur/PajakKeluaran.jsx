@@ -201,7 +201,7 @@ const PajakKeluaran = ({
         </div>
 
         <div className="flex justify-between mb-4 border-b pb-3">
-          <div className="flex items-center gap-3">
+          {/* <div className="flex items-center gap-3">
             <div className="flex text-left text-sm" ref={dropdownRef}>
               <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
@@ -233,7 +233,7 @@ const PajakKeluaran = ({
             <button className={userId ? "hidden" : "flex items-center bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-2 rounded text-sm"}>
               Hapus Dokumen
             </button>
-          </div>
+          </div> */}
         </div>
 
          <div className="w-full overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden mt-4">
