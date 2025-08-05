@@ -71,6 +71,45 @@ const PajakKeluaran = ({
     },
   });
 
+  // const cancelFaktur = useMutation({
+  //   mutationFn: async (fakturId) => {
+  //     const csrf = await getCsrf();
+  //     return axios.delete(
+  //       `${RoutesApi.apiUrl}student/assignments/${id}/sistem/${accountId}/faktur/${fakturId}`,
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           Accept: "application/json",
+  //           "X-CSRF-TOKEN": csrf,
+  //           Authorization: `Bearer ${cookies.token}`,
+  //         },
+  //       }
+  //     );
+  //   },
+  //   onSuccess: (data) => {
+  //     console.log(data);
+  //     Swal.fire("Berhasil!", "Faktur berhasil dihapus", "success").then(
+  //       (result) => {
+  //         if (result.isConfirmed) {
+  //           window.location.reload();
+  //         }
+  //       }
+  //     );
+  //   },
+  //   onError: (error) => {
+  //     console.error("Error deleting data:", error);
+
+  //     Swal.fire(
+  //       "Gagal!",
+  //       error?.response?.data?.message ||
+  //         "Terjadi kesalahan saat menghapus data",
+  //       "error"
+  //     );
+
+  //     // Swal.fire("Gagal!", error?.response?.data?.message, "error");
+  //     // Swal.fire("Gagal!", "Terjadi kesalahan saat menghapus data", "error");
+  //   },
+  // });
   const approveMultipleFaktur = useMutation({
     mutationFn: async () => {
       const csrf = await getCsrf();
@@ -489,7 +528,7 @@ const PajakKeluaran = ({
                           Lihat PDF
                         </button>
                         {/* </a> */}
-                        <button
+                        {/* <button
                           onClick={() => deleteFaktur.mutate(item.id)}
                           disabled={deleteFaktur.isPending}
                           className={`px-2 py-1 rounded text-xs text-white ${
@@ -501,7 +540,27 @@ const PajakKeluaran = ({
                           }`}
                         >
                           {deleteFaktur.isPending ? "Menghapus..." : "Hapus"}
-                        </button>
+                        </button> */}
+                        {(item.status === "APPROVED" ||
+                          item.status === "DRAFT") && (
+                          <button
+                            onClick={() => deleteFaktur.mutate(item.id)}
+                            disabled={deleteFaktur.isPending}
+                            className={`px-2 py-1 rounded text-xs text-white ${
+                              deleteFaktur.isPending
+                                ? "bg-gray-400 cursor-not-allowed"
+                                : userId
+                                ? "hidden"
+                                : "bg-red-500 hover:bg-red-600"
+                            }`}
+                          >
+                            {deleteFaktur.isPending
+                              ? "Menghapus..."
+                              : item.status === "APPROVED"
+                              ? "Batalkan"
+                              : "Hapus"}
+                          </button>
+                        )}
                       </div>
                     </td>
                     <td className="px-4 py-2 border">
