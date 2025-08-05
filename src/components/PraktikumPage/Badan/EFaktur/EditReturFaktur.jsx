@@ -27,6 +27,7 @@ import { RoutesApi } from "@/Routes";
 import { useCookies } from "react-cookie";
 import Swal from "sweetalert2";
 import { useNavigateWithParams } from "@/hooks/useNavigateWithParams";
+import TandaTangan from "../TandaTangan";
 
 const EditReturFaktur = ({ data, sidebar }) => {
   console.log(data);
@@ -1513,7 +1514,7 @@ const EditReturFaktur = ({ data, sidebar }) => {
           <button className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600">
             Batalkan Konsep
           </button>
-          <button
+          {/* <button
             onClick={handleUploadKonsep}
             disabled={updateFakturRetur.isPending}
             className={`px-4 py-2 rounded-md text-white ${
@@ -1530,7 +1531,17 @@ const EditReturFaktur = ({ data, sidebar }) => {
             ) : (
               "Upload Konsep"
             )}
-          </button>
+          </button> */}
+          <TandaTangan
+            onConfirm={handleUploadKonsep}
+            isLoading={updateFakturRetur.isPending}
+            disabled={0}
+            confirmText="Upload Konsep"
+            description="Apakah Anda yakin ingin mengupload retur faktur ini sekarang?"
+            npwp={sidebar.npwp_akun}
+          >
+            Upload Konsep
+          </TandaTangan>
 
           {/* <AlertDialog>
             <AlertDialogTrigger asChild>
