@@ -40,6 +40,7 @@ import Swal from "sweetalert2";
 import Select from "react-select";
 import { NumericFormat } from "react-number-format";
 import { formatRupiahUtils } from "@/hooks/formatRupiah";
+import TandaTangan from "../TandaTangan";
 
 const TambahFakturKeluaran = ({ data, sidebar }) => {
   const [editMode, setEditMode] = useState(false);
@@ -757,7 +758,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
 
   // const [namaBarang, setNamaBarang] = useState("");
   const handleSubmit = (e, isDraft = true) => {
-    e.preventDefault();
+    // e.preventDefault();
     const validationErrors = validateFormData();
 
     if (validationErrors.length > 0) {
@@ -978,11 +979,11 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
     }, 0);
 
     const totalPPN = formData.detail_transaksi.reduce((sum, item) => {
-      return Number(sum) +  Number (item.ppnNominal);
+      return Number(sum) + Number(item.ppnNominal);
     }, 0);
 
     const totalPPnBM = formData.detail_transaksi.reduce((sum, item) => {
-      return Number(sum) + Number (item.ppnbm);
+      return Number(sum) + Number(item.ppnbm);
     }, 0);
 
     // Tambahkan total ke formData
@@ -2918,7 +2919,7 @@ ${isChecked ? "" : "bg-gray-100"}
             >
               Batal
             </button>
-            <button
+            {/* <button
               onClick={(e) => handleSubmit(e, true)}
               className={
                 userId
@@ -2935,8 +2936,19 @@ ${isChecked ? "" : "bg-gray-100"}
               ) : (
                 "Simpan Draft"
               )}
-            </button>
-            <button
+            </button> */}
+            <TandaTangan
+              onConfirm={(e) => handleSubmit(e, true)}
+              isLoading={createFaktur.isPending}
+              disabled={userId}
+              confirmText="Simpan Draft"
+              description="Apakah Anda yakin ingin menyimpan faktur ini sebagai draft?"
+              npwp={sidebar.npwp_akun}
+            >
+              Simpan Draft
+            </TandaTangan>
+
+            {/* <button
               onClick={(e) => handleSubmit(e, false)}
               className={
                 userId
@@ -2953,7 +2965,17 @@ ${isChecked ? "" : "bg-gray-100"}
               ) : (
                 "Upload Faktur"
               )}
-            </button>
+            </button> */}
+            <TandaTangan
+              onConfirm={(e) => handleSubmit(e, false)}
+              isLoading={createFaktur.isPending}
+              disabled={userId}
+              confirmText="Upload Faktur"
+              description="Apakah Anda yakin ingin mengupload faktur ini sekarang?"
+              npwp={sidebar.npwp_akun}
+            >
+              Upload Faktur
+            </TandaTangan>
           </div>
         </div>
       </div>
