@@ -3,6 +3,7 @@ import React, { useState } from "react";
 // import "../Pengguna/Mahasiswa/editMahasiswa.css";
 // import EditPopupMahasiswa from "../Pengguna/Mahasiswa/EditPopupMahasiswa";
 import Swal from "sweetalert2";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 import {
   AlertDialog,
@@ -61,8 +62,8 @@ export default function DosenPraktikumKelasMember() {
 
   const pathRoute = getRoute();
 
-  const { isLoading, isError, data, error } = useQuery({
-    queryKey: ["praktikum", url],
+  const { isLoading, isError, data, error, refetch} = useQuery({
+    queryKey: ["praktikum", url, currentPage],
     queryFn: async () => {
       const { data } = await axios.get(
         url + `/${id}/assignments/${idpraktikum}/members`,
@@ -73,6 +74,7 @@ export default function DosenPraktikumKelasMember() {
           },
           params: {
             intent: IntentEnum.API_GET_ASSIGNMENT_MEMBERS_WITH_SISTEM_SCORES,
+            page: currentPage
           },
         }
       );
@@ -81,6 +83,8 @@ export default function DosenPraktikumKelasMember() {
       return data;
     },
   });
+
+  console.log(currentPage);
 
   const handleSort = (key) => {
     let direction = "ascending";
@@ -101,6 +105,26 @@ export default function DosenPraktikumKelasMember() {
     setData(sortedData);
   };
 
+  const handleDataRefresh = () => {
+    refetch();
+  }
+
+  const onPageChange = (page) => {
+    setCurrentPage(page);
+  }
+
+  const getPageFromUrl = (url) => {
+    if (!url) return null;
+    const matches = url.match(/[?&]page=(\d+)/);
+    return matches ? parseInt(matches[1]) : null;
+  };
+
+  const handlePageClick = (page) => {
+    if (page !== currentPage && page >= 1 && page <= totalPages) {
+      onPageChange(page);
+    }
+  };
+
   const handleOpenNilai = (sistemScores) => {
     setSelectedUser(sistemScores);
     setIsTabelNilaiMahasiswaOpen(true);
@@ -111,25 +135,10 @@ export default function DosenPraktikumKelasMember() {
     setIsOpen(true);
   };
 
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  // const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
-
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
   const [formData, setFormData] = useState({
     assignment_code: "",
   });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
-
-  const handleSave = () => {
-    // Logic to save the data
-    onClose();
-  };
   const [file, setFile] = useState();
   function handleChangeFile(e) {
     console.log(e.target.files);
@@ -137,14 +146,6 @@ export default function DosenPraktikumKelasMember() {
   }
   const [search, setSearch] = useState("");
 
-  // const processedData = data.map((item) => ({
-  //   ...item,
-  //   highlight:
-  //     search &&
-  //     Object.values(item).some((value) =>
-  //       String(value).toLowerCase().includes(search.toLowerCase())
-  //     ),
-  // }));
   let { id, idpraktikum } = useParams();
   const mutation = deleteMemberPraktikum(getCookie(), id, idpraktikum);
   console.log("id", id, idpraktikum);
@@ -292,9 +293,10 @@ export default function DosenPraktikumKelasMember() {
             <button
               className={`page-item`}
               onClick={() => {
-                setUrl(data.links.prev);
+                onPageChange(getPageFromUrl(data.links.prev))
+                // setUrl(data.links.prev);
               }}
-              disabled={data.meta.current_page === 1}
+              disabled={data.links.prev === null}
             >
               &lt;
             </button>
@@ -311,8 +313,9 @@ export default function DosenPraktikumKelasMember() {
                   : ""
               }`}
               onClick={() => {
-                console.log(data.links.next);
-                setUrl(data.links.next);
+                onPageChange(getPageFromUrl(data.links.next))
+                // console.log(data.links.next);
+                // setUrl(data.links.next);
               }}
               disabled={data.links.next == null}
             >

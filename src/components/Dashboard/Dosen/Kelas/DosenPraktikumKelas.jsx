@@ -279,7 +279,7 @@ export default function DosenPraktikumKelas() {
                       <label>Soal :</label>
                       <select name="task_id" onChange={handleChange} id="">
                         <option value="">Pilih Soal</option>
-                        {taskData.data.map((item) => (
+                        {taskData.data.data.map((item) => (
                           <option key={item.id} value={item.id}>
                             {item.name}
                           </option>

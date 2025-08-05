@@ -152,32 +152,75 @@ export default function UploadSoal() {
     },
   });
 
+  // const mutationDelete = useMutation({
+  //   mutationFn: async (id) => {
+  //     console.log("button clicked");
+  //     const response = await axios.get(`${RoutesApi.url}api/csrf-token`, {
+  //       // withCredentials: true,
+  //       headers: {
+  //         "X-Requested-With": "XMLHttpRequest",
+  //         Accept: "application/json",
+  //       },
+  //     });
+  //     console.log(response.data.token);
+  //     axios.defaults.headers.common["X-CSRF-TOKEN"] = response.data.token;
+  //     console.log(cookies.token);
+  //     const data = await axios.delete(RoutesApi.tasksAdmin + `/${id}`, {
+  //       headers: {
+  //         "Content-Type": "multipart/form-data",
+  //         Accept: "application/json",
+  //         "X-CSRF-TOKEN": response.data.token,
+  //         Authorization: `Bearer ${cookies.token}`,
+  //       },
+  //     });
+  //     return data;
+  //   },
+  //   onSuccess: (data) => {
+  //     console.log(data);
+  //     Swal.fire("Berhasil!", "Data Soal berhasil dihapus!", "success").then(
+  //       (result) => {
+  //         if (result.isConfirmed) {
+  //           refetch();
+  //         }
+  //       }
+  //     );
+  //   },
+  //   onError: (error) => {
+  //     console.log(error);
+  //   },
+  // });
   const mutationDelete = useMutation({
     mutationFn: async (id) => {
       console.log("button clicked");
       const response = await axios.get(`${RoutesApi.url}api/csrf-token`, {
-        // withCredentials: true,
         headers: {
           "X-Requested-With": "XMLHttpRequest",
           Accept: "application/json",
         },
       });
-      console.log(response.data.token);
       axios.defaults.headers.common["X-CSRF-TOKEN"] = response.data.token;
-      console.log(cookies.token);
-      const data = await axios.delete(RoutesApi.tasksAdmin + `/${id}`, {
+
+      // Create a dynamic payload object
+      const payload = {};
+      payload.status = 'inactive';
+
+      // Send the request with only non-empty fields
+      const data = await axios.post(RoutesApi.tasksAdmin + "/" + id, payload, {
         headers: {
           "Content-Type": "multipart/form-data",
           Accept: "application/json",
           "X-CSRF-TOKEN": response.data.token,
           Authorization: `Bearer ${cookies.token}`,
         },
+        params: {
+          _method: "PUT",
+        },
       });
       return data;
     },
     onSuccess: (data) => {
       console.log(data);
-      Swal.fire("Berhasil!", "Data Soal berhasil dihapus!", "success").then(
+      Swal.fire("Berhasil!", "Soal berhasil dihapus!", "success").then(
         (result) => {
           if (result.isConfirmed) {
             refetch();
@@ -187,6 +230,7 @@ export default function UploadSoal() {
     },
     onError: (error) => {
       console.log(error);
+      Swal.fire("Gagal!", "Gagal menghapus soal.", "error");
     },
   });
 

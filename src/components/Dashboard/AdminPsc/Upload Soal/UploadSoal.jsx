@@ -99,9 +99,26 @@ export default function UploadSoal() {
         });
       } else if (action === "delete" && id) {
         // Delete task
-        const deleteEndpoint = RoutesApi.psc.tasks.destroy(id);
-        return await axios.delete(deleteEndpoint.url, {
+        // const deleteEndpoint = RoutesApi.psc.tasks.destroy(id);
+        // return await axios.delete(deleteEndpoint.url, {
+        //   headers: {
+        //     "X-CSRF-TOKEN": response.data.token,
+        //     Authorization: `Bearer ${cookies.token}`,
+        //   },
+        // });
+        const formDataObj = new FormData();
+
+        // Only append fields that have values
+        formDataObj.append("status", "inactive");
+
+        // Append method to handle Laravel's form method spoofing
+        formDataObj.append("_method", "PUT");
+
+        const updateEndpoint = RoutesApi.psc.tasks.update(id);
+        return await axios.post(updateEndpoint.url, formDataObj, {
           headers: {
+            "Content-Type": "multipart/form-data",
+            Accept: "application/json",
             "X-CSRF-TOKEN": response.data.token,
             Authorization: `Bearer ${cookies.token}`,
           },
