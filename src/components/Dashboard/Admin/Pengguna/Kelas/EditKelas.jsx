@@ -220,7 +220,7 @@ const EditKelas = () => {
           <thead>
             <tr>
               <th onClick={() => handleSort("kelas")}>
-                Kelas{" "}
+                Nama Kelas{" "}
                 {sortConfig.key === "kelas"
                   ? sortConfig.direction === "ascending"
                     ? "↑"
@@ -228,7 +228,7 @@ const EditKelas = () => {
                   : ""}
               </th>
               {/* <th>Instansi</th> */}
-              {/* <th>Jumlah Mahasiswa</th> */}
+             <th>Nama Dosen</th> 
               <th>Kode Kelas</th>
               <th>Status</th>
               <th>Action</th>
@@ -237,7 +237,8 @@ const EditKelas = () => {
           <tbody>
             {data.data.map((item) => (
               <tr key={item.id}>
-                <td>{item.name}</td>
+                <td>{item.name}</td> 
+                <td>{item.teacher}</td>
                 {/* <td>{item.qty_student}</td> */}
                 <td>
                   <div className="flex gap-2 items-center justify-center">

@@ -141,10 +141,10 @@ const EditDosen = () => {
       Swal.fire("Gagal", "Harap pilih kontrak terlebih dahulu.", "error");
       return;
     }
-  
+
     Swal.fire({
       title: "Tambah Dosen",
-      text: `Anda akan menambahkan ${(validLecturers.length+invalidLecturers.length)} dosen baru. Lanjutkan?`,
+      text: `Anda akan menambahkan ${(validLecturers.length + invalidLecturers.length)} dosen baru. Lanjutkan?`,
       icon: "question",
       showCancelButton: true,
       confirmButtonText: "Ya, lanjutkan",
@@ -275,7 +275,7 @@ const EditDosen = () => {
           <ClipLoader color="#7502B5" size={50} className="!opacity-100" />
         </div>
       )}
-      {}
+      { }
       <div className="kontrak-container ">
         <div className="header">
           <h2>Data Dosen</h2>
@@ -326,7 +326,7 @@ const EditDosen = () => {
             dosen={selectedDosen}
             onSave={handleCreateMultipleDosen}
             initialStudents={invalidLecturers}
-            // id={id}
+          // id={id}
           />
         )}
         <EditPopupDosen
@@ -335,7 +335,7 @@ const EditDosen = () => {
           dosen={selectedDosen}
           onSave={handleUpdateDosen}
           refetch={refetch}
-          // id={id}
+        // id={id}
         />
         <div className="table-container">
           <table>
@@ -357,6 +357,8 @@ const EditDosen = () => {
                       : "↓"
                     : ""}
                 </th>
+                <th>Instansi</th>
+                <th>Tanggal Registrasi</th>
                 {/* <th>Kode Registrasi</th>
                 <th>Kode Pembelian</th>
                 <th>Status</th> */}
@@ -368,6 +370,9 @@ const EditDosen = () => {
                 <tr key={item.id}>
                   <td>{item.name}</td>
                   <td>{item.email}</td>
+                  <td>{item.instansi}</td>
+                  <td>{item.email_verified_at?.slice(0, 10)}</td>
+
                   {/* <td>{item.}</td>
                   <td>{item.kodePembelian}</td>
                   <td>{item.status}</td> */}
@@ -378,7 +383,7 @@ const EditDosen = () => {
                     >
                       Edit
                     </button>
-                    <button
+                    {/* <button
                       className="action-button delete"
                       onClick={() => {
                         Swal.fire({
@@ -403,7 +408,7 @@ const EditDosen = () => {
                       }}
                     >
                       Delete
-                    </button>
+                    </button> */}
                   </td>
                 </tr>
               ))}
@@ -433,11 +438,10 @@ const EditDosen = () => {
                               </button>
                           ))} */}
               <button
-                className={`page-item ${
-                  currentPage === Math.ceil(data.length / itemsPerPage)
+                className={`page-item ${currentPage === Math.ceil(data.length / itemsPerPage)
                     ? "disabled"
                     : ""
-                }`}
+                  }`}
                 onClick={() => {
                   console.log(data.links.next);
                   setUrl(data.links.next);
