@@ -5,7 +5,8 @@ import { useCookies } from "react-cookie";
 import { RoutesApi } from "@/Routes";
 import Swal from "sweetalert2";
 import { useNavigateWithParams } from "@/hooks/useNavigateWithParams";
-import BUPOTPenilaian from './BUPOTPenilaian';
+import BUPOTPenilaian from "./BUPOTPenilaian";
+import TandaTangan from "../../TandaTangan";
 
 const BUPOTActionBar = ({
   type,
@@ -17,6 +18,7 @@ const BUPOTActionBar = ({
   statusPenerbitan,
   tipeBupot,
   sistemId,
+  sidebar,
 }) => {
   const { id, akun } = useParams();
   const [cookies] = useCookies(["token"]);
@@ -24,6 +26,8 @@ const BUPOTActionBar = ({
   const navigate = useNavigateWithParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const userId = searchParams.get("user_id");
+
+  console.log("bupot sidebar", sidebar);
 
   // Map types to their creation routes
   const createPaths = {
@@ -159,7 +163,11 @@ const BUPOTActionBar = ({
       <div className="flex space-x-2">
         {showCreateButton && isDraft && (
           <button
-            className={userId ? "hidden" : "bg-blue-700 text-white px-4 py-2 rounded"}
+            className={
+              userId
+                ? "hidden"
+                : "bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
+            }
             onClick={() => navigate(createPaths[type])}
           >
             + Create eBupot {type.toUpperCase()}
@@ -168,23 +176,41 @@ const BUPOTActionBar = ({
 
         {isDraft && (
           <>
-            <button
-              className={userId ? "hidden" : (`px-4 py-2 rounded ${
-                selectedItems.length > 0 && !isLoading
-                  ? "bg-green-600 text-white hover:bg-green-700"
-                  : "bg-gray-300 text-gray-700"
-              }`)}
+            {/* <button
+              className={
+                userId
+                  ? "hidden"
+                  : `px-4 py-2 rounded ${
+                      selectedItems.length > 0 && !isLoading
+                        ? "bg-green-600 text-white hover:bg-green-700"
+                        : "bg-gray-300 text-gray-700"
+                    }`
+              }
               onClick={handlePublish}
               disabled={selectedItems.length === 0 || isLoading}
             >
               {isLoading ? "Menerbitkan..." : "Terbitkan"}
-            </button>
+            </button> */}
+            <TandaTangan
+              onConfirm={handlePublish}
+              isLoading={isLoading}
+              disabled={0}
+              confirmText="Penerbitan Bupot"
+              description="Apakah Anda yakin ingin menerbitkan bupot ?"
+              npwp={sidebar.npwp_akun}
+            >
+              Terbitkan
+            </TandaTangan>
             <button
-              className={userId ? "hidden" : (`px-4 py-2 rounded ${
-                selectedItems.length > 0 && !isLoading
-                  ? "bg-red-600 text-white hover:bg-red-700"
-                  : "bg-gray-300 text-gray-700"
-              }`)}
+              className={
+                userId
+                  ? "hidden"
+                  : `px-4 py-2 rounded ${
+                      selectedItems.length > 0 && !isLoading
+                        ? "bg-red-600 text-white hover:bg-red-700"
+                        : "bg-gray-300 text-gray-700"
+                    }`
+              }
               onClick={handleDelete}
               disabled={selectedItems.length === 0 || isLoading}
             >
@@ -195,11 +221,15 @@ const BUPOTActionBar = ({
 
         {isPublished && (
           <button
-            className={userId ? "hidden" : (`px-4 py-2 rounded ${
-              selectedItems.length > 0 && !isLoading
-                ? "bg-red-600 text-white hover:bg-red-700"
-                : "bg-gray-300 text-gray-700"
-            }`)}
+            className={
+              userId
+                ? "hidden"
+                : `px-4 py-2 rounded ${
+                    selectedItems.length > 0 && !isLoading
+                      ? "bg-red-600 text-white hover:bg-red-700"
+                      : "bg-gray-300 text-gray-700"
+                  }`
+            }
             onClick={handleDelete}
             disabled={selectedItems.length === 0 || isLoading || !!userId}
           >
@@ -209,15 +239,17 @@ const BUPOTActionBar = ({
 
         {userId ? (
           <BUPOTPenilaian
-              statusPenerbitan={statusPenerbitan}
-              tipeBupot={tipeBupot}
-              sistemId={sistemId}
+            statusPenerbitan={statusPenerbitan}
+            tipeBupot={tipeBupot}
+            sistemId={sistemId}
           />
         ) : (
           ""
         )}
 
-        <button className={userId ? "hidden" : "bg-white border px-4 py-2 rounded"}>
+        <button
+          className={userId ? "hidden" : "bg-white border px-4 py-2 rounded"}
+        >
           XML Monitoring
         </button>
         <div className="relative">

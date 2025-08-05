@@ -55,7 +55,7 @@ const BUPOTLayout = ({
 
   return (
     <div className="flex">
-      <BUPOTSidebar type={type} title={sidebarTitle} sidebar={sidebar}/>
+      <BUPOTSidebar type={type} title={sidebarTitle} sidebar={sidebar} />
 
       <div className="w-full p-6 bg-gray-50 min-h-screen min-w-0">
         {customActionBar || (
@@ -68,6 +68,7 @@ const BUPOTLayout = ({
             statusPenerbitan={statusPenerbitan}
             tipeBupot={tipeBupot}
             sistemId={sistemId}
+            sidebar={sidebar}
           />
         )}
 

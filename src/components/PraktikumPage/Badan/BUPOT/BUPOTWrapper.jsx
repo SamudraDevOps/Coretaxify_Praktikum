@@ -99,6 +99,7 @@ const typeConfigs = {
 };
 
 const BUPOTWrapper = (props) => {
+  // console.log("sidebnar:", props.sidebar);
   // Extract type from the URL
   // const { type } = useParams();
   const { type, status } = useParams(); // Access params from RoleBasedRenderer
@@ -119,7 +120,7 @@ const BUPOTWrapper = (props) => {
 
   // Modified API call with intent
   const fetchData = async () => {
-    const { data } = await axios.get(props.path,  {
+    const { data } = await axios.get(props.path, {
       headers: {
         Authorization: `Bearer ${Cookies.token}`,
         Accept: "application/json",
@@ -140,7 +141,7 @@ const BUPOTWrapper = (props) => {
       intent={currentIntent}
       fetchData={fetchData} // Optional custom data fetching function
       sidebar={props.sidebar}
-      
+
       // You can pass custom components when needed
       // draft={CustomdraftComponent}
       // published={published}
