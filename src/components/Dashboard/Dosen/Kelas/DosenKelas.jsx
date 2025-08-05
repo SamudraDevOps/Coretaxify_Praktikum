@@ -105,8 +105,6 @@ export default function DosenKelas() {
     kodeKelas: "",
     status: "",
     file_name: "",
-    start_period: "",
-    end_period: "",
   });
 
   const generateRandomCode = () => {
@@ -213,8 +211,6 @@ export default function DosenKelas() {
       namaKelas: kelas.name,
       kodeKelas: kelas.class_code,
       status: kelas.status,
-      start_period: kelas.start_period.split("-").reverse().join("-"),
-      end_period: kelas.end_period.split("-").reverse().join("-"),
     });
     // setSelectedKelas(kelas);
     // setIsOpen(true);
@@ -245,8 +241,6 @@ export default function DosenKelas() {
           urlLocal,
           {
             name: formData.namaKelas,
-            start_period: formData.start_period,
-            end_period: formData.end_period,
             class_code: formData.kodeKelas,
             status: formData.status,
           },
@@ -275,8 +269,6 @@ export default function DosenKelas() {
           urlLocal,
           {
             name: formData.namaKelas,
-            start_period: formData.start_period,
-            end_period: formData.end_period,
             class_code: formData.kodeKelas,
             status: formData.status,
           },
@@ -389,8 +381,6 @@ export default function DosenKelas() {
             setIsAddOpen(true);
             setFormData({ ...formData, kodeKelas: generateRandomCode() });
             setFormData({
-              end_period: "",
-              start_period: "",
               namaKelas: "",
               kodeKelas: "",
               status: "",
@@ -517,26 +507,6 @@ export default function DosenKelas() {
                                 className="text-black"
                                 name="kodeKelas"
                                 value={formData.kodeKelas}
-                                onChange={handleChange}
-                              />
-                            </div>
-                            <div className="edit-form-group-mahasiswa ">
-                              <label>Tanggal Mulai:</label>
-                              <input
-                                className="text-black"
-                                type="date"
-                                name="start_period"
-                                value={formData.start_period}
-                                onChange={handleChange}
-                              />
-                            </div>
-                            <div className="edit-form-group-mahasiswa">
-                              <label>Deadline:</label>
-                              <input
-                                className="text-black"
-                                type="date"
-                                name="end_period"
-                                value={formData.end_period}
                                 onChange={handleChange}
                               />
                             </div>
@@ -712,31 +682,6 @@ export default function DosenKelas() {
                         <IoReload className="text-lg text-white " />
                       </button>
                     </div>
-                  </div>
-                  <div className="edit-form-group-mahasiswa">
-                    <label>Tanggal Mulai:</label>
-                    <input
-                      className="text-black"
-                      type="date"
-                      name="start_period"
-                      value={formData.start_period}
-                      onChange={handleChange}
-                      min={new Date().toISOString().split("T")[0]}
-                    />
-                  </div>
-                  <div className="edit-form-group-mahasiswa">
-                    <label>Deadline:</label>
-                    <input
-                      className="text-black"
-                      type="date"
-                      name="end_period"
-                      value={formData.end_period}
-                      onChange={handleChange}
-                      min={
-                        formData.start_period ||
-                        new Date().toISOString().split("T")[0]
-                      }
-                    />
                   </div>
                   <div className="edit-form-group-mahasiswa">
                     <select
