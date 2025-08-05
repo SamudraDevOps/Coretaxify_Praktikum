@@ -30,7 +30,8 @@ import { RoutesApi } from "@/Routes";
 import { useNavigateWithParams } from "@/hooks/useNavigateWithParams";
 import { ClipLoader } from "react-spinners";
 import { X } from "lucide-react";
-const CreateKonsepPasal = ({ data }) => {
+import TandaTangan from "../TandaTangan";
+const CreateKonsepPasal = ({ data, sidebar }) => {
   const navigate = useNavigateWithParams();
   console.log(data);
   const [cookies] = useCookies(["token"]);
@@ -241,13 +242,24 @@ const CreateKonsepPasal = ({ data }) => {
       //   ? "Draft Faktur berhasil dibuat"
       //   : "Faktur berhasil diupload";
 
-      Swal.fire("Berhasil!", "Konsep SPT berhasil dibuat.", "success").then(
-        (result) => {
-          if (result.isConfirmed) {
-            // window.location.href = `/praktikum/${id}/sistem/${akun}/buat-konsep-spt/${idSpt}`;
-          }
-        }
-      );
+      // Swal.fire("Berhasil!", "Konsep SPT berhasil dibuat.", "success").then(
+      //   (result) => {
+      //     if (result.isConfirmed) {
+      //       // window.location.href = `/praktikum/${id}/sistem/${akun}/buat-konsep-spt/${idSpt}`;
+      //     }
+      //   }
+      // );
+      Swal.fire({
+        title: "Berhasil!",
+        text: "Konsep SPT berhasil dibuat.",
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        // navigate(`/praktikum/${id}/sistem/${akun}/buat-konsep-spt/${idSpt}`);
+        window.location.reload()
+      });
     },
     onError: (error) => {
       console.error("Error saving data:", error);
@@ -281,15 +293,27 @@ const CreateKonsepPasal = ({ data }) => {
       //   ? "Draft Faktur berhasil dibuat"
       //   : "Faktur berhasil diupload";
 
-      Swal.fire("Berhasil!", "SPT berhasil dibayar.", "success").then(
-        (result) => {
-          if (result.isConfirmed) {
-            navigate(
-              `/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt/konsep`
-            );
-          }
-        }
-      );
+      // Swal.fire("Berhasil!", "SPT berhasil dibayar.", "success").then(
+      //   (result) => {
+      //     if (result.isConfirmed) {
+      //       navigate(
+      //         `/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt/konsep`
+      //       );
+      //     }
+      //   }
+      // );
+      Swal.fire({
+        title: "Berhasil!",
+        text: "SPT berhasil dibayar.",
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        navigate(
+          `/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt/konsep`
+        );
+      });
     },
     onError: (error) => {
       console.error("Error saving data:", error);
@@ -328,17 +352,29 @@ const CreateKonsepPasal = ({ data }) => {
       //   ? "Draft Faktur berhasil dibuat"
       //   : "Faktur berhasil diupload";
 
-      Swal.fire(
-        "Berhasil!",
-        "Kode Billing SPT berhasil dibuat.",
-        "success"
-      ).then((result) => {
-        if (result.isConfirmed) {
-          // window.location.href = `/praktikum/${id}/sistem/${akun}/buat-konsep-spt/${idSpt}`;
-          navigate(
-            `/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt/konsep`
-          );
-        }
+      // Swal.fire(
+      //   "Berhasil!",
+      //   "Kode Billing SPT berhasil dibuat.",
+      //   "success"
+      // ).then((result) => {
+      //   if (result.isConfirmed) {
+      //     // window.location.href = `/praktikum/${id}/sistem/${akun}/buat-konsep-spt/${idSpt}`;
+      //     navigate(
+      //       `/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt/konsep`
+      //     );
+      //   }
+      // });
+      Swal.fire({
+        title: "Berhasil!",
+        text: "Kode Billing SPT berhasil dibuat.",
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        navigate(
+          `/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt/konsep`
+        );
       });
     },
     onError: (error) => {
@@ -1105,7 +1141,7 @@ const CreateKonsepPasal = ({ data }) => {
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <div className="flex gap-3 py-4 justify-end">
-                        <AlertDialogAction
+                        {/* <AlertDialogAction
                           onClick={() => payDeposit.mutate()}
                           className=" bg-blue-500 text-white py-3 px-4 rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 text-sm font-medium transition-colors"
                         >
@@ -1116,7 +1152,28 @@ const CreateKonsepPasal = ({ data }) => {
                           className=" bg-blue-500 text-white py-3 px-4 rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 text-sm font-medium transition-colors"
                         >
                           Buat Kode Billing
-                        </AlertDialogAction>
+                        </AlertDialogAction> */}
+
+                        <TandaTangan
+                          onConfirm={() => payDeposit.mutate()}
+                          isLoading={payDeposit.isPending}
+                          disabled={0}
+                          confirmText="Pemindahan Deposit"
+                          description="Apakah Anda yakin ingin buat kode billing ?"
+                          npwp={sidebar.npwp_akun}
+                        >
+                          Pemindahan Deposit
+                        </TandaTangan>
+                        <TandaTangan
+                          onConfirm={() => payBilling.mutate()}
+                          isLoading={payBilling.isPending}
+                          disabled={0}
+                          confirmText="Buat Kode Billing"
+                          description="Apakah Anda yakin ingin buat kode billing ?"
+                          npwp={sidebar.npwp_akun}
+                        >
+                          Buat Kode Billing
+                        </TandaTangan>
                       </div>
                       <AlertDialogFooter>
                         {/* <AlertDialogCancel className="w-full">

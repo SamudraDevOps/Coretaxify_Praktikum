@@ -32,6 +32,7 @@ import { useCookies } from "react-cookie";
 import { useNavigateWithParams } from "@/hooks/useNavigateWithParams";
 import { ClipLoader } from "react-spinners";
 import { X } from "lucide-react";
+import TandaTangan from "../TandaTangan";
 
 // const columnsUpload = [
 //   { key: "file", label: "File Excel", type: "file", accept: ".xlsx,.xls,.csv" },
@@ -59,7 +60,7 @@ const initialRowUpload = {
 //     return Number(val);
 // };
 
-const CreateKonsepSPT = ({ data }) => {
+const CreateKonsepSPT = ({ data, sidebar }) => {
   const { id, akun, idSpt } = useParams();
   const [activeTab, setActiveTab] = useState("induk");
   const tabToApiParamMap = {
@@ -3427,18 +3428,38 @@ const CreateKonsepSPT = ({ data }) => {
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <div className="flex gap-3 py-4 justify-end">
-                        <AlertDialogAction
+                        {/* <AlertDialogAction
                           onClick={() => payDeposit.mutate()}
                           className=" bg-blue-500 text-white py-3 px-4 rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 text-sm font-medium transition-colors"
                         >
                           Pemindahan Deposit
-                        </AlertDialogAction>
-                        <AlertDialogAction
+                        </AlertDialogAction> */}
+                        <TandaTangan
+                          onConfirm={() => payDeposit.mutate()}
+                          isLoading={payDeposit.isPending}
+                          disabled={0}
+                          confirmText="Pemindahan Deposit"
+                          description="Apakah Anda yakin ingin buat kode billing ?"
+                          npwp={sidebar.npwp_akun}
+                        >
+                          Pemindahan Deposit
+                        </TandaTangan>
+                        <TandaTangan
+                          onConfirm={() => payBilling.mutate()}
+                          isLoading={payBilling.isPending}
+                          disabled={0}
+                          confirmText="Buat Kode Billing"
+                          description="Apakah Anda yakin ingin buat kode billing ?"
+                          npwp={sidebar.npwp_akun}
+                        >
+                          Buat Kode Billing
+                        </TandaTangan>
+                        {/* <AlertDialogAction
                           onClick={() => payBilling.mutate()}
                           className=" bg-blue-500 text-white py-3 px-4 rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 text-sm font-medium transition-colors"
                         >
                           Buat Kode Billing
-                        </AlertDialogAction>
+                        </AlertDialogAction> */}
                       </div>
                       <AlertDialogFooter>
                         {/* <AlertDialogCancel className="w-full">
@@ -4650,6 +4671,7 @@ const CreateKonsepSPT = ({ data }) => {
                                   (sum, item) =>
                                     sum + (parseFloat(item.dpp_lain) || 0),
                                   0
+
                                 )
                               )}
                             </td>
