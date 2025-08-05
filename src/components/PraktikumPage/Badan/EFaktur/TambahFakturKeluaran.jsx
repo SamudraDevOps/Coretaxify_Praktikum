@@ -967,11 +967,11 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
     }, 0);
 
     const totalPPN = formData.detail_transaksi.reduce((sum, item) => {
-      return sum + item.ppnNominal;
+      return Number(sum) +  Number (item.ppnNominal);
     }, 0);
 
     const totalPPnBM = formData.detail_transaksi.reduce((sum, item) => {
-      return sum + item.ppnbm;
+      return Number(sum) + Number (item.ppnbm);
     }, 0);
 
     // Tambahkan total ke formData
@@ -2022,6 +2022,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                   value={formData.idtku}
                   onChange={handleChange}
                   className="p-2 border rounded w-full bg-gray-100"
+                  disabled
                 />
               </div>
               <div className="space-y-2">

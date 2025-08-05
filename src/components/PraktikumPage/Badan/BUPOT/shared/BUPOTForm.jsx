@@ -1269,6 +1269,8 @@ const BUPOTForm = ({
                       onChange={(e) => {
                         updateFormData("kode_objek_pajak", e.target.value);
                       }}
+                                          readOnly={true}
+
                     />
                   </div>
                 )}
@@ -3374,6 +3376,8 @@ const BUPOTForm = ({
                     onChange={(e) => {
                       updateFormData("jenis_pajak", e.target.value);
                     }}
+                    readOnly={true}
+
                   />
                 </div>
 
@@ -3381,7 +3385,7 @@ const BUPOTForm = ({
                 <div className="mt-4 flex justify-between gap-4">
                   <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                     Kode Objek Pajak
-                    <span className="text-red-500">*</span>
+                    <span className="text-red-500">*</span>``
                   </label>
                   <input
                     type="text"
@@ -3391,6 +3395,8 @@ const BUPOTForm = ({
                     onChange={(e) => {
                       updateFormData("kode_objek_pajak", e.target.value);
                     }}
+                    readOnly={true}
+
                   />
                 </div>
 

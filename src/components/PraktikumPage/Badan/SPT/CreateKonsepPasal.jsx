@@ -187,13 +187,13 @@ const CreateKonsepPasal = ({ data }) => {
   };
 
   const [activeTab, setActiveTab] = useState("induk");
-  const [showHeaderInduk, setShowHeaderInduk] = useState(false);
+  const [showHeaderInduk, setShowHeaderInduk] = useState(true);
   const [showIdentitasPemotong, setShowIdentitasPemotong] = useState(false);
   const [showPajakPenghasilan21, setShowPajakPenghasilan21] = useState(false);
   const [showPajakPenghasilan26, setShowPajakPenghasilan26] = useState(false);
   const [showPernyataan, setShowPernyataan] = useState(false);
 
-  const [showHeadera1, setShowHeadera1] = useState(false);
+  const [showHeadera1, setShowHeadera1] = useState(true);
   const [showHeadera2, setShowHeadera2] = useState(false);
   const [showHeaderb1, setShowHeaderb1] = useState(false);
   const [showHeaderb2, setShowHeaderb2] = useState(false);
