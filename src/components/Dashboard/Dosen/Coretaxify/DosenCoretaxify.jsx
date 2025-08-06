@@ -127,7 +127,7 @@ const DosenCoretaxify = () => {
 
   const tasksMap = useMemo(() => {
     if (!dataTasks) return {};
-    return dataTasks.reduce((acc, task) => {
+    return dataTasks.data.reduce((acc, task) => {
       acc[task.id] = task;
       return acc;
     }, {});
@@ -662,7 +662,7 @@ const DosenCoretaxify = () => {
                       className="w-full p-2 border rounded-md"
                     >
                       <option value="">Pilih Soal</option>
-                      {dataTasks?.map((task) => (
+                      {dataTasks?.data.map((task) => (
                         <option key={task.id} value={task.id}>
                           {task.name}
                           {task.file_path && " (Ada File)"}
@@ -950,7 +950,7 @@ const DosenCoretaxify = () => {
                                       className="w-full p-2 border rounded-md"
                                     >
                                       <option value="">Pilih Soal</option>
-                                      {dataTasks?.map((task) => (
+                                      {dataTasks?.data.map((task) => (
                                         <option key={task.id} value={task.id}>
                                           {task.name}
                                           {task.file_path && " (Ada File)"}
