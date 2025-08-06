@@ -12,6 +12,7 @@ import { useCookies } from "react-cookie";
 import { useUserType } from "@/components/context/userTypeContext";
 import { useNavigate } from "react-router-dom";
 import { useNavigateWithParams } from "@/hooks/useNavigateWithParams";
+import TandaTangan from "../TandaTangan";
 
 const PajakKeluaran = ({
   data,
@@ -131,13 +132,24 @@ const PajakKeluaran = ({
     },
     onSuccess: (data) => {
       console.log(data);
-      Swal.fire("Berhasil!", "Faktur berhasil diupload", "success").then(
-        (result) => {
-          if (result.isConfirmed) {
-            window.location.reload();
-          }
-        }
-      );
+      // Swal.fire("Berhasil!", "Faktur berhasil diupload", "success").then(
+      //   (result) => {
+      //     if (result.isConfirmed) {
+      //       window.location.reload();
+      //     }
+      //   }
+      // );
+
+      Swal.fire({
+        title: "Berhasil!",
+        text: "Faktur berhasil diupload",
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        window.location.reload();
+      });
     },
     onError: (error) => {
       console.error("Error deleting data:", error);
@@ -363,7 +375,7 @@ const PajakKeluaran = ({
 
           {/* {item && ( */}
           <div className="flex items-center gap-3">
-            <button
+            {/* <button
               onClick={() => approveMultipleFaktur.mutate()}
               disabled={
                 selectedFakturIds.length === 0 ||
@@ -402,7 +414,17 @@ const PajakKeluaran = ({
               ) : (
                 "Upload Faktur"
               )}
-            </button>
+            </button> */}
+            <TandaTangan
+              onConfirm={() => approveMultipleFaktur.mutate()}
+              isLoading={approveMultipleFaktur.isPending}
+              disabled={userId}
+              confirmText="Upload Faktur"
+              description="Apakah Anda yakin ingin mengupload faktur ini sekarang?"
+              npwp={sidebar.npwp_akun}
+            >
+              Upload Faktur
+            </TandaTangan>
 
             <button
               onClick={() => {
