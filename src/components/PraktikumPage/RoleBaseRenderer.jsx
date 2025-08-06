@@ -49,16 +49,46 @@ export default function RoleBasedRenderer({
 
   // First query - get user data (always for the actual user, not the viewed company)
   // This should dibuatdless of URL to determine user type
+  // const {
+  //   data: userData,
+  //   isLoading: userLoading,
+  //   isError: isUserError,
+  //   error: userError,
+  // } = useQuery({
+  //   queryKey: ["account", params.id, params.akun],
+  //   queryFn: async () => {
+  //     const { data } = await axios.get(
+  //       `${RoutesApi.apiUrl}student/assignments/${params.id}/sistem/${params.akun}`,
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${cookies.token}`,
+  //           Accept: "application/json",
+  //         },
+  //         params: {
+  //           intent: "api.get.sistem.ikhtisar.profil",
+  //           ...(userId && { user_id: userId }),
+  //         },
+  //       }
+  //     );
+  //     return data;
+  //   },
+  //   enabled: !!params.id && !!params.akun && !!cookies.token,
+  //   staleTime: 0,
+  //   cacheTime: 0,
+  //   refetchOnMount: "always",
+  //   refetchOnWindowFocus: true,
+  //   refetchOnReconnect: true,
+  // });
   const {
     data: userData,
     isLoading: userLoading,
     isError: isUserError,
     error: userError,
   } = useQuery({
-    queryKey: ["account", params.id, params.akun],
+    queryKey: ["account", params.id, effectiveCompanyId],
     queryFn: async () => {
       const { data } = await axios.get(
-        `${RoutesApi.apiUrl}student/assignments/${params.id}/sistem/${params.akun}`,
+        `${RoutesApi.apiUrl}student/assignments/${params.id}/sistem/${effectiveCompanyId}`,
         {
           headers: {
             Authorization: `Bearer ${cookies.token}`,
@@ -72,7 +102,7 @@ export default function RoleBasedRenderer({
       );
       return data;
     },
-    enabled: !!params.id && !!params.akun && !!cookies.token,
+    enabled: !!params.id && !!effectiveCompanyId && !!cookies.token,
     staleTime: 0,
     cacheTime: 0,
     refetchOnMount: "always",
