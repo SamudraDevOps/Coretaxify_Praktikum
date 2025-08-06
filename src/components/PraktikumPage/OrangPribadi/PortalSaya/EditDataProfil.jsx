@@ -164,7 +164,7 @@ const EditDataProfil = ({ data, sidebar }) => {
   const [formOrangTerkait, setFormOrangTerkait] = useState({
     // jenis_orang_terkait: "",
     sub_orang_terkait: "",
-    kewarganegaraan: "Indonesia",
+    kewarganegaraan: "Indonesia", 
     negara_asal: "Indonesia",
     keterangan: "keterangan",
     akun_op: "",
@@ -984,6 +984,103 @@ const EditDataProfil = ({ data, sidebar }) => {
     //     }
   };
 
+  const [ekonomiFormData, setEkonomiFormData] = useState({
+  sumber_penghasilan:
+    data?.field_edit_informasi?.data_ekonomi?.sumber_penghasilan || "",
+  izin_usaha:
+    data?.field_edit_informasi?.data_ekonomi?.izin_usaha || "",
+  tanggal_izin_usaha:
+    data?.field_edit_informasi?.data_ekonomi?.tanggal_izin_usaha || "",
+  tempat_kerja:
+    data?.field_edit_informasi?.data_ekonomi?.tempat_kerja || "",
+  penghasilan_per_bulan:
+    data?.field_edit_informasi?.data_ekonomi?.penghasilan_per_bulan || "",
+  tanggal_mulai:
+    data?.field_edit_informasi?.data_ekonomi?.tanggal_mulai || "",
+  jumlah_karyawan:
+    data?.field_edit_informasi?.data_ekonomi?.jumlah_karyawan || "",
+  deskripsi_kegiatan:
+    data?.field_edit_informasi?.data_ekonomi?.deskripsi_kegiatan || "",
+  periode_pembukuan:
+    data?.field_edit_informasi?.data_ekonomi?.periode_pembukuan || "",
+  peredaran_bruto:
+    data?.field_edit_informasi?.data_ekonomi?.peredaran_bruto || "",
+  metode_pembukuan:
+    data?.field_edit_informasi?.data_ekonomi?.metode_pembukuan || "",
+  mata_uang_pembukuan:
+    data?.field_edit_informasi?.data_ekonomi?.mata_uang_pembukuan || "",
+  merek_dagang:
+    data?.field_edit_informasi?.data_ekonomi?.merek_dagang || "",
+  omset_per_tahun:
+    data?.field_edit_informasi?.data_ekonomi?.omset_per_tahun || "",
+  jumlah_peredaran_bruto:
+    data?.field_edit_informasi?.data_ekonomi?.jumlah_peredaran_bruto || "",
+});
+  const handleekonomiChange = (e) => {
+    const { name, value } = e.target;
+    setEkonomiFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+//   useEffect(() => {
+//   const ekonomi = data?.field_edit_informasi?.data_ekonomi;
+//   if (ekonomi) {
+//     setEkonomiFormData({
+//       sumber_penghasilan: ekonomi.sumber_penghasilan || "",
+//       izin_usaha: ekonomi.izin_usaha || "",
+//       tanggal_izin_usaha: ekonomi.tanggal_izin_usaha || "",
+//       tempat_kerja: ekonomi.tempat_kerja || "",
+//       penghasilan_per_bulan: ekonomi.penghasilan_per_bulan || "",
+//       tanggal_mulai: ekonomi.tanggal_mulai || "",
+//       jumlah_karyawan: ekonomi.jumlah_karyawan || "",
+//       deskripsi_kegiatan: ekonomi.deskripsi_kegiatan || "",
+//       periode_pembukuan: ekonomi.periode_pembukuan || "",
+//       peredaran_bruto: ekonomi.peredaran_bruto || "", // 
+//       metode_pembukuan: ekonomi.metode_pembukuan || "",
+//       mata_uang_pembukuan: ekonomi.mata_uang_pembukuan || "",
+//       merek_dagang: ekonomi.merek_dagang || "",
+//       omset_per_tahun: ekonomi.omset_per_tahun || "",
+//       jumlah_peredaran_bruto: ekonomi.jumlah_peredaran_bruto || "", // 
+//     });
+//   }
+// }, [data]);
+
+  const updateEkonomi = useMutation({
+    mutationFn: async () => {
+      const csrf = await getCsrf();
+      const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
+      return axios.put(
+        `${RoutesApi.url}api/student/assignments/${id}/sistem/${accountId}/data-ekonomi/${accountId}`,
+        ekonomiFormData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": csrf,
+            Authorization: `Bearer ${cookies.token}`,
+          },
+        }
+      );
+    },
+    onSuccess: (data) => {
+      console.log(data);
+      Swal.fire(
+        "Berhasil!",
+        "Data Ekonomi berhasil diperbarui!",
+        "success"
+      ).then((result) => {
+        if (result.isConfirmed) {
+          window.location.reload();
+        }
+      });
+    },
+    onError: (error) => {
+      console.error("Error updating data:", error);
+      Swal.fire("Gagal!", "Terjadi kesalahan saat memperbarui data.", "error");
+    },
+  });
+
   return (
     <div className="flex items-start">
       <SidebarProfilSaya
@@ -1039,9 +1136,8 @@ const EditDataProfil = ({ data, sidebar }) => {
             </label>
           </div>
           <div
-            className={`grid grid-cols-1 md:grid-cols-1 gap-4  ${
-              !isPerwakilan && "opacity-50 pointer-events-none"
-            }`}
+            className={`grid grid-cols-1 md:grid-cols-1 gap-4  ${!isPerwakilan && "opacity-50 pointer-events-none"
+              }`}
           >
             <div>
               <label className="block font-medium text-gray-700">
@@ -1149,7 +1245,7 @@ const EditDataProfil = ({ data, sidebar }) => {
                   value={formData.negara_asal}
                 >
                   <option>Indonesia</option>
-                  <option>Malaysia</option>
+                  {/* <option>Malaysia</option> */}
                 </select>
               </div>
               <div>
@@ -1169,7 +1265,7 @@ const EditDataProfil = ({ data, sidebar }) => {
                   Tempat Lahir
                 </label>
                 <input
-                  type="date"
+                  type="text"
                   name="tempat_lahir"
                   className="w-full p-2 border rounded-md bg-white text-gray-600"
                   onChange={handleChange}
@@ -1340,6 +1436,7 @@ const EditDataProfil = ({ data, sidebar }) => {
                       }`
                 }
                 onClick={() => updateInformasiUmum.mutate()}
+              // onClick={() => console.log(formData)}
               >
                 {updateInformasiUmum.isPending ? (
                   <>
@@ -1373,434 +1470,190 @@ const EditDataProfil = ({ data, sidebar }) => {
           </div>
         )}
         <div
-          className="border rounded-md p-4 bg-gray-100 mb-2 cursor-pointer flex justify-between items-center"
-          onClick={() => setShowDataEkonomi(!showDataEkonomi)}
-        >
-          <h3 className="text-lg font-semibold">Data Ekonomi</h3>
-          {showDataEkonomi ? <FaChevronUp /> : <FaChevronDown />}
+  className="border rounded-md p-4 bg-gray-100 mb-2 cursor-pointer flex justify-between items-center"
+  onClick={() => setShowDataEkonomi(!showDataEkonomi)}
+>
+  <h3 className="text-lg font-semibold">Data Ekonomi</h3>
+  {showDataEkonomi ? <FaChevronUp /> : <FaChevronDown />}
+</div>
+
+{showDataEkonomi && (
+  <div className="border rounded-md p-4 mb-4">
+    {/* Menggunakan <form> dengan onSubmit adalah praktik terbaik */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+        
+        {/* --- KOLOM KIRI --- */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700">
+            Sumber Penghasilan
+          </label>
+          <select
+            name="sumber_penghasilan"
+            className="w-full p-2 border rounded-md bg-white text-gray-700"
+            value={ekonomiFormData.sumber_penghasilan}
+            onChange={handleekonomiChange} 
+          >
+            <option value="">--Pilih Sumber Penghasilan--</option>
+            <option value="pekerjaan">Pekerjaan</option>
+            <option value="pekerjaan-bebas">Pekerjaan Bebas</option>
+            <option value="kegiatan-usaha">Kegiatan Usaha</option>
+          </select>
+
+          <label className="block text-sm font-medium text-gray-700 mt-4">
+            Tempat Kerja
+          </label>
+          <input
+            name="tempat_kerja"
+            type="text"
+            className="w-full p-2 border rounded-md bg-white text-gray-600"
+            value={ekonomiFormData.tempat_kerja}
+            onChange={handleekonomiChange}
+          />
+
+          <label className="block text-sm font-medium text-gray-700 mt-4">
+            Penghasilan Per Bulan
+          </label>
+          <select
+            name="penghasilan_per_bulan"
+            className="w-full p-2 border rounded-md bg-white text-gray-600"
+            value={ekonomiFormData.penghasilan_per_bulan}
+            onChange={handleekonomiChange}
+          >
+            <option value="">--Pilih Penghasilan--</option>
+            <option value="kurang dari rp. 4.500.000">Kurang Dari Rp. 4.500.000</option>
+            <option value="rp. 4.500.000 - rp. 9.999.999">Rp. 4.500.000 - Rp. 9.999.999</option>
+            <option value="rp. 10.000.000 - rp. 14.999.999">Rp. 10.000.000 - Rp. 14.999.999</option>
+            <option value="rp. 15.000.000 - rp. 19.999.999">Rp. 15.000.000 - Rp. 19.999.999</option>
+            <option value="lebih dari rp. 20.000.000">Lebih Dari Rp. 20.000.000</option>
+          </select>
+
+          <label className="block text-sm font-medium text-gray-700 mt-4">
+            Izin Usaha
+          </label>
+          <input
+            name="izin_usaha"
+            type="text"
+            className="w-full p-2 border rounded-md bg-white text-gray-600"
+            value={ekonomiFormData.izin_usaha}
+            onChange={handleekonomiChange}
+          />
+
+          <label className="block text-sm font-medium text-gray-700 mt-4">
+            Tanggal Izin Usaha
+          </label>
+          <input
+            name="tanggal_izin_usaha"
+            type="date"
+            className="w-full p-2 border rounded-md bg-white text-gray-600"
+            value={ekonomiFormData.tanggal_izin_usaha}
+            onChange={handleekonomiChange}
+          />
+
+          <label className="block text-sm font-medium text-gray-700 mt-4">
+            Merek Dagang Usaha
+          </label>
+          <input
+            name="merek_dagang"
+            type="text"
+            className="w-full p-2 border rounded-md bg-white text-gray-600"
+            value={ekonomiFormData.merek_dagang}
+            onChange={handleekonomiChange}
+          />
         </div>
-        {showDataEkonomi && (
-          <div className="border rounded-md p-4 mb-4">
-            <div className="flex justify-between items-center mb-4">
-              <AlertDialog>
-                <AlertDialogTrigger
-                  className={
-                    userId
-                      ? "hidden"
-                      : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"
-                  }
+
+        {/* --- KOLOM KANAN --- */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700">
+            Metode Pembukuan/Pencatatan
+          </label>
+          <input
+            name="metode_pembukuan"
+            type="text"
+            className="w-full p-2 border rounded-md bg-white text-gray-600"
+            value={ekonomiFormData.metode_pembukuan}
+            onChange={handleekonomiChange}
+          />
+
+          <label className="block text-sm font-medium text-gray-700 mt-4">
+            Mata Uang Pembukuan
+          </label>
+          <input
+            name="mata_uang_pembukuan"
+            type="text"
+            className="w-full p-2 border rounded-md bg-white text-gray-600"
+            value={ekonomiFormData.mata_uang_pembukuan}
+            onChange={handleekonomiChange}
+          />
+
+          <label className="block text-sm font-medium text-gray-700 mt-4">
+            Periode Pembukuan
+          </label>
+          <input
+            name="periode_pembukuan"
+            type="text"
+            className="w-full p-2 border rounded-md bg-white text-gray-600"
+            placeholder="Contoh: Jan-Des"
+            value={ekonomiFormData.periode_pembukuan}
+            onChange={handleekonomiChange}
+          />
+            
+          <label className="block text-sm font-medium text-gray-700 mt-4">
+            Omset Per Tahun
+          </label>
+          <select
+            name="omset_per_tahun"
+            className="w-full p-2 border rounded-md bg-white text-gray-600"
+            value={ekonomiFormData.omset_per_tahun}
+            onChange={handleekonomiChange}
+          >
+            <option value="">--Pilih Omset--</option>
+            <option value="Rp.0 s/d Rp.4,8 M">Rp.0 s/d Rp.4.8 M</option>
+            <option value="lebih dari Rp.4,8 M">Lebih Dari Rp.4.8 M</option>
+          </select>
+          
+          <label className="block text-sm font-medium text-gray-700 mt-4">
+            Tanggal Mulai
+          </label>
+          <input
+            name="tanggal_mulai"
+            type="date"
+            className="w-full p-2 border rounded-md bg-white text-gray-600"
+            value={ekonomiFormData.tanggal_mulai}
+            onChange={handleekonomiChange}
+          />
+
+          <label className="block text-sm font-medium text-gray-700 mt-4">
+            Deskripsi Kegiatan
+          </label>
+          <textarea
+            name="deskripsi_kegiatan"
+            rows="3"
+            className="w-full p-2 border rounded-md bg-white text-gray-600"
+            value={ekonomiFormData.deskripsi_kegiatan}
+            onChange={handleekonomiChange}
+          />
+        </div>
+
+      </div>
+      
+      {/* Tombol Simpan */}
+      <div className="flex justify-end mt-4">
+                {/* Logika tombol bisa disesuaikan, apakah create atau update */}
+                <button
+                 
+                 className={userId ? "hidden" : "px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"}
+                onClick={() => updateEkonomi.mutate()}
+                 // onClick={() => {
+
+                // console.log("Data to be saved:", ekonomiFormData);
+                // }}
                 >
-                  Tambah
-                </AlertDialogTrigger>
-                <AlertDialogContent className="bg-white !min-w-[1000px] rounded-lg shadow-lg ">
-                  <AlertDialogHeader>
-                    <AlertDialogTitle className="text-xl font-bold">
-                      KLU Utama
-                    </AlertDialogTitle>
-                  </AlertDialogHeader>
-                  <div className="grid gap-1 overflow-auto h-96">
-                    <div className="h-full">
-                      <div className="mb-0">
-                        <label className="block text-sm font-medium text-gray-700">
-                          Perbarui Kode Ekonomi Utama
-                        </label>
-                        <input
-                          type="checkbox"
-                          className="mt-2"
-                          defaultChecked
-                          disabled
-                        />
-                      </div>
-                      <div className="mb-0">
-                        <label className="block text-sm font-medium text-gray-700">
-                          Sumber Penghasilan
-                        </label>
-                        <select
-                          className="w-full p-2 border rounded-md bg-white text-gray-700 "
-                          value={selectedSumberPenghasilan}
-                          onChange={(e) =>
-                            setSelectedSumberPenghasilan(e.target.value)
-                          }
-                        >
-                          <option value="">--Pilih Sumber Penghasilan--</option>
-                          <option value="pekerjaan">Pekerjaan</option>
-                          <option value="pekerjaan-bebas">
-                            Pekerjaan Bebas
-                          </option>
-                          <option value="Kegiatan-usaha">Kegiatan Usaha</option>
-                        </select>
-                      </div>
-                    </div>
-                    {selectedSumberPenghasilan === "pekerjaan" && (
-                      <div>
-                        <div className="mt-4">
-                          <label className="block text-sm font-medium text-gray-700">
-                            Metode Pembukuan/Pencatatan
-                          </label>
-                          <input
-                            type="text"
-                            className="w-full p-2 border rounded-md bg-white text-gray-600"
-                          />
-                        </div>
-                        <div className="mt-4">
-                          <label className="block text-sm font-medium text-gray-700">
-                            Mata Uang Pembukuan
-                          </label>
-                          <input
-                            type="text"
-                            className="w-full p-2 border rounded-md bg-white text-gray-600"
-                          />
-                        </div>
-                        <div className="mt-4">
-                          <label className="block text-sm font-medium text-gray-700">
-                            Periode Pembukuan
-                          </label>
-                          <input
-                            type="text"
-                            className="w-full p-2 border rounded-md bg-white text-gray-600"
-                          />
-                        </div>
-                        <div className="mt-4">
-                          <label className="block text-sm font-medium text-gray-700">
-                            Tempat Kerja
-                          </label>
-                          <input
-                            type="text"
-                            className="w-full p-2 border rounded-md bg-white text-gray-600"
-                          />
-                        </div>
-                        <div className="mt-4">
-                          <label className="block text-sm font-medium text-gray-700">
-                            Penghasilan Per Bulan
-                          </label>
-                          <select className="w-full p-2 border rounded-md bg-white text-gray-600">
-                            <option value="kurang dari rp. 4.500.000">
-                              Kurang Dari Rp. 4.500.000
-                            </option>
-                            <option value="rp. 4.500.000 - rp. 9.999.999">
-                              Rp. 4.500.000 - Rp. 9.999.999
-                            </option>
-                            <option value="rp. 10.000.000 - rp. 14.999.999">
-                              Rp. 10.000.000 - Rp. 14.999.999
-                            </option>
-                            <option value="rp. 15.000.000 - rp. 19.999.999">
-                              Rp. 4.500.000 - Rp. 9.999.999
-                            </option>
-                            <option value="lebih dari rp. 20.000.000">
-                              Lebih Dari Rp. 20.000.000
-                            </option>
-                          </select>
-                        </div>
-                        <div className="mt-4">
-                          <label className="block text-sm font-medium text-gray-700">
-                            Deskripsi Kegiatan
-                          </label>
-                          <input
-                            type="text"
-                            className="w-full p-2 border rounded-md bg-white text-gray-600"
-                          />
-                        </div>
-                        <div className="mt-4">
-                          <label className="block text-sm font-medium text-gray-700 ">
-                            Tanggal Mulai
-                          </label>
-                          <input
-                            type="date"
-                            className="w-full p-2 border rounded-md bg-white text-gray-600"
-                          />
-                        </div>
-                      </div>
-                    )}
-                    {selectedSumberPenghasilan === "pekerjaan-bebas" && (
-                      <div>
-                        <div className="mt-4">
-                          <label className="block text-sm font-medium text-gray-700">
-                            Izin Usaha
-                          </label>
-                          <input
-                            type="text"
-                            className="w-full p-2 border rounded-md bg-white text-gray-600"
-                          />
-                        </div>
-                        <div className="mt-4">
-                          <label className="block text-sm font-medium text-gray-700">
-                            Tanggal Izin Usaha
-                          </label>
-                          <input
-                            type="date"
-                            className="w-full p-2 border rounded-md bg-white text-gray-600"
-                          />
-                        </div>
-                        <div className="mt-4">
-                          <label className="block text-sm font-medium text-gray-700">
-                            Merek Dagang Usaha
-                          </label>
-                          <input
-                            type="text"
-                            className="w-full p-2 border rounded-md bg-white text-gray-600"
-                          />
-                        </div>
-                        <div className="mt-4">
-                          <label className="block text-sm font-medium text-gray-700">
-                            Metode Pembukan/Pencatatan
-                          </label>
-                          <input
-                            type="text"
-                            className="w-full p-2 border rounded-md bg-white text-gray-600"
-                          />
-                        </div>
-                        <div className="mt-4">
-                          <label className="block text-sm font-medium text-gray-700">
-                            Mata Uang Pembukuan
-                          </label>
-                          <input
-                            type="text"
-                            className="w-full p-2 border rounded-md bg-white text-gray-600"
-                          />
-                        </div>
-                        <div className="mt-4">
-                          <label className="block text-sm font-medium text-gray-700">
-                            Periode Pembukuan
-                          </label>
-                          <input
-                            type="text"
-                            className="w-full p-2 border rounded-md bg-white text-gray-600"
-                          />
-                        </div>
-                        <div className="mt-4">
-                          <label className="block text-sm font-medium text-gray-700">
-                            Tempat Kerja
-                          </label>
-                          <input
-                            type="text"
-                            className="w-full p-2 border rounded-md bg-white text-gray-600"
-                          />
-                        </div>
-                        <div className="mt-4">
-                          <label className="block text-sm font-medium text-gray-700">
-                            Penghasilan Per Bulan
-                          </label>
-                          <select className="w-full p-2 border rounded-md bg-white text-gray-600">
-                            <option value="kurang dari rp. 4.500.000">
-                              Kurang Dari Rp. 4.500.000
-                            </option>
-                            <option value="rp. 4.500.000 - rp. 9.999.999">
-                              Rp. 4.500.000 - Rp. 9.999.999
-                            </option>
-                            <option value="rp. 10.000.000 - rp. 14.999.999">
-                              Rp. 10.000.000 - Rp. 14.999.999
-                            </option>
-                            <option value="rp. 15.000.000 - rp. 19.999.999">
-                              Rp. 4.500.000 - Rp. 9.999.999
-                            </option>
-                            <option value="lebih dari rp. 20.000.000">
-                              Lebih Dari Rp. 20.000.000
-                            </option>
-                          </select>
-                        </div>
-                        <div className="mt-4">
-                          <label className="block text-sm font-medium text-gray-700">
-                            Peredaran Bruto/Penerimaan Bruto
-                          </label>
-                          <select className="w-full p-2 border rounded-md bg-white text-gray-600">
-                            <option value="Rp.0 s/d Rp.4,8 M">
-                              Rp.0 s/d Rp.4.8 M
-                            </option>
-                            <option value="lebih dari Rp.4,8 M">
-                              Lebih Dari Rp.4.8 M
-                            </option>
-                          </select>
-                        </div>
-                        <div className="mt-4">
-                          <label className="block text-sm font-medium text-gray-700">
-                            Deskripsi Kegiatan
-                          </label>
-                          <input
-                            type="text"
-                            className="w-full p-2 border rounded-md bg-white text-gray-600"
-                          />
-                        </div>
-                        <div className="mt-4">
-                          <label className="block text-sm font-medium text-gray-700">
-                            Tanggal Mulai
-                          </label>
-                          <input
-                            type="date"
-                            className="w-full p-2 border rounded-md bg-white text-gray-600"
-                          />
-                        </div>
-                      </div>
-                    )}
-                    {selectedSumberPenghasilan === "Kegiatan-usaha" && (
-                      <div>
-                        <div className="mt-4">
-                          <label className="block text-sm font-medium text-gray-700">
-                            Izin Usaha
-                          </label>
-                          <input
-                            type="text"
-                            className="w-full p-2 border rounded-md bg-white text-gray-600"
-                          />
-                        </div>
-                        <div className="mt-4">
-                          <label className="block text-sm font-medium text-gray-700">
-                            Tanggal Izin Usaha
-                          </label>
-                          <input
-                            type="date"
-                            className="w-full p-2 border rounded-md bg-white text-gray-600"
-                          />
-                        </div>
-                        <div className="mt-4">
-                          <label className="block text-sm font-medium text-gray-700">
-                            Merek Dagang Usaha
-                          </label>
-                          <input
-                            type="text"
-                            className="w-full p-2 border rounded-md bg-white text-gray-600"
-                          />
-                        </div>
-                        <div className="mt-4">
-                          <label className="block text-sm font-medium text-gray-700">
-                            Metode Pembukan/Pencatatan
-                          </label>
-                          <input
-                            type="text"
-                            className="w-full p-2 border rounded-md bg-white text-gray-600"
-                          />
-                        </div>
-                        <div className="mt-4">
-                          <label className="block text-sm font-medium text-gray-700">
-                            Mata Uang Pembukuan
-                          </label>
-                          <input
-                            type="text"
-                            className="w-full p-2 border rounded-md bg-white text-gray-600"
-                          />
-                        </div>
-                        <div className="mt-4">
-                          <label className="block text-sm font-medium text-gray-700">
-                            Periode Pembukuan
-                          </label>
-                          <input
-                            type="text"
-                            className="w-full p-2 border rounded-md bg-white text-gray-600"
-                          />
-                        </div>
-                        <div className="mt-4">
-                          <label className="block text-sm font-medium text-gray-700">
-                            Tempat Kerja
-                          </label>
-                          <input
-                            type="text"
-                            className="w-full p-2 border rounded-md bg-white text-gray-600"
-                          />
-                        </div>
-                        <div className="mt-4">
-                          <label className="block text-sm font-medium text-gray-700">
-                            Peredaran Bruto/Penerimaan Bruto
-                          </label>
-                          <select className="w-full p-2 border rounded-md bg-white text-gray-600">
-                            <option value="Rp.0 s/d Rp.4,8 M">
-                              Rp.0 s/d Rp.4.8 M
-                            </option>
-                            <option value="lebih dari Rp.4,8 M">
-                              Lebih Dari Rp.4.8 M
-                            </option>
-                          </select>
-                        </div>
-                        <div className="mt-4">
-                          <label className="block text-sm font-medium text-gray-700">
-                            Deskripsi Kegiatan
-                          </label>
-                          <input
-                            type="text"
-                            className="w-full p-2 border rounded-md bg-white text-gray-600"
-                          />
-                        </div>
-                        <div className="mt-4">
-                          <label className="block text-sm font-medium text-gray-700">
-                            Tanggal Mulai
-                          </label>
-                          <input
-                            type="date"
-                            className="w-full p-2 border rounded-md bg-white text-gray-600"
-                          />
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                  <AlertDialogFooter className="flex justify-end mt-6 space-x-2">
-                    <AlertDialogCancel className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600">
-                      Batal
-                    </AlertDialogCancel>
-                    <AlertDialogAction className="bg-blue-900 text-white px-4 py-2 rounded-md hover:bg-blue-950">
-                      Simpan
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
-            </div>
-            <div className=" w-full overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden ">
-              <table className="table-auto border border-gray-300 overflow-hidden">
-                <thead>
-                  <tr>
-                    <th className="border border-gray-300 px-1 py-2">Aksi</th>
-                    <th className="border border-gray-300 px-4 py-2">
-                      Sumber Penghasilan
-                    </th>
-                    <th className="border border-gray-300 px-4 py-2">
-                      Penghasilan Perbulan
-                    </th>
-                    <th className="border border-gray-300 px-4 py-2">
-                      Jumlah Karyawan
-                    </th>
-                    <th className="border border-gray-300 px-4 py-2">
-                      Omset Per Tahun
-                    </th>
-                    <th className="border border-gray-300 px-4 py-2">
-                      Tanggal Mulai
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="text-gray-600">
-                  <tr className="bg-gray-100">
-                    <td className="px-1 py-4 border">
-                      <button
-                        className={
-                          userId
-                            ? "hidden"
-                            : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-2 rounded"
-                        }
-                      >
-                        Edit
-                      </button>
-                      <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-2 rounded ml-2">
-                        Lihat
-                      </button>
-                      <button
-                        className={
-                          userId
-                            ? "hidden"
-                            : "bg-red-500 hover:bg-red-600 text-white py-2 px-2 rounded ml-2"
-                        }
-                      >
-                        Hapus
-                      </button>
-                    </td>
-                    <td className="px-4 py-4 border">
-                      Kontak utama Wajib Pajak
-                    </td>
-                    <td className="px-4 py-4 border">Rp. 300.000.000</td>
-                    <td className="px-4 py-4 border"></td>
-                    <td className="px-4 py-4 border">Lebih dari 4,8M </td>
-                    <td className="px-4 py-4 border">2023-01-01</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        )}
+                  Simpan
+                </button>
+              </div>
+  </div>
+)}
+      
         <div
           className="border bg-gray-100 rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center"
           onClick={() => setShowDetailKontak(!showDetailKontak)}
@@ -1898,7 +1751,7 @@ const EditDataProfil = ({ data, sidebar }) => {
                         name="alamat_email"
                         className="w-full p-2 border rounded bg-gray-100 cursor-not-allowed"
                         onChange={handleContactChange}
-                        // disabled
+                      // disabled
                       />
                       {/* Ngelink dari upload awal akun */}
                     </div>
@@ -3615,7 +3468,7 @@ const EditDataProfil = ({ data, sidebar }) => {
                 </thead>
                 <tbody className="text-gray-600">
                   {data.field_edit_informasi.unit_pajak_keluarga &&
-                  data.field_edit_informasi.unit_pajak_keluarga.length > 0 ? (
+                    data.field_edit_informasi.unit_pajak_keluarga.length > 0 ? (
                     data.field_edit_informasi.unit_pajak_keluarga.map(
                       (family, index) => (
                         <tr key={index} className="bg-gray-100">

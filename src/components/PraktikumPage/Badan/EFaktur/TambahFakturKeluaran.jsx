@@ -2034,6 +2034,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                   value={formData.idtku}
                   onChange={handleChange}
                   className="p-2 border rounded w-full bg-gray-100"
+                  disabled
                 />
               </div>
               <div className="space-y-2">

@@ -188,13 +188,13 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
   };
 
   const [activeTab, setActiveTab] = useState("induk");
-  const [showHeaderInduk, setShowHeaderInduk] = useState(false);
+  const [showHeaderInduk, setShowHeaderInduk] = useState(true);
   const [showIdentitasPemotong, setShowIdentitasPemotong] = useState(false);
   const [showPajakPenghasilan21, setShowPajakPenghasilan21] = useState(false);
   const [showPajakPenghasilan26, setShowPajakPenghasilan26] = useState(false);
   const [showPernyataan, setShowPernyataan] = useState(false);
 
-  const [showHeadera1, setShowHeadera1] = useState(false);
+  const [showHeadera1, setShowHeadera1] = useState(true);
   const [showHeadera2, setShowHeadera2] = useState(false);
   const [showHeaderb1, setShowHeaderb1] = useState(false);
   const [showHeaderb2, setShowHeaderb2] = useState(false);
@@ -1562,9 +1562,9 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                           </thead>
                           <tbody className="text-gray-600 text-center">
                             <tr>
-                              <td className="p-2 border-b text-center">1</td>
+                              <td className="p-2 border-b text-center"></td>
                               <td className="p-2 border-b">
-                                881381978971381309
+                                
                               </td>
                               <td className="p-2 border-b">-</td>
                               <td className="p-2 border-b">-</td>
@@ -1648,9 +1648,9 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                           </thead>
                           <tbody className="text-gray-600 text-center">
                             <tr>
-                              <td className="p-2 border-b text-center">1</td>
+                              <td className="p-2 border-b text-center"></td>
                               <td className="p-2 border-b">
-                                881381978971381309
+                                
                               </td>
                               <td className="p-2 border-b">-</td>
                               <td className="p-2 border-b">-</td>
@@ -1802,9 +1802,9 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                           </thead>
                           <tbody className="text-gray-600 text-center">
                             <tr>
-                              <td className="p-2 border-b text-center">1</td>
+                              <td className="p-2 border-b text-center"></td>
                               <td className="p-2 border-b">
-                                881381978971381309
+                                
                               </td>
                               <td className="p-2 border-b">-</td>
                               <td className="p-2 border-b">-</td>
@@ -1888,9 +1888,8 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                           </thead>
                           <tbody className="text-gray-600 text-center">
                             <tr>
-                              <td className="p-2 border-b text-center">1</td>
+                              <td className="p-2 border-b text-center"></td>
                               <td className="p-2 border-b">
-                                881381978971381309
                               </td>
                               <td className="p-2 border-b">-</td>
                               <td className="p-2 border-b">-</td>

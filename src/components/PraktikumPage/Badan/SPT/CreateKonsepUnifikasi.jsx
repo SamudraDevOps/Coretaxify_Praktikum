@@ -41,7 +41,7 @@ const CreateKonsepUnifikasi = ({ data, sidebar }) => {
   const navigate = useNavigateWithParams();
 
   const [activeTab, setActiveTab] = useState("induk");
-  const [showHeaderInduk, setShowHeaderInduk] = useState(false);
+  const [showHeaderInduk, setShowHeaderInduk] = useState(true);
   const [showIdentitasPemotong, setShowIdentitasPemotong] = useState(false);
   const [showPajakPenghasilan21, setShowPajakPenghasilan21] = useState(false);
   const [showPajakPenghasilan26, setShowPajakPenghasilan26] = useState(false);

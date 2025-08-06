@@ -339,6 +339,25 @@ export default function MasterAkun({
   const item = localStorage.getItem("selectedCompanyId");
   console.log(item);
 
+  // Cek apakah form valid atau tidak
+const isFormInvalid =
+  !formData.nama_akun ||
+  !formData.npwp_akun ||
+  !formData.alamat_utama_akun ||
+  !formData.tipe_akun ||
+  formData.tipe_akun === "Pilih Tipe Akun" || 
+  !formData.email_akun ||
+  !formData.negara_asal;
+
+  // Cek apakah form edit valid atau tidak
+const isEditFormInvalid = 
+  !editFormData.nama_akun ||
+  !editFormData.npwp_akun ||
+  !editFormData.alamat_utama_akun ||
+  !editFormData.tipe_akun ||
+  !editFormData.email_akun ||
+  !editFormData.negara_asal;
+
   return (
     <div className="flex h-screen bg-gray-100">
       {/* <SideBarEFaktur
@@ -405,7 +424,7 @@ export default function MasterAkun({
                   Tambah
                 </button>
               </AlertDialogTrigger>
-              <AlertDialogContent className="max-w-md">
+              <AlertDialogContent className="max-w-2xl flex flex-col max-h-[90vh]">
                 <AlertDialogHeader>
                   <AlertDialogTitle>Tambah Master Akun</AlertDialogTitle>
                   <AlertDialogDescription>
@@ -418,12 +437,13 @@ export default function MasterAkun({
                   {/* Nama Akun */}
                   <div className="grid gap-1.5">
                     <label htmlFor="nama_akun" className="text-sm font-medium text-gray-700">
-                      Nama Akun
+                      Nama Akun <span className="text-red-500">*</span>
                     </label>
                     <input
                       id="nama_akun"
                       name="nama_akun"
                       value={formData.nama_akun}
+                      required
                       onChange={handleInputChange}
                       placeholder="Contoh: Budi Santoso"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -433,12 +453,13 @@ export default function MasterAkun({
                   {/* NIK/NPWP */}
                   <div className="grid gap-1.5">
                     <label htmlFor="npwp_akun" className="text-sm font-medium text-gray-700">
-                      NIK/NPWP
+                      NIK/NPWP <span className="text-red-500">*</span>
                     </label>
                     <input
                       id="npwp_akun"
                       name="npwp_akun"
                       value={formData.npwp_akun}
+                      required
                       onChange={handleInputChange}
                       placeholder="Masukkan 16 digit NIK/NPWP"
                       type="text"
@@ -452,12 +473,13 @@ export default function MasterAkun({
                   {/* Alamat Utama (di-span agar lebar penuh) */}
                   <div className="grid gap-1.5 md:col-span-2">
                     <label htmlFor="alamat_utama_akun" className="text-sm font-medium text-gray-700">
-                      Alamat
+                      Alamat <span className="text-red-500">*</span>
                     </label>
                     <textarea
                       id="alamat_utama_akun"
                       name="alamat_utama_akun"
                       value={formData.alamat_utama_akun}
+                      required
                       onChange={handleInputChange}
                       placeholder="Masukkan alamat lengkap"
                       rows={3}
@@ -468,12 +490,13 @@ export default function MasterAkun({
                   {/* Tipe Akun */}
                   <div className="grid gap-1.5">
                     <label htmlFor="tipe_akun" className="text-sm font-medium text-gray-700">
-                      Tipe Akun
+                      Tipe Akun <span className="text-red-500">*</span>
                     </label>
                     <select
                       id="tipe_akun"
                       name="tipe_akun"
                       value={formData.tipe_akun}
+                      required
                       onChange={handleInputChange}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     >
@@ -486,13 +509,14 @@ export default function MasterAkun({
                   {/* Email */}
                   <div className="grid gap-1.5">
                     <label htmlFor="email_akun" className="text-sm font-medium text-gray-700">
-                      Email
+                      Email <span className="text-red-500">*</span>
                     </label>
                     <input
                       id="email_akun"
                       name="email_akun"
                       type="email"
                       value={formData.email_akun}
+                      required
                       onChange={handleInputChange}
                       placeholder="contoh@email.com"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -502,12 +526,13 @@ export default function MasterAkun({
                   {/* Negara Asal */}
                   <div className="grid gap-1.5 md:col-span-2">
                     <label htmlFor="negara_asal" className="text-sm font-medium text-gray-700">
-                      Negara Asal
+                      Negara Asal <span className="text-red-500">*</span>
                     </label>
                     <input
                       id="negara_asal"
                       name="negara_asal"
                       value={formData.negara_asal}
+                      required
                       onChange={handleInputChange}
                       placeholder="Contoh: Indonesia"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -526,7 +551,8 @@ export default function MasterAkun({
                   </AlertDialogCancel>
                   <AlertDialogAction
                     onClick={() => createMasterAkun.mutate()}
-                    disabled={createMasterAkun.isLoading}
+                    disabled={
+                      isFormInvalid ||createMasterAkun.isLoading}
                     className="bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-4 rounded"
                   >
                     {createMasterAkun.isLoading ? "Menyimpan..." : "Simpan"}
@@ -605,7 +631,7 @@ export default function MasterAkun({
                               Edit
                             </button>
                           </AlertDialogTrigger>
-                          <AlertDialogContent className="max-w-md flex flex-col max-h-[90vh]">
+                          <AlertDialogContent className="max-w-2xl flex flex-col max-h-[90vh]">
                             <AlertDialogHeader className="p-6 pb-4 border-b">
                               <AlertDialogTitle className="text-xl">Edit Master Akun</AlertDialogTitle>
                               <AlertDialogDescription>
@@ -618,13 +644,14 @@ export default function MasterAkun({
                               {/* Nama Akun */}
                               <div className="grid gap-1.5 md:col-span-2">
                                 <label htmlFor="edit_nama_akun" className="text-sm font-medium text-gray-700">
-                                  Nama Akun
+                                  Nama Akun <span className="text-red-500">*</span>
                                 </label>
                                 <input
                                   id="edit_nama_akun"
                                   name="nama_akun"
                                   value={editFormData.nama_akun}
                                   onChange={handleEditInputChange}
+                                  required
                                   placeholder="Masukkan nama"
                                   className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 />
@@ -633,13 +660,14 @@ export default function MasterAkun({
                               {/* NIK/NPWP */}
                               <div className="grid gap-1.5 md:col-span-2">
                                 <label htmlFor="edit_npwp_akun" className="text-sm font-medium text-gray-700">
-                                  NIK/NPWP
+                                  NIK/NPWP <span className="text-red-500">*</span>
                                 </label>
                                 <input
                                   id="edit_npwp_akun"
                                   name="npwp_akun"
                                   value={editFormData.npwp_akun}
                                   onChange={handleEditInputChange}
+                                  required
                                   placeholder="Masukkan NIK/NPWP"
                                   type="text"
                                   inputMode="numeric"
@@ -652,13 +680,14 @@ export default function MasterAkun({
                               {/* Alamat */}
                               <div className="grid gap-1.5 md:col-span-2">
                                 <label htmlFor="edit_alamat_utama_akun" className="text-sm font-medium text-gray-700">
-                                  Alamat
+                                  Alamat <span className="text-red-500">*</span>
                                 </label>
                                 <textarea
                                   id="edit_alamat_utama_akun"
                                   name="alamat_utama_akun"
                                   value={editFormData.alamat_utama_akun}
                                   onChange={handleEditInputChange}
+                                  required
                                   placeholder="Masukkan alamat"
                                   rows={3}
                                   className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -668,13 +697,14 @@ export default function MasterAkun({
                               {/* Tipe Akun */}
                               <div className="grid gap-1.5">
                                 <label htmlFor="edit_tipe_akun" className="text-sm font-medium text-gray-700">
-                                  Tipe Akun
+                                  Tipe Akun <span className="text-red-500">*</span>
                                 </label>
                                 <select
                                   name="tipe_akun"
                                   id="edit_tipe_akun"
                                   value={editFormData.tipe_akun}
                                   onChange={handleEditInputChange}
+                                  required
                                   className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 >
                                   <option value="">Pilih Tipe Akun</option>
@@ -686,13 +716,14 @@ export default function MasterAkun({
                               {/* Email */}
                               <div className="grid gap-1.5">
                                 <label htmlFor="edit_email_akun" className="text-sm font-medium text-gray-700">
-                                  Email
-                                </label>
+                                  Email <span className="text-red-500">*</span>
+                                </label> 
                                 <input
                                   id="edit_email_akun"
                                   name="email_akun"
                                   type="email"
                                   value={editFormData.email_akun}
+                                  required
                                   onChange={handleEditInputChange}
                                   placeholder="Masukkan Email"
                                   className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -702,12 +733,13 @@ export default function MasterAkun({
                               {/* Negara Asal */}
                               <div className="grid gap-1.5 md:col-span-2">
                                 <label htmlFor="edit_negara_asal" className="text-sm font-medium text-gray-700">
-                                  Negara Asal
+                                  Negara Asal <span className="text-red-500">*</span>
                                 </label>
                                 <input
                                   id="edit_negara_asal"
                                   name="negara_asal"
                                   value={editFormData.negara_asal}
+                                  required
                                   onChange={handleEditInputChange}
                                   placeholder="Masukkan Negara Asal"
                                   className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -724,7 +756,7 @@ export default function MasterAkun({
                                     data: editFormData,
                                   })
                                 }
-                                disabled={updateMasterAkun.isLoading}
+                                disabled={isEditFormInvalid|| updateMasterAkun.isLoading}
                                 className="bg-blue-900 hover:bg-blue-950 text-white"
                               >
                                 {updateMasterAkun.isLoading ? "Mengupdate..." : "Update"}

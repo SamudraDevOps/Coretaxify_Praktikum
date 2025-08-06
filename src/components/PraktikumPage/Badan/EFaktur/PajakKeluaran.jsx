@@ -473,10 +473,10 @@ const PajakKeluaran = ({
                 <th className="px-4 py-2 border">
                   Harga Jual / Penggantian / DPP (Rp)
                 </th>
-                <th className="px-4 py-2 border">DPP Nilai Lain / DPP (Rp)</th>
-                <th className="px-4 py-2 border">PPN (Rp)</th>
-                <th className="px-4 py-2 border">PPNBM (Rp)</th>
-                {/* <th className="px-4 py-2 border">PPNBM Nilai (Rp)</th> */}
+                <th className="px-4 py-2 border">DPP Nilai Lain / DPP</th>
+                <th className="px-4 py-2 border">PPN</th>
+                <th className="px-4 py-2 border">PPnBM</th>
+                {/* <th className="px-4 py-2 border">PPNBM</th> */}
                 <th className="px-4 py-2 border">Penandatangan</th>
                 <th className="px-4 py-2 border">Referensi</th>
                 <th className="px-4 py-2 border">Dilaporkan Oleh Penjual</th>

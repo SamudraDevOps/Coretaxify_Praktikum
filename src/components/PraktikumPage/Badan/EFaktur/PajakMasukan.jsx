@@ -371,7 +371,7 @@ const PajakMasukan = ({
                               `/praktikum/${id}/sistem/${akun}/e-faktur/retur-pajak/${item.id}`
                             )
                           }
-                          className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs"
+                          className="bg-blue-900 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs"
                         >
                           <GoArrowSwitch></GoArrowSwitch>
                         </button> */}
