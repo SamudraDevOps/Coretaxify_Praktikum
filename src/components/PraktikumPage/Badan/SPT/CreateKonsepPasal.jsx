@@ -1505,9 +1505,9 @@ const CreateKonsepPasal = ({ data }) => {
                           </thead>
                           <tbody className="text-gray-600 text-center">
                             <tr>
-                              <td className="p-2 border-b text-center">1</td>
+                              <td className="p-2 border-b text-center"></td>
                               <td className="p-2 border-b">
-                                881381978971381309
+                                
                               </td>
                               <td className="p-2 border-b">-</td>
                               <td className="p-2 border-b">-</td>
@@ -1591,9 +1591,9 @@ const CreateKonsepPasal = ({ data }) => {
                           </thead>
                           <tbody className="text-gray-600 text-center">
                             <tr>
-                              <td className="p-2 border-b text-center">1</td>
+                              <td className="p-2 border-b text-center"></td>
                               <td className="p-2 border-b">
-                                881381978971381309
+                                
                               </td>
                               <td className="p-2 border-b">-</td>
                               <td className="p-2 border-b">-</td>
@@ -1745,9 +1745,9 @@ const CreateKonsepPasal = ({ data }) => {
                           </thead>
                           <tbody className="text-gray-600 text-center">
                             <tr>
-                              <td className="p-2 border-b text-center">1</td>
+                              <td className="p-2 border-b text-center"></td>
                               <td className="p-2 border-b">
-                                881381978971381309
+                                
                               </td>
                               <td className="p-2 border-b">-</td>
                               <td className="p-2 border-b">-</td>
@@ -1831,9 +1831,8 @@ const CreateKonsepPasal = ({ data }) => {
                           </thead>
                           <tbody className="text-gray-600 text-center">
                             <tr>
-                              <td className="p-2 border-b text-center">1</td>
+                              <td className="p-2 border-b text-center"></td>
                               <td className="p-2 border-b">
-                                881381978971381309
                               </td>
                               <td className="p-2 border-b">-</td>
                               <td className="p-2 border-b">-</td>
