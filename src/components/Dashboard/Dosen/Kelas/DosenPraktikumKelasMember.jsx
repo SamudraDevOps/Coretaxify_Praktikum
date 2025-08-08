@@ -200,13 +200,18 @@ export default function DosenPraktikumKelasMember() {
                   : "↑"}
               </th>
               <th className="w-[2rem] !px-0">Nama Mahasiswa </th>
-              <th className="w-[2rem]">NIM </th>
+              <th className="w-[2rem]">Email </th>
+              {/* <th className="w-[2rem]">NIM </th> */}
               {pathRoute === "penilaian" ? (
-                <th className="w-[2rem]">Nilai </th>
+                <>
+                  <th className="w-[2rem]">Nilai Bupot</th>
+                  <th className="w-[2rem]">Nilai Faktur</th>
+                  <th className="w-[2rem]">Nilai SPT</th>
+                  <th className="w-[2rem]">Nilai Total</th>
+                </>
               ) : (
                 ""
               )}
-              <th className="w-[2rem]">Email </th>
               <th className="w-[2rem]">Aksi</th>
             </tr>
           </thead>
@@ -215,27 +220,50 @@ export default function DosenPraktikumKelasMember() {
               <tr key={index}>
                 <td className="max-w-5">{index + 1}</td>
                 <td>{item.user.name}</td>
-                <td>
+                <td>{item.user.email}</td>
+                {/* <td>
                   {item.user.unique_id !== null ? item.user.unique_id : "-"}
-                </td>
+                </td> */}
                 {pathRoute === "penilaian" ? (
-                  <td>
-                    {item.sistem_scores.length > 0 ? (
-                      // <button
-                      //   className="download-button"
-                      //   onClick={() => handleOpenNilai(item.sistem_scores)}
-                      // >
-                      //   Lihat Nilai
-                      // </button>
-                      item.summary.total_scores_across_all_sistems
-                    ) : (
-                      "-"
-                    )}
-                  </td>
+                  <>
+                    <td>
+                      {item.sistem_scores.length > 0 ? (
+                        // <button
+                        //   className="download-button"
+                        //   onClick={() => handleOpenNilai(item.sistem_scores)}
+                        // >
+                        //   Lihat Nilai
+                        // </button>
+                        item.summary.total_bupot_scores_across_all_sistems
+                      ) : (
+                        "-"
+                      )}
+                    </td>
+                    <td>
+                      {item.sistem_scores.length > 0 ? (
+                        item.summary.total_faktur_scores_across_all_sistems
+                      ) : (
+                        "-"
+                      )}
+                    </td>
+                    <td>
+                      {item.sistem_scores.length > 0 ? (
+                        item.summary.total_spt_scores_across_all_sistems
+                      ) : (
+                        "-"
+                      )}
+                    </td>
+                    <td>
+                      {item.sistem_scores.length > 0 ? (
+                        item.summary.total_scores_across_all_sistems
+                      ) : (
+                        "-"
+                      )}
+                    </td>
+                  </>
                 ) : (
                   ""
                 )}
-                <td>{item.user.email}</td>
                 <td>
                   {pathRoute === "penilaian" ? (
                     <>
