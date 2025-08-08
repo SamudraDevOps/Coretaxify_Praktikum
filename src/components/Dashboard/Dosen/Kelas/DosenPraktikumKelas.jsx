@@ -486,7 +486,7 @@ export default function DosenPraktikumKelas() {
                                       value={formData.task_id}
                                     >
                                       <option>Pilih Soal</option>
-                                      {taskData.data.map((item) => (
+                                      {taskData.data.data.map((item) => (
                                         <option key={item.id} value={item.id}>
                                           {item.name}
                                         </option>
