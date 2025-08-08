@@ -12,7 +12,7 @@ const TambahDosen = ({
   // formData,
   // setFormData,
   isLoading = false,
-  title = "Edit Dosen",
+  title = "Tambah Dosen",
   isCreateMode = false,
   isReadOnly = false,
   isMultipleMode = true, // bulk
@@ -400,7 +400,7 @@ const TambahDosen = ({
                 className="add-student-btn"
                 onClick={addStudentRow}
               >
-                <FaPlus /> Add Another Student
+                <FaPlus /> Tambah Dosen Lain 
               </button>
             </div>
 

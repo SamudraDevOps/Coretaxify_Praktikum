@@ -154,7 +154,7 @@ const TambahKontrak = ({
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-    if(errors[name]) {
+    if (errors[name]) {
       setErrors({ ...errors, [name]: null });
     }
   };
@@ -209,9 +209,20 @@ const TambahKontrak = ({
     onSuccess: (data) => {
       // console.log(data);
       setFormData({ ...initialFormState });
-      Swal.fire("Lanjutkan", "Kontrak berhasil dibuat", "success");
-      onClose();
-      refetch();
+      // Swal.fire("Lanjutkan", "Kontrak berhasil dibuat", "success");
+      // onClose();
+      // refetch();
+
+      Swal.fire({
+        title: "Berhasil!",
+        text: "Kontrak berhasil dibuat",
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        window.location.reload();
+      });
     },
     onError: (error) => {
       console.log(error);
@@ -487,9 +498,7 @@ const TambahKontrak = ({
               }}
               // required
             />
-            {errors.spt && (
-              <p className="text-red-500 text-sm">{errors.spt}</p>
-            )}
+            {errors.spt && <p className="text-red-500 text-sm">{errors.spt}</p>}
           </div>
           <div className="kontrak-form-group">
             <label>Bupot *</label>
@@ -505,10 +514,10 @@ const TambahKontrak = ({
                 }
               }}
               // required
-              />
-              {errors.bupot && (
-                <p className="text-red-500 text-sm">{errors.bupot}</p>
-              )}
+            />
+            {errors.bupot && (
+              <p className="text-red-500 text-sm">{errors.bupot}</p>
+            )}
           </div>
           <div className="kontrak-form-group">
             <label>Faktur *</label>

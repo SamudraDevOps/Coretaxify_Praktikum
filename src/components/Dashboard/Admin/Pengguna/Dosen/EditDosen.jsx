@@ -117,26 +117,45 @@ const EditDosen = () => {
         Swal.fire("Gagal !", error.message, "error");
         return;
       }
-      Swal.fire("Gagal !", error.response.data.message, "error").then((result) => {
-        if (result.isConfirmed) {
-          refetch();
-          // window.location.reload();
-        }
-      });
-    },
-    onSuccess: (data) => {
-      Swal.fire("Berhasil!", "Dosen berhasil ditambahkan!", "success").then(
+      Swal.fire("Gagal !", error.response.data.message, "error").then(
         (result) => {
           if (result.isConfirmed) {
-            setTambahPopupOpen(false);
             refetch();
+            // window.location.reload();
           }
         }
       );
     },
+    onSuccess: (data) => {
+      // Swal.fire("Berhasil!", "Dosen berhasil ditambahkan!", "success").then(
+      //   (result) => {
+      //     if (result.isConfirmed) {
+      //       setTambahPopupOpen(false);
+      //       refetch();
+      //     }
+      //   }
+      // );
+
+      Swal.fire({
+        title: "Berhasil!",
+        text: "Dosen berhasil ditambahkan!",
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        // setTambahPopupOpen(false);
+        window.location.reload();
+      });
+    },
   });
 
-  const handleCreateMultipleDosen = (validLecturers, contract_id, invalidLecturers = [], errors = []) => {
+  const handleCreateMultipleDosen = (
+    validLecturers,
+    contract_id,
+    invalidLecturers = [],
+    errors = []
+  ) => {
     if (!contract_id) {
       Swal.fire("Gagal", "Harap pilih kontrak terlebih dahulu.", "error");
       return;
@@ -144,7 +163,9 @@ const EditDosen = () => {
 
     Swal.fire({
       title: "Tambah Dosen",
-      text: `Anda akan menambahkan ${(validLecturers.length + invalidLecturers.length)} dosen baru. Lanjutkan?`,
+      text: `Anda akan menambahkan ${
+        validLecturers.length + invalidLecturers.length
+      } dosen baru. Lanjutkan?`,
       icon: "question",
       showCancelButton: true,
       confirmButtonText: "Ya, lanjutkan",
@@ -165,21 +186,44 @@ const EditDosen = () => {
                 // Show alert about partial success
                 Swal.fire({
                   title: "Sebagian Data Berhasil Disimpan",
-                  html: `${validLecturers.length} dosen berhasil disimpan.<br><br>
-                         ${invalidLecturers.length} dosen gagal disimpan dengan error:<br>
-                         ${errors.join('<br>')}`,
-                  icon: "warning"
+                  html: `${
+                    validLecturers.length
+                  } dosen berhasil disimpan.<br><br>
+                         ${
+                           invalidLecturers.length
+                         } dosen gagal disimpan dengan error:<br>
+                         ${errors.join("<br>")}`,
+                  icon: "warning",
+                  timer: 2000, // auto close after 2 seconds
+                  showConfirmButton: false,
+                  timerProgressBar: true,
                 }).then(() => {
-                  refetch();
-                })
+                  window.location.reload();
+                });
               } else {
                 // All lecturers were valid and saved successfully
-                Swal.fire("Berhasil!", "Semua dosen berhasil ditambahkan!", "success").then(() => {
-                  setTambahPopupOpen(false);
-                  refetch();
+                // Swal.fire(
+                //   "Berhasil!",
+                //   "Semua dosen berhasil ditambahkan!",
+                //   "success"
+                // ).then(() => {
+                //   setTambahPopupOpen(false);
+                //   refetch();
+                // });
+
+                Swal.fire({
+                  title: "Berhasil!",
+                  text: "Semua dosen berhasil ditambahkan!",
+                  icon: "success",
+                  timer: 2000, // auto close after 2 seconds
+                  showConfirmButton: false,
+                  timerProgressBar: true,
+                }).then(() => {
+                  // setTambahPopupOpen(false);
+                  window.location.reload();
                 });
               }
-            }
+            },
           }
         );
       }
@@ -200,6 +244,7 @@ const EditDosen = () => {
       console.log(response.data.token);
       axios.defaults.headers.common["X-CSRF-TOKEN"] = response.data.token;
       console.log(cookies.token);
+      alert("pending:", mutation.isPending);
       const data = await axios.delete(
         RoutesApi.postAdmin.url + `/${id}`,
         // `http://127.0.0.1:8000/api/admin/users/${id}?intent=api.user.create.admin`,
@@ -229,14 +274,25 @@ const EditDosen = () => {
     },
     onSuccess: (data) => {
       console.log(data);
-      Swal.fire("Berhasil!", "Data Dosen berhasil dihapus.", "success").then(
-        (result) => {
-          if (result.isConfirmed) {
-            refetch();
-            // window.location.reload();
-          }
-        }
-      );
+      // Swal.fire("Berhasil!", "Data Dosen berhasil dihapus.", "success").then(
+      //   (result) => {
+      //     if (result.isConfirmed) {
+      //       refetch();
+      //       // window.location.reload();
+      //     }
+      //   }
+      // );
+      Swal.fire({
+        title: "Berhasil!",
+        text: "Data Dosen berhasil dihapus.",
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        // setTambahPopupOpen(false);
+        window.location.reload();
+      });
       // const role = data.data.user.roles[0].name;
       // setCookie("token", data.data.token, { path: "/" });
       // setCookie("role", role, { path: "/" });
@@ -275,7 +331,6 @@ const EditDosen = () => {
           <ClipLoader color="#7502B5" size={50} className="!opacity-100" />
         </div>
       )}
-      { }
       <div className="kontrak-container ">
         <div className="header">
           <h2>Data Dosen</h2>
@@ -322,11 +377,12 @@ const EditDosen = () => {
           <TambahDosen
             dataContract={dataContract}
             // isMultipleMode={editPopupOpen}
+            isLoading={mutationCreate.isPending}
             onClose={() => setTambahPopupOpen(false)}
             dosen={selectedDosen}
             onSave={handleCreateMultipleDosen}
             initialStudents={invalidLecturers}
-          // id={id}
+            // id={id}
           />
         )}
         <EditPopupDosen
@@ -335,7 +391,7 @@ const EditDosen = () => {
           dosen={selectedDosen}
           onSave={handleUpdateDosen}
           refetch={refetch}
-        // id={id}
+          // id={id}
         />
         <div className="table-container">
           <table>
@@ -438,10 +494,11 @@ const EditDosen = () => {
                               </button>
                           ))} */}
               <button
-                className={`page-item ${currentPage === Math.ceil(data.length / itemsPerPage)
+                className={`page-item ${
+                  currentPage === Math.ceil(data.length / itemsPerPage)
                     ? "disabled"
                     : ""
-                  }`}
+                }`}
                 onClick={() => {
                   console.log(data.links.next);
                   setUrl(data.links.next);
