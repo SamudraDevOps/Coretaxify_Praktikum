@@ -28,6 +28,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { RxCross1 } from "react-icons/rx";
 import { IntentEnum } from "@/enums/IntentEnum";
 import TabelNilaiMahasiswa from "./TabelNilaiMahasiswa";
+import { FaDownload, FaEdit, FaTrash } from "react-icons/fa";
 
 export default function DosenPraktikumKelasMember() {
   const [isOpen, setIsOpen] = useState(false);
@@ -85,6 +86,65 @@ export default function DosenPraktikumKelasMember() {
   });
 
   console.log(currentPage);
+
+  const downloadMutation = useMutation({
+  mutationFn: async () => {
+    try {
+      const response = await axios.get(
+        `${url}/${id}/assignments/${idpraktikum}/members`,
+        {
+          headers: {
+            Authorization: `Bearer ${cookies.token}`,
+            Accept: "application/octet-stream",
+          },
+          params: {
+            intent: IntentEnum.API_USER_EXPORT_SCORE,
+          },
+          responseType: "blob",
+        }
+      );
+
+      // Create blob URL from response
+      const blob = new Blob([response.data], {
+        type: response.headers["content-type"],
+      });
+      const blobUrl = window.URL.createObjectURL(blob);
+
+      // Extract filename from header
+      const contentDisposition = response.headers["content-disposition"];
+      let filename = "soal.xlsx";
+      if (contentDisposition) {
+        const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+        const matches = filenameRegex.exec(contentDisposition);
+        if (matches?.[1]) {
+          filename = matches[1].replace(/['"]/g, "");
+        }
+      }
+
+      // Trigger download
+      const link = document.createElement("a");
+      link.href = blobUrl;
+      link.setAttribute("download", filename);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      // Clean up
+      window.URL.revokeObjectURL(blobUrl);
+
+      return response;
+    } catch (error) {
+      console.error("Download error:", error);
+      Swal.fire("Gagal!", "Gagal mengunduh file", "error");
+      throw error;
+    }
+  },
+});
+
+  const handleDownload = () => {
+    downloadMutation.mutate();
+  };
+
 
   const handleSort = (key) => {
     let direction = "ascending";
@@ -181,6 +241,14 @@ export default function DosenPraktikumKelasMember() {
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
+        <button
+          onClick={() => handleDownload()}
+          className="download-button"
+          disabled={downloadMutation.isPending}
+        >
+          <FaDownload className="download-icon" />
+          {downloadMutation.isPending ? "Loading..." : "Export Nilai"}
+        </button>
       </div>
       <div className="table-container">
         <table>
