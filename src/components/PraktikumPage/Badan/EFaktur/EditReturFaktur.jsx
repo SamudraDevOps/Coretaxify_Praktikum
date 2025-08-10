@@ -604,7 +604,7 @@ const EditReturFaktur = ({ data, sidebar }) => {
                 </label>
                 <input
                   type="text"
-                  value={formatRupiah(data?.dpp_lain_retur)}
+                  value={formatRupiah(data?.dpp_lain)}
                   className="border rounded-md p-2 w-full cursor-not-allowed bg-gray-100"
                   disabled
                 />
@@ -613,7 +613,7 @@ const EditReturFaktur = ({ data, sidebar }) => {
                 <label className="block text-sm font-medium">Maks *</label>
                 <input
                   type="text"
-                  value={formatRupiah(data?.dpp_lain_retur)}
+                  value={formatRupiah(data?.dpp_lain)}
                   className="border rounded-md p-2 w-full cursor-not-allowed bg-gray-100"
                   disabled
                 />
@@ -623,7 +623,7 @@ const EditReturFaktur = ({ data, sidebar }) => {
                   PPN diretur *
                 </label>
                 <input
-                  value={formatRupiah(data?.ppn_retur)}
+                  value={formatRupiah(data?.ppn)}
                   type="text"
                   className="border rounded-md p-2 w-full cursor-not-allowed bg-gray-100"
                   disabled
@@ -632,7 +632,7 @@ const EditReturFaktur = ({ data, sidebar }) => {
               <div className="space-y-2">
                 <label className="block text-sm font-medium">Maks *</label>
                 <input
-                  value={formatRupiah(data?.ppn_retur)}
+                  value={formatRupiah(data?.ppn)}
                   type="text"
                   className="border rounded-md p-2 w-full cursor-not-allowed bg-gray-100"
                   disabled
@@ -1137,7 +1137,7 @@ const EditReturFaktur = ({ data, sidebar }) => {
                                           parseInt(value || "0", 10) || 0;
                                         const maxValue =
                                           parseInt(
-                                            transaction.ppn_retur || "0",
+                                            transaction.ppn_asli || "0",
                                             10
                                           ) || 0;
 
@@ -1150,7 +1150,7 @@ const EditReturFaktur = ({ data, sidebar }) => {
                                         const { floatValue } = values;
                                         const maxValue =
                                           parseInt(
-                                            transaction.ppn_retur || "0",
+                                            transaction.ppn_asli || "0",
                                             10
                                           ) || 0;
                                         // Strictly enforce maximum during typing
@@ -1163,7 +1163,7 @@ const EditReturFaktur = ({ data, sidebar }) => {
                                     {/* Helper text to show maximum allowed value */}
                                     <p className="text-xs text-gray-500">
                                       Maksimal:{" "}
-                                      {formatRupiah(transaction.ppn_retur)}
+                                      {formatRupiah(transaction.ppn_asli)}
                                     </p>
                                   </div>
                                   <div className="space-y-2">
@@ -1177,7 +1177,9 @@ const EditReturFaktur = ({ data, sidebar }) => {
                                       decimalSeparator=","
                                       prefix="Rp "
                                       allowNegative={false}
-                                      value={ppnRetur}
+                                        value={formatRupiah(
+                                        transaction.ppn_asli
+                                      )}
                                       displayType="input"
                                       readOnly
                                       decimalScale={0}
