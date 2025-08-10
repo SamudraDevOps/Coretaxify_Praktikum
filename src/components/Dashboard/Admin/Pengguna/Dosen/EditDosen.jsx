@@ -360,7 +360,7 @@ const EditDosen = () => {
                 <th>Instansi</th>
                 <th>Default Password</th>
                 <th>Tanggal Registrasi</th>
-                <th>Default Password</th>
+                {/* <th>Default Password</th> */}
                 {/* <th>Kode Registrasi</th>
                 <th>Kode Pembelian</th>
                 <th>Status</th> */}
@@ -375,7 +375,7 @@ const EditDosen = () => {
                   <td>{item.instansi}</td>
                   <td>{item.default_password ?? "-"}</td>
                   <td>{item.email_verified_at?.slice(0, 10)}</td>
-                  <td>{item.default_password}</td>
+                  {/* <td>{item.default_password}</td> */}
 
                   {/* <td>{item.}</td>
                   <td>{item.kodePembelian}</td>
