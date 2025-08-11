@@ -1483,7 +1483,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
               <div className="space-y-2">
                 <label className="block text-sm font-medium">Uang Muka</label>
                 <input
-                  readOnly
+                  readOnly={fakturData.data.status !== "DRAFT"}
                   type="checkbox"
                   name="uangMuka"
                   checked={formData.uangMuka}
@@ -1494,7 +1494,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
               <div className="space-y-2">
                 <label className="block text-sm font-medium">Pelunasan</label>
                 <input
-                  readOnly
+                  readOnly={fakturData.data.status !== "DRAFT"}
                   type="checkbox"
                   name="pelunasan"
                   checked={formData.pelunasan}
@@ -1507,10 +1507,10 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                   Nomor Faktur
                 </label>
                 <input
-                  readOnly
+                  readOnly={fakturData.data.status !== "DRAFT"}
                   type="text"
                   className="p-2 border rounded w-full bg-gray-100"
-                  disabled
+                  disabled={fakturData.data.status !== "DRAFT"}
                   placeholder="Ngelink"
                 />
               </div>
@@ -1523,7 +1523,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                   name="kode_transaksi"
                   value={formData.kode_transaksi}
                   onChange={handleKodeTransaksiChange}
-                  disabled
+                  disabled={fakturData.data.status !== "DRAFT"}
                 >
                   <option value="">Pilih Kode Transaksi</option>
                   <option value="1">01 - kepada selain pemungut PPN</option>
@@ -1558,7 +1558,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                   Tanggal Faktur
                 </label>
                 <input
-                  readOnly
+                  readOnly={fakturData.data.status !== "DRAFT"}
                   type="date"
                   value={formData.tanggal_faktur_pajak}
                   onChange={handleChange}
@@ -1571,12 +1571,12 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                   Jenis Faktur
                 </label>
                 <input
-                  readOnly
+                  readOnly={fakturData.data.status !== "DRAFT"}
                   type="text"
                   value="Normal"
                   name="jenisFaktur"
                   className="p-2 border rounded w-full bg-gray-100"
-                  disabled
+                  disabled={fakturData.data.status !== "DRAFT"}
                 />
               </div>
               <div className="col-span-3 grid grid-cols-3 gap-4">
@@ -1584,10 +1584,8 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                   <label className="block text-sm font-medium">
                     Masa Pajak
                   </label>
-                  {/* <input type="month" className='p-2 border rounded w-full' /> */}
                   <select
-                    // required
-                    disabled
+                    disabled={fakturData.data.status !== "DRAFT"}
                     className="p-2 border rounded w-full"
                     name="masa_pajak"
                     value={formData.masa_pajak}
@@ -1614,22 +1612,15 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                     <PopoverTrigger asChild>
                       <Button
                         variant="outline"
-                        className="w-full justify-start "
+                        className="w-full justify-start"
                       >
                         {selectedYear.getFullYear()}
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent align="start" className="w-auto p-0">
-                      {/* <DatePicker
-                        selected={selectedYear}
-                        onChange={(date) => setSelectedYear(date.toString())}
-                        showYearPicker
-                        dateFormat="yyyy"
-                        className="border p-2 rounded-md w-full text-center"
-                      /> */}
                       <DatePicker
                         required
-                        disabled
+                        disabled={fakturData.data.status !== "DRAFT"}
                         selected={selectedYear}
                         onChange={(date) => {
                           setSelectedYear(date);
@@ -1647,9 +1638,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                     </PopoverContent>
                   </Popover>
                 </div>
-                {/* <div className="space-y-2">
-                                <label className='block text-sm font-medium'></label>
-                            </div> */}
+
                 {(kode_transaksi === "7" || kode_transaksi === "8") && (
                   <>
                     {/* Informasi Tambahan */}
@@ -1658,6 +1647,8 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                         Informasi Tambahan
                       </label>
                       <select
+                        disabled={fakturData.data.status !== "DRAFT"}
+                        readOnly={fakturData.data.status !== "DRAFT"}
                         className="p-2 border rounded w-full"
                         value={informasi_tambahan}
                         onChange={(e) => {
@@ -1994,7 +1985,6 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                         Cap Fasilitas
                       </label>
                       <input
-                        readOnly
                         type="text"
                         className="p-2 border rounded w-full bg-gray-100"
                         value={cap_fasilitas}
@@ -2029,7 +2019,6 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                           Nomor Pendukung
                         </label>
                         <input
-                          readOnly
                           type="text"
                           name="nomorPendukung"
                           className="p-2 border rounded w-full"
@@ -2053,7 +2042,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
               <div className="space-y-2">
                 <label className="block text-sm font-medium">Referensi</label>
                 <input
-                  readOnly
+                  readOnly={fakturData.data.status !== "DRAFT"}
                   type="text"
                   value={formData.referensi}
                   name="referensi"
@@ -2066,24 +2055,24 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                   Pilih Alamat
                 </label>
                 <input
-                  readOnly
+                  readOnly={fakturData.data.status !== "DRAFT"}
                   type="text"
                   name="alamat"
                   value={formData.alamat}
                   onChange={handleChange}
                   className="p-2 border rounded w-full"
                   placeholder="Link Bang, tanya pm jan tanya saia"
-                  disabled
+                  disabled={fakturData.data.status !== "DRAFT"}
                 />
               </div>
               <div className="space-y-2">
                 <label className="block text-sm font-medium">IDTKU</label>
                 <input
-                  readOnly
+                  readOnly={fakturData.data.status !== "DRAFT"}
                   type="text"
                   className="p-2 border rounded w-full bg-gray-100"
                   value="000000"
-                  disabled
+                  disabled={fakturData.data.status !== "DRAFT"}
                 />
               </div>
             </div>
@@ -2100,7 +2089,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
               <div className="space-y-2">
                 <label className="block text-sm font-medium">NPWP </label>
                 <select
-                  disabled
+                  disabled={fakturData.data.status !== "DRAFT"}
                   name="akun_penerima_id"
                   value={
                     typeof formData.akun_penerima_id === "object"
@@ -2150,7 +2139,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                   {["NPWP", "Paspor", "NIK", "Identitas Lain"].map((value) => (
                     <div key={value} className="flex items-center gap-2">
                       <input
-                        readOnly
+                        readOnly={fakturData.data.status !== "DRAFT"}
                         type="radio"
                         name="identification"
                         value={value}
@@ -2163,61 +2152,64 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                   ))}
                 </div>
               </div>
+
               <div className="space-y-2">
                 <label className="block text-sm font-medium">Negara</label>
                 <input
-                  // readOnly
                   type="text"
                   name="negara"
                   value={formData.negara}
                   onChange={handleChange}
                   className="p-2 border rounded w-full bg-gray-100"
-                  readOnly
+                  readOnly={fakturData.data.status !== "DRAFT"}
                 />
               </div>
+
               <div className="space-y-2">
                 <label className="block text-sm font-medium">
                   Nomor Dokumen
                 </label>
                 <input
-                  readOnly
+                  readOnly={fakturData.data.status !== "DRAFT"}
                   type="text"
                   name="nomorDokumen"
                   value={formData.nomorDokumen}
                   onChange={handleChange}
                   className="p-2 border rounded w-full bg-gray-100"
-                  disabled
+                  disabled={fakturData.data.status !== "DRAFT"}
                 />
               </div>
+
               <div className="space-y-2">
                 <label className="block text-sm font-medium">Nama</label>
                 <input
-                  readOnly
+                  readOnly={fakturData.data.status !== "DRAFT"}
                   type="text"
                   name="nama"
-                  // value={formData.akun_penerima_id.nama_akun}
                   value={formData.nama}
                   onChange={handleChange}
                   className="p-2 border rounded w-full bg-gray-100"
-                  disabled
+                  disabled={fakturData.data.status !== "DRAFT"}
                 />
               </div>
+
               <div className="space-y-2">
                 <label className="block text-sm font-medium">Alamat</label>
                 <input
-                  readOnly
+                  readOnly={fakturData.data.status !== "DRAFT"}
                   type="text"
                   name="alamat"
                   value={formData.alamat}
                   onChange={handleChange}
                   className="p-2 border rounded w-full bg-gray-100"
-                  disabled
+                  disabled={fakturData.data.status !== "DRAFT"}
                 />
               </div>
+
               <div className="space-y-2">
                 <label className="block text-sm font-medium">IDTKU</label>
                 <input
-                  readOnly
+                  readOnly={fakturData.data.status !== "DRAFT"}
                   type="text"
                   name="idtku"
                   value={formData.idtku}
@@ -2225,16 +2217,17 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                   className="p-2 border rounded w-full bg-gray-100"
                 />
               </div>
+
               <div className="space-y-2">
                 <label className="block text-sm font-medium">Email</label>
                 <input
-                  readOnly
+                  readOnly={fakturData.data.status !== "DRAFT"}
                   type="text"
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
                   className="p-2 border rounded w-full bg-gray-100"
-                  disabled
+                  disabled={fakturData.data.status !== "DRAFT"}
                 />
               </div>
             </div>

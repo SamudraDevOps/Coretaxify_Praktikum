@@ -538,6 +538,7 @@ const PajakKeluaran = ({
                           }
                         >
                           Edit
+                          {/* {item.status == "APPROVED" ? "Lihat" : "Edit"} */}
                         </button>
                         <button
                           onClick={() =>
