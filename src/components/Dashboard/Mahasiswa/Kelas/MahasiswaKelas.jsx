@@ -21,7 +21,8 @@ import { RoutesApi } from "@/Routes";
 import Wulan from "../../../../assets/images/wulan.png";
 
 export default function MahasiswaKelas() {
-  const defaultProfile = "https://ui-avatars.com/api/?name=User&background=random&size=128";
+  const defaultProfile =
+    "https://ui-avatars.com/api/?name=User&background=random&size=128";
   const [isOpen, setIsOpen] = useState(false);
   const [url, setUrl] = useState(`${RoutesApi.url}api/student/groups`);
   const [isAddOpen, setIsAddOpen] = useState(false);
@@ -59,7 +60,9 @@ export default function MahasiswaKelas() {
 
       const photoUrl = user.image_path
         ? `${RoutesApi.url}storage/${user.image_path}`
-        : `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || "User")}&background=random&size=128&color=auto`;
+        : `https://ui-avatars.com/api/?name=${encodeURIComponent(
+            user.name || "User"
+          )}&background=random&size=128&color=auto`;
 
       return { ...user, photoUrl };
     },
@@ -225,11 +228,21 @@ export default function MahasiswaKelas() {
     },
     onSuccess: (data) => {
       console.log(data);
-      Swal.fire("Berhasil!", "Kelas berhasil ditambahkan!", "success").then(
-        () => {
-          refetch();
-        }
-      );
+      // Swal.fire("Berhasil!", "Kelas berhasil ditambahkan!", "success").then(
+      //   () => {
+      //     refetch();
+      //   }
+      // );
+      Swal.fire({
+        title: "Berhasil!",
+        text: "Kelas berhasil ditambahkan!",
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        window.location.reload();
+      });
       // window.location.reload();
       // const role = data.data.user.roles[0].name;
       // setCookie("token", data.data.token, { path: "/" });
@@ -551,7 +564,7 @@ export default function MahasiswaKelas() {
                         name="kodeKelas"
                         value={formData.kodeKelas}
                         onChange={handleChange}
-                      // readOnly
+                        // readOnly
                       />
                     </div>
                   </div>

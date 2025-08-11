@@ -139,7 +139,17 @@ const EditAdmin = () => {
     },
     onSuccess: (data) => {
       console.log(data);
-      Swal.fire("Berhasil!", "Admin berhasil dihapus!", "success");
+      // Swal.fire("Berhasil!", "Admin berhasil dihapus!", "success");
+            Swal.fire({
+        title: "Berhasil!",
+        text: "Admin berhasil dihapus!",
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        window.location.reload();
+      });
 
       window.location.reload();
       // alert("Login successful!");

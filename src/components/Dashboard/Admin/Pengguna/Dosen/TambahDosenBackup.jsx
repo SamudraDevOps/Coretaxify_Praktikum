@@ -66,14 +66,24 @@ const TambahDosen = ({ isOpen, onClose, onSave }) => {
     },
     onSuccess: (data) => {
       console.log(data);
-      Swal.fire(
-        "Berhasil!",
-        "Data dosen berhasil ditambahkan!",
-        "success"
-      ).then((result) => {
-        if (result.isConfirmed) {
-          window.location.reload();
-        }
+      // Swal.fire(
+      //   "Berhasil!",
+      //   "Data dosen berhasil ditambahkan!",
+      //   "success"
+      // ).then((result) => {
+      //   if (result.isConfirmed) {
+      //     window.location.reload();
+      //   }
+      // });
+      Swal.fire({
+        title: "Berhasil!",
+        text: "Data dosen berhasil ditambahkan!",
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        window.location.reload();
       });
 
       // window.location.href = "/" + role;

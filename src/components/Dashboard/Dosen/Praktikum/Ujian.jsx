@@ -270,11 +270,21 @@ export default function Ujian() {
                             (itemData) => itemData.id !== item.id
                           );
                           setData(newData);
-                          Swal.fire(
-                            "Berhasil!",
-                            "Ujian berhasil dihapus!",
-                            "success"
-                          );
+                          // Swal.fire(
+                          //   "Berhasil!",
+                          //   "Ujian berhasil dihapus!",
+                          //   "success"
+                          // );
+                          Swal.fire({
+                            title: "Berhasil!",
+                            text: "Ujian berhasil dihapus!",
+                            icon: "success",
+                            timer: 2000, // auto close after 2 seconds
+                            showConfirmButton: false,
+                            timerProgressBar: true,
+                          }).then(() => {
+                            window.location.reload();
+                          });
                         }
                       });
                     }}

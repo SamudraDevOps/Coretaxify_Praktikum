@@ -27,7 +27,7 @@ const EditPengajar = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    status: "ACTIVE"
+    status: "ACTIVE",
   });
 
   // Fetch instructors data
@@ -40,8 +40,8 @@ const EditPengajar = () => {
           Accept: "application/json",
         },
         params: {
-          intent: IntentEnum.API_USER_GET_INSTRUKTUR // Filter for instructors
-        }
+          intent: IntentEnum.API_USER_GET_INSTRUKTUR, // Filter for instructors
+        },
       });
       return data;
     },
@@ -63,18 +63,18 @@ const EditPengajar = () => {
 
       if (action === "create") {
         const storeEndpoint = RoutesApi.psc.users.store();
-        
+
         // Check if we're creating multiple instructors
         if (multipleInstructors && multipleInstructors.length > 0) {
           // For bulk creation, we need to make multiple requests
-          const createPromises = multipleInstructors.map(instructor => {
+          const createPromises = multipleInstructors.map((instructor) => {
             return axios.post(
               storeEndpoint.url,
               {
                 name: instructor.name,
                 email: instructor.email,
                 status: instructor.status || "ACTIVE",
-                intent: IntentEnum.API_USER_CREATE_INSTRUKTUR
+                intent: IntentEnum.API_USER_CREATE_INSTRUKTUR,
               },
               {
                 headers: {
@@ -84,12 +84,12 @@ const EditPengajar = () => {
                   Authorization: `Bearer ${cookies.token}`,
                 },
                 params: {
-                  intent: IntentEnum.API_USER_CREATE_INSTRUKTUR
-                }
+                  intent: IntentEnum.API_USER_CREATE_INSTRUKTUR,
+                },
               }
             );
           });
-          
+
           // Execute all requests and return the combined result
           return Promise.all(createPromises);
         } else {
@@ -100,7 +100,7 @@ const EditPengajar = () => {
               name: formData.name,
               email: formData.email,
               status: formData.status,
-              intent: IntentEnum.API_USER_CREATE_INSTRUKTUR
+              intent: IntentEnum.API_USER_CREATE_INSTRUKTUR,
             },
             {
               headers: {
@@ -110,8 +110,8 @@ const EditPengajar = () => {
                 Authorization: `Bearer ${cookies.token}`,
               },
               params: {
-                intent: IntentEnum.API_USER_CREATE_INSTRUKTUR
-              }
+                intent: IntentEnum.API_USER_CREATE_INSTRUKTUR,
+              },
             }
           );
         }
@@ -130,7 +130,7 @@ const EditPengajar = () => {
               Accept: "application/json",
               "X-CSRF-TOKEN": response.data.token,
               Authorization: `Bearer ${cookies.token}`,
-            }
+            },
           }
         );
       } else if (action === "delete" && id) {
@@ -139,18 +139,48 @@ const EditPengajar = () => {
           headers: {
             "X-CSRF-TOKEN": response.data.token,
             Authorization: `Bearer ${cookies.token}`,
-          }
+          },
         });
       }
     },
     onSuccess: (data, variables) => {
       const { action } = variables;
       if (action === "create") {
-        Swal.fire("Berhasil!", "Instruktur berhasil dibuat!", "success");
+        // Swal.fire("Berhasil!", "Instruktur berhasil dibuat!", "success");
+        Swal.fire({
+          title: "Berhasil!",
+          text: "Instruktur berhasil dibuat!",
+          icon: "success",
+          timer: 2000, // auto close after 2 seconds
+          showConfirmButton: false,
+          timerProgressBar: true,
+        }).then(() => {
+          window.location.reload();
+        });
       } else if (action === "update") {
-        Swal.fire("Berhasil!", "Instruktur berhasil diubah!", "success");
+        // Swal.fire("Berhasil!", "Instruktur berhasil diubah!", "success");
+        Swal.fire({
+          title: "Berhasil!",
+          text: "Instruktur berhasil diubah!",
+          icon: "success",
+          timer: 2000, // auto close after 2 seconds
+          showConfirmButton: false,
+          timerProgressBar: true,
+        }).then(() => {
+          window.location.reload();
+        });
       } else if (action === "delete") {
-        Swal.fire("Berhasil!", "Instruktur berhasil dihapus!", "success");
+        // Swal.fire("Berhasil!", "Instruktur berhasil dihapus!", "success");
+        Swal.fire({
+          title: "Berhasil!",
+          text: "Instruktur berhasil dihapus!",
+          icon: "success",
+          timer: 2000, // auto close after 2 seconds
+          showConfirmButton: false,
+          timerProgressBar: true,
+        }).then(() => {
+          window.location.reload();
+        });
       }
       refetch();
       setIsOpen(false);
@@ -160,10 +190,10 @@ const EditPengajar = () => {
     onError: (error) => {
       console.log(error.response);
       if (error.response === undefined) {
-        Swal.fire("Gagal !", error.message, "error");
+        Swal.fire("Gagal !", error?.message, "error");
         return;
       }
-      Swal.fire("Gagal !", error.response.data.message, "error");
+      Swal.fire("Gagal !", error?.response?.data?.message, "error");
     },
   });
 
@@ -247,11 +277,14 @@ const EditPengajar = () => {
   }
 
   // Filter data based on search
-  const filteredData = data?.data?.filter(item => 
-    item.name?.toLowerCase().includes(search.toLowerCase()) ||
-    item.email?.toLowerCase().includes(search.toLowerCase()) ||
-    (item.status && item.status.toLowerCase().includes(search.toLowerCase()))
-  ) || [];
+  const filteredData =
+    data?.data?.filter(
+      (item) =>
+        item.name?.toLowerCase().includes(search.toLowerCase()) ||
+        item.email?.toLowerCase().includes(search.toLowerCase()) ||
+        (item.status &&
+          item.status.toLowerCase().includes(search.toLowerCase()))
+    ) || [];
 
   return (
     <div className="kontrak-container">
@@ -276,10 +309,7 @@ const EditPengajar = () => {
           >
             Tambah Pengajar
           </button> */}
-          <button
-            className="add-button"
-            onClick={handleMultipleCreate}
-          >
+          <button className="add-button" onClick={handleMultipleCreate}>
             Tambah Pengajar
           </button>
         </div>
@@ -357,7 +387,9 @@ const EditPengajar = () => {
         </table>
         <div className="pagination-container">
           <div className="pagination-info">
-            {data?.meta ? `Showing ${data.meta.from} to ${data.meta.to} of ${data.meta.total} entries` : "No data available"}
+            {data?.meta
+              ? `Showing ${data.meta.from} to ${data.meta.to} of ${data.meta.total} entries`
+              : "No data available"}
           </div>
           <div className="pagination">
             <button
@@ -369,7 +401,9 @@ const EditPengajar = () => {
             >
               &lt;
             </button>
-            <button className="page-item active">{data?.meta?.current_page || 1}</button>
+            <button className="page-item active">
+              {data?.meta?.current_page || 1}
+            </button>
             <button
               className={`page-item`}
               onClick={() => {
@@ -382,7 +416,7 @@ const EditPengajar = () => {
           </div>
         </div>
       </div>
-      
+
       {/* Edit Instructor Popup */}
       {isOpen && (
         <EditPopupPengajar
@@ -395,7 +429,7 @@ const EditPengajar = () => {
           title="Edit Pengajar"
         />
       )}
-      
+
       {/* Create Single Instructor Popup */}
       {isCreateOpen && (
         <TambahPengajar
@@ -407,7 +441,7 @@ const EditPengajar = () => {
           isLoading={mutation.isPending}
         />
       )}
-      
+
       {/* Create Multiple Instructors Popup */}
       {isMultipleCreateOpen && (
         <TambahPengajar

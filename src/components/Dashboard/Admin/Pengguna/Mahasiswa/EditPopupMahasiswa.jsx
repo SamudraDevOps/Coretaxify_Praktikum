@@ -84,13 +84,23 @@ const EditPopupMahasiswa = ({ isOpen, onClose, data, onSave }) => {
     onSuccess: (data) => {
       console.log(data);
       // window.location.reload();
-      Swal.fire("Berhasil!", "Data Mahasiswa berhasil diubah!", "success").then(
-        (result) => {
-          if (result.isConfirmed) {
-            window.location.reload();
-          }
-        }
-      );
+      // Swal.fire("Berhasil!", "Data Mahasiswa berhasil diubah!", "success").then(
+      //   (result) => {
+      //     if (result.isConfirmed) {
+      //       window.location.reload();
+      //     }
+      //   }
+      // );
+      Swal.fire({
+        title: "Berhasil!",
+        text: "Data Mahasiswa berhasil diubah!",
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        window.location.reload();
+      });
 
       // window.location.href = "/" + role;
       // alert("Login successful!");

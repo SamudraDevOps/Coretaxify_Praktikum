@@ -80,25 +80,27 @@ export default function DosenKelas() {
   });
 
   const { data: profileData, isLoading: loadingProfile } = useQuery({
-      queryKey: ["profile"],
-      queryFn: async () => {
-        const res = await axios.get(RoutesApi.profile, {
-          headers: {
-            Authorization: `Bearer ${cookies.token}`,
-            Accept: "application/json",
-          },
-        });
-        const user = res.data.data;
-  
-        const photoUrl = user.image_path
-          ? `${RoutesApi.url}storage/${user.image_path}`
-          : `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || "User")}&background=random&size=128&color=auto`;
-  
-        return { ...user, photoUrl };
-      },
-      enabled: !!cookies.token, // hanya jalan jika token ada
-      refetchOnWindowFocus: false,
-    });
+    queryKey: ["profile"],
+    queryFn: async () => {
+      const res = await axios.get(RoutesApi.profile, {
+        headers: {
+          Authorization: `Bearer ${cookies.token}`,
+          Accept: "application/json",
+        },
+      });
+      const user = res.data.data;
+
+      const photoUrl = user.image_path
+        ? `${RoutesApi.url}storage/${user.image_path}`
+        : `https://ui-avatars.com/api/?name=${encodeURIComponent(
+            user.name || "User"
+          )}&background=random&size=128&color=auto`;
+
+      return { ...user, photoUrl };
+    },
+    enabled: !!cookies.token, // hanya jalan jika token ada
+    refetchOnWindowFocus: false,
+  });
 
   const [formData, setFormData] = useState({
     namaKelas: "",
@@ -288,21 +290,31 @@ export default function DosenKelas() {
     },
     onSuccess: (data) => {
       console.log(data);
-      Swal.fire("Berhasil!", "Operasi berhasil dilakukan!", "success").then(
-        () => {
-          refetch();
-        }
-      );
+      // Swal.fire("Berhasil!", "Operasi berhasil dilakukan!", "success").then(
+      //   () => {
+      //     refetch();
+      //   }
+      // );
+      Swal.fire({
+        title: "Berhasil!",
+        text: "Operasi berhasil dilakukan!",
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        window.location.reload();
+      });
     },
     onError: (error, action) => {
       console.log(action);
       console.log(error.response);
       if (error.response == undefined) {
-        Swal.fire("Gagal !", error.message, "error");
+        Swal.fire("Gagal !", error?.message, "error");
         return;
       }
 
-      Swal.fire("Gagal !", error.response.data.message, "error");
+      Swal.fire("Gagal !", error?.response?.data?.message, "error");
     },
   });
 
@@ -401,7 +413,11 @@ export default function DosenKelas() {
             <a
               key={item.id}
               className="relative  shadow-lg rounded-lg w-100 md:min-w-96 p-4 cursor-pointer"
-              href={pathRoute === "penilaian" ? `/dosen/penilaian/kelas/${item.id}` : `/dosen/kelas/praktikum/${item.id}`}
+              href={
+                pathRoute === "penilaian"
+                  ? `/dosen/penilaian/kelas/${item.id}`
+                  : `/dosen/kelas/praktikum/${item.id}`
+              }
             >
               <div className="bg-purple-700 flex justify-between text-white p-4 rounded-t-lg w-150 relative">
                 <div className="">

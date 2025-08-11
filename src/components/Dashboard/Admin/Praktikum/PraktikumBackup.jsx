@@ -316,11 +316,21 @@ export default function PraktikumBackup() {
                             (itemData) => itemData.id !== item.id
                           );
                           setData(newData);
-                          Swal.fire(
-                            "Berhasil!",
-                            "Praktikum berhasil dihapus!",
-                            "success"
-                          );
+                          // Swal.fire(
+                          //   "Berhasil!",
+                          //   "Praktikum berhasil dihapus!",
+                          //   "success"
+                          // );
+                          Swal.fire({
+                            title: "Berhasil!",
+                            text: "Praktikum berhasil dihapus!",
+                            icon: "success",
+                            timer: 2000, // auto close after 2 seconds
+                            showConfirmButton: false,
+                            timerProgressBar: true,
+                          }).then(() => {
+                            window.location.reload();
+                          });
                         }
                       });
                     }}

@@ -77,18 +77,28 @@ export default function UploadSoal() {
     },
     onSuccess: (data) => {
       console.log(data);
-      Swal.fire("Berhasil!", "Data Soal berhasil dibuat !", "success").then(
-        (result) => {
-          if (result.isConfirmed) {
-            setFormData({
-              name: "",
-              file: null,
-            });
-            refetch();
-            // window.location.reload();
-          }
-        }
-      );
+      // Swal.fire("Berhasil!", "Data Soal berhasil dibuat !", "success").then(
+      //   (result) => {
+      //     if (result.isConfirmed) {
+      //       setFormData({
+      //         name: "",
+      //         file: null,
+      //       });
+      //       refetch();
+      //       // window.location.reload();
+      //     }
+      //   }
+      // );
+      Swal.fire({
+        title: "Berhasil!",
+        text: "Data Soal berhasil dibuat !",
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        window.location.reload();
+      });
     },
     onError: (error) => {
       console.log(error);
@@ -202,7 +212,7 @@ export default function UploadSoal() {
 
       // Create a dynamic payload object
       const payload = {};
-      payload.status = 'inactive';
+      payload.status = "inactive";
 
       // Send the request with only non-empty fields
       const data = await axios.post(RoutesApi.tasksAdmin + "/" + id, payload, {
@@ -220,13 +230,23 @@ export default function UploadSoal() {
     },
     onSuccess: (data) => {
       console.log(data);
-      Swal.fire("Berhasil!", "Soal berhasil dihapus!", "success").then(
-        (result) => {
-          if (result.isConfirmed) {
-            refetch();
-          }
-        }
-      );
+      // Swal.fire("Berhasil!", "Soal berhasil dihapus!", "success").then(
+      //   (result) => {
+      //     if (result.isConfirmed) {
+      //       refetch();
+      //     }
+      //   }
+      // );
+      Swal.fire({
+        title: "Berhasil!",
+        text: "Soal berhasil dihapus!",
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        window.location.reload();
+      });
     },
     onError: (error) => {
       console.log(error);

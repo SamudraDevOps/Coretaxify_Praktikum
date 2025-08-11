@@ -94,7 +94,7 @@ export default function UploadSoal() {
     // Logic to save the data
     onClose();
   };
-  
+
   const [file, setFile] = useState();
   function handleChangeFile(e) {
     console.log(e.target.files);
@@ -299,11 +299,21 @@ export default function UploadSoal() {
                             (itemData) => itemData.id !== item.id
                           );
                           setData(newData);
-                          Swal.fire(
-                            "Berhasil!",
-                            "Soal berhasil dihapus!",
-                            "success"
-                          );
+                          // Swal.fire(
+                          //   "Berhasil!",
+                          //   "Soal berhasil dihapus!",
+                          //   "success"
+                          // );
+                          Swal.fire({
+                            title: "Berhasil!",
+                            text: "Soal berhasil dihapus!",
+                            icon: "success",
+                            timer: 2000, // auto close after 2 seconds
+                            showConfirmButton: false,
+                            timerProgressBar: true,
+                          }).then(() => {
+                            window.location.reload();
+                          });
                         }
                       });
                     }}

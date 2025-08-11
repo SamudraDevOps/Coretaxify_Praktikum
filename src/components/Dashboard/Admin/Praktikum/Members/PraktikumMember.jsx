@@ -80,20 +80,30 @@ const PraktikumMember = () => {
       );
     },
     onSuccess: () => {
-      Swal.fire(
-        "Berhasil!",
-        "Member berhasil dihapus dari praktikum!",
-        "success"
-      );
-      refetch();
+      // Swal.fire(
+      //   "Berhasil!",
+      //   "Member berhasil dihapus dari praktikum!",
+      //   "success"
+      // );
+      // refetch();
+      Swal.fire({
+        title: "Berhasil!",
+        text: "Member berhasil dihapus dari praktikum!",
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        window.location.reload();
+      });
     },
     onError: (error) => {
       console.log(error.response);
       if (error.response === undefined) {
-        Swal.fire("Gagal!", error.message, "error");
+        Swal.fire("Gagal!", error?.message, "error");
         return;
       }
-      Swal.fire("Gagal!", error.response.data.message, "error");
+      Swal.fire("Gagal!", error?.response?.data?.message, "error");
     },
   });
 

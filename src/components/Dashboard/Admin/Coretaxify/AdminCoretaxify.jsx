@@ -75,9 +75,9 @@ const AdminCoretaxify = () => {
             },
           },
           column_filters: {
-            user_id: user.data.id
-          }
-        }
+            user_id: user.data.id,
+          },
+        },
       });
       return data;
     },
@@ -103,14 +103,11 @@ const AdminCoretaxify = () => {
   const { isLoading: isLoadingTasks, data: dataTasks } = useQuery({
     queryKey: ["tasks"],
     queryFn: async () => {
-      const { data } = await axios.get(
-        `${RoutesApi.url}api/admin/tasks`,
-        {
-          headers: {
-            Authorization: `Bearer ${cookies.token}`,
-          },
-        }
-      );
+      const { data } = await axios.get(`${RoutesApi.url}api/admin/tasks`, {
+        headers: {
+          Authorization: `Bearer ${cookies.token}`,
+        },
+      });
       return data;
     },
     staleTime: 10 * 60 * 1000, // 10 minutes
@@ -316,19 +313,39 @@ const AdminCoretaxify = () => {
     },
     onSuccess: (data, variables) => {
       console.log(data);
-      Swal.fire("Berhasil!", "Praktikum berhasil dimulai!", "success").then(
-        (result) => {
-          if (result.isConfirmed) {
-            // Navigate to the praktikum system or refresh
-            window.location.href = `/praktikum/${variables}`;
-            refetch();
-          }
-        }
-      );
+      // Swal.fire("Berhasil!", "Praktikum berhasil dimulai!", "success").then(
+      //   (result) => {
+      //     if (result.isConfirmed) {
+      //       // Navigate to the praktikum system or refresh
+      //       window.location.href = `/praktikum/${variables}`;
+      //       refetch();
+      //     }
+      //   }
+      // );
+      Swal.fire({
+        title: "Berhasil!",
+        text: "Praktikum berhasil dimulai!",
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        window.location.href = `/praktikum/${variables}`;
+        refetch();
+      });
     },
     onError: (error) => {
       console.log("Error starting praktikum:", error);
-      Swal.fire("Gagal!", error.message, "error");
+      // Swal.fire("Gagal!", error.message, "error");
+
+      Swal.fire({
+        title: "Gagal!",
+        text: error?.message,
+        icon: "error",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      });
     },
   });
 

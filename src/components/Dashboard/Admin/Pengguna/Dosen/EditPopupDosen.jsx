@@ -104,14 +104,24 @@ const EditPopupDosen = ({ isOpen, onClose, dosen, onSave, refetch }) => {
     onSuccess: (data) => {
       console.log(data);
       // window.location.reload();
-      Swal.fire("Berhasil!", "Data dosen berhasil diubah!", "success").then(
-        (result) => {
-          if (result.isConfirmed) {
-            refetch();
-            // window.location.reload();
-          }
-        }
-      );
+      // Swal.fire("Berhasil!", "Data dosen berhasil diubah!", "success").then(
+      //   (result) => {
+      //     if (result.isConfirmed) {
+      //       refetch();
+      //       // window.location.reload();
+      //     }
+      //   }
+      // );
+      Swal.fire({
+        title: "Berhasil!",
+        text: "Data dosen berhasil diubah!",
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        window.location.reload();
+      });
 
       // window.location.href = "/" + role;
       // alert("Login successful!");

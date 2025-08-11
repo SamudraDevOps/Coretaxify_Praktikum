@@ -255,11 +255,22 @@ export default function EditArtikel() {
                             (itemData) => itemData.id !== item.id
                           );
                           setData(newData);
-                          Swal.fire(
-                            "Berhasil!",
-                            "Kelas berhasil dihapus!",
-                            "success"
-                          );
+                          // Swal.fire(
+                          //   "Berhasil!",
+                          //   "Kelas berhasil dihapus!",
+                          //   "success"
+                          // );
+
+                          Swal.fire({
+                            title: "Berhasil!",
+                            text: "Kelas berhasil dihapus!",
+                            icon: "success",
+                            timer: 2000, // auto close after 2 seconds
+                            showConfirmButton: false,
+                            timerProgressBar: true,
+                          }).then(() => {
+                            window.location.reload();
+                          });
                         }
                       });
                     }}

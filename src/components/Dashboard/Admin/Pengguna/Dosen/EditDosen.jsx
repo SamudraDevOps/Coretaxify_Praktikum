@@ -114,7 +114,7 @@ const EditDosen = () => {
     onError: (error) => {
       console.log(error);
       if (error.response === undefined) {
-        Swal.fire("Gagal !", error.message, "error");
+        Swal.fire("Gagal !", error?.message, "error");
         return;
       }
       Swal.fire("Gagal !", error.response.data.message, "error").then(
@@ -303,11 +303,22 @@ const EditDosen = () => {
     },
     onError: (error) => {
       console.log(error);
-      Swal.fire("Gagal!", "Terjadi kesalahan!", "success").then((result) => {
-        if (result.isConfirmed) {
-          refetch();
-          // window.location.reload();
-        }
+      // Swal.fire("Gagal!", "Terjadi kesalahan!", "success").then((result) => {
+      //   if (result.isConfirmed) {
+      //     refetch();
+      //     // window.location.reload();
+      //   }
+      // });
+
+      Swal.fire({
+        title: "Gagal!",
+        text: "Terjadi kesalahan!",
+        icon: "error",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        window.location.reload();
       });
     },
   });

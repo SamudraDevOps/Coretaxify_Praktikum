@@ -181,7 +181,9 @@ const EditKontrak = ({
         title: "Kontrak berhasil diubah",
         // text: "Silakan verifikasi email Anda terlebih dahulu.",
         icon: "success",
-        confirmButtonText: "Lanjutkan",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
       }).then(() => {
         setFormData({
           jenisKontrak: "",

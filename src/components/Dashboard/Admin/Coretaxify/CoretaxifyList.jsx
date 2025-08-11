@@ -303,8 +303,8 @@ export default function CoretaxifyList() {
                     ? "↑"
                     : "↓"
                   : sortConfig.direction === "descending"
-                    ? "↓"
-                    : "↑"}
+                  ? "↓"
+                  : "↑"}
               </th>
               <th onClick={() => handleSort("namaSoal")}>
                 Nama Praktikum{" "}
@@ -313,8 +313,8 @@ export default function CoretaxifyList() {
                     ? "↑"
                     : "↓"
                   : sortConfig.direction === "descending"
-                    ? "↓"
-                    : "↑"}
+                  ? "↓"
+                  : "↑"}
               </th>
               <th>Action</th>
               <th>Coretaxify</th>
@@ -395,26 +395,43 @@ export default function CoretaxifyList() {
                           //   (itemData) => itemData.id !== item.id
                           // );
                           // setData(newData);
-                          Swal.fire(
-                            "Berhasil!",
-                            "Soal berhasil dihapus!",
-                            "success"
-                          );
+                          // Swal.fire(
+                          //   "Berhasil!",
+                          //   "Soal berhasil dihapus!",
+                          //   "success"
+                          // );
+                          Swal.fire({
+                            title: "Berhasil!",
+                            text: "Soal berhasil dihapus!",
+                            icon: "success",
+                            timer: 2000, // auto close after 2 seconds
+                            showConfirmButton: false,
+                            timerProgressBar: true,
+                          }).then(() => {
+                            window.location.reload();
+                          });
                         }
                       });
                     }}
                   >
                     Delete
                   </button>
-                  <button className="action-button edit"
-                    onClick={() => window.location.href = `/admin/coretaxify/coretaxify-send`}
+                  <button
+                    className="action-button edit"
+                    onClick={() =>
+                      (window.location.href = `/admin/coretaxify/coretaxify-send`)
+                    }
                   >
                     kirim
                   </button>
                 </td>
                 <td>
-                  <button className="action-button edit"
-                    onClick={() => window.location.href = `/admin/praktikum/1/prak1`}>
+                  <button
+                    className="action-button edit"
+                    onClick={() =>
+                      (window.location.href = `/admin/praktikum/1/prak1`)
+                    }
+                  >
                     Mulai
                   </button>
                 </td>
@@ -447,10 +464,11 @@ export default function CoretaxifyList() {
                             </button>
                         ))} */}
             <button
-              className={`page-item ${currentPage === Math.ceil(data.length / itemsPerPage)
-                ? "disabled"
-                : ""
-                }`}
+              className={`page-item ${
+                currentPage === Math.ceil(data.length / itemsPerPage)
+                  ? "disabled"
+                  : ""
+              }`}
               onClick={() => {
                 console.log(data.links.next);
                 setUrl(data.links.next);

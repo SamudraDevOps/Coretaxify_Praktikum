@@ -47,7 +47,9 @@ const EditKelasPsc = () => {
     const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     let result = "";
     for (let i = 0; i < 6; i++) {
-      result += characters.charAt(Math.floor(Math.random() * characters.length));
+      result += characters.charAt(
+        Math.floor(Math.random() * characters.length)
+      );
     }
     return result;
   };
@@ -62,8 +64,8 @@ const EditKelasPsc = () => {
           Accept: "application/json",
         },
         params: {
-          intent: IntentEnum.API_GET_GROUP_BY_ROLES
-        }
+          intent: IntentEnum.API_GET_GROUP_BY_ROLES,
+        },
       });
       return data;
     },
@@ -81,38 +83,34 @@ const EditKelasPsc = () => {
       });
 
       axios.defaults.headers.common["X-CSRF-TOKEN"] = response.data.token;
-      
+
       if (action === "create") {
         // Create new group
         const formDataObj = new FormData();
-        
+
         // Add required fields
         formDataObj.append("name", createFormData.name);
         formDataObj.append("status", createFormData.status);
         formDataObj.append("class_code", createFormData.class_code);
         formDataObj.append("start_period", createFormData.start_period);
         formDataObj.append("end_period", createFormData.end_period);
-        
+
         // Add optional import file if present
         // if (createFormData.import_file) {
         //   formDataObj.append("import_file", createFormData.import_file);
         // }
 
-        return await axios.post(
-          RoutesApi.psc.groups.store().url,
-          formDataObj,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Accept: "application/json",
-              "X-CSRF-TOKEN": response.data.token,
-              Authorization: `Bearer ${cookies.token}`,
-            },
-            params: {
-              intent: IntentEnum.API_USER_CREATE_GROUP
-            }
-          }
-        );
+        return await axios.post(RoutesApi.psc.groups.store().url, formDataObj, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": response.data.token,
+            Authorization: `Bearer ${cookies.token}`,
+          },
+          params: {
+            intent: IntentEnum.API_USER_CREATE_GROUP,
+          },
+        });
       } else if (action === "update" && id) {
         // Update existing group
         const updateEndpoint = RoutesApi.psc.groups.update(id);
@@ -145,36 +143,73 @@ const EditKelasPsc = () => {
         });
       }
     },
-    onSuccess: (data, variables) => {
+    _onSuccess: (data, variables) => {
       const { action } = variables;
       if (action === "create") {
-        Swal.fire("Berhasil!", "Kelas berhasil dibuat!", "success");
+        // Swal.fire("Berhasil!", "Kelas berhasil dibuat!", "success");
+        Swal.fire({
+          title: "Berhasil!",
+          text: "Kelas berhasil dibuat!",
+          icon: "success",
+          timer: 2000, // auto close after 2 seconds
+          showConfirmButton: false,
+          timerProgressBar: true,
+        }).then(() => {
+          window.location.reload();
+        });
       } else if (action === "update") {
-        Swal.fire("Berhasil!", "Kelas berhasil diperbarui!", "success");
+        // Swal.fire("Berhasil!", "Kelas berhasil diperbarui!", "success");
+
+        Swal.fire({
+          title: "Berhasil!",
+          text: "Kelas berhasil diperbarui!",
+          icon: "success",
+          timer: 2000, // auto close after 2 seconds
+          showConfirmButton: false,
+          timerProgressBar: true,
+        }).then(() => {
+          window.location.reload();
+        });
       } else if (action === "delete") {
-        Swal.fire("Berhasil!", "Kelas berhasil dihapus!", "success");
+        // Swal.fire("Berhasil!", "Kelas berhasil dihapus!", "success");
+
+        Swal.fire({
+          title: "Berhasil!",
+          text: "Kelas berhasil dihapus!",
+          icon: "success",
+          timer: 2000, // auto close after 2 seconds
+          showConfirmButton: false,
+          timerProgressBar: true,
+        }).then(() => {
+          window.location.reload();
+        });
       }
-      refetch();
-      setIsOpen(false);
-      setIsCreateOpen(false);
-      
-      // Reset form data
-      setCreateFormData({
-        name: "",
-        status: "ACTIVE",
-        class_code: "",
-        start_period: "",
-        end_period: "",
-        // import_file: null
-      });
+      // refetch();
+      // setIsOpen(false);
+      // setIsCreateOpen(false);
+
+      // // Reset form data
+      // setCreateFormData({
+      //   name: "",
+      //   status: "ACTIVE",
+      //   class_code: "",
+      //   start_period: "",
+      //   end_period: "",
+      // });
+    },
+    get onSuccess() {
+      return this._onSuccess;
+    },
+    set onSuccess(value) {
+      this._onSuccess = value;
     },
     onError: (error) => {
       console.log(error.response);
       if (error.response === undefined) {
-        Swal.fire("Gagal!", error.message, "error");
+        Swal.fire("Gagal!", error?.message, "error");
         return;
       }
-      Swal.fire("Gagal!", error.response.data.message, "error");
+      Swal.fire("Gagal!", error?.response?.data?.message, "error");
     },
   });
 
@@ -185,7 +220,7 @@ const EditKelasPsc = () => {
       status: kelas.status,
       class_code: kelas.class_code,
       start_period: formatDateForInput(kelas.start_period),
-      end_period: formatDateForInput(kelas.end_period)
+      end_period: formatDateForInput(kelas.end_period),
     });
     setIsOpen(true);
   };
@@ -193,7 +228,7 @@ const EditKelasPsc = () => {
   const handleCreate = () => {
     setCreateFormData({
       ...createFormData,
-      class_code: generateRandomCode()
+      class_code: generateRandomCode(),
     });
     setIsCreateOpen(true);
   };
@@ -207,10 +242,10 @@ const EditKelasPsc = () => {
   };
 
   const formatDateForInput = (apiDate) => {
-    if (!apiDate) return '';
-    
+    if (!apiDate) return "";
+
     // Convert from DD-MM-YYYY to YYYY-MM-DD
-    const [day, month, year] = apiDate.split('-');
+    const [day, month, year] = apiDate.split("-");
     return `${year}-${month}-${day}`;
   };
 
@@ -259,11 +294,13 @@ const EditKelasPsc = () => {
   }
 
   // Filter data based on search
-  const filteredData = data?.data?.filter(item => 
-    item.name?.toLowerCase().includes(search.toLowerCase()) ||
-    item.class_code?.toLowerCase().includes(search.toLowerCase()) ||
-    item.status?.toLowerCase().includes(search.toLowerCase())
-  ) || [];
+  const filteredData =
+    data?.data?.filter(
+      (item) =>
+        item.name?.toLowerCase().includes(search.toLowerCase()) ||
+        item.class_code?.toLowerCase().includes(search.toLowerCase()) ||
+        item.status?.toLowerCase().includes(search.toLowerCase())
+    ) || [];
 
   return (
     <div className="kontrak-container">
@@ -282,10 +319,7 @@ const EditKelasPsc = () => {
           />
         </div>
         {/* Add Create button */}
-        <button
-          className="add-button"
-          onClick={handleCreate}
-        >
+        <button className="add-button" onClick={handleCreate}>
           Tambah Kelas
         </button>
       </div>
@@ -376,7 +410,9 @@ const EditKelasPsc = () => {
                   </button>
                   <button
                     className="action-button edit"
-                    onClick={() => (window.location.href = `/psc/kelas/${item.id}/mahasiswa`)}
+                    onClick={() =>
+                      (window.location.href = `/psc/kelas/${item.id}/mahasiswa`)
+                    }
                   >
                     Detail
                   </button>
@@ -387,7 +423,9 @@ const EditKelasPsc = () => {
         </table>
         <div className="pagination-container">
           <div className="pagination-info">
-            {data?.meta ? `Showing ${data.meta.from} to ${data.meta.to} of ${data.meta.total} entries` : "No data available"}
+            {data?.meta
+              ? `Showing ${data.meta.from} to ${data.meta.to} of ${data.meta.total} entries`
+              : "No data available"}
           </div>
           <div className="pagination">
             <button
@@ -399,7 +437,9 @@ const EditKelasPsc = () => {
             >
               &lt;
             </button>
-            <button className="page-item active">{data?.meta?.current_page || 1}</button>
+            <button className="page-item active">
+              {data?.meta?.current_page || 1}
+            </button>
             <button
               className={`page-item`}
               onClick={() => {
@@ -412,7 +452,7 @@ const EditKelasPsc = () => {
           </div>
         </div>
       </div>
-      
+
       {/* Edit Popup */}
       {isOpen && (
         <EditPopupKelas
@@ -424,7 +464,7 @@ const EditKelasPsc = () => {
           isLoading={mutation.isPending}
         />
       )}
-      
+
       {/* Create Popup */}
       <CreateGroupPopup
         isOpen={isCreateOpen}
@@ -437,5 +477,5 @@ const EditKelasPsc = () => {
     </div>
   );
 };
-  
-export default EditKelasPsc;  
+
+export default EditKelasPsc;

@@ -19,7 +19,9 @@ const EditMahasiswaPscKelas = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [cookies, setCookie] = useCookies(["user"]);
   const [search, setSearch] = useState("");
-  const [url, setUrl] = useState(`${RoutesApi.psc.groups.nested(groupId, 'members').index().url}`);
+  const [url, setUrl] = useState(
+    `${RoutesApi.psc.groups.nested(groupId, "members").index().url}`
+  );
   const [klassInfo, setKlassInfo] = useState(null);
 
   // Form data state for member details (view-only)
@@ -42,7 +44,7 @@ const EditMahasiswaPscKelas = () => {
       setKlassInfo(data.data);
       return data;
     },
-    enabled: !!groupId
+    enabled: !!groupId,
   });
 
   // Fetch members data
@@ -57,7 +59,7 @@ const EditMahasiswaPscKelas = () => {
       });
       return data;
     },
-    enabled: !!groupId
+    enabled: !!groupId,
   });
 
   // After the useQuery call, add this:
@@ -81,18 +83,30 @@ const EditMahasiswaPscKelas = () => {
       });
 
       axios.defaults.headers.common["X-CSRF-TOKEN"] = response.data.token;
-      const deleteEndpoint = RoutesApi.psc.groups.nested(groupId, 'members').destroy(id);
-      
+      const deleteEndpoint = RoutesApi.psc.groups
+        .nested(groupId, "members")
+        .destroy(id);
+
       return await axios.delete(deleteEndpoint.url, {
         headers: {
           "X-CSRF-TOKEN": response.data.token,
           Authorization: `Bearer ${cookies.token}`,
-        }
+        },
       });
     },
     onSuccess: () => {
-      Swal.fire("Berhasil!", "Anggota berhasil dihapus!", "success");
-      refetch();
+      // Swal.fire("Berhasil!", "Anggota berhasil dihapus!", "success");
+      // refetch();
+      Swal.fire({
+        title: "Berhasil!",
+        text: "Anggota berhasil dihapus!",
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        window.location.reload();
+      });
     },
     onError: (error) => {
       console.log(error.response);
@@ -160,11 +174,13 @@ const EditMahasiswaPscKelas = () => {
   }
 
   // Filter data based on search
-  const filteredData = data?.data?.filter(item => 
-    item.name?.toLowerCase().includes(search.toLowerCase()) ||
-    item.email?.toLowerCase().includes(search.toLowerCase())
-    // item.status?.toLowerCase().includes(search.toLowerCase())
-  ) || [];
+  const filteredData =
+    data?.data?.filter(
+      (item) =>
+        item.name?.toLowerCase().includes(search.toLowerCase()) ||
+        item.email?.toLowerCase().includes(search.toLowerCase())
+      // item.status?.toLowerCase().includes(search.toLowerCase())
+    ) || [];
 
   return (
     <div className="kontrak-container">
@@ -235,7 +251,7 @@ const EditMahasiswaPscKelas = () => {
                       }).then((result) => {
                         if (result.isConfirmed) {
                           mutation.mutate({
-                            id: item.id
+                            id: item.id,
                           });
                         }
                       });
@@ -256,7 +272,9 @@ const EditMahasiswaPscKelas = () => {
         </table>
         <div className="pagination-container">
           <div className="pagination-info">
-            {data?.meta ? `Showing ${data.meta.from} to ${data.meta.to} of ${data.meta.total} entries` : "No data available"}
+            {data?.meta
+              ? `Showing ${data.meta.from} to ${data.meta.to} of ${data.meta.total} entries`
+              : "No data available"}
           </div>
           <div className="pagination">
             <button
@@ -268,7 +286,9 @@ const EditMahasiswaPscKelas = () => {
             >
               &lt;
             </button>
-            <button className="page-item active">{data?.meta?.current_page || 1}</button>
+            <button className="page-item active">
+              {data?.meta?.current_page || 1}
+            </button>
             <button
               className={`page-item`}
               onClick={() => {
@@ -281,7 +301,7 @@ const EditMahasiswaPscKelas = () => {
           </div>
         </div>
       </div>
-      
+
       {/* View-only Member Popup */}
       {/* {isViewOpen && (
         <EditPopupMahasiswa

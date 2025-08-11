@@ -26,7 +26,7 @@ export default function Ujian() {
   const [data, setData] = useState([
     {
       instansi: "Politeknik Negeri Bandung",
-      namaDosen: "Hendra", 
+      namaDosen: "Hendra",
       namaUjian: "Ujian Pajak Bumi Bangunan",
       kodeUjian: "xAE12",
       nilai: "98",
@@ -99,7 +99,7 @@ export default function Ujian() {
     kodeUjian: "",
     nilai: "",
     tanggalMulai: "",
-    tanggalSelesai:"",
+    tanggalSelesai: "",
   });
 
   const handleChange = (e) => {
@@ -136,7 +136,7 @@ export default function Ujian() {
         <table>
           <thead>
             <tr>
-              <th onClick={() => handleSort("instansi") }>
+              <th onClick={() => handleSort("instansi")}>
                 Instansi{" "}
                 {sortConfig.key === "instansi"
                   ? sortConfig.direction === "ascending"
@@ -262,11 +262,21 @@ export default function Ujian() {
                             (itemData) => itemData.id !== item.id
                           );
                           setData(newData);
-                          Swal.fire(
-                            "Berhasil!",
-                            "Ujian berhasil dihapus!",
-                            "success"
-                          );
+                          // Swal.fire(
+                          //   "Berhasil!",
+                          //   "Ujian berhasil dihapus!",
+                          //   "success"
+                          // );
+                          Swal.fire({
+                            title: "Berhasil!",
+                            text: "Ujian berhasil dihapus!",
+                            icon: "success",
+                            timer: 2000, // auto close after 2 seconds
+                            showConfirmButton: false,
+                            timerProgressBar: true,
+                          }).then(() => {
+                            window.location.reload();
+                          });
                         }
                       });
                     }}

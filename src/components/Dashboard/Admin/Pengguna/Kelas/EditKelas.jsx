@@ -77,13 +77,24 @@ const EditKelas = () => {
     },
     onSuccess: (data) => {
       console.log(data);
-      Swal.fire("Berhasil!", "Data Kelas berhasil diubah!", "success").then(
-        (result) => {
-          if (result.isConfirmed) {
-            window.location.reload();
-          }
-        }
-      );
+      // Swal.fire("Berhasil!", "Data Kelas berhasil diubah!", "success").then(
+      //   (result) => {
+      //     if (result.isConfirmed) {
+      //       window.location.reload();
+      //     }
+      //   }
+      // );
+
+      Swal.fire({
+        title: "Berhasil!",
+        text: "Data Kelas berhasil diubah!",
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        window.location.reload();
+      });
     },
     onError: (error) => {
       console.log(error);
@@ -118,16 +129,36 @@ const EditKelas = () => {
     },
     onSuccess: (data) => {
       console.log(data);
-      Swal.fire("Berhasil!", "Data Kelas berhasil dihapus!", "success").then(
-        (result) => {
-          if (result.isConfirmed) {
-            window.location.reload();
-          }
-        }
-      );
+      // Swal.fire("Berhasil!", "Data Kelas berhasil dihapus!", "success").then(
+      //   (result) => {
+      //     if (result.isConfirmed) {
+      //       window.location.reload();
+      //     }
+      //   }
+      // );
+      Swal.fire({
+        title: "Berhasil!",
+        text: "Data Kelas berhasil dihapus!",
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        window.location.reload();
+      });
     },
     onError: (error) => {
-      Swal.fire("Gagal !", error, "success");
+      // Swal.fire("Gagal !", error, "success");
+      Swal.fire({
+        title: "Gagal!",
+        text: "Terjadi kesalahan!",
+        icon: "error",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        window.location.reload();
+      });
     },
   });
   const [isOpen, setIsOpen] = useState(false);
@@ -228,7 +259,7 @@ const EditKelas = () => {
                   : ""}
               </th>
               {/* <th>Instansi</th> */}
-             <th>Nama Dosen</th> 
+              <th>Nama Dosen</th>
               <th>Kode Kelas</th>
               <th>Status</th>
               <th>Action</th>
@@ -237,7 +268,7 @@ const EditKelas = () => {
           <tbody>
             {data.data.map((item) => (
               <tr key={item.id}>
-                <td>{item.name}</td> 
+                <td>{item.name}</td>
                 <td>{item.teacher}</td>
                 {/* <td>{item.qty_student}</td> */}
                 <td>

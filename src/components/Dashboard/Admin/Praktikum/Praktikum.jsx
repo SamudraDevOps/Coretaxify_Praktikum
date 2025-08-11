@@ -22,18 +22,15 @@ export default function Praktikum() {
   const { isLoading, isError, data, error, refetch } = useQuery({
     queryKey: ["tasks_question", url],
     queryFn: async () => {
-      const { data } = await axios.get(
-        url,
-        {
-          headers: {
-            Authorization: `Bearer ${cookies.token}`,
-            Accept: "application/json",
-          },
-          params: {
-            intent: IntentEnum.API_GET_ASSIGNMENT_ALL,
-          },
-        }
-      );
+      const { data } = await axios.get(url, {
+        headers: {
+          Authorization: `Bearer ${cookies.token}`,
+          Accept: "application/json",
+        },
+        params: {
+          intent: IntentEnum.API_GET_ASSIGNMENT_ALL,
+        },
+      });
       return data.data;
     },
   });
@@ -79,9 +76,31 @@ export default function Praktikum() {
     onSuccess: (data, variables) => {
       const { action } = variables;
       if (action === "update") {
-        Swal.fire("Berhasil", "Praktikum berhasil diperbarui!", "success");
+        // Swal.fire("Berhasil", "Praktikum berhasil diperbarui!", "success");
+
+        Swal.fire({
+          title: "Berhasil!",
+          text: "Praktikum berhasil diperbarui!",
+          icon: "success",
+          timer: 2000, // auto close after 2 seconds
+          showConfirmButton: false,
+          timerProgressBar: true,
+        }).then(() => {
+          window.location.reload();
+        });
       } else if (action === "delete") {
-        Swal.fire("Berhasil", "Praktikum berhasil dihapus!", "success");
+        // Swal.fire("Berhasil", "Praktikum berhasil dihapus!", "success");
+
+        Swal.fire({
+          title: "Berhasil!",
+          text: "Praktikum berhasil dihapus!",
+          icon: "success",
+          timer: 2000, // auto close after 2 seconds
+          showConfirmButton: false,
+          timerProgressBar: true,
+        }).then(() => {
+          window.location.reload();
+        });
       }
       refetch();
       setIsUpdateOpen(false);
@@ -92,10 +111,30 @@ export default function Praktikum() {
     onError: (error) => {
       console.log(error.message);
       if (error.response === undefined) {
-        Swal.fire("Gagal!", error.message, "error");
+        // Swal.fire("Gagal!", error?.message, "error");
+        Swal.fire({
+          title: "Gagal!",
+          text: error?.message,
+          icon: "error",
+          timer: 2000, // auto close after 2 seconds
+          showConfirmButton: false,
+          timerProgressBar: true,
+        }).then(() => {
+          window.location.reload();
+        });
         return;
       }
-      Swal.fire("Gagal!", error.response.data.message, "error");
+      // Swal.fire("Gagal!", error?.response?.data?.message, "error");
+      Swal.fire({
+        title: "Gagal!",
+        text: error?.response?.data?.message,
+        icon: "error",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        window.location.reload();
+      });
     },
   });
 
