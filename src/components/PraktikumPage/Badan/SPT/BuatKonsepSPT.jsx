@@ -109,14 +109,28 @@ const BuatKonsepSPT = ({ sidebar }) => {
       //   ? "Draft Faktur berhasil dibuat"
       //   : "Faktur berhasil diupload";
 
-      Swal.fire("Berhasil!", "Konsep SPT berhasil dibuat.", "success").then(
-        (result) => {
-          if (result.isConfirmed) {
-            navigate(`/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt/konsep`);
-            // window.location.href = `/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt`;
-          }
-        }
-      );
+      // Swal.fire("Berhasil!", "Konsep SPT berhasil dibuat.", "success").then(
+      //   (result) => {
+      //     if (result.isConfirmed) {
+      //       navigate(`/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt/konsep`);
+      //       // window.location.href = `/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt`;
+      //     }
+      //   }
+      // );
+      Swal.fire({
+        title: "Berhasil!",
+        text: "Konsep SPT berhasil dibuat!",
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        // setTambahPopupOpen(false);
+        // window.location.reload();
+        navigate(
+          `/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt/konsep`
+        );
+      });
     },
     onError: (error) => {
       console.error("Error saving data:", error);
@@ -646,7 +660,7 @@ const BuatKonsepSPT = ({ sidebar }) => {
                       selectedModelSPT && !createSpt.isPending
                         ? "bg-yellow-400 hover:bg-yellow-500"
                         : userId
-                        ? "hidden" 
+                        ? "hidden"
                         : "bg-gray-300 text-white cursor-not-allowed text-normal"
                     )}
                     // onClick={() => (window.location.href = getRedirectUrl())}

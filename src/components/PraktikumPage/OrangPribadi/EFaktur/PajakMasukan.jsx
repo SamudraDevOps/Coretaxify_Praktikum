@@ -92,13 +92,24 @@ const PajakMasukanOP = ({
     },
     onSuccess: (data) => {
       console.log(data);
-      Swal.fire("Berhasil!", "Faktur berhasil dikreditkan", "success").then(
-        (result) => {
-          if (result.isConfirmed) {
-            window.location.reload();
-          }
-        }
-      );
+      // Swal.fire("Berhasil!", "Faktur berhasil dikreditkan", "success").then(
+      //   (result) => {
+      //     if (result.isConfirmed) {
+      //       window.location.reload();
+      //     }
+      //   }
+      // );
+            Swal.fire({
+        title: "Berhasil!",
+        text: "Faktur berhasil dikreditkan",
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        // setTambahPopupOpen(false);
+        window.location.reload();
+      });
     },
     onError: (error) => {
       console.error("Error deleting data:", error);
@@ -130,14 +141,25 @@ const PajakMasukanOP = ({
     },
     onSuccess: (data) => {
       console.log(data);
-      Swal.fire(
-        "Berhasil!",
-        "Faktur berhasil di Tidak Kreditkan",
-        "success"
-      ).then((result) => {
-        if (result.isConfirmed) {
-          window.location.reload();
-        }
+      // Swal.fire(
+      //   "Berhasil!",
+      //   "Faktur berhasil di Tidak Kreditkan",
+      //   "success"
+      // ).then((result) => {
+      //   if (result.isConfirmed) {
+      //     window.location.reload();
+      //   }
+      // });
+            Swal.fire({
+        title: "Berhasil!",
+        text: "Faktur berhasil di Tidak Kreditkan!",
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        // setTambahPopupOpen(false);
+        window.location.reload();
       });
     },
     onError: (error) => {

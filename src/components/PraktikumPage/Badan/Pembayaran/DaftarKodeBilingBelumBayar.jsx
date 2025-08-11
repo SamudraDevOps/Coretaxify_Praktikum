@@ -83,14 +83,25 @@ const DaftarKodeBilingBelumBayar = ({ data, sidebar }) => {
       //   ? "Draft Faktur berhasil dibuat"
       //   : "Faktur berhasil diupload";
 
-      Swal.fire(
-        "Berhasil!",
-        `Pembayaran SPT berhasil .\n\n Berikut kode NTPN anda "<b>${data.data.ntpn}</b>"`,
-        "success"
-      ).then((result) => {
-        if (result.isConfirmed) {
-          window.location.reload();
-        }
+      // Swal.fire(
+      //   "Berhasil!",
+      //   `Pembayaran SPT berhasil .\n\n Berikut kode NTPN anda "<b>${data.data.ntpn}</b>"`,
+      //   "success"
+      // ).then((result) => {
+      //   if (result.isConfirmed) {
+      //     window.location.reload();
+      //   }
+      // });
+      Swal.fire({
+        title: "Berhasil!",
+        text: `Pembayaran SPT berhasil .\n\n Berikut kode NTPN anda "<b>${data.data.ntpn}</b>"`,
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        // setTambahPopupOpen(false);
+        window.location.reload();
       });
     },
     onError: (error) => {
@@ -230,7 +241,13 @@ const DaftarKodeBilingBelumBayar = ({ data, sidebar }) => {
                       </AlertDialog> */}
                       <AlertDialog>
                         <AlertDialogTrigger>
-                          <button className={userId ? "hidden" : "bg-red-100 text-red-600 hover:bg-red-200 hover:underline rounded px-3 py-1"}>
+                          <button
+                            className={
+                              userId
+                                ? "hidden"
+                                : "bg-red-100 text-red-600 hover:bg-red-200 hover:underline rounded px-3 py-1"
+                            }
+                          >
                             Bayar
                           </button>
                         </AlertDialogTrigger>

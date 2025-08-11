@@ -74,14 +74,27 @@ const KonsepSPT = ({
     },
     onSuccess: (data, variables) => {
       console.log(data);
-      Swal.fire("Berhasil!", "Konsep SPT berhasil dihapus.", "success").then(
-        (result) => {
-          if (result.isConfirmed) {
-            window.location.reload();
-          }
-          // navigate(`/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt`);
-        }
-      );
+      // Swal.fire("Berhasil!", "Konsep SPT berhasil dihapus.", "success").then(
+      //   (result) => {
+      //     if (result.isConfirmed) {
+      //       window.location.reload();
+      //     }
+      //     // navigate(`/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt`);
+      //   }
+      // );
+      Swal.fire({
+        title: "Berhasil!",
+        text: "Konsep SPT berhasil dihapus!",
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        // setTambahPopupOpen(false);
+        // window.location.reload();
+        navigate(`/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt`);
+        //   }
+      });
     },
     onError: (error) => {
       console.error("Error saving data:", error);
@@ -138,13 +151,7 @@ const KonsepSPT = ({
             <IoDocumentTextOutline className="text-4xl text-blue-900" />
             <h1 className="text-lg font-bold text-blue-900 ml-2">Konsep SPT</h1>
           </div>
-          {userId ? (
-            <PenilaianSPT
-              tipeFaktur="Retur Faktur Masukan"
-            />
-          ) : (
-            ""
-          )}
+          {userId ? <PenilaianSPT tipeFaktur="Retur Faktur Masukan" /> : ""}
         </div>
 
         <div className="flex justify-between items-start mb-4 pb-3 border-b">

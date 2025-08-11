@@ -144,17 +144,28 @@ export default function UploadSoal() {
     },
     onSuccess: (data) => {
       console.log(data);
-      Swal.fire("Berhasil!", "Soal berhasil diperbarui!", "success").then(
-        (result) => {
-          if (result.isConfirmed) {
-            setFormData({
-              name: "",
-              file: null,
-            });
-            refetch();
-          }
-        }
-      );
+      // Swal.fire("Berhasil!", "Soal berhasil diperbarui!", "success").then(
+      //   (result) => {
+      //     if (result.isConfirmed) {
+      //       setFormData({
+      //         name: "",
+      //         file: null,
+      //       });
+      //       refetch();
+      //     }
+      //   }
+      // );
+
+      Swal.fire({
+        title: "Berhasil!",
+        text: "Soal berhasil diperbarui!",
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        window.location.reload();
+      });
     },
     onError: (error) => {
       console.log(error);

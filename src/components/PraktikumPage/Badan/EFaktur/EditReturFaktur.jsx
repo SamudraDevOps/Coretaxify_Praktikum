@@ -257,15 +257,26 @@ const EditReturFaktur = ({ data, sidebar }) => {
       //   ? "Draft Faktur berhasil dibuat"
       //   : "Faktur berhasil diupload";
 
-      Swal.fire(
-        "Berhasil!",
-        "Detail Transaksi berhasil ditambahkan",
-        "success"
-      ).then((result) => {
-        if (result.isConfirmed) {
-          window.location.reload();
-          // window.location.href = `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran?viewAs=${viewAsCompanyId}`;
-        }
+      // Swal.fire(
+      //   "Berhasil!",
+      //   "Detail Transaksi berhasil ditambahkan",
+      //   "success"
+      // ).then((result) => {
+      //   if (result.isConfirmed) {
+      //     window.location.reload();
+      //     // window.location.href = `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran?viewAs=${viewAsCompanyId}`;
+      //   }
+      // });
+      Swal.fire({
+        title: "Berhasil!",
+        text: "Detail Transaksi berhasil ditambahkan",
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        // setTambahPopupOpen(false);
+        window.location.reload();
       });
     },
     onError: (error) => {
@@ -303,15 +314,27 @@ const EditReturFaktur = ({ data, sidebar }) => {
       //   ? "Draft Faktur berhasil dibuat"
       //   : "Faktur berhasil diupload";
 
-      Swal.fire("Berhasil!", "Faktur Retur berhasil disimpan", "success").then(
-        (result) => {
-          if (result.isConfirmed) {
-            navigate(`/praktikum/${id}/sistem/${akun}/e-faktur/pajak-masukan`);
-            // window.location.reload();
-            // window.location.href = `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran?viewAs=${viewAsCompanyId}`;
-          }
-        }
-      );
+      // Swal.fire("Berhasil!", "Faktur Retur berhasil disimpan", "success").then(
+      //   (result) => {
+      //     if (result.isConfirmed) {
+      //       navigate(`/praktikum/${id}/sistem/${akun}/e-faktur/pajak-masukan`);
+      //       // window.location.reload();
+      //       // window.location.href = `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran?viewAs=${viewAsCompanyId}`;
+      //     }
+      //   }
+      // );
+
+      Swal.fire({
+        title: "Berhasil!",
+        text: "Faktur Retur berhasil disimpan",
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        // setTambahPopupOpen(false);
+        navigate(`/praktikum/${id}/sistem/${akun}/e-faktur/pajak-masukan`);
+      });
     },
     onError: (error) => {
       console.error("Error saving data:", error);
@@ -1177,9 +1200,7 @@ const EditReturFaktur = ({ data, sidebar }) => {
                                       decimalSeparator=","
                                       prefix="Rp "
                                       allowNegative={false}
-                                        value={formatRupiah(
-                                        transaction.ppn_asli
-                                      )}
+                                      value={formatRupiah(transaction.ppn_asli)}
                                       displayType="input"
                                       readOnly
                                       decimalScale={0}

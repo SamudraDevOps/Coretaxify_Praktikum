@@ -385,21 +385,35 @@ const SelfBilling = ({ data: propData }) => {
       );
     },
     onSuccess: (data, variables) => {
-      Swal.fire("Berhasil!", "Data Berhasil disimpan.", "success").then(
-        (result) => {
-          if (result.isConfirmed) {
-            // const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
-            // const navigationUrl = `/praktikum/${id}/sistem/${accountId}/daftar-kode-billing-belum-dibayar`;
-            // const urlWithViewAs = viewAsCompanyId
-            //   ? `${navigationUrl}?viewAs=${viewAsCompanyId}`
-            //   : navigationUrl;
-            // navigate(urlWithViewAs);
-            navigate(
-              `/praktikum/${id}/sistem/${akun}/daftar-kode-billing-belum-dibayar`
-            );
-          }
-        }
-      );
+      // Swal.fire("Berhasil!", "Data Berhasil disimpan.", "success").then(
+      //   (result) => {
+      //     if (result.isConfirmed) {
+      //       // const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
+      //       // const navigationUrl = `/praktikum/${id}/sistem/${accountId}/daftar-kode-billing-belum-dibayar`;
+      //       // const urlWithViewAs = viewAsCompanyId
+      //       //   ? `${navigationUrl}?viewAs=${viewAsCompanyId}`
+      //       //   : navigationUrl;
+      //       // navigate(urlWithViewAs);
+      //       navigate(
+      //         `/praktikum/${id}/sistem/${akun}/daftar-kode-billing-belum-dibayar`
+      //       );
+      //     }
+      //   }
+      // );
+      Swal.fire({
+        title: "Berhasil!",
+        text: "Data berhasil disimpan",
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        // setTambahPopupOpen(false);
+        // window.location.reload();
+        navigate(
+          `/praktikum/${id}/sistem/${akun}/daftar-kode-billing-belum-dibayar`
+        );
+      });
     },
     onError: (error) => {
       console.error("Error saving data:", error);

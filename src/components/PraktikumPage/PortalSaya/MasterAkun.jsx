@@ -56,7 +56,7 @@ export default function MasterAkun({
     const { name, value } = e.target;
 
     if (name === "npwp_akun") {
-      const numericValue = value.replace(/[^0-9]/g, '');
+      const numericValue = value.replace(/[^0-9]/g, "");
 
       setEditFormData((prev) => ({
         ...prev,
@@ -131,13 +131,24 @@ export default function MasterAkun({
     },
     onSuccess: (data) => {
       console.log(data);
-      Swal.fire("Berhasil!", "Master Akun berhasil diupdate", "success").then(
-        (result) => {
-          if (result.isConfirmed) {
-            window.location.reload();
-          }
-        }
-      );
+      // Swal.fire("Berhasil!", "Master Akun berhasil diupdate", "success").then(
+      //   (result) => {
+      //     if (result.isConfirmed) {
+      //       window.location.reload();
+      //     }
+      //   }
+      // );
+      Swal.fire({
+        title: "Berhasil!",
+        text: "Master Akun berhasil diupdate!",
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        // setTambahPopupOpen(false);
+        window.location.reload();
+      });
     },
     onError: (error) => {
       console.error("Error updating data:", error);
@@ -175,13 +186,24 @@ export default function MasterAkun({
     },
     onSuccess: (data) => {
       console.log(data);
-      Swal.fire("Berhasil!", "Master Akun berhasil dibuat", "success").then(
-        (result) => {
-          if (result.isConfirmed) {
-            window.location.reload();
-          }
-        }
-      );
+      // Swal.fire("Berhasil!", "Master Akun berhasil dibuat", "success").then(
+      //   (result) => {
+      //     if (result.isConfirmed) {
+      //       window.location.reload();
+      //     }
+      //   }
+      // );
+      Swal.fire({
+        title: "Berhasil!",
+        text: "Master akun berhasil dibuat!",
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        // setTambahPopupOpen(false);
+        window.location.reload();
+      });
     },
     onError: (error) => {
       console.error("Error Creating data:", error);
@@ -215,15 +237,26 @@ export default function MasterAkun({
       //   ? "Draft Faktur berhasil dibuat"
       //   : "Faktur berhasil diupload";
 
-      Swal.fire(
-        "Berhasil!",
-        "Detail Transaksi berhasil dihapus",
-        "success"
-      ).then((result) => {
-        if (result.isConfirmed) {
-          window.location.reload();
-          // window.location.href = `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran?viewAs=${viewAsCompanyId}`;
-        }
+      // Swal.fire(
+      //   "Berhasil!",
+      //   "Detail Transaksi berhasil dihapus",
+      //   "success"
+      // ).then((result) => {
+      //   if (result.isConfirmed) {
+      //     window.location.reload();
+      //     // window.location.href = `/praktikum/${id}/sistem/${akun}/e-faktur/pajak-keluaran?viewAs=${viewAsCompanyId}`;
+      //   }
+      // });
+      Swal.fire({
+        title: "Berhasil!",
+        text: "Master akun berhasil dihapus!",
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        // setTambahPopupOpen(false);
+        window.location.reload();
       });
     },
     onError: (error) => {
@@ -340,23 +373,23 @@ export default function MasterAkun({
   console.log(item);
 
   // Cek apakah form valid atau tidak
-const isFormInvalid =
-  !formData.nama_akun ||
-  !formData.npwp_akun ||
-  !formData.alamat_utama_akun ||
-  !formData.tipe_akun ||
-  formData.tipe_akun === "Pilih Tipe Akun" || 
-  !formData.email_akun ||
-  !formData.negara_asal;
+  const isFormInvalid =
+    !formData.nama_akun ||
+    !formData.npwp_akun ||
+    !formData.alamat_utama_akun ||
+    !formData.tipe_akun ||
+    formData.tipe_akun === "Pilih Tipe Akun" ||
+    !formData.email_akun ||
+    !formData.negara_asal;
 
   // Cek apakah form edit valid atau tidak
-const isEditFormInvalid = 
-  !editFormData.nama_akun ||
-  !editFormData.npwp_akun ||
-  !editFormData.alamat_utama_akun ||
-  !editFormData.tipe_akun ||
-  !editFormData.email_akun ||
-  !editFormData.negara_asal;
+  const isEditFormInvalid =
+    !editFormData.nama_akun ||
+    !editFormData.npwp_akun ||
+    !editFormData.alamat_utama_akun ||
+    !editFormData.tipe_akun ||
+    !editFormData.email_akun ||
+    !editFormData.negara_asal;
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -380,7 +413,11 @@ const isEditFormInvalid =
               <div className="flex  text-left text-sm" ref={dropdownRef}>
                 <button
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                  className={userId ? "hidden" : "flex items-center bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-2 rounded"}
+                  className={
+                    userId
+                      ? "hidden"
+                      : "flex items-center bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-2 rounded"
+                  }
                 >
                   Import <FaChevronDown className="ml-2" />
                 </button>
@@ -389,11 +426,21 @@ const isEditFormInvalid =
                     <div className="py-1">
                       <a
                         href="/template-import-pajak-keluaran.xlsx"
-                        className={userId ? "hidden" : "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"}
+                        className={
+                          userId
+                            ? "hidden"
+                            : "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        }
                       >
                         Download Template
                       </a>
-                      <a className={userId ? "hidden" : "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"}>
+                      <a
+                        className={
+                          userId
+                            ? "hidden"
+                            : "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+                        }
+                      >
                         Import Dokumen
                       </a>
                     </div>
@@ -420,7 +467,13 @@ const isEditFormInvalid =
             </button> */}
             <AlertDialog>
               <AlertDialogTrigger asChild>
-                <button className={userId ? "hidden" : "bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded text-sm"}>
+                <button
+                  className={
+                    userId
+                      ? "hidden"
+                      : "bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded text-sm"
+                  }
+                >
                   Tambah
                 </button>
               </AlertDialogTrigger>
@@ -433,10 +486,12 @@ const isEditFormInvalid =
                 </AlertDialogHeader>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 p-4">
-
                   {/* Nama Akun */}
                   <div className="grid gap-1.5">
-                    <label htmlFor="nama_akun" className="text-sm font-medium text-gray-700">
+                    <label
+                      htmlFor="nama_akun"
+                      className="text-sm font-medium text-gray-700"
+                    >
                       Nama Akun <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -452,7 +507,10 @@ const isEditFormInvalid =
 
                   {/* NIK/NPWP */}
                   <div className="grid gap-1.5">
-                    <label htmlFor="npwp_akun" className="text-sm font-medium text-gray-700">
+                    <label
+                      htmlFor="npwp_akun"
+                      className="text-sm font-medium text-gray-700"
+                    >
                       NIK/NPWP <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -472,7 +530,10 @@ const isEditFormInvalid =
 
                   {/* Alamat Utama (di-span agar lebar penuh) */}
                   <div className="grid gap-1.5 md:col-span-2">
-                    <label htmlFor="alamat_utama_akun" className="text-sm font-medium text-gray-700">
+                    <label
+                      htmlFor="alamat_utama_akun"
+                      className="text-sm font-medium text-gray-700"
+                    >
                       Alamat <span className="text-red-500">*</span>
                     </label>
                     <textarea
@@ -489,7 +550,10 @@ const isEditFormInvalid =
 
                   {/* Tipe Akun */}
                   <div className="grid gap-1.5">
-                    <label htmlFor="tipe_akun" className="text-sm font-medium text-gray-700">
+                    <label
+                      htmlFor="tipe_akun"
+                      className="text-sm font-medium text-gray-700"
+                    >
                       Tipe Akun <span className="text-red-500">*</span>
                     </label>
                     <select
@@ -500,7 +564,9 @@ const isEditFormInvalid =
                       onChange={handleInputChange}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     >
-                      <option defaultValue={"Pilih Tipe Akun"}>Pilih Tipe Akun</option>
+                      <option defaultValue={"Pilih Tipe Akun"}>
+                        Pilih Tipe Akun
+                      </option>
                       <option value="Orang Pribadi">Orang Pribadi</option>
                       <option value="Badan">Badan</option>
                     </select>
@@ -508,7 +574,10 @@ const isEditFormInvalid =
 
                   {/* Email */}
                   <div className="grid gap-1.5">
-                    <label htmlFor="email_akun" className="text-sm font-medium text-gray-700">
+                    <label
+                      htmlFor="email_akun"
+                      className="text-sm font-medium text-gray-700"
+                    >
                       Email <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -525,7 +594,10 @@ const isEditFormInvalid =
 
                   {/* Negara Asal */}
                   <div className="grid gap-1.5 md:col-span-2">
-                    <label htmlFor="negara_asal" className="text-sm font-medium text-gray-700">
+                    <label
+                      htmlFor="negara_asal"
+                      className="text-sm font-medium text-gray-700"
+                    >
                       Negara Asal <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -551,8 +623,7 @@ const isEditFormInvalid =
                   </AlertDialogCancel>
                   <AlertDialogAction
                     onClick={() => createMasterAkun.mutate()}
-                    disabled={
-                      isFormInvalid ||createMasterAkun.isLoading}
+                    disabled={isFormInvalid || createMasterAkun.isLoading}
                     className="bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-4 rounded"
                   >
                     {createMasterAkun.isLoading ? "Menyimpan..." : "Simpan"}
@@ -599,7 +670,8 @@ const isEditFormInvalid =
                   <tr key={item.id || index}>
                     <td className="px-6 py-2 border text-center">
                       {index + (pagination?.meta?.from || 1)}
-                    </td>                    {/* <td className="px-8 py-2 border">
+                    </td>{" "}
+                    {/* <td className="px-8 py-2 border">
                       <input
                         type="checkbox"
                         className="form-checkbox h-5 w-5"
@@ -626,14 +698,20 @@ const isEditFormInvalid =
                           <AlertDialogTrigger asChild>
                             <button
                               onClick={() => populateEditForm(item)}
-                              className={userId ? "hidden" : "bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded text-sm"}
+                              className={
+                                userId
+                                  ? "hidden"
+                                  : "bg-blue-900 hover:bg-blue-950 text-white font-bold py-2 px-2 rounded text-sm"
+                              }
                             >
                               Edit
                             </button>
                           </AlertDialogTrigger>
                           <AlertDialogContent className="max-w-2xl flex flex-col max-h-[90vh]">
                             <AlertDialogHeader className="p-6 pb-4 border-b">
-                              <AlertDialogTitle className="text-xl">Edit Master Akun</AlertDialogTitle>
+                              <AlertDialogTitle className="text-xl">
+                                Edit Master Akun
+                              </AlertDialogTitle>
                               <AlertDialogDescription>
                                 Ubah data akun yang sudah ada.
                               </AlertDialogDescription>
@@ -643,8 +721,12 @@ const isEditFormInvalid =
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 p-6 overflow-y-auto">
                               {/* Nama Akun */}
                               <div className="grid gap-1.5 md:col-span-2">
-                                <label htmlFor="edit_nama_akun" className="text-sm font-medium text-gray-700">
-                                  Nama Akun <span className="text-red-500">*</span>
+                                <label
+                                  htmlFor="edit_nama_akun"
+                                  className="text-sm font-medium text-gray-700"
+                                >
+                                  Nama Akun{" "}
+                                  <span className="text-red-500">*</span>
                                 </label>
                                 <input
                                   id="edit_nama_akun"
@@ -659,8 +741,12 @@ const isEditFormInvalid =
 
                               {/* NIK/NPWP */}
                               <div className="grid gap-1.5 md:col-span-2">
-                                <label htmlFor="edit_npwp_akun" className="text-sm font-medium text-gray-700">
-                                  NIK/NPWP <span className="text-red-500">*</span>
+                                <label
+                                  htmlFor="edit_npwp_akun"
+                                  className="text-sm font-medium text-gray-700"
+                                >
+                                  NIK/NPWP{" "}
+                                  <span className="text-red-500">*</span>
                                 </label>
                                 <input
                                   id="edit_npwp_akun"
@@ -679,7 +765,10 @@ const isEditFormInvalid =
 
                               {/* Alamat */}
                               <div className="grid gap-1.5 md:col-span-2">
-                                <label htmlFor="edit_alamat_utama_akun" className="text-sm font-medium text-gray-700">
+                                <label
+                                  htmlFor="edit_alamat_utama_akun"
+                                  className="text-sm font-medium text-gray-700"
+                                >
                                   Alamat <span className="text-red-500">*</span>
                                 </label>
                                 <textarea
@@ -696,8 +785,12 @@ const isEditFormInvalid =
 
                               {/* Tipe Akun */}
                               <div className="grid gap-1.5">
-                                <label htmlFor="edit_tipe_akun" className="text-sm font-medium text-gray-700">
-                                  Tipe Akun <span className="text-red-500">*</span>
+                                <label
+                                  htmlFor="edit_tipe_akun"
+                                  className="text-sm font-medium text-gray-700"
+                                >
+                                  Tipe Akun{" "}
+                                  <span className="text-red-500">*</span>
                                 </label>
                                 <select
                                   name="tipe_akun"
@@ -708,16 +801,21 @@ const isEditFormInvalid =
                                   className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 >
                                   <option value="">Pilih Tipe Akun</option>
-                                  <option value="Orang Pribadi">Orang Pribadi</option>
+                                  <option value="Orang Pribadi">
+                                    Orang Pribadi
+                                  </option>
                                   <option value="Badan">Badan</option>
                                 </select>
                               </div>
 
                               {/* Email */}
                               <div className="grid gap-1.5">
-                                <label htmlFor="edit_email_akun" className="text-sm font-medium text-gray-700">
+                                <label
+                                  htmlFor="edit_email_akun"
+                                  className="text-sm font-medium text-gray-700"
+                                >
                                   Email <span className="text-red-500">*</span>
-                                </label> 
+                                </label>
                                 <input
                                   id="edit_email_akun"
                                   name="email_akun"
@@ -732,8 +830,12 @@ const isEditFormInvalid =
 
                               {/* Negara Asal */}
                               <div className="grid gap-1.5 md:col-span-2">
-                                <label htmlFor="edit_negara_asal" className="text-sm font-medium text-gray-700">
-                                  Negara Asal <span className="text-red-500">*</span>
+                                <label
+                                  htmlFor="edit_negara_asal"
+                                  className="text-sm font-medium text-gray-700"
+                                >
+                                  Negara Asal{" "}
+                                  <span className="text-red-500">*</span>
                                 </label>
                                 <input
                                   id="edit_negara_asal"
@@ -756,10 +858,15 @@ const isEditFormInvalid =
                                     data: editFormData,
                                   })
                                 }
-                                disabled={isEditFormInvalid|| updateMasterAkun.isLoading}
+                                disabled={
+                                  isEditFormInvalid ||
+                                  updateMasterAkun.isLoading
+                                }
                                 className="bg-blue-900 hover:bg-blue-950 text-white"
                               >
-                                {updateMasterAkun.isLoading ? "Mengupdate..." : "Update"}
+                                {updateMasterAkun.isLoading
+                                  ? "Mengupdate..."
+                                  : "Update"}
                               </AlertDialogAction>
                             </AlertDialogFooter>
                           </AlertDialogContent>
@@ -815,20 +922,22 @@ const isEditFormInvalid =
                 <button
                   onClick={() => onPageChange(firstPage)}
                   disabled={!prevPage}
-                  className={`px-3 py-1 rounded ${!prevPage
-                    ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                    : "bg-blue-500 text-white hover:bg-blue-600"
-                    }`}
+                  className={`px-3 py-1 rounded ${
+                    !prevPage
+                      ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                      : "bg-blue-500 text-white hover:bg-blue-600"
+                  }`}
                 >
                   First
                 </button>
                 <button
                   onClick={() => onPageChange(prevPage || 1)}
                   disabled={!prevPage}
-                  className={`px-3 py-1 rounded ${!prevPage
-                    ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                    : "bg-blue-500 text-white hover:bg-blue-600"
-                    }`}
+                  className={`px-3 py-1 rounded ${
+                    !prevPage
+                      ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                      : "bg-blue-500 text-white hover:bg-blue-600"
+                  }`}
                 >
                   <FaChevronLeft className="h-4 w-4" />
                 </button>
@@ -862,10 +971,11 @@ const isEditFormInvalid =
                           )}
                           <button
                             onClick={() => onPageChange(pageNum)}
-                            className={`px-3 py-1 rounded ${currentPage === pageNum
-                              ? "bg-blue-600 text-white"
-                              : "bg-gray-200 hover:bg-gray-300"
-                              }`}
+                            className={`px-3 py-1 rounded ${
+                              currentPage === pageNum
+                                ? "bg-blue-600 text-white"
+                                : "bg-gray-200 hover:bg-gray-300"
+                            }`}
                           >
                             {pageNum}
                           </button>
@@ -882,20 +992,22 @@ const isEditFormInvalid =
                 <button
                   onClick={() => onPageChange(nextPage || lastPage)}
                   disabled={!nextPage}
-                  className={`px-3 py-1 rounded ${!nextPage
-                    ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                    : "bg-blue-500 text-white hover:bg-blue-600"
-                    }`}
+                  className={`px-3 py-1 rounded ${
+                    !nextPage
+                      ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                      : "bg-blue-500 text-white hover:bg-blue-600"
+                  }`}
                 >
                   <FaChevronRight className="h-4 w-4" />
                 </button>
                 <button
                   onClick={() => onPageChange(lastPage)}
                   disabled={!nextPage}
-                  className={`px-3 py-1 rounded ${!nextPage
-                    ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                    : "bg-blue-500 text-white hover:bg-blue-600"
-                    }`}
+                  className={`px-3 py-1 rounded ${
+                    !nextPage
+                      ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                      : "bg-blue-500 text-white hover:bg-blue-600"
+                  }`}
                 >
                   Last
                 </button>

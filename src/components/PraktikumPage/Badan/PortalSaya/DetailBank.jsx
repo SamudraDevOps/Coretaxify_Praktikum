@@ -61,14 +61,25 @@ const DetailBank = ({ data, sidebar }) => {
     },
     onSuccess: (data) => {
       console.log(data);
-      Swal.fire(
-        "Berhasil!",
-        "Data detail bank berhasil disimpan!",
-        "success"
-      ).then((result) => {
-        if (result.isConfirmed) {
-          window.location.reload();
-        }
+      // Swal.fire(
+      //   "Berhasil!",
+      //   "Data detail bank berhasil disimpan!",
+      //   "success"
+      // ).then((result) => {
+      //   if (result.isConfirmed) {
+      //     window.location.reload();
+      //   }
+      // });
+      Swal.fire({
+        title: "Berhasil!",
+        text: "Data detail bank berhasil disimpan!",
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        // setTambahPopupOpen(false);
+        window.location.reload();
       });
     },
     onError: (error) => {
@@ -94,14 +105,25 @@ const DetailBank = ({ data, sidebar }) => {
     },
     onSuccess: (data) => {
       console.log(data);
-      Swal.fire(
-        "Berhasil!",
-        "Data bank terkait berhasil dihapus!",
-        "success"
-      ).then((result) => {
-        if (result.isConfirmed) {
-          window.location.reload();
-        }
+      // Swal.fire(
+      //   "Berhasil!",
+      //   "Data bank terkait berhasil dihapus!",
+      //   "success"
+      // ).then((result) => {
+      //   if (result.isConfirmed) {
+      //     window.location.reload();
+      //   }
+      // });
+      Swal.fire({
+        title: "Berhasil!",
+        text: "Data bank terkait berhasil dihapus!",
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        // setTambahPopupOpen(false);
+        window.location.reload();
       });
     },
     onError: (error) => {
@@ -161,7 +183,11 @@ const DetailBank = ({ data, sidebar }) => {
                       <AlertDialog>
                         <AlertDialogTrigger
                           onClick={() => setBankFormData(bank)}
-                          className={userId ? "hidden" : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"}
+                          className={
+                            userId
+                              ? "hidden"
+                              : "bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"
+                          }
                         >
                           Edit
                         </AlertDialogTrigger>
@@ -336,7 +362,11 @@ const DetailBank = ({ data, sidebar }) => {
                       </AlertDialog>
                       <button
                         onClick={() => deleteDetailBank.mutate(bank.id)}
-                        className={userId ? "hidden" : "bg-red-500 hover:bg-red-600 text-white py-2 px-2 rounded ml-2"}
+                        className={
+                          userId
+                            ? "hidden"
+                            : "bg-red-500 hover:bg-red-600 text-white py-2 px-2 rounded ml-2"
+                        }
                       >
                         Hapus
                       </button>

@@ -663,14 +663,25 @@ const ViewKonsepSPT = ({ data }) => {
     },
     onSuccess: (data, variables) => {
       console.log(data);
-      Swal.fire("Berhasil!", "Konsep SPT berhasil dihitung.", "success").then(
-        (result) => {
-          if (result.isConfirmed) {
-            window.location.reload();
-          }
-          // navigate(`/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt`);
-        }
-      );
+      // Swal.fire("Berhasil!", "Konsep SPT berhasil dihitung.", "success").then(
+      //   (result) => {
+      //     if (result.isConfirmed) {
+      //       window.location.reload();
+      //     }
+      //     // navigate(`/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt`);
+      //   }
+      // );
+      Swal.fire({
+        title: "Berhasil!",
+        text: "Konsep SPT berhasil dihitung!",
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        // setTambahPopupOpen(false);
+        window.location.reload();
+      });
     },
     onError: (error) => {
       console.error("Error saving data:", error);
@@ -745,15 +756,29 @@ const ViewKonsepSPT = ({ data }) => {
       //   ? "Draft Faktur berhasil dibuat"
       //   : "Faktur berhasil diupload";
 
-      Swal.fire("Berhasil!", "SPT berhasil dibayar.", "success").then(
-        (result) => {
-          if (result.isConfirmed) {
-            navigate(
-              `/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt/konsep`
-            );
-          }
-        }
-      );
+      // Swal.fire("Berhasil!", "SPT berhasil dibayar.", "success").then(
+      //   (result) => {
+      //     if (result.isConfirmed) {
+      //       navigate(
+      //         `/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt/konsep`
+      //       );
+      //     }
+      //   }
+      // );
+      Swal.fire({
+        title: "Berhasil!",
+        text: "SPT berhasil dibayar!",
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        // setTambahPopupOpen(false);
+        // window.location.reload();
+        navigate(
+          `/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt/konsep`
+        );
+      });
     },
     onError: (error) => {
       console.error("Error saving data:", error);
@@ -792,17 +817,32 @@ const ViewKonsepSPT = ({ data }) => {
       //   ? "Draft Faktur berhasil dibuat"
       //   : "Faktur berhasil diupload";
 
-      Swal.fire(
-        "Berhasil!",
-        "Kode Billing SPT berhasil dibuat.",
-        "success"
-      ).then((result) => {
-        if (result.isConfirmed) {
-          // window.location.href = `/praktikum/${id}/sistem/${akun}/buat-konsep-spt/${idSpt}`;
-          navigate(
-            `/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt/konsep`
-          );
-        }
+      // Swal.fire(
+      //   "Berhasil!",
+      //   "Kode Billing SPT berhasil dibuat.",
+      //   "success"
+      // ).then((result) => {
+      //   if (result.isConfirmed) {
+      //     // window.location.href = `/praktikum/${id}/sistem/${akun}/buat-konsep-spt/${idSpt}`;
+      //     navigate(
+      //       `/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt/konsep`
+      //     );
+      //   }
+      // });
+
+      Swal.fire({
+        title: "Berhasil!",
+        text: "Kode Billing SPT berhasil dibuat!",
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        // setTambahPopupOpen(false);
+        // window.location.reload();
+        navigate(
+          `/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt/konsep`
+        );
       });
     },
     onError: (error) => {

@@ -117,14 +117,25 @@ const EditDosen = () => {
         Swal.fire("Gagal !", error?.message, "error");
         return;
       }
-      Swal.fire("Gagal !", error.response.data.message, "error").then(
-        (result) => {
-          if (result.isConfirmed) {
-            refetch();
-            // window.location.reload();
-          }
-        }
-      );
+      // Swal.fire("Gagal !", error.response.data.message, "error").then(
+      //   (result) => {
+      //     if (result.isConfirmed) {
+      //       refetch();
+      //       // window.location.reload();
+      //     }
+      //   }
+      // );
+      Swal.fire({
+        title: "Gagal!",
+        text: error?.response?.data?.message,
+        icon: "error",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        // setTambahPopupOpen(false);
+        window.location.reload();
+      });
     },
     onSuccess: (data) => {
       // Swal.fire("Berhasil!", "Dosen berhasil ditambahkan!", "success").then(

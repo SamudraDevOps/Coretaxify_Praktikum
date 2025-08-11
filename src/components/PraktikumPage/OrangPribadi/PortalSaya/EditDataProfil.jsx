@@ -245,13 +245,24 @@ const EditDataProfil = ({ data, sidebar }) => {
     },
     onSuccess: (data) => {
       console.log(data);
-      Swal.fire("Berhasil!", "Pihak terkait berhasil dihapus!", "success").then(
-        (result) => {
-          if (result.isConfirmed) {
-            window.location.reload();
-          }
-        }
-      );
+      // Swal.fire("Berhasil!", "Pihak terkait berhasil dihapus!", "success").then(
+      //   (result) => {
+      //     if (result.isConfirmed) {
+      //       window.location.reload();
+      //     }
+      //   }
+      // );
+            Swal.fire({
+        title: "Berhasil!",
+        text: "Pihak terkait berhasil dihapus!",
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        // setTambahPopupOpen(false);
+        window.location.reload();
+      });
     },
     onError: (error) => {
       console.error("Error saving data:", error);
@@ -1065,14 +1076,25 @@ const EditDataProfil = ({ data, sidebar }) => {
     },
     onSuccess: (data) => {
       console.log(data);
-      Swal.fire(
-        "Berhasil!",
-        "Data Ekonomi berhasil diperbarui!",
-        "success"
-      ).then((result) => {
-        if (result.isConfirmed) {
-          window.location.reload();
-        }
+      // Swal.fire(
+      //   "Berhasil!",
+      //   "Data Ekonomi berhasil diperbarui!",
+      //   "success"
+      // ).then((result) => {
+      //   if (result.isConfirmed) {
+      //     window.location.reload();
+      //   }
+      // });
+            Swal.fire({
+        title: "Berhasil!",
+        text: "Data ekonomi berhasil diperbarui!",
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        // setTambahPopupOpen(false);
+        window.location.reload();
       });
     },
     onError: (error) => {

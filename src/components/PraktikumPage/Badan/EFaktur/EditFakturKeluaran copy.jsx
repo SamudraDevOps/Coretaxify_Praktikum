@@ -657,13 +657,25 @@ const EditFakturKeluaran = ({ sidebar }) => {
     },
     onSuccess: (data) => {
       console.log(data);
-      Swal.fire("Berhasil!", "Faktur berhasil disimpan", "success").then(
-        (result) => {
-          if (result.isConfirmed) {
-            window.location.reload();
-          }
-        }
-      );
+      // Swal.fire("Berhasil!", "Faktur berhasil disimpan", "success").then(
+      //   (result) => {
+      //     if (result.isConfirmed) {
+      //       window.location.reload();
+      //     }
+      //   }
+      // );
+
+      Swal.fire({
+        title: "Berhasil!",
+        text: "Faktur berhasil disimpan!",
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        // setTambahPopupOpen(false);
+        window.location.reload();
+      });
     },
     onError: (error) => {
       console.error("Error saving data:", error);
