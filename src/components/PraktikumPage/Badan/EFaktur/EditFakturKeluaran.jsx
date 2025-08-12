@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import {
   FaCalendarAlt,
@@ -193,6 +193,16 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
   useEffect(() => {
     if (fakturData && !fakturLoading && !fakturError) {
       console.log("Setting formData from fakturData:", fakturData);
+      const akunId = fakturData.data.akun_penerima_id?.id;
+      let akunTambahanFlag = fakturData.data.akun_penerima_id?.is_akun_tambahan;
+
+      // If backend did not send is_akun_tambahan, look it up
+      if (akunId != null && akunTambahanFlag == null) {
+        const matched = npwp_faktur.data.find((acc) => acc.id === akunId);
+        if (matched) {
+          akunTambahanFlag = matched.is_akun_tambahan ?? false;
+        }
+      }
 
       setFormData({
         uangMuka: fakturData.data.uangMuka || false,
@@ -213,7 +223,30 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
           fakturData.data.alamat ||
           "",
         idtku: fakturData.data.idtku || "000000",
-        akun_penerima_id: fakturData.data.akun_penerima_id || "",
+        // akun_penerima_id: fakturData.data.akun_penerima_id
+        //   ? {
+        //       ...fakturData.data.akun_penerima_id,
+        //       is_akun_tambahan: fakturData.data.akun_penerima_id
+        //         .is_akun_tambahan
+        //         ? true
+        //         : false,
+        //     }
+        //   : "",
+        // akun_penerima_id: fakturData.data.akun_penerima_id
+        //   ? {
+        //       ...fakturData.data.akun_penerima_id,
+        //       is_akun_tambahan: Boolean(
+        //         fakturData.data.akun_penerima_id.is_akun_tambahan
+        //       ),
+        //     }
+        //   : "",
+        akun_penerima_id:
+          akunId != null
+            ? {
+                ...fakturData.data.akun_penerima_id,
+                is_akun_tambahan: akunTambahanFlag ?? false,
+              }
+            : "",
         identification: fakturData.data.identification || "",
         negara:
           fakturData.data.akun_penerima_id?.negara_asal ||
@@ -1249,8 +1282,15 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
       ppnbm: totalPPnBM,
       informasi_tambahan: informasi_tambahan,
       cap_fasilitas: cap_fasilitas,
+      // akun_penerima_id:
+      //   formData.akun_penerima_id?.id || formData.akun_penerima_id,
+
       akun_penerima_id:
         formData.akun_penerima_id?.id || formData.akun_penerima_id,
+      // Include is_akun_tambahan for backend differentiation
+      is_akun_tambahan: formData.akun_penerima_id?.is_akun_tambahan ?? false,
+      // Include account type for additional context
+      tipe_akun_penerima: formData.akun_penerima_id?.tipe_akun || null,
       pic_id: akun,
       // Ensure detail_transaksi matches the required structure
       detail_transaksi: formData.detail_transaksi.map((item) => ({
@@ -1456,6 +1496,277 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
   console.log(viewAsCompanyId);
   console.log("ppn raw", fakturData.data.ppn);
   console.log("ppn formatted Hooks", formatRupiahUtils(fakturData.data.ppn));
+
+  function deriveCompositeValue(backendAkun, npwpList = []) {
+    if (!backendAkun?.id) return "";
+
+    const candidates = npwpList.filter(
+      (it) => String(it.id) === String(backendAkun.id)
+    );
+
+    if (candidates.length === 0) {
+      return `${backendAkun.id}_${String(
+        backendAkun.is_akun_tambahan ?? false
+      )}`;
+    }
+
+    if (candidates.length === 1) {
+      return `${candidates[0].id}_${String(
+        candidates[0].is_akun_tambahan ?? false
+      )}`;
+    }
+
+    if (backendAkun.npwp_akun) {
+      const byNpwp = candidates.find(
+        (c) => (c.npwp_akun || "") === String(backendAkun.npwp_akun)
+      );
+      if (byNpwp)
+        return `${byNpwp.id}_${String(byNpwp.is_akun_tambahan ?? false)}`;
+    }
+
+    if (backendAkun.email_akun) {
+      const byEmail = candidates.find(
+        (c) =>
+          (c.email_akun || "").toLowerCase() ===
+          (backendAkun.email_akun || "").toLowerCase()
+      );
+      if (byEmail)
+        return `${byEmail.id}_${String(byEmail.is_akun_tambahan ?? false)}`;
+    }
+
+    if (backendAkun.nama_akun) {
+      const byName = candidates.find(
+        (c) =>
+          (c.nama_akun || "").toLowerCase() ===
+          (backendAkun.nama_akun || "").toLowerCase()
+      );
+      if (byName)
+        return `${byName.id}_${String(byName.is_akun_tambahan ?? false)}`;
+    }
+
+    if (backendAkun.is_akun_tambahan !== undefined) {
+      const byFlag = candidates.find(
+        (c) =>
+          String(c.is_akun_tambahan ?? false) ===
+          String(backendAkun.is_akun_tambahan)
+      );
+      if (byFlag)
+        return `${byFlag.id}_${String(byFlag.is_akun_tambahan ?? false)}`;
+    }
+
+    return `${candidates[0].id}_${String(
+      candidates[0].is_akun_tambahan ?? false
+    )}`;
+  }
+
+  /* deriveCompositeValue: same helper as before */
+  function deriveCompositeValue(backendAkun, npwpList = []) {
+    if (!backendAkun?.id) return "";
+
+    const candidates = npwpList.filter(
+      (it) => String(it.id) === String(backendAkun.id)
+    );
+    if (candidates.length === 0) {
+      return `${backendAkun.id}_${String(
+        backendAkun.is_akun_tambahan ?? false
+      )}`;
+    }
+    if (candidates.length === 1) {
+      return `${candidates[0].id}_${String(
+        candidates[0].is_akun_tambahan ?? false
+      )}`;
+    }
+
+    if (backendAkun.npwp_akun) {
+      const byNpwp = candidates.find(
+        (c) => (c.npwp_akun || "") === String(backendAkun.npwp_akun)
+      );
+      if (byNpwp)
+        return `${byNpwp.id}_${String(byNpwp.is_akun_tambahan ?? false)}`;
+    }
+    if (backendAkun.email_akun) {
+      const byEmail = candidates.find(
+        (c) =>
+          (c.email_akun || "").toLowerCase() ===
+          (backendAkun.email_akun || "").toLowerCase()
+      );
+      if (byEmail)
+        return `${byEmail.id}_${String(byEmail.is_akun_tambahan ?? false)}`;
+    }
+    if (backendAkun.nama_akun) {
+      const byName = candidates.find(
+        (c) =>
+          (c.nama_akun || "").toLowerCase() ===
+          (backendAkun.nama_akun || "").toLowerCase()
+      );
+      if (byName)
+        return `${byName.id}_${String(byName.is_akun_tambahan ?? false)}`;
+    }
+    if (backendAkun.is_akun_tambahan !== undefined) {
+      const byFlag = candidates.find(
+        (c) =>
+          String(c.is_akun_tambahan ?? false) ===
+          String(backendAkun.is_akun_tambahan)
+      );
+      if (byFlag)
+        return `${byFlag.id}_${String(byFlag.is_akun_tambahan ?? false)}`;
+    }
+    return `${candidates[0].id}_${String(
+      candidates[0].is_akun_tambahan ?? false
+    )}`;
+  }
+  function NPWPSelect({
+    initialData, // <-- the backend form object (e.g. fakturData.data)
+    npwp_faktur, // <-- the array/object with options (npwp_faktur)
+    formData,
+    setFormData,
+    isLoading,
+    disabled = false, // <-- pass disabled separately
+  }) {
+    const didInitRef = useRef(false);
+
+    useEffect(() => {
+      // Initialize once, only when backend initialData and option list are available.
+      if (didInitRef.current) return;
+      if (!initialData?.akun_penerima_id || !npwp_faktur?.data?.length) return;
+
+      const backendAkun = initialData.akun_penerima_id;
+
+      // If formData already matches backend (by npwp or id+flag), skip initialization.
+      const current = formData?.akun_penerima_id;
+      if (current) {
+        const matchByNpwp =
+          current.npwp_akun &&
+          backendAkun.npwp_akun &&
+          current.npwp_akun === backendAkun.npwp_akun;
+        const matchByIdAndFlag =
+          String(current.id ?? current) === String(backendAkun.id) &&
+          String(current.is_akun_tambahan ?? false) ===
+            String(backendAkun.is_akun_tambahan ?? false);
+
+        if (matchByNpwp || matchByIdAndFlag) {
+          didInitRef.current = true;
+          return;
+        }
+      }
+
+      const composite = deriveCompositeValue(backendAkun, npwp_faktur.data);
+      const [selectedId, isTambStr] = composite.split("_");
+      const isAkunTambahan = isTambStr === "true";
+
+      const selectedItem = npwp_faktur.data.find(
+        (it) =>
+          String(it.id) === String(selectedId) &&
+          String(it.is_akun_tambahan ?? false) === String(isAkunTambahan)
+      );
+
+      if (selectedItem) {
+        setFormData((prev) => ({
+          ...prev,
+          akun_penerima_id: {
+            id: selectedItem.id,
+            is_akun_tambahan: selectedItem.is_akun_tambahan ?? false,
+            nama_akun: selectedItem.nama_akun,
+            alamat_utama_akun: selectedItem.alamat_utama_akun,
+            negara_asal: selectedItem.negara_asal,
+            email_akun: selectedItem.email_akun,
+            npwp_akun: selectedItem.npwp_akun,
+            tipe_akun: selectedItem.tipe_akun,
+          },
+          nama: selectedItem.nama_akun || "",
+          alamat: selectedItem.alamat_utama_akun || "",
+          negara: selectedItem.negara_asal || "",
+          email: selectedItem.email_akun || "",
+        }));
+      } else {
+        // fallback: use backend object but ensure is_akun_tambahan exists
+        setFormData((prev) => ({
+          ...prev,
+          akun_penerima_id: {
+            ...backendAkun,
+            is_akun_tambahan: backendAkun.is_akun_tambahan ?? false,
+          },
+          nama: backendAkun.nama_akun || "",
+          alamat: backendAkun.alamat_utama_akun || "",
+          negara: backendAkun.negara_asal || "",
+          email: backendAkun.email_akun || "",
+        }));
+      }
+
+      didInitRef.current = true;
+      // only watch for initialData and npwp_faktur.data (we intentionally exclude formData/setFormData to avoid loops)
+    }, [initialData, npwp_faktur?.data, setFormData]);
+
+    return (
+      <select
+        name="akun_penerima_id"
+        disabled={disabled}
+        value={
+          formData.akun_penerima_id?.id != null
+            ? `${formData.akun_penerima_id.id}_${
+                formData.akun_penerima_id.is_akun_tambahan ? "true" : "false"
+              }`
+            : ""
+        }
+        onChange={(e) => {
+          const compositeValue = e.target.value;
+          if (!compositeValue) {
+            setFormData((prev) => ({
+              ...prev,
+              akun_penerima_id: null,
+              nama: "",
+              alamat: "",
+              negara: "",
+              email: "",
+            }));
+            return;
+          }
+
+          const [selectedId, isAkunTambahanStr] = compositeValue.split("_");
+          const isAkunTambahan = isAkunTambahanStr === "true";
+
+          const selectedItem = npwp_faktur.data.find(
+            (item) =>
+              String(item.id) === String(selectedId) &&
+              String(item.is_akun_tambahan ?? false) === String(isAkunTambahan)
+          );
+
+          if (selectedItem) {
+            setFormData((prev) => ({
+              ...prev,
+              akun_penerima_id: {
+                id: selectedItem.id,
+                is_akun_tambahan: selectedItem.is_akun_tambahan ?? false,
+                nama_akun: selectedItem.nama_akun,
+                alamat_utama_akun: selectedItem.alamat_utama_akun,
+                negara_asal: selectedItem.negara_asal,
+                email_akun: selectedItem.email_akun,
+                npwp_akun: selectedItem.npwp_akun,
+                tipe_akun: selectedItem.tipe_akun,
+              },
+              nama: selectedItem.nama_akun || "",
+              alamat: selectedItem.alamat_utama_akun || "",
+              negara: selectedItem.negara_asal || "",
+              email: selectedItem.email_akun || "",
+            }));
+          }
+        }}
+        className="p-2 border rounded w-full"
+      >
+        <option value="">Pilih NPWP</option>
+        {!isLoading &&
+          npwp_faktur &&
+          npwp_faktur.data.map((item, index) => (
+            <option
+              key={index}
+              value={`${item.id}_${item.is_akun_tambahan ? "true" : "false"}`}
+            >
+              {item.npwp_akun || "NPWP tidak tersedia"} - {item.nama_akun}
+            </option>
+          ))}
+      </select>
+    );
+  }
 
   return (
     console.log(""),
@@ -2088,7 +2399,8 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
             <div className="border rounded-md p-4 mb-2 grid grid-cols-3 gap-4 w-full">
               <div className="space-y-2">
                 <label className="block text-sm font-medium">NPWP </label>
-                <select
+
+                {/* <select
                   disabled={fakturData.data.status !== "DRAFT"}
                   name="akun_penerima_id"
                   value={
@@ -2124,7 +2436,169 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                         {item.nama_akun}
                       </option>
                     ))}
+                </select> */}
+                {console.log(
+                  "Select value:",
+                  formData.akun_penerima_id?.id != null
+                    ? `${String(formData.akun_penerima_id.id)}_${String(
+                        formData.akun_penerima_id.is_akun_tambahan
+                      )}`
+                    : ""
+                )}
+                {console.log(
+                  "Select value new:",
+                  formData.akun_penerima_id?.id != null
+                    ? `${String(formData.akun_penerima_id.id)}_${String(
+                        formData.akun_penerima_id.is_akun_tambahan
+                      )} ${String(formData.akun_penerima_id.nama_akun)}`
+                    : ""
+                )}
+                {console.log(
+                  "Select value all:",
+                  formData.akun_penerima_id?.id != null
+                    ? formData.akun_penerima_id
+                    : ""
+                )}
+
+                {console.log(
+                  "Available options:",
+                  npwp_faktur?.data?.map((d) => `${d.id}_${d.is_akun_tambahan}`)
+                )}
+                <select
+                  name="akun_penerima_id"
+                  // value={
+                  //   formData.akun_penerima_id?.id != null
+                  //     ? `${String(formData.akun_penerima_id.id)}_${String(
+                  //         formData.akun_penerima_id.is_akun_tambahan ?? false
+                  //       )}`
+                  //     : ""
+                  // }
+                  value={
+                    formData.akun_penerima_id?.id != null
+                      ? `${String(formData.akun_penerima_id.id)}_${String(
+                          formData.akun_penerima_id.is_akun_tambahan
+                        )}`
+                      : ""
+                  }
+                  onChange={(e) => {
+                    const compositeValue = e.target.value;
+                    if (!compositeValue) {
+                      setFormData((prev) => ({
+                        ...prev,
+                        akun_penerima_id: null,
+                        nama: "",
+                        alamat: "",
+                        negara: "",
+                        email: "",
+                      }));
+                      return;
+                    }
+
+                    const [selectedId, isAkunTambahanStr] =
+                      compositeValue.split("_");
+                    const isAkunTambahan = isAkunTambahanStr === "true";
+
+                    // const selectedItem = npwp_faktur.data.find(
+                    //   (item) =>
+                    //     String(item.id) === String(selectedId) &&
+                    //     String(item.is_akun_tambahan ?? false) === String(isAkunTambahan)
+                    // );
+                    const selectedItem = npwp_faktur.data.find(
+                      (item) =>
+                        String(item.id) === String(selectedId) &&
+                        item.is_akun_tambahan === isAkunTambahan
+                    );
+
+                    if (selectedItem) {
+                      setFormData((prev) => ({
+                        ...prev,
+                        akun_penerima_id: {
+                          id: selectedItem.id,
+                          is_akun_tambahan:
+                            selectedItem.is_akun_tambahan ?? false,
+                          nama_akun: selectedItem.nama_akun,
+                          alamat_utama_akun: selectedItem.alamat_utama_akun,
+                          negara_asal: selectedItem.negara_asal,
+                          email_akun: selectedItem.email_akun,
+                          npwp_akun: selectedItem.npwp_akun,
+                          tipe_akun: selectedItem.tipe_akun,
+                        },
+                        nama: selectedItem.nama_akun || "",
+                        alamat: selectedItem.alamat_utama_akun || "",
+                        negara: selectedItem.negara_asal || "",
+                        email: selectedItem.email_akun || "",
+                      }));
+                    }
+                  }}
+                  className="p-2 border rounded w-full"
+                >
+                  <option value="">Pilih NPWP</option>
+                  {!isLoading && npwp_faktur && npwp_faktur.data && (
+                    <>
+                      {npwp_faktur.data.filter((item) => !item.is_akun_tambahan)
+                        .length > 0 && (
+                        <optgroup label="Main Accounts">
+                          {npwp_faktur.data
+                            .filter((item) => !item.is_akun_tambahan)
+                            .map((item, index) => (
+                              <option
+                                key={`${item.id}_false_${index}`}
+                                value={`${item.id}_false`}
+                              >
+                                {item.npwp_akun || "NPWP tidak tersedia"} -{" "}
+                                {item.nama_akun}
+                                {item.tipe_akun ? ` (${item.tipe_akun})` : ""}
+                              </option>
+                            ))}
+                        </optgroup>
+                      )}
+
+                      {npwp_faktur.data.filter((item) => item.is_akun_tambahan)
+                        .length > 0 && (
+                        <optgroup label="Additional Accounts">
+                          {npwp_faktur.data
+                            .filter((item) => item.is_akun_tambahan)
+                            .map((item, index) => (
+                              <option
+                                key={`${item.id}_true_${index}`}
+                                value={`${item.id}_true`}
+                              >
+                                {item.npwp_akun || "NPWP tidak tersedia"} -{" "}
+                                {item.nama_akun}
+                                {item.tipe_akun ? ` (${item.tipe_akun})` : ""}
+                              </option>
+                            ))}
+                        </optgroup>
+                      )}
+                    </>
+                  )}
                 </select>
+                <></>
+                {/* <p>{formData.akun_penerima_id.nama_akun}</p> */}
+
+                {/* <NPWPSelect
+                  formData={formData}
+                  initialData={formData}
+                  setFormData={setFormData}
+                  isLoading={isLoading}
+                  npwp_faktur={npwp_faktur}
+                ></NPWPSelect> */}
+                {/* <NPWPSelect
+                  // initialData={fakturData.data.status !== "DRAFT"} // or whatever your initial condition is
+                  initialData={formData}
+                  npwp_faktur={npwp_faktur}
+                  formData={formData}
+                  setFormData={setFormData}
+                  isLoading={isLoading}
+                /> */}
+                {/* <NPWPSelect
+                  initialData={fakturData.data} // <- backend form object (has akun_penerima_id)
+                  npwp_faktur={npwp_faktur}
+                  formData={formData}
+                  setFormData={setFormData}
+                  isLoading={isLoading}
+                  disabled={fakturData.data.status !== "DRAFT"} // <- separate prop for disabled
+                /> */}
 
                 {isLoading && (
                   <div className="text-sm text-gray-500">
