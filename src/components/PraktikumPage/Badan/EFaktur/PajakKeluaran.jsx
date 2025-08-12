@@ -12,6 +12,7 @@ import { useCookies } from "react-cookie";
 import { useUserType } from "@/components/context/userTypeContext";
 import { useNavigate } from "react-router-dom";
 import { useNavigateWithParams } from "@/hooks/useNavigateWithParams";
+import FakturPenilaian from "./FakturPenilaian";
 
 const PajakKeluaran = ({
   data,
@@ -295,6 +296,13 @@ const PajakKeluaran = ({
               Pajak Keluaran
             </h1>
           </div>
+          {userId ? (
+            <FakturPenilaian
+              tipeFaktur="Faktur Keluaran"
+            />
+          ) : (
+            ""
+          )}
         </div>
         <div className="flex justify-between mb-4 border-b pb-3">
           <div className="flex items-center gap-3">

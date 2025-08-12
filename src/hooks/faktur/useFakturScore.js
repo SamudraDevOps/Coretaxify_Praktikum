@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { RoutesApi } from "@/Routes";
 
-export const useFakturScore = (cookies, assignmentId, akun, tipeFaktur) => {
+export const useFakturScore = (cookies, assignmentId, activeAkun, tipeFaktur) => {
   const [scoreData, setScoreData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
@@ -13,7 +13,7 @@ export const useFakturScore = (cookies, assignmentId, akun, tipeFaktur) => {
 
     setIsLoading(true);
     try {
-      const url = `${RoutesApi.apiUrl}student/assignments/${assignmentId}/sistem/${akun}/penilaian/faktur-scores`;
+      const url = `${RoutesApi.apiUrl}student/assignments/${assignmentId}/sistem/${activeAkun}/penilaian/faktur-scores`;
       const response = await axios.get(url, {
         headers: {
           Authorization: `Bearer ${cookies.token}`,
