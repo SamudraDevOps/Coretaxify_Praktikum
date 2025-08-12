@@ -8,10 +8,13 @@ const FakturPenilaian = ({tipeFaktur}) => {
   const { id, akun } = useParams();
   const [cookies] = useCookies(["token"]);
   const [searchParams] = useSearchParams();
+  const viewAsCompanyId = searchParams.get("viewAs");
   const userId = searchParams.get("user_id");
 
   const [score, setScore] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const activeAkun = viewAsCompanyId ? viewAsCompanyId : akun;
 
   const {
     scoreData,
@@ -21,7 +24,7 @@ const FakturPenilaian = ({tipeFaktur}) => {
     updateScore,
     isCreating,
     isUpdating,
-  } = useFakturScore(cookies, id, akun, tipeFaktur);
+  } = useFakturScore(cookies, id, activeAkun, tipeFaktur);
 
   useEffect(() => {
     if (tipeFaktur) {
@@ -44,7 +47,7 @@ const FakturPenilaian = ({tipeFaktur}) => {
     }
 
     const scorePayload = {
-      sistem_id: akun,
+      sistem_id: activeAkun,
       tipe_faktur: tipeFaktur,
       score: parseFloat(score),
     };
