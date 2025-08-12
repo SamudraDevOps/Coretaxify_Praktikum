@@ -21,7 +21,7 @@ export const useFakturScore = (cookies, assignmentId, activeAkun, tipeFaktur) =>
         },
         params: {
           column_filters: {
-            sistem_id: akun,
+            sistem_id: acTiveAkun,
             tipe_faktur: tipeFaktur,
           },
         },
@@ -54,7 +54,7 @@ export const useFakturScore = (cookies, assignmentId, activeAkun, tipeFaktur) =>
         },
       });
       const csrfToken = csrfResponse.data.token;
-      const url = `${RoutesApi.apiUrl}student/assignments/${assignmentId}/sistem/${akun}/penilaian/faktur-scores`;
+      const url = `${RoutesApi.apiUrl}student/assignments/${assignmentId}/sistem/${activeAkun}/penilaian/faktur-scores`;
       const response = await axios.post(
         url,
         {
@@ -88,7 +88,7 @@ export const useFakturScore = (cookies, assignmentId, activeAkun, tipeFaktur) =>
         },
       });
       const csrfToken = csrfResponse.data.token;
-      const url = `${RoutesApi.apiUrl}student/assignments/${assignmentId}/sistem/${akun}/penilaian/faktur-scores/${scoreId}`;
+      const url = `${RoutesApi.apiUrl}student/assignments/${assignmentId}/sistem/${activeAkun}/penilaian/faktur-scores/${scoreId}`;
       const response = await axios.put(
         url,
         {
