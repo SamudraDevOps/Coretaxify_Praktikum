@@ -21,8 +21,8 @@ export const useFakturScore = (cookies, assignmentId, activeAkun, tipeFaktur) =>
         },
         params: {
           column_filters: {
-            sistem_id: acTiveAkun,
-            tipe_faktur: tipeFaktur,
+            sistem_id: activeAkun,
+            :tipe_faktur tipeFaktur,
           },
         },
       });
