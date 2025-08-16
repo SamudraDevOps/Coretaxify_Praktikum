@@ -258,7 +258,7 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
         timerProgressBar: true,
       }).then(() => {
         // navigate(`/praktikum/${id}/sistem/${akun}/buat-konsep-spt/${idSpt}`);
-        window.location.reload()
+        window.location.reload();
       });
     },
     onError: (error) => {
@@ -1563,9 +1563,7 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                           <tbody className="text-gray-600 text-center">
                             <tr>
                               <td className="p-2 border-b text-center"></td>
-                              <td className="p-2 border-b">
-                                
-                              </td>
+                              <td className="p-2 border-b"></td>
                               <td className="p-2 border-b">-</td>
                               <td className="p-2 border-b">-</td>
                               <td className="p-2 border-b">-</td>
@@ -1649,9 +1647,7 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                           <tbody className="text-gray-600 text-center">
                             <tr>
                               <td className="p-2 border-b text-center"></td>
-                              <td className="p-2 border-b">
-                                
-                              </td>
+                              <td className="p-2 border-b"></td>
                               <td className="p-2 border-b">-</td>
                               <td className="p-2 border-b">-</td>
                               <td className="p-2 border-b">-</td>
@@ -1803,9 +1799,7 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                           <tbody className="text-gray-600 text-center">
                             <tr>
                               <td className="p-2 border-b text-center"></td>
-                              <td className="p-2 border-b">
-                                
-                              </td>
+                              <td className="p-2 border-b"></td>
                               <td className="p-2 border-b">-</td>
                               <td className="p-2 border-b">-</td>
                               <td className="p-2 border-b">-</td>
@@ -1889,8 +1883,7 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                           <tbody className="text-gray-600 text-center">
                             <tr>
                               <td className="p-2 border-b text-center"></td>
-                              <td className="p-2 border-b">
-                              </td>
+                              <td className="p-2 border-b"></td>
                               <td className="p-2 border-b">-</td>
                               <td className="p-2 border-b">-</td>
                               <td className="p-2 border-b">-</td>

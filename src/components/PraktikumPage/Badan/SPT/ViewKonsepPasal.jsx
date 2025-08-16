@@ -366,7 +366,7 @@ const LihatKonsepPasal = ({ data }) => {
       //     );
       //   }
       // });
-            Swal.fire({
+      Swal.fire({
         title: "Berhasil!",
         text: "Kode billing SPT berhasil dibuat!",
         icon: "success",
@@ -376,9 +376,9 @@ const LihatKonsepPasal = ({ data }) => {
       }).then(() => {
         // setTambahPopupOpen(false);
         // window.location.reload();
-          navigate(
-            `/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt/konsep`
-          );
+        navigate(
+          `/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt/konsep`
+        );
       });
     },
     onError: (error) => {
@@ -2010,7 +2010,7 @@ const LihatKonsepPasal = ({ data }) => {
                             {sptOther?.data ? (
                               sptOther.data
                                 .filter(
-                                  (item) => item.jenis_pajak === "PPh Pasal 21"
+                                  (item) => item.jenis_pajak === "Pasal 21"
                                 )
                                 .map((item, index) => (
                                   <tr key={item.id}>
@@ -2037,7 +2037,7 @@ const LihatKonsepPasal = ({ data }) => {
                                       {item.kode_objek_pajak || "-"}
                                     </td>
                                     <td className="p-2 border-b">
-                                      {item.status || "-"}
+                                      {item.tipe_bupot || "-"}
                                     </td>
                                     <td className="p-2 border-b">
                                       {item.dasar_pengenaan_pajak
@@ -2097,7 +2097,9 @@ const LihatKonsepPasal = ({ data }) => {
                                       sptOther.data
                                         .filter(
                                           (item) =>
-                                            item.jenis_pajak === "PPh Pasal 21"
+                                            item.jenis_pajak === "Pasal 21" &&
+                                            item.fasilitas_pajak ===
+                                              "pph_ditanggung_pemerintah"
                                         )
                                         .reduce(
                                           (total, item) =>
@@ -2116,7 +2118,9 @@ const LihatKonsepPasal = ({ data }) => {
                                       sptOther.data
                                         .filter(
                                           (item) =>
-                                            item.jenis_pajak === "PPh Pasal 21"
+                                            item.jenis_pajak === "Pasal 21" &&
+                                            item.fasilitas_pajak ===
+                                              "pph_ditanggung_pemerintah"
                                         )
                                         .reduce(
                                           (total, item) =>
@@ -2144,7 +2148,9 @@ const LihatKonsepPasal = ({ data }) => {
                                       sptOther.data
                                         .filter(
                                           (item) =>
-                                            item.jenis_pajak === "PPh Pasal 21"
+                                            item.jenis_pajak === "Pasal 21" &&
+                                            item.fasilitas_pajak !==
+                                              "pph_ditanggung_pemerintah"
                                         )
                                         .reduce(
                                           (total, item) =>
@@ -2163,7 +2169,9 @@ const LihatKonsepPasal = ({ data }) => {
                                       sptOther.data
                                         .filter(
                                           (item) =>
-                                            item.jenis_pajak === "PPh Pasal 21"
+                                            item.jenis_pajak === "Pasal 21" &&
+                                            item.fasilitas_pajak !==
+                                              "pph_ditanggung_pemerintah"
                                         )
                                         .reduce(
                                           (total, item) =>
@@ -2234,12 +2242,11 @@ const LihatKonsepPasal = ({ data }) => {
                               </th>
                             </tr>
                           </thead>
-
                           <tbody className="text-gray-600 text-center">
                             {sptOther?.data ? (
                               sptOther.data
                                 .filter(
-                                  (item) => item.jenis_pajak === "PPh Pasal 26"
+                                  (item) => item.jenis_pajak === "Pasal 26"
                                 )
                                 .map((item, index) => (
                                   <tr key={item.id}>
@@ -2266,7 +2273,7 @@ const LihatKonsepPasal = ({ data }) => {
                                       {item.kode_objek_pajak || "-"}
                                     </td>
                                     <td className="p-2 border-b">
-                                      {item.status || "-"}
+                                      {item.tipe_bupot || "-"}
                                     </td>
                                     <td className="p-2 border-b">
                                       {item.dasar_pengenaan_pajak
@@ -2292,7 +2299,7 @@ const LihatKonsepPasal = ({ data }) => {
                                     <td className="p-2 border-b">
                                       {item.nitku || "-"}
                                     </td>
-                                    <td className="p-2 border-b">411127-100</td>
+                                    <td className="p-2 border-b">411121-100</td>
                                     <td className="p-2 border-b">
                                       {item.status || "-"}
                                     </td>
@@ -2326,7 +2333,9 @@ const LihatKonsepPasal = ({ data }) => {
                                       sptOther.data
                                         .filter(
                                           (item) =>
-                                            item.jenis_pajak === "PPh Pasal 26"
+                                            item.jenis_pajak === "Pasal 26" &&
+                                            item.fasilitas_pajak ===
+                                              "pph_ditanggung_pemerintah"
                                         )
                                         .reduce(
                                           (total, item) =>
@@ -2339,7 +2348,27 @@ const LihatKonsepPasal = ({ data }) => {
                                     )
                                   : "0"}
                               </td>
-                              <td className="p-2"></td>
+                              <td className="p-2">
+                                {sptOther?.data
+                                  ? formatRupiah(
+                                      sptOther.data
+                                        .filter(
+                                          (item) =>
+                                            item.jenis_pajak === "Pasal 26" &&
+                                            item.fasilitas_pajak ===
+                                              "pph_ditanggung_pemerintah"
+                                        )
+                                        .reduce(
+                                          (total, item) =>
+                                            total +
+                                            (parseFloat(
+                                              item.pajak_penghasilan
+                                            ) || 0),
+                                          0
+                                        )
+                                    )
+                                  : "0"}
+                              </td>
                             </tr>
                             <tr>
                               <td
@@ -2355,7 +2384,9 @@ const LihatKonsepPasal = ({ data }) => {
                                       sptOther.data
                                         .filter(
                                           (item) =>
-                                            item.jenis_pajak === "PPh Pasal 26"
+                                            item.jenis_pajak === "Pasal 26" &&
+                                            item.fasilitas_pajak !==
+                                              "pph_ditanggung_pemerintah"
                                         )
                                         .reduce(
                                           (total, item) =>
@@ -2368,7 +2399,27 @@ const LihatKonsepPasal = ({ data }) => {
                                     )
                                   : "0"}
                               </td>
-                              <td className="p-2"></td>
+                              <td className="p-2">
+                                {sptOther?.data
+                                  ? formatRupiah(
+                                      sptOther.data
+                                        .filter(
+                                          (item) =>
+                                            item.jenis_pajak === "Pasal 26" &&
+                                            item.fasilitas_pajak !==
+                                              "pph_ditanggung_pemerintah"
+                                        )
+                                        .reduce(
+                                          (total, item) =>
+                                            total +
+                                            (parseFloat(
+                                              item.pajak_penghasilan
+                                            ) || 0),
+                                          0
+                                        )
+                                    )
+                                  : "0"}
+                              </td>
                             </tr>
                             <tr>
                               <td
@@ -2385,7 +2436,7 @@ const LihatKonsepPasal = ({ data }) => {
                                       sptOther.data
                                         .filter(
                                           (item) =>
-                                            item.jenis_pajak === "PPh Pasal 26"
+                                            item.jenis_pajak === "Pasal 26"
                                         )
                                         .reduce(
                                           (total, item) =>
@@ -2398,7 +2449,25 @@ const LihatKonsepPasal = ({ data }) => {
                                     )
                                   : "0"}
                               </td>
-                              <td className="p-2"></td>
+                              <td className="p-2">
+                                {sptOther?.data
+                                  ? formatRupiah(
+                                      sptOther.data
+                                        .filter(
+                                          (item) =>
+                                            item.jenis_pajak === "Pasal 26"
+                                        )
+                                        .reduce(
+                                          (total, item) =>
+                                            total +
+                                            (parseFloat(
+                                              item.pajak_penghasilan
+                                            ) || 0),
+                                          0
+                                        )
+                                    )
+                                  : "0"}
+                              </td>
                             </tr>
                           </tfoot>
                         </table>
