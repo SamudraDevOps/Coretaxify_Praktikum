@@ -2465,6 +2465,8 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                   npwp_faktur?.data?.map((d) => `${d.id}_${d.is_akun_tambahan}`)
                 )}
                 <select
+                  readOnly={fakturData.data.status !== "DRAFT"}
+                  disabled={fakturData.data.status !== "DRAFT"} // <- separate prop for disabled
                   name="akun_penerima_id"
                   // value={
                   //   formData.akun_penerima_id?.id != null
