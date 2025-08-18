@@ -826,11 +826,23 @@ const CreateKonsepSPT = ({ data, sidebar }) => {
     onError: (error) => {
       console.error("Error saving data:", error);
       // Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
-      Swal.fire(
-        "Gagal!",
-        `Terjadi kesalahan saat menyimpan data. ${error?.response?.data?.message}`,
-        "error"
-      );
+      // Swal.fire(
+      //   "Gagal!",
+      //   `Terjadi kesalahan saat menyimpan data. ${error?.response?.data?.message}`,
+      //   "error"
+      // );
+      
+      Swal.fire({
+        title: "Gagal!",
+        text: `Terjadi kesalahan saat menyimpan data. ${error?.response?.data?.message}`,
+
+        icon: "error",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+
+      });
     },
   });
   const payBilling = useMutation({
