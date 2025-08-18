@@ -258,9 +258,9 @@ const PajakMasukan = ({
                       selectedItems.length === 0 ||
                       tidakKreditkanFaktur.isPending
                         ? "bg-gray-400 text-gray-600 cursor-not-allowed"
-                        : "bg-blue-500 hover:bg-blue-600 text-white"
+                        : "bg-red-500 hover:bg-blue-600 text-white"
                     }`
-              }
+            }
             >
               {tidakKreditkanFaktur.isPending ? (
                 <>

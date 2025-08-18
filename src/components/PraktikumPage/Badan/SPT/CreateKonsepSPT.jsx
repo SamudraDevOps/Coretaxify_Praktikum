@@ -958,7 +958,7 @@ const CreateKonsepSPT = ({ data, sidebar }) => {
     <div className="flex h-screen bg-gray-100 ">
       <div className="flex-auto p-3 bg-white rounded-md h-full min-w-0">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-3xl font-light text-yellow-500 mt-4">
+          <h2 className="text-3xl text-blue-900 mt-4">
             SURAT PEMBERITAHUAN MASA PAJAK PERTAMBAHAN NILAI (SPT MASA PPN)
           </h2>
         </div>

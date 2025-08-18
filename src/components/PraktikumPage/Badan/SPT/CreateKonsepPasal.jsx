@@ -440,7 +440,7 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
     <div className="flex h-screen bg-gray-100">
       <div className="flex-auto p-3 bg-white rounded-md h-full min-w-0">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-3xl font-light text-yellow-500 mt-4">
+          <h2 className="text-3xl text-blue-900 mt-4">
             PEMOTONGAN PPH PASAL 21 DAN ATAU PASAL 26
           </h2>
         </div>
@@ -1214,7 +1214,7 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
               <>
                 <TabsContent value="L1">
                   <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-lg font-light text-yellow-500 mt-4">
+                    <h2 className="text-black mt-4">
                       DAFTAR PEMOTONGAN BULANAN PAJAK PENGHASILAN PASAL 21 BAGI
                       PEGAWAI TETAP DAN PENSIUNAN YANG MENERIMA UANG TERKAIT
                       PENSIUN SECARA BERKALA SERTA BAGI PEGAWAI NEGERI SIPIL,
@@ -1468,7 +1468,7 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                 </TabsContent>
                 <TabsContent value="l-ib">
                   <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-lg font-light text-yellow-500 mt-4">
+                    <h2 className="text-black mt-4">
                       DAFTAR PEMOTONGAN PAJAK PENGHASILAN PASAL 21 BAGI PEGAWAI
                       TETAP DAN PENSIUNAN YANG MENERIMA UANG TERKAIT PENSIUN
                       SECARA BERKALA SERTA BAGI PEGAWAI NEGERI SIPIL, ANGGOTA
@@ -1708,7 +1708,7 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                 </TabsContent>
                 <TabsContent value="l-ii">
                   <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-lg font-light text-yellow-500 mt-4">
+                    <h2 className="text-black mt-4">
                       DAFTAR PEMOTONGAN SATU TAHUN PAJAK ATAU BAGIAN TAHUN PAJAK
                       PAJAK PENGHASILAN PASAL 21 BAGI PEGAWAI TETAP DAN
                       PENSIUNAN YANG MENERIMA UANG TERKAIT PENSIUN SECARA
@@ -1923,7 +1923,7 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                 </TabsContent>
                 <TabsContent value="L3">
                   <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-lg font-light text-yellow-500 mt-4">
+                    <h2 className="text-black mt-4">
                       DAFTAR PEMOTONGAN PAJAK PENGHASILAN PASAL 21 DAN/ATAU
                       PASAL 26 SELAIN PEGAWAI TETAP ATAU PENSIUNAN YANG MENERIMA
                       UANG TERKAIT PENSIUN SECARA BERKALA
