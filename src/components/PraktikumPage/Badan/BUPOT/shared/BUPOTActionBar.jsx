@@ -80,10 +80,21 @@ const BUPOTActionBar = ({
         }
       );
 
-      Swal.fire("Berhasil!", "BUPOT berhasil diterbitkan!", "success");
-      if (onActionComplete) {
-        onActionComplete();
-      }
+      // Swal.fire("Berhasil!", "BUPOT berhasil diterbitkan!", "success");
+      // if (onActionComplete) {
+      //   onActionComplete();
+      // }
+      Swal.fire({
+        title: "Berhasil!",
+        text: `BUPOT berhasil diterbitkan!`,
+
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        window.location.reload();
+      });
     } catch (error) {
       console.error("Error publishing BUPOT:", error);
       Swal.fire(
