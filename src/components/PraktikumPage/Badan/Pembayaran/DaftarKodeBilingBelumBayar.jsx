@@ -93,10 +93,10 @@ const DaftarKodeBilingBelumBayar = ({ data, sidebar }) => {
       //   }
       // });
       Swal.fire({
-        title: "Berhasil!",
-        text: `Pembayaran SPT berhasil .\n\n Berikut kode NTPN anda "<b>${data.data.ntpn}</b>"`,
+        title: "Pembayaran Berhasil!",
+        html: `<br>Berikut kode NTPN anda: <strong>${data.data.ntpn}</strong>`,
         icon: "success",
-        timer: 2000, // auto close after 2 seconds
+        timer: 4000, // auto close after 2 seconds
         showConfirmButton: false,
         timerProgressBar: true,
       }).then(() => {

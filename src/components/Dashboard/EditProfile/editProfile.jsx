@@ -560,7 +560,7 @@ const EditProfile = () => {
                 </div>
 
                 {/* Password Baru */}
-                <div>
+                {/* <div>
                   <label
                     className="block text-gray-700 font-medium mb-1"
                     htmlFor="password"
@@ -596,10 +596,10 @@ const EditProfile = () => {
                   <p className="text-xs text-gray-500 mt-1">
                     Password minimal 4 karakter
                   </p>
-                </div>
+                </div> */}
 
                 {/* Konfirmasi Password */}
-                <div>
+                {/* <div>
                   <label
                     className="block text-gray-700 font-medium mb-1"
                     htmlFor="confirmPassword"
@@ -631,7 +631,7 @@ const EditProfile = () => {
                       {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
                     </button>
                   </div>
-                </div>
+                </div> */}
 
                 {/* Tombol */}
                 <div className="flex justify-end gap-3 pt-4">
