@@ -41,6 +41,8 @@ const Header = () => {
   const token = getCookieToken();
   const [cookies, setCookie, removeCookie] = useCookies(["token"]);
   const [isCompanyDropdownOpen, setIsCompanyDropdownOpen] = useState(false);
+  const companyDropdownRef = useRef(null);
+  const accountDropdownRef = useRef(null);
   const logout = () => {
     // removeCookie("token", { path: "/" });
     // removeCookie("role", { path: "/" });
@@ -64,11 +66,51 @@ const Header = () => {
       if (!isClickInsideAnyButton && !isClickInsideAnyDropdown) {
         setDropdownOpen(null);
       }
+
+      if (
+        isCompanyDropdownOpen &&
+        !event.target.closest(".company-dropdown-container")
+      ) {
+        setIsCompanyDropdownOpen(false);
+      }
     }
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (
+        companyDropdownRef.current &&
+        !companyDropdownRef.current.contains(event.target)
+      ) {
+        setIsCompanyDropdownOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (
+        accountDropdownRef.current &&
+        !accountDropdownRef.current.contains(e.target)
+      ) {
+        setIsDropdownOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("touchstart", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    };
+  }, []);
+
   const { isLoading, isError, data, error, refetch } = useQuery({
     queryKey: ["getaccount", id],
     queryFn: async () => {
@@ -416,7 +458,10 @@ const Header = () => {
           {representedCompanies &&
             representedCompanies.data &&
             representedCompanies.data.length > 0 && (
-              <div className="flex items-center space-x-2 cursor-pointer ">
+            <div className="flex items-center space-x-2 cursor-pointer "
+              ref={companyDropdownRef}
+            >
+              
                 <button
                   className="flex items-center space-x-2 cursor-pointer bg-white px-3 py-2 rounded-md shadow-md"
                   onClick={() =>
@@ -466,10 +511,13 @@ const Header = () => {
               </div>
             )}
 
-          <div className="flex items-center space-x-2 cursor-pointer">
+          <div className="flex items-center space-x-2 cursor-pointer"
+            ref={accountDropdownRef}
+            >
             <button
               className="flex items-center space-x-2 cursor-pointer bg-white px-3 py-2 rounded-md shadow-md relative"
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              
             >
               <UserCircle className="w-8 h-8" />
               <span className="hidden md:inline">
