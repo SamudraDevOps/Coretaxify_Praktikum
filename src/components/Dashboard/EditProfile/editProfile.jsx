@@ -50,6 +50,8 @@ const EditProfile = () => {
   const queryClient = useQueryClient();
   const [cookies, , removeCookie] = useCookies(["token", "role"]);
   const navigate = useNavigate();
+  const [isPsc, setIsPsc] = useState(false);
+
 
   // Prepare headers if token exists
   const headers = cookies.token
@@ -80,6 +82,12 @@ const EditProfile = () => {
     if (data?.data) {
       // Backend returns user data wrapped in 'data' object
       const user = data.data;
+      const rolesArr = Array.isArray(user.roles) ? user.roles : [];
+      const hasPscRole =
+        rolesArr.some(r => String(r?.id) === "4" || String(r?.name).toLowerCase() === "psc") ||
+        (cookies.role && (String(cookies.role) === "4" || String(cookies.role).toLowerCase() === "psc"));
+
+      setIsPsc(!!hasPscRole);
 
       const photoUrl = user.image_path
         ? `${RoutesApi.url}storage/${user.image_path}`
@@ -262,59 +270,60 @@ const EditProfile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validate password confirmation
-    if (profile.password && profile.password !== profile.confirmPassword) {
-      Swal.fire({
-        icon: "error",
-        title: "Gagal",
-        text: "Password dan konfirmasi password tidak sama.",
-      });
-      return;
+    // ✅ Validasi password hanya jika BUKAN PSC dan user memang mengisi password
+    if (!isPsc && profile.password) {
+      if (profile.password !== profile.confirmPassword) {
+        Swal.fire({ icon: "error", title: "Gagal", text: "Password dan konfirmasi password tidak sama." });
+        return;
+      }
+      if (profile.password.length < 4) {
+        Swal.fire({ icon: "error", title: "Gagal", text: "Password minimal 4 karakter." });
+        return;
+      }
     }
 
-    // Validate password length if provided
-    if (profile.password && profile.password.length < 4) {
-      Swal.fire({
-        icon: "error",
-        title: "Gagal",
-        text: "Password minimal 4 karakter.",
-      });
-      return;
-    }
-
-    // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(profile.email)) {
-      Swal.fire({
-        icon: "error",
-        title: "Gagal",
-        text: "Format email tidak valid.",
-      });
-      return;
+    // ✅ Validasi email hanya jika BUKAN PSC dan email diubah
+    const isEmailChanged = profile.email !== originalProfile.email;
+    if (!isPsc && isEmailChanged) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(profile.email)) {
+        Swal.fire({ icon: "error", title: "Gagal", text: "Format email tidak valid." });
+        return;
+      }
     }
 
     const formData = new FormData();
 
-    // Only append fields that have changed or are required
+    // name boleh diubah semua role
     if (profile.name !== originalProfile.name) {
       formData.append("name", profile.name);
     }
 
-    if (profile.email !== originalProfile.email) {
+    // ✅ Email hanya dikirim jika BUKAN PSC & memang berubah
+    if (!isPsc && isEmailChanged) {
       formData.append("email", profile.email);
     }
 
-    if (profile.password) {
+    // ✅ Password hanya dikirim jika BUKAN PSC & user mengisi
+    if (!isPsc && profile.password) {
       formData.append("password", profile.password);
       formData.append("password_confirmation", profile.confirmPassword);
     }
 
+    // Foto boleh diubah semua role
     if (profile.photo) {
       formData.append("image", profile.photo);
     }
 
+    // (Opsional) kalau tidak ada perubahan sama sekali
+    if ([...formData.keys()].length === 0) {
+      Swal.fire({ icon: "info", title: "Tidak ada perubahan", text: "Tidak ada data yang diubah." });
+      return;
+    }
+
     mutation.mutate(formData);
   };
+
 
   // Show loading or error
   if (isLoading) {
@@ -466,8 +475,8 @@ const EditProfile = () => {
                     <div className="bg-gray-50 border rounded-lg px-4 py-3 text-gray-800">
                       <span
                         className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${profile.status === "ACTIVE"
-                            ? "bg-green-100 text-green-800"
-                            : "bg-red-100 text-red-800"
+                          ? "bg-green-100 text-green-800"
+                          : "bg-red-100 text-red-800"
                           }`}
                       >
                         {profile.status === "ACTIVE" ? "Aktif" : "Tidak Aktif"}
@@ -529,108 +538,94 @@ const EditProfile = () => {
                 </div>
 
                 {/* Email */}
-                <div>
-                  <label
-                    className="block text-gray-700 font-medium mb-1"
-                    htmlFor="email"
-                  >
-                    Email <span className="text-red-500">*</span>
-                  </label>
-                  <div className="relative">
-                    <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
-                      <FaEnvelope />
-                    </span>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      value={profile.email}
-                      onChange={handleInputChange}
-                      className="w-full border rounded-lg pl-10 pr-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#7502B5] bg-white"
-                      required
-                      autoComplete="email"
-                      disabled={mutation.isLoading}
-                      minLength={4}
-                    />
-                  </div>
-                  <p className="text-xs text-gray-500 mt-1">
-                    Email harus minimal 4 karakter dan unik
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={profile.email}
+                  onChange={handleInputChange}
+                  className="w-full border rounded-lg pl-10 pr-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#7502B5] bg-white"
+                  required
+                  autoComplete="email"
+                  disabled={mutation.isLoading || isPsc} // <-- tambah ini
+                  minLength={4}
+                />
+                {isPsc && (
+                  <p className="text-xs text-amber-600 mt-1">
+                    Akun PSC tidak dapat mengubah email & password.
                   </p>
-                </div>
+                )}
+
 
                 {/* Password Baru */}
-                <div>
-                  <label
-                    className="block text-gray-700 font-medium mb-1"
-                    htmlFor="password"
-                  >
-                    Password Baru
-                  </label>
-                  <div className="relative">
-                    <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
-                      <FaLock />
-                    </span>
-                    <input
-                      type={showPassword ? "text" : "password"}
-                      id="password"
-                      name="password"
-                      value={profile.password}
-                      onChange={handleInputChange}
-                      className="w-full border rounded-lg pl-10 pr-10 py-2 focus:outline-none focus:ring-2 focus:ring-[#7502B5] bg-white"
-                      placeholder="Kosongkan jika tidak ingin mengubah"
-                      autoComplete="new-password"
-                      disabled={mutation.isLoading}
-                      minLength={4}
-                    />
-                    <button
-                      type="button"
-                      className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 focus:outline-none"
-                      tabIndex={-1}
-                      onClick={() => setShowPassword((prev) => !prev)}
-                      disabled={mutation.isLoading}
-                    >
-                      {showPassword ? <FaEyeSlash /> : <FaEye />}
-                    </button>
+                {!isPsc && (
+                  <div>
+                    <label className="block text-gray-700 font-medium mb-1" htmlFor="password">
+                      Password Baru
+                    </label>
+                    <div className="relative">
+                      <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                        <FaLock />
+                      </span>
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        id="password"
+                        name="password"
+                        value={profile.password}
+                        onChange={handleInputChange}
+                        className="w-full border rounded-lg pl-10 pr-10 py-2 focus:outline-none focus:ring-2 focus:ring-[#7502B5] bg-white"
+                        placeholder="Kosongkan jika tidak ingin mengubah"
+                        autoComplete="new-password"
+                        disabled={mutation.isLoading}
+                        minLength={4}
+                      />
+                      <button
+                        type="button"
+                        className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 focus:outline-none"
+                        tabIndex={-1}
+                        onClick={() => setShowPassword((prev) => !prev)}
+                        disabled={mutation.isLoading}
+                      >
+                        {showPassword ? <FaEyeSlash /> : <FaEye />}
+                      </button>
+                    </div>
+                    <p className="text-xs text-gray-500 mt-1">Password minimal 4 karakter</p>
                   </div>
-                  <p className="text-xs text-gray-500 mt-1">
-                    Password minimal 4 karakter
-                  </p>
-                </div>
+                )}
 
-                {/* Konfirmasi Password */}
-                <div>
-                  <label
-                    className="block text-gray-700 font-medium mb-1"
-                    htmlFor="confirmPassword"
-                  >
-                    Konfirmasi Password
-                  </label>
-                  <div className="relative">
-                    <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
-                      <FaLock />
-                    </span>
-                    <input
-                      type={showConfirmPassword ? "text" : "password"}
-                      id="confirmPassword"
-                      name="confirmPassword"
-                      value={profile.confirmPassword}
-                      onChange={handleInputChange}
-                      className="w-full border rounded-lg pl-10 pr-10 py-2 focus:outline-none focus:ring-2 focus:ring-[#7502B5] bg-white"
-                      placeholder="Ulangi password baru"
-                      autoComplete="new-password"
-                      disabled={mutation.isLoading}
-                    />
-                    <button
-                      type="button"
-                      className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 focus:outline-none"
-                      tabIndex={-1}
-                      onClick={() => setShowConfirmPassword((prev) => !prev)}
-                      disabled={mutation.isLoading}
-                    >
-                      {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
-                    </button>
+                {!isPsc && (
+                  <div>
+                    <label className="block text-gray-700 font-medium mb-1" htmlFor="confirmPassword">
+                      Konfirmasi Password
+                    </label>
+                    <div className="relative">
+                      <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                        <FaLock />
+                      </span>
+                      <input
+                        type={showConfirmPassword ? "text" : "password"}
+                        id="confirmPassword"
+                        name="confirmPassword"
+                        value={profile.confirmPassword}
+                        onChange={handleInputChange}
+                        className="w-full border rounded-lg pl-10 pr-10 py-2 focus:outline-none focus:ring-2 focus:ring-[#7502B5] bg-white"
+                        placeholder="Ulangi password baru"
+                        autoComplete="new-password"
+                        disabled={mutation.isLoading}
+                      />
+                      <button
+                        type="button"
+                        className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 focus:outline-none"
+                        tabIndex={-1}
+                        onClick={() => setShowConfirmPassword((prev) => !prev)}
+                        disabled={mutation.isLoading}
+                      >
+                        {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                      </button>
+                    </div>
                   </div>
-                </div>
+                )}
+
 
                 {/* Tombol */}
                 <div className="flex justify-end gap-3 pt-4">
