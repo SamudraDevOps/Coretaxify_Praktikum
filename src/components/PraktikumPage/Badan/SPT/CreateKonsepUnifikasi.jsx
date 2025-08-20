@@ -45,7 +45,7 @@ const CreateKonsepUnifikasi = ({ data, sidebar }) => {
   const [showIdentitasPemotong, setShowIdentitasPemotong] = useState(false);
   const [showPajakPenghasilan21, setShowPajakPenghasilan21] = useState(false);
   const [showPajakPenghasilan26, setShowPajakPenghasilan26] = useState(false);
-  const [showPernyataan, setShowPernyataan] = useState(false);
+  const [showPernyataan, setShowPernyataan] = useState(true);
   const [showTabelBPPUnifikasi, setShowTabelBPPUnifikasi] = useState(false);
   const [showTabelBPNRUnifikasi, setShowTabelBPNRUnifikasi] = useState(false);
   const [showTabelDaftarPPh, setShowTabelDaftarPPh] = useState(false);
@@ -60,6 +60,10 @@ const CreateKonsepUnifikasi = ({ data, sidebar }) => {
   const [showHeaderc, setShowHeaderc] = useState(false);
 
   const [showScrollTop, setShowScrollTop] = useState(false);
+
+  // State untuk Pernyataan kotak centang
+  const [isStatementChecked, setIsStatementChecked] = useState(false);
+
   const formatRupiah = (number) => {
     if (typeof number !== "number" && typeof number !== "string") return "";
 
@@ -126,7 +130,7 @@ const CreateKonsepUnifikasi = ({ data, sidebar }) => {
       const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
       const data = await axios.get(
         RoutesApi.apiUrl +
-          `student/assignments/${id}/sistem/${accountId}/spt/${idSpt}/show-bupot-pph-unifikasi`,
+        `student/assignments/${id}/sistem/${accountId}/spt/${idSpt}/show-bupot-pph-unifikasi`,
         {
           headers: {
             Authorization: `Bearer ${cookies.token}`,
@@ -943,11 +947,19 @@ const CreateKonsepUnifikasi = ({ data, sidebar }) => {
                 {showPernyataan && (
                   <div className="border rounded-md p-4 mb-4">
                     <div className="text-sm font-bold italic">
-                      <input type="checkbox" className="m-2" />
+                      <input type="checkbox"
+                        className="m-2"
+                        checked={isStatementChecked}
+                        onChange={(e) => setIsStatementChecked(e.target.checked)}
+                      />
                       PERNYATAAN : DENGAN MENYADARI SEPENUHNYA AKAN SEGALA
                       AKIBATNYA, SAYA MENYATAKAN BAHWA APA YANG TELAH SAYA
                       BERITAHUKAN DI ATAS BESERTA LAMPIRAN-LAMPIRANNYA ADALAH
                       BENAR, LENGKAP, JELAS, DAN TIDAK BERSYARAT
+                      {/* <span className="text-red-500">*</span> */}
+                      {!isStatementChecked && ( // Tampilkan peringatan jika tidak dicentang
+                        <span className="text-red-500 text-l ml-2"> (Wajib dicentang)</span>
+                      )}
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                       <div className="grid grid-cols-2 gap-4">
@@ -994,6 +1006,7 @@ const CreateKonsepUnifikasi = ({ data, sidebar }) => {
                         <div className="flex items-center space-x-2 w-full">
                           <input
                             type="text"
+                            value={data.nama_pic}
                             className="rounded w-full bg-gray-300 border-black text-sm p-2 flex-1"
                             disabled
                           />
@@ -1018,14 +1031,14 @@ const CreateKonsepUnifikasi = ({ data, sidebar }) => {
                   <AlertDialog>
                     <button
                       onClick={() => saveConcept.mutate()}
-                      disabled={saveConcept.isPending}
-                      className={`py-2 px-4 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-sm flex items-center justify-center ${
-                        saveConcept.isPending
+                      disabled={saveConcept.isPending || !isStatementChecked}
+                      className={`py-2 px-4 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-sm flex items-center justify-center 
+                        ${saveConcept.isPending || !isStatementChecked
                           ? "bg-blue-400 text-white cursor-not-allowed"
                           : userId
-                          ? "hidden"
-                          : "bg-blue-700 text-white hover:bg-blue-800"
-                      }`}
+                            ? "hidden"
+                            : "bg-blue-700 text-white hover:bg-blue-800"
+                        }`}
                     >
                       {saveConcept.isPending ? (
                         <>
@@ -1062,21 +1075,22 @@ const CreateKonsepUnifikasi = ({ data, sidebar }) => {
                         disabled={
                           saveConcept.isPending ||
                           payDeposit.isPending ||
-                          payBilling.isPending
+                          payBilling.isPending ||
+                          !isStatementChecked
                         }
-                        className={`py-2 px-4 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-sm flex items-center justify-center ${
-                          saveConcept.isPending ||
+                        className={`py-2 px-4 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-sm flex items-center justify-center ${saveConcept.isPending ||
                           payDeposit.isPending ||
-                          payBilling.isPending
-                            ? "bg-blue-400 text-white cursor-not-allowed"
-                            : userId
+                          payBilling.isPending ||
+                          !isStatementChecked
+                          ? "bg-blue-400 text-white cursor-not-allowed"
+                          : userId
                             ? "hidden"
                             : "bg-blue-700 text-white hover:bg-blue-800"
-                        }`}
+                          }`}
                       >
                         {saveConcept.isPending ||
-                        payDeposit.isPending ||
-                        payBilling.isPending ? (
+                          payDeposit.isPending ||
+                          payBilling.isPending ? (
                           <>
                             <svg
                               className="animate-spin -ml-1 mr-3 h-4 w-4 text-white"
@@ -1490,7 +1504,7 @@ const CreateKonsepUnifikasi = ({ data, sidebar }) => {
                                         (item) =>
                                           item.tipe_bupot === "BPNR" &&
                                           item.uang_persediaan ===
-                                            "Pembayaran Langsung"
+                                          "Pembayaran Langsung"
                                       )
                                       .reduce(
                                         (sum, item) =>
@@ -1552,7 +1566,7 @@ const CreateKonsepUnifikasi = ({ data, sidebar }) => {
                                               "DTP"
                                             )) &&
                                           item.uang_persediaan ===
-                                            "Pembayaran Langsung"
+                                          "Pembayaran Langsung"
                                       )
                                       .reduce(
                                         (sum, item) =>
@@ -1601,9 +1615,9 @@ const CreateKonsepUnifikasi = ({ data, sidebar }) => {
                     </div>
                   </div>
                   <div className="flex justify-end items-center mt-4">
-                    <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                    {/* <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
                       Simpan
-                    </button>
+                    </button> */}
                   </div>
                 </TabsContent>
                 <TabsContent value="DAFTAR-2">
@@ -1743,8 +1757,8 @@ const CreateKonsepUnifikasi = ({ data, sidebar }) => {
                                   <td className="border border-gray-300 px-2 py-1 text-right">
                                     {item.dasar_pengenaan_pajak
                                       ? parseInt(
-                                          item.dasar_pengenaan_pajak
-                                        ).toLocaleString()
+                                        item.dasar_pengenaan_pajak
+                                      ).toLocaleString()
                                       : "0"}
                                   </td>
                                   <td className="border border-gray-300 px-2 py-1 text-right">
@@ -1753,8 +1767,8 @@ const CreateKonsepUnifikasi = ({ data, sidebar }) => {
                                   <td className="border border-gray-300 px-2 py-1 text-right">
                                     {item.pajak_penghasilan
                                       ? parseInt(
-                                          item.pajak_penghasilan
-                                        ).toLocaleString()
+                                        item.pajak_penghasilan
+                                      ).toLocaleString()
                                       : "0"}
                                   </td>
                                   <td className="border border-gray-300 px-2 py-1">
@@ -1789,7 +1803,7 @@ const CreateKonsepUnifikasi = ({ data, sidebar }) => {
                                   ?.filter(
                                     (item) =>
                                       item.tipe_bupot ===
-                                        "Penyetoran Sendiri" &&
+                                      "Penyetoran Sendiri" &&
                                       (item.fasilitas_pajak?.includes(
                                         "Ditanggung Pemerintah"
                                       ) ||
@@ -1816,7 +1830,7 @@ const CreateKonsepUnifikasi = ({ data, sidebar }) => {
                                   ?.filter(
                                     (item) =>
                                       item.tipe_bupot ===
-                                        "Penyetoran Sendiri" &&
+                                      "Penyetoran Sendiri" &&
                                       !item.fasilitas_pajak?.includes(
                                         "Ditanggung Pemerintah"
                                       ) &&
@@ -1944,8 +1958,8 @@ const CreateKonsepUnifikasi = ({ data, sidebar }) => {
                                     <td className="border border-gray-300 px-2 py-1 text-right">
                                       {item.dasar_pengenaan_pajak
                                         ? parseInt(
-                                            item.dasar_pengenaan_pajak
-                                          ).toLocaleString()
+                                          item.dasar_pengenaan_pajak
+                                        ).toLocaleString()
                                         : "0"}
                                     </td>
                                     <td className="border border-gray-300 px-2 py-1 text-right">
@@ -1954,8 +1968,8 @@ const CreateKonsepUnifikasi = ({ data, sidebar }) => {
                                     <td className="border border-gray-300 px-2 py-1 text-right">
                                       {item.pajak_penghasilan
                                         ? parseInt(
-                                            item.pajak_penghasilan
-                                          ).toLocaleString()
+                                          item.pajak_penghasilan
+                                        ).toLocaleString()
                                         : "0"}
                                     </td>
                                     <td className="border border-gray-300 px-2 py-1">

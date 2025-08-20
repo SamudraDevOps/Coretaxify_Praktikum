@@ -43,7 +43,7 @@ const LihatKonsepUnifikasi = ({ data }) => {
   const [showIdentitasPemotong, setShowIdentitasPemotong] = useState(false);
   const [showPajakPenghasilan21, setShowPajakPenghasilan21] = useState(false);
   const [showPajakPenghasilan26, setShowPajakPenghasilan26] = useState(false);
-  const [showPernyataan, setShowPernyataan] = useState(false);
+  const [showPernyataan, setShowPernyataan] = useState(true);
   const [showTabelBPPUnifikasi, setShowTabelBPPUnifikasi] = useState(false);
   const [showTabelBPNRUnifikasi, setShowTabelBPNRUnifikasi] = useState(false);
   const [showTabelDaftarPPh, setShowTabelDaftarPPh] = useState(false);
@@ -124,7 +124,7 @@ const LihatKonsepUnifikasi = ({ data }) => {
       const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
       const data = await axios.get(
         RoutesApi.apiUrl +
-          `student/assignments/${id}/sistem/${accountId}/spt/${idSpt}/show-bupot-pph-unifikasi`,
+        `student/assignments/${id}/sistem/${accountId}/spt/${idSpt}/show-bupot-pph-unifikasi`,
         {
           headers: {
             Authorization: `Bearer ${cookies.token}`,
@@ -215,7 +215,7 @@ const LihatKonsepUnifikasi = ({ data }) => {
       //     }
       //   }
       // );
-            Swal.fire({
+      Swal.fire({
         title: "Berhasil!",
         text: "SPT berhasil dibayar!",
         icon: "success",
@@ -225,9 +225,9 @@ const LihatKonsepUnifikasi = ({ data }) => {
       }).then(() => {
         // setTambahPopupOpen(false);
         // window.location.reload();
-            navigate(
-              `/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt/konsep`
-            );
+        navigate(
+          `/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt/konsep`
+        );
       });
     },
     onError: (error) => {
@@ -290,7 +290,7 @@ const LihatKonsepUnifikasi = ({ data }) => {
       //     );
       //   }
       // });
-            Swal.fire({
+      Swal.fire({
         title: "Berhasil!",
         text: "Kode Billing SPT berhasil dibuat!",
         icon: "success",
@@ -300,9 +300,9 @@ const LihatKonsepUnifikasi = ({ data }) => {
       }).then(() => {
         // setTambahPopupOpen(false);
         // window.location.reload();
-          navigate(
-            `/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt/konsep`
-          );
+        navigate(
+          `/praktikum/${id}/sistem/${akun}/surat-pemberitahuan-spt/konsep`
+        );
       });
     },
     onError: (error) => {
@@ -313,9 +313,9 @@ const LihatKonsepUnifikasi = ({ data }) => {
 
   return (
     <div className="flex h-screen bg-gray-100">
-      <div className="flex-auto p-3 bg-white rounded-md h-full">
+      <div className="flex-auto p-3 bg-white rounded-md h-full min-w-0">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-3xl font-light text-yellow-500 mt-4">
+          <h2 className="text-3xl text-blue-900 mt-4">
             SPT MASA PPH UNIFIKASI
           </h2>
         </div>
@@ -933,7 +933,11 @@ const LihatKonsepUnifikasi = ({ data }) => {
                 {showPernyataan && (
                   <div className="border rounded-md p-4 mb-4">
                     <div className="text-sm font-bold italic">
-                      <input type="checkbox" className="m-2" />
+                      <input type="checkbox"
+                        className="m-2"
+                        defaultChecked={true}
+                        disabled={true}
+                      />
                       PERNYATAAN : DENGAN MENYADARI SEPENUHNYA AKAN SEGALA
                       AKIBATNYA, SAYA MENYATAKAN BAHWA APA YANG TELAH SAYA
                       BERITAHUKAN DI ATAS BESERTA LAMPIRAN-LAMPIRANNYA ADALAH
@@ -948,6 +952,8 @@ const LihatKonsepUnifikasi = ({ data }) => {
                           <input
                             type="radio"
                             id="test1"
+                            disabled={true}
+                        // defaultChecked={true}
                             name="ditandatangani"
                             className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
                           />
@@ -960,6 +966,7 @@ const LihatKonsepUnifikasi = ({ data }) => {
                           <input
                             type="radio"
                             id="test2"
+                            disabled={true}
                             name="ditandatangani"
                             className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
                             onClick={(e) =>
@@ -984,6 +991,7 @@ const LihatKonsepUnifikasi = ({ data }) => {
                         <div className="flex items-center space-x-2 w-full">
                           <input
                             type="text"
+                            value={data.nama_pic}
                             className="rounded w-full bg-gray-300 border-black text-sm p-2 flex-1"
                             disabled
                           />
@@ -1194,8 +1202,8 @@ const LihatKonsepUnifikasi = ({ data }) => {
                         )}
                       </div>
                       {showTabelBPPUnifikasi && (
-                        <div className="border rounded-md p-4 overflow-x-auto w-[1400px]">
-                          <table className="w-[1200px] text-sm text-left border overflow-x-auto">
+                        <div className="border rounded-md p-4 overflow-x-auto">
+                          <table className="text-sm text-left border overflow-x-auto">
                             <thead className="bg-purple-700 text-white text-center ">
                               <tr>
                                 <th className="border border-gray-300 px-2 py-1 whitespace-normal">
@@ -1324,8 +1332,8 @@ const LihatKonsepUnifikasi = ({ data }) => {
                           )}
                         </div>
                         {showTabelBPNRUnifikasi && (
-                          <div className="border rounded-md p-4 overflow-x-auto w-[1400px]">
-                            <table className="w-[1200px] text-sm text-left border overflow-x-auto">
+                          <div className="border rounded-md p-4 overflow-x-auto">
+                            <table className="text-sm text-left border overflow-x-auto">
                               <thead className="bg-purple-700 text-white text-center ">
                                 <tr>
                                   <th className="border border-gray-300 px-2 py-1 whitespace-normal">
@@ -1451,7 +1459,7 @@ const LihatKonsepUnifikasi = ({ data }) => {
                                         (item) =>
                                           item.tipe_bupot === "BPNR" &&
                                           item.uang_persediaan ===
-                                            "Pembayaran Langsung"
+                                          "Pembayaran Langsung"
                                       )
                                       .reduce(
                                         (sum, item) =>
@@ -1513,7 +1521,7 @@ const LihatKonsepUnifikasi = ({ data }) => {
                                               "DTP"
                                             )) &&
                                           item.uang_persediaan ===
-                                            "Pembayaran Langsung"
+                                          "Pembayaran Langsung"
                                       )
                                       .reduce(
                                         (sum, item) =>
@@ -1562,9 +1570,9 @@ const LihatKonsepUnifikasi = ({ data }) => {
                     </div>
                   </div>
                   <div className="flex justify-end items-center mt-4">
-                    <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                    {/* <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
                       Simpan
-                    </button>
+                    </button> */}
                   </div>
                 </TabsContent>
                 <TabsContent value="DAFTAR-2">
@@ -1615,8 +1623,8 @@ const LihatKonsepUnifikasi = ({ data }) => {
                       {showTabelDaftarPPh ? <FaChevronUp /> : <FaChevronDown />}
                     </div>
                     {showTabelDaftarPPh && (
-                      <div className="border rounded-md p-4 overflow-x-auto w-[1400px]">
-                        <table className="w-[1200px] text-sm text-left border overflow-x-auto">
+                      <div className="border rounded-md p-4 overflow-x-auto">
+                        <table className="text-sm text-left border overflow-x-auto">
                           <thead className="bg-purple-700 text-white text-center ">
                             <tr>
                               <th className="border border-gray-300 px-2 py-1 whitespace-normal">
@@ -1704,8 +1712,8 @@ const LihatKonsepUnifikasi = ({ data }) => {
                                   <td className="border border-gray-300 px-2 py-1 text-right">
                                     {item.dasar_pengenaan_pajak
                                       ? parseInt(
-                                          item.dasar_pengenaan_pajak
-                                        ).toLocaleString()
+                                        item.dasar_pengenaan_pajak
+                                      ).toLocaleString()
                                       : "0"}
                                   </td>
                                   <td className="border border-gray-300 px-2 py-1 text-right">
@@ -1714,8 +1722,8 @@ const LihatKonsepUnifikasi = ({ data }) => {
                                   <td className="border border-gray-300 px-2 py-1 text-right">
                                     {item.pajak_penghasilan
                                       ? parseInt(
-                                          item.pajak_penghasilan
-                                        ).toLocaleString()
+                                        item.pajak_penghasilan
+                                      ).toLocaleString()
                                       : "0"}
                                   </td>
                                   <td className="border border-gray-300 px-2 py-1">
@@ -1750,7 +1758,7 @@ const LihatKonsepUnifikasi = ({ data }) => {
                                   ?.filter(
                                     (item) =>
                                       item.tipe_bupot ===
-                                        "Penyetoran Sendiri" &&
+                                      "Penyetoran Sendiri" &&
                                       (item.fasilitas_pajak?.includes(
                                         "Ditanggung Pemerintah"
                                       ) ||
@@ -1777,7 +1785,7 @@ const LihatKonsepUnifikasi = ({ data }) => {
                                   ?.filter(
                                     (item) =>
                                       item.tipe_bupot ===
-                                        "Penyetoran Sendiri" &&
+                                      "Penyetoran Sendiri" &&
                                       !item.fasilitas_pajak?.includes(
                                         "Ditanggung Pemerintah"
                                       ) &&
@@ -1816,8 +1824,8 @@ const LihatKonsepUnifikasi = ({ data }) => {
                         )}
                       </div>
                       {showTabelDaftarPajakPenghasilan && (
-                        <div className="border rounded-md p-4 overflow-x-auto w-[1400px]">
-                          <table className="w-[1200px] text-sm text-left border overflow-x-auto">
+                        <div className="border rounded-md p-4 overflow-x-auto">
+                          <table className=" text-sm text-left border overflow-x-auto">
                             <thead className="bg-purple-700 text-white text-center ">
                               <tr>
                                 <th className="border border-gray-300 px-2 py-1 whitespace-normal">
@@ -1905,8 +1913,8 @@ const LihatKonsepUnifikasi = ({ data }) => {
                                     <td className="border border-gray-300 px-2 py-1 text-right">
                                       {item.dasar_pengenaan_pajak
                                         ? parseInt(
-                                            item.dasar_pengenaan_pajak
-                                          ).toLocaleString()
+                                          item.dasar_pengenaan_pajak
+                                        ).toLocaleString()
                                         : "0"}
                                     </td>
                                     <td className="border border-gray-300 px-2 py-1 text-right">
@@ -1915,8 +1923,8 @@ const LihatKonsepUnifikasi = ({ data }) => {
                                     <td className="border border-gray-300 px-2 py-1 text-right">
                                       {item.pajak_penghasilan
                                         ? parseInt(
-                                            item.pajak_penghasilan
-                                          ).toLocaleString()
+                                          item.pajak_penghasilan
+                                        ).toLocaleString()
                                         : "0"}
                                     </td>
                                     <td className="border border-gray-300 px-2 py-1">
@@ -2010,8 +2018,8 @@ const LihatKonsepUnifikasi = ({ data }) => {
                       <div className="border rounded-md p-4 mb-4 font-semibold">
                         TABEL I. ATC
                       </div>
-                      <div className="border rounded-md p-4 overflow-x-auto w-[1400px]">
-                        <table className="w-[1200px] text-sm text-left border overflow-x-auto">
+                      <div className="border rounded-md p-4 overflow-x-auto">
+                        <table className="text-sm text-left border overflow-x-auto">
                           <thead className="bg-purple-700 text-white text-center ">
                             <tr>
                               <th className="border border-gray-300 px-2 py-1 whitespace-normal">
