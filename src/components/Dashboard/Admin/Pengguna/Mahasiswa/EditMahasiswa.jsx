@@ -176,35 +176,67 @@ const EditMahasiswa = () => {
 
               <div className="pagination">
                 <button
-                  className={`page-item`}
-                  onClick={() => {
-                    setUrl(data.links.prev);
-                  }}
+                  className="page-item"
+                  onClick={() => setUrl(data.links.prev)}
                   disabled={data.meta.current_page === 1}
                 >
                   &lt;
                 </button>
-                <button className="page-item">{data.meta.current_page}</button>
-                {/* {Array.from({ length: Math.ceil(data.length / itemsPerPage) }, (_, index) => (
-                            <button key={index + 1} className={`page-item ${currentPage === index + 1 ? "active" : ""}`} onClick={() => paginate(index + 1)}>
-                                {index + 1}
-                            </button>
-                        ))} */}
+
+                {(() => {
+                  const currentPage = data.meta.current_page;
+                  const lastPage = data.meta.last_page;
+                  const pages = [];
+
+                  const addPage = (page) => {
+                    pages.push(
+                      <button
+                        key={page}
+                        className={`page-item ${currentPage === page ? "active" : ""}`}
+                        onClick={() =>
+                          setUrl(`${RoutesApi.getUserAdmin.url}?page=${page}`)
+                        }
+                      >
+                        {page}
+                      </button>
+                    );
+                  };
+
+                  // 1) Selalu tampilkan halaman pertama
+                  addPage(1);
+
+                  // 2) Titik jika ada jeda dari awal
+                  if (currentPage > 2) {
+                    pages.push(<span key="dots-start">...</span>);
+                  }
+
+                  // 3) Tampilkan halaman saat ini (jika bukan 1 / last)
+                  if (currentPage !== 1 && currentPage !== lastPage) {
+                    addPage(currentPage);
+                  }
+
+                  // 4) Titik jika masih ada jeda ke akhir
+                  if (currentPage < lastPage - 1) {
+                    pages.push(<span key="dots-end">...</span>);
+                  }
+
+                  // 5) Selalu tampilkan halaman terakhir (jika > 1)
+                  if (lastPage > 1) {
+                    addPage(lastPage);
+                  }
+
+                  return pages;
+                })()} {/* <- penting: pastikan ada () untuk mengeksekusi IIFE */}
+
                 <button
-                  className={`page-item ${
-                    currentPage === Math.ceil(data.length / itemsPerPage)
-                      ? "disabled"
-                      : ""
-                  }`}
-                  onClick={() => {
-                    console.log(data.links.next);
-                    setUrl(data.links.next);
-                  }}
+                  className="page-item"
+                  onClick={() => setUrl(data.links.next)}
                   disabled={data.links.next == null}
                 >
                   &gt;
                 </button>
               </div>
+
             </div>
           </div>
           {isOpen && (

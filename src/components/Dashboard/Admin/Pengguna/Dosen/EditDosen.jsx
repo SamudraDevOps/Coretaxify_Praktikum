@@ -174,9 +174,8 @@ const EditDosen = () => {
 
     Swal.fire({
       title: "Tambah Dosen",
-      text: `Anda akan menambahkan ${
-        validLecturers.length + invalidLecturers.length
-      } dosen baru. Lanjutkan?`,
+      text: `Anda akan menambahkan ${validLecturers.length + invalidLecturers.length
+        } dosen baru. Lanjutkan?`,
       icon: "question",
       showCancelButton: true,
       confirmButtonText: "Ya, lanjutkan",
@@ -197,12 +196,10 @@ const EditDosen = () => {
                 // Show alert about partial success
                 Swal.fire({
                   title: "Sebagian Data Berhasil Disimpan",
-                  html: `${
-                    validLecturers.length
-                  } dosen berhasil disimpan.<br><br>
-                         ${
-                           invalidLecturers.length
-                         } dosen gagal disimpan dengan error:<br>
+                  html: `${validLecturers.length
+                    } dosen berhasil disimpan.<br><br>
+                         ${invalidLecturers.length
+                    } dosen gagal disimpan dengan error:<br>
                          ${errors.join("<br>")}`,
                   icon: "warning",
                   timer: 2000, // auto close after 2 seconds
@@ -404,7 +401,7 @@ const EditDosen = () => {
             dosen={selectedDosen}
             onSave={handleCreateMultipleDosen}
             initialStudents={invalidLecturers}
-            // id={id}
+          // id={id}
           />
         )}
         <EditPopupDosen
@@ -413,7 +410,7 @@ const EditDosen = () => {
           dosen={selectedDosen}
           onSave={handleUpdateDosen}
           refetch={refetch}
-          // id={id}
+        // id={id}
         />
         <div className="table-container">
           <table>
@@ -505,30 +502,59 @@ const EditDosen = () => {
             </div> */}
             <div className="pagination">
               <button
-                className={`page-item`}
-                onClick={() => {
-                  setUrl(data.links.prev);
-                }}
+                className="page-item"
+                onClick={() => setUrl(data.links.prev)}
                 disabled={data.meta.current_page === 1}
               >
                 &lt;
               </button>
-              <button className="page-item">{data.meta.current_page}</button>
-              {/* {Array.from({ length: Math.ceil(data.length / itemsPerPage) }, (_, index) => (
-                              <button key={index + 1} className={`page-item ${currentPage === index + 1 ? "active" : ""}`} onClick={() => paginate(index + 1)}>
-                                  {index + 1}
-                              </button>
-                          ))} */}
+
+              {(() => {
+                const currentPage = data.meta.current_page;
+                const lastPage = data.meta.last_page;
+                const pages = [];
+
+                const addPage = (page) => {
+                  pages.push(
+                    <button
+                      key={page}
+                      className={`page-item ${currentPage === page ? "active" : ""}`}
+                      onClick={() => setUrl(`${RoutesApi.getDosenAdmin.url}?page=${page}`)}
+                    >
+                      {page}
+                    </button>
+                  );
+                };
+
+                // Selalu tampilkan halaman pertama
+                addPage(1);
+
+                // Jika currentPage lebih dari 2, kasih titik
+                if (currentPage > 2) {
+                  pages.push(<span key="dots-start">...</span>);
+                }
+
+                // Tampilkan currentPage (selain 1 & lastPage)
+                if (currentPage !== 1 && currentPage !== lastPage) {
+                  addPage(currentPage);
+                }
+
+                // Jika currentPage < lastPage - 1, kasih titik
+                if (currentPage < lastPage - 1) {
+                  pages.push(<span key="dots-end">...</span>);
+                }
+
+                // Selalu tampilkan halaman terakhir (kalau > 1)
+                if (lastPage > 1) {
+                  addPage(lastPage);
+                }
+
+                return pages;
+              })()}
+
               <button
-                className={`page-item ${
-                  currentPage === Math.ceil(data.length / itemsPerPage)
-                    ? "disabled"
-                    : ""
-                }`}
-                onClick={() => {
-                  console.log(data.links.next);
-                  setUrl(data.links.next);
-                }}
+                className="page-item"
+                onClick={() => setUrl(data.links.next)}
                 disabled={data.links.next == null}
               >
                 &gt;

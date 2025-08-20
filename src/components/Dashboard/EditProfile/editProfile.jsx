@@ -54,9 +54,9 @@ const EditProfile = () => {
   // Prepare headers if token exists
   const headers = cookies.token
     ? {
-        Authorization: `Bearer ${cookies.token}`,
-        Accept: "application/json",
-      }
+      Authorization: `Bearer ${cookies.token}`,
+      Accept: "application/json",
+    }
     : {};
 
   // GET PROFILE DATA
@@ -84,8 +84,8 @@ const EditProfile = () => {
       const photoUrl = user.image_path
         ? `${RoutesApi.url}storage/${user.image_path}`
         : `https://ui-avatars.com/api/?name=${encodeURIComponent(
-            user.name || "User"
-          )}&background=random&size=128`;
+          user.name || "User"
+        )}&background=random&size=128`;
 
       const profileData = {
         id: user.id || "",
@@ -465,11 +465,10 @@ const EditProfile = () => {
                     </label>
                     <div className="bg-gray-50 border rounded-lg px-4 py-3 text-gray-800">
                       <span
-                        className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${
-                          profile.status === "ACTIVE"
+                        className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${profile.status === "ACTIVE"
                             ? "bg-green-100 text-green-800"
                             : "bg-red-100 text-red-800"
-                        }`}
+                          }`}
                       >
                         {profile.status === "ACTIVE" ? "Aktif" : "Tidak Aktif"}
                       </span>
@@ -560,7 +559,7 @@ const EditProfile = () => {
                 </div>
 
                 {/* Password Baru */}
-                {/* <div>
+                <div>
                   <label
                     className="block text-gray-700 font-medium mb-1"
                     htmlFor="password"
@@ -596,10 +595,10 @@ const EditProfile = () => {
                   <p className="text-xs text-gray-500 mt-1">
                     Password minimal 4 karakter
                   </p>
-                </div> */}
+                </div>
 
                 {/* Konfirmasi Password */}
-                {/* <div>
+                <div>
                   <label
                     className="block text-gray-700 font-medium mb-1"
                     htmlFor="confirmPassword"
@@ -631,7 +630,7 @@ const EditProfile = () => {
                       {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
                     </button>
                   </div>
-                </div> */}
+                </div>
 
                 {/* Tombol */}
                 <div className="flex justify-end gap-3 pt-4">
