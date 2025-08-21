@@ -386,38 +386,61 @@ export default function DosenPraktikumKelasMember() {
           </div>
 
           <div className="pagination">
+            {/* Prev */}
             <button
-              className={`page-item`}
-              onClick={() => {
-                onPageChange(getPageFromUrl(data.links.prev))
-                // setUrl(data.links.prev);
-              }}
-              disabled={data.links.prev === null}
+              className="page-item"
+              onClick={() => onPageChange(currentPage - 1)}
+              disabled={currentPage <= 1}
             >
               &lt;
             </button>
-            <button className="page-item">{data.meta.current_page}</button>
-            {/* {Array.from({ length: Math.ceil(data.length / itemsPerPage) }, (_, index) => (
-                            <button key={index + 1} className={`page-item ${currentPage === index + 1 ? "active" : ""}`} onClick={() => paginate(index + 1)}>
-                                {index + 1}
-                            </button>
-                        ))} */}
+
+            {(() => {
+              const pages = [];
+              const current = data.meta.current_page;
+              const last = data.meta.last_page;
+
+              const addBtn = (p) => {
+                pages.push(
+                  <button
+                    key={p}
+                    className={`page-item ${current === p ? "active" : ""}`}
+                    onClick={() => onPageChange(p)}
+                    disabled={current === p}
+                  >
+                    {p}
+                  </button>
+                );
+              };
+
+              // 1) Halaman pertama
+              addBtn(1);
+
+              // 2) Titik di awal jika ada gap
+              if (current > 2) pages.push(<span key="dots-start">...</span>);
+
+              // 3) Halaman saat ini (bukan 1 / last)
+              if (current !== 1 && current !== last) addBtn(current);
+
+              // 4) Titik di akhir jika ada gap
+              if (current < last - 1) pages.push(<span key="dots-end">...</span>);
+
+              // 5) Halaman terakhir
+              if (last > 1) addBtn(last);
+
+              return pages;
+            })()}
+
+            {/* Next */}
             <button
-              className={`page-item ${
-                currentPage === Math.ceil(data.length / itemsPerPage)
-                  ? "disabled"
-                  : ""
-              }`}
-              onClick={() => {
-                onPageChange(getPageFromUrl(data.links.next))
-                // console.log(data.links.next);
-                // setUrl(data.links.next);
-              }}
-              disabled={data.links.next == null}
+              className="page-item"
+              onClick={() => onPageChange(currentPage + 1)}
+              disabled={currentPage >= data.meta.last_page}
             >
               &gt;
             </button>
           </div>
+
         </div>
       </div>
       {isOpen && (
