@@ -99,7 +99,7 @@ const ViewKonsepSPT = ({ data }) => {
     setShowPemungutanPPNatauPPNdanPPNMBolehPihakLain,
   ] = useState(false);
   const [showKelengkapan, setShowKelengkapan] = useState(false);
-  const [showPernyataan, setShowPernyataan] = useState(false);
+  const [showPernyataan, setShowPernyataan] = useState(true);
 
   const [showHeadera1, setShowHeadera1] = useState(false);
   const [showHeadera2, setShowHeadera2] = useState(false);
@@ -493,7 +493,7 @@ const ViewKonsepSPT = ({ data }) => {
       const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
       const response = await axios.get(
         RoutesApi.apiUrl +
-          `student/assignments/${id}/sistem/${accountId}/spt/${idSpt}/show-faktur-ppn`,
+        `student/assignments/${id}/sistem/${accountId}/spt/${idSpt}/show-faktur-ppn`,
         {
           headers: {
             Authorization: `Bearer ${cookies.token}`,
@@ -2262,7 +2262,7 @@ const ViewKonsepSPT = ({ data }) => {
                               // value={data.detail_spt.cl_3e_ppn}
                               name="cl_3e_ppn"
                               readOnly
-                              // onChange={handleChange}
+                            // onChange={handleChange}
                             />
                           </td>
                           <td className="p-2 flex items-center gap-2"></td>
@@ -3184,9 +3184,13 @@ const ViewKonsepSPT = ({ data }) => {
                   {setShowPernyataan ? <FaChevronUp /> : <FaChevronDown />}
                 </div>
                 {showPernyataan && (
-                  <div className="border rounded-md p-4 mb-4">
+                  <div className="border rounded-md p-4 mb-4 ">
                     <div className="text-sm font-bold italic">
-                      <input type="checkbox" className="m-2" />
+                      <input type="checkbox"
+                        className="m-2"
+                        defaultChecked={true}
+                        disabled={true}
+                      />
                       PERNYATAAN : DENGAN MENYADARI SEPENUHNYA AKAN SEGALA
                       AKIBATNYA, SAYA MENYATAKAN BAHWA APA YANG TELAH SAYA
                       BERITAHUKAN DI ATAS BESERTA LAMPIRAN-LAMPIRANNYA ADALAH
@@ -3203,8 +3207,8 @@ const ViewKonsepSPT = ({ data }) => {
                             id="test1"
                             name="ditandatangani"
                             className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
-                            disabled
-                            // value={}
+                            disabled={true}
+                          // value={}
                           />
                           <label
                             htmlFor="PKP"
@@ -3215,6 +3219,7 @@ const ViewKonsepSPT = ({ data }) => {
                           <input
                             type="radio"
                             id="test2"
+                            disabled={true}
                             name="ditandatangani"
                             className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
                             onClick={(e) =>
@@ -3254,6 +3259,7 @@ const ViewKonsepSPT = ({ data }) => {
                           <input
                             type="text"
                             name="nama_pic"
+                            value={data.nama_pic}
                             className="rounded w-full bg-gray-300 border-black text-sm p-2 flex-1"
                             disabled
                           />
@@ -3284,7 +3290,8 @@ const ViewKonsepSPT = ({ data }) => {
                           <input
                             name="cl_10_batas_waktu"
                             type="date"
-                            className="rounded w-full bg-white border-grey-300 border text-sm p-2 flex-1"
+                            disabled={true}
+                            className="rounded w-full bg-gray-300 border-black text-sm p-2 flex-1"
                             onChange={handleChange}
                             value={formData.cl_10_batas_waktu}
                             readOnly

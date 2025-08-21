@@ -101,7 +101,7 @@ const CreateKonsepSPT = ({ data, sidebar }) => {
     setShowPemungutanPPNatauPPNdanPPNMBolehPihakLain,
   ] = useState(false);
   const [showKelengkapan, setShowKelengkapan] = useState(false);
-  const [showPernyataan, setShowPernyataan] = useState(false);
+  const [showPernyataan, setShowPernyataan] = useState(true);
 
   const [showHeadera1, setShowHeadera1] = useState(false);
   const [showHeadera2, setShowHeadera2] = useState(false);
@@ -114,6 +114,8 @@ const CreateKonsepSPT = ({ data, sidebar }) => {
   const [openUpload, setOpenUpload] = useState(false);
   const [openLampiran, setOpenLampiran] = useState(false);
   const [openPenyerahan, setOpenPenyerahan] = useState(false);
+
+  const [isStatementChecked, setIsStatementChecked] = useState(false);
 
   const [searchParams, setSearchParams] = useSearchParams();
   const viewAsCompanyId = searchParams.get("viewAs");
@@ -523,7 +525,7 @@ const CreateKonsepSPT = ({ data, sidebar }) => {
       const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
       const response = await axios.get(
         RoutesApi.apiUrl +
-          `student/assignments/${id}/sistem/${accountId}/spt/${idSpt}/show-faktur-ppn`,
+        `student/assignments/${id}/sistem/${accountId}/spt/${idSpt}/show-faktur-ppn`,
         {
           headers: {
             Authorization: `Bearer ${cookies.token}`,
@@ -831,7 +833,7 @@ const CreateKonsepSPT = ({ data, sidebar }) => {
       //   `Terjadi kesalahan saat menyimpan data. ${error?.response?.data?.message}`,
       //   "error"
       // );
-      
+
       Swal.fire({
         title: "Gagal!",
         text: `Terjadi kesalahan saat menyimpan data. ${error?.response?.data?.message}`,
@@ -1120,11 +1122,10 @@ const CreateKonsepSPT = ({ data, sidebar }) => {
                       <button
                         onClick={() => calculateSpt.mutate()}
                         disabled={calculateSpt.isPending}
-                        className={`flex items-center justify-center gap-2 px-4 py-2 rounded-md shadow-sm transition ${
-                          calculateSpt.isPending
-                            ? "bg-yellow-300 text-white cursor-not-allowed"
-                            : "bg-yellow-500 hover:bg-yellow-600 text-white"
-                        }`}
+                        className={`flex items-center justify-center gap-2 px-4 py-2 rounded-md shadow-sm transition ${calculateSpt.isPending
+                          ? "bg-yellow-300 text-white cursor-not-allowed"
+                          : "bg-yellow-500 hover:bg-yellow-600 text-white"
+                          }`}
                       >
                         {calculateSpt.isPending ? (
                           <>
@@ -2331,7 +2332,7 @@ const CreateKonsepSPT = ({ data, sidebar }) => {
                               // value={data.detail_spt.cl_3e_ppn}
                               name="cl_3e_ppn"
                               readOnly
-                              // onChange={handleChange}
+                            // onChange={handleChange}
                             />
                           </td>
                           <td className="p-2 flex items-center gap-2"></td>
@@ -3226,11 +3227,20 @@ const CreateKonsepSPT = ({ data, sidebar }) => {
                 {showPernyataan && (
                   <div className="border rounded-md p-4 mb-4">
                     <div className="text-sm font-bold italic">
-                      <input type="checkbox" className="m-2" />
+                      <input type="checkbox"
+                        className="m-2"
+                        checked={isStatementChecked}
+                        onChange={(e) => setIsStatementChecked(e.target.checked)}
+                      />
                       PERNYATAAN : DENGAN MENYADARI SEPENUHNYA AKAN SEGALA
                       AKIBATNYA, SAYA MENYATAKAN BAHWA APA YANG TELAH SAYA
                       BERITAHUKAN DI ATAS BESERTA LAMPIRAN-LAMPIRANNYA ADALAH
                       BENAR, LENGKAP, JELAS, DAN TIDAK BERSYARAT
+                      {/* <span className="text-red-500">*</span> */}
+                      {!isStatementChecked && ( // Tampilkan peringatan jika tidak dicentang
+                        <span className="text-red-500 text-l ml-2"> (Wajib dicentang)</span>
+                      )}
+
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                       <div className="grid grid-cols-2 gap-4">
@@ -3244,7 +3254,7 @@ const CreateKonsepSPT = ({ data, sidebar }) => {
                             name="ditandatangani"
                             className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
                             disabled
-                            // value={}
+                          // value={}
                           />
                           <label
                             htmlFor="PKP"
@@ -3294,6 +3304,7 @@ const CreateKonsepSPT = ({ data, sidebar }) => {
                           <input
                             type="text"
                             name="nama_pic"
+                            value={data.nama_pic}
                             className="rounded w-full bg-gray-300 border-black text-sm p-2 flex-1"
                             disabled
                           />
@@ -3337,14 +3348,14 @@ const CreateKonsepSPT = ({ data, sidebar }) => {
                   <AlertDialog>
                     <button
                       onClick={() => saveConcept.mutate()}
-                      disabled={saveConcept.isPending}
-                      className={`py-2 px-4 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-sm flex items-center justify-center ${
-                        saveConcept.isPending
+                      disabled={saveConcept.isPending || !isStatementChecked}
+                      className={`py-2 px-4 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-sm flex items-center justify-center 
+                        ${saveConcept.isPending || !isStatementChecked
                           ? "bg-blue-400 text-white cursor-not-allowed"
                           : userId
-                          ? "hidden"
-                          : "bg-blue-700 text-white hover:bg-blue-800"
-                      }`}
+                            ? "hidden"
+                            : "bg-blue-700 text-white hover:bg-blue-800"
+                        }`}
                     >
                       {saveConcept.isPending ? (
                         <>
@@ -3381,21 +3392,22 @@ const CreateKonsepSPT = ({ data, sidebar }) => {
                         disabled={
                           saveConcept.isPending ||
                           payDeposit.isPending ||
-                          payBilling.isPending
+                          payBilling.isPending ||
+                          !isStatementChecked
                         }
-                        className={`py-2 px-4 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-sm flex items-center justify-center ${
-                          saveConcept.isPending ||
+                        className={`py-2 px-4 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-sm flex items-center justify-center ${saveConcept.isPending ||
                           payDeposit.isPending ||
-                          payBilling.isPending
-                            ? "bg-blue-400 text-white cursor-not-allowed"
-                            : userId
+                          payBilling.isPending ||
+                          !isStatementChecked
+                          ? "bg-blue-400 text-white cursor-not-allowed"
+                          : userId
                             ? "hidden"
                             : "bg-blue-700 text-white hover:bg-blue-800"
-                        }`}
+                          }`}
                       >
                         {saveConcept.isPending ||
-                        payDeposit.isPending ||
-                        payBilling.isPending ? (
+                          payDeposit.isPending ||
+                          payBilling.isPending ? (
                           <>
                             <svg
                               className="animate-spin -ml-1 mr-3 h-4 w-4 text-white"
@@ -3742,7 +3754,7 @@ const CreateKonsepSPT = ({ data, sidebar }) => {
                               Faktur Pajak Dokumen Tertentu/Nota Retur/Nota
                               Pembatalan - nomor
                             </th>
-                              <th className="p-2 border-b min-w-[150px] break-words">
+                            <th className="p-2 border-b min-w-[150px] break-words">
                               Faktur Pajak Dokumen Tertentu/Nota Retur/Nota
                               Pembatalan - Tanggal
                             </th>

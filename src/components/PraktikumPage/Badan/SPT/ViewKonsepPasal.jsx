@@ -190,7 +190,7 @@ const LihatKonsepPasal = ({ data }) => {
   const [showIdentitasPemotong, setShowIdentitasPemotong] = useState(false);
   const [showPajakPenghasilan21, setShowPajakPenghasilan21] = useState(false);
   const [showPajakPenghasilan26, setShowPajakPenghasilan26] = useState(false);
-  const [showPernyataan, setShowPernyataan] = useState(false);
+  const [showPernyataan, setShowPernyataan] = useState(true);
 
   const [showHeadera1, setShowHeadera1] = useState(false);
   const [showHeadera2, setShowHeadera2] = useState(false);
@@ -454,10 +454,10 @@ const LihatKonsepPasal = ({ data }) => {
 
   return (
     <div className="flex h-screen bg-gray-100">
-      <div className="flex-auto p-3 bg-white rounded-md h-full">
+      <div className="flex-auto p-3 bg-white rounded-md h-full min-w-0">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-3xl font-light text-yellow-500 mt-4">
-            PEMOTONGAN PPH PASAL 21 DAN ATAU PASAL 26
+          <h2 className="text-3xl text-blue-900 mt-4"> 
+            PEMOTONGAN PPH PASAL 21 DAN ATAU PASAL 26 
           </h2>
         </div>
         <div className="w-full p-2 ml-0 border-t text-lg">
@@ -994,7 +994,11 @@ const LihatKonsepPasal = ({ data }) => {
                 {showPernyataan && (
                   <div className="border rounded-md p-4 mb-4">
                     <div className="text-sm font-bold italic">
-                      <input readOnly type="checkbox" className="m-2" />
+                      <input readOnly type="checkbox" 
+                      className="m-2" 
+                      defaultChecked={true}
+                      disabled={true}
+                      />
                       PERNYATAAN : DENGAN MENYADARI SEPENUHNYA AKAN SEGALA
                       AKIBATNYA, SAYA MENYATAKAN BAHWA APA YANG TELAH SAYA
                       BERITAHUKAN DI ATAS BESERTA LAMPIRAN-LAMPIRANNYA ADALAH
@@ -1009,6 +1013,7 @@ const LihatKonsepPasal = ({ data }) => {
                           <input
                             type="radio"
                             id="test1"
+                            disabled={true}
                             name="ditandatangani"
                             className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
                           />
@@ -1021,6 +1026,7 @@ const LihatKonsepPasal = ({ data }) => {
                           <input
                             type="radio"
                             id="test2"
+                            disabled={true}
                             name="ditandatangani"
                             className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
                             onClick={(e) =>
@@ -1209,7 +1215,7 @@ const LihatKonsepPasal = ({ data }) => {
               <>
                 <TabsContent value="L1">
                   <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-lg font-light text-yellow-500 mt-4">
+                    <h2 className="text-black mt-4">
                       DAFTAR PEMOTONGAN BULANAN PAJAK PENGHASILAN PASAL 21 BAGI
                       PEGAWAI TETAP DAN PENSIUNAN YANG MENERIMA UANG TERKAIT
                       PENSIUN SECARA BERKALA SERTA BAGI PEGAWAI NEGERI SIPIL,
@@ -1254,7 +1260,7 @@ const LihatKonsepPasal = ({ data }) => {
                       </div>
                     )}
                     <div className="border rounded-md p-4 mb-4">
-                      <div className="w-[1450px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden">
+                      <div className=" overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden">
                         <table className="table-auto text-sm text-left border overflow-hidden">
                           <thead className="bg-purple-700 text-white text-center">
                             <tr>
@@ -1467,7 +1473,7 @@ const LihatKonsepPasal = ({ data }) => {
                 </TabsContent>
                 <TabsContent value="l-ib">
                   <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-lg font-light text-yellow-500 mt-4">
+                    <h2 className="text-black mt-4">
                       DAFTAR PEMOTONGAN PAJAK PENGHASILAN PASAL 21 BAGI PEGAWAI
                       TETAP DAN PENSIUNAN YANG MENERIMA UANG TERKAIT PENSIUN
                       SECARA BERKALA SERTA BAGI PEGAWAI NEGERI SIPIL, ANGGOTA
@@ -1516,7 +1522,7 @@ const LihatKonsepPasal = ({ data }) => {
                       <div className="border rounded-md p-4 mb-4 font-semibold">
                         BPA1
                       </div>
-                      <div className="w-[1400px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden">
+                      <div className="overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden">
                         <table className="table-auto text-sm text-left border overflow-hidden">
                           <thead className="bg-purple-700 text-white text-center">
                             <tr>
@@ -1561,9 +1567,9 @@ const LihatKonsepPasal = ({ data }) => {
                           </thead>
                           <tbody className="text-gray-600 text-center">
                             <tr>
-                              <td className="p-2 border-b text-center">1</td>
+                              <td className="p-2 border-b text-center">-</td>
                               <td className="p-2 border-b">
-                                881381978971381309
+                                -
                               </td>
                               <td className="p-2 border-b">-</td>
                               <td className="p-2 border-b">-</td>
@@ -1602,7 +1608,7 @@ const LihatKonsepPasal = ({ data }) => {
                       <div className="border rounded-md p-4 mb-4 font-semibold">
                         BPA2
                       </div>
-                      <div className="w-[1400px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden">
+                      <div className="overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden">
                         <table className="table-auto text-sm text-left border overflow-hidden">
                           <thead className="bg-purple-700 text-white text-center">
                             <tr>
@@ -1647,9 +1653,9 @@ const LihatKonsepPasal = ({ data }) => {
                           </thead>
                           <tbody className="text-gray-600 text-center">
                             <tr>
-                              <td className="p-2 border-b text-center">1</td>
+                              <td className="p-2 border-b text-center">-</td>
                               <td className="p-2 border-b">
-                                881381978971381309
+                                -
                               </td>
                               <td className="p-2 border-b">-</td>
                               <td className="p-2 border-b">-</td>
@@ -1707,7 +1713,7 @@ const LihatKonsepPasal = ({ data }) => {
                 </TabsContent>
                 <TabsContent value="l-ii">
                   <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-lg font-light text-yellow-500 mt-4">
+                    <h2 className="text-black mt-4">
                       DAFTAR PEMOTONGAN SATU TAHUN PAJAK ATAU BAGIAN TAHUN PAJAK
                       PAJAK PENGHASILAN PASAL 21 BAGI PEGAWAI TETAP DAN
                       PENSIUNAN YANG MENERIMA UANG TERKAIT PENSIUN SECARA
@@ -1756,7 +1762,7 @@ const LihatKonsepPasal = ({ data }) => {
                       <div className="border rounded-md p-4 mb-4 font-semibold">
                         BPA1
                       </div>
-                      <div className="w-[1400px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden">
+                      <div className="overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden">
                         <table className="table-auto text-sm text-left border overflow-hidden">
                           <thead className="bg-purple-700 text-white text-center">
                             <tr>
@@ -1801,9 +1807,9 @@ const LihatKonsepPasal = ({ data }) => {
                           </thead>
                           <tbody className="text-gray-600 text-center">
                             <tr>
-                              <td className="p-2 border-b text-center">1</td>
+                              <td className="p-2 border-b text-center">-</td>
                               <td className="p-2 border-b">
-                                881381978971381309
+                                -
                               </td>
                               <td className="p-2 border-b">-</td>
                               <td className="p-2 border-b">-</td>
@@ -1842,7 +1848,7 @@ const LihatKonsepPasal = ({ data }) => {
                       <div className="border rounded-md p-4 mb-4 font-semibold">
                         BPA2
                       </div>
-                      <div className="w-[1400px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden">
+                      <div className="overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden">
                         <table className="table-auto text-sm text-left border overflow-hidden">
                           <thead className="bg-purple-700 text-white text-center">
                             <tr>
@@ -1887,9 +1893,9 @@ const LihatKonsepPasal = ({ data }) => {
                           </thead>
                           <tbody className="text-gray-600 text-center">
                             <tr>
-                              <td className="p-2 border-b text-center">1</td>
+                              <td className="p-2 border-b text-center">-</td>
                               <td className="p-2 border-b">
-                                881381978971381309
+                                -
                               </td>
                               <td className="p-2 border-b">-</td>
                               <td className="p-2 border-b">-</td>
@@ -1923,7 +1929,7 @@ const LihatKonsepPasal = ({ data }) => {
                 </TabsContent>
                 <TabsContent value="L3">
                   <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-lg font-light text-yellow-500 mt-4">
+                    <h2 className="text-black mt-4">
                       DAFTAR PEMOTONGAN PAJAK PENGHASILAN PASAL 21 DAN/ATAU
                       PASAL 26 SELAIN PEGAWAI TETAP ATAU PENSIUNAN YANG MENERIMA
                       UANG TERKAIT PENSIUN SECARA BERKALA
@@ -1969,7 +1975,7 @@ const LihatKonsepPasal = ({ data }) => {
                       <div className="border rounded-md p-4 mb-4 font-semibold">
                         BP21
                       </div>
-                      <div className="w-[1400px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden">
+                      <div className="overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden">
                         <table className="table-auto text-sm text-left border overflow-hidden">
                           <thead className="bg-purple-700 text-white text-center">
                             <tr>
@@ -2205,7 +2211,7 @@ const LihatKonsepPasal = ({ data }) => {
                       <div className="border rounded-md p-4 mb-4 font-semibold">
                         BP26
                       </div>
-                      <div className="w-[1400px] overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden">
+                      <div className="overflow-x-auto bg-white shadow-md rounded-lg overflow-hidden">
                         <table className="table-auto text-sm text-left border overflow-hidden">
                           <thead className="bg-purple-700 text-white text-center">
                             <tr>

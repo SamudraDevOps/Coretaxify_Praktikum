@@ -192,7 +192,7 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
   const [showIdentitasPemotong, setShowIdentitasPemotong] = useState(false);
   const [showPajakPenghasilan21, setShowPajakPenghasilan21] = useState(false);
   const [showPajakPenghasilan26, setShowPajakPenghasilan26] = useState(false);
-  const [showPernyataan, setShowPernyataan] = useState(false);
+  const [showPernyataan, setShowPernyataan] = useState(true);
 
   const [showHeadera1, setShowHeadera1] = useState(true);
   const [showHeadera2, setShowHeadera2] = useState(false);
@@ -200,6 +200,9 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
   const [showHeaderb2, setShowHeaderb2] = useState(false);
   const [showHeaderb3, setShowHeaderb3] = useState(false);
   const [showHeaderc, setShowHeaderc] = useState(false);
+
+  const [isStatementChecked, setIsStatementChecked] = useState(false);
+
 
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -427,7 +430,7 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
       const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
       const data = await axios.get(
         RoutesApi.apiUrl +
-          `student/assignments/${id}/sistem/${accountId}/spt/${idSpt}/show-bupot-pph`,
+        `student/assignments/${id}/sistem/${accountId}/spt/${idSpt}/show-bupot-pph`,
         {
           headers: {
             Authorization: `Bearer ${cookies.token}`,
@@ -985,11 +988,18 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                 {showPernyataan && (
                   <div className="border rounded-md p-4 mb-4">
                     <div className="text-sm font-bold italic">
-                      <input type="checkbox" className="m-2" />
+                      <input type="checkbox"
+                        className="m-2"
+                        hecked={isStatementChecked}
+                        onChange={(e) => setIsStatementChecked(e.target.checked)}
+                      />
                       PERNYATAAN : DENGAN MENYADARI SEPENUHNYA AKAN SEGALA
                       AKIBATNYA, SAYA MENYATAKAN BAHWA APA YANG TELAH SAYA
                       BERITAHUKAN DI ATAS BESERTA LAMPIRAN-LAMPIRANNYA ADALAH
                       BENAR, LENGKAP, JELAS, DAN TIDAK BERSYARAT
+                      {!isStatementChecked && ( // Tampilkan peringatan jika tidak dicentang
+                        <span className="text-red-500 text-l ml-2"> (Wajib dicentang)</span>
+                      )}
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                       <div className="grid grid-cols-2 gap-4">
@@ -1049,14 +1059,14 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                   <AlertDialog>
                     <button
                       onClick={() => saveConcept.mutate()}
-                      disabled={saveConcept.isPending}
-                      className={`py-2 px-4 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-sm flex items-center justify-center ${
-                        saveConcept.isPending
+                      disabled={saveConcept.isPending || !isStatementChecked}
+                      className={`py-2 px-4 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-sm flex items-center justify-center 
+                        ${saveConcept.isPending || !isStatementChecked
                           ? "bg-blue-400 text-white cursor-not-allowed"
                           : userId
-                          ? "hidden"
-                          : "bg-blue-700 text-white hover:bg-blue-800"
-                      }`}
+                            ? "hidden"
+                            : "bg-blue-700 text-white hover:bg-blue-800"
+                        }`}
                     >
                       {saveConcept.isPending ? (
                         <>
@@ -1093,21 +1103,22 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                         disabled={
                           saveConcept.isPending ||
                           payDeposit.isPending ||
-                          payBilling.isPending
+                          payBilling.isPending ||
+                          !isStatementChecked
                         }
-                        className={`py-2 px-4 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-sm flex items-center justify-center ${
-                          saveConcept.isPending ||
+                        className={`py-2 px-4 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-sm flex items-center justify-center ${saveConcept.isPending ||
                           payDeposit.isPending ||
-                          payBilling.isPending
-                            ? "bg-blue-400 text-white cursor-not-allowed"
-                            : userId
+                          payBilling.isPending || 
+                          !isStatementChecked
+                          ? "bg-blue-400 text-white cursor-not-allowed"
+                          : userId
                             ? "hidden"
                             : "bg-blue-700 text-white hover:bg-blue-800"
-                        }`}
+                          }`}
                       >
                         {saveConcept.isPending ||
-                        payDeposit.isPending ||
-                        payBilling.isPending ? (
+                          payDeposit.isPending ||
+                          payBilling.isPending ? (
                           <>
                             <svg
                               className="animate-spin -ml-1 mr-3 h-4 w-4 text-white"
@@ -1313,8 +1324,8 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                                   <td className="p-2 border-b">
                                     {item.masa_awal
                                       ? new Date(
-                                          item.masa_awal
-                                        ).toLocaleDateString("id-ID")
+                                        item.masa_awal
+                                      ).toLocaleDateString("id-ID")
                                       : "-"}
                                   </td>
                                   <td className="p-2 border-b">
@@ -1358,43 +1369,43 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                               <td className="p-2 text-center">
                                 {sptOther?.data
                                   ? formatRupiah(
-                                      sptOther.data
-                                        .filter(
-                                          (item) =>
-                                            item.jenis_pajak ===
-                                              "PPh Pasal 21" ||
-                                            item.jenis_pajak === "PPh Pasal 26"
-                                        )
-                                        .reduce(
-                                          (total, item) =>
-                                            total +
-                                            (parseFloat(
-                                              item.dasar_pengenaan_pajak
-                                            ) || 0),
-                                          0
-                                        )
-                                    )
+                                    sptOther.data
+                                      .filter(
+                                        (item) =>
+                                          item.jenis_pajak ===
+                                          "PPh Pasal 21" ||
+                                          item.jenis_pajak === "PPh Pasal 26"
+                                      )
+                                      .reduce(
+                                        (total, item) =>
+                                          total +
+                                          (parseFloat(
+                                            item.dasar_pengenaan_pajak
+                                          ) || 0),
+                                        0
+                                      )
+                                  )
                                   : "0"}
                               </td>
                               <td className="p-2 text-center">
                                 {sptOther?.data
                                   ? formatRupiah(
-                                      sptOther.data
-                                        .filter(
-                                          (item) =>
-                                            item.jenis_pajak ===
-                                              "PPh Pasal 21" ||
-                                            item.jenis_pajak === "PPh Pasal 26"
-                                        )
-                                        .reduce(
-                                          (total, item) =>
-                                            total +
-                                            (parseFloat(
-                                              item.pajak_penghasilan
-                                            ) || 0),
-                                          0
-                                        )
-                                    )
+                                    sptOther.data
+                                      .filter(
+                                        (item) =>
+                                          item.jenis_pajak ===
+                                          "PPh Pasal 21" ||
+                                          item.jenis_pajak === "PPh Pasal 26"
+                                      )
+                                      .reduce(
+                                        (total, item) =>
+                                          total +
+                                          (parseFloat(
+                                            item.pajak_penghasilan
+                                          ) || 0),
+                                        0
+                                      )
+                                  )
                                   : "0"}
                               </td>
                             </tr>
@@ -1409,28 +1420,28 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                               <td className="p-2 text-center">
                                 {sptOther?.data
                                   ? formatRupiah(
-                                      sptOther.data.reduce(
-                                        (total, item) =>
-                                          total +
-                                          (parseFloat(
-                                            item.dasar_pengenaan_pajak
-                                          ) || 0),
-                                        0
-                                      )
+                                    sptOther.data.reduce(
+                                      (total, item) =>
+                                        total +
+                                        (parseFloat(
+                                          item.dasar_pengenaan_pajak
+                                        ) || 0),
+                                      0
                                     )
+                                  )
                                   : "0"}
                               </td>
                               <td className="p-2 text-center">
                                 {sptOther?.data
                                   ? formatRupiah(
-                                      sptOther.data.reduce(
-                                        (total, item) =>
-                                          total +
-                                          (parseFloat(item.pajak_penghasilan) ||
-                                            0),
-                                        0
-                                      )
+                                    sptOther.data.reduce(
+                                      (total, item) =>
+                                        total +
+                                        (parseFloat(item.pajak_penghasilan) ||
+                                          0),
+                                      0
                                     )
+                                  )
                                   : "0"}
                               </td>
                             </tr>
@@ -1446,28 +1457,28 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                               <td className="p-2 text-center">
                                 {sptOther?.data
                                   ? formatRupiah(
-                                      sptOther.data.reduce(
-                                        (total, item) =>
-                                          total +
-                                          (parseFloat(
-                                            item.dasar_pengenaan_pajak
-                                          ) || 0),
-                                        0
-                                      )
+                                    sptOther.data.reduce(
+                                      (total, item) =>
+                                        total +
+                                        (parseFloat(
+                                          item.dasar_pengenaan_pajak
+                                        ) || 0),
+                                      0
                                     )
+                                  )
                                   : "0"}
                               </td>
                               <td className="p-2 text-center">
                                 {sptOther?.data
                                   ? formatRupiah(
-                                      sptOther.data.reduce(
-                                        (total, item) =>
-                                          total +
-                                          (parseFloat(item.pajak_penghasilan) ||
-                                            0),
-                                        0
-                                      )
+                                    sptOther.data.reduce(
+                                      (total, item) =>
+                                        total +
+                                        (parseFloat(item.pajak_penghasilan) ||
+                                          0),
+                                      0
                                     )
+                                  )
                                   : "0"}
                               </td>
                             </tr>
@@ -2045,8 +2056,8 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                                     <td className="p-2 border-b">
                                       {item.masa_awal
                                         ? new Date(
-                                            item.masa_awal
-                                          ).toLocaleDateString("id-ID")
+                                          item.masa_awal
+                                        ).toLocaleDateString("id-ID")
                                         : "-"}
                                     </td>
                                     <td className="p-2 border-b">
@@ -2058,8 +2069,8 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                                     <td className="p-2 border-b">
                                       {item.dasar_pengenaan_pajak
                                         ? formatRupiah(
-                                            item.dasar_pengenaan_pajak
-                                          )
+                                          item.dasar_pengenaan_pajak
+                                        )
                                         : "-"}
                                     </td>
                                     <td className="p-2 border-b">
@@ -2110,43 +2121,43 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                               <td className="p-2 text-center">
                                 {sptOther?.data
                                   ? formatRupiah(
-                                      sptOther.data
-                                        .filter(
-                                          (item) =>
-                                            item.jenis_pajak === "Pasal 21" &&
-                                            item.fasilitas_pajak ===
-                                              "pph_ditanggung_pemerintah"
-                                        )
-                                        .reduce(
-                                          (total, item) =>
-                                            total +
-                                            (parseFloat(
-                                              item.dasar_pengenaan_pajak
-                                            ) || 0),
-                                          0
-                                        )
-                                    )
+                                    sptOther.data
+                                      .filter(
+                                        (item) =>
+                                          item.jenis_pajak === "Pasal 21" &&
+                                          item.fasilitas_pajak ===
+                                          "pph_ditanggung_pemerintah"
+                                      )
+                                      .reduce(
+                                        (total, item) =>
+                                          total +
+                                          (parseFloat(
+                                            item.dasar_pengenaan_pajak
+                                          ) || 0),
+                                        0
+                                      )
+                                  )
                                   : "0"}
                               </td>
                               <td className="p-2">
                                 {sptOther?.data
                                   ? formatRupiah(
-                                      sptOther.data
-                                        .filter(
-                                          (item) =>
-                                            item.jenis_pajak === "Pasal 21" &&
-                                            item.fasilitas_pajak ===
-                                              "pph_ditanggung_pemerintah"
-                                        )
-                                        .reduce(
-                                          (total, item) =>
-                                            total +
-                                            (parseFloat(
-                                              item.pajak_penghasilan
-                                            ) || 0),
-                                          0
-                                        )
-                                    )
+                                    sptOther.data
+                                      .filter(
+                                        (item) =>
+                                          item.jenis_pajak === "Pasal 21" &&
+                                          item.fasilitas_pajak ===
+                                          "pph_ditanggung_pemerintah"
+                                      )
+                                      .reduce(
+                                        (total, item) =>
+                                          total +
+                                          (parseFloat(
+                                            item.pajak_penghasilan
+                                          ) || 0),
+                                        0
+                                      )
+                                  )
                                   : "0"}
                               </td>
                             </tr>
@@ -2161,43 +2172,43 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                               <td className="p-2 text-center">
                                 {sptOther?.data
                                   ? formatRupiah(
-                                      sptOther.data
-                                        .filter(
-                                          (item) =>
-                                            item.jenis_pajak === "Pasal 21" &&
-                                            item.fasilitas_pajak !==
-                                              "pph_ditanggung_pemerintah"
-                                        )
-                                        .reduce(
-                                          (total, item) =>
-                                            total +
-                                            (parseFloat(
-                                              item.dasar_pengenaan_pajak
-                                            ) || 0),
-                                          0
-                                        )
-                                    )
+                                    sptOther.data
+                                      .filter(
+                                        (item) =>
+                                          item.jenis_pajak === "Pasal 21" &&
+                                          item.fasilitas_pajak !==
+                                          "pph_ditanggung_pemerintah"
+                                      )
+                                      .reduce(
+                                        (total, item) =>
+                                          total +
+                                          (parseFloat(
+                                            item.dasar_pengenaan_pajak
+                                          ) || 0),
+                                        0
+                                      )
+                                  )
                                   : "0"}
                               </td>
                               <td className="p-2">
                                 {sptOther?.data
                                   ? formatRupiah(
-                                      sptOther.data
-                                        .filter(
-                                          (item) =>
-                                            item.jenis_pajak === "Pasal 21" &&
-                                            item.fasilitas_pajak !==
-                                              "pph_ditanggung_pemerintah"
-                                        )
-                                        .reduce(
-                                          (total, item) =>
-                                            total +
-                                            (parseFloat(
-                                              item.pajak_penghasilan
-                                            ) || 0),
-                                          0
-                                        )
-                                    )
+                                    sptOther.data
+                                      .filter(
+                                        (item) =>
+                                          item.jenis_pajak === "Pasal 21" &&
+                                          item.fasilitas_pajak !==
+                                          "pph_ditanggung_pemerintah"
+                                      )
+                                      .reduce(
+                                        (total, item) =>
+                                          total +
+                                          (parseFloat(
+                                            item.pajak_penghasilan
+                                          ) || 0),
+                                        0
+                                      )
+                                  )
                                   : "0"}
                               </td>
                             </tr>
@@ -2281,8 +2292,8 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                                     <td className="p-2 border-b">
                                       {item.masa_awal
                                         ? new Date(
-                                            item.masa_awal
-                                          ).toLocaleDateString("id-ID")
+                                          item.masa_awal
+                                        ).toLocaleDateString("id-ID")
                                         : "-"}
                                     </td>
                                     <td className="p-2 border-b">
@@ -2294,8 +2305,8 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                                     <td className="p-2 border-b">
                                       {item.dasar_pengenaan_pajak
                                         ? formatRupiah(
-                                            item.dasar_pengenaan_pajak
-                                          )
+                                          item.dasar_pengenaan_pajak
+                                        )
                                         : "-"}
                                     </td>
                                     <td className="p-2 border-b">
@@ -2346,43 +2357,43 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                               <td className="p-2 text-center">
                                 {sptOther?.data
                                   ? formatRupiah(
-                                      sptOther.data
-                                        .filter(
-                                          (item) =>
-                                            item.jenis_pajak === "Pasal 26" &&
-                                            item.fasilitas_pajak ===
-                                              "pph_ditanggung_pemerintah"
-                                        )
-                                        .reduce(
-                                          (total, item) =>
-                                            total +
-                                            (parseFloat(
-                                              item.dasar_pengenaan_pajak
-                                            ) || 0),
-                                          0
-                                        )
-                                    )
+                                    sptOther.data
+                                      .filter(
+                                        (item) =>
+                                          item.jenis_pajak === "Pasal 26" &&
+                                          item.fasilitas_pajak ===
+                                          "pph_ditanggung_pemerintah"
+                                      )
+                                      .reduce(
+                                        (total, item) =>
+                                          total +
+                                          (parseFloat(
+                                            item.dasar_pengenaan_pajak
+                                          ) || 0),
+                                        0
+                                      )
+                                  )
                                   : "0"}
                               </td>
                               <td className="p-2">
                                 {sptOther?.data
                                   ? formatRupiah(
-                                      sptOther.data
-                                        .filter(
-                                          (item) =>
-                                            item.jenis_pajak === "Pasal 26" &&
-                                            item.fasilitas_pajak ===
-                                              "pph_ditanggung_pemerintah"
-                                        )
-                                        .reduce(
-                                          (total, item) =>
-                                            total +
-                                            (parseFloat(
-                                              item.pajak_penghasilan
-                                            ) || 0),
-                                          0
-                                        )
-                                    )
+                                    sptOther.data
+                                      .filter(
+                                        (item) =>
+                                          item.jenis_pajak === "Pasal 26" &&
+                                          item.fasilitas_pajak ===
+                                          "pph_ditanggung_pemerintah"
+                                      )
+                                      .reduce(
+                                        (total, item) =>
+                                          total +
+                                          (parseFloat(
+                                            item.pajak_penghasilan
+                                          ) || 0),
+                                        0
+                                      )
+                                  )
                                   : "0"}
                               </td>
                             </tr>
@@ -2397,43 +2408,43 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                               <td className="p-2 text-center">
                                 {sptOther?.data
                                   ? formatRupiah(
-                                      sptOther.data
-                                        .filter(
-                                          (item) =>
-                                            item.jenis_pajak === "Pasal 26" &&
-                                            item.fasilitas_pajak !==
-                                              "pph_ditanggung_pemerintah"
-                                        )
-                                        .reduce(
-                                          (total, item) =>
-                                            total +
-                                            (parseFloat(
-                                              item.dasar_pengenaan_pajak
-                                            ) || 0),
-                                          0
-                                        )
-                                    )
+                                    sptOther.data
+                                      .filter(
+                                        (item) =>
+                                          item.jenis_pajak === "Pasal 26" &&
+                                          item.fasilitas_pajak !==
+                                          "pph_ditanggung_pemerintah"
+                                      )
+                                      .reduce(
+                                        (total, item) =>
+                                          total +
+                                          (parseFloat(
+                                            item.dasar_pengenaan_pajak
+                                          ) || 0),
+                                        0
+                                      )
+                                  )
                                   : "0"}
                               </td>
                               <td className="p-2">
                                 {sptOther?.data
                                   ? formatRupiah(
-                                      sptOther.data
-                                        .filter(
-                                          (item) =>
-                                            item.jenis_pajak === "Pasal 26" &&
-                                            item.fasilitas_pajak !==
-                                              "pph_ditanggung_pemerintah"
-                                        )
-                                        .reduce(
-                                          (total, item) =>
-                                            total +
-                                            (parseFloat(
-                                              item.pajak_penghasilan
-                                            ) || 0),
-                                          0
-                                        )
-                                    )
+                                    sptOther.data
+                                      .filter(
+                                        (item) =>
+                                          item.jenis_pajak === "Pasal 26" &&
+                                          item.fasilitas_pajak !==
+                                          "pph_ditanggung_pemerintah"
+                                      )
+                                      .reduce(
+                                        (total, item) =>
+                                          total +
+                                          (parseFloat(
+                                            item.pajak_penghasilan
+                                          ) || 0),
+                                        0
+                                      )
+                                  )
                                   : "0"}
                               </td>
                             </tr>
@@ -2449,39 +2460,39 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                               <td className="p-2 text-center">
                                 {sptOther?.data
                                   ? formatRupiah(
-                                      sptOther.data
-                                        .filter(
-                                          (item) =>
-                                            item.jenis_pajak === "Pasal 26"
-                                        )
-                                        .reduce(
-                                          (total, item) =>
-                                            total +
-                                            (parseFloat(
-                                              item.dasar_pengenaan_pajak
-                                            ) || 0),
-                                          0
-                                        )
-                                    )
+                                    sptOther.data
+                                      .filter(
+                                        (item) =>
+                                          item.jenis_pajak === "Pasal 26"
+                                      )
+                                      .reduce(
+                                        (total, item) =>
+                                          total +
+                                          (parseFloat(
+                                            item.dasar_pengenaan_pajak
+                                          ) || 0),
+                                        0
+                                      )
+                                  )
                                   : "0"}
                               </td>
                               <td className="p-2">
                                 {sptOther?.data
                                   ? formatRupiah(
-                                      sptOther.data
-                                        .filter(
-                                          (item) =>
-                                            item.jenis_pajak === "Pasal 26"
-                                        )
-                                        .reduce(
-                                          (total, item) =>
-                                            total +
-                                            (parseFloat(
-                                              item.pajak_penghasilan
-                                            ) || 0),
-                                          0
-                                        )
-                                    )
+                                    sptOther.data
+                                      .filter(
+                                        (item) =>
+                                          item.jenis_pajak === "Pasal 26"
+                                      )
+                                      .reduce(
+                                        (total, item) =>
+                                          total +
+                                          (parseFloat(
+                                            item.pajak_penghasilan
+                                          ) || 0),
+                                        0
+                                      )
+                                  )
                                   : "0"}
                               </td>
                             </tr>
