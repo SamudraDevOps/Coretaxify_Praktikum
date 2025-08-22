@@ -8,10 +8,13 @@ const PenilaianSPT = () => {
   const { id, akun } = useParams();
   const [cookies] = useCookies(["token"]);
   const [searchParams] = useSearchParams();
+  const viewAsCompanyId = searchParams.get("viewAs");
   const userId = searchParams.get("user_id");
 
   const [score, setScore] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const activeAkun = viewAsCompanyId ? viewAsCompanyId : akun;
 
   const {
     scoreData,
@@ -21,13 +24,13 @@ const PenilaianSPT = () => {
     updateScore,
     isCreating,
     isUpdating,
-  } = useSptScore(cookies, id, akun);
+  } = useSptScore(cookies, id, activeAkun);
 
   useEffect(() => {
-    if (akun) {
+    if (activeAkun) {
       fetchScore();
     }
-  }, [akun]);
+  }, [activeAkun]);
 
   useEffect(() => {
     if (scoreData) {
@@ -44,7 +47,7 @@ const PenilaianSPT = () => {
     }
 
     const scorePayload = {
-      sistem_id: akun,
+      sistem_id: activeAkun,
       score: parseFloat(score),
     };
 
