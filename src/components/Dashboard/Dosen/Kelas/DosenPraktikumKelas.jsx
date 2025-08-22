@@ -131,12 +131,14 @@ export default function DosenPraktikumKelas() {
     onClose();
   };
   const [file, setFile] = useState();
+  // ganti handleChangeFile agar simpan preview name juga
   function handleChangeFile(e) {
-    console.log(e.target.files);
-
-    setFilePreview(URL.createObjectURL(e.target.files[0]));
-    setFile(e.target.files[0]);
+    const f = e.target.files?.[0];
+    if (!f) return;
+    setFilePreview({ name: f.name, url: URL.createObjectURL(f) });
+    setFile(f);
   }
+
   const [search, setSearch] = useState("");
 
   // const processedData = data.map((item) => ({
@@ -195,6 +197,42 @@ export default function DosenPraktikumKelas() {
       // <div className="h-full w-full text-2xl italic font-bold text-center flex items-center justify-center">Loading...</div>
     );
   }
+  // di atas, setelah state formData dan file, tambahkan:
+
+  const validateForm = () => {
+    if (
+      !formData.name ||
+      !formData.task_id ||
+      !formData.start_period ||
+      !formData.end_period
+    ) {
+      Swal.fire({
+        icon: "error",
+        title: "Gagal",
+        text: "Field ada yang kosong! Harap lengkapi field",
+      });
+      return false;
+    }
+
+    // tanggal selesai >= tanggal mulai
+    if (new Date(formData.end_period) < new Date(formData.start_period)) {
+      Swal.fire({
+        icon: "error",
+        title: "Gagal",
+        text: "Tanggal Selesai harus setelah atau sama dengan Tanggal Mulai.",
+      });
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleCreateSubmit = () => {
+    if (!validateForm()) return;
+    // valid → kirim
+    mutation.mutate();
+  };
+
 
   // console.log(taskData.data);
   console.log("hi");
@@ -248,7 +286,7 @@ export default function DosenPraktikumKelas() {
                 <AlertDialogCancel className="border-none shadow-none">
                   <RxCross1
                     className="text-2xl text-black hover:cursor-pointer"
-                    // onClick={onClose}
+                  // onClick={onClose}
                   />
                 </AlertDialogCancel>
               </div>
@@ -287,7 +325,7 @@ export default function DosenPraktikumKelas() {
                       </select>
                     </div>
 
-                         <div className="edit-form-group-mahasiswa">
+                    <div className="edit-form-group-mahasiswa">
                       <label>File Support:</label>
                       <div className="flex items-center justify-center w-full ">
                         <label
@@ -296,14 +334,12 @@ export default function DosenPraktikumKelas() {
                         >
                           <div className="flex flex-col items-center justify-center pt-5 pb-6">
                             {filePreview ? (
-                              <>
-                                <div className="grid justify-center items-center p-20">
-                                  <FaFile className="w-8 h-8 text-gray-500 dark:text-gray-400 mb-2" />
-                                  <p className="text-sm text-gray-500 dark:text-gray-400">
-                                    {filePreview.name}
-                                  </p>
-                                </div>
-                              </>
+                              <div className="grid justify-center items-center p-20">
+                                <FaFile className="w-8 h-8 text-gray-500 dark:text-gray-400 mb-2" />
+                                <p className="text-sm text-gray-500 dark:text-gray-400">
+                                  {filePreview.name}
+                                </p>
+                              </div>
                             ) : (
                               <>
                                 <svg
@@ -344,7 +380,7 @@ export default function DosenPraktikumKelas() {
                         </label>
                       </div>
                     </div>
-                    
+
                     <div className="edit-form-group-mahasiswa">
                       <label>Tanggal Mulai:</label>
                       <input
@@ -366,7 +402,7 @@ export default function DosenPraktikumKelas() {
                         }
                       />
                     </div>
-               
+
                   </form>
                 </div>
               </AlertDialogDescription>
@@ -376,7 +412,8 @@ export default function DosenPraktikumKelas() {
                 Kembali
               </AlertDialogCancel>
               <AlertDialogAction
-                onClick={() => mutation.mutate()}
+                type="button" 
+                onClick={handleCreateSubmit}
                 className="bg-green-600"
               >
                 Simpan
@@ -396,8 +433,8 @@ export default function DosenPraktikumKelas() {
                     ? "↑"
                     : "↓"
                   : sortConfig.direction === "descending"
-                  ? "↓"
-                  : "↑"}
+                    ? "↓"
+                    : "↑"}
               </th>
               <th className="">Nama Praktikum </th>
               <th className="">Kode Praktikum </th>
@@ -456,7 +493,7 @@ export default function DosenPraktikumKelas() {
                           <AlertDialogCancel className="border-none shadow-none">
                             <RxCross1
                               className="text-2xl text-black hover:cursor-pointer"
-                              // onClick={onClose}
+                            // onClick={onClose}
                             />
                           </AlertDialogCancel>
                         </div>
@@ -508,17 +545,17 @@ export default function DosenPraktikumKelas() {
                                       onChange={handleChange}
                                       // className="bg-red-400"
                                       value={formData.start_period}
-                                      // value={formData.start_period
-                                      //   .split("-")
-                                      //   .reverse()
-                                      //   .join("-")}
-                                      // value={
-                                      //   formData.start_period
-                                      //     ? new Date(formData.start_period)
-                                      //         .toISOString()
-                                      //         .split("T")[0]
-                                      //     : ""
-                                      // }
+                                    // value={formData.start_period
+                                    //   .split("-")
+                                    //   .reverse()
+                                    //   .join("-")}
+                                    // value={
+                                    //   formData.start_period
+                                    //     ? new Date(formData.start_period)
+                                    //         .toISOString()
+                                    //         .split("T")[0]
+                                    //     : ""
+                                    // }
                                     />
                                   </div>
                                   <div className="edit-form-group-mahasiswa">
@@ -528,17 +565,17 @@ export default function DosenPraktikumKelas() {
                                       name="end_period"
                                       onChange={handleChange}
                                       value={formData.end_period}
-                                      // value={formData.end_period
-                                      //   .split("-")
-                                      //   .reverse()
-                                      //   .join("-")}
-                                      // value={
-                                      //   formData.end_period
-                                      //     ? new Date(formData.end_period)
-                                      //         .toISOString()
-                                      //         .split("T")[0]
-                                      //     : ""
-                                      // }
+                                    // value={formData.end_period
+                                    //   .split("-")
+                                    //   .reverse()
+                                    //   .join("-")}
+                                    // value={
+                                    //   formData.end_period
+                                    //     ? new Date(formData.end_period)
+                                    //         .toISOString()
+                                    //         .split("T")[0]
+                                    //     : ""
+                                    // }
                                     />
                                   </div>
                                   <div className="edit-form-group-mahasiswa">

@@ -80,54 +80,128 @@ export default function Praktikum() {
     },
   });
 
+  // const mutation = useMutation({
+  //   mutationFn: async () => {
+  //     console.log("button clicked");
+  //     // const { response } = await axios.post(RoutesApi.login, {
+  //     const response = await axios.get(`${RoutesApi.url}api/csrf-token`, {
+  //       // withCredentials: true,
+  //       headers: {
+  //         "X-Requested-With": "XMLHttpRequest",
+  //         Accept: "application/json",
+  //       },
+  //     });
+  //     console.log(response.data.token);
+  //     axios.defaults.headers.common["X-CSRF-TOKEN"] = response.data.token;
+  //     console.log(cookies.token);
+  //     const data = await axios.post(
+  //       RoutesApi.assignment.url,
+  //       {
+  //         name: formData.name,
+  //         assignment_code: formData.assignment_code,
+  //         groups: [formData.group_id],
+  //         start_period: formData.start_period,
+  //         end_period: formData.end_period,
+  //         supporting_files: formData.supporting_files,
+  //       },
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           Accept: "application/json",
+  //           "X-CSRF-TOKEN": response.data.token,
+  //           Authorization: `Bearer ${cookies.token}`,
+  //         },
+  //         params: {
+  //           intent: RoutesApi.assignment.intent,
+  //         },
+  //       }
+  //     );
+  //     return data;
+  //   },
+  //   onSuccess: (data) => {
+  //     console.log(data);
+  //     window.location.reload();
+
+  //     // queryClient.invalidateQueries({ queryKey: ["praktikum"] });
+  //   },
+  //   onError: (error) => {
+  //     console.log(error);
+  //   },
+  // });
   const mutation = useMutation({
     mutationFn: async () => {
-      console.log("button clicked");
-      // const { response } = await axios.post(RoutesApi.login, {
-      const response = await axios.get(`${RoutesApi.url}api/csrf-token`, {
-        // withCredentials: true,
-        headers: {
-          "X-Requested-With": "XMLHttpRequest",
-          Accept: "application/json",
-        },
+      // ambil csrf
+      const { data: csrf } = await axios.get(`${RoutesApi.url}api/csrf-token`, {
+        headers: { "X-Requested-With": "XMLHttpRequest", Accept: "application/json" },
       });
-      console.log(response.data.token);
-      axios.defaults.headers.common["X-CSRF-TOKEN"] = response.data.token;
-      console.log(cookies.token);
-      const data = await axios.post(
-        RoutesApi.assignment.url,
-        {
+
+      const commonHeaders = {
+        Accept: "application/json",
+        "X-CSRF-TOKEN": csrf.token,
+        Authorization: `Bearer ${cookies.token}`,
+      };
+
+      // bangun payload dinamis
+      if (formData.supportingFile) {
+        // === ada file → multipart ===
+        const fd = new FormData();
+        fd.append("name", formData.name);
+        fd.append("assignment_code", formData.assignment_code);
+        // backend kamu minta array "groups" → dua opsi; pilih salah satu sesuai server:
+        // Opsi A (JSON array string):
+        // fd.append("groups", JSON.stringify([formData.group_id]));
+        // Opsi B (array-style key):
+        fd.append("groups[]", formData.group_id);
+
+        fd.append("start_period", formData.start_period);
+        fd.append("end_period", formData.end_period);
+        fd.append("supporting_files", formData.supportingFile); // ← nama yang benar
+
+        return axios.post(RoutesApi.assignment.url, fd, {
+          headers: { ...commonHeaders }, // biarkan browser set boundary
+          params: { intent: RoutesApi.assignment.intent },
+        });
+      } else {
+        // === tanpa file → JSON ===
+        const body = {
           name: formData.name,
           assignment_code: formData.assignment_code,
           groups: [formData.group_id],
           start_period: formData.start_period,
           end_period: formData.end_period,
-          supporting_files: formData.supporting_files,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            "X-CSRF-TOKEN": response.data.token,
-            Authorization: `Bearer ${cookies.token}`,
-          },
-          params: {
-            intent: RoutesApi.assignment.intent,
-          },
-        }
-      );
-      return data;
-    },
-    onSuccess: (data) => {
-      console.log(data);
-      window.location.reload();
+        };
 
-      // queryClient.invalidateQueries({ queryKey: ["praktikum"] });
+        return axios.post(RoutesApi.assignment.url, body, {
+          headers: { ...commonHeaders, "Content-Type": "application/json" },
+          params: { intent: RoutesApi.assignment.intent },
+        });
+      }
     },
-    onError: (error) => {
-      console.log(error);
+    onSuccess: () => {
+      Swal.fire({ icon: "success", title: "Berhasil", text: "Praktikum dibuat." })
+        .then(() => window.location.reload());
+    },
+    onError: (err) => {
+      // tampilkan 422 dari backend dengan rapi
+      const res = err?.response;
+      if (res?.status === 422) {
+        const msg =
+          res.data?.message ||
+          Object.entries(res.data?.errors || {})
+            .map(([k, v]) => `• ${k}: ${Array.isArray(v) ? v.join(", ") : v}`)
+            .join("\n") ||
+          "Data tidak valid.";
+        Swal.fire({ icon: "error", title: "Validasi Gagal (422)", text: msg });
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Gagal",
+          text: res?.data?.message || err?.message || "Terjadi kesalahan.",
+        });
+      }
     },
   });
+
 
   const handleSort = (key) => {
     let direction = "ascending";
@@ -183,6 +257,43 @@ export default function Praktikum() {
   }
   const [search, setSearch] = useState("");
 
+  const validateForm = () => {
+    if (
+      !formData.name ||
+      !formData.assignment_code ||
+      !formData.group_id ||
+      !formData.start_period ||
+      !formData.end_period
+    ) {
+      Swal.fire({
+        icon: "error",
+        title: "Gagal",
+        text: "Semua field wajib diisi kecuali File Support.",
+      });
+      return false;
+    }
+
+    // end >= start
+    if (new Date(formData.end_period) < new Date(formData.start_period)) {
+      Swal.fire({
+        icon: "error",
+        title: "Gagal",
+        text: "Tanggal Selesai harus setelah Tanggal Mulai.",
+      });
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleSubmit = (e) => {
+    e?.preventDefault?.();
+    if (!validateForm()) return;
+    mutation.mutate();
+  };
+
+
+
   // const processedData = data.map((item) => ({
   //   ...item,
   //   highlight:
@@ -210,7 +321,7 @@ export default function Praktikum() {
   return (
     <div className="kontrak-container">
       <div className="header">
-        <h2>Data Praktikum</h2>
+        <h2>Data Praktiku</h2>
         {/* <p>{cookies.user ? cookies.user : "no user"}</p>
         {processedData.map((item) => (
           <li key={item.id} style={{ color: item.highlight ? "red" : "black" }}>
@@ -247,7 +358,7 @@ export default function Praktikum() {
                         name="name"
                         value={formData.name}
                         onChange={handleChange}
-                        required
+                        
                       />
                     </div>
                     <div className="edit-form-group-mahasiswa">
@@ -257,6 +368,7 @@ export default function Praktikum() {
                         name="assignment_code"
                         value={formData.assignment_code}
                         onChange={handleChange}
+                        
                       />
                     </div>
                     <div className="edit-form-group-mahasiswa">
@@ -334,6 +446,7 @@ export default function Praktikum() {
                         name="start_period"
                         onChange={handleChange}
                         min={new Date().toISOString().split("T")[0]}
+                        
                       />
                     </div>
                     <div className="edit-form-group-mahasiswa">
@@ -346,6 +459,7 @@ export default function Praktikum() {
                           formData.start_period ||
                           new Date().toISOString().split("T")[0]
                         }
+                        
                       />
                     </div>
                   </form>
@@ -357,7 +471,8 @@ export default function Praktikum() {
                 Kembali
               </AlertDialogCancel>
               <AlertDialogAction
-                onClick={() => mutation.mutate()}
+                type="button"
+                onClick={handleSubmit}
                 className="bg-green-600"
               >
                 Simpan
@@ -377,8 +492,8 @@ export default function Praktikum() {
                     ? "↑"
                     : "↓"
                   : sortConfig.direction === "descending"
-                  ? "↓"
-                  : "↑"}
+                    ? "↓"
+                    : "↑"}
               </th>
               <th className="">Kode Praktikum</th>
               <th className="">Tanggal Praktikum</th>
@@ -421,7 +536,7 @@ export default function Praktikum() {
                           <AlertDialogCancel className="border-none shadow-none">
                             <RxCross1
                               className="text-2xl text-black hover:cursor-pointer"
-                              // onClick={onClose}
+                            // onClick={onClose}
                             />
                           </AlertDialogCancel>
                         </div>
