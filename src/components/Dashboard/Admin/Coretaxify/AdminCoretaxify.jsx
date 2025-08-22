@@ -176,6 +176,8 @@ const AdminCoretaxify = () => {
         title: "Berhasil",
         description: "Praktikum berhasil ditambahkan",
       });
+                window.location.reload();
+
     },
     onError: (error) => {
       console.error("Error creating assignment:", error);
@@ -236,6 +238,8 @@ const AdminCoretaxify = () => {
         title: "Berhasil",
         description: "Praktikum berhasil diperbarui",
       });
+                window.location.reload();
+
     },
     onError: (error) => {
       console.error("Error updating assignment:", error);

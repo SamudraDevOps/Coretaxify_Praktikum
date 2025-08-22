@@ -22,7 +22,8 @@ import { IntentEnum } from "@/enums/IntentEnum";
 import { RxCross1 } from "react-icons/rx";
 import { FaRegCopy } from "react-icons/fa";
 import { useToast } from "@/hooks/use-toast";
-import { useOutletContext } from "react-router-dom";
+import { useOutletContext,useNavigate } from "react-router-dom";
+
 
 const AdminPscCoretaxify = () => {
   // State management
@@ -48,6 +49,8 @@ const AdminPscCoretaxify = () => {
   const [cookies] = useCookies(["user"]);
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const navigate = useNavigate(); // FIX: Initialize useNavigate
+
 
   // API URL with pagination
   const apiUrl = useMemo(() => {
@@ -173,9 +176,10 @@ const AdminPscCoretaxify = () => {
       queryClient.invalidateQueries({ queryKey: ["self_assignments"] });
       resetForm();
       toast({
-        title: "Berhasil",
-        description: "Praktikum berhasil ditambahkan",
+      title: "Berhasil",
+      description: "Praktikum berhasil ditambahkan",
       });
+      window.location.reload();
     },
     onError: (error) => {
       console.error("Error creating assignment:", error);
@@ -236,6 +240,7 @@ const AdminPscCoretaxify = () => {
         title: "Berhasil",
         description: "Praktikum berhasil diperbarui",
       });
+      window.location.reload();
     },
     onError: (error) => {
       console.error("Error updating assignment:", error);
@@ -783,7 +788,7 @@ const AdminPscCoretaxify = () => {
               </th>
               <th
                 onClick={() => handleSort("name")}
-                // className="cursor-pointer hover:bg-gray-100 transition-colors"
+              // className="cursor-pointer hover:bg-gray-100 transition-colors"
               >
                 Nama Praktikum{" "}
                 {sortConfig.key === "name" && (

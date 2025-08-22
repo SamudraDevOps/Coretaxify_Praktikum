@@ -179,6 +179,8 @@ const DosenCoretaxify = () => {
         title: "Berhasil",
         description: "Praktikum berhasil ditambahkan",
       });
+          window.location.reload();
+
     },
     onError: (error) => {
       console.error("Error creating assignment:", error);
@@ -239,6 +241,8 @@ const DosenCoretaxify = () => {
         title: "Berhasil",
         description: "Praktikum berhasil diperbarui",
       });
+                window.location.reload();
+
     },
     onError: (error) => {
       console.error("Error updating assignment:", error);
@@ -762,6 +766,7 @@ const DosenCoretaxify = () => {
                 onClick={handleSubmit}
                 disabled={createMutation.isLoading}
                 className="bg-green-600 hover:bg-green-700"
+                
               >
                 {createMutation.isLoading ? (
                   <ClipLoader color="white" size={16} />
