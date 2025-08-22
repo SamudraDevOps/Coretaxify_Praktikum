@@ -709,6 +709,8 @@ const BUPOTForm = ({
 
   // Helper BP21 calculation
   const bp21Ps17Calculation = (tarif, effectiveIncome) => {
+    if (!tarif || !effectiveIncome) return 0;
+    
     if (formData.fasilitas_pajak === "fasilitas_lainnya") {
       return effectiveIncome * (tarif / 100);
     } else if (
