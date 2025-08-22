@@ -43,7 +43,7 @@ export default function RoleProtectedRoutes({ allowedRoles, layout = "admin" }) 
   }
 
   if (userRouteError) {
-    console.error('Error fetching user:', userError);
+    console.error('Error fetching user:', userRouteError);
     // Optionally handle user fetch error
   }
 
