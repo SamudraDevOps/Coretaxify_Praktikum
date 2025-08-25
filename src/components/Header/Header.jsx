@@ -104,6 +104,10 @@ const Header = () => {
       }
     }
     fetchAssignmentUser();
+    // Set interval refresh setiap 30 detik
+    intervalId = setInterval(fetchAssignmentUser, 30000);
+
+    return () => clearInterval(intervalId); // Bersihkan interval saat unmount
   }, [userId, cookies.assignment_user_id, cookies.token]);
 
   useEffect(() => {
