@@ -53,6 +53,7 @@ export default function MahasiswaPraktikum() {
           },
         },
       });
+      console.log(data);
       return data;
     },
   });
@@ -259,7 +260,7 @@ export default function MahasiswaPraktikum() {
               <th className="">Nama Dosen</th>
               <th className="">Judul Praktikum</th>
               <th className="">Deadline Praktikum</th>
-              <th>Aksi</th>
+              <th className="">Aksi</th>
             </tr>
           </thead>
           <tbody>
@@ -272,6 +273,13 @@ export default function MahasiswaPraktikum() {
                   <p className="">{item.assignment.end_period}</p>
                 </td>
                 <td>
+                  {item.is_valid === false ? (
+                    <button
+                      className="download-button"
+                    >
+                      Tidak Valid
+                      </button>
+                  ) : (
                   <button
                     className="action-button"
                     disabled={startPraktikum.isPending}
@@ -294,6 +302,7 @@ export default function MahasiswaPraktikum() {
                       "Mulai"
                     )}
                   </button>
+                  )}
                 </td>
               </tr>
             ))}
