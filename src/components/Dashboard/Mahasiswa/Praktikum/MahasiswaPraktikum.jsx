@@ -284,6 +284,7 @@ export default function MahasiswaPraktikum() {
                     className="action-button"
                     disabled={startPraktikum.isPending}
                     onClick={() => {
+                      setCookie("assignment_user_id", item.id, { path: "/" });
                       if (item.is_start === 1) {
                         // If already started, redirect directly
                         window.location.href = `/praktikum/${item.assignment.id}`;
