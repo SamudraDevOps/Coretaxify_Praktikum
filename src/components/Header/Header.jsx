@@ -71,8 +71,10 @@ const Header = () => {
 
   // Get current assignment status
   useEffect(() => {
+    if(userId) return;
+
     if(!cookies.assignment_user_id){
-      // triggerLogoutAlert("Sesi anda telah berakhir atau tidak valid");
+      triggerLogoutAlert("Sesi anda telah berakhir atau tidak valid");
       return;
     }
 
@@ -87,24 +89,22 @@ const Header = () => {
             },
           }
         );
-        console.log("API response:", data.data);
         if (!data.data.is_valid) {
           console.log("Data is not valid. Exiting.");
-          // triggerLogoutAlert("Akses praktikum ini tidak valid.");
+          triggerLogoutAlert("Akses praktikum ini tidak valid.");
           return;
         }
 
         setAssignmentUser(data.data);
-        console.log("setAssignmentUser called");
       } catch (error) {
         console.error("Error fetching assignment user:", error);
-        // triggerLogoutAlert("Terjadi kesalahan. Anda akan keluar.");
+        triggerLogoutAlert("Terjadi kesalahan. Anda akan keluar.");
       } finally {
         setLoading(false);
       }
     }
     fetchAssignmentUser();
-  }, []);
+  }, [userId, cookies.assignment_user_id, cookies.token]);
 
   useEffect(() => {
     if (assignmentUser) {
@@ -508,13 +508,18 @@ const Header = () => {
         </div>
         <div className="flex items-center space-x-6 mr-1">
           {/* Tempat Tambah FETCH API untuk status assignment */}
-          {assignmentUser?.remaining_time ? (
-            <span className="text-600 font-semibold">
-              Sisa Waktu: {assignmentUser.remaining_time}
-            </span>
-          ) : (
-            <span className="text-600 font-semibold">Batas Pengerjaan: {assignmentUser.assignment.end_period}</span>
-          )}
+          {!userId &&
+            (assignmentUser?.remaining_time ? (
+              <span className="text-600 font-semibold">
+                Sisa Waktu: {assignmentUser.remaining_time}
+              </span>
+            ) : (
+              assignmentUser?.assignment?.end_period && (
+                <span className="text-600 font-semibold">
+                  Batas Pengerjaan: {assignmentUser.assignment.end_period}
+                </span>
+              )
+            ))}
           <FileText className="w-6 h-6 cursor-pointer" />
           <Bell
             className="w-6 h-6 cursor-pointer"
@@ -526,10 +531,10 @@ const Header = () => {
           {representedCompanies &&
             representedCompanies.data &&
             representedCompanies.data.length > 0 && (
-            <div className="flex items-center space-x-2 cursor-pointer "
-              ref={companyDropdownRef}
-            >
-              
+              <div
+                className="flex items-center space-x-2 cursor-pointer "
+                ref={companyDropdownRef}
+              >
                 <button
                   className="flex items-center space-x-2 cursor-pointer bg-white px-3 py-2 rounded-md shadow-md"
                   onClick={() =>
@@ -579,13 +584,13 @@ const Header = () => {
               </div>
             )}
 
-          <div className="flex items-center space-x-2 cursor-pointer"
+          <div
+            className="flex items-center space-x-2 cursor-pointer"
             ref={accountDropdownRef}
-            >
+          >
             <button
               className="flex items-center space-x-2 cursor-pointer bg-white px-3 py-2 rounded-md shadow-md relative"
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              
             >
               <UserCircle className="w-8 h-8" />
               <span className="hidden md:inline">
