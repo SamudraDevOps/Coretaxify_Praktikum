@@ -39,6 +39,8 @@ const DaftarKodeBilingBelumBayar = ({ data, sidebar }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const viewAsCompanyId = searchParams.get("viewAs");
   const userId = searchParams.get("user_id");
+  const [localPage, setLocalPage] = useState(1);
+  const itemsPerPage = 10;
 
   console.log(data);
   const handleBayarClick = () => {
@@ -126,6 +128,69 @@ const DaftarKodeBilingBelumBayar = ({ data, sidebar }) => {
       maximumFractionDigits: 0,
     }).format(amount);
   };
+
+  const rawItems = Array.isArray(data?.data) ? data.data : Array.isArray(data) ? data : [];
+  const unpaid = (rawItems || []).filter((item) => item.is_paid === 0);
+
+  const hasServerMeta = !!(data?.meta && data?.links);
+  const current = hasServerMeta ? data.meta.current_page : localPage;
+  const last = hasServerMeta ? data.meta.last_page : Math.max(1, Math.ceil(unpaid.length / itemsPerPage));
+
+  const displayItems = hasServerMeta
+    ? unpaid
+    : unpaid.slice((current - 1) * itemsPerPage, current * itemsPerPage);
+
+  const goTo = (page) => {
+    if (page < 1 || page > last || page === current) return;
+    if (hasServerMeta) {
+      // parent bertanggung jawab refetch; opsional callback
+      onPageChange?.(page);
+    } else {
+      setLocalPage(page);
+    }
+  };
+
+  const Prev = () => goTo(current - 1);
+  const Next = () => goTo(current + 1);
+
+  const Pagination = () => (
+    <div className="pagination">
+      {/* Prev */}
+      <button className="page-item" onClick={Prev}
+        disabled={hasServerMeta ? data.links?.prev == null : current <= 1}>
+        &lt;
+      </button>
+
+      {(() => {
+        const pages = [];
+        const addBtn = (p) =>
+          pages.push(
+            <button
+              key={p}
+              className={`page-item ${current === p ? "active" : ""}`}
+              onClick={() => goTo(p)}
+              disabled={current === p}
+            >
+              {p}
+            </button>
+          );
+
+        addBtn(1);
+        if (current > 2) pages.push(<span key="dots-start">...</span>);
+        if (current !== 1 && current !== last) addBtn(current);
+        if (current < last - 1) pages.push(<span key="dots-end">...</span>);
+        if (last > 1) addBtn(last);
+
+        return pages;
+      })()}
+
+      {/* Next */}
+      <button className="page-item" onClick={Next}
+        disabled={hasServerMeta ? data.links?.next == null : current >= last}>
+        &gt;
+      </button>
+    </div>
+  );
 
   return (
     <div className="m-4 rounded-md">
@@ -287,6 +352,9 @@ const DaftarKodeBilingBelumBayar = ({ data, sidebar }) => {
             )}
           </tbody>
         </table>
+        <div className="pagination-container mt-3 flex justify-end">
+          <Pagination />
+        </div>  
       </div>
 
       {/* AlertDialog Konfirmasi Pembayaran */}

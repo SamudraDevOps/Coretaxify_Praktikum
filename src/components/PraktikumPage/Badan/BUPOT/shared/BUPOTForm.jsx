@@ -927,18 +927,23 @@ const BUPOTForm = ({
                           Pegawai Asing
                           <span className="text-red-500">*</span>
                         </label>
-                        <select
-                          className="w-64 flex-auto border p-2 rounded appearance-none"
-                          value={String(formData.pegawai_asing) || ""}
-                          onChange={(e) =>
-                            updatePegawaiAsing(e.target.value)
+                        <Select
+                          className="w-64 flex-auto"
+                          value={
+                            formData.pegawai_asing
+                              ? { value: String(formData.pegawai_asing), label: formData.pegawai_asing === "1" ? "Ya" : "Tidak" }
+                              : null
                           }
-                          placehoder="Please Select"
-                        >
-                          <option value="">Please Select</option>
-                          <option value="1">Ya</option>
-                          <option value="0">Tidak</option>
-                        </select>
+                          onChange={(selectedOption) =>
+                            updatePegawaiAsing(selectedOption ? selectedOption.value : "")
+                          }
+                          options={[
+                            { value: "1", label: "Ya" },
+                            { value: "0", label: "Tidak" }
+                          ]}
+                          placeholder="Please Select"
+                          isClearable
+                        />
                       </div>
                     </>
                   )}
