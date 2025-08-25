@@ -16,6 +16,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { getCookieToken } from "@/service";
 import { ClipLoader } from "react-spinners";
 import { useCookies } from "react-cookie";
+import Swal from "sweetalert2";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -39,18 +40,77 @@ const Header = () => {
   const viewAsCompanyId = searchParams.get("viewAs");
 
   const token = getCookieToken();
-  const [cookies, setCookie, removeCookie] = useCookies(["token"]);
+  const [cookies, setCookie, removeCookie] = useCookies(["token", "assignment_user_id"]);
   const [isCompanyDropdownOpen, setIsCompanyDropdownOpen] = useState(false);
+  const [assignmentUser, setAssignmentUser] = useState(null);
+  const [loading, setLoading] = useState(true);
   const companyDropdownRef = useRef(null);
   const accountDropdownRef = useRef(null);
   const logout = () => {
     // removeCookie("token", { path: "/" });
     // removeCookie("role", { path: "/" });
+    removeCookie("assignment_user_id", { path: "/" });
     window.location.href = "/";
   };
   const buttonRefs = useRef([]);
   const dropdownRefs = useRef([]);
   const userId = searchParams.get("user_id");
+
+  const triggerLogoutAlert = (message) => {
+    Swal.fire({
+      title: "Sesi tidak valid",
+      text: message,
+      icon: "warning",
+      confirmButtonText: "OK",
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+    }).then(() => {
+      logout();
+    });
+  }
+
+  // Get current assignment status
+  useEffect(() => {
+    if(!cookies.assignment_user_id){
+      // triggerLogoutAlert("Sesi anda telah berakhir atau tidak valid");
+      return;
+    }
+
+    const fetchAssignmentUser = async () => {
+      try {
+        const { data } = await axios.get(
+          `${RoutesApi.apiUrl}student/assignment-user/${cookies.assignment_user_id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${cookies.token}`,
+              Accept: "application/json",
+            },
+          }
+        );
+        console.log("API response:", data.data);
+        if (!data.data.is_valid) {
+          console.log("Data is not valid. Exiting.");
+          // triggerLogoutAlert("Akses praktikum ini tidak valid.");
+          return;
+        }
+
+        setAssignmentUser(data.data);
+        console.log("setAssignmentUser called");
+      } catch (error) {
+        console.error("Error fetching assignment user:", error);
+        // triggerLogoutAlert("Terjadi kesalahan. Anda akan keluar.");
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchAssignmentUser();
+  }, []);
+
+  useEffect(() => {
+    if (assignmentUser) {
+      console.log("assignment user updated:", assignmentUser);
+    }
+  }, [assignmentUser]);
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -447,6 +507,14 @@ const Header = () => {
           <h1 className="text-lg font-bold">CORETAXIFY</h1>
         </div>
         <div className="flex items-center space-x-6 mr-1">
+          {/* Tempat Tambah FETCH API untuk status assignment */}
+          {assignmentUser?.remaining_time ? (
+            <span className="text-600 font-semibold">
+              Sisa Waktu: {assignmentUser.remaining_time}
+            </span>
+          ) : (
+            <span className="text-600 font-semibold">Batas Pengerjaan: {assignmentUser.assignment.end_period}</span>
+          )}
           <FileText className="w-6 h-6 cursor-pointer" />
           <Bell
             className="w-6 h-6 cursor-pointer"
