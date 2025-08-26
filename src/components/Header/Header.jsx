@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import {
   Bell,
   UserCircle,
@@ -6,6 +6,7 @@ import {
   FileText,
   LogOut,
   ChevronRight,
+  RefreshCw
 } from "lucide-react";
 import Logo from "../../assets/images/5.png";
 import { useUserType } from "../context/userTypeContext";
@@ -16,6 +17,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { getCookieToken } from "@/service";
 import { ClipLoader } from "react-spinners";
 import { useCookies } from "react-cookie";
+import Swal from "sweetalert2";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -39,18 +41,110 @@ const Header = () => {
   const viewAsCompanyId = searchParams.get("viewAs");
 
   const token = getCookieToken();
-  const [cookies, setCookie, removeCookie] = useCookies(["token"]);
+  const [cookies, setCookie, removeCookie] = useCookies(["token", "assignment_user_id"]);
   const [isCompanyDropdownOpen, setIsCompanyDropdownOpen] = useState(false);
+  const [assignmentUser, setAssignmentUser] = useState(null);
+  const [countdown, setCountdown] = useState(0);
+  const [loading, setLoading] = useState(true);
   const companyDropdownRef = useRef(null);
   const accountDropdownRef = useRef(null);
   const logout = () => {
     // removeCookie("token", { path: "/" });
     // removeCookie("role", { path: "/" });
+    removeCookie("assignment_user_id", { path: "/" });
     window.location.href = "/";
   };
   const buttonRefs = useRef([]);
   const dropdownRefs = useRef([]);
   const userId = searchParams.get("user_id");
+
+  const triggerLogoutAlert = (message) => {
+    Swal.fire({
+      title: "Sesi tidak valid",
+      text: message,
+      icon: "warning",
+      confirmButtonText: "OK",
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+    }).then(() => {
+      logout();
+    });
+  }
+
+  // Get current assignment status
+  const fetchAssignmentUser = useCallback(async () => {
+
+    if(!cookies.assignment_user_id){
+      triggerLogoutAlert("Sesi anda telah berakhir atau tidak valid");
+      return;
+    }
+
+    try {
+      const { data } = await axios.get(
+        `${RoutesApi.apiUrl}student/assignment-user/${cookies.assignment_user_id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${cookies.token}`,
+            Accept: "application/json",
+          },
+        }
+      );
+
+      if (!data.data.is_valid) {
+        console.log("Data is not valid. Exiting.");
+        triggerLogoutAlert("Akses praktikum ini tidak valid.");
+        return;
+      }
+
+      setAssignmentUser(data.data);
+    } catch (error) {
+      console.error("Error fetching assignment user:", error);
+      triggerLogoutAlert("Terjadi kesalahan. Anda akan keluar.");
+    } finally {
+      setLoading(false);
+    }
+  }, [userId, cookies.assignment_user_id, cookies.token]);
+
+  useEffect(() => {
+    if (userId) return;
+
+    fetchAssignmentUser(); // Fetch pertama kali
+
+    const intervalId = setInterval(fetchAssignmentUser, 30000); // Refresh setiap 30 detik
+
+    return () => clearInterval(intervalId);
+  }, [userId, fetchAssignmentUser]);
+
+  useEffect(() => {
+    if (!assignmentUser?.remaining_time) return;
+
+    let totalSeconds = assignmentUser.remaining_time;
+
+    setCountdown(totalSeconds);
+
+    const interval = setInterval(() => {
+      totalSeconds -= 1;
+      if (totalSeconds <= 0) {
+        clearInterval(interval);
+        setCountdown(0);
+        triggerLogoutAlert("Waktu Anda telah habis!");
+        return;
+      }
+
+      setCountdown(Math.floor(totalSeconds));
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [assignmentUser?.remaining_time]);
+
+  const formatTime = (seconds) => {
+    const h = Math.floor(seconds / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
+    const s = Math.floor(seconds % 60);
+    return `${h.toString().padStart(2, "0")}:${m
+      .toString()
+      .padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
+  };
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -447,6 +541,28 @@ const Header = () => {
           <h1 className="text-lg font-bold">CORETAXIFY</h1>
         </div>
         <div className="flex items-center space-x-6 mr-1">
+          {/* Tempat Tambah FETCH API untuk status assignment */}
+          {!userId &&
+            (countdown > 0 ? (
+              <>
+                <button
+                  onClick={fetchAssignmentUser}
+                  className="p-2 rounded-full hover:bg-gray-200"
+                  title="Reload Data"
+                >
+                  <RefreshCw size={20} />
+                </button>
+                <span className="text-600 font-semibold">
+                  Sisa Waktu: {formatTime(countdown)}
+                </span>
+              </>
+            ) : (
+              assignmentUser?.assignment?.end_period && (
+                <span className="text-600 font-semibold">
+                  Batas Pengerjaan: {assignmentUser.assignment.end_period}
+                </span>
+              )
+            ))}
           <FileText className="w-6 h-6 cursor-pointer" />
           <Bell
             className="w-6 h-6 cursor-pointer"
@@ -458,10 +574,10 @@ const Header = () => {
           {representedCompanies &&
             representedCompanies.data &&
             representedCompanies.data.length > 0 && (
-            <div className="flex items-center space-x-2 cursor-pointer "
-              ref={companyDropdownRef}
-            >
-              
+              <div
+                className="flex items-center space-x-2 cursor-pointer "
+                ref={companyDropdownRef}
+              >
                 <button
                   className="flex items-center space-x-2 cursor-pointer bg-white px-3 py-2 rounded-md shadow-md"
                   onClick={() =>
@@ -511,13 +627,13 @@ const Header = () => {
               </div>
             )}
 
-          <div className="flex items-center space-x-2 cursor-pointer"
+          <div
+            className="flex items-center space-x-2 cursor-pointer"
             ref={accountDropdownRef}
-            >
+          >
             <button
               className="flex items-center space-x-2 cursor-pointer bg-white px-3 py-2 rounded-md shadow-md relative"
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              
             >
               <UserCircle className="w-8 h-8" />
               <span className="hidden md:inline">
