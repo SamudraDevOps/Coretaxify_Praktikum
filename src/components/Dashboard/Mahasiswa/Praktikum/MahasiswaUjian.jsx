@@ -100,6 +100,46 @@ export default function MahasiswaUjian() {
     },
   });
 
+  const startUjian = useMutation({
+    mutationFn: async (assignment_id) => {
+      console.log("Start button clicked");
+      const csrf = await getCsrf();
+      const data = await axios.post(
+        `${RoutesApi.url}api/student/sistem`,
+        {
+          assignment: String(assignment_id),
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": csrf,
+            Authorization: `Bearer ${cookies.token}`,
+          },
+        }
+      );
+      return data;
+    },
+    onSuccess: (data, variables) => {
+      console.log(data);
+      Swal.fire({
+        title: "Berhasil!",
+        text: "Ujian berhasil dimulai!",
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        window.location.href = `/praktikum/${variables}`;
+        refetch();
+      })
+    },
+    onError: (error) => {
+      console.log("Error starting ujian: ", error);
+      Swal.fire("Gagal!", error.message, "error");
+    }
+  });
+
   const handleSort = (key) => {
     let direction = "ascending";
     if (sortConfig.key === key && sortConfig.direction === "ascending") {
@@ -281,9 +321,35 @@ export default function MahasiswaUjian() {
                   <p className="">{item.tanggal}</p>
                 </td>
                 <td>
-                  <button className="bg-green-500 text-white p-2 rounded-md">
-                    Mulai
-                  </button>
+                  {item.is_valid === false ? (
+                    <button
+                      className="download-button"
+                    >
+                      Tidak Valid
+                    </button>
+                  ) : (
+                    <button
+                      className="action-button"
+                      disabled={startUjian.isPending}
+                      onClick={() => {
+                        setCookie("assignment_user_id", item.id, { path: "/" });
+                        if (item.is_start === 1) {
+                          window.location.href = `/praktikum/${item.assignment.id}`;
+                        } else {
+                          startUjian.mutate(item.assignment.id);
+                        }
+                      }}
+                    >
+                      {startUjian.isPending ? (
+                        <div className="flex items-center gap-2">
+                            <ClipLoader color="#ffffff" size={16} />
+                            Loading...
+                          </div>
+                        ) : (
+                          "Mulai"
+                      )}
+                    </button>
+                  )}
                 </td>
               </tr>
             ))}

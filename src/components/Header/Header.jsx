@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import {
   Bell,
   UserCircle,
@@ -6,6 +6,7 @@ import {
   FileText,
   LogOut,
   ChevronRight,
+  RefreshCw
 } from "lucide-react";
 import Logo from "../../assets/images/5.png";
 import { useUserType } from "../context/userTypeContext";
@@ -43,6 +44,7 @@ const Header = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["token", "assignment_user_id"]);
   const [isCompanyDropdownOpen, setIsCompanyDropdownOpen] = useState(false);
   const [assignmentUser, setAssignmentUser] = useState(null);
+  const [countdown, setCountdown] = useState(0);
   const [loading, setLoading] = useState(true);
   const companyDropdownRef = useRef(null);
   const accountDropdownRef = useRef(null);
@@ -70,51 +72,79 @@ const Header = () => {
   }
 
   // Get current assignment status
-  useEffect(() => {
-    if(userId) return;
+  const fetchAssignmentUser = useCallback(async () => {
 
     if(!cookies.assignment_user_id){
       triggerLogoutAlert("Sesi anda telah berakhir atau tidak valid");
       return;
     }
 
-    const fetchAssignmentUser = async () => {
-      try {
-        const { data } = await axios.get(
-          `${RoutesApi.apiUrl}student/assignment-user/${cookies.assignment_user_id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${cookies.token}`,
-              Accept: "application/json",
-            },
-          }
-        );
-        if (!data.data.is_valid) {
-          console.log("Data is not valid. Exiting.");
-          triggerLogoutAlert("Akses praktikum ini tidak valid.");
-          return;
+    try {
+      const { data } = await axios.get(
+        `${RoutesApi.apiUrl}student/assignment-user/${cookies.assignment_user_id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${cookies.token}`,
+            Accept: "application/json",
+          },
         }
+      );
 
-        setAssignmentUser(data.data);
-      } catch (error) {
-        console.error("Error fetching assignment user:", error);
-        triggerLogoutAlert("Terjadi kesalahan. Anda akan keluar.");
-      } finally {
-        setLoading(false);
+      if (!data.data.is_valid) {
+        console.log("Data is not valid. Exiting.");
+        triggerLogoutAlert("Akses praktikum ini tidak valid.");
+        return;
       }
-    }
-    fetchAssignmentUser();
-    // Set interval refresh setiap 30 detik
-    intervalId = setInterval(fetchAssignmentUser, 30000);
 
-    return () => clearInterval(intervalId); // Bersihkan interval saat unmount
+      setAssignmentUser(data.data);
+    } catch (error) {
+      console.error("Error fetching assignment user:", error);
+      triggerLogoutAlert("Terjadi kesalahan. Anda akan keluar.");
+    } finally {
+      setLoading(false);
+    }
   }, [userId, cookies.assignment_user_id, cookies.token]);
 
   useEffect(() => {
-    if (assignmentUser) {
-      console.log("assignment user updated:", assignmentUser);
-    }
-  }, [assignmentUser]);
+    if (userId) return;
+
+    fetchAssignmentUser(); // Fetch pertama kali
+
+    const intervalId = setInterval(fetchAssignmentUser, 30000); // Refresh setiap 30 detik
+
+    return () => clearInterval(intervalId);
+  }, [userId, fetchAssignmentUser]);
+
+  useEffect(() => {
+    if (!assignmentUser?.remaining_time) return;
+
+    let totalSeconds = assignmentUser.remaining_time;
+
+    setCountdown(totalSeconds);
+
+    const interval = setInterval(() => {
+      totalSeconds -= 1;
+      if (totalSeconds <= 0) {
+        clearInterval(interval);
+        setCountdown(0);
+        triggerLogoutAlert("Waktu Anda telah habis!");
+        return;
+      }
+
+      setCountdown(Math.floor(totalSeconds));
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [assignmentUser?.remaining_time]);
+
+  const formatTime = (seconds) => {
+    const h = Math.floor(seconds / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
+    const s = Math.floor(seconds % 60);
+    return `${h.toString().padStart(2, "0")}:${m
+      .toString()
+      .padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
+  };
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -513,10 +543,19 @@ const Header = () => {
         <div className="flex items-center space-x-6 mr-1">
           {/* Tempat Tambah FETCH API untuk status assignment */}
           {!userId &&
-            (assignmentUser?.remaining_time ? (
-              <span className="text-600 font-semibold">
-                Sisa Waktu: {assignmentUser.remaining_time}
-              </span>
+            (countdown > 0 ? (
+              <>
+                <button
+                  onClick={fetchAssignmentUser}
+                  className="p-2 rounded-full hover:bg-gray-200"
+                  title="Reload Data"
+                >
+                  <RefreshCw size={20} />
+                </button>
+                <span className="text-600 font-semibold">
+                  Sisa Waktu: {formatTime(countdown)}
+                </span>
+              </>
             ) : (
               assignmentUser?.assignment?.end_period && (
                 <span className="text-600 font-semibold">
