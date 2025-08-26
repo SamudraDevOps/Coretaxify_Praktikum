@@ -472,7 +472,7 @@ const SidebarAdmin = () => {
                     <li
                       className="dropdown-item"
                       onClick={() => {
-                        window.location.href = `/${cookies.role}/praktikum-kosong`;
+                        window.location.href = `/${cookies.role}/praktikum/kosong`;
                       }}
                     >
                       Praktikum Kosong
@@ -480,7 +480,7 @@ const SidebarAdmin = () => {
                     <li
                       className="dropdown-item"
                       onClick={() => {
-                        window.location.href = `/${cookies.role}/praktikum-terisi`;
+                        window.location.href = `/${cookies.role}/praktikum/terisi`;
                       }}
                     >
                       Praktikum Terisi
