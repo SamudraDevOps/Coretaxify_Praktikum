@@ -51,8 +51,13 @@ const Header = () => {
   const logout = () => {
     // removeCookie("token", { path: "/" });
     // removeCookie("role", { path: "/" });
-    removeCookie("assignment_user_id", { path: "/" });
-    window.location.href = "/";
+    if (localStorage.getItem('url_penilaian')) {
+      window.location.href = localStorage.getItem('url_penilaian');
+      localStorage.removeItem('url_penilaian');
+    } else {
+      window.location.href = "/";
+      removeCookie("assignment_user_id", { path: "/" });
+    }
   };
   const buttonRefs = useRef([]);
   const dropdownRefs = useRef([]);
