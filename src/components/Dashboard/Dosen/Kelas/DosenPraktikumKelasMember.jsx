@@ -42,7 +42,7 @@ export default function DosenPraktikumKelasMember() {
   const [scoreModal, setScoreModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [scoreValue, setScoreValue] = useState("");
-  const currentUrl = window.location.href.split('?')[0];
+  const currentUrl = window.location.href.split("?")[0];
   const [isTabelNilaiMahasiswaOpen, setIsTabelNilaiMahasiswaOpen] =
     useState(false);
   const location = useLocation();
@@ -64,7 +64,7 @@ export default function DosenPraktikumKelasMember() {
 
   const pathRoute = getRoute();
 
-  const { isLoading, isError, data, error, refetch} = useQuery({
+  const { isLoading, isError, data, error, refetch } = useQuery({
     queryKey: ["praktikum", url, currentPage],
     queryFn: async () => {
       const { data } = await axios.get(
@@ -76,12 +76,10 @@ export default function DosenPraktikumKelasMember() {
           },
           params: {
             intent: IntentEnum.API_GET_ASSIGNMENT_MEMBERS_WITH_SISTEM_SCORES,
-            page: currentPage
+            page: currentPage,
           },
         }
       );
-      console.log(url + `/${id}/assignments/${idpraktikum}/members`);
-      console.log(data);
       return data;
     },
   });
@@ -89,63 +87,62 @@ export default function DosenPraktikumKelasMember() {
   console.log(currentPage);
 
   const downloadMutation = useMutation({
-  mutationFn: async () => {
-    try {
-      const response = await axios.get(
-        `${url}/${id}/assignments/${idpraktikum}/members`,
-        {
-          headers: {
-            Authorization: `Bearer ${cookies.token}`,
-            Accept: "application/octet-stream",
-          },
-          params: {
-            intent: IntentEnum.API_USER_EXPORT_SCORE,
-          },
-          responseType: "blob",
-        }
-      );
+    mutationFn: async () => {
+      try {
+        const response = await axios.get(
+          `${url}/${id}/assignments/${idpraktikum}/members`,
+          {
+            headers: {
+              Authorization: `Bearer ${cookies.token}`,
+              Accept: "application/octet-stream",
+            },
+            params: {
+              intent: IntentEnum.API_USER_EXPORT_SCORE,
+            },
+            responseType: "blob",
+          }
+        );
 
-      // Create blob URL from response
-      const blob = new Blob([response.data], {
-        type: response.headers["content-type"],
-      });
-      const blobUrl = window.URL.createObjectURL(blob);
+        // Create blob URL from response
+        const blob = new Blob([response.data], {
+          type: response.headers["content-type"],
+        });
+        const blobUrl = window.URL.createObjectURL(blob);
 
-      // Extract filename from header
-      const contentDisposition = response.headers["content-disposition"];
-      let filename = "soal.xlsx";
-      if (contentDisposition) {
-        const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
-        const matches = filenameRegex.exec(contentDisposition);
-        if (matches?.[1]) {
-          filename = matches[1].replace(/['"]/g, "");
+        // Extract filename from header
+        const contentDisposition = response.headers["content-disposition"];
+        let filename = "soal.xlsx";
+        if (contentDisposition) {
+          const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+          const matches = filenameRegex.exec(contentDisposition);
+          if (matches?.[1]) {
+            filename = matches[1].replace(/['"]/g, "");
+          }
         }
+
+        // Trigger download
+        const link = document.createElement("a");
+        link.href = blobUrl;
+        link.setAttribute("download", filename);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        // Clean up
+        window.URL.revokeObjectURL(blobUrl);
+
+        return response;
+      } catch (error) {
+        console.error("Download error:", error);
+        Swal.fire("Gagal!", "Gagal mengunduh file", "error");
+        throw error;
       }
-
-      // Trigger download
-      const link = document.createElement("a");
-      link.href = blobUrl;
-      link.setAttribute("download", filename);
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-
-      // Clean up
-      window.URL.revokeObjectURL(blobUrl);
-
-      return response;
-    } catch (error) {
-      console.error("Download error:", error);
-      Swal.fire("Gagal!", "Gagal mengunduh file", "error");
-      throw error;
-    }
-  },
-});
+    },
+  });
 
   const handleDownload = () => {
     downloadMutation.mutate();
   };
-
 
   const handleSort = (key) => {
     let direction = "ascending";
@@ -168,11 +165,11 @@ export default function DosenPraktikumKelasMember() {
 
   const handleDataRefresh = () => {
     refetch();
-  }
+  };
 
   const onPageChange = (page) => {
     setCurrentPage(page);
-  }
+  };
 
   const getPageFromUrl = (url) => {
     if (!url) return null;
@@ -296,38 +293,30 @@ export default function DosenPraktikumKelasMember() {
                 {pathRoute === "penilaian" ? (
                   <>
                     <td>
-                      {item.sistem_scores.length > 0 ? (
-                        // <button
-                        //   className="download-button"
-                        //   onClick={() => handleOpenNilai(item.sistem_scores)}
-                        // >
-                        //   Lihat Nilai
-                        // </button>
-                        item.summary.total_bupot_scores_across_all_sistems
-                      ) : (
-                        "-"
-                      )}
+                      {item.sistem_scores.length > 0
+                        ? // <button
+                          //   className="download-button"
+                          //   onClick={() => handleOpenNilai(item.sistem_scores)}
+                          // >
+                          //   Lihat Nilai
+                          // </button>
+                          item.summary.total_bupot_scores_across_all_sistems
+                        : "-"}
                     </td>
                     <td>
-                      {item.sistem_scores.length > 0 ? (
-                        item.summary.total_faktur_scores_across_all_sistems
-                      ) : (
-                        "-"
-                      )}
+                      {item.sistem_scores.length > 0
+                        ? item.summary.total_faktur_scores_across_all_sistems
+                        : "-"}
                     </td>
                     <td>
-                      {item.sistem_scores.length > 0 ? (
-                        item.summary.total_spt_scores_across_all_sistems
-                      ) : (
-                        "-"
-                      )}
+                      {item.sistem_scores.length > 0
+                        ? item.summary.total_spt_scores_across_all_sistems
+                        : "-"}
                     </td>
                     <td>
-                      {item.sistem_scores.length > 0 ? (
-                        item.summary.total_scores_across_all_sistems
-                      ) : (
-                        "-"
-                      )}
+                      {item.sistem_scores.length > 0
+                        ? item.summary.total_scores_across_all_sistems
+                        : "-"}
                     </td>
                   </>
                 ) : (
@@ -339,7 +328,7 @@ export default function DosenPraktikumKelasMember() {
                       <button
                         className="action-button edit bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 transition-colors"
                         onClick={() => {
-                          localStorage.setItem('url_penilaian', currentUrl);
+                          localStorage.setItem("url_penilaian", currentUrl);
                           navigate(
                             `/praktikum/${idpraktikum}?user_id=${item.user.id}`
                           );
@@ -425,7 +414,8 @@ export default function DosenPraktikumKelasMember() {
               if (current !== 1 && current !== last) addBtn(current);
 
               // 4) Titik di akhir jika ada gap
-              if (current < last - 1) pages.push(<span key="dots-end">...</span>);
+              if (current < last - 1)
+                pages.push(<span key="dots-end">...</span>);
 
               // 5) Halaman terakhir
               if (last > 1) addBtn(last);
@@ -442,7 +432,6 @@ export default function DosenPraktikumKelasMember() {
               &gt;
             </button>
           </div>
-
         </div>
       </div>
       {isOpen && (
