@@ -42,6 +42,7 @@ export default function DosenPraktikumKelasMember() {
   const [scoreModal, setScoreModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [scoreValue, setScoreValue] = useState("");
+  const currentUrl = window.location.href.split('?')[0];
   const [isTabelNilaiMahasiswaOpen, setIsTabelNilaiMahasiswaOpen] =
     useState(false);
   const location = useLocation();
@@ -338,6 +339,7 @@ export default function DosenPraktikumKelasMember() {
                       <button
                         className="action-button edit bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 transition-colors"
                         onClick={() => {
+                          localStorage.setItem('url_penilaian', currentUrl);
                           navigate(
                             `/praktikum/${idpraktikum}?user_id=${item.user.id}`
                           );
