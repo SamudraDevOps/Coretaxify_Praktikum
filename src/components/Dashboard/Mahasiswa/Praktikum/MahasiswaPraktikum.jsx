@@ -21,18 +21,20 @@ import { ClipLoader } from "react-spinners";
 import { joinAssignmentMahasiswa } from "@/hooks/dashboard/useMahasiswa";
 import { getCookie } from "@/service";
 import { getCsrf } from "@/service/getCsrf";
-import { useOutletContext } from "react-router-dom";
+import { useOutletContext, useNavigate } from "react-router-dom";
 
 export default function MahasiswaPraktikum() {
   const [isOpen, setIsOpen] = useState(false);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
   const [selectedData, setSelectedData] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const currentUrl = window.location.href.split("?")[0];
   const itemsPerPage = 20;
   const [cookies, setCookie] = useCookies(["user"]);
   // const [url, setUrl] = useState(`${RoutesApi.url}api/student/assignments`);
   const [url, setUrl] = useState(`${RoutesApi.url}api/student/assignment-user`);
   const { user } = useOutletContext();
+  const navigate = useNavigate();
 
   const { isLoading, isError, data, error, refetch } = useQuery({
     queryKey: ["praktikum", url],
@@ -276,8 +278,13 @@ export default function MahasiswaPraktikum() {
                   {item.is_valid === false ? (
                     <button
                       className="download-button"
+                      onClick={() => {
+                          navigate(
+                            `/praktikum/${item.assignment.id}?user_id=${user.data.id}`
+                          );
+                        }}
                     >
-                      Tidak Valid
+                      Lihat
                       </button>
                   ) : (
                   <button
