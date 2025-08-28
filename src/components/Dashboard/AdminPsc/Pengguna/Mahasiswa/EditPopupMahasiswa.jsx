@@ -54,7 +54,7 @@ const EditPopupMahasiswa = ({
     // Filter out any empty rows
     const validStudents = students.filter(student => student.name && student.email && student.status);
     if (validStudents.length === 0) {
-      Swal.fire("Gagal!", "Harap isi setidaknya satu mahasiswa dengan nama, email, dan status.", "error");
+      Swal.fire("Gagal!", "Harap isi setidaknya satu Peserta dengan nama, email, dan status.", "error");
       return;
     }
 
@@ -64,7 +64,7 @@ const EditPopupMahasiswa = ({
 
     if (emails.length !== uniqueEmails.size) {
       
-      Swal.fire("Gagal!", "Terdapat email duplikat. Email mahasiswa tidak boleh sama", "error");
+      Swal.fire("Gagal!", "Terdapat email duplikat. Email Peserta tidak boleh sama", "error");
       return;
     }
 
@@ -136,7 +136,7 @@ const EditPopupMahasiswa = ({
         setStudents(importedStudents);
 
         // show success message
-        setImportSuccess(`${importedStudents.length} mahasiswa berhasil diimport.`);
+        setImportSuccess(`${importedStudents.length} Peserta berhasil diimport.`);
 
         // reset file input
         e.target.value = null;
@@ -251,11 +251,11 @@ const downloadTemplate = () => {
             </div>
 
             <div className="students-counter">
-              <strong>{students.length}</strong> mahasiswa akan ditambahkan
+              <strong>{students.length}</strong> Peserta akan ditambahkan
             </div>
             <div className="students-table">
               <div className="students-table-header">
-                <div className="student-field-header">Nama Mahasiswa</div>
+                <div className="student-field-header">Nama Peserta</div>
                 <div className="student-field-header">Email</div>
                 <div className="student-field-header">Status</div>
                 <div className="student-field-header actions">Actions</div>
@@ -268,7 +268,7 @@ const downloadTemplate = () => {
                       type="text" 
                       value={student.name}
                       onChange={(e) => handleStudentChange(index, "name", e.target.value)}
-                      placeholder="Nama Mahasiswa"
+                      placeholder="Nama Peserta"
                       required
                     />
                   </div>
@@ -344,7 +344,7 @@ const downloadTemplate = () => {
           // single student
         <form>
           <div className="edit-form-group-mahasiswa">
-            <label>Nama Mahasiswa:</label>
+            <label>Nama Peserta:</label>
             <input
               type="text"
               name="name"
@@ -393,7 +393,7 @@ const downloadTemplate = () => {
             <div className="edit-form-group-mahasiswa">
               <p className="text-info">
                 <small>
-                  Password akan digenerate secara otomatis dan akan dikirimkan ke email mahasiswa.
+                  Password akan digenerate secara otomatis dan akan dikirimkan ke email Peserta.
                 </small>
               </p>
             </div>
