@@ -11,6 +11,7 @@ import { FaFile, FaPlus } from "react-icons/fa";
 import JoinPraktikum from "./JoinPraktikum";
 import { getCsrf } from "@/service/getCsrf";
 import Swal from "sweetalert2";
+import { IntentEnum } from "@/enums/IntentEnum";
 
 const MahasiswaPscPraktikum = () => {
   const navigate = useNavigate();
@@ -46,6 +47,10 @@ const MahasiswaPscPraktikum = () => {
       return data;
     },
   });
+
+   const handleDownload = (id) => {
+    downloadMutation.mutate(id);
+  };
 
   const startPraktikum = useMutation({
     mutationFn: async (assignment_id) => {
@@ -150,6 +155,57 @@ const MahasiswaPscPraktikum = () => {
   //         item.status?.toLowerCase().includes(search.toLowerCase())
   //     ) || [];
 
+
+  // Download file mutation
+
+    const downloadMutation = useMutation({
+    mutationFn: async (id) => {
+      try {
+        const showEndpoint = RoutesApi.psc.assignments.show(id);
+        const response = await axios.get(showEndpoint.url, {
+          headers: {
+            Authorization: `Bearer ${cookies.token}`,
+            Accept: "*/*",
+          },
+          params: {
+            intent: IntentEnum.API_USER_DOWNLOAD_FILE,
+          },
+          responseType: "blob",
+        });
+
+        // Extract filename from Content-Disposition header if present
+        let filename = "file.pdf"; // Default fallback name
+        const contentDisposition = response.headers["content-disposition"];
+
+        if (contentDisposition) {
+          // Extract filename from the header
+          const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+          const matches = filenameRegex.exec(contentDisposition);
+          if (matches !== null && matches[1]) {
+            // Clean up the filename
+            filename = matches[1].replace(/['"]/g, "");
+          }
+        }
+
+        // Create a blob URL and trigger download
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", filename);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        return response;
+      } catch (error) {
+        console.error("Download error:", error);
+        Swal.fire("Gagal!", "Gagal mengunduh file", "error");
+        throw error;
+      }
+    },
+  });
+
+
   return (
     <div className="kontrak-container">
       <div className="header">
@@ -221,6 +277,7 @@ const MahasiswaPscPraktikum = () => {
                 <th className="">Nama Kelas</th>
                 <th className="">Nama Dosen</th>
                 <th className="">Judul Praktikum</th>
+                <th className="">Support File</th>
                 <th className="">Deadline Praktikum</th>
                 <th>Aksi</th>
               </tr>
@@ -231,9 +288,24 @@ const MahasiswaPscPraktikum = () => {
                   <td>{item.assignment?.group?.name}</td>
                   <td>{item.assignment?.group?.teacher}</td>
                   <td>{item.assignment.name}</td>
+                                    {/* <td>{item.assignment.supporting_file}</td> */}
                   <td className="max-w-5">
-                    <p className="">{item.assignment.end_period}</p>
+                        <td>
+                  {item.assignment.supporting_file ? (
+                    <button
+                      onClick={() => handleDownload(item.assignment.id)}
+                      className="download-button"
+                      disabled={downloadMutation.isPending}
+                    >
+                      {downloadMutation.isPending ? "Loading..." : "Download"}
+                    </button>
+                  ) : (
+                    <span>-</span>
+                  )}
+                </td>
+                    {/* <p className="">{item.assignment.end_period}</p> */}
                   </td>
+                  <td>{item.assignment.end_period}</td>
                   <td>
                     <button
                       className="action-button"
