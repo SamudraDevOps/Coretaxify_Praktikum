@@ -27,6 +27,7 @@ const BUPOTForm = ({
   initialData = {},
   isEditing = false,
   isLoading = false,
+  sidebar = {}
 }) => {
   const location = useLocation();
   const navigate = useNavigateWithParams();
@@ -490,10 +491,9 @@ const BUPOTForm = ({
   // set nitku_dokumen to current
   useEffect(() => {
     if (!isEditing) {
-      const currentAkun = npwp.find((obj) => (obj.id = akun));
       updateFormData(
         "nitku_dokumen",
-        currentAkun?.npwp_akun + "000000 - " + currentAkun?.nama_akun
+        sidebar.npwp_akun + "000000 - " + sidebar.nama_akun
       );
     }
   }, [formData.jenis_dokumen]);
@@ -971,15 +971,28 @@ const BUPOTForm = ({
                           );
 
                           if (selectedObject) {
-                            updateMultipleFields({
-                              npwp_akun: selectedObject.npwp_akun,
-                              nama_akun: selectedObject.nama_akun,
-                              alamat_utama_akun: selectedObject.alamat_utama_akun,
-                              nitku:
-                                selectedObject.npwp_akun +
-                                "000000 - " +
-                                selectedObject.nama_akun,
-                            });
+                            if (currentBupot === "Bukti Pemotongan Bulanan Pegawai Tetap") {
+                              updateMultipleFields({
+                                npwp_akun: selectedObject.npwp_akun,
+                                nama_akun: selectedObject.nama_akun,
+                                alamat_utama_akun: selectedObject.alamat_utama_akun,
+                                nitku:
+                                  sidebar.npwp_akun +
+                                  "000000 - " +
+                                  sidebar.nama_akun,
+                              });
+                            } else {
+                              updateMultipleFields({
+                                npwp_akun: selectedObject.npwp_akun,
+                                nama_akun: selectedObject.nama_akun,
+                                alamat_utama_akun: selectedObject.alamat_utama_akun,
+                                nitku:
+                                  selectedObject.npwp_akun +
+                                  "000000 - " +
+                                  selectedObject.nama_akun,
+                              });
+
+                            }
                           } else {
                             updateFormData("npwp_akun", e.target.value);
                           }
@@ -1276,8 +1289,7 @@ const BUPOTForm = ({
                       onChange={(e) => {
                         updateFormData("kode_objek_pajak", e.target.value);
                       }}
-                                          readOnly={true}
-
+                      readOnly={true}
                     />
                   </div>
                 )}
@@ -1313,7 +1325,7 @@ const BUPOTForm = ({
                 {(currentBupot === "BPPU" || currentBupot === "BP 21") && (
                   <div className="mt-4 flex justify-between gap-4">
                     <label className="w-64 flex-none block text-sm font-medium text-gray-700">
-                      NITKU
+                      NITKU/Nomor Identitas Sub Unit Organisasi
                       <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -3229,7 +3241,7 @@ const BUPOTForm = ({
                 {(currentBupot === "BPPU" || currentBupot === "BP 21") && (
                   <div className="mt-4 flex justify-between gap-4">
                     <label className="w-64 flex-none block text-sm font-medium text-gray-700">
-                      NITKU
+                      NITKU/Nomor Identitas Sub Unit Organisasi
                       <span className="text-red-500">*</span>
                     </label>
                     <select
@@ -3489,7 +3501,7 @@ const BUPOTForm = ({
                 {/* NITKU */}
                 <div className="mt-4 flex justify-between gap-4">
                   <label className="w-64 flex-none block text-sm font-medium text-gray-700">
-                    NITKU
+                    NITKU/Nomor Identitas Sub Unit Organisasi
                     <span className="text-red-500">*</span>
                   </label>
                   <input
