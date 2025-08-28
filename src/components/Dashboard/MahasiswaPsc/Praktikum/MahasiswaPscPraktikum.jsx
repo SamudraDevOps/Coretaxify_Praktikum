@@ -14,7 +14,7 @@ import Swal from "sweetalert2";
 
 const MahasiswaPscPraktikum = () => {
   const navigate = useNavigate();
-  const [cookies] = useCookies(["token"]);
+  const [cookies, setCookie] = useCookies(["token"]);
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 20;
@@ -235,28 +235,44 @@ const MahasiswaPscPraktikum = () => {
                     <p className="">{item.assignment.end_period}</p>
                   </td>
                   <td>
-                    <button
-                      className="action-button"
-                      disabled={startPraktikum.isPending}
-                      onClick={() => {
-                        if (item.is_start === 1) {
-                          // If already started, redirect directly
-                          window.location.href = `/praktikum/${item.assignment.id}`;
-                        } else {
-                          // If not started, call the mutation to start
-                          startPraktikum.mutate(item.assignment.id);
-                        }
-                      }}
-                    >
-                      {startPraktikum.isPending ? (
-                        <div className="flex items-center gap-2">
-                          <ClipLoader color="#ffffff" size={16} />
-                          Loading...
-                        </div>
-                      ) : (
-                        "Mulai"
-                      )}
-                    </button>
+                    {item.is_valid === false ? (
+                      <button
+                        className="download-button"
+                        onClick={() => {
+                          navigate(
+                            `/praktikum/${item.assignment.id}?user_id=${user.data.id}`
+                          );
+                        }}
+                      >
+                        Lihat
+                      </button>
+                    ) : (
+                      <button
+                        className="action-button"
+                        disabled={startPraktikum.isPending}
+                        onClick={() => {
+                          setCookie("assignment_user_id", item.id, {
+                            path: "/",
+                          });
+                          if (item.is_start === 1) {
+                            // If already started, redirect directly
+                            window.location.href = `/praktikum/${item.assignment.id}`;
+                          } else {
+                            // If not started, call the mutation to start
+                            startPraktikum.mutate(item.assignment.id);
+                          }
+                        }}
+                      >
+                        {startPraktikum.isPending ? (
+                          <div className="flex items-center gap-2">
+                            <ClipLoader color="#ffffff" size={16} />
+                            Loading...
+                          </div>
+                        ) : (
+                          "Mulai"
+                        )}
+                      </button>
+                    )}
                   </td>
                 </tr>
               ))}
