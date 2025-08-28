@@ -5,12 +5,14 @@ import { FaChevronDown, FaEdit, FaFilePdf } from "react-icons/fa";
 import { TiDeleteOutline } from "react-icons/ti";
 import { useParams, useSearchParams } from "react-router";
 import { useNavigateWithParams } from "@/hooks/useNavigateWithParams";
+import { useCookies } from "react-cookie";
 import FakturPenilaian from "./FakturPenilaian";
 
 const ReturFakturKeluaran = ({ data, sidebar }) => {
   const { id, akun } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const viewAsCompanyId = searchParams.get("viewAs");
+  const [cookies] = useCookies(["token", "role"]);
   const navigate = useNavigateWithParams();
   const userId = searchParams.get("user_id");
   console.log("data", data);
@@ -57,7 +59,7 @@ const ReturFakturKeluaran = ({ data, sidebar }) => {
               Retur Pajak Keluaran
             </h1>
           </div>
-          {userId ? <FakturPenilaian tipeFaktur="Retur Faktur Keluaran" /> : ""}
+          {userId && (cookies.role === "dosen" || cookies.role === "psc") ? <FakturPenilaian tipeFaktur="Retur Faktur Keluaran" /> : ""}
         </div>
         <div className="flex justify-end mb-4 border-b pb-3">
           <button

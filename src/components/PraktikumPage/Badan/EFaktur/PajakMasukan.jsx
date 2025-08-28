@@ -22,7 +22,7 @@ const PajakMasukan = ({
 }) => {
   console.log(data);
   const { id, akun } = useParams();
-  const [cookies] = useCookies(["token"]);
+  const [cookies] = useCookies(["token", "role"]);
   const [selectedItems, setSelectedItems] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -213,7 +213,7 @@ const PajakMasukan = ({
               Pajak Masukan
             </h1>
           </div>
-          {userId ? <FakturPenilaian tipeFaktur="Faktur Masukan" /> : ""}
+          {userId && (cookies.role === "dosen" || cookies.role === "psc") ? <FakturPenilaian tipeFaktur="Faktur Masukan" /> : ""}
         </div>
         <div className="flex justify-between mb-4 border-b pb-3">
           <button
