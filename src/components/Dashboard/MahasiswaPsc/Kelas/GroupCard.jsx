@@ -1,9 +1,38 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Wulan from "../../../../assets/images/wulan.png";
+import { CookiesProvider, useCookies } from "react-cookie";
+import axios from "axios";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { ClipLoader } from "react-spinners";
+import { RoutesApi } from "@/Routes";
 
 const GroupCard = ({ kelas }) => {
     const navigate = useNavigate();
+    const [cookies, setCookie] = useCookies(["user"]);
+
+    const { data: profileData, isLoading: loadingProfile } = useQuery({
+        queryKey: ["profile"],
+        queryFn: async () => {
+          const res = await axios.get(RoutesApi.profile, {
+            headers: {
+              Authorization: `Bearer ${cookies.token}`,
+              Accept: "application/json",
+            },
+          });
+          const user = res.data.data;
+    
+          const photoUrl = user.image_path
+            ? `${RoutesApi.url}storage/${user.image_path}`
+            : `https://ui-avatars.com/api/?name=${encodeURIComponent(
+                user.name || "User"
+              )}&background=random&size=128&color=auto`;
+    
+          return { ...user, photoUrl };
+        },
+        enabled: !!cookies.token, // hanya jalan jika token ada
+        refetchOnWindowFocus: false,
+      });
 
     const handleViewClass = (e) => {
         e.preventDefault();
@@ -21,9 +50,8 @@ const GroupCard = ({ kelas }) => {
                     <h3 className="font-bold text-lg">{kelas.name}</h3>
                     <p className="text-sm">Kode: {kelas.class_code}</p>
                 </div>
-                <span className={`px-2 py-1 text-xs font-semibold rounded-full ${
-                    kelas.status === 'ACTIVE' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
-                }`}>
+                <span className={`px-4 py-4 text-xs font-semibold rounded-full ${kelas.status === 'ACTIVE' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
+                    }`}>
                     {kelas.status}
                 </span>
             </div>
@@ -50,9 +78,14 @@ const GroupCard = ({ kelas }) => {
                 <p className="text-gray-500 p-4">{kelas.end_period || 'N/A'}</p>
             </div>
             <img
-                src={Wulan}
-                alt="Icon"
-                className="absolute bottom-[120px] right-4 w-14 h-14 rounded-full border-2 border-white shadow-md"
+                src={profileData?.photoUrl}
+                alt="Foto Profil"
+                className="absolute bottom-[110px] right-4 w-14 h-14 rounded-full border-2 border-white shadow-md object-cover"
+                onError={(e) => {
+                    e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(
+                        profileData?.name || "User"
+                    )}&background=random&size=128&color=auto`;
+                }}
             />
         </a>
     );
