@@ -24,6 +24,7 @@ import EditKelas from "./components/Dashboard/Admin/Pengguna/Kelas/EditKelas";
 
 // ADMIN
 import AdminCoretaxify from "./components/Dashboard/Admin/Coretaxify/AdminCoretaxify";
+import Instansi from "./components/Dashboard/Admin/Instansi/Index";
 
 // DOSEN
 import DosenCoretaxify from "./components/Dashboard/Dosen/Coretaxify/DosenCoretaxify";
@@ -306,6 +307,7 @@ const Main = () => {
         >
           <Route path="/admin" element={<DashboardAdmin />} />
           <Route path="/admin/kontrak" element={<Kontrak />} />
+          <Route path="/admin/instansi" element={<Instansi />} />
           <Route path="/admin/coretaxify" element={<AdminCoretaxify />} />
           <Route path="/admin/edit-dosen" element={<EditDosen />} />
           <Route path="/admin/upload-soal" element={<UploadSoal />} />
