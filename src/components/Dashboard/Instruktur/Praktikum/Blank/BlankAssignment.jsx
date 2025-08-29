@@ -44,10 +44,8 @@ const BlankAssignment = () => {
     supporting_file: null,
   });
 
-  // di atas, setelah state lain
   const [isAddOpen, setIsAddOpen] = useState(false);
-  const [editOpenFor, setEditOpenFor] = useState(null); // simpan id assignment yang sedang di-edit
-
+  const [editOpenFor, setEditOpenFor] = useState(null); 
 
   const itemsPerPage = 20;
   const [cookies] = useCookies(["user"]);

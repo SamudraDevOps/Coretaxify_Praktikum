@@ -33,6 +33,9 @@ const AdminCoretaxify = () => {
   const [filePreview, setFilePreview] = useState(null);
   const [editFilePreview, setEditFilePreview] = useState(null);
   const { user } = useOutletContext();
+  const [isAddOpen, setIsAddOpen] = useState(false);
+  const [editOpenFor, setEditOpenFor] = useState(null);
+
   const [formData, setFormData] = useState({
     name: "",
     task_id: "",
@@ -172,11 +175,12 @@ const AdminCoretaxify = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["self_assignments"] });
       resetForm();
+      setIsAddOpen(false);
       toast({
         title: "Berhasil",
         description: "Praktikum berhasil ditambahkan",
       });
-                window.location.reload();
+
 
     },
     onError: (error) => {
@@ -234,12 +238,11 @@ const AdminCoretaxify = () => {
       queryClient.invalidateQueries({ queryKey: ["self_assignments"] });
       setSelectedData(null);
       resetEditForm();
+      setEditOpenFor(null);
       toast({
         title: "Berhasil",
         description: "Praktikum berhasil diperbarui",
       });
-                window.location.reload();
-
     },
     onError: (error) => {
       console.error("Error updating assignment:", error);
@@ -486,7 +489,7 @@ const AdminCoretaxify = () => {
     (e) => {
       e.preventDefault();
 
-      if (!selectedData?.id) return;
+      if (!selectedData?.assignment.id) return;
 
       updateMutation.mutate({
         id: selectedData.assignment.id,
@@ -499,11 +502,13 @@ const AdminCoretaxify = () => {
   const handleEditClick = useCallback((item) => {
     setSelectedData(item);
     setEditFormData({
-      name: item.name || "",
-      task_id: item.task_id || "",
+      name: item.assignment.name || "",
+      task_id: item.assignment.task_id || "",
       supporting_file: null,
     });
     setEditFilePreview(null);
+    setEditOpenFor(item.assignment.id);
+
   }, []);
 
   const resetForm = useCallback(() => {
@@ -647,9 +652,11 @@ const AdminCoretaxify = () => {
           />
         </div>
 
-        <AlertDialog>
-          <AlertDialogTrigger>
-            <div className="bg-blue-800 p-2 rounded-lg text-white hover:bg-blue-700 transition-colors">
+        <AlertDialog open={isAddOpen} onOpenChange={setIsAddOpen}>
+          <AlertDialogTrigger asChild>
+            <div className="bg-blue-800 p-2 rounded-lg text-white hover:bg-blue-700 transition-colors"
+              onClick={() => setIsAddOpen(true)}
+            >
               + Tambah Praktikum
             </div>
           </AlertDialogTrigger>
@@ -765,7 +772,10 @@ const AdminCoretaxify = () => {
             <AlertDialogFooter>
               <AlertDialogCancel
                 className="bg-red-600 text-white hover:bg-red-700"
-                onClick={resetForm}
+                onClick={() => {
+                  resetForm();
+                  setIsAddOpen(false);
+                }}
               >
                 Batal
               </AlertDialogCancel>
@@ -796,7 +806,7 @@ const AdminCoretaxify = () => {
               </th>
               <th
                 onClick={() => handleSort("name")}
-                // className="cursor-pointer hover:bg-gray-100 transition-colors"
+              // className="cursor-pointer hover:bg-gray-100 transition-colors"
               >
                 Nama Praktikum{" "}
                 {sortConfig.key === "name" && (
@@ -922,20 +932,27 @@ const AdminCoretaxify = () => {
                     </td>
                     <td>
                       <div>
-                        <AlertDialog>
+                        <AlertDialog
+                          open={editOpenFor === item.assignment.id}
+                          onOpenChange={(open) => setEditOpenFor(open ? item.assignment.id : null)}
+                        >
                           <AlertDialogTrigger
                             className="action-button edit bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 transition-colors"
                             onClick={() => handleEditClick(item)}
                           >
                             Edit
                           </AlertDialogTrigger>
+
                           <AlertDialogContent className="max-w-2xl">
                             <AlertDialogHeader>
                               <div className="w-full flex justify-between items-center">
                                 <AlertDialogTitle>
                                   Edit Praktikum
                                 </AlertDialogTitle>
-                                <AlertDialogCancel className="border-none shadow-none p-0">
+                                <AlertDialogCancel className="border-none shadow-none p-0"
+                                  onClick={() => setEditOpenFor(null)}
+
+                                >
                                   <RxCross1 className="text-xl hover:text-red-500 transition-colors" />
                                 </AlertDialogCancel>
                               </div>
