@@ -324,6 +324,7 @@ const Main = () => {
           <Route path="/admin/edit-admin" element={<EditAdmin />} />
           <Route path="/admin/edit-kelas" element={<EditKelas />} />
           <Route path="/admin/edit-mahasiswa" element={<EditMahasiswa />} />
+          <Route path="/admin/edit-mahasiswa-psc" element={<EditMahasiswaPsc />} />
           <Route path="/admin/edit-artikel" element={<EditArtikel />} />
           <Route path="/admin/edit-ulasan" element={<EditUlasan />} />
           <Route path="/admin/kontrak-backup" element={<KontrakBackup />} />
