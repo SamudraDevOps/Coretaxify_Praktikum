@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./editMahasiswa.css";
+import ExportMahasiswaPsc from "./ExportMahasiswaPsc"
 import EditPopupMahasiswa from "./EditPopupMahasiswa";
 import Swal from "sweetalert2";
 import { CookiesProvider, useCookies } from "react-cookie";
@@ -13,6 +14,7 @@ import { IntentEnum } from "@/enums/IntentEnum";
 
 const EditMahasiswaPsc = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isExportOpen, setIsExportOpen] = useState(false);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isMultipleCreateOpen, setIsMultipleCreateOpen] = useState(false); // New state for multiple create mode
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
@@ -220,6 +222,11 @@ const EditMahasiswaPsc = () => {
     setIsOpen(true);
   };
 
+  const handleExportStudent = (student) => {
+    setSelectedData(student);
+    setIsExportOpen(false);
+  };
+
   const handleCreate = () => {
     setFormData({
       name: "",
@@ -230,6 +237,9 @@ const EditMahasiswaPsc = () => {
   };
 
   // New function to handle multiple student creation
+  const handleExport = () => {
+    setIsExportOpen(true);
+  };
   const handleMultipleCreate = () => {
     setIsMultipleCreateOpen(true);
   };
@@ -365,7 +375,14 @@ const EditMahasiswaPsc = () => {
             Tambah Mahasiswa
           </button> */}
           <button
-            className="add-button multiple"
+            className={`add-button multiple ${cookies.role === "admin" ? "" : "!hidden"}`}
+            onClick={handleExport}
+            style={{ marginLeft: "10px", backgroundColor: "#4A148C" }}
+          >
+            Ekspor Data Mahasiswa
+          </button>
+          <button
+            className={`add-button multiple ${cookies.role === "psc" ? "" : "!hidden"}`}
             onClick={handleMultipleCreate}
             style={{ marginLeft: "10px", backgroundColor: "#4A148C" }}
           >
@@ -548,6 +565,15 @@ const EditMahasiswaPsc = () => {
           title="Tambah Mahasiswa"
           isCreateMode={true}
           isMultipleMode={true}
+        />
+      )}
+
+      {/* Export Popup */}
+      {isExportOpen && (
+        <ExportMahasiswaPsc
+          onClose={() => setIsExportOpen(false)}
+          onExport={handleExportStudent}
+          isExportOpen={isExportOpen}
         />
       )}
     </div>
