@@ -7,8 +7,8 @@ import { IntentEnum } from "./enums/IntentEnum";
 
 // const url = "https://api.coretaxify.com/";
 // const apiUrl = "https://api.coretaxify.com/api/";
-const url = "https://coretaxify-api.venturo.pro/";
-const apiUrl = "https://coretaxify-api.venturo.pro/api/";
+const url = "https://coretaxify-api.venturo.id/";
+const apiUrl = "https://coretaxify-api.venturo.id/api/";
 // const url = "http://127.0.0.1:8004/";
 // const apiUrl = "http://127.0.0.1:8004/api/";
 const role = {
