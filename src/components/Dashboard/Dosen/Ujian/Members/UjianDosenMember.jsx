@@ -8,14 +8,18 @@ import { RoutesApi } from "@/Routes";
 import { ClipLoader } from "react-spinners";
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
+import { IntentEnum } from "@/enums/IntentEnum";
 import { useParams, useNavigate } from "react-router-dom";
+import { FaDownload, FaEdit, FaTrash } from "react-icons/fa";
 
 const UjianDosenMember = () => {
   const { examId } = useParams();
   const navigate = useNavigate();
   const [selectedMember, setSelectedMember] = useState(null);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
+  const [currentPage, setCurrentPage] = useState(1);
   const [cookies] = useCookies(["token"]);
+  const currentUrl = window.location.href.split("?")[0];
   const [url, setUrl] = useState(
     `${RoutesApi.lecturer.assignments.url}/${examId}/members`
   );
@@ -25,12 +29,15 @@ const UjianDosenMember = () => {
   const { data: examData } = useQuery({
     queryKey: ["exam_detail", examId],
     queryFn: async () => {
-      const { data } = await axios.get(`${RoutesApi.lecturer.assignments.url}/${examId}`, {
-        headers: {
-          Authorization: `Bearer ${cookies.token}`,
-          Accept: "application/json",
-        },
-      });
+      const { data } = await axios.get(
+        `${RoutesApi.lecturer.assignments.url}/${examId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${cookies.token}`,
+            Accept: "application/json",
+          },
+        }
+      );
       return data;
     },
     enabled: !!examId,
@@ -45,11 +52,70 @@ const UjianDosenMember = () => {
           Authorization: `Bearer ${cookies.token}`,
           Accept: "application/json",
         },
+        params: {
+          intent: IntentEnum.API_GET_ASSIGNMENT_MEMBERS_WITH_SISTEM_SCORES,
+          page: currentPage,
+        },
       });
       return data;
     },
     enabled: !!examId,
   });
+
+  const downloadMutation = useMutation({
+    mutationFn: async () => {
+      try {
+        const response = await axios.get(url, {
+          headers: {
+            Authorization: `Bearer ${cookies.token}`,
+            Accept: "application/octet-stream",
+          },
+          params: {
+            intent: IntentEnum.API_USER_EXPORT_SCORE,
+          },
+          responseType: "blob",
+        });
+
+        // Create blob URL from response
+        const blob = new Blob([response.data], {
+          type: response.headers["content-type"],
+        });
+        const blobUrl = window.URL.createObjectURL(blob);
+
+        // Extract filename from header
+        const contentDisposition = response.headers["content-disposition"];
+        let filename = "soal.xlsx";
+        if (contentDisposition) {
+          const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+          const matches = filenameRegex.exec(contentDisposition);
+          if (matches?.[1]) {
+            filename = matches[1].replace(/['"]/g, "");
+          }
+        }
+
+        // Trigger download
+        const link = document.createElement("a");
+        link.href = blobUrl;
+        link.setAttribute("download", filename);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        // Clean up
+        window.URL.revokeObjectURL(blobUrl);
+
+        return response;
+      } catch (error) {
+        console.error("Download error:", error);
+        Swal.fire("Gagal!", "Gagal mengunduh file", "error");
+        throw error;
+      }
+    },
+  });
+
+  const handleDownload = () => {
+    downloadMutation.mutate();
+  };
 
   // Member removal mutation
   const removeMemberMutation = useMutation({
@@ -159,8 +225,8 @@ const UjianDosenMember = () => {
   const filteredData =
     data?.data?.filter(
       (item) =>
-        item.name?.toLowerCase().includes(search.toLowerCase()) ||
-        item.email?.toLowerCase().includes(search.toLowerCase())
+        item.user.name?.toLowerCase().includes(search.toLowerCase()) ||
+        item.user.email?.toLowerCase().includes(search.toLowerCase())
     ) || [];
 
   // Apply sorting if sortConfig is set
@@ -176,6 +242,9 @@ const UjianDosenMember = () => {
       return 0;
     });
   }
+
+  console.log("filtered data: ", filteredData);
+  console.log("sorted member: ", sortedMembers);
 
   return (
     <div className="member-container">
@@ -193,19 +262,26 @@ const UjianDosenMember = () => {
             onChange={handleSearchChange}
           />
         </div>
-        <button
-          className="back-button"
-          onClick={handleBack}
-        >
-          Kembali
-        </button>
+        <div className="flex justify-between gap-4">
+          <button
+            onClick={() => handleDownload()}
+            className="download-button"
+            disabled={downloadMutation.isPending}
+          >
+            <FaDownload className="download-icon" />
+            {downloadMutation.isPending ? "Loading..." : "Export Nilai"}
+          </button>
+          <button className="rounded-md bg-[#7502B5] px-4 py-2 text-white" onClick={handleBack}>
+            Kembali
+          </button>
+        </div>
       </div>
       <div className="table-container">
         <table>
           <thead>
             <tr>
-              <th>No</th>
-              <th onClick={() => handleSort("name")}>
+              <th className="w-[2rem]">No</th>
+              <th className="w-[2rem]" onClick={() => handleSort("name")}>
                 Nama{" "}
                 {sortConfig.key === "name"
                   ? sortConfig.direction === "ascending"
@@ -213,7 +289,7 @@ const UjianDosenMember = () => {
                     : "↓"
                   : ""}
               </th>
-              <th onClick={() => handleSort("email")}>
+              <th className="w-[2rem]" onClick={() => handleSort("email")}>
                 Email{" "}
                 {sortConfig.key === "email"
                   ? sortConfig.direction === "ascending"
@@ -221,8 +297,11 @@ const UjianDosenMember = () => {
                     : "↓"
                   : ""}
               </th>
-              <th>NIM</th>
-              <th>Action</th>
+              <th className="w-[2rem]">Nilai Bupot</th>
+              <th className="w-[2rem]">Nilai Faktur</th>
+              <th className="w-[2rem]">Nilai SPT</th>
+              <th className="w-[2rem]">Nilai Total</th>
+              <th className="w-[2rem]">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -230,21 +309,51 @@ const UjianDosenMember = () => {
               sortedMembers.map((item, index) => (
                 <tr key={item.id}>
                   <td>{index + 1}</td>
-                  <td>{item.name}</td>
-                  <td>{item.email}</td>
-                  <td>{item.unique_id}</td>
+                  <td>{item.user.name}</td>
+                  <td>{item.user.email}</td>
                   <td>
-                    <button
+                    {item.sistem_scores.length > 0
+                      ? // <button
+                        //   className="download-button"
+                        //   onClick={() => handleOpenNilai(item.sistem_scores)}
+                        // >
+                        //   Lihat Nilai
+                        // </button>
+                        item.summary.total_bupot_scores_across_all_sistems
+                      : "-"}
+                  </td>
+                  <td>
+                    {item.sistem_scores.length > 0
+                      ? item.summary.total_faktur_scores_across_all_sistems
+                      : "-"}
+                  </td>
+                  <td>
+                    {item.sistem_scores.length > 0
+                      ? item.summary.total_spt_scores_across_all_sistems
+                      : "-"}
+                  </td>
+                  <td>
+                    {item.sistem_scores.length > 0
+                      ? item.summary.total_scores_across_all_sistems
+                      : "-"}
+                  </td>
+                  <td>
+                    {/* <button
                       className="action-button delete"
                       onClick={() => handleRemoveMember(item.id)}
                     >
                       Remove
-                    </button>
+                    </button> */}
                     <button
-                      className="action-button view"
-                    //   onClick={() => handleRemoveMember(item.id)}
+                      className="action-button edit bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 transition-colors"
+                      onClick={() => {
+                        localStorage.setItem("url_penilaian", currentUrl);
+                        navigate(
+                          `/praktikum/${examId}?user_id=${item.user.id}`
+                        );
+                      }}
                     >
-                      Nilai
+                      Cek Pengerjaan
                     </button>
                   </td>
                 </tr>

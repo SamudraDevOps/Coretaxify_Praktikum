@@ -287,8 +287,8 @@ export default function UjianDosen() {
 
   const getTaskName = (taskId) => {
     if (!tasksData) return "-";
-    const task = tasksData.find((task) => task.id === taskId);
-    return task ? task.name : "-";
+    const task = tasksData.data.find((task) => task.id === taskId);
+    return task ? task.name.data : "-";
   };
 
   const [formData, setFormData] = useState({
@@ -652,7 +652,7 @@ export default function UjianDosen() {
                     >
                       <option value="">Pilih soal</option>
                       {tasksData ? (
-                        tasksData.map((task) => (
+                        tasksData.data.map((task) => (
                           <option key={task.id} value={task.id.toString()}>
                             {task.name}
                           </option>
@@ -793,7 +793,7 @@ export default function UjianDosen() {
                     >
                       <option value="">Pilih soal</option>
                       {tasksData ? (
-                        tasksData.map((task) => (
+                        tasksData.data.map((task) => (
                           <option key={task.id} value={task.id.toString()}>
                             {task.name}
                           </option>

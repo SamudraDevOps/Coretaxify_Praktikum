@@ -24,7 +24,7 @@ const MahasiswaPscUjian = () => {
 
   // Fetch assignments data
   const { isLoading, isError, data, error, refetch } = useQuery({
-    queryKey: ["mahasiswa_psc_praktikum", url],
+    queryKey: ["mahasiswa_psc_exam", url],
     queryFn: async () => {
       const { data } = await axios.get(url, {
         headers: {
@@ -34,7 +34,7 @@ const MahasiswaPscUjian = () => {
         params: {
           relation_column_filters: {
             assignment: {
-              tipe: "assignment",
+              tipe: "exam",
             },
           },
           column_filters: {
@@ -47,7 +47,50 @@ const MahasiswaPscUjian = () => {
     },
   });
 
-  const startPraktikum = useMutation({
+  const downloadMutation = useMutation({
+    mutationFn: async (id) => {
+      try {
+        const showEndpoint = RoutesApi.student.assignments.show(id);
+        const response = await axios.get(showEndpoint.url, {
+          headers: {
+            Authorization: `Bearer ${cookies.token}`,
+            Accept: "*/*",
+          },
+          params: {
+            intent: IntentEnum.API_USER_DOWNLOAD_FILE,
+          },
+          responseType: "blob",
+        });
+
+        let filename = "file.pdf";
+        const contentDisposition = response.headers["content-disposition"];
+
+        if (contentDisposition) {
+          const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+          const matches = filenameRegex.exec(contentDisposition);
+          if (matches !== null && matches[1]) {
+            filename = matches[1].replace(/['"]/g, "");
+          }
+        }
+
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", filename);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        return response;
+      } catch (error) {
+        console.error("Download error:", error);
+        Swal.fire("Gagal!", "Gagal mengunduh file", "error");
+        throw error;
+      }
+    },
+  });
+
+  const startUjian = useMutation({
     mutationFn: async (assignment_id) => {
       console.log("Start button clicked");
       const csrf = await getCsrf();
@@ -153,7 +196,7 @@ const MahasiswaPscUjian = () => {
   return (
     <div className="kontrak-container">
       <div className="header">
-        <h2>Praktikum Saya</h2>
+        <h2>Ujian Saya</h2>
       </div>
       <div className="search-add-container">
         <div className="search-input-container">
@@ -161,7 +204,7 @@ const MahasiswaPscUjian = () => {
             type="text"
             id="search"
             className="search-input"
-            placeholder="Cari Praktikum                     🔎"
+            placeholder="Cari Ujian                     🔎"
             value={search}
             onChange={handleSearchChange}
           />
@@ -170,7 +213,7 @@ const MahasiswaPscUjian = () => {
           className="bg-blue-800 p-2 rounded-md text-white hover:bg-blue-900 flex items-center"
           onClick={() => setIsGabungUjianOpen(true)}
         >
-          <FaPlus className="mr-2" /> Gabung Praktikum
+          <FaPlus className="mr-2" /> Gabung Ujian
         </button>
       </div>
 
@@ -191,16 +234,16 @@ const MahasiswaPscUjian = () => {
             ></path>
           </svg>
           <h3 className="mt-2 text-sm font-medium text-gray-900">
-            Tidak ada praktikum
+            Tidak ada ujian.
           </h3>
           <p className="mt-1 text-sm text-gray-500">
-            Anda belum terdaftar di praktikum manapun.
+            Anda belum terdaftar di ujian manapun.
           </p>
           <button
             className="mt-4 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700"
             onClick={() => setIsGabungUjianOpen(true)}
           >
-            Gabung Praktikum
+            Gabung Ujian
           </button>
         </div>
       ) : (
@@ -218,37 +261,65 @@ const MahasiswaPscUjian = () => {
                             ? "↓"
                             : "↑"}
                         </th> */}
-                <th className="">Nama Kelas</th>
-                <th className="">Nama Dosen</th>
-                <th className="">Judul Praktikum</th>
-                <th className="">Deadline Praktikum</th>
+
+                <th className="">No</th>
+                <th className="">Judul Ujian</th>
+                <th className="">Kode Ujian</th>
+                <th className="">File Ujian</th>
+                <th className="">Durasi Ujian</th>
+                <th className="">Deadline Ujian</th>
                 <th>Aksi</th>
               </tr>
             </thead>
             <tbody>
               {data.data.map((item, index) => (
                 <tr key={index}>
-                  <td>{item.assignment?.group?.name}</td>
-                  <td>{item.assignment?.group?.teacher}</td>
+                  <td>{index + 1}</td>
                   <td>{item.assignment.name}</td>
-                  <td className="max-w-5">
-                    <p className="">{item.assignment.end_period}</p>
+                  <td>{item.assignment.assignment_code}</td>
+                  <td>
+                    {item.supporting_file ? (
+                      <button
+                        onClick={() => handleDoanload(item.id)}
+                        className="download-button"
+                        disabled={downloadMutation.isPending}
+                      >
+                        {downloadMutation.isPending ? "Loading..." : "Download"}
+                      </button>
+                    ) : (
+                      <span>-</span>
+                    )}
+                  </td>
+                  <td>
+                    {item.assignment.duration ? (
+                      <span>{item.assignment.duration}</span>
+                    ) : (
+                      <span>-</span>
+                    )}
+                  </td>
+                  <td>
+                    {item.assignment.end_period ? (
+                      <span>{item.assignment.end_period}</span>
+                    ) : (
+                      <span>-</span>
+                    )}
+                    <p className="">{item.tanggal}</p>
                   </td>
                   <td>
                     <button
                       className="action-button"
-                      disabled={startPraktikum.isPending}
+                      disabled={startUjian.isPending}
                       onClick={() => {
                         if (item.is_start === 1) {
                           // If already started, redirect directly
                           window.location.href = `/praktikum/${item.assignment.id}`;
                         } else {
                           // If not started, call the mutation to start
-                          startPraktikum.mutate(item.assignment.id);
+                          startUjian.mutate(item.assignment.id);
                         }
                       }}
                     >
-                      {startPraktikum.isPending ? (
+                      {startUjian.isPending ? (
                         <div className="flex items-center gap-2">
                           <ClipLoader color="#ffffff" size={16} />
                           Loading...

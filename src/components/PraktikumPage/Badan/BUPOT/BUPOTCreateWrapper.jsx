@@ -154,6 +154,7 @@ const BUPOTCreateWrapper = (props) => {
         onSubmit={handleSubmit}
         initialData={props.data?.formData || {}} // Use data from RoleBasedRenderer if available
         isLoading={isLoading} // Pass the loading state
+        sidebar={props.sidebar}
       />
     </>
   );
