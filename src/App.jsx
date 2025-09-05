@@ -198,6 +198,8 @@ import LihatKonsepPasal from "./components/PraktikumPage/Badan/SPT/ViewKonsepPas
 import LihatKonsepUnifikasi from "./components/PraktikumPage/Badan/SPT/ViewKonsepUnifikasi";
 import EditReturFaktur from "./components/PraktikumPage/Badan/EFaktur/EditReturFaktur";
 import BupotViewPDF from "./components/PraktikumPage/Badan/BUPOT/BPPU/BupotViewPDF";
+import Bupot21ViewPDF from "./components/PraktikumPage/Badan/BUPOT/Bupot21ViewPDF";
+import BP21PDF from "./components/PraktikumPage/PDFTemplate/Bupot21Template";
 import ReturFakturViewPDF from "./components/PraktikumPage/Badan/EFaktur/ReturFakturViewPDF";
 
 const Main = () => {
@@ -1146,11 +1148,9 @@ const Main = () => {
           path="/praktikum/:id/sistem/:akun/surat-pemberitahuan-spt/"
           element={
             <Navigate
-              to={`/praktikum/${
-                window.location.pathname.split("/")[2]
-              }/sistem/${
-                window.location.pathname.split("/")[4]
-              }/surat-pemberitahuan-spt/konsep`}
+              to={`/praktikum/${window.location.pathname.split("/")[2]
+                }/sistem/${window.location.pathname.split("/")[4]
+                }/surat-pemberitahuan-spt/konsep`}
               replace
             />
           }
@@ -1233,60 +1233,12 @@ const Main = () => {
           }
         />
         <Route
-          path="/praktikum/:id/sistem/:akun/buat-konsep-spt-pph/:idSpt"
-          // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
+          path="/praktikum/:id/sistem/:akun/buat-konsep-spt-pasal"
           element={
             <>
-              <RoleBasedRenderer
-                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/spt/:idSpt`}
-                intent={""}
-                OrangPribadi={CreateKonsepPasal}
-                Badan={CreateKonsepPasal}
-                query={""}
-              ></RoleBasedRenderer>
+              <Header />
+              <CreateKonsepPasal />
             </>
-            // <>
-            //   <Header />
-            //   <KonsepSPT />
-            // </>
-          }
-        />
-        <Route
-          path="/praktikum/:id/sistem/:akun/lihat-konsep-spt-pph/:idSpt"
-          // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
-          element={
-            <>
-              <RoleBasedRenderer
-                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/spt/:idSpt`}
-                intent={""}
-                OrangPribadi={LihatKonsepPasal}
-                Badan={LihatKonsepPasal}
-                query={""}
-              ></RoleBasedRenderer>
-            </>
-            // <>
-            //   <Header />
-            //   <KonsepSPT />
-            // </>
-          }
-        />
-        <Route
-          path="/praktikum/:id/sistem/:akun/spt-pph/pdf/:idSpt"
-          // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
-          element={
-            <>
-              <RoleBasedRenderer
-                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/spt/:idSpt`}
-                intent={""}
-                OrangPribadi={SPTPPHViewPDF}
-                Badan={SPTPPHViewPDF}
-                query={""}
-              ></RoleBasedRenderer>
-            </>
-            // <>
-            //   <Header />
-            //   <KonsepSPT />
-            // </>
           }
         />
         <Route
@@ -1327,6 +1279,26 @@ const Main = () => {
             // </>
           }
         />
+        <Route
+          path="/praktikum/:id/sistem/:akun/spt-unifikasi/pdf/:idSpt"
+          // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/spt/:idSpt`}
+                intent={""}
+                OrangPribadi={SPTUnifikasiViewPDF}
+                Badan={SPTUnifikasiViewPDF}
+                query={""}
+              ></RoleBasedRenderer>
+            </>
+            // <>
+            //   <Header />
+            //   <KonsepSPT />
+            // </>
+          }
+        />
+
         <Route
           path="/praktikum/:id/sistem/:akun/spt-unifikasi/pdf/:idSpt"
           // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
@@ -1561,7 +1533,8 @@ const Main = () => {
           }
         />
 
-        <Route
+        {/* Tes BP21 PDF */}
+            <Route
           path="/praktikum/:id/sistem/:akun/bupot/bppu/pdf/:bupot"
           element={
             <>
@@ -1578,6 +1551,37 @@ const Main = () => {
             </>
           }
         />
+
+        <Route
+          path="/praktikum/:id/sistem/:akun/bupot/bpbpt/pdf/:bupot"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/bupot/:bupot`}
+                intent="api.bupot.bp21.show"
+                query={"pdf-bp21"}
+                OrangPribadi={Bupot21ViewPDF}
+                Badan={Bupot21ViewPDF}
+              ></RoleBasedRenderer>
+            </>
+          }
+        />
+
+         <Route
+          path="/praktikum/:id/sistem/:akun/bupot/bp21/pdf/:bupot"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/bupot/:bupot`}
+                intent="api.bupot.bp21.show"
+                query={"pdf-bp21"}
+                OrangPribadi={Bupot21ViewPDF}
+                Badan={Bupot21ViewPDF}
+              ></RoleBasedRenderer>
+            </>
+          }
+        />
+
         <Route
           path="/praktikum/:id/sistem/:akun/buku-besar"
           element={
@@ -1824,17 +1828,6 @@ const Main = () => {
             <>
               <Header />
               <ProfilSayaBadan />
-            </>
-          }
-        />
-        <Route
-          path="/tes/:id/:akun"
-          element={
-            <>
-              <RoleBasedRenderer
-                OrangPribadi={DashboardAdmin}
-                Badan={DetailKontakBadan}
-              ></RoleBasedRenderer>
             </>
           }
         />

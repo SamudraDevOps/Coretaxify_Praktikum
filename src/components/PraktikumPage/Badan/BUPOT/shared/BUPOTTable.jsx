@@ -101,6 +101,14 @@ const BUPOTTable = ({
   const tableColumns = getColumns();
   const colSpan = tableColumns.length;
 
+  const getPdfPath = (rowId) => {
+    if (type === "bppu") return `/praktikum/${id}/sistem/${akun}/bupot/bppu/pdf/${rowId}`;
+    // if (type === "bpbpt") return `/praktikum/${id}/sistem/${akun}/bupot/bpbpt/pdf/${rowId}`;
+    if (type === "bp21") return `/praktikum/${id}/sistem/${akun}/bupot/bp21/pdf/${rowId}`;
+
+    return null;
+  };
+
   return (
     <div className="bg-white p-4 border rounded w-full overflow-x-auto">
       <table className="table-auto border-collapse">
@@ -147,32 +155,29 @@ const BUPOTTable = ({
                             Edit
                           </button>
                         </div>
-                        <div className="flex pace-x-2">
-                          <button
-                            onClick={() =>
-                              navigate(
-                                `/praktikum/${id}/sistem/${akun}/bupot/bppu/pdf/${row.id}`
-                              )
-                            }
-                            className={
-                              userId ||
-                              !(status === "published" && type === "bppu")
-                                ? "hidden"
-                                : "bg-blue-500 text-white px-2 py-1 rounded text-sm hover:bg-blue-600"
-                            }
-                          >
-                            Lihat PDF
-                          </button>
-                        </div>
+                        {status === "published" && getPdfPath(row.id) && (
+                          <div className="flex space-x-2">
+                            <button
+                              onClick={() => navigate(getPdfPath(row.id))}
+                              className={
+                                userId
+                                  ? "hidden"
+                                  : "bg-blue-500 text-white px-2 py-1 rounded text-sm hover:bg-blue-600"
+                              }
+                            >
+                              Lihat PDF
+                            </button>
+                          </div>
+                        )}
                       </div>
                     ) : // row[column.key]
-                    // <>{row[column.key]}{column.key}</>
-                    column.key === "dasar_pengenaan_pajak" ||
-                      column.key === "pajak_penghasilan" ? (
-                      formatRupiah(row[column.key])
-                    ) : (
-                      row[column.key]
-                    )}
+                      // <>{row[column.key]}{column.key}</>
+                      column.key === "dasar_pengenaan_pajak" ||
+                        column.key === "pajak_penghasilan" ? (
+                        formatRupiah(row[column.key])
+                      ) : (
+                        row[column.key]
+                      )}
                   </td>
                 ))}
               </tr>
