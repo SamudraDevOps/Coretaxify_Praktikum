@@ -1062,11 +1062,13 @@ const BUPOTForm = ({
                     <div className="mt-4 flex justify-between gap-4">
                       <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                         Nomor Paspor
-                        <span className="text-red-500">*</span>
+                        {/* <span className="text-red-500">*</span> */}
                       </label>
                       <input
                         type="text"
-                        className="w-64 flex-auto border p-2 rounded"
+                        className=  {`w-64 flex-auto border p-2 rounded appearance-none 
+                          ${String(formData.pegawai_asing) === "1" ? "bg-white" : "bg-gray-200"
+                          }`}
                         placeholder="Nomor Paspor"
                         value={
                           String(formData.pegawai_asing) === "1"
@@ -1089,10 +1091,12 @@ const BUPOTForm = ({
                     <div className="mt-4 flex justify-between gap-4">
                       <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                         Negara
-                        <span className="text-red-500">*</span>
+                        {/* <span className="text-red-500">*</span> */}
                       </label>
                       <select
-                        className="w-64 flex-auto border p-2 rounded appearance-none"
+                        className={`w-64 flex-auto border p-2 rounded appearance-none 
+                          ${String(formData.pegawai_asing) === "1" ? "bg-white" : "bg-gray-200"
+                          }`}
                         value={
                           String(formData.pegawai_asing) === "1"
                             ? formData.negara_akun || ""

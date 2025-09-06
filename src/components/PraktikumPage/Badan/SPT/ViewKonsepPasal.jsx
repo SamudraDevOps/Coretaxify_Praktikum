@@ -220,7 +220,7 @@ const LihatKonsepPasal = ({ data }) => {
       const csrf = await getCsrf();
       return axios.put(
         `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/spt/${idSpt}`,
-        {},
+      form,
         {
           headers: {
             "Content-Type": "application/json",
@@ -272,7 +272,7 @@ const LihatKonsepPasal = ({ data }) => {
       const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
       return axios.put(
         `${RoutesApi.url}api/student/assignments/${id}/sistem/${accountId}/spt/${idSpt}`,
-        {},
+        form,
         {
           headers: {
             "Content-Type": "application/json",
@@ -345,7 +345,7 @@ const LihatKonsepPasal = ({ data }) => {
       const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
       return axios.put(
         `${RoutesApi.url}api/student/assignments/${id}/sistem/${accountId}/spt/${idSpt}`,
-        {},
+        form,
         {
           headers: {
             "Content-Type": "application/json",
