@@ -85,8 +85,8 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
   const RoutesApi = {
     // kodeTransaksi: "https://api.coretaxify.com/api/kode-transaksi",
     // satuan: "https://api.coretaxify.com/api/satuan",
-    kodeTransaksi: "https://coretaxify-app.venturo.pro/api/kode-transaksi",
-    satuan: "https://coretaxify-app.venturo.pro/api/satuan",
+    kodeTransaksi: "https://api.coretaxify.com/api/kode-transaksi",
+    satuan: "https://api.coretaxify.com/api/satuan",
   };
   const stripCurrencyFormat = (value) => {
     if (typeof value === "string") {
