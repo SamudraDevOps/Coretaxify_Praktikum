@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./editMahasiswa.css";
+import ExportMahasiswaPsc from "./ExportMahasiswaPsc"
 import EditPopupMahasiswa from "./EditPopupMahasiswa";
 import Swal from "sweetalert2";
 import { CookiesProvider, useCookies } from "react-cookie";
@@ -13,6 +14,7 @@ import { IntentEnum } from "@/enums/IntentEnum";
 
 const EditMahasiswaPsc = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isExportOpen, setIsExportOpen] = useState(false);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isMultipleCreateOpen, setIsMultipleCreateOpen] = useState(false); // New state for multiple create mode
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
@@ -148,7 +150,7 @@ const EditMahasiswaPsc = () => {
 
           Swal.fire({
             title: "Berhasil!",
-            text: `${data.length} mahasiswa berhasil ditambahkan!`,
+            text: `${data.length} Peserta berhasil ditambahkan!`,
             icon: "success",
             timer: 2000, // auto close after 2 seconds
             showConfirmButton: false,
@@ -173,7 +175,7 @@ const EditMahasiswaPsc = () => {
         // Swal.fire("Berhasil!", "Mahasiswa berhasil diperbarui!", "success");
         Swal.fire({
           title: "Berhasil!",
-          text: "Mahasiswa berhasil diperbarui!",
+          text: "Peserta berhasil diperbarui!",
           icon: "success",
           timer: 2000, // auto close after 2 seconds
           showConfirmButton: false,
@@ -185,7 +187,7 @@ const EditMahasiswaPsc = () => {
         // Swal.fire("Berhasil!", "Mahasiswa berhasil dihapus!", "success");
         Swal.fire({
           title: "Berhasil!",
-          text: "Mahasiswa berhasil dihapus!",
+          text: "Peserta berhasil dihapus!",
           icon: "success",
           timer: 2000, // auto close after 2 seconds
           showConfirmButton: false,
@@ -220,6 +222,11 @@ const EditMahasiswaPsc = () => {
     setIsOpen(true);
   };
 
+  const handleExportStudent = (student) => {
+    setSelectedData(student);
+    setIsExportOpen(false);
+  };
+
   const handleCreate = () => {
     setFormData({
       name: "",
@@ -230,6 +237,9 @@ const EditMahasiswaPsc = () => {
   };
 
   // New function to handle multiple student creation
+  const handleExport = () => {
+    setIsExportOpen(true);
+  };
   const handleMultipleCreate = () => {
     setIsMultipleCreateOpen(true);
   };
@@ -251,7 +261,7 @@ const EditMahasiswaPsc = () => {
     if (invalidStudents.length > 0) {
       Swal.fire(
         "Validasi Gagal",
-        "Semua mahasiswa harus memili nama, email, dan status",
+        "Semua Peserta harus memili nama, email, dan status",
         "error"
       );
       return;
@@ -264,15 +274,15 @@ const EditMahasiswaPsc = () => {
     if (emails.length !== uniqueEmails.size) {
       Swal.fire(
         "Validasi Gagal",
-        "Terdapat email duplikat. Email setiap mahasiswa harus unik",
+        "Terdapat email duplikat. Email setiap Peserta harus unik",
         "error"
       );
       return;
     }
 
     Swal.fire({
-      title: "Tambah Mahasiswa",
-      text: `Anda akan menambahkan ${students.length} mahasiswa baru. Lanjutkan?`,
+      title: "Tambah Peserta",
+      text: `Anda akan menambahkan ${students.length} Peserta baru. Lanjutkan?`,
       icon: "question",
       showCancelButton: true,
       confirmButtonText: "Ya, lanjutkan",
@@ -344,7 +354,7 @@ const EditMahasiswaPsc = () => {
   return (
     <div className="kontrak-container">
       <div className="header">
-        <h2>Data Mahasiswa</h2>
+        <h2>Data Peserta</h2>
       </div>
       <div className="search-add-container">
         <div className="search-input-container">
@@ -352,7 +362,7 @@ const EditMahasiswaPsc = () => {
             type="text"
             id="search"
             className="search-input"
-            placeholder="Cari Data Mahasiswa 🔎"
+            placeholder="Cari Data Peserta 🔎"
             value={search}
             onChange={handleSearchChange}
           />
@@ -365,11 +375,18 @@ const EditMahasiswaPsc = () => {
             Tambah Mahasiswa
           </button> */}
           <button
-            className="add-button multiple"
+            className={`add-button multiple ${cookies.role === "admin" ? "" : "!hidden"}`}
+            onClick={handleExport}
+            style={{ marginLeft: "10px", backgroundColor: "#4A148C" }}
+          >
+            Ekspor Data Mahasiswa
+          </button>
+          <button
+            className={`add-button multiple ${cookies.role === "psc" ? "" : "!hidden"}`}
             onClick={handleMultipleCreate}
             style={{ marginLeft: "10px", backgroundColor: "#4A148C" }}
           >
-            Tambah Mahasiswa
+            Tambah Peserta
           </button>
         </div>
       </div>
@@ -378,7 +395,7 @@ const EditMahasiswaPsc = () => {
           <thead>
             <tr>
               <th onClick={() => handleSort("name")}>
-                Nama Mahasiswa{" "}
+                Nama Peserta{" "}
                 {sortConfig.key === "name"
                   ? sortConfig.direction === "ascending"
                     ? "↑"
@@ -522,7 +539,7 @@ const EditMahasiswaPsc = () => {
           formData={formData}
           setFormData={setFormData}
           isLoading={mutation.isPending}
-          title="Edit Mahasiswa"
+          title="Edit Peserta"
         />
       )}
 
@@ -534,7 +551,7 @@ const EditMahasiswaPsc = () => {
           formData={formData}
           setFormData={setFormData}
           isLoading={mutation.isPending}
-          title="Tambah Mahasiswa"
+          title="Tambah Peserta"
           isCreateMode={true}
         />
       )}
@@ -545,9 +562,18 @@ const EditMahasiswaPsc = () => {
           onClose={() => setIsMultipleCreateOpen(false)}
           onSave={handleCreateMultipleStudents}
           isLoading={mutation.isPending}
-          title="Tambah Mahasiswa"
+          title="Tambah Peserta"
           isCreateMode={true}
           isMultipleMode={true}
+        />
+      )}
+
+      {/* Export Popup */}
+      {isExportOpen && (
+        <ExportMahasiswaPsc
+          onClose={() => setIsExportOpen(false)}
+          onExport={handleExportStudent}
+          isExportOpen={isExportOpen}
         />
       )}
     </div>

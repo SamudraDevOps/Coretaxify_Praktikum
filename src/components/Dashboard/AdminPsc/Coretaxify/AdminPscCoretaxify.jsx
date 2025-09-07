@@ -22,7 +22,8 @@ import { IntentEnum } from "@/enums/IntentEnum";
 import { RxCross1 } from "react-icons/rx";
 import { FaRegCopy } from "react-icons/fa";
 import { useToast } from "@/hooks/use-toast";
-import { useOutletContext } from "react-router-dom";
+import { useOutletContext, useNavigate } from "react-router-dom";
+
 
 const AdminPscCoretaxify = () => {
   // State management
@@ -48,6 +49,10 @@ const AdminPscCoretaxify = () => {
   const [cookies, setCookie] = useCookies(["user"]);
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const navigate = useNavigate(); // FIX: Initialize useNavigate
+  const [isAddOpen, setIsAddOpen] = useState(false);
+  const [editOpenFor, setEditOpenFor] = useState(null);
+
 
   // API URL with pagination
   const apiUrl = useMemo(() => {
@@ -172,6 +177,7 @@ const AdminPscCoretaxify = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["self_assignments"] });
       resetForm();
+      setIsAddOpen(false);
       toast({
         title: "Berhasil",
         description: "Praktikum berhasil ditambahkan",
@@ -232,6 +238,7 @@ const AdminPscCoretaxify = () => {
       queryClient.invalidateQueries({ queryKey: ["self_assignments"] });
       setSelectedData(null);
       resetEditForm();
+      setEditOpenFor(null);
       toast({
         title: "Berhasil",
         description: "Praktikum berhasil diperbarui",
@@ -486,11 +493,13 @@ const AdminPscCoretaxify = () => {
   const handleEditClick = useCallback((item) => {
     setSelectedData(item);
     setEditFormData({
-      name: item.name || "",
-      task_id: item.task_id || "",
+      name: item.assignment.name || "",
+      task_id: item.assignment.task_id || "",
       supporting_file: null,
     });
     setEditFilePreview(null);
+    setEditOpenFor(item.assignment.id);
+
   }, []);
 
   const resetForm = useCallback(() => {
@@ -634,9 +643,12 @@ const AdminPscCoretaxify = () => {
           />
         </div>
 
-        <AlertDialog>
-          <AlertDialogTrigger>
-            <div className="bg-blue-800 p-2 rounded-lg text-white hover:bg-blue-700 transition-colors">
+        <AlertDialog open={isAddOpen} onOpenChange={setIsAddOpen}>
+          <AlertDialogTrigger asChild >
+            <div className="bg-blue-800 p-2 rounded-lg text-white hover:bg-blue-700 transition-colors"
+              onClick={() => setIsAddOpen(true)}
+
+            >
               + Tambah Praktikum
             </div>
           </AlertDialogTrigger>
@@ -752,7 +764,10 @@ const AdminPscCoretaxify = () => {
             <AlertDialogFooter>
               <AlertDialogCancel
                 className="bg-red-600 text-white hover:bg-red-700"
-                onClick={resetForm}
+                onClick={() => {
+                  resetForm();
+                  setIsAddOpen(false);
+                }}
               >
                 Batal
               </AlertDialogCancel>
@@ -783,7 +798,7 @@ const AdminPscCoretaxify = () => {
               </th>
               <th
                 onClick={() => handleSort("name")}
-                // className="cursor-pointer hover:bg-gray-100 transition-colors"
+              // className="cursor-pointer hover:bg-gray-100 transition-colors"
               >
                 Nama Praktikum{" "}
                 {sortConfig.key === "name" && (
@@ -909,7 +924,10 @@ const AdminPscCoretaxify = () => {
                     </td>
                     <td>
                       <div>
-                        <AlertDialog>
+                        <AlertDialog
+                          open={editOpenFor === item.assignment.id}
+                          onOpenChange={(open) => setEditOpenFor(open ? item.assignment.id : null)}
+                        >
                           <AlertDialogTrigger
                             className="action-button edit bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 transition-colors"
                             onClick={() => handleEditClick(item)}
@@ -922,7 +940,10 @@ const AdminPscCoretaxify = () => {
                                 <AlertDialogTitle>
                                   Edit Praktikum
                                 </AlertDialogTitle>
-                                <AlertDialogCancel className="border-none shadow-none p-0">
+                                <AlertDialogCancel className="border-none shadow-none p-0"
+                                  onClick={() => setEditOpenFor(null)}
+
+                                >
                                   <RxCross1 className="text-xl hover:text-red-500 transition-colors" />
                                 </AlertDialogCancel>
                               </div>

@@ -209,6 +209,21 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
   const viewAsCompanyId = searchParams.get("viewAs");
   const userId = searchParams.get("user_id");
 
+  const stripRupiahFormat = (value) => {
+    if (!value) return value;
+    // Remove all dots from the string
+    return value.toString().replace(/\./g, "");
+  };
+
+  const toNumber = (value) => {
+    if (value === undefined || value === null || value === "") return 0;
+    // console.log("value", value);
+    // First strip the dots, then convert to number
+    const strippedValue = stripRupiahFormat(value);
+    // console.log("num", strippedValue);
+    return Number(strippedValue);
+  };
+
   useEffect(() => {
     const handleScroll = () => {
       setShowScrollTop(window.scrollY > 200);
@@ -220,12 +235,34 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
+
+
   const saveConcept = useMutation({
     mutationFn: async () => {
       const csrf = await getCsrf();
+
+      // const sptData = {
+      //   cl_bp1_2: toNumber(form.cl_bp1_2),
+      //   cl_bp1_3: toNumber(form.cl_bp1_3),
+      //   cl_bp1_5: toNumber(form.cl_bp1_5),
+      //   cl_bp1_4: toNumber(form.cl_bp1_4),
+      //   cl_bp1_6: toNumber(form.cl_bp1_6),
+      //   cl_bp2_2: toNumber(form.cl_bp2_2),
+      //   cl_bp2_3: toNumber(form.cl_bp2_3),
+      //   cl_bp2_5: toNumber(form.cl_bp2_5),
+      //   cl_bp2_4: toNumber(form.cl_bp2_4),
+      //   cl_bp2_6: toNumber(form.cl_bp2_6),
+
+      //   cl_bp1_1: toNumber(data.detail_spt.cl_bp1_1),
+      //   cl_bp1_7: toNumber(data.detail_spt.cl_bp1_7),
+      //   cl_bp2_1: toNumber(data.detail_spt.cl_bp2_1),
+      //   cl_bp2_7: toNumber(data.detail_spt.cl_bp2_7),
+      // };
+      //  console.log("Sending SPT data:", sptData); // Debug what's being sent
+
       return axios.put(
         `${RoutesApi.url}api/student/assignments/${id}/sistem/${akun}/spt/${idSpt}`,
-        {},
+        form,
         {
           headers: {
             "Content-Type": "application/json",
@@ -240,7 +277,7 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
       );
     },
     onSuccess: (data, variables) => {
-      // console.log(data);
+      // console.log(data); 
       // const successMessage = variables.isDraft
       //   ? "Draft Faktur berhasil dibuat"
       //   : "Faktur berhasil diupload";
@@ -275,7 +312,7 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
       const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
       return axios.put(
         `${RoutesApi.url}api/student/assignments/${id}/sistem/${accountId}/spt/${idSpt}`,
-        {},
+        form,
         {
           headers: {
             "Content-Type": "application/json",
@@ -345,7 +382,7 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
       const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
       return axios.put(
         `${RoutesApi.url}api/student/assignments/${id}/sistem/${accountId}/spt/${idSpt}`,
-        {},
+        form,
         {
           headers: {
             "Content-Type": "application/json",
@@ -1108,7 +1145,7 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                         }
                         className={`py-2 px-4 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-sm flex items-center justify-center ${saveConcept.isPending ||
                           payDeposit.isPending ||
-                          payBilling.isPending || 
+                          payBilling.isPending ||
                           !isStatementChecked
                           ? "bg-blue-400 text-white cursor-not-allowed"
                           : userId

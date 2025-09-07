@@ -44,6 +44,9 @@ const BlankAssignment = () => {
     supporting_file: null,
   });
 
+  const [isAddOpen, setIsAddOpen] = useState(false);
+  const [editOpenFor, setEditOpenFor] = useState(null); 
+
   const itemsPerPage = 20;
   const [cookies] = useCookies(["user"]);
   const { toast } = useToast();
@@ -172,6 +175,7 @@ const BlankAssignment = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["self_assignments"] });
       resetForm();
+      setIsAddOpen(false);
       toast({
         title: "Berhasil",
         description: "Praktikum berhasil ditambahkan",
@@ -232,6 +236,7 @@ const BlankAssignment = () => {
       queryClient.invalidateQueries({ queryKey: ["self_assignments"] });
       setSelectedData(null);
       resetEditForm();
+      setEditOpenFor(null);
       toast({
         title: "Berhasil",
         description: "Praktikum berhasil diperbarui",
@@ -633,11 +638,14 @@ const BlankAssignment = () => {
           />
         </div>
 
-        <AlertDialog>
-          <AlertDialogTrigger>
-            <div className="bg-blue-800 p-2 rounded-lg text-white hover:bg-blue-700 transition-colors">
+        <AlertDialog open={isAddOpen} onOpenChange={setIsAddOpen}>
+          <AlertDialogTrigger asChild>
+            <button
+              className="bg-blue-800 p-2 rounded-lg text-white hover:bg-blue-700 transition-colors"
+              onClick={() => setIsAddOpen(true)}
+            >
               + Tambah Praktikum
-            </div>
+            </button>
           </AlertDialogTrigger>
           <AlertDialogContent className="max-w-2xl">
             <AlertDialogHeader>
@@ -751,7 +759,10 @@ const BlankAssignment = () => {
             <AlertDialogFooter>
               <AlertDialogCancel
                 className="bg-red-600 text-white hover:bg-red-700"
-                onClick={resetForm}
+                onClick={() => {
+                  resetForm();
+                  setIsAddOpen(false);
+                }}
               >
                 Batal
               </AlertDialogCancel>
@@ -782,7 +793,7 @@ const BlankAssignment = () => {
               </th>
               <th
                 onClick={() => handleSort("name")}
-                // className="cursor-pointer hover:bg-gray-100 transition-colors"
+              // className="cursor-pointer hover:bg-gray-100 transition-colors"
               >
                 Nama Praktikum{" "}
                 {sortConfig.key === "name" && (

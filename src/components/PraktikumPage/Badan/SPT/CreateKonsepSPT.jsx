@@ -2393,7 +2393,7 @@ const CreateKonsepSPT = ({ data, sidebar }) => {
                                   onChange={handleChange}
                                   className="form-radio"
                                 />
-                                <span className="ml-2">1. Dikompresikan</span>
+                                <span className="ml-2">1. Dikompensasikan</span>
                               </label>
                               <label className="flex items-center w-full">
                                 <input
