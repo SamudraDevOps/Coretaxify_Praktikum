@@ -1,11 +1,7 @@
-name: Mirror to GitLab
+name: One-time Force Mirror to GitLab
 
 on:
-  push:
-    branches: ['**']
-    tags: ['**']
-  delete: {}
-  workflow_dispatch: {}
+  workflow_dispatch: {}   # hanya jalan saat kamu klik Run (manual)
 
 jobs:
   mirror:
@@ -34,11 +30,11 @@ jobs:
           git remote add gitlab "https://oauth2:${GITLAB_TOKEN}@${CLEAN_REMOTE}"
           git remote -v
 
-      # Penting: jangan pakai --mirror (menghindari hidden refs)
-      - name: Push branches (no hidden refs)
+      - name: Force push branches (overwrite)
         run: |
-          git push --prune --all gitlab
+          # + = force update, --atomic = all-or-nothing, --prune = hapus branch yang sudah dihapus di GitHub
+          git push --prune --atomic gitlab +refs/heads/*:refs/heads/*
 
-      - name: Push tags
+      - name: Force push tags (overwrite)
         run: |
-          git push --prune --tags gitlab
+          git push --prune --force gitlab --tags
