@@ -32,7 +32,6 @@ jobs:
 
       - name: Push main & dev branches
         run: |
-          git push gitlab main:main
           git push gitlab dev:dev
 
       - name: Push tags
