@@ -188,7 +188,7 @@ export default function Praktikum() {
   return (
     <div className="kontrak-container">
       <div className="header">
-        <h2>Data Praktikum</h2>
+        <h2>Data Praktiku</h2>
         {/* <p>{cookies.user ? cookies.user : "no user"}</p>
         {processedData.map((item) => (
           <li key={item.id} style={{ color: item.highlight ? "red" : "black" }}>

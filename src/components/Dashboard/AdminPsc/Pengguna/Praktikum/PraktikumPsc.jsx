@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./praktikumPsc.css";
-import CreateAssignmentPopup from "./CreateAssignmentPopup";
-import UpdateAssignmentPopup from "./UpdateAssignmentPopup";
+import CreateAssignmentPopup from "./CreateAssignmentPopUp";
+import UpdateAssignmentPopup from "./UpdateAssignmentPopUp";
 import Swal from "sweetalert2";
 import { useCookies } from "react-cookie";
 import { useMutation, useQuery } from "@tanstack/react-query";

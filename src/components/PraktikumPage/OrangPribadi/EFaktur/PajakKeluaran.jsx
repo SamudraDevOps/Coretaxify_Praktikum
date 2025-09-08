@@ -9,6 +9,7 @@ import axios from "axios";
 import { RoutesApi } from "@/Routes";
 import { useQuery } from "@tanstack/react-query";
 import { getCookieToken } from "@/service";
+import { useCookies } from "react-cookie";
 import FakturPenilaian from "../../Badan/EFaktur/FakturPenilaian";
 
 const PajakKeluaran = ({
@@ -26,6 +27,7 @@ const PajakKeluaran = ({
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isCompanyDropdownOpen, setIsCompanyDropdownOpen] = useState(false);
+  const [cookies] = useCookies(["token", "role"]);
   const dropdownRef = useRef(null);
   const companyDropdownRef = useRef(null);
   const token = getCookieToken();
@@ -150,7 +152,7 @@ const PajakKeluaran = ({
               Pajak Keluaran
             </h1>
           </div>
-          {userId ? (
+          {userId && (cookies.role === "dosen" || cookies.role === "psc") ? (
             <FakturPenilaian
               tipeFaktur="Faktur Keluaran"
             />

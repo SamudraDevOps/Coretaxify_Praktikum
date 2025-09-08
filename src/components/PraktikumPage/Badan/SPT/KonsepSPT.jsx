@@ -23,7 +23,7 @@ const KonsepSPT = ({
   const { id, akun } = useParams();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
-  const [cookies] = useCookies(["token"]);
+  const [cookies] = useCookies(["token", "role"]);
 
   const handleClickOutside = (event) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -151,7 +151,7 @@ const KonsepSPT = ({
             <IoDocumentTextOutline className="text-4xl text-blue-900" />
             <h1 className="text-lg font-bold text-blue-900 ml-2">Konsep SPT</h1>
           </div>
-          {userId ? <PenilaianSPT tipeFaktur="Retur Faktur Masukan" /> : ""}
+          {userId && (cookies.role === "dosen" || cookies.role === "psc") ? <PenilaianSPT tipeFaktur="Retur Faktur Masukan" /> : ""}
         </div>
 
         <div className="flex justify-between items-start mb-4 pb-3 border-b">

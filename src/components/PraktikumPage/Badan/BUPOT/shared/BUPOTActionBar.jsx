@@ -21,7 +21,7 @@ const BUPOTActionBar = ({
   sidebar,
 }) => {
   const { id, akun } = useParams();
-  const [cookies] = useCookies(["token"]);
+  const [cookies] = useCookies(["token", "role"]);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigateWithParams();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -202,16 +202,18 @@ const BUPOTActionBar = ({
             >
               {isLoading ? "Menerbitkan..." : "Terbitkan"}
             </button> */}
-            <TandaTangan
-              onConfirm={handlePublish}
-              isLoading={isLoading}
-              disabled={0}
-              confirmText="Penerbitan Bupot"
-              description="Apakah Anda yakin ingin menerbitkan bupot ?"
-              npwp={sidebar.npwp_akun}
-            >
-              Terbitkan
-            </TandaTangan>
+            {!userId && (
+              <TandaTangan
+                onConfirm={handlePublish}
+                isLoading={isLoading}
+                disabled={0}
+                confirmText="Penerbitan Bupot"
+                description="Apakah Anda yakin ingin menerbitkan bupot ?"
+                npwp={sidebar.npwp_akun}
+              >
+                Terbitkan
+              </TandaTangan>
+            )}
             <button
               className={
                 userId
@@ -248,7 +250,7 @@ const BUPOTActionBar = ({
           </button>
         )}
 
-        {userId ? (
+        {userId && (cookies.role === "dosen" || cookies.role === "psc") ? (
           <BUPOTPenilaian
             statusPenerbitan={statusPenerbitan}
             tipeBupot={tipeBupot}
