@@ -30,7 +30,11 @@ jobs:
           git remote add gitlab "https://oauth2:${GITLAB_TOKEN}@${CLEAN_REMOTE}"
           git remote -v
 
-      - name: Push main & dev branches
+      - name: Fetch dev branch
+        run: |
+          git fetch origin dev:dev
+
+      - name: Push dev branch
         run: |
           git push gitlab dev:dev
 
