@@ -1019,6 +1019,7 @@ const Main = () => {
             //   <KonsepSPT />
             // </>
           }
+          
         />
         <Route
           path="/praktikum/:id/sistem/:akun/lihat-konsep-spt-unifikasi/:idSpt"
