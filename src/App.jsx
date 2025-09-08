@@ -470,7 +470,7 @@ const Main = () => {
           />
         </Route>
         {/* Praktikum */}
-        
+
         {/* Praktikum */}
         {/* Praktikum  Orang Pribadi*/}
         {/* <Route
@@ -500,7 +500,7 @@ const Main = () => {
             </>
           }
         />
-        
+
         <Route
           path="/praktikum/:id/sistem/:akun/profil-saya"
           element={
@@ -974,13 +974,32 @@ const Main = () => {
             // </>
           }
         />
+         <Route
+          path="/praktikum/:id/sistem/:akun/spt/pdf/:idSpt"
+          // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/spt/:idSpt`}
+                intent={""}
+                OrangPribadi={SPTViewPDF}
+                Badan={SPTViewPDF}
+                query={""}
+              ></RoleBasedRenderer>
+            </>
+            // <>
+            //   <Header />
+            //   <KonsepSPT />
+            // </>
+          }
+        />
         <Route
-                  path="/praktikum/:id/sistem/:akun/buat-konsep-spt-pph/:idSpt"
+          path="/praktikum/:id/sistem/:akun/buat-konsep-spt-pph/:idSpt"
           // path="/praktikum/:id/sistem/:akun/spt/pdf/:idSpt"
           // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
           element={
             <>
-                         <RoleBasedRenderer
+              <RoleBasedRenderer
                 url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/spt/:idSpt`}
                 intent={""}
                 OrangPribadi={CreateKonsepPasal}
@@ -1005,7 +1024,7 @@ const Main = () => {
           }
         />
         <Route
-                  path="/praktikum/:id/sistem/:akun/lihat-konsep-spt-pph/:idSpt"
+          path="/praktikum/:id/sistem/:akun/lihat-konsep-spt-pph/:idSpt"
 
           // path="/praktikum/:id/sistem/:akun/buat-konsep-spt-unifikasi/:idSpt"
           // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
@@ -1014,13 +1033,13 @@ const Main = () => {
               <RoleBasedRenderer
                 url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/spt/:idSpt`}
                 intent={""}
-                                OrangPribadi={LihatKonsepPasal}
+                OrangPribadi={LihatKonsepPasal}
                 Badan={LihatKonsepPasal}
                 query={""}
 
-                // OrangPribadi={CreateKonsepUnifikasi}
-                // Badan={CreateKonsepUnifikasi}
-                // query={"buat-konsep-spt-unifikasi"}
+              // OrangPribadi={CreateKonsepUnifikasi}
+              // Badan={CreateKonsepUnifikasi}
+              // query={"buat-konsep-spt-unifikasi"}
               ></RoleBasedRenderer>
             </>
             // <>
@@ -1030,7 +1049,7 @@ const Main = () => {
           }
         />
         <Route
-                  path="/praktikum/:id/sistem/:akun/spt-pph/pdf/:idSpt"
+          path="/praktikum/:id/sistem/:akun/spt-pph/pdf/:idSpt"
 
           // path="/praktikum/:id/sistem/:akun/lihat-konsep-spt-unifikasi/:idSpt"
           // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
@@ -1041,7 +1060,7 @@ const Main = () => {
                 intent={""}
                 // OrangPribadi={LihatKonsepUnifikasi}
                 // Badan={LihatKonsepUnifikasi}
-                                OrangPribadi={SPTPPHViewPDF}
+                OrangPribadi={SPTPPHViewPDF}
                 Badan={SPTPPHViewPDF}
                 query={""}
               ></RoleBasedRenderer>
@@ -1073,7 +1092,7 @@ const Main = () => {
           }
         />
         <Route
-                  path="/praktikum/:id/sistem/:akun/lihat-konsep-spt-unifikasi/:idSpt"
+          path="/praktikum/:id/sistem/:akun/lihat-konsep-spt-unifikasi/:idSpt"
           // path="/praktikum/:id/sistem/:akun/spt-unifikasi/pdf/:idSpt"
           // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
           element={
@@ -1081,13 +1100,13 @@ const Main = () => {
               <RoleBasedRenderer
                 url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/spt/:idSpt`}
                 intent={""}
-                                OrangPribadi={LihatKonsepUnifikasi}
+                OrangPribadi={LihatKonsepUnifikasi}
                 Badan={LihatKonsepUnifikasi}
                 query={"buat-konsep-spt-unifikasi"}
 
-                // OrangPribadi={SPTUnifikasiViewPDF}
-                // Badan={SPTUnifikasiViewPDF}
-                // query={""}
+              // OrangPribadi={SPTUnifikasiViewPDF}
+              // Badan={SPTUnifikasiViewPDF}
+              // query={""}
               ></RoleBasedRenderer>
             </>
             // <>
@@ -1332,7 +1351,7 @@ const Main = () => {
         />
 
         {/* Tes BP21 PDF */}
-            <Route
+        <Route
           path="/praktikum/:id/sistem/:akun/bupot/bppu/pdf/:bupot"
           element={
             <>
@@ -1365,7 +1384,7 @@ const Main = () => {
           }
         />
 
-         <Route
+        <Route
           path="/praktikum/:id/sistem/:akun/bupot/bp21/pdf/:bupot"
           element={
             <>
@@ -1629,6 +1648,18 @@ const Main = () => {
             </>
           }
         />
+                <Route
+          path="/tes/:id/:akun"
+          element={
+            <>
+              <RoleBasedRenderer
+                OrangPribadi={DashboardAdmin}
+                Badan={DetailKontakBadan}
+              ></RoleBasedRenderer>
+            </>
+          }
+        />
+
         <Route
           path="/admin/praktikum/2/profil-saya/informasi-umum"
           element={
