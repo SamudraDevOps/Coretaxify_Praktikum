@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link, useLocation } from 'react-router-dom';
-import { useUserType } from '../../../../context/UserTypeContext';
+import { useUserType } from '../../../../context/userTypeContext';
 const BpnrTelahTerbit = () => {
   const { userType } = useUserType();
       const userTypeId = userType === "Orang Pribadi" ? 1 : 2;
