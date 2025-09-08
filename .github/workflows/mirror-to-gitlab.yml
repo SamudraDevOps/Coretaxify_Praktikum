@@ -30,11 +30,11 @@ jobs:
           git remote add gitlab "https://oauth2:${GITLAB_TOKEN}@${CLEAN_REMOTE}"
           git remote -v
 
-      - name: Force push branches (overwrite)
+      - name: Push main & dev branches
         run: |
-          # + = force update, --atomic = all-or-nothing, --prune = hapus branch yang sudah dihapus di GitHub
-          git push --prune --atomic gitlab +refs/heads/*:refs/heads/*
+          git push gitlab main:main
+          git push gitlab dev:dev
 
-      - name: Force push tags (overwrite)
+      - name: Push tags
         run: |
-          git push --prune --force gitlab --tags
+          git push gitlab --tags
