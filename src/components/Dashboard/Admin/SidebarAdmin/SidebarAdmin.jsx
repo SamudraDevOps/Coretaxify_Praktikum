@@ -309,6 +309,18 @@ const SidebarAdmin = () => {
                     </li>
                     <li
                       className={`dropdown-item  ${
+                        cookies.role == "admin"
+                          ? ""
+                          : "!hidden"
+                      }`}
+                      onClick={() => {
+                        window.location.href = `/${cookies.role}/edit-mahasiswa-psc`;
+                      }}
+                    >
+                      Mahasiswa PSC
+                    </li>
+                    <li
+                      className={`dropdown-item  ${
                         cookies.role == "psc" ? "" : "!hidden"
                       }`}
                       onClick={() => {

@@ -1293,8 +1293,7 @@ const BUPOTForm = ({
                       onChange={(e) => {
                         updateFormData("kode_objek_pajak", e.target.value);
                       }}
-                                          readOnly={true}
-
+                      readOnly={true}
                     />
                   </div>
                 )}
