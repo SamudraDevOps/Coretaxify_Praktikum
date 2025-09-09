@@ -975,8 +975,7 @@ const Main = () => {
           }
         />
         <Route
-          path="/praktikum/:id/sistem/:akun/buat-konsep-spt-pph/:idSpt"
-          // path="/praktikum/:id/sistem/:akun/spt/pdf/:idSpt"
+          path="/praktikum/:id/sistem/:akun/spt/pdf/:idSpt"
           // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
           element={
             <>
@@ -993,6 +992,21 @@ const Main = () => {
             //   <Header />
             //   <KonsepSPT />
             // </>
+          }
+        />
+        <Route
+          path="/praktikum/:id/sistem/:akun/buat-konsep-spt-pph/:idSpt"
+          // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/spt/:idSpt`}
+                intent={""}
+                OrangPribadi={CreateKonsepPasal}
+                Badan={CreateKonsepPasal}
+                query={""}
+              ></RoleBasedRenderer>
+            </>
           }
         />
         <Route
@@ -1410,9 +1424,8 @@ const Main = () => {
             </>
           }
         />
-
         <Route
-          path="/admin/praktikum/1/profil-saya/alamat"
+          path="/tes/:id/:akun"
           element={
             <>
               <Header />
@@ -2081,7 +2094,7 @@ const Main = () => {
               <TambahFakturKeluaranDokumenLain />
             </>
           }
-        />
+        />        
         {/* NOT FOUND ROUTE - LAST REGISTERED ROUTE */}
         <Route path="*" element={<NotFound />} />
         {/* <Route
