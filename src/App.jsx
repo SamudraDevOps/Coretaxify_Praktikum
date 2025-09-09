@@ -213,6 +213,7 @@ const Main = () => {
     }, 0);
   }, []);
 
+  
   // In the useEffect that validates the token
   // useEffect(() => {
   //   const validateToken = async () => {
