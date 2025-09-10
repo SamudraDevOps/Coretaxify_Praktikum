@@ -188,7 +188,7 @@ export default function Praktikum() {
   return (
     <div className="kontrak-container">
       <div className="header">
-        <h2>Data Praktiku</h2>
+        <h2>Data Praktikum</h2>
         {/* <p>{cookies.user ? cookies.user : "no user"}</p>
         {processedData.map((item) => (
           <li key={item.id} style={{ color: item.highlight ? "red" : "black" }}>
@@ -234,9 +234,9 @@ export default function Praktikum() {
                 <tr>
                   <td>{index + 1}</td>
                   <td>{item.name}</td>
-                  <td>{item.group.teacher}</td>
+                  <td>{item.group ? item.group.teacher : item.user.name}</td>
                   <td>{item.instansi}</td>
-                  <td>{item.group.status}</td>
+                  <td>{item.group ? item.group.status : "-"}</td>
                   <td>
                     <button
                       className="action-button edit"
