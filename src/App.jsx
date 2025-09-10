@@ -975,28 +975,8 @@ const Main = () => {
             // </>
           }
         />
-         <Route
-          path="/praktikum/:id/sistem/:akun/spt/pdf/:idSpt"
-          // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
-          element={
-            <>
-              <RoleBasedRenderer
-                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/spt/:idSpt`}
-                intent={""}
-                OrangPribadi={SPTViewPDF}
-                Badan={SPTViewPDF}
-                query={""}
-              ></RoleBasedRenderer>
-            </>
-            // <>
-            //   <Header />
-            //   <KonsepSPT />
-            // </>
-          }
-        />
         <Route
-          path="/praktikum/:id/sistem/:akun/buat-konsep-spt-pph/:idSpt"
-          // path="/praktikum/:id/sistem/:akun/spt/pdf/:idSpt"
+          path="/praktikum/:id/sistem/:akun/spt/pdf/:idSpt"
           // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
           element={
             <>
@@ -1013,6 +993,21 @@ const Main = () => {
             //   <Header />
             //   <KonsepSPT />
             // </>
+          }
+        />
+        <Route
+          path="/praktikum/:id/sistem/:akun/buat-konsep-spt-pph/:idSpt"
+          // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/spt/:idSpt`}
+                intent={""}
+                OrangPribadi={CreateKonsepPasal}
+                Badan={CreateKonsepPasal}
+                query={""}
+              ></RoleBasedRenderer>
+            </>
           }
         />
         <Route
