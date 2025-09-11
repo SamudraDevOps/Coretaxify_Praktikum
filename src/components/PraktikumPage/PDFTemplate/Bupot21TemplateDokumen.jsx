@@ -127,8 +127,8 @@ const HeaderFixed = ({ kopImage }) => (
   <View fixed style={styles.fixedTop}>
     {kopImage ? <Image style={styles.kop} src={kopImage} /> : null}
     <View style={styles.titleBlock}>
-      {/* <Text style={styles.title1}>KEMENTERIAN KEUANGAN REPUBLIK INDONESIA</Text>
-      <Text style={styles.title2}>DIREKTORAT JENDERAL PAJAK</Text> */}
+      <Text style={styles.title1}>KEMENTERIAN KEUANGAN REPUBLIK INDONESIA</Text>
+      <Text style={styles.title2}>DIREKTORAT JENDERAL PAJAK</Text>
       <Text style={styles.title3}>BUKTI PEMOTONGAN PAJAK PENGHASILAN PASAL 21</Text>
       <Text style={styles.title3}>YANG TIDAK BERSIFAT FINAL & YANG BERSIFAT FINAL</Text>
       <Text style={styles.codeBadge}>BP21</Text>
@@ -149,9 +149,23 @@ const TableHeaderFixed = () => (
   </View>
 );
 
-const BP21PDF = ({ data = {}, kopImage, qrImage }) => {
-  // console.log("BP21PDF data:", data);
-const bupotData = data?.bupot_resource || data?.data || data || {};
+const BP21PDFDokumen = ({ data = {}, kopImage, qrImage }) => {
+
+  let bupotData = data?.bupot_resource;
+  if (typeof bupotData === "string") {
+    try {
+      bupotData = JSON.parse(bupotData);
+    } catch {
+      bupotData = {};
+    }
+  }
+  if (!bupotData || Object.keys(bupotData).length === 0) {
+    bupotData = data;
+  }
+
+  // console.log("BP21PDFDokumen data Testing :", data);
+  //  console.log("BP21PDF bupotData coba :", bupotData);
+
   const rincian = Array.isArray(bupotData.rincian) && bupotData.rincian.length
     ? bupotData.rincian
     : [{
@@ -178,7 +192,7 @@ const bupotData = data?.bupot_resource || data?.data || data || {};
         {/* Grid metadata */}
         <View style={styles.metaRow}>
           {[
-            { label: "NOMOR BUKTI PEMOTONGAN", value: bupotData.nomor_dokumen || "-" },
+            { label: "NOMOR BUKTI PEMOTONGAN", value: bupotData.nomor_pemotongan || "-" },
             { label: "MASA PAJAK", value: formatMasaPajak(bupotData.masa_awal) },
             { label: "SIFAT PEMOTONGAN", value: (bupotData.sifat_pajak_penghasilan || "TIDAK FINAL").toUpperCase() },
             { label: "STATUS BUKTI PEMOTONGAN", value: (bupotData.status || "NORMAL").toUpperCase() },
@@ -249,7 +263,7 @@ const bupotData = data?.bupot_resource || data?.data || data || {};
           <RowField label="C.1 NPWP/NIK" value={bupotData.nitku_dokumen?.split(" - ")[0] || "-"} />
           <RowField label="C.2 NITKU atau Nomor Identitas Subunit Organisasi" value={bupotData.nitku_dokumen || "-"} />
           <RowField label="C.3 Nama Pemotong" value={bupotData.nitku_dokumen?.split(" - ")[1] || "-"} />
-          <RowField label="C.4 Tanggal" value={formatDate(bupotData.tanggal_dokumen)} />
+          <RowField label="C.4 Tanggal" value={formatDate(bupotData.created_at)} />
           <RowField label="C.5 Nama Penandatangan" value={bupotData.nitku_dokumen?.split(" - ")[1] || "-"} />
           <RowField
             label="C.6 Pernyataan"
@@ -270,4 +284,4 @@ const bupotData = data?.bupot_resource || data?.data || data || {};
   );
 };
 
-export default BP21PDF;
+export default BP21PDFDokumen;
