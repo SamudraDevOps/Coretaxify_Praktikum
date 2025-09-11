@@ -19,7 +19,7 @@ const EditDosen = () => {
   const toHTTPS = (u) => (u ? u.replace(/^http:\/\//i, "https://") : u);
   const [isOpen, setIsOpen] = useState(false);
   const [id, setId] = useState(0);
-  const [url, setUrl] = useState(toHTTPS(RoutesApi.getDosenAdmin.url));
+  const [url, setUrl] = useState(RoutesApi.getDosenAdmin.url);
   const [editPopupOpen, setEditPopupOpen] = useState(false);
   const [tambahPopupOpen, setTambahPopupOpen] = useState(false);
   const [selectedDosen, setSelectedDosen] = useState(null);
@@ -32,7 +32,7 @@ const EditDosen = () => {
   const { isLoading, isError, data, error, refetch } = useQuery({
     queryKey: ["dosenadmin", url],
     queryFn: async () => {
-      const { data } = await axios.get(toHTTPS(url), {
+      const { data } = await axios.get(url, {
         headers: {
           Authorization: `Bearer ${cookies.token}`,
         },
@@ -49,7 +49,8 @@ const EditDosen = () => {
     isError: isErrorContract,
     data: dataContract,
     error: errorContract,
-  } = getContracts(toHTTPS(RoutesApi.url) + "api/admin/contract", getCookieToken());
+  } = getContracts(RoutesApi.url + "api/admin/contract", getCookieToken(), 10000, "desc");
+  console.log(dataContract);
 
   const handleData = (newData) => {
     setData([...data, { id: data.length + 1, ...newData }]);
