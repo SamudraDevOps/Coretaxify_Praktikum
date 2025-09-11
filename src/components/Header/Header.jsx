@@ -42,6 +42,7 @@ const Header = () => {
 
   const token = getCookieToken();
   const [cookies, setCookie, removeCookie] = useCookies(["token", "assignment_user_id"]);
+  const [cookieReady, setCookieReady] = useState(false);
   const [isCompanyDropdownOpen, setIsCompanyDropdownOpen] = useState(false);
   const [assignmentUser, setAssignmentUser] = useState(null);
   const [countdown, setCountdown] = useState(0);
@@ -62,6 +63,12 @@ const Header = () => {
   const buttonRefs = useRef([]);
   const dropdownRefs = useRef([]);
   const userId = searchParams.get("user_id");
+
+  useEffect(() => {
+    if (cookies.token || cookies.assignment_user_id) {
+      setCookieReady(true);
+    }
+  }, [cookies.token, cookies.assignment_user_id]);
 
   const triggerLogoutAlert = (message) => {
     Swal.fire({
@@ -112,13 +119,14 @@ const Header = () => {
 
   useEffect(() => {
     if (userId) return;
+    if (!cookieReady) return;
 
     fetchAssignmentUser(); // Fetch pertama kali
 
     const intervalId = setInterval(fetchAssignmentUser, 30000); // Refresh setiap 30 detik
 
     return () => clearInterval(intervalId);
-  }, [userId, fetchAssignmentUser]);
+  }, [userId, cookieReady, fetchAssignmentUser]);
 
   useEffect(() => {
     if (!assignmentUser?.remaining_time) return;
