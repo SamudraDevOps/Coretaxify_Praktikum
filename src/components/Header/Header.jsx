@@ -738,7 +738,11 @@ const Header = () => {
               {
                 label: "Portal Saya",
                 submenu: [
-                  "Dokumen Saya",
+                  {
+                    label: "Dokumen Saya",
+                    links: `/praktikum/${id}/sistem/${akun}/dokumen-saya`,
+                  },
+                  
                   {
                     label: "Notifikasi Saya",
                     links: `/praktikum/${id}/sistem/${akun}/notifikasi`,
