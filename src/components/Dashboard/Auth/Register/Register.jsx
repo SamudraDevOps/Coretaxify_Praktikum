@@ -72,7 +72,7 @@ const Register = () => {
           Accept: "application/json",
         },
       });
-      
+
       axios.defaults.headers.common["X-CSRF-TOKEN"] = response.data.token;
 
       const data = await axios.post(
@@ -90,28 +90,28 @@ const Register = () => {
     },
     onSuccess: (data) => {
       console.log("Registration successful:", data);
-      
-      // Store email for OTP verification
-      localStorage.setItem("pendingVerificationEmail", formData.email);
-      
+
+      // Store email for OTP verification (still sent, but no OTP input step)
+      // localStorage.setItem("pendingVerificationEmail", formData.email);
+
       // Store token from registration response
       if (data.data && data.data.token) {
         setCookie("token", data.data.token, { path: "/" });
-        
+
         // Store role if available
         if (data.data.user && data.data.user.roles && data.data.user.roles.length > 0) {
           const role = data.data.user.roles[0].name;
           setCookie("role", role, { path: "/" });
         }
       }
-      
+
       Swal.fire({
         title: "Registrasi Berhasil!",
-        text: "Silakan verifikasi email Anda dengan kode OTP yang telah dikirim.",
+        text: "Silakan login untuk melanjutkan.",
         icon: "success",
-        confirmButtonText: "Verifikasi Sekarang",
+        confirmButtonText: "Menuju Login",
       }).then(() => {
-        navigate("/confirm-otp");
+        navigate("/login");
       });
     },
     onError: (error) => {
@@ -126,11 +126,11 @@ const Register = () => {
     const { name, value } = event.target;
     setEmail(value);
     setFormData({ ...formData, [name]: value });
-    
+
     // Clear email errors when user types
     setEmailError("");
     if (errors.email) {
-      setErrors({...errors, email: ""});
+      setErrors({ ...errors, email: "" });
     }
   };
 
@@ -138,21 +138,21 @@ const Register = () => {
     const { name, value } = event.target;
     setPassword(value);
     setFormData({ ...formData, [name]: value });
-    
+
     // Clear password errors when user types
     setPasswordError("");
     if (errors.password) {
-      setErrors({...errors, password: ""});
+      setErrors({ ...errors, password: "" });
     }
   };
 
   const handleRepeatPasswordChange = (event) => {
     setRepeatPassword(event.target.value);
-    
+
     // Clear password errors when user types
     setPasswordError("");
     if (errors.password) {
-      setErrors({...errors, password: ""});
+      setErrors({ ...errors, password: "" });
     }
   };
 
@@ -160,28 +160,28 @@ const Register = () => {
     const { name, value } = event.target;
     setRegistrationCode(value);
     setFormData({ ...formData, [name]: value });
-    
+
     // Clear registration code errors when user types
     setRegistrationCodeError("");
     if (errors.registrationCode) {
-      setErrors({...errors, registrationCode: ""});
+      setErrors({ ...errors, registrationCode: "" });
     }
   };
 
   const handleUsernameChange = (event) => {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
-    
+
     // Clear username errors when user types
     // Clear username errors when user types
     if (errors.username) {
-      setErrors({...errors, username: ""});
+      setErrors({ ...errors, username: "" });
     }
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    
+
     // Only validate when form is submitted
     if (validate()) {
       mutation.mutate();
@@ -236,7 +236,7 @@ const Register = () => {
               onChange={handleEmailChange}
               className="mt-1 block w-full p-2 border rounded-md"
               placeholder="Masukkan email"
-              // required
+            // required
             />
             {errors.email && (
               <p className="text-red-500 text-sm">{errors.email}</p>
@@ -260,7 +260,7 @@ const Register = () => {
                 onChange={handlePasswordChange}
                 className="mt-1 block w-full p-2 border rounded-md"
                 placeholder="Masukkan password"
-                // required
+              // required
               />
               <button
                 type="button"
@@ -290,7 +290,7 @@ const Register = () => {
                 onChange={handleRepeatPasswordChange}
                 className="mt-1 block w-full p-2 border rounded-md"
                 placeholder="Ulangi password"
-                // required
+              // required
               />
               <button
                 type="button"
@@ -338,7 +338,7 @@ const Register = () => {
                 name="contract_code"
                 className="mt-1 block w-full p-2 border rounded-md"
                 placeholder="Masukkan Kode Registrasi"
-                // required
+              // required
               />
               {errors.registrationCode && (
                 <p className="text-red-500 text-sm">{errors.registrationCode}</p>
@@ -380,4 +380,4 @@ const Register = () => {
   );
 };
 
-export default Register;    
+export default Register;
