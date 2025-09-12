@@ -110,8 +110,13 @@ const Header = () => {
 
       setAssignmentUser(data.data);
     } catch (error) {
-      console.error("Error fetching assignment user:", error);
-      triggerLogoutAlert("Terjadi kesalahan. Anda akan keluar.");
+      if (error.response.status === 401 || error.response.status === 403) {
+        triggerLogoutAlert("Sesi anda telah berakhir atau tidak valid");
+      } else {
+        console.warn("Server error, keeping session alive: ", error.response.status);
+      }
+      // console.error("Error fetching assignment user:", error);
+      // triggerLogoutAlert("Terjadi kesalahan. Anda akan keluar.");
     } finally {
       setLoading(false);
     }
