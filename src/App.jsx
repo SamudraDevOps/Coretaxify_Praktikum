@@ -161,6 +161,7 @@ import PermohonanPemindahBukuan from "./components/PraktikumPage/Badan/Pembayara
 import ReturFakturKeluaran from "./components/PraktikumPage/Badan/EFaktur/ReturFakturKeluaran";
 import ReturFakturMasukan from "./components/PraktikumPage/Badan/EFaktur/ReturFakturMasukan";
 import TambahReturFaktur from "./components/PraktikumPage/Badan/EFaktur/TambahReturFaktur";
+import Bupot21ViewPDFDokumen from "./components/PraktikumPage/Badan/BUPOT/Bupot21ViewPDFDokumen";
 // Route Badan
 
 import ProtectedRoutes from "./components/Dashboard/Auth/ProtectedRoutes";
@@ -983,14 +984,14 @@ const Main = () => {
               <RoleBasedRenderer
                 url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/spt/:idSpt`}
                 intent={""}
-                OrangPribadi={CreateKonsepPasal}
-                Badan={CreateKonsepPasal}
+                OrangPribadi={SPTViewPDF}
+                Badan={SPTViewPDF}
                 query={""}
               ></RoleBasedRenderer>
 
             </>
             // <>
-            //   <Header />
+            //   <yHeader />
             //   <KonsepSPT />
             // </>
           }
@@ -1043,6 +1044,7 @@ const Main = () => {
             //   <KonsepSPT />
             // </>
           }
+
         />
         <Route
           path="/praktikum/:id/sistem/:akun/spt-pph/pdf/:idSpt"
@@ -1221,6 +1223,38 @@ const Main = () => {
             //   <Header />
             //   <KonsepSPT />
             // </>
+          }
+        />
+        <Route
+          path="/praktikum/:id/sistem/:akun/dokumen-saya"
+            element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/notification`}
+                intent={""}
+                OrangPribadi={DokumenSayaBadan}
+                Badan={DokumenSayaBadan}
+                query={"notifikasi"}
+              ></RoleBasedRenderer>
+            </>
+            // <>
+            //   <Header />
+            //   <KonsepSPT />
+            // </>
+          }
+        />
+        <Route
+          path="/praktikum/:id/sistem/:akun/dokumen-saya/pdf/:dokumen"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/notification`}
+                intent={""}
+                OrangPribadi={Bupot21ViewPDFDokumen}
+                Badan={Bupot21ViewPDFDokumen}
+                query={"notifikasi"}
+                               ></RoleBasedRenderer>
+            </>
           }
         />
         <Route
