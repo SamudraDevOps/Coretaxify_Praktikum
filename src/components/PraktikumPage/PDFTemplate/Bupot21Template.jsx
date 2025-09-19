@@ -1,6 +1,9 @@
 import React from "react";
 import { Document, Page, Text, View, Image, StyleSheet } from "@react-pdf/renderer";
 
+import qrImage from "../../../assets/images/qr-web.png";
+import kopImage from "../../../assets/images/KOP/BP21.png";
+
 const formatRupiah = (value) =>
   new Intl.NumberFormat("id-ID", {
     style: "currency",
@@ -126,13 +129,13 @@ const RowFieldNoColon = ({ label, value }) => (
 const HeaderFixed = ({ kopImage }) => (
   <View fixed style={styles.fixedTop}>
     {kopImage ? <Image style={styles.kop} src={kopImage} /> : null}
-    <View style={styles.titleBlock}>
-      {/* <Text style={styles.title1}>KEMENTERIAN KEUANGAN REPUBLIK INDONESIA</Text>
-      <Text style={styles.title2}>DIREKTORAT JENDERAL PAJAK</Text> */}
+    {/* <View style={styles.titleBlock}>
+      <Text style={styles.title1}>KEMENTERIAN KEUANGAN REPUBLIK INDONESIA</Text>
+      <Text style={styles.title2}>DIREKTORAT JENDERAL PAJAK</Text>
       <Text style={styles.title3}>BUKTI PEMOTONGAN PAJAK PENGHASILAN PASAL 21</Text>
       <Text style={styles.title3}>YANG TIDAK BERSIFAT FINAL & YANG BERSIFAT FINAL</Text>
       <Text style={styles.codeBadge}>BP21</Text>
-    </View>
+    </View> */}
   </View>
 );
 
@@ -142,14 +145,18 @@ const TableHeaderFixed = () => (
       <Text style={[styles.th, { flex: 1.4 }]}>KODE OBJEK PAJAK{"\n"}B.2</Text>
       <Text style={[styles.th, { flex: 3 }]}>OBJEK PAJAK{"\n"}B.3</Text>
       <Text style={[styles.th, { flex: 2 }, styles.right]}>PENGHASILAN BRUTO (Rp){"\n"}B.4</Text>
-      <Text style={[styles.th, { flex: 2 }, styles.center]}>DPP (%){"\n"}B.5</Text>
+      <Text style={[styles.th, { flex: 2 }, styles.center]}>PPH Dipotong {"\n"}B.5</Text>
       <Text style={[styles.th, { flex: 1 }, styles.center]}>TARIF (%){"\n"}B.6</Text>
       {/* <Text style={[styles.th, { flex: 1 }, styles.right, styles.lastCell]}>PPh DIPOTONG (Rp){"\n"}B.7</Text> */}
     </View>
   </View>
 );
 
-const BP21PDF = ({ data = {}, kopImage, qrImage }) => {
+const BP21PDF = ({ data = {}, kopImage: kopImageProp, qrImage: qrImageProp}) => {
+
+  const kopImg = kopImageProp || kopImage;
+    const qrImg = qrImageProp || qrImage;
+  
   // console.log("BP21PDF data:", data);
 const bupotData = data?.bupot_resource || data?.data || data || {};
   const rincian = Array.isArray(bupotData.rincian) && bupotData.rincian.length
@@ -172,7 +179,7 @@ const bupotData = data?.bupot_resource || data?.data || data || {};
     <Document>
       <Page size="A4" style={styles.page} wrap>
         {/* Header fixed */}
-        <HeaderFixed kopImage={kopImage} />
+        <HeaderFixed kopImage={kopImg} />
         <View style={styles.topSpacer} />
 
         {/* Grid metadata */}
@@ -259,7 +266,7 @@ const bupotData = data?.bupot_resource || data?.data || data || {};
 
         {/* QR & footer note */}
         <View style={[styles.mt12, { flexDirection: "row", alignItems: "center" }]}>
-          {qrImage ? <Image style={{ width: 80 }} src={qrImage} /> : null}
+          {qrImg ? <Image style={{ width: 80 }} src={qrImg} /> : null}
           <Text style={[styles.italic, { marginLeft: 8 }]}>Ditandatangani secara elektronik</Text>
         </View>
         <Text style={styles.mt6}>

@@ -9,25 +9,28 @@ const DokumenSayaBadan = ({ data }) => {
     const { id, akun } = useParams();
 
     const dokumenList = (data || [])
-    .map((item) => {
-        let bupotResource = null;
-        if (item.bupot_resource) {
-            if (typeof item.bupot_resource === "string") {
-                try {
-                    bupotResource = JSON.parse(item.bupot_resource);
-                } catch {
-                    bupotResource = null;
+        .map((item) => {
+            let bupotResource = null;
+            if (item.bupot_resource) {
+                if (typeof item.bupot_resource === "string") {
+                    try {
+                        bupotResource = JSON.parse(item.bupot_resource);
+                    } catch {
+                        bupotResource = null;
+                    }
+                } else {
+                    bupotResource = item.bupot_resource;
                 }
-            } else {
-                bupotResource = item.bupot_resource;
             }
-        }
-        return { ...item, bupotResource };
-    })
-        .filter((item) => item.bupotResource?.tipe_bupot === "BP 21");
+            return { ...item, bupotResource };
+        })
+        // console.log("Dokumen List:", dokumenList);
+        .filter((item) => item.bupotResource?.tipe_bupot === "BP 21"); 
+        // ||  item.bupotResource?.tipe_bupot === "BPPU");
 
 
-    // console.log("Dokumen List:", dokumenList);
+
+
 
     return (
         <div className="p-4">
@@ -92,7 +95,7 @@ const DokumenSayaBadan = ({ data }) => {
                                                 className="bg-purple-900 hover:bg-purple-950 text-white font-bold py-2 px-4 rounded"
                                                 onClick={() =>
                                                     navigate(`/praktikum/${id}/sistem/${akun}/dokumen-saya/pdf/${item.id}`)
-                                                  
+
                                                 }>
                                                 Lihat PDF
                                             </button>
@@ -106,7 +109,7 @@ const DokumenSayaBadan = ({ data }) => {
                     </tbody>
                 </table>
             </div>
-       
+
         </div>
     );
 };

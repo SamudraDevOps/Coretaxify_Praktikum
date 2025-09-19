@@ -10,7 +10,7 @@ export default function Bupot21ViewPDFDokumen({ data }) {
     ? data.find((item) => String(item.id) === String(dokumen))
     : data;
 
-  console.log("pdfdata testing", dokumenObj); // Harus satu objek, bukan array
+  // console.log("pdfdata testing", dokumenObj); 
 
   return (
     <div>
