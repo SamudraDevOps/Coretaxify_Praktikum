@@ -2,9 +2,15 @@ import React from "react";
 import { Document, Page, Text, View, Image, StyleSheet } from "@react-pdf/renderer";
 // import qrImage from "../../../assets/images/qr-web.png";
 import qrImage from "../../../assets/images/qr-web.png";
-import kopImage from "../../../assets/images/KOP/BP21.png";
+import kopImageBP21 from "../../../assets/images/KOP/BP21.png";
+import kopImageBppu from "../../../assets/images/KOP/BPPU.png";
 
 
+const getKopImage = (tipeBupot) => {
+  if (tipeBupot === "BPPU") return kopImageBppu;
+  if (tipeBupot === "BP 21") return kopImageBP21;
+  return kopImageBP21;  // Default nya king
+};
 
 const formatRupiah = (value) =>
   new Intl.NumberFormat("id-ID", {
@@ -128,15 +134,15 @@ const RowFieldNoColon = ({ label, value }) => (
   </View>
 );
 
-const HeaderFixed = ({ kopImage }) => (
+const HeaderFixed = ({ kopImageBP21 }) => (
   <View fixed style={styles.fixedTop}>
-    {kopImage ? <Image style={styles.kop} src={kopImage} /> : null}
+    {kopImageBP21 ? <Image style={styles.kop} src={kopImageBP21} /> : null}
     {/* <View style={styles.titleBlock}> */}
-      {/* <Text style={styles.title1}>KEMENTERIAN KEUANGAN REPUBLIK INDONESIA</Text> */}
-      {/* <Text style={styles.title2}>DIREKTORAT JENDERAL PAJAK</Text> */}
-      {/* <Text style={styles.title3}>BUKTI PEMOTONGAN PAJAK PENGHASILAN PASAL 21</Text> */}
-      {/* <Text style={styles.title3}>YANG TIDAK BERSIFAT FINAL & YANG BERSIFAT FINAL</Text> */}
-      {/* <Text style={styles.codeBadge}>BP21</Text> */}
+    {/* <Text style={styles.title1}>KEMENTERIAN KEUANGAN REPUBLIK INDONESIA</Text> */}
+    {/* <Text style={styles.title2}>DIREKTORAT JENDERAL PAJAK</Text> */}
+    {/* <Text style={styles.title3}>BUKTI PEMOTONGAN PAJAK PENGHASILAN PASAL 21</Text> */}
+    {/* <Text style={styles.title3}>YANG TIDAK BERSIFAT FINAL & YANG BERSIFAT FINAL</Text> */}
+    {/* <Text style={styles.codeBadge}>BP21</Text> */}
     {/* </View> */}
   </View>
 );
@@ -154,9 +160,9 @@ const TableHeaderFixed = () => (
   </View>
 );
 
-const BP21PDFDokumen = ({ data = {}, kopImage: kopImageProp, qrImage: qrImageProp }) => {
+const BP21PDFDokumen = ({ data = {}, kopImageBP21: kopImageProp, qrImage: qrImageProp }) => {
 
-  const kopImg = kopImageProp || kopImage;
+  // const kopImg = kopImageProp || kopImageBP21;
   const qrImg = qrImageProp || qrImage;
 
   let bupotData = data?.bupot_resource;
@@ -170,6 +176,8 @@ const BP21PDFDokumen = ({ data = {}, kopImage: kopImageProp, qrImage: qrImagePro
   if (!bupotData || Object.keys(bupotData).length === 0) {
     bupotData = data;
   }
+  const tipeBupot = bupotData.tipe_bupot;
+  const kopImg = kopImageProp || getKopImage(tipeBupot);
 
   // console.log("BP21PDFDokumen data Testing :", data);
   //  console.log("BP21PDF bupotData coba :", bupotData);
@@ -194,7 +202,7 @@ const BP21PDFDokumen = ({ data = {}, kopImage: kopImageProp, qrImage: qrImagePro
     <Document>
       <Page size="A4" style={styles.page} wrap>
         {/* Header fixed */}
-        <HeaderFixed kopImage={kopImg} />
+        <HeaderFixed kopImageBP21={kopImg} />
         <View style={styles.topSpacer} />
 
         {/* Grid metadata */}

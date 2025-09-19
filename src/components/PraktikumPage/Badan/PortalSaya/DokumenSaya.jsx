@@ -25,8 +25,8 @@ const DokumenSayaBadan = ({ data }) => {
             return { ...item, bupotResource };
         })
         // console.log("Dokumen List:", dokumenList);
-        .filter((item) => item.bupotResource?.tipe_bupot === "BP 21"); 
-        // ||  item.bupotResource?.tipe_bupot === "BPPU");
+        .filter((item) => item.bupotResource?.tipe_bupot === "BP 21" ||
+            item.bupotResource?.tipe_bupot === "BPPU");
 
 
 
