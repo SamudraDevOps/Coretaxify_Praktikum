@@ -39,6 +39,9 @@ export default function UploadSoal() {
           Authorization: `Bearer ${cookies.token}`,
           Accept: "application/json",
         },
+        params: {
+          search: search
+        }
       });
       console.log(data);
       return data;
@@ -354,6 +357,12 @@ export default function UploadSoal() {
             placeholder="Cari Soal   🔎"
             onChange={(e) => setSearch(e.target.value)}
           />
+          <button
+            className="bg-blue-500 p-2 rounded-md text-white text-sm ml-2 hover:cursor-pointer hover:bg-blue-700"
+            onClick={() => refetch()}
+          >
+            Cari
+          </button>
         </div>
         <AlertDialog>
           <AlertDialogTrigger>

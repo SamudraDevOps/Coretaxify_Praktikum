@@ -24,6 +24,7 @@ const EditDosen = () => {
   const [tambahPopupOpen, setTambahPopupOpen] = useState(false);
   const [selectedDosen, setSelectedDosen] = useState(null);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
+  const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [cookies, setCookie] = useCookies(["user"]);
   const [invalidLecturers, setInvalidLecturers] = useState(null);
@@ -38,6 +39,7 @@ const EditDosen = () => {
         },
         params: {
           intent: RoutesApi.getDosenAdmin.intent,
+          search: search,
         },
       });
       console.log(data.data);
@@ -50,7 +52,6 @@ const EditDosen = () => {
     data: dataContract,
     error: errorContract,
   } = getContracts(RoutesApi.url + "api/admin/contract", getCookieToken(), 10000, "desc");
-  console.log(dataContract);
 
   const handleData = (newData) => {
     setData([...data, { id: data.length + 1, ...newData }]);
@@ -363,7 +364,14 @@ const EditDosen = () => {
               type="text"
               className="search-input"
               placeholder="Cari Data Dosen 🔎"
+              onChange={(e) => setSearch(e.target.value)}
             />
+          <button
+            className="bg-blue-500 p-2 rounded-md text-white text-sm ml-2 hover:cursor-pointer hover:bg-blue-700"
+            onClick={() => refetch()}
+          >
+            Cari
+          </button>
           </div>
           {/* <button
             className="add-button mr-3"
