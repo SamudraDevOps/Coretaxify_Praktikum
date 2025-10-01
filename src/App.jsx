@@ -89,7 +89,7 @@ import WajibPajakYangDiwakili from "./components/PraktikumPage/OrangPribadi/Port
 import TwoAuthentication from "./components/PraktikumPage/OrangPribadi/PortalSaya/TwoAuthentication";
 import PermohonanTertunda from "./components/PraktikumPage/OrangPribadi/PortalSaya/PermohonanTertunda";
 import LihatKonsepPribadi from "./components/PraktikumPage/Badan/SPT/ViewKonsepPribadi";
-import CreateKonsepPribadi from "./components/PraktikumPage/Badan/SPT/Spt_Pribadi/CreateKonsepPribadi";
+import CreateKonsepPribadi from "./components/PraktikumPage/Badan/SPT/Spt_Pribadi/Induk/CreateKonsepPribadi";
 
 
 
