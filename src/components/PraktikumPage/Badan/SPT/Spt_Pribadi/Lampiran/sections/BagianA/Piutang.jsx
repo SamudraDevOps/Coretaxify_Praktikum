@@ -3,7 +3,7 @@ import { FaPlus } from "react-icons/fa";
 import TableA2 from "../../components/A2/TableA2";
 import ModalA2 from "../../components/A2/ModalA2";
 
-const HartaBergerak = () => {
+const Piutang = () => {
   // State untuk data A.2
   const [dataA2, setDataA2] = useState([]);
 
@@ -12,12 +12,12 @@ const HartaBergerak = () => {
   const [modalDataA2, setModalDataA2] = useState({
     kode: 0,
     deskripsi: "",
-    buktikepemilikan: 0,
-    atasnama: "",
-    namabank: "",
-    lokasiharta: "",
-    tahunperolehan: "",
-    saldo: 0,
+    lokasipenerima: "",
+    nomoridentitas: "",
+    penerimaPinjaman: "",
+    nilaiPiutang: 0,
+    tahunDimulai: "",
+    SaldoPiutang: 0,
     keterangan: "",
   });
   const [editingId, setEditingId] = useState(null);
@@ -27,12 +27,12 @@ const HartaBergerak = () => {
     setModalDataA2({
       kode: 0,
       deskripsi: "",
-      buktikepemilikan: 0,
-      atasnama: "",
-      namabank: "",
-      lokasiharta: "",
-      tahunperolehan: "",
-      saldo: 0,
+      lokasipenerima: "",
+      nomoridentitas: "",
+      penerimaPinjaman: "",
+      nilaiPiutang: 0,
+      tahunDimulai: "",
+      SaldoPiutang: 0,
       keterangan: "",
     });
     setEditingId(null);
@@ -63,8 +63,17 @@ const HartaBergerak = () => {
   // Function untuk validasi dan save data
   const saveData = () => {
     // Validasi
-    if (!modalDataA2.nik || !modalDataA2.nama) {
-      alert("NIK/NPWP dan Nama wajib diisi!");
+    if (
+      !modalDataA2.deskripsi ||
+      !modalDataA2.lokasipenerima ||
+      !modalDataA2.nomoridentitas ||
+      !modalDataA2.penerimaPinjaman ||
+      !modalDataA2.nilaiPiutang ||
+      !modalDataA2.tahunDimulai ||
+      !modalDataA2.SaldoPiutang ||
+      !modalDataA2.keterangan
+    ) {
+      alert("Semua field wajib diisi!");
       return;
     }
 
@@ -126,4 +135,4 @@ const HartaBergerak = () => {
   );
 };
 
-export default HartaBergerak;
+export default Piutang;

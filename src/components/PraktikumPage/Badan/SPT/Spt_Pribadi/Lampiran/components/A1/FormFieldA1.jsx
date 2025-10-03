@@ -7,16 +7,29 @@ import {
 
 const FormFieldA1 = ({ modalData, updateModalData }) => {
   
-  // Function untuk mengekstrak kode dari deskripsi
-  const handleDeskripsiChange = (selectedValue) => {
-    updateModalData("deskripsi", selectedValue);
+ const handleSelectChange = (fieldName) => (selectedValue) => {
+    updateModalData(fieldName, selectedValue);
 
-    // Ekstrak kode dari value yang dipilih (4 digit pertama)
-    if (selectedValue) {
-      const kode = selectedValue.substring(0, 4);
-      updateModalData("kode", kode);
-    } else {
-      updateModalData("kode", "");
+    // Logic khusus berdasarkan field yang diubah
+    switch (fieldName) {
+      case "deskripsi":
+        // Ekstrak kode dari value yang dipilih (4 digit pertama)
+        if (selectedValue) {
+          const kode = selectedValue.substring(0, 4);
+          updateModalData("kode", kode);
+        } else {
+          updateModalData("kode", "");
+        }
+        break;
+        
+      case "keterangan":
+        // Logic tambahan untuk keterangan jika diperlukan
+        console.log("Keterangan dipilih:", selectedValue);
+        break;
+        
+      default:
+        // Field lain tidak perlu logic khusus
+        break;
     }
   };
 
@@ -49,7 +62,7 @@ const FormFieldA1 = ({ modalData, updateModalData }) => {
         </label>
         <select
           value={modalData.deskripsi || ""}
-          onChange={(e) => handleDeskripsiChange(e.target.value)}
+          onChange={(e) => handleSelectChange("deskripsi")(e.target.value)}
           className="flex-1 p-2 border rounded-md focus:ring-2 focus:ring-blue-500 text-sm"
         >
           <option value="">Pilih jenis harta</option>

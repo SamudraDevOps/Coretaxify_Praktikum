@@ -52,7 +52,9 @@ const TableA1 = ({ data, onEdit, onDelete }) => {
               >
                 <td className="p-2 border-b text-center">{index + 1}</td>
                 <td className="p-2 border-b">{item.kode || "-"}</td>
-                <td className="p-2 border-b">{item.deskripsi || "-"}</td>
+                <td className="p-2 border-b">
+                  {item.deskripsi.replace(/^\d{4}:\s*/, "") || "-"}
+                </td>{" "}
                 <td className="p-2 border-b">{item.buktikepemilikan || "-"}</td>
                 <td className="p-2 border-b">{item.atasnama || "-"}</td>
                 <td className="p-2 border-b">{item.namabank || "-"}</td>
