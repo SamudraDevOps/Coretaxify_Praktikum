@@ -1,8 +1,14 @@
 import React, { useState } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import HeaderLampiran from "./HeaderLampiran";
-import KasdanSetaraKas from "./sections/BagianA/KasdanSetaraKas";
-import HartaBergerak from "./sections/BagianA/Piutang";
+import {
+  Piutang,
+  Investasi,
+  HartaBergerak,
+  KasdanSetaraKas,
+} from "./sections/BagianA";
+
+//                                                ^
 
 const Lampiran_1 = ({ data }) => {
   const [showBagianA, setShowBagianA] = useState(true);
@@ -12,8 +18,9 @@ const Lampiran_1 = ({ data }) => {
 
   // State untuk sub-bagian dalam Bagian A
   const [showKasdanSetaraKas, setShowKasdanSetaraKas] = useState(false);
+  const [showPiutang, setShowPiutang] = useState(false);
+  const [showInvestasi, setShowInvestasi] = useState(false);
   const [showHartaBergerak, setShowHartaBergerak] = useState(false);
-  const [showHartaLainnya, setShowHartaLainnya] = useState(false);
 
   // State untuk data lampiran
   const [formData, setFormData] = useState({
@@ -79,28 +86,27 @@ const Lampiran_1 = ({ data }) => {
   return (
     <div className="space-y-4">
       <ul className="space-y-2 pl-3">
-        {
-          [
-            " Harta pada Akhir Tahun Pajak",
-            "Hutang pada Akhir Tahun Pajak",
-            "Daftar Angota Keluarga yang Menjadi Tanggungan",
-            "Penghasilan Neto Dalam Negeri dan Pekerjaan",
-            "Daftar Bukti Pemotongan/Pemungutan PPh ",
-          ].map((t, i) => (
-            <li
-              key={i}
-              className="relative pl-5 uppercase tracking-wide
+        {[
+          " Harta pada Akhir Tahun Pajak",
+          "Hutang pada Akhir Tahun Pajak",
+          "Daftar Angota Keluarga yang Menjadi Tanggungan",
+          "Penghasilan Neto Dalam Negeri dan Pekerjaan",
+          "Daftar Bukti Pemotongan/Pemungutan PPh ",
+        ].map((t, i) => (
+          <li
+            key={i}
+            className="relative pl-5 uppercase tracking-wide
                  before:content-['•'] before:absolute before:left-0
                 before:text-black before:font-extrabold before:text-xl"
-            >
-              {t}
-            </li>
-          ))}
+          >
+            {t}
+          </li>
+        ))}
       </ul>
 
       {/* Header Lampiran */}
       <HeaderLampiran />
-      
+
       {/* Bagian A - Harta pada Akhir Tahun Pajak */}
       <div>
         <div
@@ -115,7 +121,6 @@ const Lampiran_1 = ({ data }) => {
 
         {showBagianA && (
           <div className="border rounded-md p-4 space-y-4">
-            
             {/* Sub-Bagian A.1 - Harta Tidak Bergerak */}
             <div className="ml-4">
               <div
@@ -130,76 +135,66 @@ const Lampiran_1 = ({ data }) => {
 
               {showKasdanSetaraKas && (
                 <div className="border rounded-md p-4">
-                  {/* Menggunakan komponen KasdanSetaraKas yang sudah ada */}
                   <KasdanSetaraKas />
                 </div>
               )}
             </div>
-  
+
             {/* Sub-Bagian A.2 - Harta Bergerak */}
+            <div className="ml-4">
+              <div
+                className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
+                onClick={() => setShowPiutang(!showPiutang)}
+              >
+                <h4 className="text-lg font-semibold">A.2 PIUTANG</h4>
+                {showPiutang ? <FaChevronUp /> : <FaChevronDown />}
+              </div>
+
+              {showPiutang && (
+                <div className="border rounded-md p-4">
+                  <Piutang />
+                </div>
+              )}
+            </div>
+
+            {/* Sub-Bagian A.3 -  Investasi/Sekuritas */}
+            <div className="ml-4">
+              <div
+                className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
+                onClick={() => setShowInvestasi(!showInvestasi)}
+              >
+                <h4 className="text-lg font-semibold">
+                  A.3 INVESTASI / SEKURITAS
+                </h4>
+                {showInvestasi ? <FaChevronUp /> : <FaChevronDown />}
+              </div>
+
+              {showInvestasi && (
+                <div className="border rounded-md p-4">
+                  <Investasi/>
+                </div>
+              )}
+            </div>
+
+            {/* Sub-Bagian A.3 -  Investasi/Sekuritas */}
             <div className="ml-4">
               <div
                 className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
                 onClick={() => setShowHartaBergerak(!showHartaBergerak)}
               >
                 <h4 className="text-lg font-semibold">
-                  A.2 PIUTANG
+                  A.4 HARTA BERGERAK
                 </h4>
                 {showHartaBergerak ? <FaChevronUp /> : <FaChevronDown />}
               </div>
 
               {showHartaBergerak && (
-                  <div className="border rounded-md p-4">
-                  {/* Menggunakan komponen HartaTidakBergerak yang sudah ada */}
-                  <HartaBergerak />
+                <div className="border rounded-md p-4">
+                  <HartaBergerak/>
                 </div>
               )}
             </div>
-
-            {/* Sub-Bagian A.3 - Harta Lainnya */}
-            <div className="ml-4">
-              <div
-                className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
-                onClick={() => setShowHartaLainnya(!showHartaLainnya)}
-              >
-                <h4 className="text-lg font-semibold">
-                  A.3 Harta Lainnya (Deposito, Investasi)
-                </h4>
-                {showHartaLainnya ? <FaChevronUp /> : <FaChevronDown />}
-              </div>
-
-              {showHartaLainnya && (
-                <div className="border rounded-md p-4 space-y-3">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Jenis Investasi
-                      </label>
-                      <select className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500">
-                        <option value="">Pilih Jenis</option>
-                        <option value="deposito">Deposito</option>
-                        <option value="saham">Saham</option>
-                        <option value="obligasi">Obligasi</option>
-                        <option value="emas">Emas</option>
-                        <option value="lainnya">Lainnya</option>
-                      </select>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Nilai Investasi (Rp)
-                      </label>
-                      <input
-                        type="number"
-                        min={0}
-                        className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500"
-                        placeholder="0"
-                      />
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-                     </div>
+          </div>
         )}
       </div>
 
