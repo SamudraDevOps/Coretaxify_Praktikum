@@ -4,7 +4,6 @@ import TableA3 from "../../components/A3/TableA3";
 import ModalA3 from "../../components/A3/ModalA3";
 
 const Investasi = () => {
-  // State untuk data A.2
   const [dataA3, setDataA3] = useState([]);
 
   // State untuk modal

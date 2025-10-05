@@ -1,8 +1,8 @@
 import React from 'react';
 import { FaTimes } from 'react-icons/fa';
-import FormFieldA3 from './FormFieldA3';
+import FormFieldA6 from './FormFieldA6';
 
-const ModalA3 = ({ 
+const ModalA6 = ({ 
   showModal, 
   closeModal, 
   modalData, 
@@ -22,7 +22,7 @@ const ModalA3 = ({
         {/* Header Modal */}
         <div className="flex justify-between items-center mb-6">
           <h3 className="text-xl font-semibold text-gray-800">
-            {editingId ? 'Edit Data Investasi / Sekuitas' : 'Tambah Data Investasi / Sekuitas'}
+            {editingId ? 'Edit Data Aset Lain lain' : 'Tambah Data Aset Lain lain'}
           </h3>
           <button
             onClick={closeModal}
@@ -33,7 +33,7 @@ const ModalA3 = ({
         </div>
 
         {/* Form */}
-        <FormFieldA3 
+        <FormFieldA6
           modalData={modalData}
           updateModalData={updateModalData}
         />
@@ -58,4 +58,4 @@ const ModalA3 = ({
   );
 };
 
-export default ModalA3;
+export default ModalA6;

@@ -2,16 +2,19 @@ import React from "react";
 import { FaTrash, FaEdit } from "react-icons/fa";
 import { formatRupiah } from "../../utils/formatCurrency";
 
-const TableA1 = ({ data, onEdit, onDelete }) => {
+const TableA5 = ({ data, onEdit, onDelete }) => {
 
-  // Function untuk menghitung total saldo
-  const calculateTotalSaldo = () => {
-    return data.reduce(
-      (total, item) => total + (item.saldo || 0),
-      0
-    );
+    const getKepemilikanText = (value) => {
+    switch(value) {
+      case "1": return "Warisan";
+      case "2": return "Hasil Sendiri";
+      case "3": return "Utang";
+      case "4": return "Hibah";
+      case "5": return "Hadiah";
+      case "6": return "Sumber Lainnya";
+      default: return "-";
+    }
   };
-
 
   return (
     <div className="w-full overflow-x-auto bg-white shadow-md rounded-lg">
@@ -20,15 +23,17 @@ const TableA1 = ({ data, onEdit, onDelete }) => {
           <tr>
             <th className="p-2 border-b">No</th>
             <th className="p-2 border-b min-w-[200px]">Kode</th>
-            <th className="p-2 border-b min-w-[150px]">Deskripsi</th>
-            <th className="p-2 border-b min-w-[150px]">
-              Bukti Kepemilikan/Nomor Akun
+            <th className="p-2 border-b min-w-[200px]">Deskripsi</th>
+            <th className="p-2 border-b min-w-[200px]">Lokasi Harta</th>
+            <th className="p-2 border-b min-w-[200px]">
+              Ukuran Properti - Tanah (m2)
             </th>
-            <th className="p-2 border-b min-w-[150px]">Atas Nama</th>
-            <th className="p-2 border-b min-w-[150px]">Nama Bank/Institusi</th>
-            <th className="p-2 border-b min-w-[150px]">Lokasi Harta</th>
+            <th className="p-2 border-b min-w-[150px]">Ukuran Properti - Bangunan (m2)</th>
+            <th className="p-2 border-b min-w-[150px]"> Sumber Kepemilikan</th>
+            <th className="p-2 border-b min-w-[150px]">Nomor Sertifikat</th>
             <th className="p-2 border-b min-w-[150px]">Tahun Perolehan</th>
-            <th className="p-2 border-b min-w-[150px]">Saldo (Rp)</th>
+            <th className="p-2 border-b min-w-[150px]">Biaya Perolehan</th>
+            <th className="p-2 border-b min-w-[150px]">Nilai Saat ini</th>
             <th className="p-2 border-b min-w-[150px]">Keterangan</th>
             <th className="p-2 border-b min-w-[100px]">Aksi</th>
           </tr>
@@ -50,25 +55,22 @@ const TableA1 = ({ data, onEdit, onDelete }) => {
                 <td className="p-2 border-b">{item.kode || "-"}</td>
                 <td className="p-2 border-b">
                   {item.deskripsi.replace(/^\d{4}:\s*/, "") || "-"}
-                </td>{" "}
-                <td className="p-2 border-b">{item.buktikepemilikan || "-"}</td>
-                <td className="p-2 border-b">{item.atasnama || "-"}</td>
-                <td className="p-2 border-b">{item.namabank || "-"}</td>
-                <td className="p-2 border-b">{item.lokasiharta || "-"}</td>
-                <td className="p-2 border-b">{item.tahunperolehan || "-"}</td>
-                <td className="p-2 border-b">{formatRupiah(item.saldo)}</td>
+                </td>
+                {/* <td className="p-2 border-b">{item.deskripsi  || "-"}</td> */}
+                <td className="p-2 border-b">{item.lokasiHarta || "-"}</td>
+                <td className="p-2 border-b">{item.ukuranTanah || "-"}</td>
+                <td className="p-2 border-b">{item.ukuranBangunan || "-"}</td>
+                <td className="p-2 border-b">{getKepemilikanText(item.sumberKepemilikan)}</td>
+                <td className="p-2 border-b">{item.nomorSertifikat || "-"}</td>
+                <td className="p-2 border-b">{item.tahunPerolehan}</td>
+                <td className="p-2 border-b">
+                  {formatRupiah(item.biayaPerolehan)}
+                </td>
+                <td className="p-2 border-b">
+                  {formatRupiah(item.nilaiSaatIni)}
+                </td>
                 <td className="p-2 border-b">{item.keterangan || "-"}</td>
-                {/* <td className="p-2 border-b">
-                  {item.status && (
-                    <span className={`px-2 py-1 rounded-full text-xs ${
-                      item.status === 'Aktif' 
-                        ? 'bg-green-100 text-green-800' 
-                        : 'bg-red-100 text-red-800'
-                    }`}>
-                      {item.status}
-                    </span>
-                  )}
-                </td> */}
+
                 <td className="p-2 border-b">
                   <div className="flex gap-1 justify-center">
                     <button
@@ -92,20 +94,23 @@ const TableA1 = ({ data, onEdit, onDelete }) => {
           )}
         </tbody>
 
-           {/* Footer dengan total saldo */}
-        {data.length > 0 && (
+        {/* Footer dengan total */}
+        {/* {data.length > 0 && (
           <tfoot className="text-gray-800 font-semibold bg-gray-100">
             <tr>
-              <td className="p-2 text-right" colSpan={8}> 
-                Total Saldo:
+              <td className="p-2 text-right" colSpan={6}>
+                Total Penghasilan Bruto:
               </td>
-              <td className="p-2 text-center bg-green-100"> 
-                {formatRupiah(calculateTotalSaldo())}
+              <td className="p-2 text-center">
+                {formatRupiah(calculateTotalPenghasilanBruto())}
               </td>
-              <td className="p-2" colSpan={2}></td> 
+              <td className="p-2 text-center">
+                {formatRupiah(calculateTotalPajakPenghasilan())}
+              </td>
+              <td className="p-2" colSpan={6}></td>
             </tr>
             <tr>
-              <td className="p-2 text-right" colSpan={10}> 
+              <td className="p-2 text-right" colSpan={13}>
                 <span className="text-blue-600">
                   Jumlah Data: {data.length} item
                 </span>
@@ -113,10 +118,10 @@ const TableA1 = ({ data, onEdit, onDelete }) => {
               <td className="p-2"></td>
             </tr>
           </tfoot>
-        )}
+        )} */}
       </table>
     </div>
   );
 };
 
-export default TableA1;
+export default TableA5;

@@ -5,7 +5,10 @@ import {
   Piutang,
   Investasi,
   HartaBergerak,
+  HartaTidakBergerak,
   KasdanSetaraKas,
+  HartaLainnya,
+  Ikhtisar
 } from "./sections/BagianA";
 
 //                                                ^
@@ -21,6 +24,9 @@ const Lampiran_1 = ({ data }) => {
   const [showPiutang, setShowPiutang] = useState(false);
   const [showInvestasi, setShowInvestasi] = useState(false);
   const [showHartaBergerak, setShowHartaBergerak] = useState(false);
+  const [showHartaTidakBergerak, setShowHartaTidakBergerak] = useState(false);
+  const [showHartaLainnya, setShowHartaLainnya] = useState(false);
+  const [showIkhtisar, setShowIkhtisar] = useState(false);
 
   // State untuk data lampiran
   const [formData, setFormData] = useState({
@@ -176,7 +182,7 @@ const Lampiran_1 = ({ data }) => {
               )}
             </div>
 
-            {/* Sub-Bagian A.3 -  Investasi/Sekuritas */}
+            {/* Sub-Bagian A.4 -  Harta Bergerak */}
             <div className="ml-4">
               <div
                 className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
@@ -194,6 +200,64 @@ const Lampiran_1 = ({ data }) => {
                 </div>
               )}
             </div>
+
+             {/* Sub-Bagian A.5 -  Harta Tidak Bergerak */}
+            <div className="ml-4">
+              <div
+                className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
+                onClick={() => setShowHartaTidakBergerak(!showHartaTidakBergerak)}
+              >
+                <h4 className="text-lg font-semibold">
+                  A.5 HARTA TIDAK BERGERAK (TERMASUK TANAH DAN/ATAU BANGUNAN)
+                </h4>
+                {showHartaTidakBergerak ? <FaChevronUp /> : <FaChevronDown />}
+              </div>
+
+              {showHartaTidakBergerak && (
+                <div className="border rounded-md p-4">
+                  <HartaTidakBergerak/>
+                </div>
+              )}
+            </div>
+
+                {/* Sub-Bagian A.6 -  Harta Lainnya*/}
+            <div className="ml-4">
+              <div
+                className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
+                onClick={() => setShowHartaLainnya(!showHartaLainnya)}
+              >
+                <h4 className="text-lg font-semibold">
+                  A.6 HARTA LAINNYA 
+                </h4>
+                {showHartaLainnya ? <FaChevronUp /> : <FaChevronDown />}
+              </div>
+
+              {showHartaLainnya && (
+                <div className="border rounded-md p-4">
+                  <HartaLainnya/>
+                </div>
+              )}
+            </div>
+            
+                {/* Sub-Bagian A.7 -  Ikhtisar*/}
+            <div className="ml-4">
+              <div
+                className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
+                onClick={() => setShowIkhtisar(!showIkhtisar)}
+              >
+                <h4 className="text-lg font-semibold">
+                  A.7 IKHTISAR
+                </h4>
+                {showIkhtisar ? <FaChevronUp /> : <FaChevronDown />}
+              </div>
+
+              {showIkhtisar && (
+                <div className="border rounded-md p-4">
+                  <Ikhtisar/>
+                </div>
+              )}
+            </div>
+
           </div>
         )}
       </div>

@@ -4,7 +4,6 @@ import TableA4 from "../../components/A4/TableA4";
 import ModalA4 from "../../components/A4/ModalA4";
 
 const HartaBergerak = () => {
-  // State untuk data A.2
   const [dataA4, setDataA4] = useState([]);
 
   // State untuk modal

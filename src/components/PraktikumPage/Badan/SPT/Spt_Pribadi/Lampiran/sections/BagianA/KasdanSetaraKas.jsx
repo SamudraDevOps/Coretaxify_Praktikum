@@ -4,7 +4,6 @@ import TableA1 from "../../components/A1/TableA1";
 import ModalA1 from "../../components/A1/ModalA1";
 
 const KasdanSetaraKas = () => {
-  // State untuk data A.1
   const [dataA1, setDataA1] = useState([]);
 
   // State untuk modal

@@ -1,59 +1,57 @@
 import React, { useState } from "react";
 import { FaPlus } from "react-icons/fa";
-import TableA2 from "../../components/A2/TableA2";
-import ModalA2 from "../../components/A2/ModalA2";
+import TableA6 from "../../components/A6/TableA6";
+import ModalA6 from "../../components/A6/ModalA6";
 
-const Piutang = () => {
-  const [dataA2, setDataA2] = useState([]);
+const HartaLainLain = () => {
+  const [dataA6, setDataA6] = useState([]);
 
   // State untuk modal
-  const [showModalA2, setShowModalA2] = useState(false);
-  const [modalDataA2, setModalDataA2] = useState({
+  const [showModalA6, setShowModalA6] = useState(false);
+  const [modalDataA6, setModalDataA6] = useState({
     kode: 0,
     deskripsi: "",
-    lokasipenerima: "",
-    nomoridentitas: "",
-    penerimaPinjaman: "",
-    nilaiPiutang: 0,
-    tahunDimulai: "",
-    SaldoPiutang: 0,
+    tahunPerolehan: "",
+    biayaPerolehan: "",
+    nilaiSaatIni: "",
+    buktiKepemilikan: "",
+    InformasiTambahan: "",
     keterangan: "",
   });
   const [editingId, setEditingId] = useState(null);
 
   // Function untuk membuka modal tambah
   const openAddModal = () => {
-    setModalDataA2({
+    setModalDataA6({
       kode: 0,
       deskripsi: "",
-      lokasipenerima: "",
-      nomoridentitas: "",
-      penerimaPinjaman: "",
-      nilaiPiutang: 0,
-      tahunDimulai: "",
-      SaldoPiutang: 0,
+      tahunPerolehan: "",
+      biayaPerolehan: "",
+      nilaiSaatIni: "",
+      buktiKepemilikan: "",
+      InformasiTambahan: "",
       keterangan: "",
     });
     setEditingId(null);
-    setShowModalA2(true);
+    setShowModalA6(true);
   };
 
   // Function untuk membuka modal edit
   const openEditModal = (item) => {
-    setModalDataA2(item);
+    setModalDataA6(item);
     setEditingId(item.id);
-    setShowModalA2(true);
+    setShowModalA6(true);
   };
 
   // Function untuk menutup modal
   const closeModal = () => {
-    setShowModalA2(false);
+    setShowModalA6(false);
     setEditingId(null);
   };
 
   // Function untuk update modal data
   const updateModalData = (field, value) => {
-    setModalDataA2((prev) => ({
+    setModalDataA6((prev) => ({
       ...prev,
       [field]: value,
     }));
@@ -61,16 +59,16 @@ const Piutang = () => {
 
   // Function untuk validasi dan save data
   const saveData = () => {
+    console.log("Data yang disimpan:", modalDataA6);
     // Validasi
     if (
-      !modalDataA2.deskripsi ||
-      !modalDataA2.lokasipenerima ||
-      !modalDataA2.nomoridentitas ||
-      !modalDataA2.penerimaPinjaman ||
-      !modalDataA2.nilaiPiutang ||
-      !modalDataA2.tahunDimulai ||
-      !modalDataA2.SaldoPiutang ||
-      !modalDataA2.keterangan
+      !modalDataA6.deskripsi ||
+      !modalDataA6.tahunPerolehan ||
+      !modalDataA6.biayaPerolehan ||
+      !modalDataA6.nilaiSaatIni ||
+      !modalDataA6.buktiKepemilikan ||
+      !modalDataA6.InformasiTambahan ||
+      !modalDataA6.keterangan
     ) {
       alert("Semua field wajib diisi!");
       return;
@@ -78,18 +76,18 @@ const Piutang = () => {
 
     if (editingId) {
       // Update existing data
-      setDataA2((prevData) =>
+      setDataA6((prevData) =>
         prevData.map((item) =>
-          item.id === editingId ? { ...modalDataA2, id: editingId } : item
+          item.id === editingId ? { ...modalDataA6, id: editingId } : item
         )
       );
     } else {
       // Add new data
       const newData = {
-        ...modalDataA2,
+        ...modalDataA6,
         id: Date.now(), // Simple ID generation
       };
-      setDataA2((prevData) => [...prevData, newData]);
+      setDataA6((prevData) => [...prevData, newData]);
     }
 
     closeModal();
@@ -98,17 +96,17 @@ const Piutang = () => {
   // Function untuk delete data
   const deleteData = (id) => {
     if (window.confirm("Apakah Anda yakin ingin menghapus data ini?")) {
-      setDataA2((prevData) => prevData.filter((item) => item.id !== id));
+      setDataA6((prevData) => prevData.filter((item) => item.id !== id));
     }
   };
 
   return (
     <div className="space-y-3">
       {/* Modal */}
-      <ModalA2
-        showModal={showModalA2}
+      <ModalA6
+        showModal={showModalA6}
         closeModal={closeModal}
-        modalData={modalDataA2}
+        modalData={modalDataA6}
         updateModalData={updateModalData}
         onSave={saveData}
         editingId={editingId}
@@ -129,9 +127,9 @@ const Piutang = () => {
       </div>
 
       {/* Table */}
-      <TableA2 data={dataA2} onEdit={openEditModal} onDelete={deleteData} />
+      <TableA6 data={dataA6} onEdit={openEditModal} onDelete={deleteData} />
     </div>
   );
 };
 
-export default Piutang;
+export default HartaLainLain;
