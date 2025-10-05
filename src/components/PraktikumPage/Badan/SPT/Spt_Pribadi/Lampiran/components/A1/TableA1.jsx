@@ -3,19 +3,15 @@ import { FaTrash, FaEdit } from "react-icons/fa";
 import { formatRupiah } from "../../utils/formatCurrency";
 
 const TableA1 = ({ data, onEdit, onDelete }) => {
-  const calculateTotalPenghasilanBruto = () => {
+
+  // Function untuk menghitung total saldo
+  const calculateTotalSaldo = () => {
     return data.reduce(
-      (total, item) => total + (item.penghasilanBruto || 0),
+      (total, item) => total + (item.saldo || 0),
       0
     );
   };
 
-  const calculateTotalPajakPenghasilan = () => {
-    return data.reduce(
-      (total, item) => total + (item.pajakPenghasilan || 0),
-      0
-    );
-  };
 
   return (
     <div className="w-full overflow-x-auto bg-white shadow-md rounded-lg">
@@ -96,23 +92,20 @@ const TableA1 = ({ data, onEdit, onDelete }) => {
           )}
         </tbody>
 
-        {/* Footer dengan total */}
-        {/* {data.length > 0 && (
+           {/* Footer dengan total saldo */}
+        {data.length > 0 && (
           <tfoot className="text-gray-800 font-semibold bg-gray-100">
             <tr>
-              <td className="p-2 text-right" colSpan={6}>
-                Total Penghasilan Bruto:
+              <td className="p-2 text-right" colSpan={8}> 
+                Total Saldo:
               </td>
-              <td className="p-2 text-center">
-                {formatRupiah(calculateTotalPenghasilanBruto())}
+              <td className="p-2 text-center bg-green-100"> 
+                {formatRupiah(calculateTotalSaldo())}
               </td>
-              <td className="p-2 text-center">
-                {formatRupiah(calculateTotalPajakPenghasilan())}
-              </td>
-              <td className="p-2" colSpan={6}></td>
+              <td className="p-2" colSpan={2}></td> 
             </tr>
             <tr>
-              <td className="p-2 text-right" colSpan={13}>
+              <td className="p-2 text-right" colSpan={10}> 
                 <span className="text-blue-600">
                   Jumlah Data: {data.length} item
                 </span>
@@ -120,7 +113,7 @@ const TableA1 = ({ data, onEdit, onDelete }) => {
               <td className="p-2"></td>
             </tr>
           </tfoot>
-        )} */}
+        )}
       </table>
     </div>
   );

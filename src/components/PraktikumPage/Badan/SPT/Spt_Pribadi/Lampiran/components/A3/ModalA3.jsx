@@ -22,7 +22,7 @@ const ModalA3 = ({
         {/* Header Modal */}
         <div className="flex justify-between items-center mb-6">
           <h3 className="text-xl font-semibold text-gray-800">
-            {editingId ? 'Edit Data Piutang' : 'Tambah Data Piutang'}
+            {editingId ? 'Edit Data Investasi / Sekuitas' : 'Tambah Data Investasi / Sekuitas'}
           </h3>
           <button
             onClick={closeModal}

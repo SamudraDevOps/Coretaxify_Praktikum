@@ -4,7 +4,6 @@ import TableA2 from "../../components/A2/TableA2";
 import ModalA2 from "../../components/A2/ModalA2";
 
 const Piutang = () => {
-  // State untuk data A.2
   const [dataA2, setDataA2] = useState([]);
 
   // State untuk modal
