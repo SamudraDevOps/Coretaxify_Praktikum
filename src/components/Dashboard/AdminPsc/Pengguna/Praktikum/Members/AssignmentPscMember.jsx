@@ -23,6 +23,7 @@ import {
 import { RxCross1 } from "react-icons/rx";
 import { IntentEnum } from "@/enums/IntentEnum";
 // import AssignmentPscMemberDetailPopup from "./AssignmentPscMemberDetailPopup";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 const AssignmentPscMember = () => {
   const { assignmentId } = useParams();
@@ -78,7 +79,7 @@ const AssignmentPscMember = () => {
 
   // Fetch members data
   const { isLoading, isError, data, error, refetch } = useQuery({
-    queryKey: ["assignment_members", url],
+    queryKey: ["assignment_members", url, currentPage],
     queryFn: async () => {
       const { data } = await axios.get(url, {
         headers: {
@@ -238,6 +239,43 @@ const AssignmentPscMember = () => {
       </div>
     );
   }
+
+  const handleDataRefresh = () => {
+    refetch();
+  };
+
+  // Handle page change
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  // Pagination
+  const getPageFromUrl = (url) => {
+    if (!url) return null;
+    const matches = url.match(/[?&]page=(\d+)/);
+    return matches ? parseInt(matches[1]) : null;
+  };
+
+  let totalPages = null;
+  let firstPage = null;
+  let lastPage = null;
+  let nextPage = null;
+  let prevPage = null;
+
+  if (!isLoading) {
+    // Get page numbers from links
+    totalPages = data.meta?.last_page;
+    firstPage = data.links?.first ? getPageFromUrl(data.links.first) : 1;
+    lastPage = data.links?.last ? getPageFromUrl(data.links.last) : totalPages;
+    nextPage = data.links?.next ? getPageFromUrl(data.links.next) : null;
+    prevPage = data.links?.prev ? getPageFromUrl(data.links.prev) : null;
+  }
+
+  const handlePageClick = (page) => {
+    if (page !== currentPage && page >= 1 && page <= totalPages) {
+      handlePageChange(page);
+    }
+  };
 
   // Error state
   if (isError) {
@@ -402,33 +440,103 @@ const AssignmentPscMember = () => {
             )}
           </tbody>
         </table>
-        <div className="pagination-container">
-          <div className="pagination-info">
-            {data?.meta
-              ? `Showing ${data.meta.from} to ${data.meta.to} of ${data.meta.total} entries`
-              : "No data available"}
+        <div className="pagination-container flex-justify-between">
+          <div className="flex space-x-2">
+            <p className="text-sm text-gray-700">
+              Page {currentPage} of {totalPages}
+            </p>
           </div>
-          <div className="pagination">
+          <div className="flex space-x-2">
             <button
-              className="page-item"
-              onClick={() => {
-                if (data?.links?.prev) setUrl(data.links.prev);
-              }}
-              disabled={!data?.links?.prev}
+              onClick={() => handlePageChange(firstPage)}
+              disabled={!prevPage}
+              className={`px-3 py-1 rounded ${
+                !prevPage
+                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                  : "bg-blue-500 text-white hover:bg-blue-600"
+              }`}
             >
-              &lt;
-            </button>
-            <button className="page-item active">
-              {data?.meta?.current_page || 1}
+              First
             </button>
             <button
-              className="page-item"
-              onClick={() => {
-                if (data?.links?.next) setUrl(data.links.next);
-              }}
-              disabled={!data?.links?.next}
+              onClick={() => handlePageChange(prevPage || 1)}
+              disabled={!prevPage}
+              className={`px-3 py-1 rounded ${
+                !prevPage
+                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                  : "bg-blue-500 text-white hover:bg-blue-600"
+              }`}
             >
-              &gt;
+              <FaChevronLeft className="h-4 w-4" />
+            </button>
+
+            {/* Show page numbers */}
+            <div className="flex space-x-1">
+              {Array.from({ length: totalPages }, (_, i) => i + 1)
+                .filter((pageNum) => {
+                  // Show first, last, and pages around current
+                  return (
+                    pageNum === 1 ||
+                    pageNum === totalPages ||
+                    (pageNum >= currentPage - 1 && pageNum <= currentPage + 1)
+                  );
+                })
+                .map((pageNum, index, array) => {
+                  // Add ellipsis if needed
+                  const showEllipsisBefore =
+                    index > 0 && array[index - 1] !== pageNum - 1;
+                  const showEllipsisAfter =
+                    index < array.length - 1 &&
+                    array[index + 1] !== pageNum + 1;
+
+                  return (
+                    <React.Fragment key={pageNum}>
+                      {showEllipsisBefore && (
+                        <span className="px-3 py-1 bg-gray-100 rounded">
+                          ...
+                        </span>
+                      )}
+                      <button
+                        onClick={() => handlePageClick(pageNum)}
+                        className={`px-3 py-1 rounded ${
+                          currentPage === pageNum
+                            ? "bg-blue-600 text-white"
+                            : "bg-gray-200 hover:bg-gray-300"
+                        }`}
+                      >
+                        {pageNum}
+                      </button>
+                      {showEllipsisAfter && (
+                        <span className="px-3 py-1 bg-gray-100 rounded">
+                          ...
+                        </span>
+                      )}
+                    </React.Fragment>
+                  );
+                })}
+            </div>
+
+            <button
+              onClick={() => handlePageChange(nextPage || totalPages)}
+              disabled={!nextPage}
+              className={`px-3 py-1 rounded ${
+                !nextPage
+                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                  : "bg-blue-500 text-white hover:bg-blue-600"
+              }`}
+            >
+              <FaChevronRight className="h-4 w-4" />
+            </button>
+            <button
+              onClick={() => handlePageChange(lastPage)}
+              disabled={!nextPage}
+              className={`px-3 py-1 rounded ${
+                !nextPage
+                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                  : "bg-blue-500 text-white hover:bg-blue-600"
+              }`}
+            >
+              Last
             </button>
           </div>
         </div>
