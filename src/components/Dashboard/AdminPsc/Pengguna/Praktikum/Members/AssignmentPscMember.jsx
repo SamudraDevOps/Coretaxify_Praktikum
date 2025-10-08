@@ -369,7 +369,7 @@ const AssignmentPscMember = () => {
             {filteredData.length > 0 ? (
               filteredData.map((item, index) => (
                 <tr key={item.id}>
-                  <td>{index + 1}</td>
+                  <td>{(currentPage - 1) * itemsPerPage + index + 1}</td>
                   <td>{item.user.name}</td>
                   <td>{item.user.email}</td>
                   <td>{item.user.status}</td>

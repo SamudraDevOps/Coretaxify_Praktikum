@@ -12,12 +12,15 @@ import { Alert, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 import { IntentEnum } from "@/enums/IntentEnum";
 import { useLocation, useNavigate, useOutletContext } from "react-router-dom";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 const PraktikumPsc = () => {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isUpdateOpen, setIsUpdateOpen] = useState(false);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
   const [selectedAssignment, setSelectedAssignment] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 20;
   const [cookies] = useCookies(["user"]);
   const [url, setUrl] = useState(RoutesApi.psc.assignments.index().url);
   const [search, setSearch] = useState("");
@@ -84,7 +87,7 @@ const PraktikumPsc = () => {
 
   // Fetch assignments data
   const { isLoading, isError, data, error, refetch } = useQuery({
-    queryKey: ["assignments_data", url],
+    queryKey: ["assignments_data", url, currentPage],
     queryFn: async () => {
       const { data } = await axios.get(url, {
         headers: {
@@ -95,9 +98,14 @@ const PraktikumPsc = () => {
           column_filters: {
             tipe: "assignment",
             user_id: user.data.id
-          }
+          },
+          page: currentPage,
+          perPage: itemsPerPage,
+          search: search,
         }
       });
+
+      console.log(data);
       return data;
     },
   });
@@ -403,6 +411,44 @@ const PraktikumPsc = () => {
   const handleSearchChange = (e) => {
     setSearch(e.target.value);
   };
+  
+  // Function to refresh data after actions
+  const handleDataRefresh = () => {
+    refetch();
+  };
+
+  // Pagination
+  // Handle page change
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const getPageFromUrl = (url) => {
+    if (!url) return null;
+    const matches = url.match(/[?&]page=(\d+)/);
+    return matches ? parseInt(matches[1]) : null;
+  };
+
+  let totalPages = null;
+  let firstPage = null;
+  let lastPage = null;
+  let nextPage = null;
+  let prevPage = null;
+
+  if (!isLoading) {
+    // Get page numbers from links
+    totalPages = data.meta?.last_page;
+    firstPage = data.links?.first ? getPageFromUrl(data.links.first) : 1;
+    lastPage = data.links?.last ? getPageFromUrl(data.links.last) : totalPages;
+    nextPage = data.links?.next ? getPageFromUrl(data.links.next) : null;
+    prevPage = data.links?.prev ? getPageFromUrl(data.links.prev) : null;
+  }
+
+  const handlePageClick = (page) => {
+    if (page !== currentPage && page >= 1 && page <= totalPages) {
+      handlePageChange(page);
+    }
+  };
 
   // Loading state
   if (isLoading) {
@@ -459,6 +505,12 @@ const PraktikumPsc = () => {
             value={search}
             onChange={handleSearchChange}
           />
+          <button
+            className="bg-blue-500 p-2 rounded-md text-white text-sm ml-2 hover:cursor-pointer hover:bg-blue-700"
+            onClick={() => handleDataRefresh()}
+          >
+            Cari
+          </button>
         </div>
         <button className={pathRoute === "penilaian" ? "hidden" : "add-button"} onClick={handleCreate}>
           Tambah Praktikum
@@ -495,9 +547,9 @@ const PraktikumPsc = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredData.map((item, index) => (
+            {data.data.map((item, index) => (
               <tr key={item.id}>
-                <td>{index + 1}</td>
+                <td>{(currentPage - 1) * itemsPerPage + index + 1}</td>
                 <td>{item.name}</td>
                 <td>{item.assignment_code}</td>
                 <td>{item.group ? item.group.name : "-"}</td>
@@ -559,33 +611,103 @@ const PraktikumPsc = () => {
             ))}
           </tbody>
         </table>
-        <div className="pagination-container">
-          <div className="pagination-info">
-            {data?.meta
-              ? `Showing ${data.meta.from} to ${data.meta.to} of ${data.meta.total} entries`
-              : "No data available"}
+        <div className="pagination-container flex-justify-between">
+          <div className="flex space-x-2">
+            <p className="text-sm text-gray-700">
+              Page {currentPage} of {totalPages}
+            </p>
           </div>
-          <div className="pagination">
+          <div className="flex space-x-2">
             <button
-              className="page-item"
-              onClick={() => {
-                if (data?.links?.prev) setUrl(data.links.prev);
-              }}
-              disabled={!data?.links?.prev}
+              onClick={() => handlePageChange(firstPage)}
+              disabled={!prevPage}
+              className={`px-3 py-1 rounded ${
+                !prevPage
+                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                  : "bg-blue-500 text-white hover:bg-blue-600"
+              }`}
             >
-              &lt;
-            </button>
-            <button className="page-item active">
-              {data?.meta?.current_page || 1}
+              First
             </button>
             <button
-              className="page-item"
-              onClick={() => {
-                if (data?.links?.next) setUrl(data.links.next);
-              }}
-              disabled={!data?.links?.next}
+              onClick={() => handlePageChange(prevPage || 1)}
+              disabled={!prevPage}
+              className={`px-3 py-1 rounded ${
+                !prevPage
+                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                  : "bg-blue-500 text-white hover:bg-blue-600"
+              }`}
             >
-              &gt;
+              <FaChevronLeft className="h-4 w-4" />
+            </button>
+
+            {/* Show page numbers */}
+            <div className="flex space-x-1">
+              {Array.from({ length: totalPages }, (_, i) => i + 1)
+                .filter((pageNum) => {
+                  // Show first, last, and pages around current
+                  return (
+                    pageNum === 1 ||
+                    pageNum === totalPages ||
+                    (pageNum >= currentPage - 1 && pageNum <= currentPage + 1)
+                  );
+                })
+                .map((pageNum, index, array) => {
+                  // Add ellipsis if needed
+                  const showEllipsisBefore =
+                    index > 0 && array[index - 1] !== pageNum - 1;
+                  const showEllipsisAfter =
+                    index < array.length - 1 &&
+                    array[index + 1] !== pageNum + 1;
+
+                  return (
+                    <React.Fragment key={pageNum}>
+                      {showEllipsisBefore && (
+                        <span className="px-3 py-1 bg-gray-100 rounded">
+                          ...
+                        </span>
+                      )}
+                      <button
+                        onClick={() => handlePageClick(pageNum)}
+                        className={`px-3 py-1 rounded ${
+                          currentPage === pageNum
+                            ? "bg-blue-600 text-white"
+                            : "bg-gray-200 hover:bg-gray-300"
+                        }`}
+                      >
+                        {pageNum}
+                      </button>
+                      {showEllipsisAfter && (
+                        <span className="px-3 py-1 bg-gray-100 rounded">
+                          ...
+                        </span>
+                      )}
+                    </React.Fragment>
+                  );
+                })}
+            </div>
+
+            <button
+              onClick={() => handlePageChange(nextPage || totalPages)}
+              disabled={!nextPage}
+              className={`px-3 py-1 rounded ${
+                !nextPage
+                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                  : "bg-blue-500 text-white hover:bg-blue-600"
+              }`}
+            >
+              <FaChevronRight className="h-4 w-4" />
+            </button>
+            <button
+              onClick={() => handlePageChange(lastPage)}
+              disabled={!nextPage}
+              className={`px-3 py-1 rounded ${
+                !nextPage
+                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                  : "bg-blue-500 text-white hover:bg-blue-600"
+              }`}
+            >
+              Last
             </button>
           </div>
         </div>
