@@ -460,14 +460,6 @@ const Main = () => {
           />
           <Route
             path="/instruktur/praktikum"
-            element={<InstrukturPraktikum />}
-          />
-          <Route
-            path="/instruktur/praktikum/terisi"
-            element={<FilledAssignment />}
-          />
-          <Route
-            path="/instruktur/praktikum/kosong"
             element={<BlankAssignment />}
           />
         </Route>

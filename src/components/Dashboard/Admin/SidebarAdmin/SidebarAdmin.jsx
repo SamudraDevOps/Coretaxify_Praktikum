@@ -496,18 +496,10 @@ const SidebarAdmin = () => {
                     <li
                       className="dropdown-item"
                       onClick={() => {
-                        window.location.href = `/${cookies.role}/praktikum/kosong`;
+                        window.location.href = `/${cookies.role}/praktikum`;
                       }}
                     >
-                      Praktikum Kosong
-                    </li>
-                    <li
-                      className="dropdown-item"
-                      onClick={() => {
-                        window.location.href = `/${cookies.role}/praktikum/terisi`;
-                      }}
-                    >
-                      Praktikum Terisi
+                      Praktikum
                     </li>
                   </ul>
                 </AccordionContent>
