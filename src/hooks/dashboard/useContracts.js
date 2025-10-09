@@ -6,7 +6,7 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import { RoutesApi } from "@/Routes";
 
-export const getContracts = (url, cookie, perPage = 20, sortDirection = "asc", search = "") =>
+export const getContracts = (url, cookie, perPage = 20, sortDirection = "asc", search = "", currentPage = "1") =>
   useQuery({
     queryKey: [dashboard_const.contracts, url],
     queryFn: async () => {
@@ -19,6 +19,7 @@ export const getContracts = (url, cookie, perPage = 20, sortDirection = "asc", s
           sortDirection: sortDirection,
           search: search,
           perPage: perPage,
+          currentPage: currentPage,
         },
       });
       console.log(data.data);
