@@ -8,16 +8,18 @@ import {
   HartaTidakBergerak,
   KasdanSetaraKas,
   HartaLainnya,
-  Ikhtisar
-} from "./sections/BagianA";
-
-//                                                ^
+  Ikhtisar,
+  UtangAkhir,
+  Penghasilan,
+  Pemotongan,
+} from "./sections";
 
 const Lampiran_1 = ({ data }) => {
   const [showBagianA, setShowBagianA] = useState(true);
   const [showBagianB, setShowBagianB] = useState(false);
   const [showBagianC, setShowBagianC] = useState(false);
   const [showBagianD, setShowBagianD] = useState(false);
+  const [showBagianE, setShowBagianE] = useState(false);
 
   // State untuk sub-bagian dalam Bagian A
   const [showKasdanSetaraKas, setShowKasdanSetaraKas] = useState(false);
@@ -119,9 +121,7 @@ const Lampiran_1 = ({ data }) => {
           className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
           onClick={() => setShowBagianA(!showBagianA)}
         >
-          <h3 className="text-lg font-semibold">
-            A. HARTA PADA AKHIR TAHUN PAJAK
-          </h3>
+          <h3 className="text-lg font-semibold">A. HARTA PADA AKHIR TAHUN PAJAK</h3>
           {showBagianA ? <FaChevronUp /> : <FaChevronDown />}
         </div>
 
@@ -133,9 +133,7 @@ const Lampiran_1 = ({ data }) => {
                 className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
                 onClick={() => setShowKasdanSetaraKas(!showKasdanSetaraKas)}
               >
-                <h4 className="text-lg font-semibold">
-                  A.1 KAS DAN SETARA KAS
-                </h4>
+                <h4 className="text-lg font-semibold">A.1 KAS DAN SETARA KAS</h4>
                 {showKasdanSetaraKas ? <FaChevronUp /> : <FaChevronDown />}
               </div>
 
@@ -169,15 +167,13 @@ const Lampiran_1 = ({ data }) => {
                 className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
                 onClick={() => setShowInvestasi(!showInvestasi)}
               >
-                <h4 className="text-lg font-semibold">
-                  A.3 INVESTASI / SEKURITAS
-                </h4>
+                <h4 className="text-lg font-semibold">A.3 INVESTASI / SEKURITAS</h4>
                 {showInvestasi ? <FaChevronUp /> : <FaChevronDown />}
               </div>
 
               {showInvestasi && (
                 <div className="border rounded-md p-4">
-                  <Investasi/>
+                  <Investasi />
                 </div>
               )}
             </div>
@@ -188,20 +184,18 @@ const Lampiran_1 = ({ data }) => {
                 className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
                 onClick={() => setShowHartaBergerak(!showHartaBergerak)}
               >
-                <h4 className="text-lg font-semibold">
-                  A.4 HARTA BERGERAK
-                </h4>
+                <h4 className="text-lg font-semibold">A.4 HARTA BERGERAK</h4>
                 {showHartaBergerak ? <FaChevronUp /> : <FaChevronDown />}
               </div>
 
               {showHartaBergerak && (
                 <div className="border rounded-md p-4">
-                  <HartaBergerak/>
+                  <HartaBergerak />
                 </div>
               )}
             </div>
 
-             {/* Sub-Bagian A.5 -  Harta Tidak Bergerak */}
+            {/* Sub-Bagian A.5 -  Harta Tidak Bergerak */}
             <div className="ml-4">
               <div
                 className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
@@ -215,268 +209,122 @@ const Lampiran_1 = ({ data }) => {
 
               {showHartaTidakBergerak && (
                 <div className="border rounded-md p-4">
-                  <HartaTidakBergerak/>
+                  <HartaTidakBergerak />
                 </div>
               )}
             </div>
 
-                {/* Sub-Bagian A.6 -  Harta Lainnya*/}
+            {/* Sub-Bagian A.6 -  Harta Lainnya*/}
             <div className="ml-4">
               <div
                 className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
                 onClick={() => setShowHartaLainnya(!showHartaLainnya)}
               >
-                <h4 className="text-lg font-semibold">
-                  A.6 HARTA LAINNYA 
-                </h4>
+                <h4 className="text-lg font-semibold">A.6 HARTA LAINNYA</h4>
                 {showHartaLainnya ? <FaChevronUp /> : <FaChevronDown />}
               </div>
 
               {showHartaLainnya && (
                 <div className="border rounded-md p-4">
-                  <HartaLainnya/>
+                  <HartaLainnya />
                 </div>
               )}
             </div>
-            
-                {/* Sub-Bagian A.7 -  Ikhtisar*/}
+
+            {/* Sub-Bagian A.7 -  Ikhtisar*/}
             <div className="ml-4">
               <div
                 className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
                 onClick={() => setShowIkhtisar(!showIkhtisar)}
               >
-                <h4 className="text-lg font-semibold">
-                  A.7 IKHTISAR
-                </h4>
+                <h4 className="text-lg font-semibold">A.7 IKHTISAR</h4>
                 {showIkhtisar ? <FaChevronUp /> : <FaChevronDown />}
               </div>
 
               {showIkhtisar && (
                 <div className="border rounded-md p-4">
-                  <Ikhtisar/>
+                  <Ikhtisar />
                 </div>
               )}
             </div>
-
           </div>
         )}
       </div>
 
-      {/* Bagian B - Penghasilan Bruto */}
+      {/* Bagian B - Utang pada Akhir Tahun Pajak */}
       <div>
         <div
           className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
           onClick={() => setShowBagianB(!showBagianB)}
         >
-          <h3 className="text-lg font-semibold">
-            BAGIAN B - PENGHASILAN BRUTO
-          </h3>
+          <h3 className="text-lg font-semibold">B. UTANG PADA AKHIR TAHUN PAJAK</h3>
           {showBagianB ? <FaChevronUp /> : <FaChevronDown />}
         </div>
 
         {showBagianB && (
           <div className="border rounded-md p-4 space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Gaji Pokok
-                </label>
-                <input
-                  type="number"
-                  min={0}
-                  value={formData.gajiPokok}
-                  onChange={(e) =>
-                    updateField("gajiPokok", +e.target.value || 0)
-                  }
-                  className="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500"
-                />
-                <p className="text-xs text-gray-500 mt-1">
-                  {formatRupiah(formData.gajiPokok)}
-                </p>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Tunjangan
-                </label>
-                <input
-                  type="number"
-                  min={0}
-                  value={formData.tunjangan}
-                  onChange={(e) =>
-                    updateField("tunjangan", +e.target.value || 0)
-                  }
-                  className="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500"
-                />
-                <p className="text-xs text-gray-500 mt-1">
-                  {formatRupiah(formData.tunjangan)}
-                </p>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Bonus/THR
-                </label>
-                <input
-                  type="number"
-                  min={0}
-                  value={formData.bonus}
-                  onChange={(e) => updateField("bonus", +e.target.value || 0)}
-                  className="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500"
-                />
-                <p className="text-xs text-gray-500 mt-1">
-                  {formatRupiah(formData.bonus)}
-                </p>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Total Penghasilan Bruto
-                </label>
-                <input
-                  type="number"
-                  value={formData.totalPenghasilanBruto}
-                  readOnly
-                  className="w-full p-3 border rounded-md bg-gray-100 text-gray-600"
-                />
-                <p className="text-xs text-green-600 mt-1 font-medium">
-                  {formatRupiah(formData.totalPenghasilanBruto)}
-                </p>
-              </div>
+            {/* Sub-Bagian A.1 - Harta Tidak Bergerak */}
+            <div className="ml-4">
+              <UtangAkhir />
             </div>
           </div>
         )}
       </div>
 
-      {/* Bagian C - Pengurang */}
+      {/* Bagian C - Daftar Anggota Keluarga yang Menjadi Tanggungan */}
       <div>
         <div
           className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
           onClick={() => setShowBagianC(!showBagianC)}
         >
-          <h3 className="text-lg font-semibold">BAGIAN C - PENGURANG</h3>
+          <h3 className="text-lg font-semibold">
+            C. DAFTAR ANGGOTA KELUARGA YANG MENJADI TANGGUNGAN
+          </h3>
           {showBagianC ? <FaChevronUp /> : <FaChevronDown />}
         </div>
 
         {showBagianC && (
           <div className="border rounded-md p-4 space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Biaya Jabatan (5% maks 6jt/tahun)
-                </label>
-                <input
-                  type="number"
-                  min={0}
-                  value={formData.biayaJabatan}
-                  onChange={(e) =>
-                    updateField("biayaJabatan", +e.target.value || 0)
-                  }
-                  className="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500"
-                />
-                <p className="text-xs text-gray-500 mt-1">
-                  {formatRupiah(formData.biayaJabatan)}
-                </p>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Iuran Pensiun/JHT
-                </label>
-                <input
-                  type="number"
-                  min={0}
-                  value={formData.iuranPensiun}
-                  onChange={(e) =>
-                    updateField("iuranPensiun", +e.target.value || 0)
-                  }
-                  className="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500"
-                />
-                <p className="text-xs text-gray-500 mt-1">
-                  {formatRupiah(formData.iuranPensiun)}
-                </p>
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Total Pengurang
-              </label>
-              <input
-                type="number"
-                value={formData.totalPengurang}
-                readOnly
-                className="w-full p-3 border rounded-md bg-gray-100 text-gray-600"
-              />
-              <p className="text-xs text-green-600 mt-1 font-medium">
-                {formatRupiah(formData.totalPengurang)}
-              </p>
-            </div>
+            {/* Sub-Bagian A.1 - Harta Tidak Bergerak */}
+            <div className="ml-4">{/* <UtangAkhir /> */}</div>
           </div>
         )}
       </div>
 
-      {/* Bagian D - Penghasilan Neto */}
+      {/* Bagian D - Penghasilan Neto Dalam Negeri Dari Pekerjaan */}
       <div>
         <div
-          className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-green-100 w-full"
+          className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
           onClick={() => setShowBagianD(!showBagianD)}
         >
-          <h3 className="text-lg font-semibold text-green-800">
-            BAGIAN D - PENGHASILAN NETO (HASIL AKHIR)
-          </h3>
+          <h3 className="text-lg font-semibold">D. PENGHASILAN NETO DALAM NEGERI DARI PEKERJAAN</h3>
           {showBagianD ? <FaChevronUp /> : <FaChevronDown />}
         </div>
 
         {showBagianD && (
-          <div className="border rounded-md p-4 space-y-4 bg-green-50">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-green-700 mb-2">
-                  Penghasilan Neto (Bruto - Pengurang)
-                </label>
-                <input
-                  type="number"
-                  value={formData.penghasilanNeto}
-                  readOnly
-                  className="w-full p-3 border rounded-md bg-white text-green-800 font-bold text-lg"
-                />
-                <p className="text-sm text-green-600 mt-1 font-bold">
-                  {formatRupiah(formData.penghasilanNeto)}
-                </p>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  PPh Pasal 21 yang Dipotong
-                </label>
-                <input
-                  type="number"
-                  min={0}
-                  value={formData.pphDipotong}
-                  onChange={(e) =>
-                    updateField("pphDipotong", +e.target.value || 0)
-                  }
-                  className="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500"
-                />
-                <p className="text-xs text-gray-500 mt-1">
-                  {formatRupiah(formData.pphDipotong)}
-                </p>
-              </div>
+          <div className="border rounded-md p-4 space-y-4">
+            {/* Sub-Bagian A.1 - Harta Tidak Bergerak */}
+            <div className="ml-4">
+              <Penghasilan />
             </div>
+          </div>
+        )}
+      </div>
+      {/* Bagian E - Daftar Bukti Pemotongan/Pemungutan PPh */}
+      <div>
+        <div
+          className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
+          onClick={() => setShowBagianE(!showBagianE)}
+        >
+          <h3 className="text-lg font-semibold">E. DAFTAR BUKTI PEMOTONGAN/PEMUNGUTAN PPH</h3>
+          {showBagianE ? <FaChevronUp /> : <FaChevronDown />}
+        </div>
 
-            <div className="bg-white p-4 rounded-lg border-2 border-green-300">
-              <p className="text-center text-green-800 font-bold text-lg">
-                TOTAL PENGHASILAN NETO DARI PEKERJAAN
-              </p>
-              <p className="text-center text-green-600 font-bold text-2xl mt-2">
-                {formatRupiah(formData.penghasilanNeto)}
-              </p>
-              <p className="text-center text-xs text-gray-500 mt-1">
-                *Nilai ini akan otomatis terbawa ke Form Induk bagian B.1.a
-              </p>
+        {showBagianE && (
+          <div className="border rounded-md p-4 space-y-4">
+            {/* Sub-Bagian A.1 - Harta Tidak Bergerak */}
+            <div className="ml-4">
+              <Pemotongan />
             </div>
           </div>
         )}

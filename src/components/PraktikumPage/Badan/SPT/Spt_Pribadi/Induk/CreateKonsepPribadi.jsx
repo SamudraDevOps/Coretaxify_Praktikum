@@ -44,7 +44,8 @@ import {
   PertanyaanI,
   PertanyaanJ,
 } from "./sections";
-import { Lampiran_1 } from "../Lampiran";
+import { Lampiran_1,Lampiran_2, Lampiran_3A1 } from "../Lampiran";
+
 
 const CreateKonsepPribadi = () => {
   const { id, akun, idSpt } = useParams();
@@ -151,7 +152,8 @@ const CreateKonsepPribadi = () => {
 
   // STEP 5: State untuk lampiran yang aktif
 
-  const [availableLampiran, setAvailableLampiran] = useState([]);
+const [dynamicLampiran, setDynamicLampiran] = useState([]);
+  const availableLampiran = dynamicLampiran;
 
   // STEP 6: Function yang menerima data dari child components
 
@@ -163,54 +165,74 @@ const CreateKonsepPribadi = () => {
   };
 
   // STEP 7: Effect untuk mengelola lampiran berdasarkan jawaban
-  useEffect(() => {
-    const newLampiran = [];
+ useEffect(() => {
+      const allLampiran = [];
 
-    // Lampiran I - Penghasilan dari Pekerjaan (1.a = Ya)
-    if (answersState.r1a === true) {
-      newLampiran.push({
-        id: "lampiran-1",
-        title: "L-I",
-        subtitle: "Lampiran I - Penghasilan dari Pekerjaan",
-        component: "Lampiran_1",
-        badge: "Wajib Diisi",
-      });
-    }
+  // const newDynamicLampiran = [];
 
-    // Lampiran 3A-4 - Penghasilan dari Usaha (1.b.1 = Ya)
-    if (answersState.hasPenghasilanUsaha === true) {
-      newLampiran.push({
-        id: "lampiran-3a4",
-        title: "L-3A4",
-        subtitle: "Lampiran 3A-4 - Penghasilan dari Usaha",
-        component: "Lampiran_3A4",
-        badge: "Wajib Diisi",
-      });
-    }
+  // Lampiran I - Penghasilan dari Pekerjaan (1.a = Ya)
+  if (answersState.r1a === true) {
+    allLampiran.push({
+      id: "lampiran-1",
+      title: "L-I",
+      subtitle: "Lampiran I - Penghasilan dari Pekerjaan",
+      component: "Lampiran_1",
+      badge: "Wajib Diisi",
+      order: 1, // Urutan pertama
+    });
+  }
 
-    // Lampiran 2 - Penghasilan Luar Negeri (1.d = Ya)
-    if (answersState.hasPenghasilanLuarNegeri === true) {
-      newLampiran.push({
-        id: "lampiran-2",
-        title: "L-II",
-        subtitle: "Lampiran 2 - Penghasilan Luar Negeri",
-        component: "Lampiran_2",
-        badge: "Wajib Diisi",
-      });
-    }
+  // Lampiran 2 - SELALU TERSEDIA
 
-    setAvailableLampiran(newLampiran);
-  }, [answersState]);
+    allLampiran.push({
+    id: "lampiran-2",
+    title: "L-II",
+    subtitle: "Lampiran 2 - Penghasilan Luar Negeri",
+    component: "Lampiran_2",
+    badge: "Tersedia",
+    order: 2,  // Urutan kedua
+  });
 
-  // STEP 8: Function untuk render content lampiran
+    // Lampiran 3A1 - SELALU TERSEDIA
+
+    allLampiran.push({
+    id: "lampiran-3A1",
+    title: "L-3A-1",
+    subtitle: "Lampiran 3A1 - Rekonsiliasi Laporan Keuangan ",
+    component: "Lampiran_3A1",
+    badge: "Tersedia",
+    order: 2,  // Urutan kedua
+  });
+
+  // Lampiran 3A-4 - Penghasilan dari Usaha (1.b.1 = Ya)
+  if (answersState.hasPenghasilanUsaha === true) {
+    allLampiran.push({
+      id: "lampiran-3a4",
+      title: "L-3A4",
+      subtitle: "Lampiran 3A-4 - Penghasilan dari Usaha",
+      component: "Lampiran_3A4",
+      badge: "Wajib Diisi",
+    });
+  }
+
+     // CUSTOM SORTING berdasarkan property 'order'
+  const sortedLampiran = allLampiran.sort((a, b) => {
+    return a.order - b.order; // Sort berdasarkan order, bukan ID
+  });
+
+
+  setDynamicLampiran(sortedLampiran);
+}, [answersState]);
+
+  // STEP 8: Function untuk render content lampiran (Import lampiran ditampilkan di atas)
   const renderLampiranContent = (componentName, data) => {
     switch (componentName) {
       case "Lampiran_1":
         return <Lampiran_1 data={data} />;
-      case "Lampiran_3A4":
-        return <div>Lampiran 3A-4 akan diimplementasikan</div>;
       case "Lampiran_2":
-        return <div>Lampiran 2 akan diimplementasikan</div>;
+        return <Lampiran_2 data={data} />;
+      case "Lampiran_3A1":
+        return <Lampiran_3A1 data={data} />;
       default:
         return (
           <div className="text-center py-8">
