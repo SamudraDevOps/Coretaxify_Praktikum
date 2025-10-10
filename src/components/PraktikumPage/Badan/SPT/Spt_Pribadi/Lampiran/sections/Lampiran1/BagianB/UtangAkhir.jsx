@@ -3,7 +3,6 @@ import { FaPlus } from "react-icons/fa";
 import TableUtang from "../../../components/Lampiran1/UtangAkhir/TableUtang";
 import ModalUtang from "../../../components/Lampiran1/UtangAkhir/ModalUtang";
 
-
 const UtangAkhir = () => {
   const [dataUtang, setDataUtang] = useState([]);
 
@@ -23,11 +22,11 @@ const UtangAkhir = () => {
   const openAddModal = () => {
     setModalDataUtang({
       kode: 0,
-    deskripsi: "",
-    npwpKreditur: "",
-    negara: "",
-    tahunPerolehan: "",
-    saldo: 0,
+      deskripsi: "",
+      npwpKreditur: "",
+      negara: "",
+      tahunPerolehan: "",
+      saldo: 0,
     });
     setEditingId(null);
     setShowModalUtang(true);
@@ -56,7 +55,19 @@ const UtangAkhir = () => {
 
   // Function untuk validasi dan save data
   const saveData = () => {
-        console.log("Data yang disimpan:", modalDataAUtang);
+    console.log("Data yang disimpan:", modalDataAUtang);
+
+    // FIXED: Validasi yang handle 0 dengan benar
+    const isValidValue = (value) => {
+      return value !== null && value !== undefined && value !== "";
+    };
+
+    // Convert null to 0 for saving
+
+    const dataToSave = {
+      ...modalDataAUtang,
+      saldo: modalDataAUtang.saldo ?? 0,
+    };
 
     // Validasi
     if (
@@ -64,9 +75,7 @@ const UtangAkhir = () => {
       !modalDataAUtang.npwpKreditur ||
       !modalDataAUtang.negara ||
       !modalDataAUtang.tahunPerolehan ||
-      !modalDataAUtang.saldo
-   
-      
+      !isValidValue(modalDataAUtang.saldo)
     ) {
       alert("Semua field wajib diisi!");
       return;
@@ -76,13 +85,13 @@ const UtangAkhir = () => {
       // Update existing data
       setDataUtang((prevData) =>
         prevData.map((item) =>
-          item.id === editingId ? { ...modalDataAUtang, id: editingId } : item
+          item.id === editingId ? { ...dataToSave, id: editingId } : item
         )
       );
     } else {
       // Add new data
       const newData = {
-        ...modalDataAUtang,
+        ...dataToSave,
         id: Date.now(), // Simple ID generation
       };
       setDataUtang((prevData) => [...prevData, newData]);

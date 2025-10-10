@@ -14,9 +14,9 @@ const Piutang = () => {
     lokasipenerima: "",
     nomoridentitas: "",
     penerimaPinjaman: "",
-    nilaiPiutang: 0,
+    nilaiPiutang: "",
     tahunDimulai: "",
-    SaldoPiutang: 0,
+    SaldoPiutang: "",
     keterangan: "",
   });
   const [editingId, setEditingId] = useState(null);
@@ -29,9 +29,9 @@ const Piutang = () => {
       lokasipenerima: "",
       nomoridentitas: "",
       penerimaPinjaman: "",
-      nilaiPiutang: 0,
+      nilaiPiutang: "",
       tahunDimulai: "",
-      SaldoPiutang: 0,
+      SaldoPiutang: "",
       keterangan: "",
     });
     setEditingId(null);
@@ -61,15 +61,30 @@ const Piutang = () => {
 
   // Function untuk validasi dan save data
   const saveData = () => {
-    // Validasi
+    console.log("Data yang disimpan:", modalDataA2);
+
+     // FIXED: Validasi yang handle 0 dengan benar
+    const isValidValue = (value) => {
+      return value !== null && value !== undefined && value !== "";
+    };
+
+  // Convert null to 0 for saving
+
+      const dataToSave = {
+    ...modalDataA2,
+    nilaiPiutang: modalDataA2.nilaiPiutang ?? 0,
+    SaldoPiutang: modalDataA2.SaldoPiutang ?? 0,
+  };
+
+      // Validasi 
     if (
       !modalDataA2.deskripsi ||
       !modalDataA2.lokasipenerima ||
       !modalDataA2.nomoridentitas ||
       !modalDataA2.penerimaPinjaman ||
-      !modalDataA2.nilaiPiutang ||
+      !isValidValue(modalDataA2.nilaiPiutang) ||
       !modalDataA2.tahunDimulai ||
-      !modalDataA2.SaldoPiutang ||
+      !isValidValue(modalDataA2.SaldoPiutang) ||
       !modalDataA2.keterangan
     ) {
       alert("Semua field wajib diisi!");

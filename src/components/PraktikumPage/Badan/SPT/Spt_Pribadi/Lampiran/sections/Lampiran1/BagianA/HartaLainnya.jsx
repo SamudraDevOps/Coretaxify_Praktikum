@@ -60,12 +60,26 @@ const HartaLainLain = () => {
   // Function untuk validasi dan save data
   const saveData = () => {
     console.log("Data yang disimpan:", modalDataA6);
+
+// FIXED: Validasi yang handle 0 dengan benar
+    const isValidValue = (value) => {
+      return value !== null && value !== undefined && value !== "";
+    };
+
+  // Convert null to 0 for saving
+
+      const dataToSave = {
+    ...modalDataA6,
+    biayaPerolehan: modalDataA6.biayaPerolehan ?? 0,
+    nilaiSaatIni: modalDataA6.nilaiSaatIni ?? 0,
+  };
+
     // Validasi
     if (
       !modalDataA6.deskripsi ||
       !modalDataA6.tahunPerolehan ||
-      !modalDataA6.biayaPerolehan ||
-      !modalDataA6.nilaiSaatIni ||
+      !isValidValue(modalDataA6.biayaPerolehan) ||
+      !isValidValue(modalDataA6.nilaiSaatIni) ||
       !modalDataA6.buktiKepemilikan ||
       !modalDataA6.InformasiTambahan ||
       !modalDataA6.keterangan
@@ -78,13 +92,13 @@ const HartaLainLain = () => {
       // Update existing data
       setDataA6((prevData) =>
         prevData.map((item) =>
-          item.id === editingId ? { ...modalDataA6, id: editingId } : item
+          item.id === editingId ? { ...dataToSave, id: editingId } : item
         )
       );
     } else {
       // Add new data
       const newData = {
-        ...modalDataA6,
+        ...dataToSave,
         id: Date.now(), // Simple ID generation
       };
       setDataA6((prevData) => [...prevData, newData]);

@@ -61,6 +61,7 @@ const KasdanSetaraKas = () => {
 
   // Save data ke backend
   const saveDataA1 = async () => {
+    
     try {
       setSaving(true);
       console.log(" Saving A1 data", dataA1);
@@ -156,8 +157,22 @@ const KasdanSetaraKas = () => {
 
   // Function untuk validasi dan save data
   const saveData = () => {
+
+       // FIXED: Validasi yang handle 0 dengan benar
+    const isValidValue = (value) => {
+      return value !== null && value !== undefined && value !== "";
+    };
+
+  // Convert null to 0 for saving
+
+      const dataToSave = {
+    ...modalDataA1,
+    dasarPengenaanPajak: modalDataA1.dasarPengenaanPajak ?? 0,
+    pphdipotong: modalDataA1.pphdipotong ?? 0,
+  };
     // Validasi
-    if (!modalDataA1.deskripsi || !modalDataA1.saldo) {
+    if (!modalDataA1.deskripsi || 
+      !isValidValue(modalDataA1.saldo)) {
       alert("Deskripsi dan saldo wajib diisi!");
       return;
     }
@@ -166,13 +181,13 @@ const KasdanSetaraKas = () => {
       // Update existing data
       setDataA1((prevData) =>
         prevData.map((item) =>
-          item.id === editingId ? { ...modalDataA1, id: editingId } : item
+          item.id === editingId ? { ...dataToSave, id: editingId } : item
         )
       );
     } else {
       // Add new data
       const newData = {
-        ...modalDataA1,
+        ...dataToSave,
         id: Date.now(), // Simple ID generation
       };
       setDataA1((prevData) => [...prevData, newData]);

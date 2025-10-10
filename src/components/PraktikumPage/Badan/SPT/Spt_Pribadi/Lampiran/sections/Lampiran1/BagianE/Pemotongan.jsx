@@ -59,14 +59,27 @@ const Pemotongan = () => {
   const saveData = () => {
     console.log("Data yang disimpan:", modalDataAPemotongan);
 
+    // FIXED: Validasi yang handle 0 dengan benar
+    const isValidValue = (value) => {
+      return value !== null && value !== undefined && value !== "";
+    };
+
+    // Convert null to 0 for saving
+
+    const dataToSave = {
+      ...modalDataAPemotongan,
+      dasarPengenaanPajak: modalDataAPemotongan.dasarPengenaanPajak ?? 0,
+      pphdipotong: modalDataAPemotongan.pphdipotong ?? 0,
+    };
+
     // Validasi
     if (
       !modalDataAPemotongan.npwpPemotong ||
       !modalDataAPemotongan.nomorBuktiPemotongan ||
       !modalDataAPemotongan.tanggalPemotongan ||
       !modalDataAPemotongan.jenisPajak ||
-      !modalDataAPemotongan.dasarPengenaanPajak ||
-      !modalDataAPemotongan.pphdipotong
+      !isValidValue(modalDataAPemotongan.dasarPengenaanPajak) ||
+      !isValidValue(modalDataAPemotongan.pphdipotong)
     ) {
       alert("Semua field wajib diisi!");
       return;
@@ -77,14 +90,14 @@ const Pemotongan = () => {
       setDataPemotongan((prevData) =>
         prevData.map((item) =>
           item.id === editingId
-            ? { ...modalDataAPemotongan, id: editingId }
+            ? { ...dataToSave, id: editingId }
             : item
         )
       );
     } else {
       // Add new data
       const newData = {
-        ...modalDataAPemotongan,
+        ...dataToSave,
         id: Date.now(), // Simple ID generation
       };
       setDataPemotongan((prevData) => [...prevData, newData]);

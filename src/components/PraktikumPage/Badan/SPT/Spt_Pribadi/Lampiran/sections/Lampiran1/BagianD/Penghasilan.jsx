@@ -55,12 +55,26 @@ const Penghasilan = () => {
   const saveData = () => {
     console.log("Data yang disimpan:", modalDataAPenghasilan);
 
+    // FIXED: Validasi yang handle 0 dengan benar
+    const isValidValue = (value) => {
+      return value !== null && value !== undefined && value !== "";
+    };
+
+    // Convert null to 0 for saving
+
+    const dataToSave = {
+      ...modalDataAPenghasilan,
+      penghasilanBruto: modalDataAPenghasilan.penghasilanBruto ?? 0,
+      pengurangan: modalDataAPenghasilan.pengurangan ?? 0,
+      penghasilanNeto: modalDataAPenghasilan.penghasilanNeto ?? 0,
+    };
+
     // Validasi
     if (
       !modalDataAPenghasilan.pemberiKerja ||
-      !modalDataAPenghasilan.penghasilanBruto ||
-      !modalDataAPenghasilan.pengurangan ||
-      !modalDataAPenghasilan.penghasilanNeto
+      !isValidValue(modalDataAPenghasilan.penghasilanBruto) ||
+      !isValidValue(modalDataAPenghasilan.pengurangan) ||
+      !isValidValue(modalDataAPenghasilan.penghasilanNeto)
     ) {
       alert("Semua field wajib diisi!");
       return;
@@ -70,13 +84,13 @@ const Penghasilan = () => {
       // Update existing data
       setDataPenghasilan((prevData) =>
         prevData.map((item) =>
-          item.id === editingId ? { ...modalDataAPenghasilan, id: editingId } : item
+          item.id === editingId ? { ...dataToSave, id: editingId } : item
         )
       );
     } else {
       // Add new data
       const newData = {
-        ...modalDataAPenghasilan,
+        ...dataToSave,
         id: Date.now(), // Simple ID generation
       };
       setDataPenghasilan((prevData) => [...prevData, newData]);
@@ -119,11 +133,7 @@ const Penghasilan = () => {
       </div>
 
       {/* Table */}
-      <TablePenghasilan
-        data={dataPenghasilan}
-        onEdit={openEditModal}
-        onDelete={deleteData}
-      />
+      <TablePenghasilan data={dataPenghasilan} onEdit={openEditModal} onDelete={deleteData} />
     </div>
   );
 };

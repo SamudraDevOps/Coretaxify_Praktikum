@@ -17,8 +17,8 @@ const HartaTidakBergerak = () => {
     sumberKepemilikan: "",
     nomorSertifikat: "",
     tahunPerolehan: "",
-    biayaPerolehan: 0,
-    nilaiSaatIni: 0,
+    biayaPerolehan: "",
+    nilaiSaatIni: "",
     keterangan: "",
   });
   const [editingId, setEditingId] = useState(null);
@@ -34,8 +34,8 @@ const HartaTidakBergerak = () => {
     sumberKepemilikan: "",
     nomorSertifikat: "",
     tahunPerolehan: "",
-    biayaPerolehan: 0,
-    nilaiSaatIni: 0,
+    biayaPerolehan: "",
+    nilaiSaatIni: "",
     keterangan: "",
     });
     setEditingId(null);
@@ -66,6 +66,20 @@ const HartaTidakBergerak = () => {
   // Function untuk validasi dan save data
   const saveData = () => {
     console.log("Data yang disimpan:", modalDataA5);
+
+        // FIXED: Validasi yang handle 0 dengan benar
+    const isValidValue = (value) => {
+      return value !== null && value !== undefined && value !== "";
+    };
+
+  // Convert null to 0 for saving
+
+      const dataToSave = {
+    ...modalDataA5,
+    biayaPerolehan: modalDataA5.biayaPerolehan ?? 0,
+    nilaiSaatIni: modalDataA5.nilaiSaatIni ?? 0,
+  };
+
     // Validasi
     if (
       !modalDataA5.kode ||
@@ -76,8 +90,8 @@ const HartaTidakBergerak = () => {
       !modalDataA5.sumberKepemilikan ||
       !modalDataA5.nomorSertifikat ||
       !modalDataA5.tahunPerolehan ||
-      !modalDataA5.biayaPerolehan ||
-      !modalDataA5.nilaiSaatIni ||
+      !isValidValue(modalDataA5.biayaPerolehan) ||
+      !isValidValue(modalDataA5.nilaiSaatIni) ||
       !modalDataA5.keterangan
     ) {
       alert("Semua field wajib diisi!");
@@ -88,13 +102,13 @@ const HartaTidakBergerak = () => {
       // Update existing data
       setDataA5((prevData) =>
         prevData.map((item) =>
-          item.id === editingId ? { ...modalDataA5, id: editingId } : item
+          item.id === editingId ? { ...dataToSave, id: editingId } : item
         )
       );
     } else {
       // Add new data
       const newData = {
-        ...modalDataA5,
+        ...dataToSave,
         id: Date.now(), // Simple ID generation
       };
       setDataA5((prevData) => [...prevData, newData]);

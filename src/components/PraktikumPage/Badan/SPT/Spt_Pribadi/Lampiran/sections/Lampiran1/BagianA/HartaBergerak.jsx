@@ -18,8 +18,8 @@ const HartaBergerak = () => {
     npwp: "",
     namaPemotongPajak: "",
     tahunPerolehan: "",
-    biayaPerolehan: 0,
-    nilaiSaatIni: 0,
+    biayaPerolehan: "",
+    nilaiSaatIni: "",
     keterangan: "",
   });
   const [editingId, setEditingId] = useState(null);
@@ -36,8 +36,8 @@ const HartaBergerak = () => {
     npwp: "",
     namaPemotongPajak: "",
     tahunPerolehan: "",
-    biayaPerolehan: 0,
-    nilaiSaatIni: 0,
+    biayaPerolehan: "",
+    nilaiSaatIni: "",
     keterangan: "",
     });
     setEditingId(null);
@@ -68,6 +68,20 @@ const HartaBergerak = () => {
   // Function untuk validasi dan save data
   const saveData = () => {
     console.log("Data yang disimpan:", modalDataA4);
+
+    // FIXED: Validasi yang handle 0 dengan benar
+    const isValidValue = (value) => {
+      return value !== null && value !== undefined && value !== "";
+    };
+
+  // Convert null to 0 for saving
+
+      const dataToSave = {
+    ...modalDataA4,
+    biayaPerolehan: modalDataA4.biayaPerolehan ?? 0,
+    nilaiSaatIni: modalDataA4.nilaiSaatIni ?? 0,
+  };
+    console.log("Data yang disimpan:", dataToSave);
     // Validasi
     if (
       !modalDataA4.tipe ||
@@ -77,8 +91,8 @@ const HartaBergerak = () => {
       !modalDataA4.npwp ||
       !modalDataA4.namaPemotongPajak ||
       !modalDataA4.tahunPerolehan ||
-      !modalDataA4.biayaPerolehan ||
-      !modalDataA4.nilaiSaatIni ||
+      !isValidValue(modalDataA4.biayaPerolehan) ||
+      !isValidValue(modalDataA4.nilaiSaatIni) ||
       !modalDataA4.keterangan
     ) {
       alert("Semua field wajib diisi!");
@@ -89,13 +103,13 @@ const HartaBergerak = () => {
       // Update existing data
       setDataA4((prevData) =>
         prevData.map((item) =>
-          item.id === editingId ? { ...modalDataA4, id: editingId } : item
+          item.id === editingId ? { ...dataToSave, id: editingId } : item
         )
       );
     } else {
       // Add new data
       const newData = {
-        ...modalDataA4,
+        ...dataToSave,
         id: Date.now(), // Simple ID generation
       };
       setDataA4((prevData) => [...prevData, newData]);

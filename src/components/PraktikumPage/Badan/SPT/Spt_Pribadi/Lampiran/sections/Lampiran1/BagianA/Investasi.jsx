@@ -13,7 +13,7 @@ const Investasi = () => {
     deskripsi: "",
     lokasiharta: "",
     nomoridentitas: "",
-    penerimaInvestasi: "", 
+    penerimaInvestasi: "",
     buktiKepemilikan: "",
     biayaPerolehan: 0,
     tahunPerolehan: "",
@@ -26,15 +26,15 @@ const Investasi = () => {
   const openAddModal = () => {
     setModalDataA3({
       kode: 0,
-    deskripsi: "",
-    lokasiharta: "",
-    nomoridentitas: "",
-    penerimaInvestasi: "", 
-    buktiKepemilikan: "",
-    biayaPerolehan: 0,
-    tahunPerolehan: "",
-    nilaiSaatIni: 0,
-    keterangan: "",
+      deskripsi: "",
+      lokasiharta: "",
+      nomoridentitas: "",
+      penerimaInvestasi: "",
+      buktiKepemilikan: "",
+      biayaPerolehan: 0,
+      tahunPerolehan: "",
+      nilaiSaatIni: 0,
+      keterangan: "",
     });
     setEditingId(null);
     setShowModalA3(true);
@@ -63,6 +63,21 @@ const Investasi = () => {
 
   // Function untuk validasi dan save data
   const saveData = () => {
+    console.log("Data yang disimpan:", modalDataA3);
+
+    // FIXED: Validasi yang handle 0 dengan benar
+    const isValidValue = (value) => {
+      return value !== null && value !== undefined && value !== "";
+    };
+
+    // Convert null to 0 for saving
+
+    const dataToSave = {
+      ...modalDataA3,
+      biayaPerolehan: modalDataA3.biayaPerolehan ?? 0,
+      nilaiSaatIni: modalDataA3.nilaiSaatIni ?? 0,
+    };
+
     // Validasi
     if (
       !modalDataA3.deskripsi ||
@@ -70,9 +85,9 @@ const Investasi = () => {
       !modalDataA3.nomoridentitas ||
       !modalDataA3.penerimaInvestasi ||
       !modalDataA3.buktiKepemilikan ||
-      !modalDataA3.biayaPerolehan ||
+      !isValidValue(modalDataA3.biayaPerolehan) ||
       !modalDataA3.tahunPerolehan ||
-      !modalDataA3.nilaiSaatIni ||
+      !isValidValue(modalDataA3.nilaiSaatIni) ||
       !modalDataA3.keterangan
     ) {
       alert("Semua field wajib diisi!");
@@ -82,9 +97,7 @@ const Investasi = () => {
     if (editingId) {
       // Update existing data
       setDataA3((prevData) =>
-        prevData.map((item) =>
-          item.id === editingId ? { ...modalDataA3, id: editingId } : item
-        )
+        prevData.map((item) => (item.id === editingId ? { ...modalDataA3, id: editingId } : item))
       );
     } else {
       // Add new data
