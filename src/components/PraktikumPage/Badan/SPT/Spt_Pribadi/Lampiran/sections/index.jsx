@@ -1,0 +1,13 @@
+export { default as KasdanSetaraKas } from "./Lampiran1/BagianA/KasdanSetarakas";
+export { default as Piutang } from "./Lampiran1/BagianA/Piutang";
+export { default as Investasi } from "./Lampiran1/BagianA/Investasi";
+export { default as HartaBergerak } from "./Lampiran1/BagianA/HartaBergerak";
+export { default as HartaTidakBergerak } from "./Lampiran1/BagianA/HartaTidakBergerak";
+export { default as HartaLainnya } from "./Lampiran1/BagianA/HartaLainnya";
+export { default as Ikhtisar } from "./Lampiran1/BagianA/Ikhtisar";
+export { default as UtangAkhir } from "./Lampiran1/BagianB/UtangAkhir";
+export { default as Penghasilan } from "./Lampiran1/BagianD/Penghasilan";
+export { default as Pemotongan } from "./Lampiran1/BagianE/Pemotongan";
+export { default as PenghasilanKenaPajak } from "./Lampiran2/BagianA/PenghasilanKenaPajak";
+export { default as PenghasilanTidakObjekPajak } from "./Lampiran2/BagianB/PenghasilanTidakObjekPajak";
+export { default as PenghasilanLuarNegeri } from "./Lampiran2/BagianC/PenghasilanLuarNegeri";

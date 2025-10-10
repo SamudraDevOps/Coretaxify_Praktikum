@@ -89,6 +89,10 @@ import WakilKuasaSaya from "./components/PraktikumPage/OrangPribadi/PortalSaya/W
 import WajibPajakYangDiwakili from "./components/PraktikumPage/OrangPribadi/PortalSaya/WajibPajakYangDiwakili";
 import TwoAuthentication from "./components/PraktikumPage/OrangPribadi/PortalSaya/TwoAuthentication";
 import PermohonanTertunda from "./components/PraktikumPage/OrangPribadi/PortalSaya/PermohonanTertunda";
+import LihatKonsepPribadi from "./components/PraktikumPage/Badan/SPT/ViewKonsepPribadi";
+import CreateKonsepPribadi from "./components/PraktikumPage/Badan/SPT/Spt_Pribadi/Induk/CreateKonsepPribadi";
+
+
 
 // MAHASISWA-PSC
 import MahasiswaPscKelas from "./components/Dashboard/MahasiswaPsc/Kelas/MahasiswaPscKelas";
@@ -1071,7 +1075,6 @@ const Main = () => {
                 intent={""}
                 OrangPribadi={CreateKonsepUnifikasi}
                 Badan={CreateKonsepUnifikasi}
-
                 query={"buat-konsep-spt-unifikasi"}
               ></RoleBasedRenderer>
             </>
@@ -1083,7 +1086,6 @@ const Main = () => {
         />
         <Route
           path="/praktikum/:id/sistem/:akun/lihat-konsep-spt-unifikasi/:idSpt"
-          // path="/praktikum/:id/sistem/:akun/spt-unifikasi/pdf/:idSpt"
           // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
           element={
             <>
@@ -1093,10 +1095,85 @@ const Main = () => {
                 OrangPribadi={LihatKonsepUnifikasi}
                 Badan={LihatKonsepUnifikasi}
                 query={"buat-konsep-spt-unifikasi"}
+              ></RoleBasedRenderer>
+            </>
+            // <>
+            //   <Header />
+            //   <KonsepSPT />
+            // </>
+          }
+        />
 
-              // OrangPribadi={SPTUnifikasiViewPDF}
-              // Badan={SPTUnifikasiViewPDF}
-              // query={""}
+        {/* Route Sementra SPT Pribadi */}
+
+
+<Route
+  path="/praktikum/:id/sistem/:akun/buat-konsep-spt-pribadi"
+  element={
+    <>
+      <RoleBasedRenderer
+        url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun`}
+        intent={""}
+        OrangPribadi={CreateKonsepPribadi}
+        Badan={CreateKonsepPribadi}
+        query={"buat-konsep-spt-pribadi-no-id"}
+      />
+    </>
+  }
+/>
+        {/* SPT Pribadi */}
+        
+
+          <Route
+          path="/praktikum/:id/sistem/:akun/buat-konsep-spt-pribadi/:idSpt"
+          // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/spt/:idSpt`}
+                intent={""}
+                OrangPribadi={CreateKonsepPribadi}
+                Badan={CreateKonsepPribadi}
+                query={"buat-konsep-spt-pribadi"}
+              ></RoleBasedRenderer>
+            </>
+            // <>
+            //   <Header />
+            //   <KonsepSPT />
+            // </>
+          }
+        />
+
+         <Route
+          path="/praktikum/:id/sistem/:akun/lihat-konsep-spt-pribadi/:idSpt"
+          // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/spt/:idSpt`}
+                intent={""}
+                OrangPribadi={LihatKonsepPribadi}
+                Badan={LihatKonsepPribadi}
+                query={"buat-konsep-spt-pribadi"}
+              ></RoleBasedRenderer>
+            </>
+            // <>
+            //   <Header />
+            //   <KonsepSPT />
+            // </>
+          }
+        />
+        <Route
+          path="/praktikum/:id/sistem/:akun/spt-unifikasi/pdf/:idSpt"
+          // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/spt/:idSpt`}
+                intent={""}
+                OrangPribadi={SPTUnifikasiViewPDF}
+                Badan={SPTUnifikasiViewPDF}
+                query={""}
               ></RoleBasedRenderer>
             </>
             // <>

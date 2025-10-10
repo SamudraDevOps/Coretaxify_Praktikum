@@ -267,7 +267,7 @@ const KonsepSPT = ({
                             } else {
                               // Default fallback for other tax types
                               navigate(
-                                `/praktikum/${id}/sistem/${akun}/buat-konsep-spt/${item.id}`
+                                `/praktikum/${id}/sistem/${akun}/buat-konsep-spt-pribadi/${item.id}`
                               );
                             }
                           }}

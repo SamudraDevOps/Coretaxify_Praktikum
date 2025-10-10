@@ -58,7 +58,7 @@ const BuatKonsepSPT = ({ sidebar }) => {
       const data = await axios.get(
         // RoutesApiReal.apiUrl + `student/assignments/${id}/sistem/${akun}`,
         RoutesApi.apiUrl +
-          `student/assignments/${id}/sistem/${akun}/check-periode`,
+        `student/assignments/${id}/sistem/${akun}/check-periode`,
         {
           headers: {
             Authorization: `Bearer ${cookies.token}`,
@@ -174,9 +174,9 @@ const BuatKonsepSPT = ({ sidebar }) => {
       langkah: step,
       bulan: selectedMonth
         ? new Date(`${selectedYear}-${selectedMonth}-01`).toLocaleString(
-            "id-ID",
-            { month: "long" }
-          )
+          "id-ID",
+          { month: "long" }
+        )
         : "Belum dipilih",
       tahun: selectedYear || "Belum dipilih",
       modelSPT: selectedModelSPT
@@ -187,19 +187,19 @@ const BuatKonsepSPT = ({ sidebar }) => {
       periode:
         selectedMonth && selectedYear
           ? `${new Date(`${selectedYear}-${selectedMonth}-01`).toLocaleString(
-              "id-ID",
-              { month: "long" }
-            )} ${selectedYear}`
+            "id-ID",
+            { month: "long" }
+          )} ${selectedYear}`
           : selectedYear
-          ? selectedYear
-          : "Belum lengkap",
+            ? selectedYear
+            : "Belum lengkap",
     };
 
     alert(
       "Form Data:\n" +
-        Object.entries(formData)
-          .map(([key, value]) => `${key}: ${value}`)
-          .join("\n")
+      Object.entries(formData)
+        .map(([key, value]) => `${key}: ${value}`)
+        .join("\n")
     );
 
     console.log("Form Data:", formData);
@@ -209,7 +209,11 @@ const BuatKonsepSPT = ({ sidebar }) => {
     { label: "PPN", value: "ppn" },
     { label: "PPh Pasal 21/26", value: "pph" },
     { label: "PPh Unifikasi", value: "pphunifikasi" },
-    { label: "PPh Badan", value: "badan" },
+    ...(viewAsCompanyId
+      ? [{ label: "PPh Badan", value: "badan" }]
+      : [{ label: "PPh Pribadi", value: "pribadi" }]
+    ),
+    // { label: "PPh Badan", value: "badan" },
   ];
 
   const handleNext = () => {
@@ -262,7 +266,7 @@ const BuatKonsepSPT = ({ sidebar }) => {
     ) {
       return `${selectedMonth}-${selectedYear}`;
     }
-    if (selectedType === "badan" && selectedYear) {
+    if ((selectedType === "badan" || selectedType === "pribadi") && selectedYear) {
       return selectedYear;
     }
     return null;
@@ -372,6 +376,36 @@ const BuatKonsepSPT = ({ sidebar }) => {
             </Popover>
           </>
         );
+
+      case "pribadi":
+        return (
+          <>
+            <label className="block text-sm font-medium text-gray-700">
+              Tahun Pajak untuk PPh Pribadi{" "}
+              <span className="text-red-500">*</span>
+            </label>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button className="w-40 bg-white hover:bg-white text-black border rounded px-4 py-2 focus:outline-none focus:ring-1 focus:ring-yellow-500 border-gray-300">
+                  {selectedYear || "Pilih Tahun"}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-48">
+                <DatePicker
+                  selected={
+                    selectedYear ? new Date(parseInt(selectedYear), 0) : null
+                  }
+                  onChange={(date) =>
+                    setSelectedYear(date.getFullYear().toString())
+                  }
+                  showYearPicker
+                  dateFormat="yyyy"
+                  className="w-full"
+                />
+              </PopoverContent>
+            </Popover>
+          </>
+        );
       default:
         return null;
     }
@@ -387,8 +421,34 @@ const BuatKonsepSPT = ({ sidebar }) => {
         return "/admin/praktikum/2/surat-pemberitahuan-(spt)/tambah-konsep-spt-unifikasi";
       case "badan":
         return "/admin/praktikum/2/surat-pemberitahuan-(spt)/tambah-konsep-spt-badan";
+      case "pribadi":
+        return "/admin/praktikum/2/surat-pemberitahuan-(spt)/tambah-konsep-spt-pribadi";
       default:
         return "/admin/praktikum/2/surat-pemberitahuan-(spt)/tambah-konsep-spt";
+    }
+  };
+
+  const handleTemporarySPT = () => {
+    if (selectedType === 'pribadi') {
+      // Redirect ke halaman CreateKonsepPribadi
+      navigate(`/praktikum/${id}/sistem/${akun}/buat-konsep-spt-pribadi/temp-id`);
+    } else if (selectedType === 'badan') {
+      Swal.fire({
+        title: "Fitur Dalam Pengembangan",
+        text: "SPT Badan sedang dalam tahap pengembangan. Backend API belum tersedia.",
+        icon: "info",
+        confirmButtonText: "OK",
+        confirmButtonColor: "#f59e0b", // yellow-500
+      });
+    }
+  };
+
+  const handleCreateSPT = () => {
+    // Cek apakah ini SPT Badan atau Pribadi (backend belum ready)
+    if (selectedType === 'badan' || selectedType === 'pribadi') {
+      handleTemporarySPT();
+    } else {
+      createSpt.mutate();
     }
   };
 
@@ -433,8 +493,8 @@ const BuatKonsepSPT = ({ sidebar }) => {
                     {num === 1
                       ? "Pilih Jenis Pajak"
                       : num === 2
-                      ? "Pilih periode pelaporan SPT"
-                      : "Pilih Jenis SPT"}
+                        ? "Pilih periode pelaporan SPT"
+                        : "Pilih Jenis SPT"}
                   </span>
                 </div>
                 {index < 2 && (
@@ -443,9 +503,8 @@ const BuatKonsepSPT = ({ sidebar }) => {
                       <div
                         className="h-full bg-yellow-400 absolute left-0 top-0 transition-all duration-500 ease-in-out"
                         style={{
-                          width: `${
-                            step > index + 1 ? 100 : step === index + 1 ? 50 : 0
-                          }%`,
+                          width: `${step > index + 1 ? 100 : step === index + 1 ? 50 : 0
+                            }%`,
                         }}
                       ></div>
                     </div>
@@ -527,8 +586,8 @@ const BuatKonsepSPT = ({ sidebar }) => {
                   className={cn(
                     "bg-yellow-400 hover:bg-yellow-500 text-normal w-full md:w-auto",
                     selectedType === "ppn" &&
-                      !(selectedMonth && selectedYear) &&
-                      "bg-gray-300 cursor-not-allowed hover:bg-gray-300"
+                    !(selectedMonth && selectedYear) &&
+                    "bg-gray-300 cursor-not-allowed hover:bg-gray-300"
                   )}
                 >
                   Lanjut
@@ -552,7 +611,15 @@ const BuatKonsepSPT = ({ sidebar }) => {
                     <strong>
                       {selectedType === "ppn"
                         ? "SPT Masa PPN"
-                        : "Jenis Pajak Lainnya"}
+                        : selectedType === "pph"
+                          ? "SPT Masa PPh Pasal 21/26"
+                          : selectedType === "pphunifikasi"
+                            ? "SPT Masa PPh Unifikasi"
+                            : selectedType === "badan"
+                              ? "SPT Tahunan Badan"
+                              : selectedType === "pribadi"
+                                ? "SPT Tahunan Orang Pribadi"
+                                : "Jenis Pajak Lainnya"}
                     </strong>
                   </div>
                   <div>
@@ -566,15 +633,164 @@ const BuatKonsepSPT = ({ sidebar }) => {
                           })} ${selectedYear}`
                         : "Belum dipilih"}
                     </strong> */}
-                    <strong>{formatPeriodDisplay()}</strong>
+
+                    <strong>
+                      {selectedType === "badan" || selectedType === "pribadi"
+                        ? selectedYear || "Belum dipilih"
+                        : formatPeriodDisplay()}
+                    </strong>
+
+                    {/* <strong>{formatPeriodDisplay()}</strong> */}
                   </div>
+                  {/* Info untuk SPT Pribadi/Badan */}
+                  {(selectedType === 'badan' || selectedType === 'pribadi') && (
+                    <div className="bg-blue-50 border border-blue-200 rounded-md p-3 mt-4">
+                      <div className="flex items-center">
+                        <div className="flex-shrink-0">
+                          <svg className="h-5 w-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
+                            <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                        <div className="ml-3">
+                          <p className="text-sm text-blue-800">
+                            <strong>Informasi:</strong> {selectedType === 'pribadi' ? 'Anda akan diarahkan ke halaman SPT Pribadi.' : 'Fitur SPT Badan sedang dalam pengembangan.'}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 <div>
                   <label className="block text-normal font-medium text-gray-700 mb-1">
                     Model SPT <span className="text-red-500">*</span>
                   </label>
-                  {selectedModelSPT !== null && (
+
+                  {/* Untuk SPT Badan/Pribadi, tampilkan input manual */}
+                  {(selectedType === 'badan' || selectedType === 'pribadi') ? (
+                    <div className="space-y-2">
+                      <select
+                        value={selectedModelSPT}
+                        onChange={(e) => {
+                          setSelectedModelSPT(e.target.value);
+                          setModelTouched(true);
+                        }}
+                        className="w-52 border rounded px-4 py-2 focus:outline-none focus:ring-1 focus:ring-yellow-500 border-gray-300"
+                      >
+                        <option value="">Pilih Jenis SPT</option>
+                        {modelSPTOptions.map((option) => (
+                          <option key={option.value} value={option.value}>
+                            {option.label}
+                          </option>
+                        ))}
+                      </select>
+                      <p className="text-xs text-gray-500">
+                        {selectedType === 'pribadi'
+                          ? '*Pilih jenis untuk melanjutkan ke halaman SPT Pribadi'
+                          : '*Pilihan ini bersifat sementara karena sedang dalam tahap pengembangan'
+                        }
+                      </p>
+                    </div>
+                  ) : (
+                    // Untuk SPT lainnya yang sudah ada backend
+                    selectedModelSPT !== null && (
+                      <p
+                        className={cn(
+                          "w-52 border rounded px-4 py-2",
+                          !selectedModelSPT && modelTouched
+                            ? "border-red-500 bg-red-50"
+                            : "border-gray-300"
+                        )}
+                      >
+                        {selectedModelSPT}
+                      </p>
+                    )
+                  )}
+                </div>
+
+                <div className="mt-6 flex justify-between text-normal">
+                  <Button
+                    variant="outline"
+                    onClick={handleBack}
+                    className="w-full md:w-auto text-normal"
+                  >
+                    Kembali
+                  </Button>
+
+                  {/* Button untuk SPT Pribadi - Direct redirect */}
+                  {selectedType === 'pribadi' ? (
+                    <Button
+                      disabled={!selectedModelSPT}
+                      className={cn(
+                        "w-full md:w-auto",
+                        selectedModelSPT
+                          ? "bg-yellow-400 hover:bg-yellow-500"
+                          : "bg-gray-300 text-white cursor-not-allowed text-normal"
+                      )}
+                      onClick={() => {
+                        // Coba dengan route yang lebih sederhana dulu
+                        const targetRoute = `/praktikum/${id}/sistem/${akun}/buat-konsep-spt-pribadi`;
+                        console.log("Navigating to:", targetRoute);
+                        navigate(targetRoute);
+                      }}                    >
+                      Lanjut ke SPT Pribadi
+                    </Button>
+                  ) : selectedType === 'badan' ? (
+                    /* Button untuk SPT Badan - Show alert */
+                    <Button
+                      disabled={!selectedModelSPT}
+                      className={cn(
+                        "w-full md:w-auto",
+                        selectedModelSPT
+                          ? "bg-yellow-400 hover:bg-yellow-500"
+                          : "bg-gray-300 text-white cursor-not-allowed text-normal"
+                      )}
+                      onClick={() => {
+                        Swal.fire({
+                          title: "Fitur Dalam Pengembangan",
+                          text: "SPT Badan sedang dalam tahap pengembangan. Backend API belum tersedia.",
+                          icon: "info",
+                          confirmButtonText: "OK",
+                          confirmButtonColor: "#f59e0b",
+                        });
+                      }}
+                    >
+                      Buat SPT Badan (Demo)
+                    </Button>
+                  ) : (
+                    /* Button untuk SPT lainnya - API call */
+                    <>
+                      {selectedModelSPT == null && (
+                        <p className="text-sm text-red-600 mt-1">
+                          SPT Sudah menjadi Konsep
+                        </p>
+                      )}
+                      <Button
+                        disabled={
+                          selectedModelSPT === null ||
+                          !selectedModelSPT ||
+                          createSpt.isPending
+                        }
+                        className={cn(
+                          "w-full md:w-auto",
+                          selectedModelSPT && !createSpt.isPending
+                            ? "bg-yellow-400 hover:bg-yellow-500"
+                            : userId
+                              ? "hidden"
+                              : "bg-gray-300 text-white cursor-not-allowed text-normal"
+                        )}
+                        onClick={() => createSpt.mutate()}
+                      >
+                        {createSpt.isPending ? "Membuat..." : "Buat Konsep SPT"}
+                      </Button>
+                    </>
+                  )}
+                </div>
+              </>
+            </div>
+          )}
+
+          {/* {selectedModelSPT !== null && (
                     <p
                       className={cn(
                         "w-52 border rounded px-4 py-2",
@@ -586,41 +802,7 @@ const BuatKonsepSPT = ({ sidebar }) => {
                       {selectedModelSPT}
                     </p>
                   )}
-                  {/* <p
-                    className={cn(
-                      "w-52 border rounded px-4 py-2",
-                      !selectedModelSPT && modelTouched
-                        ? "border-red-500 bg-red-50"
-                        : "border-gray-300"
-                    )}
-                  >
-                    {selectedModelSPT}
-                  </p> */}
-                  {/* <select
-                    value={selectedModelSPT}
-                    onChange={(e) => {
-                      setSelectedModelSPT(e.target.value);
-                      setModelTouched(true);
-                    }}
-                    className={cn(
-                      "w-52 border rounded px-4 py-2",
-                      !selectedModelSPT && modelTouched
-                        ? "border-red-500 bg-red-50"
-                        : "border-gray-300"
-                    )}
-                  >
-                    <option value="">Pilih Jenis SPT</option>
-                    {modelSPTOptions.map((option) => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select> */}
-                  {/* {!selectedModelSPT && modelTouched && (
-                    <p className="text-sm text-red-600 mt-1">
-                      Kolom ini wajib diisi!
-                    </p>
-                  )} */}
+                 
                 </div>
 
                 <div className="mt-6 flex justify-between text-normal">
@@ -631,19 +813,7 @@ const BuatKonsepSPT = ({ sidebar }) => {
                   >
                     Kembali
                   </Button>
-                  {/* <Button
-                    disabled={!selectedModelSPT}
-                    className={cn(
-                      "w-full md:w-auto",
-                      selectedModelSPT
-                        ? "bg-yellow-400 hover:bg-yellow-500"
-                        : "bg-gray-300 text-white cursor-not-allowed text-normal"
-                    )}
-                    // onClick={() => (window.location.href = getRedirectUrl())}
-                    onClick={() => createSpt.mutate()}
-                  >
-                    Buat Konsep SPT
-                  </Button> */}
+                
                   {selectedModelSPT == null && (
                     <p className="text-sm text-red-600 mt-1">
                       SPT Sudah menjadi Konsep
@@ -660,25 +830,19 @@ const BuatKonsepSPT = ({ sidebar }) => {
                       selectedModelSPT && !createSpt.isPending
                         ? "bg-yellow-400 hover:bg-yellow-500"
                         : userId
-                        ? "hidden"
-                        : "bg-gray-300 text-white cursor-not-allowed text-normal"
+                          ? "hidden"
+                          : "bg-gray-300 text-white cursor-not-allowed text-normal"
                     )}
-                    // onClick={() => (window.location.href = getRedirectUrl())}
                     onClick={() => createSpt.mutate()}
                   >
                     {createSpt.isPending ? "Membuat..." : "Buat Konsep SPT"}
                   </Button>
 
-                  {/* <button onClick={showFormData}>form data test</button> */}
                 </div>
               </>
-              {/* ) : (
-                <div className="text-center py-8 text-red-500 font-medium">
-                  Data faktur tidak ditemukan
-                </div>
-              )} */}
+          
             </div>
-          )}
+          )} */}
         </div>
       </div>
     </div>
