@@ -79,7 +79,7 @@ const FormFieldA4 = ({ modalData, updateModalData }) => {
           <option value="0406: Kendaraan Tujuan Khusus">
             Kendaraan Tujuan Khusus
           </option>
-          <option value="0407: Kereta"> Kereta </option>
+          <option value="0407:Kereta"> Kereta </option>
           <option value="0408: Pesawat Terbang"> Pesawat Terbang </option>
           <option value="0409: Kapal"> Kapal </option>
           <option value="0410: Mesin"> Mesin </option>

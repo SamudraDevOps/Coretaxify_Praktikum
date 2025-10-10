@@ -4,17 +4,11 @@ import { formatRupiah } from "../../../utils/formatCurrency";
 
 const TableA3 = ({ data, onEdit, onDelete }) => {
   const calculateTotalPenghasilanBruto = () => {
-    return data.reduce(
-      (total, item) => total + (item.penghasilanBruto || 0),
-      0
-    );
+    return data.reduce((total, item) => total + (item.penghasilanBruto || 0), 0);
   };
 
   const calculateTotalPajakPenghasilan = () => {
-    return data.reduce(
-      (total, item) => total + (item.pajakPenghasilan || 0),
-      0
-    );
+    return data.reduce((total, item) => total + (item.pajakPenghasilan || 0), 0);
   };
 
   return (
@@ -27,13 +21,8 @@ const TableA3 = ({ data, onEdit, onDelete }) => {
             <th className="p-2 border-b min-w-[200px]">Deskripsi</th>
             <th className="p-2 border-b min-w-[200px]">Lokasi Harta</th>
             <th className="p-2 border-b min-w-[150px]">Nomor Identitas</th>
-            <th className="p-2 border-b min-w-[200px]">
-              Nama Bank/Institusi/Penerima Investasi
-            </th>
-            <th className="p-2 border-b min-w-[150px]">
-              {" "}
-              Bukti Kepemilikan/Nomor Akuns
-            </th>
+            <th className="p-2 border-b min-w-[200px]">Nama Bank/Institusi/Penerima Investasi</th>
+            <th className="p-2 border-b min-w-[150px]"> Bukti Kepemilikan/Nomor Akuns</th>
             <th className="p-2 border-b min-w-[150px]"> Biaya Perolehan</th>
             <th className="p-2 border-b min-w-[150px]"> Tahun Perolehan</th>
             <th className="p-2 border-b min-w-[150px]"> Nilai Saat ini</th>
@@ -50,32 +39,19 @@ const TableA3 = ({ data, onEdit, onDelete }) => {
             </tr>
           ) : (
             data.map((item, index) => (
-              <tr
-                key={item.id}
-                className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}
-              >
+              <tr key={item.id} className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}>
                 <td className="p-2 border-b text-center">{index + 1}</td>
                 <td className="p-2 border-b">{item.kode || "-"}</td>
-                <td className="p-2 border-b">
-                  {item.deskripsi.replace(/^\d{4}:\s*/, "") || "-"}
-                </td>
+                <td className="p-2 border-b">{item.deskripsi.replace(/^\d{4}:\s*/, "") || "-"}</td>
                 {/* <td className="p-2 border-b">{item.deskripsi  || "-"}</td> */}
                 <td className="p-2 border-b">{item.lokasiharta || "-"}</td>
                 <td className="p-2 border-b">{item.nomoridentitas || "-"}</td>
                 <td className="p-2 border-b">{item.penerimaInvestasi || "-"}</td>
-                <td className="p-2 border-b">
-                  {formatRupiah(item.buktiKepemilikan)}
-                </td>
-                <td className="p-2 border-b">{item.biayaPerolehan || "-"}</td>
-                <td className="p-2 border-b">
-                  {formatRupiah(item.tahunPerolehan)}
-                </td>
-                 <td className="p-2 border-b">
-                  {formatRupiah(item.nilaiSaatIni)}
-                </td>
-                <td className="p-2 border-b">
-                  {item.keterangan || "-"}
-                </td>
+                <td className="p-2 border-b">{item.buktiKepemilikan || "-"}</td>
+                <td className="p-2 border-b">{formatRupiah(item.biayaPerolehan) || "-"}</td>
+                <td className="p-2 border-b">{item.tahunPerolehan}</td>
+                <td className="p-2 border-b">{formatRupiah(item.nilaiSaatIni)}</td>
+                <td className="p-2 border-b">{item.keterangan || "-"}</td>
 
                 <td className="p-2 border-b">
                   <div className="flex gap-1 justify-center">

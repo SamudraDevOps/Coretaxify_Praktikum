@@ -9,17 +9,9 @@ const TablePemotongan = ({ data, onEdit, onDelete }) => {
         <thead className="bg-purple-700 text-white text-center">
           <tr>
             <th className="p-2 border-b">No</th>
-            <th className="p-2 border-b min-w-[200px]">
-              {" "}
-              Nama Pemotong /Pemumut PPh
-            </th>
-            <th className="p-2 border-b min-w-[200px]">
-              NPWP Pemotong / Pemumut PPh
-            </th>
-            <th className="p-2 border-b min-w-[200px]">
-              {" "}
-              Nomor Bukti Pemotongan / Pemumutan
-            </th>
+            <th className="p-2 border-b min-w-[200px]"> Nama Pemotong /Pemumut PPh</th>
+            <th className="p-2 border-b min-w-[200px]">NPWP Pemotong / Pemumut PPh</th>
+            <th className="p-2 border-b min-w-[200px]"> Nomor Bukti Pemotongan / Pemumutan</th>
             <th className="p-2 border-b min-w-[150px]">Tanggal Pemotongan</th>
             <th className="p-2 border-b min-w-[150px]">Jenis Pajak</th>
             <th className="p-2 border-b min-w-[150px]">Dasar Pengenaan Pajak</th>
@@ -37,28 +29,17 @@ const TablePemotongan = ({ data, onEdit, onDelete }) => {
             </tr>
           ) : (
             data.map((item, index) => (
-              <tr
-                key={item.id}
-                className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}
-              >
+              <tr key={item.id} className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}>
                 <td className="p-2 border-b text-center">{index + 1}</td>
                 <td className="p-2 border-b">{item.namaPemotong || "-"}</td>
 
                 <td className="p-2 border-b">{item.npwpPemotong || "-"}</td>
-                <td className="p-2 border-b">
-                  {item.nomorBuktiPemotongan || "-"}
-                </td>
-                <td className="p-2 border-b">
-                  {item.tanggalPemotongan || "-"}
-                </td>
+                <td className="p-2 border-b">{item.nomorBuktiPemotongan || "-"}</td>
+                <td className="p-2 border-b">{item.tanggalPemotongan || "-"}</td>
                 <td className="p-2 border-b">{item.jenisPajak || "-"}</td>
-                <td className="p-2 border-b">
-                  {formatRupiah(item.dasarPengenaanPajak) || "-"}
-                </td>
-                <td className="p-2 border-b">
-                  {formatRupiah(item.pphdipotong) || "-"}
-                </td>
-               
+                <td className="p-2 border-b">{formatRupiah(item.dasarPengenaanPajak) || "-"}</td>
+                <td className="p-2 border-b">{formatRupiah(item.pphdipotong) || "-"}</td>
+
                 <td className="p-2 border-b">
                   <div className="flex gap-1 justify-center">
                     <button
