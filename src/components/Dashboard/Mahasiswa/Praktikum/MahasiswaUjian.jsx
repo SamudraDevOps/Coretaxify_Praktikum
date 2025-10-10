@@ -296,7 +296,7 @@ export default function MahasiswaUjian() {
                 <td>
                   {item.assignment.supporting_file ? (
                     <button
-                      onClick={() => handleDownload(item.id)}
+                      onClick={() => handleDownload(item.assignment.id)}
                       className="download-button"
                       disabled={downloadMutation.isPending}
                     >
