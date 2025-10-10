@@ -41,6 +41,7 @@ const AssignmentPscMember = () => {
   const [scoreModal, setScoreModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [scoreValue, setScoreValue] = useState("");
+  const itemsPerPage = 20;
   const location = useLocation();
 
   const getRoute = () => {
