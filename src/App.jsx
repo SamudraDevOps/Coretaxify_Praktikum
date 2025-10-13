@@ -91,6 +91,7 @@ import TwoAuthentication from "./components/PraktikumPage/OrangPribadi/PortalSay
 import PermohonanTertunda from "./components/PraktikumPage/OrangPribadi/PortalSaya/PermohonanTertunda";
 import LihatKonsepPribadi from "./components/PraktikumPage/Badan/SPT/ViewKonsepPribadi";
 import CreateKonsepPribadi from "./components/PraktikumPage/Badan/SPT/Spt_Pribadi/Induk/CreateKonsepPribadi";
+import CreateKonsepBadan from "./components/PraktikumPage/Badan/SPT/Spt_Badan/Induk/CreateKonsepBadan";
 
 
 
@@ -220,7 +221,7 @@ const Main = () => {
     }, 0);
   }, []);
 
-  
+
   // In the useEffect that validates the token
   // useEffect(() => {
   //   const validateToken = async () => {
@@ -1107,24 +1108,38 @@ const Main = () => {
         {/* Route Sementra SPT Pribadi */}
 
 
-<Route
-  path="/praktikum/:id/sistem/:akun/buat-konsep-spt-pribadi"
-  element={
-    <>
-      <RoleBasedRenderer
-        url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun`}
-        intent={""}
-        OrangPribadi={CreateKonsepPribadi}
-        Badan={CreateKonsepPribadi}
-        query={"buat-konsep-spt-pribadi-no-id"}
-      />
-    </>
-  }
-/>
+        <Route
+          path="/praktikum/:id/sistem/:akun/buat-konsep-spt-pribadi"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun`}
+                intent={""}
+                OrangPribadi={CreateKonsepPribadi}
+                Badan={CreateKonsepPribadi}
+                query={"buat-konsep-spt-pribadi-no-id"}
+              />
+            </>
+          }
+        />
         {/* SPT Pribadi */}
         
+        <Route
+          path="/praktikum/:id/sistem/:akun/buat-konsep-spt-badan"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun`}
+                intent={""}
+                OrangPribadi={CreateKonsepBadan}
+                Badan={CreateKonsepBadan}
+                query={"buat-konsep-spt-badan-no-id"}
+              />
+            </>
+          }
+        />
 
-          <Route
+        <Route
           path="/praktikum/:id/sistem/:akun/buat-konsep-spt-pribadi/:idSpt"
           // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
           element={
@@ -1144,7 +1159,7 @@ const Main = () => {
           }
         />
 
-         <Route
+        <Route
           path="/praktikum/:id/sistem/:akun/lihat-konsep-spt-pribadi/:idSpt"
           // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
           element={
@@ -1296,7 +1311,7 @@ const Main = () => {
         />
         <Route
           path="/praktikum/:id/sistem/:akun/dokumen-saya"
-            element={
+          element={
             <>
               <RoleBasedRenderer
                 url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/notification`}
@@ -1322,7 +1337,7 @@ const Main = () => {
                 OrangPribadi={Bupot21ViewPDFDokumen}
                 Badan={Bupot21ViewPDFDokumen}
                 query={"notifikasi"}
-                               ></RoleBasedRenderer>
+              ></RoleBasedRenderer>
             </>
           }
         />
@@ -1529,8 +1544,8 @@ const Main = () => {
           }
         />
 
-        
-                <Route
+
+        <Route
           path="/tes/:id/:akun"
           element={
             <>
@@ -1542,7 +1557,7 @@ const Main = () => {
           }
         />
 
-        
+
         {/* NOT FOUND ROUTE - LAST REGISTERED ROUTE */}
         <Route path="*" element={<NotFound />} />
         {/* <Route
