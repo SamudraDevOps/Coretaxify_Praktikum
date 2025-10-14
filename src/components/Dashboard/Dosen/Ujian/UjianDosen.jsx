@@ -66,7 +66,6 @@ export default function UjianDosen() {
           search: search,
         },
       });
-      console.log("data asli:", data);
       return data;
     },
   });
