@@ -60,8 +60,6 @@ const UjianDosenMember = () => {
           search: search,
         },
       });
-
-      console.log("data asli: ", data);
       return data;
     },
     enabled: !!examId,
