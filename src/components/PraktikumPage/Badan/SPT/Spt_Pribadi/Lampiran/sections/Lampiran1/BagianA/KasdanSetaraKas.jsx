@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FaPlus, FaSave, FaExclamationTriangle, FaCheck } from "react-icons/fa";
-import TableA1 from "../../../components/Lampiran1/A1/TableA1";
+import TableA1  from "@lampiran/Lampiran1/A1/TableA1";
 import ModalA1 from "../../../components/Lampiran1/A1/ModalA1";
 
 const KasdanSetaraKas = () => {

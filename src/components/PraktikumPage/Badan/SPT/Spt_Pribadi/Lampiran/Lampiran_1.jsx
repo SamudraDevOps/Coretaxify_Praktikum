@@ -12,7 +12,7 @@ import {
   UtangAkhir,
   Penghasilan,
   Pemotongan,
-} from "./sections";
+} from "./sections/Lampiran1";
 
 const Lampiran_1 = ({ data }) => {
   const [showBagianA, setShowBagianA] = useState(true);

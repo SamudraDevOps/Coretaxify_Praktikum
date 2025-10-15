@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import HeaderLampiran from "./HeaderLampiran";
-import { PenghasilanKenaPajak, PenghasilanTidakObjekPajak, PenghasilanLuarNegeri } from "./sections";
+import { PenghasilanKenaPajak, PenghasilanTidakObjekPajak, PenghasilanLuarNegeri } from "./sections/Lampiran2";
 
 const Lampiran_2 = ({ data }) => {
   const [showBagianA, setShowBagianA] = useState(true);
