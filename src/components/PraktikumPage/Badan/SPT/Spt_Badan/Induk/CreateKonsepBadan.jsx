@@ -2,7 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import DatePicker from 'react-datepicker';
-import { PertanyaanA } from '../../Spt_Pribadi/Induk/sections';
+import {
+    PertanyaanA,
+    PertanyaanB,
+    PertanyaanC,
+    PertanyaanD,
+    PertanyaanE,
+    PertanyaanF,
+    PertanyaanG,
+    PertanyaanH,
+    PertanyaanI,
+}
+    from './section';
 
 const CreateKonsepBadan = () => {
     const [showHeaderInduk, setShowHeaderInduk] = useState(true);
@@ -82,7 +93,14 @@ const CreateKonsepBadan = () => {
                                     </div>
                                 )}
                                 <PertanyaanA />
-
+                                <PertanyaanB />
+                                <PertanyaanC />
+                                <PertanyaanD />
+                                <PertanyaanE />
+                                <PertanyaanF />
+                                <PertanyaanG />
+                                <PertanyaanH />
+                                <PertanyaanI />
                             </div>
                         </TabsContent>
                     </Tabs>

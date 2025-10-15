@@ -1,0 +1,9 @@
+export { default as PertanyaanA } from "./PertanyaanA";
+export { default as PertanyaanB } from "./PertanyaanB";
+export { default as PertanyaanC } from "./PertanyaanC";
+export { default as PertanyaanD } from "./PertanyaanD";
+export { default as PertanyaanE } from "./PertanyaanE";
+export { default as PertanyaanF } from "./PertanyaanF";
+export { default as PertanyaanG } from "./PertanyaanG";
+export { default as PertanyaanH } from "./PertanyaanH";
+export { default as PertanyaanI } from "./PertanyaanI";
