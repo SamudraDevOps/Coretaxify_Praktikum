@@ -7,6 +7,19 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+      "@components": path.resolve(__dirname, "./src/components"),
+      "@sections": path.resolve(
+        __dirname,
+        "./src/components/PraktikumPage/Badan/SPT/Spt_Pribadi/Lampiran/sections"
+      ),
+      "@lampiran": path.resolve(
+        __dirname,
+        "./src/components/PraktikumPage/Badan/SPT/Spt_Pribadi/Lampiran/components"
+      ),
+      "@utils": path.resolve(
+        __dirname,
+        "./src/components/PraktikumPage/Badan/SPT/Spt_Pribadi/Lampiran/utils"
+      ),
     },
   },
   server: {
