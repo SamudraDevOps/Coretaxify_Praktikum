@@ -7,3 +7,4 @@ export { default as PertanyaanF } from "./PertanyaanF";
 export { default as PertanyaanG } from "./PertanyaanG";
 export { default as PertanyaanH } from "./PertanyaanH";
 export { default as PertanyaanI } from "./PertanyaanI";
+export { default as PertanyaanJ } from "./PertanyaanJ";

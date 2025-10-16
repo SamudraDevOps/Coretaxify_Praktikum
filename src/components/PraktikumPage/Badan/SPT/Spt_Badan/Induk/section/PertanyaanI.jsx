@@ -730,6 +730,93 @@ const PertanyaanI = ({ onAnswerChange, answersState }) => {
                             )}
                         </div>
                     </div>
+                    <div className="grid grid-cols-12 gap-3 items-start px-3 py-2 pt-3">
+                        <div className="col-span-12 md:col-span-5 flex gap-3 items-start">
+                            <span className="pt-1 text-gray-700 font-medium min-w-[3.5rem]">i.</span>
+                            <span className="text-gray-700 font-normal text-base">
+                                Tanda Terima Elektronik Penyampaian Laporan Per Negara
+                                (Country-by-Country-Report)
+                            </span>
+                        </div>
+                        <div className="col-span-12 md:col-span-7 flex flex-col gap-2">
+                            <div className="flex gap-2">
+                                <label className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded cursor-pointer hover:bg-blue-700">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                    </svg>
+                                    Pilih
+                                    <input
+                                        type="file"
+                                        onChange={(e) => handleFileUpload('suratPenghitunganDividen', e)}
+                                        className="hidden"
+                                        accept=".pdf,.doc,.docx"
+                                    />
+                                </label>
+                                <button
+                                    onClick={() => document.querySelector(`input[type="file"][data-field="suratPenghitunganDividen"]`)?.click()}
+                                    className={`px-4 py-2 border border-gray-300 rounded ${uploadedFiles.suratPenghitunganDividen ? 'bg-green-50 text-green-700' : 'bg-gray-100 text-gray-500'} cursor-pointer`}
+                                    disabled={!uploadedFiles.suratPenghitunganDividen}
+                                >
+                                    Unggah
+                                </button>
+                                <button
+                                    onClick={() => handleRemoveFile('suratPenghitunganDividen')}
+                                    className={`px-4 py-2 border border-gray-300 rounded ${uploadedFiles.suratPenghitunganDividen ? 'bg-red-50 text-red-700' : 'bg-gray-100 text-gray-500'} cursor-pointer`}
+                                    disabled={!uploadedFiles.suratPenghitunganDividen}
+                                >
+                                    Batalkan
+                                </button>
+                            </div>
+                            {uploadedFiles.suratPenghitunganDividen && (
+                                <div className="mt-2 text-sm text-gray-600">
+                                    <span className="font-medium">Dipilih:</span> {getFileName(uploadedFiles.suratPenghitunganDividen)}
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                    <div className="grid grid-cols-12 gap-3 items-start px-3 py-2 pt-3">
+                        <div className="col-span-12 md:col-span-5 flex gap-3 items-start">
+                            <span className="pt-1 text-gray-700 font-medium min-w-[3.5rem]">j.</span>
+                            <span className="text-gray-700 font-normal text-base">
+                                Dokumen Lainnya
+                            </span>
+                        </div>
+                        <div className="col-span-12 md:col-span-7 flex flex-col gap-2">
+                            <div className="flex gap-2">
+                                <label className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded cursor-pointer hover:bg-blue-700">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                    </svg>
+                                    Pilih
+                                    <input
+                                        type="file"
+                                        onChange={(e) => handleFileUpload('suratPenghitunganDividen', e)}
+                                        className="hidden"
+                                        accept=".pdf,.doc,.docx"
+                                    />
+                                </label>
+                                <button
+                                    onClick={() => document.querySelector(`input[type="file"][data-field="suratPenghitunganDividen"]`)?.click()}
+                                    className={`px-4 py-2 border border-gray-300 rounded ${uploadedFiles.suratPenghitunganDividen ? 'bg-green-50 text-green-700' : 'bg-gray-100 text-gray-500'} cursor-pointer`}
+                                    disabled={!uploadedFiles.suratPenghitunganDividen}
+                                >
+                                    Unggah
+                                </button>
+                                <button
+                                    onClick={() => handleRemoveFile('suratPenghitunganDividen')}
+                                    className={`px-4 py-2 border border-gray-300 rounded ${uploadedFiles.suratPenghitunganDividen ? 'bg-red-50 text-red-700' : 'bg-gray-100 text-gray-500'} cursor-pointer`}
+                                    disabled={!uploadedFiles.suratPenghitunganDividen}
+                                >
+                                    Batalkan
+                                </button>
+                            </div>
+                            {uploadedFiles.suratPenghitunganDividen && (
+                                <div className="mt-2 text-sm text-gray-600">
+                                    <span className="font-medium">Dipilih:</span> {getFileName(uploadedFiles.suratPenghitunganDividen)}
+                                </div>
+                            )}
+                        </div>
+                    </div>
                 </div>
             )}
         </div>

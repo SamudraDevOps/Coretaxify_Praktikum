@@ -12,6 +12,7 @@ import {
     PertanyaanG,
     PertanyaanH,
     PertanyaanI,
+    PertanyaanJ
 }
     from './section';
 
@@ -28,7 +29,7 @@ const CreateKonsepBadan = () => {
                     <Tabs defaultValue="induk" onValueChange={(val) => setShowHeaderInduk(val === 'induk')}>
                         <TabsList className="flex justify-start gap-2 text-blue-700 text-lg">
                             <TabsTrigger value="induk">Induk</TabsTrigger>
-                            <TabsTrigger value="anak">Anak</TabsTrigger>
+                            <TabsTrigger value="L1-B">L1-B</TabsTrigger>
                         </TabsList>
                         <TabsContent value="induk">
                             <div className="mt-4">
@@ -101,8 +102,10 @@ const CreateKonsepBadan = () => {
                                 <PertanyaanG />
                                 <PertanyaanH />
                                 <PertanyaanI />
+                                <PertanyaanJ />
                             </div>
                         </TabsContent>
+                        <TabsContent value="L1-B">L1-B</TabsContent>
                     </Tabs>
 
                 </div>
