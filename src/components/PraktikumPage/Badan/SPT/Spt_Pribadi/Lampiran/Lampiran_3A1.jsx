@@ -1,40 +1,39 @@
 import React, { useState } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import HeaderLampiran from "./HeaderLampiran";
-import { PenghasilanKenaPajak, PenghasilanTidakObjekPajak, PenghasilanLuarNegeri } from "./sections";
 
-const Lampiran_3A1 = ({ data }) => {
+// pastikan path ini benar sesuai struktur kamu
+// kalau container utama LaporanLabaRugi ada di index.jsx (Lampiran3A-1)
+import Lampiran3A1 from "@sections/Lampiran3/Lampiran3A-1/BagianA";
+
+export default function Lampiran_3A1({ data }) {
   const [showBagianA, setShowBagianA] = useState(true);
-  const [showBagianB, setShowBagianB] = useState(true);
-  const [showBagianC, setShowBagianC] = useState(true);
 
   return (
     <div className="space-y-4">
       <HeaderLampiran />
 
-      {/* Bagian A - Penghasilan yang dikenakan pajak penghasilan bersifat Final */}
+      {/* Bagian A - Laporan Laba Rugi */}
       <div>
         <div
           className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
           onClick={() => setShowBagianA(!showBagianA)}
         >
           <h3 className="text-lg font-semibold">
-            A. PENGHASILAN NETO DARI USAHA DAN/ATAU PROFESI BEDASARKAN LAPORAN KEUANGAN
+            A.1. LAPORAN LABA RUGI
           </h3>
           {showBagianA ? <FaChevronUp /> : <FaChevronDown />}
         </div>
 
         {showBagianA && (
           <div className="border rounded-md p-4 space-y-4">
-            {/* Sub-Bagian A.1 - Harta Tidak Bergerak */}
             <div className="ml-4">
-              {/* <PenghasilanKenaPajak /> */}
+              {/* tampilkan seluruh form + tabel di sini */}
+              <Lampiran3A1 />
             </div>
           </div>
         )}
       </div>
     </div>
   );
-};
-
-export default Lampiran_3A1;
+}

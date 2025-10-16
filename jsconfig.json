@@ -2,6 +2,10 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@sections/*": ["src/components/PraktikumPage/Badan/SPT/Spt_Pribadi/Lampiran/sections/*"],
+      "@lampiran/*": ["src/components/PraktikumPage/Badan/SPT/Spt_Pribadi/Lampiran/components/*"],
+      "@utils/*": ["src/components/PraktikumPage/Badan/SPT/Spt_Pribadi/Lampiran/utils/*"]
     }
-}}
+  }
+}
