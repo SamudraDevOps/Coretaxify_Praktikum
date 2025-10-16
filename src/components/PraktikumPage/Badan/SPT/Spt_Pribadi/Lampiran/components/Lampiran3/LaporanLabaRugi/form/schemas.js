@@ -1,9 +1,8 @@
-// opsi dropdown Kode Koreksi Fiskal (contoh – isi sesuai list-mu)
+// opsi dropdown Kode Koreksi Fiskal (contoh e dibawah)
 export const KODE_KOREKSI_OPTIONS = [
   { value: "", label: "— pilih —" },
   { value: "FPO-01", label: "FPO-01 Biaya yang dibebankan/..." },
   { value: "FPO-02", label: "FPO-02 Biaya natura/kenikmatan" },
-  // ...dst
 ];
 
 // DEFAULT FIELD ORDER (semua bisa diisi; readOnly bisa dioverride)
@@ -33,8 +32,7 @@ export const defaultFields = [
 
 // Setting kode berapa yang akan dibuat khusus (bisa lebih dari satu)
 // misal: untuk kodeAkun 4002, keterangan dan kodeAkun dibuat readOnly
-//      untuk kodeAkun 5001, nilaiFiskal dibuat readOnly
-// dst, OKEEE KING
+//      untuk kodeAkun 5001, nilaiFiskal dibuat readOnly OKEEE KING
 
 const perKode = {
   // contoh: untuk 4002, kunci identitas dibuat baca-saja
@@ -49,7 +47,7 @@ const perKode = {
   // dst, OKEEE KING
 };
 
-// >>> pastikan fungsi ini ADA dan di-export
+// Build SCHEMA lengkap untuk baris tertentu iki kudu di panggil di index.jsx
 export function buildSchema(row, dynamicOverrides = []) {
   const map = new Map(defaultFields.map((f) => [f.name, { ...f }]));
   [...(perKode[row?.kodeAkun] || []), ...dynamicOverrides].forEach((ov) => {
@@ -60,11 +58,11 @@ export function buildSchema(row, dynamicOverrides = []) {
 
 // Menampilkan apakah field tertentu readonly (untuk menampikan Rp0 di tabel)
 export function isFieldReadonly(row, fieldName) {
-  // non-line (header/label/subtotal) anggap semuanya readonly
+  // non-line (header/label/subtotal)  semuanya readonly
   if (row?.type && row.type !== "line") return true;
   const ov = (perKode[row?.kodeAkun] || []).find(f => f.name === fieldName);
   return !!ov?.readOnly;
 }
 
-// opsional: alias nama lain, kalau nanti kamu import getSchemaForRow
+// opsional kawan : alias nama lain, kalau nanti kamu import getSchemaForRow dari file ini
 export const getSchemaForRow = (row, overrides = []) => buildSchema(row, overrides);

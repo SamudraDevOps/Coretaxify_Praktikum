@@ -105,13 +105,13 @@ const ROWS = [
     kodePenyesuaian: "",
     nilaiFiskal: 0,
   },
-  { id: "label-dikurangi2", type: "label", level: 1, keterangan: "(Dikurangi: Persediaan Akhir)" },
+  // { id: "label-dikurangi2", type: "label", level: 1, keterangan: "(Dikurangi: Persediaan Akhir)" },  
   {
     id: 5009,
     kodeAkun: "5009",
-    keterangan: "Persediaan Akhir",
+    keterangan: "(Dikurangi: Persediaan Akhir)",
     type: "line",
-    level: 2,
+    level: 1,
     nilaiKomersial: 0,
     nonObjekPajak: 0,
     pphFinal: 0,
@@ -159,6 +159,22 @@ const ROWS = [
   {
     id: 5314,
     kodeAkun: "5314",
+    keterangan: "Beban Penyusutan dan Amortisasi",
+    type: "line",
+    level: 1,
+    nilaiKomersial: 0,
+    nonObjekPajak: 0,
+    pphFinal: 0,
+    tidakFinal: 0,
+    penyesuaianPositif: 0,
+    penyesuaianNegatif: 0,
+    kodePenyesuaian: "",
+    nilaiFiskal: 0,
+  },
+
+   {
+    id: 5314,
+    kodeAkun: "5314",
     keterangan: "Beban orang tua",
     type: "line",
     level: 1,
@@ -171,7 +187,6 @@ const ROWS = [
     kodePenyesuaian: "",
     nilaiFiskal: 0,
   },
-  // …lanjutkan semua baris lain sesuai list patenmu…
 ];
 
 export default function Lampiran3A1() {

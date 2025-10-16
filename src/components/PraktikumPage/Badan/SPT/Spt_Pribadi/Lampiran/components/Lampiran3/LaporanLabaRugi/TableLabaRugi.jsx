@@ -63,7 +63,7 @@ export default function TableLabaRugi({ rows = [], onEdit }) {
                   {r.keterangan}
                 </td>
 
-                {/* ⬇️ kolom angka: pakai moneyCell */}
+                {/* kolom angka: pakai moneyCell Bakal diganti menggunakan format Currency iki lek */}
                 <td className="border p-2 text-right">
                   {moneyCell(r, r.nilaiKomersial, "nilaiKomersial")}
                 </td>
