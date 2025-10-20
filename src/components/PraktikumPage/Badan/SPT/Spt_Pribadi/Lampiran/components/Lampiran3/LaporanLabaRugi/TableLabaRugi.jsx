@@ -37,19 +37,21 @@ export default function TableLabaRugi({ rows = [], onEdit }) {
             return (
               <tr key={r.id} className="border-b hover:bg-gray-50">
                 <td className="border p-2 text-center">
-                  <button
-                    type="button"
-                    onClick={() => !readonlyRow && onEdit?.(r)}
-                    className={
-                      readonlyRow
-                        ? "text-gray-300 cursor-not-allowed"
-                        : "text-blue-600 hover:text-blue-800"
-                    }
-                    disabled={readonlyRow}
-                    title={readonlyRow ? "Tidak dapat diedit" : "Edit"}
-                  >
-                    <FaPen size={14} />
-                  </button>
+                  {!readonlyRow && r.type !== "header" && r.type !== "total" && (
+                    <button
+                      type="button"
+                      onClick={() => onEdit?.(r)}
+                      className={
+                        readonlyRow
+                          ? "text-gray-300 cursor-not-allowed"
+                          : "text-blue-600 hover:text-blue-800"
+                      }
+                      // disabled={readonlyRow}
+                      // title={readonlyRow ? "Tidak dapat diedit" : "Edit"}
+                    >
+                      <FaPen size={14} />
+                    </button>
+                  )}
                 </td>
 
                 <td className="border p-2 text-center font-medium">{r.kodeAkun || ""}</td>
