@@ -15,6 +15,7 @@ import {
     PertanyaanJ
 }
     from './section';
+import { Header } from '../Lampiran'
 
 const CreateKonsepBadan = () => {
     const [showHeaderInduk, setShowHeaderInduk] = useState(true);
@@ -105,7 +106,14 @@ const CreateKonsepBadan = () => {
                                 <PertanyaanJ />
                             </div>
                         </TabsContent>
-                        <TabsContent value="L1-B">L1-B</TabsContent>
+                        <TabsContent value="L1-B">
+                            <div className="mt-4">
+                                <div className=" font-medium mb-4 text-lg mt-3">
+                                    Rekonsiliasi Laporan Keuangan - Perdagangan
+                                </div>
+                                <Header />
+                            </div>
+                        </TabsContent>
                     </Tabs>
 
                 </div>
