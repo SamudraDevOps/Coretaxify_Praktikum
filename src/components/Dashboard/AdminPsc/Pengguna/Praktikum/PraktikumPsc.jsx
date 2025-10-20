@@ -55,8 +55,10 @@ const PraktikumPsc = () => {
         },
         params: {
           intent: IntentEnum.API_GET_GROUP_BY_ROLES,
+          perPage: 'all',
         },
       });
+      console.log("data kelas: ", data);
       return data;
     },
   });
