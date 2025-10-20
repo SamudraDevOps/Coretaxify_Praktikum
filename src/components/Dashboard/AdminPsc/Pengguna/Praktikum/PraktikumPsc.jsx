@@ -58,7 +58,6 @@ const PraktikumPsc = () => {
           perPage: 'all',
         },
       });
-      console.log("data kelas: ", data);
       return data;
     },
   });
@@ -106,8 +105,6 @@ const PraktikumPsc = () => {
           search: search,
         }
       });
-
-      console.log(data);
       return data;
     },
   });
