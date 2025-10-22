@@ -105,7 +105,7 @@ const ROWS = [
     kodePenyesuaian: "",
     nilaiFiskal: 0,
   },
-  // { id: "label-dikurangi2", type: "label", level: 1, keterangan: "(Dikurangi: Persediaan Akhir)" },  
+  // { id: "label-dikurangi2", type: "label", level: 1, keterangan: "(Dikurangi: Persediaan Akhir)" },
   {
     id: 5009,
     kodeAkun: "5009",
@@ -172,10 +172,10 @@ const ROWS = [
     nilaiFiskal: 0,
   },
 
-   {
-    id: 5314,
-    kodeAkun: "5314",
-    keterangan: "Beban orang tua",
+  {
+    id: 5315,
+    kodeAkun: "5315",
+    keterangan: "Beban Sewa",
     type: "line",
     level: 1,
     nilaiKomersial: 0,
@@ -187,9 +187,136 @@ const ROWS = [
     kodePenyesuaian: "",
     nilaiFiskal: 0,
   },
+
+  {
+    id: 5316,
+    kodeAkun: "5316",
+    keterangan: "Beban Bunga",
+    type: "line",
+    level: 1,
+    nilaiKomersial: 0,
+    nonObjekPajak: 0,
+    pphFinal: 0,
+    tidakFinal: 0,
+    penyesuaianPositif: 0,
+    penyesuaianNegatif: 0,
+    kodePenyesuaian: "",
+    nilaiFiskal: 0,
+  },
+  {
+    id: 5317,
+    kodeAkun: "5317",
+    keterangan: "Beban Sehubungan Dengan Jasa",
+    type: "line",
+    level: 1,
+    nilaiKomersial: 0,
+    nonObjekPajak: 0,
+    pphFinal: 0,
+    tidakFinal: 0,
+    penyesuaianPositif: 0,
+    penyesuaianNegatif: 0,
+    kodePenyesuaian: "",
+    nilaiFiskal: 0,
+  },
+
+  {
+    id: 5318,
+    kodeAkun: "5318",
+    keterangan: "Beban Piutang Tidak Tertagih",
+    type: "line",
+    level: 1,
+    nilaiKomersial: 0,
+    nonObjekPajak: 0,
+    pphFinal: 0,
+    tidakFinal: 0,
+    penyesuaianPositif: 0,
+    penyesuaianNegatif: 0,
+    kodePenyesuaian: "",
+    nilaiFiskal: 0,
+  },
+
+  {
+    id: 5320,
+    kodeAkun: "5320",
+    keterangan: "Beban Pemasaran, Promosi, dan Periklanan",
+    type: "line",
+    level: 1,
+    nilaiKomersial: 0,
+    nonObjekPajak: 0,
+    pphFinal: 0,
+    tidakFinal: 0,
+    penyesuaianPositif: 0,
+    penyesuaianNegatif: 0,
+    kodePenyesuaian: "",
+    nilaiFiskal: 0,
+  },
+
+  {
+    id: 5321,
+    kodeAkun: "5321",
+    keterangan: "Beban Entertaiment",
+    type: "line",
+    level: 1,
+    nilaiKomersial: 0,
+    nonObjekPajak: 0,
+    pphFinal: 0,
+    tidakFinal: 0,
+    penyesuaianPositif: 0,
+    penyesuaianNegatif: 0,
+    kodePenyesuaian: "",
+    nilaiFiskal: 0,
+  },
+
+  {
+    id: 5322,
+    kodeAkun: "5322",
+    keterangan: "Beban Umum dan Administrasi",
+    type: "line",
+    level: 1,
+    nilaiKomersial: 0,
+    nonObjekPajak: 0,
+    pphFinal: 0,
+    tidakFinal: 0,
+    penyesuaianPositif: 0,
+    penyesuaianNegatif: 0,
+    kodePenyesuaian: "",
+    nilaiFiskal: 0,
+  },
+
+  {
+    id: 5399,
+    kodeAkun: "5399",
+    keterangan: "Beban Usaha Lainnya ",
+    type: "line",
+    level: 1,
+    nilaiKomersial: 0,
+    nonObjekPajak: 0,
+    pphFinal: 0,
+    tidakFinal: 0,
+    penyesuaianPositif: 0,
+    penyesuaianNegatif: 0,
+    kodePenyesuaian: "",
+    nilaiFiskal: 0,
+  },
+
+  {
+    id: 5400,
+    kodeAkun: "5400",
+    keterangan: "Jumlah Beban Usaha",
+    type: "subtotal",
+    level: 0,
+  },
+
+  {
+    id: 4800,
+    kodeAkun: "4800",
+    keterangan: "Laba (Rugi) Sebelum Pajak ",
+    type: "subtotal",
+    level: 0,
+  },
 ];
 
-export default function Lampiran3A1() {
+export default function LabaRugi() {
   const [rows, setRows] = useState(ROWS);
   const [open, setOpen] = useState(false);
   const [schema, setSchema] = useState([]);
@@ -233,7 +360,6 @@ export default function Lampiran3A1() {
     setRows((prev) => prev.map((r) => (r.id === selected.id ? { ...r, ...values } : r)));
     closeModal();
   };
-
 
   return (
     <>
