@@ -15,7 +15,8 @@ import {
     PertanyaanJ
 }
     from './section';
-import { Header } from '../Lampiran'
+import { Header, LampiranL1B } from '../Lampiran'
+import LampiranL1C from '../Lampiran/LampiranL1-C';
 
 const CreateKonsepBadan = () => {
     const [showHeaderInduk, setShowHeaderInduk] = useState(true);
@@ -31,6 +32,7 @@ const CreateKonsepBadan = () => {
                         <TabsList className="flex justify-start gap-2 text-blue-700 text-lg">
                             <TabsTrigger value="induk">Induk</TabsTrigger>
                             <TabsTrigger value="L1-B">L1-B</TabsTrigger>
+                            <TabsTrigger value="L1-C">L1-C</TabsTrigger>
                         </TabsList>
                         <TabsContent value="induk">
                             <div className="mt-4">
@@ -109,9 +111,17 @@ const CreateKonsepBadan = () => {
                         <TabsContent value="L1-B">
                             <div className="mt-4">
                                 <div className=" font-medium mb-4 text-lg mt-3">
-                                    Rekonsiliasi Laporan Keuangan - Perdagangan
+                                    Rekonsiliasi Laporan Keuangan - Manufaktur
                                 </div>
-                                <Header />
+                                <LampiranL1B />
+                            </div>
+                        </TabsContent>
+                        <TabsContent value="L1-C">
+                            <div className="mt-4">
+                                <div className=" font-medium mb-4 text-lg mt-3">
+                                    Rekonsiliasi Laporan Keuangan - Dagang
+                                </div>
+                                <LampiranL1C />
                             </div>
                         </TabsContent>
                     </Tabs>
