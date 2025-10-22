@@ -225,6 +225,14 @@ export default function BagianB() {
       level: 1,
       nilaiKomersial: 0,
     },
+     {
+      id: 2103,
+      kodeAkun: "2103",
+      keterangan: "Utang Usaha - Pihak Yang Mempunyai Hubungan Istimewa",
+      type: "line",
+      level: 1,
+      nilaiKomersial: 0,
+    },
     {
       id: 2111,
       kodeAkun: "2111",
@@ -233,15 +241,130 @@ export default function BagianB() {
       level: 1,
       nilaiKomersial: 0,
     },
+     {
+      id: 2191,
+      kodeAkun: "2191",
+      keterangan: "Utang Pajak",
+      type: "line",
+      level: 1,
+      nilaiKomersial: 0,
+    },
 
+     {
+      id: 2192,
+      kodeAkun: "2192",
+      keterangan: "Utang Dividen",
+      type: "line",
+      level: 1,
+      nilaiKomersial: 0,
+    },
+
+     {
+      id: 2195,
+      kodeAkun: "2195",
+      keterangan: "Beban Yang Masih Harus Dibayar",
+      type: "line",
+      level: 1,
+      nilaiKomersial: 0,
+    },
+
+    {
+      id: 2201,
+      kodeAkun: "2201",
+      keterangan: "Utang Bank Jangka Pendek",
+      type: "line",
+      level: 1,
+      nilaiKomersial: 0,
+    },
+
+      {
+      id: 2202,
+      kodeAkun: "2202",
+      keterangan: "Utang Bank Jangka Panjang yang Jatuh Tempo Dalam Satu Tahun",
+      type: "line",
+      level: 1,
+      nilaiKomersial: 0,
+    },
+    {
+      id: 2203,
+      kodeAkun: "2203",
+      keterangan: "Pendapatan Diterima Dimuka",
+      type: "line",
+      level: 1,
+      nilaiKomersial: 0,
+    },
+
+    {
+      id: 2228,
+      kodeAkun: "2228",
+      keterangan: "Liabilitas Jangka Pendek Lainnya",
+      type: "line",
+      level: 1,
+      nilaiKomersial: 0,
+    },
+
+    {
+      id: "liabilitas-jangka-panjang",
+      type: "header",
+      level: 0,
+      keterangan: "Liabilitas Jangka Panjang",
+      nilaiKomersial: 0,
+    },
+
+    {
+      id: 2301,
+      kodeAkun: "2301",
+      keterangan: "Utang Bank Jangka Panjang",
+      type: "line",
+      level: 1,
+      nilaiKomersial: 0,
+    },
+
+     {
+      id: 2303,
+      kodeAkun: "2303",
+      keterangan: "Utang Jangka Panjang-pihak Ketiga",
+      type: "line",
+      level: 1,
+      nilaiKomersial: 0,
+    },
+    
+    {
+      id: 2304,
+      kodeAkun: "2304",
+      keterangan: "Utang Jangka Panjang-pihak Yang Mempunyai Hubungan Istimewa",
+      type: "line",
+      level: 1,
+      nilaiKomersial: 0,
+    },
+
+    {
+      id: 2321,
+      kodeAkun: "2321",
+      keterangan: "Liabilitas Pajak Tangguhan",
+      type: "line",
+      level: 1,
+      nilaiKomersial: 0,
+    },
+
+    {
+      id: 2998,
+      kodeAkun: "2998",
+      keterangan: "Liabilitas Jangka Panjang Lainnya",
+      type: "line",
+      level: 1,
+      nilaiKomersial: 0,
+    },
     // Total Liabilitas
     {
       id: "s-total-liabilitas",
       type: "subtotal",
       level: 0,
-      keterangan: "Total Liabilitas",
+      keterangan: "Jumlah Liabilitas",
       nilaiKomersial: 0,
     },
+
+    // Ekuitas
     {
       id: "h-ekuitas",
       type: "header",
@@ -250,7 +373,7 @@ export default function BagianB() {
       nilaiKomersial: 0,
     },
     {
-      id: 31028,
+      id: 3102,
       kodeAkun: "3102",
       keterangan: "Modal Saham",
       type: "line",
@@ -258,12 +381,48 @@ export default function BagianB() {
       nilaiKomersial: 0,
     },
 
+    {
+      id: 3120,
+      kodeAkun: "3120",
+      keterangan: "Tambahan Modal Disetor",
+      type: "line",
+      level: 1,
+      nilaiKomersial: 0,
+    },
+
+    {
+      id: 3200,
+      kodeAkun: "3200",
+      keterangan: "Laba Ditahan",
+      type: "line",
+      level: 1,
+      nilaiKomersial: 0,
+    },
+
+     {
+      id: 3298,
+      kodeAkun: "3298",
+      keterangan: "Ekuitas Lainnya",
+      type: "line",
+      level: 1,
+      nilaiKomersial: 0,
+    },
     // Total Ekuitas
     {
       id: "s-total-ekuitas",
       type: "subtotal",
       level: 0,
-      keterangan: "Total Ekuitas",
+      keterangan: "Jumlah Ekuitas",
+      nilaiKomersial: 0,
+    },
+
+     // Total Liabilitas & Ekuitas
+    {
+      id: "s-total-liab-ekuitas",
+      kodeAkun: "3300",
+      type: "subtotal",
+      level: 0,
+      keterangan: "Jumlah Liabilitas & Ekuitas",
       nilaiKomersial: 0,
     },
   ]);
@@ -301,7 +460,7 @@ export default function BagianB() {
         ];
         const subtractIds = [1131, 1524, 1530];
         const value = calculateWithDeductions(addIds, subtractIds, leftRows);
-        console.log("🔢 Calculating TOTAL ASET:", value);
+        console.log(" Calculating TOTAL ASET:", value);
         return { ...row, nilaiKomersial: value };
       }
 
@@ -313,7 +472,7 @@ export default function BagianB() {
     return rightRows.map((row) => {
       // Auto-calculate untuk Total Liabilitas row
       if (row.id === "s-total-liabilitas") {
-        const liabilitasIds = [2102, 2111]; // Utang Usaha + Utang Bunga
+        const liabilitasIds = [2102, 2103, 2111, 2191, 2192, 2195, 2201, 2202, 2203, 2228, 2301, 2303, 2304, 2321, 2998];
         const totalLiabilitas = liabilitasIds.reduce((sum, id) => {
           const liabilitasRow = rightRows.find((r) => r.id === id);
           return sum + (liabilitasRow?.nilaiKomersial || 0);
@@ -325,7 +484,7 @@ export default function BagianB() {
 
       // Auto-calculate untuk Total Ekuitas row
       if (row.id === "s-total-ekuitas") {
-        const ekuitasIds = [31028]; // Modal Saham
+        const ekuitasIds = [3102, 3120, 3200, 3298]; 
         const totalEkuitas = ekuitasIds.reduce((sum, id) => {
           const ekuitasRow = rightRows.find((r) => r.id === id);
           return sum + (ekuitasRow?.nilaiKomersial || 0);
@@ -341,8 +500,8 @@ export default function BagianB() {
         const totalEkuitas = rightRows.find((r) => r.id === "s-total-ekuitas")?.nilaiKomersial || 0;
 
         // Atau hitung langsung dari ID individual
-        const liabIds = [2102, 2111];
-        const ekuitasIds = [31028];
+        const liabIds = [2102, 2103, 2111, 2191, 2192, 2195, 2201, 2202, 2203, 2228, 2301, 2303, 2304, 2321, 2998];
+        const ekuitasIds = [3102, 3120, 3200, 3298];
 
         const calculatedLiab = liabIds.reduce((sum, id) => {
           const row = rightRows.find((r) => r.id === id);
