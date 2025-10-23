@@ -15,7 +15,7 @@ import { IntentEnum } from "@/enums/IntentEnum";
 
 const MahasiswaPscPraktikum = () => {
   const navigate = useNavigate();
-  const [cookies] = useCookies(["token"]);
+  const [cookies, setCookie] = useCookies(["token"]);
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 20;
@@ -48,7 +48,7 @@ const MahasiswaPscPraktikum = () => {
     },
   });
 
-   const handleDownload = (id) => {
+  const handleDownload = (id) => {
     downloadMutation.mutate(id);
   };
 
@@ -114,51 +114,8 @@ const MahasiswaPscPraktikum = () => {
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
 
-  // Loading state
-  if (isLoading) {
-    return (
-      <div className="loading">
-        <ClipLoader color="#7502B5" size={50} />
-      </div>
-    );
-  }
 
-  // Error state
-  if (isError) {
-    return (
-      <div className="h-screen w-full justify-center items-center flex">
-        <Alert variant="destructive" className="w-1/2 bg-white">
-          <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Error!</AlertTitle>
-          <div className="">
-            <p>{error?.message ?? "Error loading praktikum!"}</p>
-            <div className="w-full flex justify-end">
-              <button
-                className="bg-green-500 p-2 rounded-md text-white"
-                onClick={() => refetch()}
-              >
-                Ulangi
-              </button>
-            </div>
-          </div>
-        </Alert>
-      </div>
-    );
-  }
-
-  // Filter data based on search
-  //   const filteredData =
-  //     data?.data?.filter(
-  //       (item) =>
-  //         item.name?.toLowerCase().includes(search.toLowerCase()) ||
-  //         item.description?.toLowerCase().includes(search.toLowerCase()) ||
-  //         item.status?.toLowerCase().includes(search.toLowerCase())
-  //     ) || [];
-
-
-  // Download file mutation
-
-    const downloadMutation = useMutation({
+  const downloadMutation = useMutation({
     mutationFn: async (id) => {
       try {
         const showEndpoint = RoutesApi.psc.assignments.show(id);
@@ -204,6 +161,51 @@ const MahasiswaPscPraktikum = () => {
       }
     },
   });
+
+  // Loading state
+  if (isLoading) {
+    return (
+      <div className="loading">
+        <ClipLoader color="#7502B5" size={50} />
+      </div>
+    );
+  }
+
+  // Error state
+  if (isError) {
+    return (
+      <div className="h-screen w-full justify-center items-center flex">
+        <Alert variant="destructive" className="w-1/2 bg-white">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>Error!</AlertTitle>
+          <div className="">
+            <p>{error?.message ?? "Error loading praktikum!"}</p>
+            <div className="w-full flex justify-end">
+              <button
+                className="bg-green-500 p-2 rounded-md text-white"
+                onClick={() => refetch()}
+              >
+                Ulangi
+              </button>
+            </div>
+          </div>
+        </Alert>
+      </div>
+    );
+  }
+
+  // Filter data based on search
+  //   const filteredData =
+  //     data?.data?.filter(
+  //       (item) =>
+  //         item.name?.toLowerCase().includes(search.toLowerCase()) ||
+  //         item.description?.toLowerCase().includes(search.toLowerCase()) ||
+  //         item.status?.toLowerCase().includes(search.toLowerCase())
+  //     ) || [];
+
+
+  // Download file mutation
+
 
 
   return (
@@ -288,47 +290,63 @@ const MahasiswaPscPraktikum = () => {
                   <td>{item.assignment?.group?.name}</td>
                   <td>{item.assignment?.group?.teacher}</td>
                   <td>{item.assignment.name}</td>
-                                    {/* <td>{item.assignment.supporting_file}</td> */}
+                  {/* <td>{item.assignment.supporting_file}</td> */}
                   <td className="max-w-5">
-                        <td>
-                  {item.assignment.supporting_file ? (
-                    <button
-                      onClick={() => handleDownload(item.assignment.id)}
-                      className="download-button"
-                      disabled={downloadMutation.isPending}
-                    >
-                      {downloadMutation.isPending ? "Loading..." : "Download"}
-                    </button>
-                  ) : (
-                    <span>-</span>
-                  )}
-                </td>
+                    <td>
+                      {item.assignment.supporting_file ? (
+                        <button
+                          onClick={() => handleDownload(item.assignment.id)}
+                          className="download-button"
+                          disabled={downloadMutation.isPending}
+                        >
+                          {downloadMutation.isPending ? "Loading..." : "Download"}
+                        </button>
+                      ) : (
+                        <span>-</span>
+                      )}
+                    </td>
                     {/* <p className="">{item.assignment.end_period}</p> */}
                   </td>
                   <td>{item.assignment.end_period}</td>
                   <td>
-                    <button
-                      className="action-button"
-                      disabled={startPraktikum.isPending}
-                      onClick={() => {
-                        if (item.is_start === 1) {
-                          // If already started, redirect directly
-                          window.location.href = `/praktikum/${item.assignment.id}`;
-                        } else {
-                          // If not started, call the mutation to start
-                          startPraktikum.mutate(item.assignment.id);
-                        }
-                      }}
-                    >
-                      {startPraktikum.isPending ? (
-                        <div className="flex items-center gap-2">
-                          <ClipLoader color="#ffffff" size={16} />
-                          Loading...
-                        </div>
-                      ) : (
-                        "Mulai"
-                      )}
-                    </button>
+                    {item.is_valid === false ? (
+                      <button
+                        className="download-button"
+                        onClick={() => {
+                          navigate(
+                            `/praktikum/${item.assignment.id}?user_id=${user.data.id}`
+                          );
+                        }}
+                      >
+                        Lihat
+                      </button>
+                    ) : (
+                      <button
+                        className="action-button"
+                        disabled={startPraktikum.isPending}
+                        onClick={() => {
+                          setCookie("assignment_user_id", item.id, {
+                            path: "/",
+                          });
+                          if (item.is_start === 1) {
+                            // If already started, redirect directly
+                            window.location.href = `/praktikum/${item.assignment.id}`;
+                          } else {
+                            // If not started, call the mutation to start
+                            startPraktikum.mutate(item.assignment.id);
+                          }
+                        }}
+                      >
+                        {startPraktikum.isPending ? (
+                          <div className="flex items-center gap-2">
+                            <ClipLoader color="#ffffff" size={16} />
+                            Loading...
+                          </div>
+                        ) : (
+                          "Mulai"
+                        )}
+                      </button>
+                    )}
                   </td>
                 </tr>
               ))}
@@ -368,11 +386,10 @@ const MahasiswaPscPraktikum = () => {
                 )
               )} */}
               <button
-                className={`page-item ${
-                  currentPage === Math.ceil(data.length / itemsPerPage)
+                className={`page-item ${currentPage === Math.ceil(data.length / itemsPerPage)
                     ? "disabled"
                     : ""
-                }`}
+                  }`}
                 onClick={() => {
                   console.log(data.links.next);
                   setUrl(data.links.next);

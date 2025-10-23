@@ -21,18 +21,20 @@ import { ClipLoader } from "react-spinners";
 import { joinAssignmentMahasiswa } from "@/hooks/dashboard/useMahasiswa";
 import { getCookie } from "@/service";
 import { getCsrf } from "@/service/getCsrf";
-import { useOutletContext } from "react-router-dom";
+import { useOutletContext, useNavigate } from "react-router-dom";
 
 export default function MahasiswaPraktikum() {
   const [isOpen, setIsOpen] = useState(false);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
   const [selectedData, setSelectedData] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const currentUrl = window.location.href.split("?")[0];
   const itemsPerPage = 20;
   const [cookies, setCookie] = useCookies(["user"]);
   // const [url, setUrl] = useState(`${RoutesApi.url}api/student/assignments`);
   const [url, setUrl] = useState(`${RoutesApi.url}api/student/assignment-user`);
   const { user } = useOutletContext();
+  const navigate = useNavigate();
 
   const { isLoading, isError, data, error, refetch } = useQuery({
     queryKey: ["praktikum", url],
@@ -53,6 +55,7 @@ export default function MahasiswaPraktikum() {
           },
         },
       });
+      console.log(data);
       return data;
     },
   });
@@ -259,7 +262,7 @@ export default function MahasiswaPraktikum() {
               <th className="">Nama Dosen</th>
               <th className="">Judul Praktikum</th>
               <th className="">Deadline Praktikum</th>
-              <th>Aksi</th>
+              <th className="">Aksi</th>
             </tr>
           </thead>
           <tbody>
@@ -272,10 +275,23 @@ export default function MahasiswaPraktikum() {
                   <p className="">{item.assignment.end_period}</p>
                 </td>
                 <td>
+                  {item.is_valid === false ? (
+                    <button
+                      className="download-button"
+                      onClick={() => {
+                          navigate(
+                            `/praktikum/${item.assignment.id}?user_id=${user.data.id}`
+                          );
+                        }}
+                    >
+                      Lihat
+                      </button>
+                  ) : (
                   <button
                     className="action-button"
                     disabled={startPraktikum.isPending}
                     onClick={() => {
+                      setCookie("assignment_user_id", item.id, { path: "/" });
                       if (item.is_start === 1) {
                         // If already started, redirect directly
                         window.location.href = `/praktikum/${item.assignment.id}`;
@@ -294,6 +310,7 @@ export default function MahasiswaPraktikum() {
                       "Mulai"
                     )}
                   </button>
+                  )}
                 </td>
               </tr>
             ))}

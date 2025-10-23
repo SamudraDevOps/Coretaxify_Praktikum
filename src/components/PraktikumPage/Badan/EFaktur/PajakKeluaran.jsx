@@ -26,7 +26,7 @@ const PajakKeluaran = ({
   const [searchParams, setSearchParams] = useSearchParams();
   const viewAsCompanyId = searchParams.get("viewAs");
   const userId = searchParams.get("user_id");
-  const [cookies] = useCookies(["token"]);
+  const [cookies] = useCookies(["token", "role"]);
   const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
   // return axios.post(
   //   `${RoutesApiReal.url}api/student/assignments/${id}/sistem/${accountId}/faktur`,
@@ -331,7 +331,7 @@ const PajakKeluaran = ({
               Pajak Keluaran
             </h1>
           </div>
-          {userId ? (
+          {userId && (cookies.role === "dosen" || cookies.role === "psc") ? (
             <FakturPenilaian
               tipeFaktur="Faktur Keluaran"
             />

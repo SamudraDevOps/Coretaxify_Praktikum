@@ -433,13 +433,7 @@ const BuatKonsepSPT = ({ sidebar }) => {
       // Redirect ke halaman CreateKonsepPribadi
       navigate(`/praktikum/${id}/sistem/${akun}/buat-konsep-spt-pribadi/temp-id`);
     } else if (selectedType === 'badan') {
-      Swal.fire({
-        title: "Fitur Dalam Pengembangan",
-        text: "SPT Badan sedang dalam tahap pengembangan. Backend API belum tersedia.",
-        icon: "info",
-        confirmButtonText: "OK",
-        confirmButtonColor: "#f59e0b", // yellow-500
-      });
+      navigate(`/praktikum/${id}/sistem/${akun}/buat-konsep-spt-badan/temp-id`);
     }
   };
 
@@ -746,13 +740,9 @@ const BuatKonsepSPT = ({ sidebar }) => {
                           : "bg-gray-300 text-white cursor-not-allowed text-normal"
                       )}
                       onClick={() => {
-                        Swal.fire({
-                          title: "Fitur Dalam Pengembangan",
-                          text: "SPT Badan sedang dalam tahap pengembangan. Backend API belum tersedia.",
-                          icon: "info",
-                          confirmButtonText: "OK",
-                          confirmButtonColor: "#f59e0b",
-                        });
+                       const targetRoute = `/praktikum/${id}/sistem/${akun}/buat-konsep-spt-badan`;
+                       console.log("Navigating to:", targetRoute);
+                       navigate(targetRoute);
                       }}
                     >
                       Buat SPT Badan (Demo)

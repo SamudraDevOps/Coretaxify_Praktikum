@@ -8,6 +8,7 @@ import {
   FaChevronDown,
   FaUserCircle,
   FaFileAlt,
+  FaBuilding,
 } from "react-icons/fa";
 import { GiPieChart } from "react-icons/gi";
 import Logo from "../../../../assets/images/7.png";
@@ -154,15 +155,26 @@ const SidebarAdmin = () => {
             {isOpen && <span>Dashboard</span>}
           </li>
           {cookies.role == "admin" ? (
-            <li
-              className="menu-item"
-              onClick={() => {
-                window.location.href = "/admin/kontrak";
-              }}
-            >
-              <FaBox className="menu-icon" />
-              {isOpen && <span>Kontrak</span>}
-            </li>
+            <>
+              <li
+                className="menu-item"
+                onClick={() => {
+                  window.location.href = "/admin/kontrak";
+                }}
+              >
+                <FaBox className="menu-icon" />
+                {isOpen && <span>Kontrak</span>}
+              </li>
+              <li
+                className="menu-item"
+                onClick={() => {
+                  window.location.href = "/admin/instansi";
+                }}
+              >
+                <FaBuilding className="menu-icon" />
+                {isOpen && <span>Instansi</span>}
+              </li>
+            </>
           ) : (
             <></>
           )}
@@ -294,6 +306,18 @@ const SidebarAdmin = () => {
                       }}
                     >
                       Mahasiswa
+                    </li>
+                    <li
+                      className={`dropdown-item  ${
+                        cookies.role == "admin"
+                          ? ""
+                          : "!hidden"
+                      }`}
+                      onClick={() => {
+                        window.location.href = `/${cookies.role}/edit-mahasiswa-psc`;
+                      }}
+                    >
+                      Mahasiswa PSC
                     </li>
                     <li
                       className={`dropdown-item  ${
@@ -472,18 +496,10 @@ const SidebarAdmin = () => {
                     <li
                       className="dropdown-item"
                       onClick={() => {
-                        window.location.href = `/${cookies.role}/praktikum-kosong`;
+                        window.location.href = `/${cookies.role}/praktikum`;
                       }}
                     >
-                      Praktikum Kosong
-                    </li>
-                    <li
-                      className="dropdown-item"
-                      onClick={() => {
-                        window.location.href = `/${cookies.role}/praktikum-terisi`;
-                      }}
-                    >
-                      Praktikum Terisi
+                      Praktikum
                     </li>
                   </ul>
                 </AccordionContent>

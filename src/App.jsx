@@ -24,6 +24,7 @@ import EditKelas from "./components/Dashboard/Admin/Pengguna/Kelas/EditKelas";
 
 // ADMIN
 import AdminCoretaxify from "./components/Dashboard/Admin/Coretaxify/AdminCoretaxify";
+import Instansi from "./components/Dashboard/Admin/Instansi/Index";
 
 // DOSEN
 import DosenCoretaxify from "./components/Dashboard/Dosen/Coretaxify/DosenCoretaxify";
@@ -90,6 +91,7 @@ import TwoAuthentication from "./components/PraktikumPage/OrangPribadi/PortalSay
 import PermohonanTertunda from "./components/PraktikumPage/OrangPribadi/PortalSaya/PermohonanTertunda";
 import LihatKonsepPribadi from "./components/PraktikumPage/Badan/SPT/ViewKonsepPribadi";
 import CreateKonsepPribadi from "./components/PraktikumPage/Badan/SPT/Spt_Pribadi/Induk/CreateKonsepPribadi";
+import CreateKonsepBadan from "./components/PraktikumPage/Badan/SPT/Spt_Badan/Induk/CreateKonsepBadan";
 
 
 
@@ -164,6 +166,7 @@ import PermohonanPemindahBukuan from "./components/PraktikumPage/Badan/Pembayara
 import ReturFakturKeluaran from "./components/PraktikumPage/Badan/EFaktur/ReturFakturKeluaran";
 import ReturFakturMasukan from "./components/PraktikumPage/Badan/EFaktur/ReturFakturMasukan";
 import TambahReturFaktur from "./components/PraktikumPage/Badan/EFaktur/TambahReturFaktur";
+import Bupot21ViewPDFDokumen from "./components/PraktikumPage/Badan/BUPOT/Bupot21ViewPDFDokumen";
 // Route Badan
 
 import ProtectedRoutes from "./components/Dashboard/Auth/ProtectedRoutes";
@@ -217,6 +220,7 @@ const Main = () => {
       setLoading(false);
     }, 0);
   }, []);
+
 
   // In the useEffect that validates the token
   // useEffect(() => {
@@ -312,6 +316,7 @@ const Main = () => {
         >
           <Route path="/admin" element={<DashboardAdmin />} />
           <Route path="/admin/kontrak" element={<Kontrak />} />
+          <Route path="/admin/instansi" element={<Instansi />} />
           <Route path="/admin/coretaxify" element={<AdminCoretaxify />} />
           <Route path="/admin/edit-dosen" element={<EditDosen />} />
           <Route path="/admin/upload-soal" element={<UploadSoal />} />
@@ -328,6 +333,7 @@ const Main = () => {
           <Route path="/admin/edit-admin" element={<EditAdmin />} />
           <Route path="/admin/edit-kelas" element={<EditKelas />} />
           <Route path="/admin/edit-mahasiswa" element={<EditMahasiswa />} />
+          <Route path="/admin/edit-mahasiswa-psc" element={<EditMahasiswaPsc />} />
           <Route path="/admin/edit-artikel" element={<EditArtikel />} />
           <Route path="/admin/edit-ulasan" element={<EditUlasan />} />
           <Route path="/admin/kontrak-backup" element={<KontrakBackup />} />
@@ -459,226 +465,11 @@ const Main = () => {
           />
           <Route
             path="/instruktur/praktikum"
-            element={<InstrukturPraktikum />}
-          />
-          <Route
-            path="/instruktur/praktikum/terisi"
-            element={<FilledAssignment />}
-          />
-          <Route
-            path="/instruktur/praktikum/kosong"
             element={<BlankAssignment />}
           />
         </Route>
         {/* Praktikum */}
-        <Route
-          path="/admin/praktikum/prak1"
-          element={
-            <>
-              <Header />
-              <Home />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/dokumen-saya"
-          element={
-            <>
-              <Header />
-              <DokumenSaya />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/notifikasi-saya"
-          element={
-            <>
-              <Header />
-              <NotifikasiSaya />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/dokumen-saya"
-          element={
-            <>
-              <Header />
-              <DokumenSaya />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/notifikasi-saya"
-          element={
-            <>
-              <Header />
-              <NotifikasiSaya />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/kasus-saya"
-          element={
-            <>
-              <Header />
-              <KasusSaya />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/profil-saya"
-          element={
-            <>
-              <Header />
-              <ProfilSaya />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/profil-saya/informasi-umum"
-          element={
-            <>
-              <Header />
-              <InformasiSaya />
-            </>
-          }
-        />
-        {/* <Route
-          path="/admin/praktikum/profil-saya/informasi-umum/edit-data-profil"
-          element={
-            <>
-              <Header />
-              <EditDataProfil />
-            </>
-          }
-        /> */}
-        <Route
-          path="/admin/praktikum/profil-saya/alamat"
-          element={
-            <>
-              <Header />
-              <AlamatSaya />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/profil-saya/detail-kontak"
-          element={
-            <>
-              <Header />
-              <DetailKontak />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/profil-saya/pihak-terkait"
-          element={
-            <>
-              <Header />
-              <PihakTerkait />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/profil-saya/detail-bank"
-          element={
-            <>
-              <Header />
-              <DetailBank />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/profil-saya/objek-pajak-bumi-dan-bangunan-(pbb)"
-          element={
-            <>
-              <Header />
-              <ObjekPBB />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/profil-saya/klasifikasi-lapangan-usaha-(klu)"
-          element={
-            <>
-              <Header />
-              <KlasifikasiLapanganUsaha />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/profil-saya/data-unit-keluarga"
-          element={
-            <>
-              <Header />
-              <DataUnitKeluarga />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/profil-saya/tempat-kegiatan-usaha/sub-unit"
-          element={
-            <>
-              <Header />
-              <TempatKegiatanUsaha />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/profil-saya/nomor-identifikasi-eksternal"
-          element={
-            <>
-              {/* query={} */}
-              <Header />
-              <NomorIdentifikasiEksternal />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/profil-saya/jenis-pajak"
-          element={
-            <>
-              <Header />
-              <JenisPajak />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/profil-saya/wakil-kuasa-saya"
-          element={
-            <>
-              <Header />
-              <WakilKuasaSaya />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/profil-saya/wajib-pajak-yang-diwakili"
-          element={
-            <>
-              <Header />
-              <WajibPajakYangDiwakili />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/profil-saya/verifikasi-dua-langkah"
-          element={
-            <>
-              <Header />
-              <TwoAuthentication />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/profil-saya/permohonan-tertunda"
-          element={
-            <>
-              <Header />
-              <PermohonanTertunda />
-            </>
-          }
-        />
+
         {/* Praktikum */}
         {/* Praktikum  Orang Pribadi*/}
         {/* <Route
@@ -708,42 +499,7 @@ const Main = () => {
             </>
           }
         />
-        <Route
-          path="/admin/praktikum/1/notifikasi-saya"
-          element={
-            <>
-              <Header />
-              <NotifikasiSaya />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/1/dokumen-saya"
-          element={
-            <>
-              <Header />
-              <DokumenSaya />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/1/notifikasi-saya"
-          element={
-            <>
-              <Header />
-              <NotifikasiSaya />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/1/kasus-saya"
-          element={
-            <>
-              <Header />
-              <KasusSaya />
-            </>
-          }
-        />
+
         <Route
           path="/praktikum/:id/sistem/:akun/profil-saya"
           element={
@@ -1229,11 +985,27 @@ const Main = () => {
                 Badan={SPTViewPDF}
                 query={""}
               ></RoleBasedRenderer>
+
             </>
             // <>
-            //   <Header />
+            //   <yHeader />
             //   <KonsepSPT />
             // </>
+          }
+        />
+        <Route
+          path="/praktikum/:id/sistem/:akun/buat-konsep-spt-pph/:idSpt"
+          // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/spt/:idSpt`}
+                intent={""}
+                OrangPribadi={CreateKonsepPasal}
+                Badan={CreateKonsepPasal}
+                query={""}
+              ></RoleBasedRenderer>
+            </>
           }
         />
         <Route
@@ -1243,6 +1015,55 @@ const Main = () => {
               <Header />
               <CreateKonsepPasal />
             </>
+          }
+        />
+        <Route
+          path="/praktikum/:id/sistem/:akun/lihat-konsep-spt-pph/:idSpt"
+
+          // path="/praktikum/:id/sistem/:akun/buat-konsep-spt-unifikasi/:idSpt"
+          // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/spt/:idSpt`}
+                intent={""}
+                OrangPribadi={LihatKonsepPasal}
+                Badan={LihatKonsepPasal}
+                query={""}
+
+              // OrangPribadi={CreateKonsepUnifikasi}
+              // Badan={CreateKonsepUnifikasi}
+              // query={"buat-konsep-spt-unifikasi"}
+              ></RoleBasedRenderer>
+            </>
+            // <>
+            //   <Header />
+            //   <KonsepSPT />
+            // </>
+          }
+
+        />
+        <Route
+          path="/praktikum/:id/sistem/:akun/spt-pph/pdf/:idSpt"
+
+          // path="/praktikum/:id/sistem/:akun/lihat-konsep-spt-unifikasi/:idSpt"
+          // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/spt/:idSpt`}
+                intent={""}
+                // OrangPribadi={LihatKonsepUnifikasi}
+                // Badan={LihatKonsepUnifikasi}
+                OrangPribadi={SPTPPHViewPDF}
+                Badan={SPTPPHViewPDF}
+                query={""}
+              ></RoleBasedRenderer>
+            </>
+            // <>
+            //   <Header />
+            //   <KonsepSPT />
+            // </>
           }
         />
         <Route
@@ -1287,24 +1108,38 @@ const Main = () => {
         {/* Route Sementra SPT Pribadi */}
 
 
-<Route
-  path="/praktikum/:id/sistem/:akun/buat-konsep-spt-pribadi"
-  element={
-    <>
-      <RoleBasedRenderer
-        url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun`}
-        intent={""}
-        OrangPribadi={CreateKonsepPribadi}
-        Badan={CreateKonsepPribadi}
-        query={"buat-konsep-spt-pribadi-no-id"}
-      />
-    </>
-  }
-/>
+        <Route
+          path="/praktikum/:id/sistem/:akun/buat-konsep-spt-pribadi"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun`}
+                intent={""}
+                OrangPribadi={CreateKonsepPribadi}
+                Badan={CreateKonsepPribadi}
+                query={"buat-konsep-spt-pribadi-no-id"}
+              />
+            </>
+          }
+        />
         {/* SPT Pribadi */}
         
+        <Route
+          path="/praktikum/:id/sistem/:akun/buat-konsep-spt-badan"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun`}
+                intent={""}
+                OrangPribadi={CreateKonsepBadan}
+                Badan={CreateKonsepBadan}
+                query={"buat-konsep-spt-badan-no-id"}
+              />
+            </>
+          }
+        />
 
-          <Route
+        <Route
           path="/praktikum/:id/sistem/:akun/buat-konsep-spt-pribadi/:idSpt"
           // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
           element={
@@ -1324,7 +1159,7 @@ const Main = () => {
           }
         />
 
-         <Route
+        <Route
           path="/praktikum/:id/sistem/:akun/lihat-konsep-spt-pribadi/:idSpt"
           // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
           element={
@@ -1475,6 +1310,38 @@ const Main = () => {
           }
         />
         <Route
+          path="/praktikum/:id/sistem/:akun/dokumen-saya"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/notification`}
+                intent={""}
+                OrangPribadi={DokumenSayaBadan}
+                Badan={DokumenSayaBadan}
+                query={"notifikasi"}
+              ></RoleBasedRenderer>
+            </>
+            // <>
+            //   <Header />
+            //   <KonsepSPT />
+            // </>
+          }
+        />
+        <Route
+          path="/praktikum/:id/sistem/:akun/dokumen-saya/pdf/:dokumen"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/notification`}
+                intent={""}
+                OrangPribadi={Bupot21ViewPDFDokumen}
+                Badan={Bupot21ViewPDFDokumen}
+                query={"notifikasi"}
+              ></RoleBasedRenderer>
+            </>
+          }
+        />
+        <Route
           path="/pdf/faktur-keluaran"
           element={
             <>
@@ -1598,7 +1465,7 @@ const Main = () => {
         />
 
         {/* Tes BP21 PDF */}
-            <Route
+        <Route
           path="/praktikum/:id/sistem/:akun/bupot/bppu/pdf/:bupot"
           element={
             <>
@@ -1631,7 +1498,7 @@ const Main = () => {
           }
         />
 
-         <Route
+        <Route
           path="/praktikum/:id/sistem/:akun/bupot/bp21/pdf/:bupot"
           element={
             <>
@@ -1677,677 +1544,20 @@ const Main = () => {
           }
         />
 
+
         <Route
-          path="/admin/praktikum/1/profil-saya/alamat"
+          path="/tes/:id/:akun"
           element={
             <>
-              <Header />
-              <AlamatSaya />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/1/profil-saya/detail-kontak"
-          element={
-            <>
-              <Header />
-              <DetailKontak />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/1/profil-saya/pihak-terkait"
-          element={
-            <>
-              <Header />
-              <PihakTerkait />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/1/profil-saya/objek-pajak-bumi-dan-bangunan-(pbb)"
-          element={
-            <>
-              <Header />
-              <ObjekPBB />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/1/profil-saya/klasifikasi-lapangan-usaha-(klu)"
-          element={
-            <>
-              <Header />
-              <KlasifikasiLapanganUsaha />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/1/profil-saya/data-unit-keluarga"
-          element={
-            <>
-              <Header />
-              <DataUnitKeluarga />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/1/profil-saya/tempat-kegiatan-usaha/sub-unit"
-          element={
-            <>
-              <Header />
-              <TempatKegiatanUsaha />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/1/profil-saya/nomor-identifikasi-eksternal"
-          element={
-            <>
-              <Header />
-              <NomorIdentifikasiEksternal />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/1/profil-saya/jenis-pajak"
-          element={
-            <>
-              <Header />
-              <JenisPajak />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/1/profil-saya/wakil-kuasa-saya"
-          element={
-            <>
-              <Header />
-              <WakilKuasaSaya />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/1/profil-saya/wajib-pajak-yang-diwakili"
-          element={
-            <>
-              <Header />
-              <WajibPajakYangDiwakili />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/1/profil-saya/verifikasi-dua-langkah"
-          element={
-            <>
-              <Header />
-              <TwoAuthentication />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/1/profil-saya/permohonan-tertunda"
-          element={
-            <>
-              <Header />
-              <PermohonanTertunda />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/1/e-faktur"
-          element={
-            <>
-              <Header />
-              <DashboardEFakturOP />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/1/e-faktur/pajak-keluaran"
-          element={
-            <>
-              <Header />
-              <PajakKeluaranOP />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/1/e-faktur/pajak-keluaran/tambah-faktur-keluaran"
-          element={
-            <>
-              <Header />
-              <TambahFakturKeluaranOP />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/1/e-faktur/pajak-masukan"
-          element={
-            <>
-              <Header />
-              <PajakMasukanOP />
-            </>
-          }
-        />
-        {/* Praktikum Orang Pribadi*/}
-        {/* Praktikum  Orang Badan*/}
-        <Route
-          path="/admin/praktikum/2/prak1"
-          element={
-            <>
-              <Header />
-              <Home />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/2/dokumen-saya"
-          element={
-            <>
-              <Header />
-              <DokumenSayaBadan />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/2/notifikasi-saya"
-          element={
-            <>
-              <Header />
-              <NotifikasiSayaBadan />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/2/dokumen-saya"
-          element={
-            <>
-              <Header />
-              <DokumenSayaBadan />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/2/notifikasi-saya"
-          element={
-            <>
-              <Header />
-              <NotifikasiSayaBadan />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/2/kasus-saya"
-          element={
-            <>
-              <Header />
-              <KasusSayaBadan />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/2/profil-saya"
-          element={
-            <>
-              <Header />
-              <ProfilSayaBadan />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/2/profil-saya/informasi-umum"
-          element={
-            <>
-              <Header />
-              <InformasiSayaBadan />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/2/profil-saya/informasi-umum/edit-data-profil"
-          element={
-            <>
-              <Header />
-              <EditDataProfilBadan />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/2/profil-saya/alamat"
-          element={
-            <>
-              <Header />
-              <AlamatSayaBadan />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/2/profil-saya/detail-kontak"
-          element={
-            <>
-              <Header />
-              <DetailKontakBadan />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/2/profil-saya/pihak-terkait"
-          element={
-            <>
-              <Header />
-              <PihakTerkaitBadan />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/2/profil-saya/detail-bank"
-          element={
-            <>
-              <Header />
-              <DetailBankBadan />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/2/profil-saya/objek-pajak-bumi-dan-bangunan-(pbb)"
-          element={
-            <>
-              <Header />
-              <ObjekPBBBadan />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/2/profil-saya/klasifikasi-lapangan-usaha-(klu)"
-          element={
-            <>
-              <Header />
-              <KlasifikasiLapanganUsahaBadan />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/2/profil-saya/data-unit-keluarga"
-          element={
-            <>
-              <Header />
-              <DataUnitKeluargaBadan />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/2/profil-saya/tempat-kegiatan-usaha/sub-unit"
-          element={
-            <>
-              <Header />
-              <TempatKegiatanUsahaBadan />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/2/profil-saya/nomor-identifikasi-eksternal"
-          element={
-            <>
-              <Header />
-              <NomorIdentifikasiEksternalBadan />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/2/profil-saya/jenis-pajak"
-          element={
-            <>
-              <Header />
-              <JenisPajakBadan />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/2/profil-saya/wakil-kuasa-saya"
-          element={
-            <>
-              <Header />
-              <WakilKuasaSayaBadan />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/2/profil-saya/wajib-pajak-yang-diwakili"
-          element={
-            <>
-              <Header />
-              <WajibPajakYangDiwakiliBadan />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/2/profil-saya/verifikasi-dua-langkah"
-          element={
-            <>
-              <Header />
-              <TwoAuthenticationBadan />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/2/profil-saya/permohonan-tertunda"
-          element={
-            <>
-              <Header />
-              <PermohonanTertundaBadan />
-            </>
-          }
-        />
-        {/* Praktikum Orang Pribadi*/}
-        <Route
-          path="/admin/praktikum/2/e-faktur"
-          element={
-            <>
-              <Header />
-              <DashboardEFaktur />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/2/e-faktur/pajak-keluaran"
-          element={
-            <>
-              <Header />
-              <PajakKeluaran />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/2/e-faktur/dokumen-lain/pajak-keluaran"
-          element={
-            <>
-              <Header />
-              <PajakKeluaranDokumenLain />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/2/e-faktur/pajak-keluaran/tambah-faktur-keluaran"
-          element={
-            <>
-              <Header />
-              <TambahFakturKeluaran />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/2/e-faktur/dokumen-lain/pajak-keluaran/tambah-faktur-keluaran"
-          element={
-            <>
-              <Header />
-              <TambahFakturKeluaranDokumenLain />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/2/e-faktur/pajak-masukan"
-          element={
-            <>
-              <Header />
-              {/* <PajakMasukan /> */}
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
-          element={
-            <>
-              <Header />
-              <KonsepSPT />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/2/surat-pemberitahuan-(spt)/buat-konsep-spt"
-          element={
-            <>
-              <Header />
-              <BuatKonsepSPT />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/2/surat-pemberitahuan-(spt)/tambah-konsep-spt"
-          element={
-            <>
-              <Header />
-              <CreateKonsepSPT />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/2/bukti-pemotongan-bulanan-pegawai-tetap"
-          element={
-            <>
-              <Header />
-              <BupotBulananPegawaiTetap />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/2/bukti-pemotongan-bulanan-pegawai-tetap/telah-terbit"
-          element={
-            <>
-              <Header />
-              <BupotBulananPegawaiTetapTelahTerbit />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/2/bukti-pemotongan-bulanan-pegawai-tetap/tidak-valid"
-          element={
-            <>
-              <Header />
-              <BupotBulananPegawaiTetapTidakValid />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/2/bukti-pemotongan-bulanan-pegawai-tetap/tambah-bukti-pemotongan-bulanan-pegawai-tetap"
-          element={
-            <>
-              <Header />
-              <CreateEbupot />
-            </>
-          }
-        />
-        <Route
-          path="admin/praktikum/2/surat-pemberitahuan-(spt)/tambah-konsep-spt-pasal"
-          element={
-            <>
-              <Header />
-              <CreateKonsepPasal />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/2/bppu"
-          element={
-            <>
-              <Header />
-              <BppuBelumTerbit />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/2/bppu/tambah-bppu"
-          element={
-            <>
-              <Header />
-              <CreateBppu />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/2/bppu/telah-terbit"
-          element={
-            <>
-              <Header />
-              <BppuTelahTerbit />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/2/bppu/tidak-valid"
-          element={
-            <>
-              <Header />
-              <BppuTidakValid />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/2/bpnr"
-          element={
-            <>
-              <Header />
-              <BpnrBelumTerbit />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/2/bpnr/tambah-bpnr"
-          element={
-            <>
-              <Header />
-              <CreateBpnr />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/2/bpnr/telah-terbit"
-          element={
-            <>
-              <Header />
-              <BpnrTelahTerbit />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/2/bpnr/tidak-valid"
-          element={
-            <>
-              <Header />
-              <BpnrTidakValid />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/2/layanan-mandiri-kode-billing"
-          element={
-            <>
-              <Header />
-              <SelfBilling />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/2/daftar-kode-billing-belum-dibayar"
-          element={
-            <>
-              <Header />
-              <DaftarKodeBilingBelumBayar />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/2/riwayat-pembayaran"
-          element={
-            <>
-              <Header />
-              <RiwayatBilling />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/2/riwayat-pembatalan"
-          element={
-            <>
-              <Header />
-              <RiwayatPembatalanBilling />
+              <RoleBasedRenderer
+                OrangPribadi={DashboardAdmin}
+                Badan={DetailKontakBadan}
+              ></RoleBasedRenderer>
             </>
           }
         />
 
-        {/* ROUTE BARU BELUM DIMASUKIN */}
-        <Route
-          path="/admin/praktikum/2/unifikasi"
-          element={
-            <>
-              <Header />
-              <CreateKonsepUnifikasi />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/2/notifikasi"
-          element={
-            <>
-              <Header />
-              <Notifikasi />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/2/kode-billing-atas-tagihan-pajak"
-          element={
-            <>
-              <Header />
-              <PembuatanKodeBillingAtasPajak />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/2/permohonan-pemindahbukuan"
-          element={
-            <>
-              <Header />
-              <PermohonanPemindahBukuan />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/2/retur-faktur-keluaran"
-          element={
-            <>
-              <Header />
-              <ReturFakturKeluaran />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/2/retur-faktur-masukan"
-          element={
-            <>
-              <Header />
-              <ReturFakturMasukan />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/2/tambah-retur-faktur"
-          element={
-            <>
-              <Header />
-              <TambahReturFaktur />
-            </>
-          }
-        />
-        <Route
-          path="/admin/praktikum/2/dokumen-lain-keluaran"
-          element={
-            <>
-              <Header />
-              <TambahFakturKeluaranDokumenLain />
-            </>
-          }
-        />
+
         {/* NOT FOUND ROUTE - LAST REGISTERED ROUTE */}
         <Route path="*" element={<NotFound />} />
         {/* <Route

@@ -25,8 +25,9 @@ import { useToast } from "@/hooks/use-toast";
 const EditKelas = () => {
   const [url, setUrl] = useState(RoutesApi.classAdmin);
   const [cookies, setCookie] = useCookies(["token"]);
+  const [search, setSearch] = useState("");
   const { toast } = useToast();
-  const { isLoading, isError, data, error } = useQuery({
+  const { isLoading, isError, data, error, refetch } = useQuery({
     queryKey: ["classes", url],
     queryFn: async () => {
       const { data } = await axios.get(url, {
@@ -35,6 +36,7 @@ const EditKelas = () => {
         },
         params: {
           intent: "api.get.group.all",
+          search: search,
         },
       });
       console.log(data.data);
@@ -243,7 +245,14 @@ const EditKelas = () => {
             id="search"
             className="search-input"
             placeholder="Cari Data Kelas 🔎"
+            onChange={(e) => setSearch(e.target.value)}
           />
+          <button
+            className="bg-blue-500 p-2 rounded-md text-white text-sm ml-2 hover:cursor-pointer hover:bg-blue-700"
+            onClick={() => refetch()}
+          >
+            Cari
+          </button>
         </div>
       </div>
       <div className="table-container">
@@ -309,7 +318,7 @@ const EditKelas = () => {
                               <AlertDialogCancel className="border-none shadow-none">
                                 <RxCross1
                                   className="text-2xl text-black hover:cursor-pointer"
-                                  // onClick={onClose}
+                                // onClick={onClose}
                                 />
                               </AlertDialogCancel>
                             </div>
@@ -420,6 +429,54 @@ const EditKelas = () => {
           </tbody>
         </table>
         <div className="pagination-container">
+          <div className="pagination">
+            <button
+              className="page-item"
+              onClick={() => setUrl(data.links.prev)}
+              disabled={data.meta.current_page === 1}
+            >
+              &lt;
+            </button>
+
+            {(() => {
+              const currentPage = data.meta.current_page;
+              const lastPage = data.meta.last_page;
+              const pages = [];
+
+              const addPage = (page) => {
+                pages.push(
+                  <button
+                    key={page}
+                    className={`page-item ${currentPage === page ? "active" : ""}`}
+                    onClick={() => setUrl(`${RoutesApi.classAdmin}?page=${page}`)}
+                  >
+                    {page}
+                  </button>
+                );
+              };
+
+              addPage(1);
+
+              if (currentPage > 2) pages.push(<span key="dots-start">...</span>);
+
+              if (currentPage !== 1 && currentPage !== lastPage) addPage(currentPage);
+
+              if (currentPage < lastPage - 1) pages.push(<span key="dots-end">...</span>);
+
+              if (lastPage > 1) addPage(lastPage);
+
+              return pages;
+            })()}  {/* ← perhatikan () di sini */}
+
+            <button
+              className="page-item"
+              onClick={() => setUrl(data.links.next)}
+              disabled={data.meta.current_page === data.meta.last_page}
+            >
+              &gt;
+            </button>
+          </div>
+
           {/* <div className="pagination-info">
             {`Showing ${indexOfFirstItem + 1} to ${Math.min(
               indexOfLastItem,

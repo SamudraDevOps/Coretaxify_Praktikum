@@ -43,6 +43,7 @@ export const IntentEnum = {
     API_USER_DOWNLOAD_SOAL: 'api.user.download.soal',
     API_USER_DOWNLOAD_FILE: 'api.user.download.file',
     API_USER_EXPORT_SCORE: 'api.user.export.score',
+    API_USER_EXPORT_MAHASISWA_PSC: 'api.user.export.mahasiswa.psc',
 
     API_GET_ASSIGNMENT_MEMBERS_WITH_SISTEM_SCORES: 'api.get.assignment.members.with.sistem.scores',
   };

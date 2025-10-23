@@ -5,6 +5,7 @@ import { FaChevronDown, FaEdit, FaFilePdf, FaPlus } from "react-icons/fa";
 import { TiDeleteOutline } from "react-icons/ti";
 import { Link, useParams, useSearchParams } from "react-router";
 import { useNavigateWithParams } from "@/hooks/useNavigateWithParams";
+import { useCookies } from "react-cookie";
 import FakturPenilaian from "./FakturPenilaian";
 
 const ReturFakturMasukan = ({ data, sidebar }) => {
@@ -12,6 +13,7 @@ const ReturFakturMasukan = ({ data, sidebar }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const viewAsCompanyId = searchParams.get("viewAs");
   const userId = searchParams.get("user_id");
+  const [cookies] = useCookies(["token", "role"]);
   const navigate = useNavigateWithParams();
   console.log("retur masukan :", data);
   const formatRupiah = (number) => {
@@ -56,7 +58,7 @@ const ReturFakturMasukan = ({ data, sidebar }) => {
               Retur Pajak Masukan{" "}
             </h1>
           </div>
-          {userId ? (
+          {userId && (cookies.role === "dosen" || cookies.role === "psc") ? (
             <FakturPenilaian
               tipeFaktur="Retur Faktur Masukan"
             />

@@ -48,7 +48,7 @@ const AdminCoretaxify = () => {
   });
 
   const itemsPerPage = 20;
-  const [cookies] = useCookies(["user"]);
+  const [cookies, setCookie] = useCookies(["user"]);
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -1114,6 +1114,7 @@ const AdminCoretaxify = () => {
                           disabled={startPraktikum.isPending}
                           onClick={() => {
                             console.log(item);
+                            setCookie("assignment_user_id", item.id, { path: "/" });
                             if (item.is_start === 1) {
                               // If already started, redirect directly
                               window.location.href = `/praktikum/${item.assignment.id}`;
