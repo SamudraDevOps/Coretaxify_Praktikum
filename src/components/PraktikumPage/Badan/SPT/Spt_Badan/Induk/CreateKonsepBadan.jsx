@@ -17,6 +17,7 @@ import {
     from './section';
 import { Header, LampiranL1B } from '../Lampiran'
 import LampiranL1C from '../Lampiran/LampiranL1-C';
+import Lampiran2 from '../Lampiran/Lampiran2';
 
 const CreateKonsepBadan = () => {
     const [showHeaderInduk, setShowHeaderInduk] = useState(true);
@@ -33,6 +34,7 @@ const CreateKonsepBadan = () => {
                             <TabsTrigger value="induk">Induk</TabsTrigger>
                             <TabsTrigger value="L1-B">L1-B</TabsTrigger>
                             <TabsTrigger value="L1-C">L1-C</TabsTrigger>
+                            <TabsTrigger value="L2">L2</TabsTrigger>
                         </TabsList>
                         <TabsContent value="induk">
                             <div className="mt-4">
@@ -122,6 +124,14 @@ const CreateKonsepBadan = () => {
                                     Rekonsiliasi Laporan Keuangan - Dagang
                                 </div>
                                 <LampiranL1C />
+                            </div>
+                        </TabsContent>
+                        <TabsContent value="L2">
+                            <div className="mt-4">
+                                <div className=" font-medium mb-4 text-lg mt-3">
+                                    Daftar Pemegang Saham/Anggota dan Pembagian Dividen atau Bagian Laba
+                                </div>
+                                <Lampiran2 />   
                             </div>
                         </TabsContent>
                     </Tabs>
