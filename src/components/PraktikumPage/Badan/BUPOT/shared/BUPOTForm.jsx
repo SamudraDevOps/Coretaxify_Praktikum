@@ -600,33 +600,33 @@ const BUPOTForm = ({
         const naturaPPhPasal21 = parseFloat(formData.natura_pph_pasal_21 ?? 0);
         const tantiemBonusGratifikasiJasaThr = parseFloat(formData.tantiem_bonus_gratifikasi_jasa_thr ?? 0);
         const bruto = gajiPokokPensiun + tunjanganPPh + tunjanganLainnya + honorariumImbalanLainnya + premiAsuransiPemberiKerja + naturaPPhPasal21 + tantiemBonusGratifikasiJasaThr;
-        console.log({
-          "gajiPokokPensiun": gajiPokokPensiun,
-          "tunjanganPPh": tunjanganPPh,
-          "tunjanganLainnya": tunjanganLainnya,
-          "honorariumImbalanLainnya": honorariumImbalanLainnya,
-          "premiAsuransiPemberiKerja": premiAsuransiPemberiKerja,
-          "naturaPPhPasal21": naturaPPhPasal21,
-          "tantiemBonusGratifikasiJasaThr": tantiemBonusGratifikasiJasaThr,
-          "bruto": bruto,
-          
-        });
-        // updateFormData("dasar_pengenaan_pajak", bruto);
 
         // PENGURANG
-        const biayaJabatan = parseFloat(formData.biaya_jabatan);
+        const biayaJabatan = Math.round(getBiayaJabatan(bruto));
         const iuranPensiun = parseFloat(formData.iuran_pensiun);
         const sumbanganKeagamaanPemberiKerja = parseFloat(formData.sumbangan_keagamaan_pemberi_kerja);
         const totalPengurangan = biayaJabatan + iuranPensiun + sumbanganKeagamaanPemberiKerja;
-        // updateFormData("jumlah_pengurangan", totalPengurangan);
 
         // PERHITUNGAN PPH
         const netto = bruto - totalPengurangan;
-        // updateFormData("jumlah_penghasilan_neto", netto);
         const potonganPTKP = getBPA1PTKP(formData.ptkp_akun);
-        // updateFormData("penghasilan_tidak_kena_pajak", potonganPTKP);
+        
+        // console.log({
+        //   "gajiPokokPensiun": gajiPokokPensiun,
+        //   "tunjanganPPh": tunjanganPPh,
+        //   "tunjanganLainnya": tunjanganLainnya,
+        //   "honorariumImbalanLainnya": honorariumImbalanLainnya,
+        //   "premiAsuransiPemberiKerja": premiAsuransiPemberiKerja,
+        //   "naturaPPhPasal21": naturaPPhPasal21,
+        //   "tantiemBonusGratifikasiJasaThr": tantiemBonusGratifikasiJasaThr,
+        //   "bruto": bruto,
+        //   "biayaJabatan": biayaJabatan,
+        // });
+
+        // FIELD UPDATES
         updateMultipleFields({
           dasar_pengenaan_pajak: bruto,
+          biaya_jabatan: biayaJabatan,
           jumlah_pengurangan: totalPengurangan,
           jumlah_penghasilan_neto: netto,
           penghasilan_tidak_kena_pajak: potonganPTKP,
@@ -831,6 +831,46 @@ const BUPOTForm = ({
 
   const getBPA1PTKP = (ptkpStatus) => {
     return PTKP_DATA[ptkpStatus] || 54000000;
+  }
+
+  const getBiayaJabatan = (bruto) => {
+    const masaAwal = formData.masa_awal;
+    const masaAkhir = formData.masa_akhir;
+
+    if (!masaAwal || !masaAkhir) return 0;
+
+    // Ubah string "YYYY-MM-DD" jadi objek Date
+    const start = new Date(masaAwal);
+    const end = new Date(masaAkhir);
+
+    // Validasi tanggal
+    if (isNaN(start) || isNaN(end)) return 0;
+
+    // Hitung selisih bulan antara dua tanggal
+    const totalMonths =
+      (end.getFullYear() - start.getFullYear()) * 12 +
+      (end.getMonth() - start.getMonth()) +
+      1; // +1 agar inklusif
+
+    // Hitung biaya jabatan berdasarkan bulan atau 5% bruto
+    const biayaJabatanByMonths = totalMonths * 500000;
+    const biayaJabatanByTotal = bruto * 0.05;
+
+    return Math.min(biayaJabatanByMonths, biayaJabatanByTotal);
+  }
+
+  const setTunjanganPPh = () => {
+    const golongan = getTer(formData.ptkp_akun);
+    const tarif = getTarifByGolonganTer(
+      golongan,
+      formData.gaji_pokok_pensiun
+    );
+
+    const tunjanganPph = Math.round((parseFloat(formData.gaji_pokok_pensiun) * tarif) / 100);
+
+    console.log(tunjanganPph);
+
+    updateFormData("tunjangan_pph", tunjanganPph); 
   }
 
   // set status
@@ -1041,6 +1081,16 @@ const BUPOTForm = ({
 
                           if (selectedObject) {
                             if (currentBupot === "Bukti Pemotongan Bulanan Pegawai Tetap") {
+                              updateMultipleFields({
+                                npwp_akun: selectedObject.npwp_akun,
+                                nama_akun: selectedObject.nama_akun,
+                                alamat_utama_akun: selectedObject.alamat_utama_akun,
+                                nitku:
+                                  sidebar.npwp_akun +
+                                  "000000 - " +
+                                  sidebar.nama_akun,
+                              });
+                            } if (currentBupot === "BP A1") {
                               updateMultipleFields({
                                 npwp_akun: selectedObject.npwp_akun,
                                 nama_akun: selectedObject.nama_akun,
@@ -1384,7 +1434,7 @@ const BUPOTForm = ({
                     </label>
                     <input
                       type="text"
-                      className="w-64 flex-auto border p-2 rounded"
+                      className="w-64 flex-auto border p-2 rounded bg-gray-200"
                       placeholder="Jenis Pajak"
                       value={formData.jenis_pajak || ""}
                       onChange={(e) => {
@@ -1404,7 +1454,7 @@ const BUPOTForm = ({
                     </label>
                     <input
                       type="text"
-                      className="w-64 flex-auto border p-2 rounded"
+                      className="w-64 flex-auto border p-2 rounded bg-gray-200"
                       placeholder="Kode Objek Pajak"
                       value={formData.kode_objek_pajak || ""}
                       onChange={(e) => {
@@ -1451,7 +1501,7 @@ const BUPOTForm = ({
                     </label>
                     <input
                       type="text"
-                      className="w-64 flex-auto border p-2 rounded"
+                      className="w-64 flex-auto border p-2 rounded bg-gray-200"
                       placeholder="Nama"
                       value={formData.nitku || ""}
                       onChange={(e) => {
@@ -2566,22 +2616,25 @@ const BUPOTForm = ({
 
                 {/* Pembulatan Kotor */}
                 {currentBupot === "BP A1" && (
-                  <div className="mt-4 flex justify-between gap-4">
+                  <div className="mt-4 flex gap-4">
                     <label className="w-64 flex-none block text-sm font-medium text-gray-700">
-                      Pembulatan Kotor
+                      Gross Up
                       <span className="text-red-500">*</span>
                     </label>
                     <input
-                      type="text"
-                      className="w-64 flex-auto border p-2 rounded"
+                      type="checkbox"
+                      checked={formData.pembulatan_kotor}
+                      className="flex-none border p-2 rounded"
                       placeholder="Pembulatan Kotor"
-                      value={formatRupiah(formData.pembulatan_kotor) || ""}
+                      value={formData.pembulatan_kotor || ""}
                       onChange={(e) => {
-                        const rawValue = e.target.value.replace(/[^\d]/g, "");
-                        updateFormData("pembulatan_kotor", rawValue);
-                        // updateFormData("penghasilan_bruto_raw", Number(rawValue));
+                        updateFormData("pembulatan_kotor", e.target.checked);
+                        if (e.target.checked === false) {
+                          updateFormData("tunjangan_pph", 0);
+                        } else if (e.target.checked === true) {
+                          setTunjanganPPh();
+                        }
                       }}
-                      onWheel={(e) => e.target.blur()}
                     />
                   </div>
                 )}
@@ -2595,7 +2648,9 @@ const BUPOTForm = ({
                     </label>
                     <input
                       type="text"
-                      className="w-64 flex-auto border p-2 rounded"
+                      className={`w-64 flex-auto border p-2 rounded appearance-none
+                        ${formData.pembulatan_kotor === true ? "bg-gray-200" : "bg-white"}
+                        `}
                       placeholder="Tunjangan PPH"
                       value={formatRupiah(formData.tunjangan_pph) || ""}
                       onChange={(e) => {
@@ -2604,7 +2659,7 @@ const BUPOTForm = ({
                         // updateFormData("penghasilan_bruto_raw", Number(rawValue));
                       }}
                       onWheel={(e) => e.target.blur()}
-                      readOnly={formData.pembulatan_kotor === "1"
+                      readOnly={formData.pembulatan_kotor === true
                         ? true
                         : false
                       }
@@ -2935,7 +2990,7 @@ const BUPOTForm = ({
                   </label>
                   <input
                     type="text"
-                    className="w-64 flex-auto border p-2 rounded"
+                    className="w-64 flex-auto border p-2 rounded bg-gray-rounded"
                     placeholder="Biaya Jabatan / Biaya Pensiun"
                     value={formatRupiah(formData.biaya_jabatan) || ""}
                     onChange={(e) => {
@@ -2944,6 +2999,7 @@ const BUPOTForm = ({
                       // updateFormData("penghasilan_bruto_raw", Number(rawValue));
                     }}
                     onWheel={(e) => e.target.blur()}
+                    readOnly={true}
                   />
                 </div>
 
@@ -3367,22 +3423,21 @@ const BUPOTForm = ({
                 </div>
 
                 {/* NITKU */}
-                {(currentBupot === "BP A1" || currentBupot === "BP 21") && (
+                {(currentBupot === "BP A1" || currentBupot === "BP A2") && (
                   <div className="mt-4 flex justify-between gap-4">
                     <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                       NITKU/Nomor Identitas Sub Unit Organisasi
                       <span className="text-red-500">*</span>
                     </label>
-                    <select
-                      className="w-64 flex-auto border p-2 rounded appearance-none"
+                    <input
+                      className="w-64 flex-auto border p-2 rounded bg-gray-200"
+                      placehoder="NITKU"
                       value={formData.nitku || ""}
-                      onChange={(e) => updateFormData("nitku", e.target.value)}
-                      placehoder="Please Select"
-                    >
-                      <option value="">Please Select</option>
-                      <option value="NITKU1">NITKU1</option>
-                      <option value="NITKU2">NITKU2</option>
-                    </select>
+                      onChange={(e) => {
+                        updateFormData("nitku", e.target.value);
+                      }}
+                      readOnly={true}
+                    />
                   </div>
                 )}
 
