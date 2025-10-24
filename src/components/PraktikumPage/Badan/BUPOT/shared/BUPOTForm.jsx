@@ -861,12 +861,22 @@ const BUPOTForm = ({
 
   const setTunjanganPPh = () => {
     const golongan = getTer(formData.ptkp_akun);
+    const gaji = parseFloat(formData.gaji_pokok_pensiun);
     const tarif = getTarifByGolonganTer(
       golongan,
       formData.gaji_pokok_pensiun
     );
+    
 
-    const tunjanganPph = Math.round((parseFloat(formData.gaji_pokok_pensiun) * tarif) / 100);
+    const tambahanGaji = Math.round((parseFloat(gaji) * tarif) / 100);
+    const total = parseFloat(gaji) + parseFloat(tambahanGaji);
+
+    const tarif2 = getTarifByGolonganTer(
+      golongan,
+      total,
+    );
+
+    const tunjanganPph = Math.round((parseFloat(total) * tarif2) / 100);
 
     console.log(tunjanganPph);
 
