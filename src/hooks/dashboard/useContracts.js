@@ -8,7 +8,7 @@ import { RoutesApi } from "@/Routes";
 
 export const getContracts = (url, cookie, perPage = 20, sortDirection = "asc", search = "", currentPage = "1") =>
   useQuery({
-    queryKey: [dashboard_const.contracts, url],
+    queryKey: [dashboard_const.contracts, url, cookie, perPage, sortDirection, search, currentPage],
     queryFn: async () => {
       const data = await axios.get(url, {
         headers: {
@@ -19,10 +19,9 @@ export const getContracts = (url, cookie, perPage = 20, sortDirection = "asc", s
           sortDirection: sortDirection,
           search: search,
           perPage: perPage,
-          currentPage: currentPage,
+          page: currentPage,
         },
       });
-      console.log(data.data);
       return data.data;
     },
   });
