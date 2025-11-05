@@ -44,8 +44,14 @@ import {
   PertanyaanI,
   PertanyaanJ,
 } from "./sections";
-import { Lampiran_1,Lampiran_2, Lampiran_3A1 } from "../Lampiran";
-
+import {
+  Lampiran_1,
+  Lampiran_2,
+  Lampiran_3A1,
+  Lampiran_3B,
+  Lampiran_3C,
+  Lampiran_3D,
+} from "../Lampiran";
 
 const CreateKonsepPribadi = () => {
   const { id, akun, idSpt } = useParams();
@@ -77,10 +83,8 @@ const CreateKonsepPribadi = () => {
   const [activeTab, setActiveTab] = useState("induk");
   const [showHeaderInduk, setShowHeaderInduk] = useState(true);
   const [showIdentitasWajibPajak, setShowIdentitasWajibPajak] = useState(false);
-  const [showIkhtisarPenghasilanNeto, setShowIkhtisarPenghasilanNeto] =
-    useState(false);
-  const [showPerhitunganPajakTerutang, setShowPerhitunganPajakTerutang] =
-    useState(false);
+  const [showIkhtisarPenghasilanNeto, setShowIkhtisarPenghasilanNeto] = useState(false);
+  const [showPerhitunganPajakTerutang, setShowPerhitunganPajakTerutang] = useState(false);
   const [showKreditPajak, setShowKreditPajak] = useState(false);
   const [showKurangLebihBayar, setShowKurangLebihBayar] = useState(false);
   const [showPembetulanSPT, setShowPembetulanSPT] = useState(false);
@@ -92,11 +96,7 @@ const CreateKonsepPribadi = () => {
   const [showScrollTop, setShowScrollTop] = useState(false);
 
   const sumberOptions = ["Kegiatan Usaha", "Pekerjaan", "Pekerjaan Bebas"];
-  const metodeOptions = [
-    "Pembukuan stelsel akrual",
-    "Pembukuan stelsel kas",
-    "Pencatatan",
-  ];
+  const metodeOptions = ["Pembukuan stelsel akrual", "Pembukuan stelsel kas", "Pencatatan"];
 
   const [metode, setMetode] = useState("Pencatatan");
   const [metodeOpen, setMetodeOpen] = useState(false);
@@ -152,7 +152,7 @@ const CreateKonsepPribadi = () => {
 
   // STEP 5: State untuk lampiran yang aktif
 
-const [dynamicLampiran, setDynamicLampiran] = useState([]);
+  const [dynamicLampiran, setDynamicLampiran] = useState([]);
   const availableLampiran = dynamicLampiran;
 
   // STEP 6: Function yang menerima data dari child components
@@ -165,64 +165,96 @@ const [dynamicLampiran, setDynamicLampiran] = useState([]);
   };
 
   // STEP 7: Effect untuk mengelola lampiran berdasarkan jawaban
- useEffect(() => {
-      const allLampiran = [];
+  useEffect(() => {
+    const allLampiran = [];
 
-  // const newDynamicLampiran = [];
+    // const newDynamicLampiran = [];
 
-  // Lampiran I - Penghasilan dari Pekerjaan (1.a = Ya)
-  if (answersState.r1a === true) {
+    // Lampiran I - Penghasilan dari Pekerjaan (1.a = Ya)
+    if (answersState.r1a === true) {
+      allLampiran.push({
+        id: "lampiran-1",
+        title: "L-I",
+        subtitle: "Lampiran I - Penghasilan dari Pekerjaan",
+        component: "Lampiran_1",
+        badge: "Wajib Diisi",
+        order: 1, // Urutan pertama
+      });
+    }
+
+    // Lampiran 2 - SELALU TERSEDIA
+
     allLampiran.push({
-      id: "lampiran-1",
-      title: "L-I",
-      subtitle: "Lampiran I - Penghasilan dari Pekerjaan",
-      component: "Lampiran_1",
-      badge: "Wajib Diisi",
-      order: 1, // Urutan pertama
+      id: "lampiran-2",
+      title: "L-II",
+      subtitle: "Lampiran 2 - Penghasilan Luar Negeri",
+      component: "Lampiran_2",
+      badge: "Tersedia",
+      order: 2, // Urutan kedua
     });
-  }
-
-  // Lampiran 2 - SELALU TERSEDIA
-
-    allLampiran.push({
-    id: "lampiran-2",
-    title: "L-II",
-    subtitle: "Lampiran 2 - Penghasilan Luar Negeri",
-    component: "Lampiran_2",
-    badge: "Tersedia",
-    order: 2,  // Urutan kedua
-  });
 
     // Lampiran 3A1 - SELALU TERSEDIA
 
     allLampiran.push({
-    id: "lampiran-3A1",
-    title: "L-3A-1",
-    subtitle: "Lampiran 3A1 - Rekonsiliasi Laporan Keuangan ",
-    component: "Lampiran_3A1",
-    badge: "Tersedia",
-    order: 2,  // Urutan kedua
-  });
-
-  // Lampiran 3A-4 - Penghasilan dari Usaha (1.b.1 = Ya)
-  if (answersState.hasPenghasilanUsaha === true) {
-    allLampiran.push({
-      id: "lampiran-3a4",
-      title: "L-3A4",
-      subtitle: "Lampiran 3A-4 - Penghasilan dari Usaha",
-      component: "Lampiran_3A4",
-      badge: "Wajib Diisi",
+      id: "lampiran-3A1",
+      title: "L-3A-1",
+      subtitle: "Lampiran 3A1 - Rekonsiliasi Laporan Keuangan ",
+      component: "Lampiran_3A1",
+      badge: "Tersedia",
+      order: 2, // Urutan kedua
     });
-  }
 
-     // CUSTOM SORTING berdasarkan property 'order'
-  const sortedLampiran = allLampiran.sort((a, b) => {
-    return a.order - b.order; // Sort berdasarkan order, bukan ID
-  });
+    // Lampiran 3B - SELALU TERSEDIA
 
+    allLampiran.push({
+      id: "lampiran-3B",
+      title: "L-3B",
+      subtitle: "Lampiran 3B - Daftar Tempat Kegiatan Usaha (TKU)",
+      component: "Lampiran_3B",
+      badge: "Tersedia",
+      order: 2, // Urutan kedua
+    });
 
-  setDynamicLampiran(sortedLampiran);
-}, [answersState]);
+    // Lampiran 3C - SELALU TERSEDIA
+
+    allLampiran.push({
+      id: "lampiran-3C",
+      title: "L-3C",
+      subtitle: "Lampiran 3C - Daftar Harta Berwujud",
+      component: "Lampiran_3C",
+      badge: "Tersedia",
+      order: 2, // Urutan kedua
+    });
+
+    // Lampiran 3D - SELALU TERSEDIA
+
+    allLampiran.push({
+      id: "lampiran-3D",
+      title: "L-3D",
+      subtitle: "Lampiran 3D - Daftar Harta Tidak Berwujud",
+      component: "Lampiran_3D",
+      badge: "Tersedia",
+      order: 2, // Urutan kedua
+    });
+
+    // Lampiran 3A-4 - Penghasilan dari Usaha (1.b.1 = Ya)
+    if (answersState.hasPenghasilanUsaha === true) {
+      allLampiran.push({
+        id: "lampiran-3a4",
+        title: "L-3A4",
+        subtitle: "Lampiran 3A-4 - Penghasilan dari Usaha",
+        component: "Lampiran_3A4",
+        badge: "Wajib Diisi",
+      });
+    }
+
+    // CUSTOM SORTING berdasarkan property 'order'
+    const sortedLampiran = allLampiran.sort((a, b) => {
+      return a.order - b.order; // Sort berdasarkan order, bukan ID
+    });
+
+    setDynamicLampiran(sortedLampiran);
+  }, [answersState]);
 
   // STEP 8: Function untuk render content lampiran (Import lampiran ditampilkan di atas)
   const renderLampiranContent = (componentName, data) => {
@@ -233,6 +265,12 @@ const [dynamicLampiran, setDynamicLampiran] = useState([]);
         return <Lampiran_2 data={data} />;
       case "Lampiran_3A1":
         return <Lampiran_3A1 data={data} />;
+      case "Lampiran_3B":
+        return <Lampiran_3B data={data} />;
+      case "Lampiran_3C":
+        return <Lampiran_3C data={data} />;
+      case "Lampiran_3D":
+        return <Lampiran_3D data={data} />;
       default:
         return (
           <div className="text-center py-8">
@@ -240,7 +278,7 @@ const [dynamicLampiran, setDynamicLampiran] = useState([]);
           </div>
         );
     }
-  };
+  };  
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -322,9 +360,7 @@ const [dynamicLampiran, setDynamicLampiran] = useState([]);
                       </div>
 
                       <div className="col-span-12 md:col-span-2 self-start">
-                        <label className="block mb-2 text-sm font-base text-gray-900">
-                          Status
-                        </label>
+                        <label className="block mb-2 text-sm font-base text-gray-900">Status</label>
                         <input
                           readOnly
                           // value={data.status}
@@ -334,8 +370,7 @@ const [dynamicLampiran, setDynamicLampiran] = useState([]);
 
                       <div className="col-span-12 md:col-span-3 self-start">
                         <label className="block mb-2 text-sm font-base text-gray-900">
-                          Sumber Penghasilan{" "}
-                          <span className="text-red-500">*</span>
+                          Sumber Penghasilan <span className="text-red-500">*</span>
                         </label>
                         <div className="relative">
                           <select className="w-full p-2 pr-8 border rounded-md text-base">
@@ -351,8 +386,7 @@ const [dynamicLampiran, setDynamicLampiran] = useState([]);
 
                       <div className="col-span-12 md:col-span-3 self-start">
                         <label className="block mb-2 text-sm font-base text-gray-900">
-                          Sumber Penghasilan{" "}
-                          <span className="text-red-500">*</span>
+                          Sumber Penghasilan <span className="text-red-500">*</span>
                         </label>
                         <div className="relative">
                           <select className="w-full p-2 pr-8 border rounded-md text-base">
@@ -374,10 +408,7 @@ const [dynamicLampiran, setDynamicLampiran] = useState([]);
               <PertanyaanA />
 
               {/* khtisar Penghasilan Neto */}
-              <PertanyaanB
-                onAnswerChange={updateAnswer}
-                answersState={answersState}
-              />
+              <PertanyaanB onAnswerChange={updateAnswer} answersState={answersState} />
 
               {/* Perhitungan Pajak Teruntang */}
 
