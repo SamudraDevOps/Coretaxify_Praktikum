@@ -3,7 +3,7 @@ import { Plus, Edit, Trash2 } from "lucide-react";
 import { formatRupiah } from "../../../../utils/formatCurrency";
 import GlobalModal from "../../../../components/shared/GlobalModal";
 
-export default function BiayaEntertainment({ config }) {
+export default function BiayaPromosi({ config }) {
   const {
     baseFields = [
       "calender",

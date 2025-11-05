@@ -7,7 +7,7 @@ const BiayaEntertainmentConfig = {
     "calender",
     "namaTempatEntertainment",
     "alamat",
-    "jenis-entertainment",
+    "jenisEntertainment",
     "biayaEntertainment",
     "namaRelasiDiberikanEntertainment",
     "jabatan",
@@ -18,7 +18,7 @@ const BiayaEntertainmentConfig = {
 
   customChildren: [
     {
-      key: "jenis-entertainment",
+      key: "jenisEntertainment",
       type: "select-search",
       title: "Jenis Entertainment",
       placeholder: "Pilih Jenis Entertainment",

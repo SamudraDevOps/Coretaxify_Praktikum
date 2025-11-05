@@ -2,9 +2,11 @@ import React, { useState, useEffect } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import HeaderLampiran from "./HeaderLampiran";
 import BiayaEntertainment from "./sections/Lampiran3/Lampiran3D/BiayaEntertainment";
+import BiayaPromosi from "./sections/Lampiran3/Lampiran3D/biayaPromosi";
 
 export default function Lampiran_3({ data }) {
   const [showBagianA, setShowBagianA] = useState(true);
+  const [showBagianB, setShowBagianB] = useState(true);
 
   const [showBiayaHiburan, setShowBiayaHiburan] = useState(false);
 
@@ -42,6 +44,29 @@ export default function Lampiran_3({ data }) {
           <div className="border rounded-md p-4 space-y-4">
             <div className="ml-4">
               <BiayaEntertainment />
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Bagian B - Daftar Nominatif Biaya Promosi Serta Penggantian Atau 
+Imbalan Dalam Bentuk Naturan Dan/Atau Kenikmatan  */}
+      <div>
+        <div
+          className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
+          onClick={() => setShowBagianB(!showBagianB)}
+        >
+          <h3 className="text-lg font-semibold">
+            B. DAFTAR NOMINATIF BIAYA PROMOSI SERTA PENGGANTIAN ATAU IMBALAN DALAM BENTUK NATURAN
+            DAN/ATAU KENIKMATAN
+          </h3>
+          {showBagianB ? <FaChevronUp /> : <FaChevronDown />}
+        </div>
+
+        {showBagianB && (
+          <div className="border rounded-md p-4 space-y-4">
+            <div className="ml-4">
+              <BiayaPromosi />
             </div>
           </div>
         )}
