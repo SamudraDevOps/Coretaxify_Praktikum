@@ -1,7 +1,15 @@
 import React, { useState } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import HeaderLampiran from "./HeaderLampiran";
-import { PenghasilanKenaPajak, PenghasilanTidakObjekPajak, PenghasilanLuarNegeri } from "./sections/Lampiran2";
+import BagianAIndex from "./sections/Lampiran2/BagianA"; // Atau BagianA/index
+import BagianBIndex from "./sections/Lampiran2/BagianB"; // Atau BagianB/index
+import BagianCIndex from "./sections/Lampiran2/BagianC"; // Atau BagianC/index
+
+import {
+  PenghasilanKenaPajak,
+  PenghasilanTidakObjekPajak,
+  PenghasilanLuarNegeri,
+} from "./sections/Lampiran2";
 
 const Lampiran_2 = ({ data }) => {
   const [showBagianA, setShowBagianA] = useState(true);
@@ -40,7 +48,7 @@ const Lampiran_2 = ({ data }) => {
           <div className="border rounded-md p-4 space-y-4">
             {/* Sub-Bagian A.1 - Harta Tidak Bergerak */}
             <div className="ml-4">
-              <PenghasilanKenaPajak />
+              <BagianAIndex />
             </div>
           </div>
         )}
@@ -60,17 +68,17 @@ const Lampiran_2 = ({ data }) => {
           <div className="border rounded-md p-4 space-y-4">
             {/* Sub-Bagian B.1 - Penghasilan Tidak Objek Pajak */}
             <div className="ml-4">
-              <PenghasilanTidakObjekPajak />
+              <BagianBIndex />
             </div>
           </div>
         )}
       </div>
 
-       {/* Bagian C - Penghasilan Luar Negeri */}
+      {/* Bagian C - Penghasilan Luar Negeri */}
       <div>
         <div
           className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
-          onClick={() => setShowBagianC(!showBagianC  )}
+          onClick={() => setShowBagianC(!showBagianC)}
         >
           <h3 className="text-lg font-semibold">C. PENGHASILAN LUAR NEGERI</h3>
           {showBagianC ? <FaChevronUp /> : <FaChevronDown />}
@@ -80,7 +88,7 @@ const Lampiran_2 = ({ data }) => {
           <div className="border rounded-md p-4 space-y-4">
             {/* Sub-Bagian C.1 - Penghasilan Luar Negeri */}
             <div className="ml-4">
-              <PenghasilanLuarNegeri />
+              <BagianCIndex  />
             </div>
           </div>
         )}
