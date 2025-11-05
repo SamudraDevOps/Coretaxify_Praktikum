@@ -4,7 +4,9 @@ id -> Id yang digunakan
 
 <!-- Perhatikan Huruf besar kecilnya bang karena ngaruh ke fieldnya  -->
 
-type -> Label = Text biasa basic -> Buton pensil Disable
+type ->
+
+Label = Text biasa basic -> Buton pensil Disable
 Subtotal = Text jadi font-semibold -> Buton pensil Disable
 header = Text jadi font-semibold -> Buton pensil Disable
 line = Mengaktifkan Button Pensil atau edit

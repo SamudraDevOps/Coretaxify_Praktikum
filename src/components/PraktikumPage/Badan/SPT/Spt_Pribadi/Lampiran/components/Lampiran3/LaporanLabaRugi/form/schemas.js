@@ -7,7 +7,7 @@ export const KODE_KOREKSI_OPTIONS = [
 
 // DEFAULT FIELD ORDER (semua bisa diisi; readOnly bisa dioverride)
 export const defaultFields = [
-  { name: "kodeAkun", label: "Kode Akun", type: "text", readOnly: false, },
+  { name: "kodeAkun", label: "Kode Akun", type: "text", readOnly: false },
   { name: "keterangan", label: "Keterangan", type: "text", readOnly: false },
   { name: "nilaiKomersial", label: "NILAI (KOMERSIAL)", type: "number", readOnly: false },
   { name: "nonObjekPajak", label: "NON OBJEK PAJAK", type: "number", readOnly: false },
@@ -40,9 +40,10 @@ const perKode = {
     { name: "kodeAkun", readOnly: true },
     { name: "keterangan", readOnly: true },
   ],
-  5001: [{ name: "nilaiFiskal", readOnly: true },
-    { name: "nilaiKomersial", hidden : true },
-    { name: "pphFinal", readOnly : true },
+  5001: [
+    { name: "nilaiFiskal", readOnly: true },
+    { name: "nilaiKomersial", hidden: true },
+    { name: "pphFinal", readOnly: true },
   ],
   // dst, OKEEE KING
 };
@@ -60,9 +61,9 @@ export function buildSchema(row, dynamicOverrides = []) {
 export function isFieldReadonly(row, fieldName) {
   // non-line (header/label/subtotal)  semuanya readonly
   if (row?.type && row.type !== "line") return true;
-  const ov = (perKode[row?.kodeAkun] || []).find(f => f.name === fieldName);
+  const ov = (perKode[row?.kodeAkun] || []).find((f) => f.name === fieldName);
   return !!ov?.readOnly;
 }
 
-// opsional kawan : alias nama lain, kalau nanti kamu import getSchemaForRow dari file ini
+// opsional kawan : alias nama lain, kalau nanti import getSchemaForRow dari file ini
 export const getSchemaForRow = (row, overrides = []) => buildSchema(row, overrides);
