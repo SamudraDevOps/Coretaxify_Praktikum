@@ -7,18 +7,18 @@ const BiayaEntertainmentConfig = {
     "calender",
     "namaTempatEntertainment",
     "alamat",
-    "bulanTahun",
-    "biayaPerolehan",
-    "nilaiSisaBukuFiskal",
-    "komersial",
-    "fiskal",
-    "penyusutanDanAmortisasi",
+    "jenis-entertainment",
+    "biayaEntertainment",
+    "namaRelasiDiberikanEntertainment",
+    "jabatan",
+    "namaPerusahaan",
+    "usahaDiberikanEntertainment",
     "keterangan",
   ],
 
   customChildren: [
     {
-      key: "jenis",
+      key: "jenis-entertainment",
       type: "select-search",
       title: "Jenis Entertainment",
       placeholder: "Pilih Jenis Entertainment",
@@ -150,6 +150,49 @@ const BiayaEntertainmentConfig = {
       onChange: (value, updateField) => {
         updateField("kode", value);
       },
+    },
+    {
+      key: "namaTempatEntertainment",
+      type: "text",
+      title: "Nama Tempat Entertainment",
+      placeholder: "Masukkan nama tempat entertainment",
+      required: true,
+    },
+
+    {
+      key: "biayaEntertainment",
+      type: "currency",
+      title: "Biaya Entertainment",
+      placeholder: "Masukkan jumlah biaya entertainment",
+      required: true,
+    },
+    {
+      key: "namaRelasiDiberikanEntertainment",
+      type: "text",
+      title: "Nama Relasi yang Diberikan Entertainment",
+      placeholder: "Masukkan nama relasi yang diberikan entertainment",
+      required: true,
+    },
+    {
+      key: "jabatan",
+      type: "text",
+      title: "Jabatan",
+      placeholder: "Masukkan jabatan",
+      required: false,
+    },
+    {
+      key: "namaPerusahaan",
+      type: "text",
+      title: "Nama Perusahaan",
+      placeholder: "Masukkan nama perusahaan",
+      required: false,
+    },
+    {
+      key: "usahaDiberikanEntertainment",
+      type: "text",
+      title: "Jenis Usaha Relasi yang Diberikan Entertainment",
+      placeholder: "Masukkan usaha yang diberikan entertainment",
+      required: false,
     },
   ],
 

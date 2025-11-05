@@ -169,7 +169,7 @@ export default function BiayaEntertainment({ config }) {
         isOpen={showModal}
         onClose={closeModal}
         onSave={saveData}
-        title={editingId ? "Edit Penghasilan Kena Pajak" : "Tambah Penghasilan Kena Pajak"}
+        title={editingId ? "Edit Daftar Nominatif Biaya Hiburan" : "Daftar Nominatif Biaya Hiburan"}
         baseFields={baseFields}
         customChildren={customChildren}
         data={selected || {}}
