@@ -3,7 +3,7 @@ import LaporanLabaRugi from "./LaporanLabaRugi";
 import ModalLabaRugi from "@lampiran/Lampiran3/LaporanLabaRugi/form/ModalLabaRugi";
 import { buildSchema } from "@lampiran/Lampiran3/LaporanLabaRugi/form/schemas";
 
-// 👉 ROWS PATEN: isi lengkap sesuai yang dipingin bang pusing pala aing
+//  ROWS PATEN: isi lengkap sesuai yang dipingin bang pusing pala aing
 const ROWS = [
   // GROUP PENJUALAN
   { id: "g-penjualan", type: "header", level: 0, keterangan: "Penjualan" },

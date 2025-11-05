@@ -15,7 +15,7 @@ const BASE_FIELD_TEMPLATES = {
     type: "textarea",
     title: "Keterangan",
     placeholder: "Masukkan keterangan",
-    rows: 2,
+    rows: 3,
     required: false,
   },
 
@@ -134,40 +134,6 @@ const BASE_FIELD_TEMPLATES = {
     type: "currency",
     title: "Laba Kotor",
     placeholder: "Masukkan jumlah laba kotor",
-    required: true,
-  },
-
-  // Field Untuk Lampiran 3
-
-  biayaPerolehan: {
-    key: "biayaPerolehan",
-    type: "currency",
-    title: "Biaya Perolehan",
-    placeholder: "Masukkan jumlah biaya perolehan",
-    required: true,
-  },
-
-  nilaiSisaBukuFiskal: {
-    key: "nilaiSisaBukuFiskal",
-    type: "currency",
-    title: "Nilai Sisa Buku Fiskal",
-    placeholder: "Masukkan jumlah nilai sisa buku fiskal",
-    required: true,
-  },
-
-  penyusutanDanAmortisasi: {
-    key: "penyusutanDanAmortisasi",
-    type: "currency",
-    title: "Penyusutan dan Amortisasi",
-    placeholder: "Masukkan jumlah penyusutan dan amortisasi",
-    required: true,
-  },
-
-  namaTempatEntertainment: {
-    key: "namaTempatEntertainment",
-    type: "text",
-    title: "Nama Tempat Entertainment",
-    placeholder: "Masukkan nama tempat entertainment",
     required: true,
   },
 };
