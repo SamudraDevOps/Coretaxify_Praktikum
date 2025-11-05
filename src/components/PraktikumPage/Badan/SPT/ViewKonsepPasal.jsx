@@ -439,6 +439,7 @@ const LihatKonsepPasal = ({ data }) => {
           },
           params: {
             jenis_spt_pph: activeTabContent,
+            ...(userId && { user_id: userId }),
           },
         }
       );

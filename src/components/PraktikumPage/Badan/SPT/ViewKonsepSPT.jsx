@@ -500,6 +500,7 @@ const ViewKonsepSPT = ({ data }) => {
           },
           params: {
             jenis_spt_ppn: tabToApiParamMap[activeTab],
+            ...(userId && { user_id: userId }),
           },
         }
       );
