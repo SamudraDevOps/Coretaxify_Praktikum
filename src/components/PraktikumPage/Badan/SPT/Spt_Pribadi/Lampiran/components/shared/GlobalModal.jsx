@@ -75,24 +75,33 @@ const BASE_FIELD_TEMPLATES = {
     required: true,
   },
 
-  // Field untuk Lampiran 2
+  pphdipotong: {
+    key: "pphdipotong",
+    type: "currency",
+    title: "PPh Yang Dipotong/Dipungut",
+    placeholder: "Masukkan jumlah PPh yang dipotong/dipungut",
+    required: true,
+  },
+
   namaPemotong: {
-    key: "namaPemotong",
+    key: "nama",
     type: "text",
-    title: "Nama Pemotong/Pemungut PPh",
-    placeholder: "Nama Pemotong/Pemungut PPh Otomatis Terisi",
+    title: "Nama ",
+    placeholder: "Nama ",
     required: true,
     readOnly: true,
     className: "bg-gray-100 text-gray-600",
   },
 
   npwpPemotong: {
-    key: "npwpPemotong",
+    key: "npwp",
     type: "text",
-    title: "NPWP Pemotong/Pemungut PPh",
-    placeholder: "Nomor Identitas Pemotong/Pemungut PPh",
+    title: "NPWP ",
+    placeholder: "Nomor Identitas ",
     required: true,
   },
+
+  // Field untuk Lampiran 2
 
   alamatPemotong: {
     key: "alamatPemotong",
@@ -118,14 +127,6 @@ const BASE_FIELD_TEMPLATES = {
     type: "currency",
     title: "Dasar Pengenaan Pajak",
     placeholder: "Masukkan jumlah dasar pengenaan pajak",
-    required: true,
-  },
-
-  pphdipotong: {
-    key: "pphdipotong",
-    type: "currency",
-    title: "PPh Yang Dipotong/Dipungut",
-    placeholder: "Masukkan jumlah PPh yang dipotong/dipungut",
     required: true,
   },
 
