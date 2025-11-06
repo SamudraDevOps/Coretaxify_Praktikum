@@ -25,7 +25,7 @@ const BASE_FIELD_TEMPLATES = {
     title: "Alamat",
     placeholder: "Masukkan alamat",
     rows: 2,
-    required: false,
+    required: true,
   },
 
   bulanTahun: {
@@ -88,7 +88,7 @@ const BASE_FIELD_TEMPLATES = {
     type: "text",
     title: "Nama ",
     placeholder: "Nama ",
-    required: true,
+    required: false,
     readOnly: true,
     className: "bg-gray-100 text-gray-600",
   },

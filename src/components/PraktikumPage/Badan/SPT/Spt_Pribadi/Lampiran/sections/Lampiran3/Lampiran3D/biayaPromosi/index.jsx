@@ -12,7 +12,7 @@ const BiayaPromosiConfig = {
     "biayaPromosi",
     "keterangan",
     "pphdipotong",
-    "namaRelasiDiberikanBiayaPromosi",
+    "nomorBuktiPotong",
   ],
 
   customChildren: [
