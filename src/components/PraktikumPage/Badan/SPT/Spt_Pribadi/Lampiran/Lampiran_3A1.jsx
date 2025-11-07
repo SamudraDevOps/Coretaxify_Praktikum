@@ -10,6 +10,26 @@ export default function Lampiran_3A1({ data }) {
   const [showBagianB, setShowBagianB] = useState(true);
   const [showBagianC, setShowBagianC] = useState(true);
 
+  // State untuk form laporan keuangan
+  const [formLaporanKeuangan, setFormLaporanKeuangan] = useState({
+    jenis_laporan: "",
+    npwp_konsultan_pajak: "",
+    nama_konsultan_pajak: "",
+    npwp_kantor_akuntan_publik: "",
+    nama_kantor_akuntan_publik: "",
+  });
+
+  // Handler perubahan field
+  const handleLaporanKeuanganChange = (key, value) => {
+    setFormLaporanKeuangan((prev) => ({
+      ...prev,
+      [key]: value,
+      ...(key === "jenis_laporan" && value === "01"
+        ? { npwp_kantor_akuntan_publik: "", nama_kantor_akuntan_publik: "" }
+        : {}),
+    }));
+  };
+
   return (
     <div className="space-y-4">
       <HeaderLampiran />
@@ -52,7 +72,7 @@ export default function Lampiran_3A1({ data }) {
         )}
       </div>
 
-        {/* Bagian C - Laporan Keuangan */}
+      {/* Bagian C - Laporan Keuangan */}
       <div>
         <div
           className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
@@ -66,7 +86,10 @@ export default function Lampiran_3A1({ data }) {
           <div className="border rounded-md p-4 space-y-4">
             <div className="ml-4">
               {/* tampilkan seluruh form + tabel di sini */}
-              <LaporanKeuangan />
+              <LaporanKeuangan
+                formData={formLaporanKeuangan}
+                onFieldChange={handleLaporanKeuanganChange}
+              />
             </div>
           </div>
         )}

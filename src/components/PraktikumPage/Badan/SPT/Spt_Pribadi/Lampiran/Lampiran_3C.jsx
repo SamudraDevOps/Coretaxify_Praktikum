@@ -6,6 +6,7 @@ import HeaderLampiran from "./HeaderLampiran";
 import Kelompok1IndexBerwujud from "./sections/Lampiran3/Lampiran3C/HartaBerwujud";
 import Kelompok1IndexTidakBerwujud from "./sections/Lampiran3/Lampiran3C/HartaTidakBerwujud";
 import BangunanTidakPermanenIndex from "@sections/Lampiran3/Lampiran3C/Bangunan";
+import GlobalFormField from "./components/shared/GlobalFormField";
 
 export default function Lampiran_3C({ data }) {
   const [showBagianA, setShowBagianA] = useState(true);
@@ -122,45 +123,35 @@ export default function Lampiran_3C({ data }) {
       </div>
 
       <div className="border rounded-md p-4 space-y-4">
-        {/* Jumlah Penyusutan Fiskal Tahun ini */}
-        <div className="flex items-center gap-4">
-          <label className="text-sm font-medium w-80 flex-shrink-0">
-            Jumlah Penyusutan Fiskal Tahun ini
-          </label>
-          <input
-            readOnly
-            type="text"
-            value={formatNumber(form.penFiskal || 0)}
-            onChange={handleNumericChange("penFiskal")}
-            className="flex-1 p-2 border rounded-md bg-gray-100 text-sm"
-          />
-        </div>
+        <GlobalFormField
+          customChildren={[
+            {
+              key: "penFiskal",
+              type: "currency",
+              title: "Jumlah Penyusutan Fiskal Tahun ini",
+              placeholder: "",
+              readOnly: true,
+            },
 
-        {/* Jumlah Penyusutan Komersial Tahun ini */}
-        <div className="flex items-center gap-4">
-          <label className="text-sm font-medium w-80 flex-shrink-0">
-            Jumlah Penyusutan Komersial Tahun ini
-          </label>
-          <input
-            // readOnly
-            type="text"
-            value={formatNumber(form.penKomersial || 0)}
-            onChange={handleNumericChange("penKomersial")}
-            className="flex-1 p-2 border rounded-md text-sm font-medium"
-          />
-        </div>
+            {
+              key: "penKomersial",
+              type: "currency",
+              title: "Jumlah Penyusutan Komersial",
+              placeholder: "",
+            },
 
-        {/* Selisih Penyusutan */}
-        <div className="flex items-center gap-4">
-          <label className="text-sm font-medium w-80 flex-shrink-0">Selisih Penyusutan</label>
-          <input
-            readOnly
-            type="text"
-            value={formatNumber(form.penFiskal || 0)}
-            onChange={handleNumericChange("penFiskal")}
-            className="flex-1 p-2 border rounded-md bg-gray-100 text-sm"
-          />
-        </div>
+            {
+              key: "selisihPen",
+              type: "currency",
+              title: "Selisih Penyusutan",
+              placeholder: "",
+              readOnly: true,
+            },
+          ]}
+          formData={form}
+          onFieldChange={(key, value) => setForm((prev) => ({ ...prev, [key]: value }))}
+          labelWidth="w-80"
+        />
       </div>
 
       {/* Bagian C - Harta Tidak Berwujud */}
@@ -196,45 +187,35 @@ export default function Lampiran_3C({ data }) {
       </div>
 
       <div className="border rounded-md p-4 space-y-4">
-        {/* Jumlah Amortisasi Fiskal Tahun ini */}
-        <div className="flex items-center gap-4">
-          <label className="text-sm font-medium w-80 flex-shrink-0">
-            Jumlah Amortisasi Fiskal Tahun ini
-          </label>
-          <input
-            readOnly
-            type="text"
-            value={formatNumber(form.amorFiskal || 0)}
-            onChange={handleNumericChange("amorFiskal")}
-            className="flex-1 p-2 border rounded-md bg-gray-100 text-sm"
-          />
-        </div>
+        <GlobalFormField
+          customChildren={[
+            {
+              key: "amorFiskal",
+              type: "currency",
+              title: "Jumlah Amortisasi Fiskal Tahun ini",
+              placeholder: "",
+              readOnly: true,
+            },
 
-        {/* Jumlah Amortiasasi Komersial Tahun ini */}
-        <div className="flex items-center gap-4">
-          <label className="text-sm font-medium w-80 flex-shrink-0">
-            Jumlah Amortisasi Komersial Tahun ini
-          </label>
-          <input
-            // readOnly
-            type="text"
-            value={formatNumber(form.amorKomersial || 0)}
-            onChange={handleNumericChange("amorKomersial")}
-            className="flex-1 p-2 border rounded-md text-sm font-medium"
-          />
-        </div>
+            {
+              key: "amorKomersial",
+              type: "currency",
+              title: "Jumlah Amortisasi Komersial ",
+              placeholder: "",
+            },
 
-        {/* Selisih Amortisasi */}
-        <div className="flex items-center gap-4">
-          <label className="text-sm font-medium w-80 flex-shrink-0">Selisih Amortisasi</label>
-          <input
-            readOnly
-            type="text"
-            value={formatNumber(form.selisihAmor || 0)}
-            onChange={handleNumericChange("selisihAmor")}
-            className="flex-1 p-2 border rounded-md bg-gray-100 text-sm"
-          />
-        </div>
+            {
+              key: "selisihAmor",
+              type: "currency",
+              title: "Selisih Amortisasi",
+              placeholder: "",
+              readOnly: true,
+            },
+          ]}
+          formData={form}
+          onFieldChange={(key, value) => setForm((prev) => ({ ...prev, [key]: value }))}
+          labelWidth="w-80"
+        />
       </div>
     </div>
   );
