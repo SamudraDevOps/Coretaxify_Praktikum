@@ -5,7 +5,7 @@ import BiayaEntertainment from "./sections/Lampiran3/Lampiran3D/BiayaEntertainme
 import BiayaPromosi from "./sections/Lampiran3/Lampiran3D/biayaPromosi";
 import DaftarPiutang from "./sections/Lampiran3/Lampiran3D/DaftarPiutang";
 
-export default function Lampiran_3({ data }) {
+export default function Lampiran_3D({ data }) {
   const [showBagianA, setShowBagianA] = useState(true);
   const [showBagianB, setShowBagianB] = useState(true);
   const [showBagianC, setShowBagianC] = useState(true);

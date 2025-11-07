@@ -7,7 +7,7 @@ import Kelompok1IndexBerwujud from "./sections/Lampiran3/Lampiran3C/HartaBerwuju
 import Kelompok1IndexTidakBerwujud from "./sections/Lampiran3/Lampiran3C/HartaTidakBerwujud";
 import BangunanTidakPermanenIndex from "@sections/Lampiran3/Lampiran3C/Bangunan";
 
-export default function Lampiran_3({ data }) {
+export default function Lampiran_3C({ data }) {
   const [showBagianA, setShowBagianA] = useState(true);
   const [showBagianB, setShowBagianB] = useState(true);
   const [showBagianC, setShowBagianC] = useState(true);
