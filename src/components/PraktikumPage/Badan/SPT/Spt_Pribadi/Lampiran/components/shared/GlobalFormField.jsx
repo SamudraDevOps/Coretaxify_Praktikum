@@ -98,6 +98,7 @@ export const BASE_FIELD_TEMPLATES = {
     type: "text",
     title: "NPWP ",
     placeholder: "Nomor Identitas ",
+    readOnly: false,
     required: true,
   },
 
@@ -120,21 +121,6 @@ export const BASE_FIELD_TEMPLATES = {
     className: "bg-gray-100 text-gray-600",
   },
 
-  dasarPengenaanPajak: {
-    key: "dasarPengenaanPajak",
-    type: "currency",
-    title: "Dasar Pengenaan Pajak",
-    placeholder: "Masukkan jumlah dasar pengenaan pajak",
-    required: true,
-  },
-
-  labakotor: {
-    key: "labakotor",
-    type: "currency",
-    title: "Laba Kotor",
-    placeholder: "Masukkan jumlah laba kotor",
-    required: true,
-  },
 };
 
 // Komponen Global Form Field
@@ -282,6 +268,7 @@ export default function GlobalFormField({
               {field.fields.map((f) => {
                 const value =
                   f.type === "currency" ? formatNumber(formData[f.key]) : formData[f.key] || "";
+                const isReadOnly = f.readOnly;
                 return (
                   <div key={f.key} className="flex-1">
                     {f.subLabel && <div className="text-xs text-gray-500 mb-1">{f.subLabel}</div>}
@@ -296,8 +283,10 @@ export default function GlobalFormField({
                         updateField(f.key, val);
                       }}
                       placeholder={f.placeholder}
-                      readOnly={f.readOnly}
-                      className="w-full flex-1 p-2 border rounded-md text-sm transition-colors"
+                      readOnly={isReadOnly}
+                      className={`w-full flex-1 p-2 border rounded-md text-sm transition-colors ${
+                        isReadOnly ? "bg-gray-100 text-gray-600 cursor-not-allowed" : ""
+                      }`}
                     />
                   </div>
                 );

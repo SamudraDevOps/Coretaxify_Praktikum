@@ -51,6 +51,7 @@ import {
   Lampiran_3B,
   Lampiran_3C,
   Lampiran_3D,
+  Lampiran_4,
 } from "../Lampiran";
 
 const CreateKonsepPribadi = () => {
@@ -201,7 +202,7 @@ const CreateKonsepPribadi = () => {
       subtitle: "Lampiran 3A1 - Rekonsiliasi Laporan Keuangan ",
       component: "Lampiran_3A1",
       badge: "Tersedia",
-      order: 2, // Urutan kedua
+      order: 3,
     });
 
     // Lampiran 3B - SELALU TERSEDIA
@@ -212,7 +213,7 @@ const CreateKonsepPribadi = () => {
       subtitle: "Lampiran 3B - Daftar Tempat Kegiatan Usaha (TKU)",
       component: "Lampiran_3B",
       badge: "Tersedia",
-      order: 2, // Urutan kedua
+      order: 4,
     });
 
     // Lampiran 3C - SELALU TERSEDIA
@@ -223,7 +224,7 @@ const CreateKonsepPribadi = () => {
       subtitle: "Lampiran 3C - Daftar Harta Berwujud",
       component: "Lampiran_3C",
       badge: "Tersedia",
-      order: 2, // Urutan kedua
+      order: 5,
     });
 
     // Lampiran 3D - SELALU TERSEDIA
@@ -234,7 +235,17 @@ const CreateKonsepPribadi = () => {
       subtitle: "Lampiran 3D - Daftar Harta Tidak Berwujud",
       component: "Lampiran_3D",
       badge: "Tersedia",
-      order: 2, // Urutan kedua
+      order: 6,
+    });
+
+    // Lampiran 4 - SELALU TERSEDIA
+    allLampiran.push({
+      id: "lampiran-4",
+      title: "L-4",
+      subtitle: "Lampiran 4 - Perhitungan Angsuran PPh Pasal 25 Tahun Berikutnya",
+      component: "Lampiran_4",
+      badge: "Tersedia",
+      order: 7,
     });
 
     // Lampiran 3A-4 - Penghasilan dari Usaha (1.b.1 = Ya)
@@ -271,6 +282,8 @@ const CreateKonsepPribadi = () => {
         return <Lampiran_3C data={data} />;
       case "Lampiran_3D":
         return <Lampiran_3D data={data} />;
+      case "Lampiran_4":
+        return <Lampiran_4 data={data} />;
       default:
         return (
           <div className="text-center py-8">
@@ -278,7 +291,7 @@ const CreateKonsepPribadi = () => {
           </div>
         );
     }
-  };  
+  };
 
   return (
     <div className="flex h-screen bg-gray-100">

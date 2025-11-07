@@ -5,3 +5,4 @@ export { default as Lampiran_3A1 } from "./Lampiran_3A1";
 export { default as Lampiran_3B } from "./Lampiran_3B";
 export { default as Lampiran_3C } from "./Lampiran_3C";
 export { default as Lampiran_3D } from "./Lampiran_3D";
+export { default as Lampiran_4 } from "./Lampiran_4";
