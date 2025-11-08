@@ -25,14 +25,19 @@ const piutangConfig = {
     },
     {
       key: "deskripsi",
-      type: "select",
+      type: "select-search",
       title: "Deskripsi",
       placeholder: "Pilih jenis harta",
       required: true,
       options: [
-        { value: "0201: Piutang Usaha", label: "Piutang Usaha" },
-        { value: "0202: Piutang Afiliasi", label: "Piutang Afiliasi" },
-        { value: "0209: Piutang Lainnya", label: "Piutang Lainnya" },
+        {
+          id: 1,
+          kode: "0201",
+          value: "0201: Piutang Usaha",
+          label: "Piutang Usaha",
+        },
+        { id: 2, kode: "0202", value: "0202: Piutang Afiliasi", label: "Piutang Afiliasi" },
+        { id: 3, kode: "0209", value: "0209: Piutang Lainnya", label: "Piutang Lainnya" },
       ],
       onChange: (value, updateField) => {
         // Ekstrak kode dari value (4 digit pertama)

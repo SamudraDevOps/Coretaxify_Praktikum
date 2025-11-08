@@ -7,22 +7,28 @@ export default function DaftarHartaBergerak({ config }) {
   const {
     baseFields = [
       "kode",
-      "deskripsi",
-      "jenis",
+      "tipe",
       "merk",
+      "nopol",
+      "kepemilikan",
+      "npwp",
+      "namaPemotongPajak",
       "tahunPerolehan",
-      "nilaiPerolehan",
+      "biayaPerolehan",
       "nilaiSaatIni",
       "keterangan",
     ],
     customChildren = [],
     defaultData = {
       kode: "",
-      deskripsi: "",
-      jenis: "",
+      tipe: "",
       merk: "",
+      nopol: "",
+      kepemilikan: "",
+      npwp: "",
+      namaPemotongPajak: "PT TEST",
       tahunPerolehan: "",
-      nilaiPerolehan: 0,
+      biayaPerolehan: 0,
       nilaiSaatIni: 0,
       keterangan: "",
     },
@@ -56,6 +62,8 @@ export default function DaftarHartaBergerak({ config }) {
 
   // Save data
   const saveData = (values) => {
+    console.log("Saved values:", values);
+
     if (editingId) {
       setData((prev) =>
         prev.map((item) => (item.id === editingId ? { ...values, id: editingId } : item))
@@ -93,13 +101,16 @@ export default function DaftarHartaBergerak({ config }) {
           <thead className="bg-purple-700 text-white text-center">
             <tr>
               <th className="p-2 border-b">No</th>
-              <th className="p-2 border-b min-w-[150px]">Kode</th>
-              <th className="p-2 border-b min-w-[200px]">Deskripsi</th>
-              <th className="p-2 border-b min-w-[150px]">Jenis</th>
-              <th className="p-2 border-b min-w-[150px]">Merk</th>
+              <th className="p-2 border-b min-w-[200px]">Kode</th>
+              <th className="p-2 border-b min-w-[200px]">Tipe</th>
+              <th className="p-2 border-b min-w-[200px]">Merk/Model</th>
+              <th className="p-2 border-b min-w-[200px]">Nomor Polisi/Registrasi</th>
+              <th className="p-2 border-b min-w-[150px]">Kepemilikan</th>
+              <th className="p-2 border-b min-w-[150px]">NPWP</th>
+              <th className="p-2 border-b min-w-[150px]">Nama Pemotong Pajak</th>
               <th className="p-2 border-b min-w-[150px]">Tahun Perolehan</th>
-              <th className="p-2 border-b min-w-[150px]">Nilai Perolehan</th>
-              <th className="p-2 border-b min-w-[150px]">Nilai Saat Ini</th>
+              <th className="p-2 border-b min-w-[150px]">Biaya Perolehan</th>
+              <th className="p-2 border-b min-w-[150px]">Nilai Saat ini</th>
               <th className="p-2 border-b min-w-[150px]">Keterangan</th>
               <th className="p-2 border-b min-w-[100px]">Aksi</th>
             </tr>
@@ -107,7 +118,7 @@ export default function DaftarHartaBergerak({ config }) {
           <tbody className="text-gray-600 text-center">
             {dataHarta.length === 0 ? (
               <tr>
-                <td colSpan="10" className="p-4 text-center text-gray-500">
+                <td colSpan="13" className="p-4 text-center text-gray-500">
                   Belum ada data. Klik "Tambah Data" untuk menambah data baru.
                 </td>
               </tr>
@@ -116,11 +127,23 @@ export default function DaftarHartaBergerak({ config }) {
                 <tr key={item.id} className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}>
                   <td className="p-2 border-b text-center">{index + 1}</td>
                   <td className="p-2 border-b">{item.kode || "-"}</td>
-                  <td className="p-2 border-b">{item.deskripsi || "-"}</td>
-                  <td className="p-2 border-b">{item.jenis || "-"}</td>
+                  <td className="p-2 border-b max-w-xs trunate">
+                    {customChildren
+                      ?.find((f) => f.key === "tipe")
+                      ?.options?.find((opt) => opt.value === item.tipe)?.label || item.tipe}
+                  </td>
                   <td className="p-2 border-b">{item.merk || "-"}</td>
+                  <td className="p-2 border-b">{item.nopol || "-"}</td>
+                  <td className="p-2 border-b max-w-xs trunate">
+                    {customChildren
+                      ?.find((f) => f.key === "kepemilikan")
+                      ?.options?.find((opt) => opt.value === item.kepemilikan)?.label ||
+                      item.kepemilikan}
+                  </td>
+                  <td className="p-2 border-b">{item.npwp || "-"}</td>
+                  <td className="p-2 border-b">{item.namaPemotongPajak || "-"}</td>
                   <td className="p-2 border-b">{item.tahunPerolehan || "-"}</td>
-                  <td className="p-2 border-b">{formatRupiah(item.nilaiPerolehan)}</td>
+                  <td className="p-2 border-b">{formatRupiah(item.biayaPerolehan)}</td>
                   <td className="p-2 border-b">{formatRupiah(item.nilaiSaatIni)}</td>
                   <td className="p-2 border-b">{item.keterangan || "-"}</td>
                   <td className="px-4 py-3 text-sm">

@@ -120,7 +120,6 @@ export const BASE_FIELD_TEMPLATES = {
     readOnly: true,
     className: "bg-gray-100 text-gray-600",
   },
-
 };
 
 // Komponen Global Form Field

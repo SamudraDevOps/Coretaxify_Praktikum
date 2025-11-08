@@ -15,7 +15,7 @@ export default function DaftarInvestasi({ config }) {
       "biayaPerolehan",
       "tahunPerolehan",
       "nilaiSaatIni",
-      "keterangan",
+      "keteranganHarta",
     ],
     customChildren = [],
     defaultData = {
@@ -28,7 +28,7 @@ export default function DaftarInvestasi({ config }) {
       biayaPerolehan: 0,
       tahunPerolehan: "",
       nilaiSaatIni: 0,
-      keterangan: "",
+      keteranganHarta: "",
     },
   } = config || {};
 
@@ -60,6 +60,7 @@ export default function DaftarInvestasi({ config }) {
 
   // Save data
   const saveData = (values) => {
+    console.log("Saved values:", values);
     if (editingId) {
       setData((prev) =>
         prev.map((item) => (item.id === editingId ? { ...values, id: editingId } : item))
@@ -122,8 +123,11 @@ export default function DaftarInvestasi({ config }) {
                 <tr key={item.id} className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}>
                   <td className="p-2 border-b text-center">{index + 1}</td>
                   <td className="p-2 border-b">{item.kode || "-"}</td>
-                  <td className="p-2 border-b">
-                    {item.deskripsi?.replace(/^\d{4}:\s*/, "") || "-"}
+                  <td className="p-2 border-b max-w-xs trunate">
+                    {customChildren
+                      ?.find((f) => f.key === "deskripsi")
+                      ?.options?.find((opt) => opt.value === item.deskripsi)?.label ||
+                      item.deskripsi}
                   </td>
                   <td className="p-2 border-b">{item.lokasiharta || "-"}</td>
                   <td className="p-2 border-b">{item.nomoridentitas || "-"}</td>
@@ -132,7 +136,12 @@ export default function DaftarInvestasi({ config }) {
                   <td className="p-2 border-b">{formatRupiah(item.biayaPerolehan) || "-"}</td>
                   <td className="p-2 border-b">{item.tahunPerolehan || "-"}</td>
                   <td className="p-2 border-b">{formatRupiah(item.nilaiSaatIni) || "-"}</td>
-                  <td className="p-2 border-b">{item.keterangan || "-"}</td>
+                  <td className="p-2 border-b max-w-xs trunate">
+                    {customChildren
+                      ?.find((f) => f.key === "keterangan")
+                      ?.options?.find((opt) => opt.value === item.keteranganHarta)?.label ||
+                      item.keterangan}
+                  </td>{" "}
                   <td className="px-4 py-3 text-sm">
                     <div className="flex gap-2">
                       <button

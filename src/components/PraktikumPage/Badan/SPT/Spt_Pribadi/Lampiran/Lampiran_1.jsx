@@ -1,12 +1,18 @@
 import React, { useState } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import HeaderLampiran from "./HeaderLampiran";
+// import { KasDanSetaraKas, Piutang} from "./sections/Lampiran1";
+import KasDanSetaraKas from "./sections/Lampiran1/BagianA/KasDanSetaraKas";
+import Piutang from "./sections/Lampiran1/BagianA/Piutang";
+import Investasi from "./sections/Lampiran1/BagianA/Investasi";
+import HartaBergerak from "./sections/Lampiran1/BagianA/HartaBergerak";
+
 import {
-  Piutang,
-  Investasi,
-  HartaBergerak,
+  // Piutang,
+  // Investasi,
+  // HartaBergerak,
   HartaTidakBergerak,
-  KasdanSetaraKas,
+  // KasdanSetaraKas,
   HartaLainnya,
   Ikhtisar,
   UtangAkhir,
@@ -139,7 +145,7 @@ const Lampiran_1 = ({ data }) => {
 
               {showKasdanSetaraKas && (
                 <div className="border rounded-md p-4">
-                  <KasdanSetaraKas />
+                  <KasDanSetaraKas />
                 </div>
               )}
             </div>

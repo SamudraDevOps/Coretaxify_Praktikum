@@ -4,7 +4,7 @@ const DaftarInvestasiconfig = {
   baseFields: [
     "kode",
     "deskripsi",
-    "lokasiharta",
+    "lokasiHarta",
     "nomoridentitas",
     "penerimaInvestasi",
     "buktiKepemilikan",
@@ -16,7 +16,7 @@ const DaftarInvestasiconfig = {
   customChildren: [
     {
       key: "deskripsi",
-      type: "select",
+      type: "select-search",
       title: "Deskripsi",
       placeholder: "Pilih jenis harta",
       required: false,
@@ -98,13 +98,6 @@ const DaftarInvestasiconfig = {
       onChange: (value, updateField) => {
         updateField("kode", value);
       },
-    },
-    {
-      key: "lokasiharta",
-      type: "text",
-      title: "Lokasi Harta",
-      placeholder: "Lokasi Harta",
-      required: true,
     },
 
     {

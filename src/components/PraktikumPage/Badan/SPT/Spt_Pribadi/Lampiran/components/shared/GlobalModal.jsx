@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { X } from "lucide-react";
 import { formatNumber, parseFormattedNumber } from "../../utils/formatCurrency";
-import { defaultYearPickerProps } from "../../utils/datePickerUtils";
+import { defaultYearPickerProps, yearToDate, dateToYear } from "../../utils/datePickerUtils";
+import DatePicker from "react-datepicker";
 import Select from "react-select";
 function cn(...cls) {
   return cls.filter(Boolean).join(" ");
@@ -17,6 +18,23 @@ const BASE_FIELD_TEMPLATES = {
     placeholder: "Masukkan keterangan",
     rows: 3,
     required: false,
+  },
+
+  keteranganHarta: {
+    key: "keteranganHarta",
+    type: "select",
+    title: "Keterangan",
+    placeholder: "Pilih Keterangan",
+    required: false,
+    options: [
+      {
+        id: 1,
+        kode: "01",
+        value: "Harta PPS",
+        label: "Harta PPS",
+      },
+      { id: 2, kode: "02", value: "Harta Investasi", label: "Harta Investasi PPS" },
+    ],
   },
 
   alamat: {
@@ -40,6 +58,15 @@ const BASE_FIELD_TEMPLATES = {
     key: "tahun",
     type: "year",
     title: "Tahun",
+    placeholder: "Pilih tahun",
+    required: true,
+    yearPickerProps: defaultYearPickerProps,
+  },
+
+  tahunPerolehan: {
+    key: "tahunPerolehan",
+    type: "year",
+    title: "Tahun Perolehan",
     placeholder: "Pilih tahun",
     required: true,
     yearPickerProps: defaultYearPickerProps,
@@ -99,6 +126,54 @@ const BASE_FIELD_TEMPLATES = {
     title: "NPWP ",
     placeholder: "Nomor Identitas ",
     required: true,
+  },
+
+  nomoridentitas: {
+    key: "nomoridentitas",
+    type: "text",
+    title: "Nomor Identitas ",
+    placeholder: "Nomor Identitas ",
+    required: true,
+  },
+
+  // Tambahkan di dalam BASE_FIELD_TEMPLATES di GlobalModal.jsx
+  negara: {
+    key: "negara",
+    type: "select-search",
+    title: "Nama Negara",
+    placeholder: "Cari atau pilih negara...",
+    required: true,
+    apiEndpoint: "https://restcountries.com/v3.1/all?fields=name,currencies,cca2",
+    searchable: true,
+    onChange: (value, updateField, selectedOption) => {
+      updateField("negara", value);
+      updateField("kodeNegara", selectedOption?.kodeNegara || "");
+      updateField("nama", value);
+
+      if (selectedOption?.mataUangPrefill && selectedOption.mataUangPrefill !== "—") {
+        updateField("mataUang", selectedOption.mataUangPrefill);
+      }
+    },
+  },
+
+  lokasiHarta: {
+    // Api Lokasi Harta
+    key: "lokasiHarta",
+    type: "select-search",
+    title: "Lokasi Harta",
+    placeholder: "Cari atau pilih lokasi harta...",
+    required: true,
+    apiEndpoint: "https://restcountries.com/v3.1/all?fields=name,currencies,cca2",
+    searchable: true,
+    onChange: (value, updateField, selectedOption) => {
+      updateField("lokasiHarta", value);
+      updateField("kodeNegara", selectedOption?.kodeNegara || "");
+      updateField("nama", value);
+
+      if (selectedOption?.mataUangPrefill && selectedOption.mataUangPrefill !== "—") {
+        updateField("mataUang", selectedOption.mataUangPrefill);
+      }
+    },
   },
 
   // Field untuk Lampiran 2
@@ -488,7 +563,7 @@ const GlobalModal = ({
         let options = [];
         let isLoading = false;
 
-        if (key === "negara") {
+        if (key === "negara" || key === "lokasiHarta") {
           options = apiData.countries;
           isLoading = apiData.loading;
         } else if (key === "mataUang") {
@@ -526,6 +601,22 @@ const GlobalModal = ({
               }}
             />
           </div>
+        );
+
+      case "year":
+        return fieldWrapper(
+          <DatePicker
+            selected={yearToDate(value)}
+            onChange={(date) => {
+              const year = dateToYear(date);
+              updateField(key, year);
+            }}
+            showYearPicker
+            dateFormat="yyyy"
+            placeholderText={placeholder}
+            className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            {...(field.yearPickerProps || {})}
+          />
         );
 
       case "text":

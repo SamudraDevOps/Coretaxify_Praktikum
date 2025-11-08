@@ -1,7 +1,5 @@
-export { default as KasdanSetaraKas } from "./BagianA/KasdanSetarakas";
-export { default as Piutang } from "./BagianA/Piutang";
-export { default as Investasi } from "./BagianA/Investasi";
-export { default as HartaBergerak } from "./BagianA/HartaBergerak";
+// export { default as Investasi } from "./BagianA/Investasi";
+// export { default as HartaBergerak } from "./BagianA/HartaBergerak";
 export { default as HartaTidakBergerak } from "./BagianA/HartaTidakBergerak";
 export { default as HartaLainnya } from "./BagianA/HartaLainnya";
 export { default as Ikhtisar } from "./BagianA/Ikhtisar";
