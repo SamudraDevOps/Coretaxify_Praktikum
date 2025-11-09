@@ -1,7 +1,7 @@
 // export { default as Investasi } from "./BagianA/Investasi";
 // export { default as HartaBergerak } from "./BagianA/HartaBergerak";
 // export { default as HartaTidakBergerak } from "./BagianA/HartaTidakBergerak";
-export { default as HartaLainnya } from "./BagianA/HartaLainnya";
+// export { default as HartaLainnya } from "./BagianA/HartaLainnya";
 export { default as Ikhtisar } from "./BagianA/Ikhtisar";
 export { default as UtangAkhir } from "./BagianB/UtangAkhir";
 export { default as Penghasilan } from "./BagianD/Penghasilan";
