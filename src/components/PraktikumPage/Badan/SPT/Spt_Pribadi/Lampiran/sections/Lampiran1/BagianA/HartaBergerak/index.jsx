@@ -145,30 +145,15 @@ const DaftarHartaBergerakconfig = {
           label: "atas nama orang lain",
         },
       ],
-    },
-
-    {
-      key: "biayaPerolehan",
-      type: "currency",
-      title: "Nilai Perolehan",
-      placeholder: "Masukkan nilai perolehan",
-      required: true,
-    },
-    {
-      key: "nilaiSaatIni",
-      type: "currency",
-      title: "Nilai Saat Ini",
-      placeholder: "Masukkan nilai saat ini",
-      required: true,
-    },
+    }, 
   ],
 };
 
-const DaftarInvestasiIndex = () => {
+const DaftarHartaBergerakIndex = () => {
   return (
     <div className="space-y-4">
       <DaftarHartaBergerak config={DaftarHartaBergerakconfig} />
     </div>
   );
 };
-export default DaftarInvestasiIndex;
+export default DaftarHartaBergerakIndex;

@@ -6,12 +6,13 @@ import KasDanSetaraKas from "./sections/Lampiran1/BagianA/KasDanSetaraKas";
 import Piutang from "./sections/Lampiran1/BagianA/Piutang";
 import Investasi from "./sections/Lampiran1/BagianA/Investasi";
 import HartaBergerak from "./sections/Lampiran1/BagianA/HartaBergerak";
+import HartaTidakBergerak from "./sections/Lampiran1/BagianA/HartaTidakBergerak";
 
 import {
   // Piutang,
   // Investasi,
   // HartaBergerak,
-  HartaTidakBergerak,
+  // HartaTidakBergerak,
   // KasdanSetaraKas,
   HartaLainnya,
   Ikhtisar,

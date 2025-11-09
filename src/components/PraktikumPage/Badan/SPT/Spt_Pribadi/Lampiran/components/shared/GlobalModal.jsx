@@ -136,6 +136,22 @@ const BASE_FIELD_TEMPLATES = {
     required: true,
   },
 
+  biayaPerolehan: {
+    key: "biayaPerolehan",
+    type: "currency",
+    title: "Nilai Perolehan",
+    placeholder: "Masukkan nilai perolehan",
+    required: true,
+  },
+
+  nilaiSaatIni: {
+    key: "nilaiSaatIni",
+    type: "currency",
+    title: "Nilai Saat Ini",
+    placeholder: "Masukkan nilai saat ini",
+    required: true,
+  },
+
   // Tambahkan di dalam BASE_FIELD_TEMPLATES di GlobalModal.jsx
   negara: {
     key: "negara",
