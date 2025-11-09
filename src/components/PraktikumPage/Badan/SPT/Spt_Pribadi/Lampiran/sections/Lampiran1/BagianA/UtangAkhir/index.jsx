@@ -1,14 +1,14 @@
-import DaftarUtangAkhir from "./PenghasilanNeto";
+import DaftarUtangAkhir from "./UtangAkhir";
 
 const DaftarUtangAkhirconfig = {
   baseFields: [
-    "kode",           
-    "deskripsi",        
-    "npwpPemotong",     
-    "negara",           
-    "tahunPerolehan",   
-    "saldo",            
-    "keteranganHarta",  
+    "kode",
+    "deskripsi",
+    "npwpPemotong",
+    "negara",
+    "tahunPerolehan",
+    "saldo",
+    "keteranganHarta",
   ],
 
   customChildren: [
@@ -40,7 +40,7 @@ const DaftarUtangAkhirconfig = {
       required: true,
     },
   ],
-};  
+};
 
 const DaftarUtangAkhirIndex = () => {
   return (

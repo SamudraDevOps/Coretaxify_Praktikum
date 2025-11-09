@@ -9,6 +9,7 @@ import HartaBergerak from "./sections/Lampiran1/BagianA/HartaBergerak";
 import HartaTidakBergerak from "./sections/Lampiran1/BagianA/HartaTidakBergerak";
 import HartaLainnya from "./sections/Lampiran1/BagianA/HartaLainnya";
 import UtangAkhir from "./sections/Lampiran1/BagianA/UtangAkhir";
+import PenghasilanNeto from "./sections/Lampiran1/BagianA/PenghasilanNeto";
 
 import {
   // Piutang,
@@ -19,7 +20,7 @@ import {
   // HartaLainnya,
   Ikhtisar,
   // UtangAkhir,
-  Penghasilan,
+  // Penghasilan,
   Pemotongan,
 } from "./sections/Lampiran1";
 
@@ -314,7 +315,7 @@ const Lampiran_1 = ({ data }) => {
           <div className="border rounded-md p-4 space-y-4">
             {/* Sub-Bagian A.1 - Harta Tidak Bergerak */}
             <div className="ml-4">
-              <Penghasilan />
+              <PenghasilanNeto />
             </div>
           </div>
         )}
