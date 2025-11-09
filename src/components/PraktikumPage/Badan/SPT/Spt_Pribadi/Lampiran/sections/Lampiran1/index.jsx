@@ -3,6 +3,6 @@
 // export { default as HartaTidakBergerak } from "./BagianA/HartaTidakBergerak";
 // export { default as HartaLainnya } from "./BagianA/HartaLainnya";
 export { default as Ikhtisar } from "./BagianA/Ikhtisar";
-export { default as UtangAkhir } from "./BagianB/UtangAkhir";
+// export { default as UtangAkhir } from "./BagianB/UtangAkhir";
 export { default as Penghasilan } from "./BagianD/Penghasilan";
 export { default as Pemotongan } from "./BagianE/Pemotongan";

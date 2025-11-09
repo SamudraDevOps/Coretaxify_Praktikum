@@ -3,43 +3,35 @@ import { Plus, Edit, Trash2 } from "lucide-react";
 import { formatRupiah } from "../../../../utils/formatCurrency";
 import GlobalModal from "../../../../components/shared/GlobalModal";
 
-export default function DaftarUtangAkhir({ config }) {
+export default function DaftarHartaBergerak({ config }) {
   const {
     baseFields = [
       "kode",
-      "tipe",
-      "merk",
-      "nopol",
-      "kepemilikan",
+      "deskripsi",
       "npwp",
-      "namaPemotongPajak",
+      "negara",
       "tahunPerolehan",
-      "biayaPerolehan",
-      "nilaiSaatIni",
-      "keterangan",
+      "saldo",
+      "keteranganHarta",
     ],
     customChildren = [],
     defaultData = {
       kode: "",
-      tipe: "",
-      merk: "",
-      nopol: "",
-      kepemilikan: "",
+      deskripsi: "",
       npwp: "",
-      namaPemotongPajak: "PT TEST",
+      negara: "",
       tahunPerolehan: "",
-      biayaPerolehan: 0,
-      nilaiSaatIni: 0,
-      keterangan: "",
+      saldo: 0,
+      keteranganHarta: "",
     },
   } = config || {};
 
-  const [dataHarta, setData] = useState([]);
+  const [dataUtang, setData] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [selected, setSelected] = useState(null);
 
-  // Open modal untuk add
+  // Open modal untuk tambah data
   const openAddModal = () => {
     setSelected({ ...defaultData });
     setEditingId(null);
@@ -53,17 +45,16 @@ export default function DaftarUtangAkhir({ config }) {
     setShowModal(true);
   };
 
-  // Close modal
+  // Tutup modal
   const closeModal = () => {
     setShowModal(false);
     setEditingId(null);
     setSelected(null);
   };
 
-  // Save data
+  // Simpan data
   const saveData = (values) => {
     console.log("Saved values:", values);
-
     if (editingId) {
       setData((prev) =>
         prev.map((item) => (item.id === editingId ? { ...values, id: editingId } : item))
@@ -74,14 +65,14 @@ export default function DaftarUtangAkhir({ config }) {
     closeModal();
   };
 
-  // Delete data
+  // Hapus data
   const deleteData = (id) => {
     if (confirm("Apakah Anda yakin ingin menghapus data ini?")) {
       setData((prev) => prev.filter((item) => item.id !== id));
     }
   };
 
-  // Tabel Harta Bergerak
+  // Template tabel
   return (
     <div className="space-y-4">
       {/* Header */}
@@ -101,53 +92,47 @@ export default function DaftarUtangAkhir({ config }) {
           <thead className="bg-purple-700 text-white text-center">
             <tr>
               <th className="p-2 border-b">No</th>
-              <th className="p-2 border-b min-w-[200px]">Kode</th>
-              <th className="p-2 border-b min-w-[200px]">Tipe</th>
-              <th className="p-2 border-b min-w-[200px]">Merk/Model</th>
-              <th className="p-2 border-b min-w-[200px]">Nomor Polisi/Registrasi</th>
-              <th className="p-2 border-b min-w-[150px]">Kepemilikan</th>
-              <th className="p-2 border-b min-w-[150px]">NPWP</th>
-              <th className="p-2 border-b min-w-[150px]">Nama Pemotong Pajak</th>
+              <th className="p-2 border-b min-w-[150px]">Kode</th>
+              <th className="p-2 border-b min-w-[250px]">Deskripsi</th>
+              <th className="p-2 border-b min-w-[180px]">NPWP Kreditur</th>
+              <th className="p-2 border-b min-w-[180px]">Negara Kreditur</th>
               <th className="p-2 border-b min-w-[150px]">Tahun Perolehan</th>
-              <th className="p-2 border-b min-w-[150px]">Biaya Perolehan</th>
-              <th className="p-2 border-b min-w-[150px]">Nilai Saat ini</th>
+              <th className="p-2 border-b min-w-[150px]">Saldo</th>
               <th className="p-2 border-b min-w-[150px]">Keterangan</th>
               <th className="p-2 border-b min-w-[100px]">Aksi</th>
             </tr>
           </thead>
+
           <tbody className="text-gray-600 text-center">
-            {dataHarta.length === 0 ? (
+            {dataUtang.length === 0 ? (
               <tr>
-                <td colSpan="13" className="p-4 text-center text-gray-500">
+                <td colSpan="9" className="p-4 text-center text-gray-500">
                   Belum ada data. Klik "Tambah Data" untuk menambah data baru.
                 </td>
               </tr>
             ) : (
-              dataHarta.map((item, index) => (
+              dataUtang.map((item, index) => (
                 <tr key={item.id} className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}>
                   <td className="p-2 border-b text-center">{index + 1}</td>
                   <td className="p-2 border-b">{item.kode || "-"}</td>
-                  <td className="p-2 border-b max-w-xs trunate">
+
+                  {/* Deskripsi lookup dari customChildren */}
+                  <td className="p-2 border-b max-w-xs truncate">
                     {customChildren
-                      ?.find((f) => f.key === "tipe")
-                      ?.options?.find((opt) => opt.value === item.tipe)?.label || item.tipe}
+                      ?.find((f) => f.key === "deskripsi")
+                      ?.options?.find((opt) => opt.value === item.deskripsi)?.label ||
+                      item.deskripsi ||
+                      "-"}
                   </td>
-                  <td className="p-2 border-b">{item.merk || "-"}</td>
-                  <td className="p-2 border-b">{item.nopol || "-"}</td>
-                  <td className="p-2 border-b max-w-xs trunate">
-                    {customChildren
-                      ?.find((f) => f.key === "kepemilikan")
-                      ?.options?.find((opt) => opt.value === item.kepemilikan)?.label ||
-                      item.kepemilikan}
-                  </td>
+
                   <td className="p-2 border-b">{item.npwp || "-"}</td>
-                  <td className="p-2 border-b">{item.namaPemotongPajak || "-"}</td>
+                  <td className="p-2 border-b">{item.negara || "-"}</td>
                   <td className="p-2 border-b">{item.tahunPerolehan || "-"}</td>
-                  <td className="p-2 border-b">{formatRupiah(item.biayaPerolehan)}</td>
-                  <td className="p-2 border-b">{formatRupiah(item.nilaiSaatIni)}</td>
-                  <td className="p-2 border-b">{item.keterangan || "-"}</td>
+                  <td className="p-2 border-b">{formatRupiah(item.saldo)}</td>
+                  <td className="p-2 border-b">{item.keteranganHarta || "-"}</td>
+
                   <td className="px-4 py-3 text-sm">
-                    <div className="flex gap-2">
+                    <div className="flex gap-2 justify-center">
                       <button
                         onClick={() => openEditModal(item)}
                         className="p-1 text-blue-600 hover:bg-blue-50 rounded"
@@ -169,12 +154,12 @@ export default function DaftarUtangAkhir({ config }) {
         </table>
       </div>
 
-      {/* MODAL dengan Safe Config */}
+      {/* Modal */}
       <GlobalModal
         isOpen={showModal}
         onClose={closeModal}
         onSave={saveData}
-        title={editingId ? "Edit Data Harta Bergerak" : "Tambah Data Harta Bergerak"}
+        title={editingId ? "Edit Data Utang" : "Tambah Data Utang"}
         baseFields={baseFields}
         customChildren={customChildren}
         data={selected || {}}
