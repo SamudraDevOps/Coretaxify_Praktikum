@@ -152,7 +152,6 @@ const BASE_FIELD_TEMPLATES = {
     required: true,
   },
 
-  // Tambahkan di dalam BASE_FIELD_TEMPLATES di GlobalModal.jsx
   negara: {
     key: "negara",
     type: "select-search",
@@ -173,7 +172,6 @@ const BASE_FIELD_TEMPLATES = {
   },
 
   lokasiHarta: {
-    // Api Lokasi Harta
     key: "lokasiHarta",
     type: "select-search",
     title: "Lokasi Harta",

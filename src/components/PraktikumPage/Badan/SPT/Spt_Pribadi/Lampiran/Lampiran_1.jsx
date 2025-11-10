@@ -10,6 +10,7 @@ import HartaTidakBergerak from "./sections/Lampiran1/BagianA/HartaTidakBergerak"
 import HartaLainnya from "./sections/Lampiran1/BagianA/HartaLainnya";
 import UtangAkhir from "./sections/Lampiran1/BagianA/UtangAkhir";
 import PenghasilanNeto from "./sections/Lampiran1/BagianA/PenghasilanNeto";
+import Pemotongan from "./sections/Lampiran1/BagianA/BuktiPemotongan";
 
 import {
   // Piutang,
@@ -21,7 +22,7 @@ import {
   Ikhtisar,
   // UtangAkhir,
   // Penghasilan,
-  Pemotongan,
+  // Pemotongan,
 } from "./sections/Lampiran1";
 
 const Lampiran_1 = ({ data }) => {
