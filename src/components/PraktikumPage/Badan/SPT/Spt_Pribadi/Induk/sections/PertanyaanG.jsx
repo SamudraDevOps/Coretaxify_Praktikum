@@ -13,12 +13,21 @@ const PertanyaanG = () => {
         onClick={() => setShowPengembalianPPh(!showPengembalianPPh)}
       >
         <h3 className="text-lg font-semibold">
-          G. PERMOHONAN PENGEMBALIAN PPh LEBIH BAYAR (DIISI JIKA STATUS
-          SPT ADALAH LEBIH BAYAR)
+          G. PERMOHONAN PENGEMBALIAN PPh LEBIH BAYAR (DIISI JIKA STATUS SPT ADALAH LEBIH BAYAR)
         </h3>
-        {showPengembalianPPh ? <FaChevronUp /> : <FaChevronDown />}
+        <span
+          className={`transition-transform duration-500 ease-in-out ${
+            showPengembalianPPh ? "rotate-180" : "rotate-0"
+          }`}
+        >
+          <FaChevronDown />
+        </span>
       </div>
-      {showPengembalianPPh && (
+      <div
+        className={`overflow-hidden transition-all duration-500 ease-in-out ${
+          showPengembalianPPh ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
+        }`}
+      >
         <div className="border rounded-md p-4 mb-4">
           <div className="divide-y">
             <div className="grid grid-cols-12 gap-4 items-start">
@@ -43,45 +52,28 @@ const PertanyaanG = () => {
               {/* Kolom Kanan */}
               <div className="col-span-12 md:col-span-6 space-y-3">
                 <div className="flex items-center gap-2">
-                  <label className="text-sm text-gray-700 w-40">
-                    Pilih Rekening Bank
-                  </label>
+                  <label className="text-sm text-gray-700 w-40">Pilih Rekening Bank</label>
                   <button className="px-3 py-2 border rounded bg-gray-100 hover:bg-gray-200">
                     📂
                   </button>
                 </div>
                 <div className="flex items-center gap-2">
-                  <label className="text-sm text-gray-700 w-40">
-                    Nomor Rekening
-                  </label>
-                  <input
-                    type="text"
-                    className="flex-1 p-2 border rounded-md bg-gray-100 text-sm"
-                  />
+                  <label className="text-sm text-gray-700 w-40">Nomor Rekening</label>
+                  <input type="text" className="flex-1 p-2 border rounded-md bg-gray-100 text-sm" />
                 </div>
                 <div className="flex items-center gap-2">
-                  <label className="text-sm text-gray-700 w-40">
-                    Nama Bank
-                  </label>
-                  <input
-                    type="text"
-                    className="flex-1 p-2 border rounded-md bg-gray-100 text-sm"
-                  />
+                  <label className="text-sm text-gray-700 w-40">Nama Bank</label>
+                  <input type="text" className="flex-1 p-2 border rounded-md bg-gray-100 text-sm" />
                 </div>
                 <div className="flex items-center gap-2">
-                  <label className="text-sm text-gray-700 w-40">
-                    Nama Pemilik Rekening
-                  </label>
-                  <input
-                    type="text"
-                    className="flex-1 p-2 border rounded-md bg-gray-100 text-sm"
-                  />
+                  <label className="text-sm text-gray-700 w-40">Nama Pemilik Rekening</label>
+                  <input type="text" className="flex-1 p-2 border rounded-md bg-gray-100 text-sm" />
                 </div>
               </div>
             </div>
           </div>
         </div>
-      )}
+      </div>
     </>
   );
 };

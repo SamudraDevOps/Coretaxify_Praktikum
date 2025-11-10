@@ -3,7 +3,7 @@ import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 
 const PertanyaanC = () => {
   const [showPerhitunganPajakTerutang, setShowPerhitunganPajakTerutang] = useState(false);
-  
+
   // State untuk Bagian C - PERHITUNGAN PAJAK TERUTANG
   const [r2, setR2] = useState(null);
   const [amt2, setAmt2] = useState(0);
@@ -25,28 +25,28 @@ const PertanyaanC = () => {
       {/* Perhitungan Pajak Terutang */}
       <div
         className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
-        onClick={() =>
-          setShowPerhitunganPajakTerutang(!showPerhitunganPajakTerutang)
-        }
+        onClick={() => setShowPerhitunganPajakTerutang(!showPerhitunganPajakTerutang)}
       >
-        <h3 className="text-lg font-semibold">
-          C. PERHITUNGAN PAJAK TERUTANG
-        </h3>
-        {showPerhitunganPajakTerutang ? (
-          <FaChevronUp />
-        ) : (
+        <h3 className="text-lg font-semibold">C. PERHITUNGAN PAJAK TERUTANG</h3>
+        <span
+          className={`transition-transform duration-500 ease-in-out ${
+            showPerhitunganPajakTerutang ? "rotate-180" : "rotate-0"
+          }`}
+        >
           <FaChevronDown />
-        )}
+        </span>
       </div>
-      {showPerhitunganPajakTerutang && (
+      <div
+        className={`overflow-hidden transition-all duration-500 ease-in-out ${
+          showPerhitunganPajakTerutang ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
+        }`}
+      >
         <div className="border rounded-md p-4 mb-4">
           <div className="divide-y">
             {/* 2 */}
             <div className="grid grid-cols-12 gap-3 items-center px-3 py-2">
               <div className="col-span-12 md:col-span-5 flex gap-3 items-center">
-                <span className="pt-1 text-gray-700 font-medium min-w-[3.5rem]">
-                  2
-                </span>
+                <span className="pt-1 text-gray-700 font-medium min-w-[3.5rem]">2</span>
                 <span className="text-gray-800 text-base font-medium">
                   Penghasilan neto Setahun (1a + 1b + 1c + 1d){" "}
                   <span className="text-red-500">*</span>
@@ -67,13 +67,10 @@ const PertanyaanC = () => {
             {/* 3 */}
             <div className="grid grid-cols-12 gap-3 items-center px-3 py-2">
               <div className="col-span-12 md:col-span-5 flex gap-3 items-center">
-                <span className="pt-1 text-gray-700 font-medium min-w-[3.5rem]">
-                  3
-                </span>
+                <span className="pt-1 text-gray-700 font-medium min-w-[3.5rem]">3</span>
                 <span className="text-gray-800 text-base font-medium">
-                  Apakah Terdapat Pengurangan Penghasilan Neto seperti
-                  Kompensasi Kerugian Atau Zakat yang dibayarkan selain
-                  yang telah diperhitungkan dalam formulir BPA1 dan/
+                  Apakah Terdapat Pengurangan Penghasilan Neto seperti Kompensasi Kerugian Atau
+                  Zakat yang dibayarkan selain yang telah diperhitungkan dalam formulir BPA1 dan/
                   Atau BPA2
                 </span>
               </div>
@@ -101,10 +98,8 @@ const PertanyaanC = () => {
               </div>
               <div className="col-span-12 md:col-span-3 text-sm">
                 <div className="bg-blue-100 rounded px-3 py-2">
-                  {r3 === true &&
-                    "Ya, Isi Lampiran 5 Bagian A dan/Atau Bagian B"}
-                  {r3 === false &&
-                    "Tidak. Silahkan Melanjutkan ke pertanyaan berikutnya."}
+                  {r3 === true && "Ya, Isi Lampiran 5 Bagian A dan/Atau Bagian B"}
+                  {r3 === false && "Tidak. Silahkan Melanjutkan ke pertanyaan berikutnya."}
                   {r3 === null && "Pilih salah satu Ya/Tidak"}
                 </div>
               </div>
@@ -122,12 +117,9 @@ const PertanyaanC = () => {
             {/* 4 */}
             <div className="grid grid-cols-12 gap-3 items-center px-3 py-2">
               <div className="col-span-12 md:col-span-5 flex gap-3 items-center">
-                <span className="pt-1 text-gray-700 font-medium min-w-[3.5rem]">
-                  4
-                </span>
+                <span className="pt-1 text-gray-700 font-medium min-w-[3.5rem]">4</span>
                 <span className="text-gray-800 text-base font-medium">
-                  Penghasilan Neto Setelah Pengurangan Penghasilan Neto
-                  (2-3){" "}
+                  Penghasilan Neto Setelah Pengurangan Penghasilan Neto (2-3){" "}
                 </span>
               </div>
               <div className="col-span-12 md:col-span-5"></div>
@@ -145,9 +137,7 @@ const PertanyaanC = () => {
             {/* 5 */}
             <div className="grid grid-cols-12 gap-3 items-center px-3 py-2">
               <div className="col-span-12 md:col-span-5 flex gap-3 items-center">
-                <span className="pt-1 text-gray-700 font-medium min-w-[3.5rem]">
-                  5
-                </span>
+                <span className="pt-1 text-gray-700 font-medium min-w-[3.5rem]">5</span>
                 <span className="text-gray-800 text-base font-medium">
                   Penghasilan Tidak Kena Pajak
                 </span>
@@ -184,9 +174,7 @@ const PertanyaanC = () => {
             {/* 6 */}
             <div className="grid grid-cols-12 gap-3 items-center px-3 py-2">
               <div className="col-span-12 md:col-span-5 flex gap-3 items-center">
-                <span className="pt-1 text-gray-700 font-medium min-w-[3.5rem]">
-                  6
-                </span>
+                <span className="pt-1 text-gray-700 font-medium min-w-[3.5rem]">6</span>
                 <span className="text-gray-800 text-base font-medium">
                   Penghasilan Kena Pajak (4-5){" "}
                 </span>
@@ -206,12 +194,8 @@ const PertanyaanC = () => {
             {/* 7 */}
             <div className="grid grid-cols-12 gap-3 items-center px-3 py-2">
               <div className="col-span-12 md:col-span-5 flex gap-3 items-center">
-                <span className="pt-1 text-gray-700 font-medium min-w-[3.5rem]">
-                  7
-                </span>
-                <span className="text-gray-800 text-base font-medium">
-                  Pph Terutang
-                </span>
+                <span className="pt-1 text-gray-700 font-medium min-w-[3.5rem]">7</span>
+                <span className="text-gray-800 text-base font-medium">Pph Terutang</span>
               </div>
               <div className="col-span-12 md:col-span-5"></div>
               <div className="col-span-12 md:col-span-2">
@@ -228,12 +212,9 @@ const PertanyaanC = () => {
             {/* 8 */}
             <div className="grid grid-cols-12 gap-3 items-center px-3 py-2">
               <div className="col-span-12 md:col-span-5 flex gap-3 items-center">
-                <span className="pt-1 text-gray-700 font-medium min-w-[3.5rem]">
-                  8
-                </span>
+                <span className="pt-1 text-gray-700 font-medium min-w-[3.5rem]">8</span>
                 <span className="text-gray-800 text-base font-medium">
-                  Apakah Terdapat Pengurangan PPh Terutang ?
-                  <span className="text-red-500">*</span>
+                  Apakah Terdapat Pengurangan PPh Terutang ?<span className="text-red-500">*</span>
                 </span>
               </div>
               <div className="col-span-12 md:col-span-2">
@@ -261,8 +242,7 @@ const PertanyaanC = () => {
               <div className="col-span-12 md:col-span-3 text-sm">
                 <div className="bg-blue-100 rounded px-3 py-2">
                   {r8 === true && "Ya, Isi Lampiran 5 Bagian C "}
-                  {r8 === false &&
-                    "Tidak. Silahkan Melanjutkan ke pertanyaan berikutnya."}
+                  {r8 === false && "Tidak. Silahkan Melanjutkan ke pertanyaan berikutnya."}
                   {r8 === null && "Pilih salah satu Ya/Tidak"}
                 </div>
               </div>
@@ -278,7 +258,7 @@ const PertanyaanC = () => {
             </div>
           </div>
         </div>
-      )}
+      </div>
     </>
   );
 };

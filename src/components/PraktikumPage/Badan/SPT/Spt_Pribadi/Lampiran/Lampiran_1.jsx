@@ -133,80 +133,121 @@ const Lampiran_1 = ({ data }) => {
           onClick={() => setShowBagianA(!showBagianA)}
         >
           <h3 className="text-lg font-semibold">A. HARTA PADA AKHIR TAHUN PAJAK</h3>
-          {showBagianA ? <FaChevronUp /> : <FaChevronDown />}
+          <span
+            className={`transition-transform duration-500 ease-in-out ${
+              showBagianA ? "rotate-180" : "rotate-0"
+            }`}
+          >
+            <FaChevronDown />
+          </span>
         </div>
-
-        {showBagianA && (
+        <div
+          className={`overflow-hidden transition-all duration-500 ease-in-out ${
+            showBagianA ? "max-h-[2000px] opacity-100" : "max-h-0 opacity-0"
+          }`}
+        >
           <div className="border rounded-md p-4 space-y-4">
-            {/* Sub-Bagian A.1 - Harta Tidak Bergerak */}
+            {/* Sub-Bagian A.1 */}
             <div className="ml-4">
               <div
                 className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
                 onClick={() => setShowKasdanSetaraKas(!showKasdanSetaraKas)}
               >
                 <h4 className="text-lg font-semibold">A.1 KAS DAN SETARA KAS</h4>
-                {showKasdanSetaraKas ? <FaChevronUp /> : <FaChevronDown />}
+                <span
+                  className={`transition-transform duration-500 ease-in-out ${
+                    showKasdanSetaraKas ? "rotate-180" : "rotate-0"
+                  }`}
+                >
+                  <FaChevronDown />
+                </span>
               </div>
-
-              {showKasdanSetaraKas && (
+              <div
+                className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                  showKasdanSetaraKas ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
+                }`}
+              >
                 <div className="border rounded-md p-4">
                   <KasDanSetaraKas />
                 </div>
-              )}
+              </div>
             </div>
-
-            {/* Sub-Bagian A.2 - Harta Bergerak */}
+            {/* Sub-Bagian A.2 */}
             <div className="ml-4">
               <div
                 className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
                 onClick={() => setShowPiutang(!showPiutang)}
               >
                 <h4 className="text-lg font-semibold">A.2 PIUTANG</h4>
-                {showPiutang ? <FaChevronUp /> : <FaChevronDown />}
+                <span
+                  className={`transition-transform duration-500 ease-in-out ${
+                    showPiutang ? "rotate-180" : "rotate-0"
+                  }`}
+                >
+                  <FaChevronDown />
+                </span>
               </div>
-
-              {showPiutang && (
+              <div
+                className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                  showPiutang ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
+                }`}
+              >
                 <div className="border rounded-md p-4">
                   <Piutang />
                 </div>
-              )}
+              </div>
             </div>
-
-            {/* Sub-Bagian A.3 -  Investasi/Sekuritas */}
+            {/* Sub-Bagian A.3 */}
             <div className="ml-4">
               <div
                 className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
                 onClick={() => setShowInvestasi(!showInvestasi)}
               >
                 <h4 className="text-lg font-semibold">A.3 INVESTASI / SEKURITAS</h4>
-                {showInvestasi ? <FaChevronUp /> : <FaChevronDown />}
+                <span
+                  className={`transition-transform duration-500 ease-in-out ${
+                    showInvestasi ? "rotate-180" : "rotate-0"
+                  }`}
+                >
+                  <FaChevronDown />
+                </span>
               </div>
-
-              {showInvestasi && (
+              <div
+                className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                  showInvestasi ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
+                }`}
+              >
                 <div className="border rounded-md p-4">
                   <Investasi />
                 </div>
-              )}
+              </div>
             </div>
-
-            {/* Sub-Bagian A.4 -  Harta Bergerak */}
+            {/* Sub-Bagian A.4 */}
             <div className="ml-4">
               <div
                 className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
                 onClick={() => setShowHartaBergerak(!showHartaBergerak)}
               >
                 <h4 className="text-lg font-semibold">A.4 HARTA BERGERAK</h4>
-                {showHartaBergerak ? <FaChevronUp /> : <FaChevronDown />}
+                <span
+                  className={`transition-transform duration-500 ease-in-out ${
+                    showHartaBergerak ? "rotate-180" : "rotate-0"
+                  }`}
+                >
+                  <FaChevronDown />
+                </span>
               </div>
-
-              {showHartaBergerak && (
+              <div
+                className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                  showHartaBergerak ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
+                }`}
+              >
                 <div className="border rounded-md p-4">
                   <HartaBergerak />
                 </div>
-              )}
+              </div>
             </div>
-
-            {/* Sub-Bagian A.5 -  Harta Tidak Bergerak */}
+            {/* Sub-Bagian A.5 */}
             <div className="ml-4">
               <div
                 className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
@@ -215,51 +256,76 @@ const Lampiran_1 = ({ data }) => {
                 <h4 className="text-lg font-semibold">
                   A.5 HARTA TIDAK BERGERAK (TERMASUK TANAH DAN/ATAU BANGUNAN)
                 </h4>
-                {showHartaTidakBergerak ? <FaChevronUp /> : <FaChevronDown />}
+                <span
+                  className={`transition-transform duration-500 ease-in-out ${
+                    showHartaTidakBergerak ? "rotate-180" : "rotate-0"
+                  }`}
+                >
+                  <FaChevronDown />
+                </span>
               </div>
-
-              {showHartaTidakBergerak && (
+              <div
+                className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                  showHartaTidakBergerak ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
+                }`}
+              >
                 <div className="border rounded-md p-4">
                   <HartaTidakBergerak />
                 </div>
-              )}
+              </div>
             </div>
-
-            {/* Sub-Bagian A.6 -  Harta Lainnya*/}
+            {/* Sub-Bagian A.6 */}
             <div className="ml-4">
               <div
                 className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
                 onClick={() => setShowHartaLainnya(!showHartaLainnya)}
               >
                 <h4 className="text-lg font-semibold">A.6 HARTA LAINNYA</h4>
-                {showHartaLainnya ? <FaChevronUp /> : <FaChevronDown />}
+                <span
+                  className={`transition-transform duration-500 ease-in-out ${
+                    showHartaLainnya ? "rotate-180" : "rotate-0"
+                  }`}
+                >
+                  <FaChevronDown />
+                </span>
               </div>
-
-              {showHartaLainnya && (
+              <div
+                className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                  showHartaLainnya ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
+                }`}
+              >
                 <div className="border rounded-md p-4">
                   <HartaLainnya />
                 </div>
-              )}
+              </div>
             </div>
-
-            {/* Sub-Bagian A.7 -  Ikhtisar*/}
+            {/* Sub-Bagian A.7 */}
             <div className="ml-4">
               <div
                 className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
                 onClick={() => setShowIkhtisar(!showIkhtisar)}
               >
                 <h4 className="text-lg font-semibold">A.7 IKHTISAR</h4>
-                {showIkhtisar ? <FaChevronUp /> : <FaChevronDown />}
+                <span
+                  className={`transition-transform duration-500 ease-in-out ${
+                    showIkhtisar ? "rotate-180" : "rotate-0"
+                  }`}
+                >
+                  <FaChevronDown />
+                </span>
               </div>
-
-              {showIkhtisar && (
+              <div
+                className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                  showIkhtisar ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
+                }`}
+              >
                 <div className="border rounded-md p-4">
                   <Ikhtisar />
                 </div>
-              )}
+              </div>
             </div>
           </div>
-        )}
+        </div>
       </div>
 
       {/* Bagian B - Utang pada Akhir Tahun Pajak */}
@@ -269,17 +335,25 @@ const Lampiran_1 = ({ data }) => {
           onClick={() => setShowBagianB(!showBagianB)}
         >
           <h3 className="text-lg font-semibold">B. UTANG PADA AKHIR TAHUN PAJAK</h3>
-          {showBagianB ? <FaChevronUp /> : <FaChevronDown />}
+          <span
+            className={`transition-transform duration-500 ease-in-out ${
+              showBagianB ? "rotate-180" : "rotate-0"
+            }`}
+          >
+            <FaChevronDown />
+          </span>
         </div>
-
-        {showBagianB && (
+        <div
+          className={`overflow-hidden transition-all duration-500 ease-in-out ${
+            showBagianB ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
+          }`}
+        >
           <div className="border rounded-md p-4 space-y-4">
-            {/* Sub-Bagian A.1 - Harta Tidak Bergerak */}
             <div className="ml-4">
               <UtangAkhir />
             </div>
           </div>
-        )}
+        </div>
       </div>
 
       {/* Bagian C - Daftar Anggota Keluarga yang Menjadi Tanggungan */}
@@ -291,15 +365,26 @@ const Lampiran_1 = ({ data }) => {
           <h3 className="text-lg font-semibold">
             C. DAFTAR ANGGOTA KELUARGA YANG MENJADI TANGGUNGAN
           </h3>
-          {showBagianC ? <FaChevronUp /> : <FaChevronDown />}
+          <span
+            className={`transition-transform duration-500 ease-in-out ${
+              showBagianC ? "rotate-180" : "rotate-0"
+            }`}
+          >
+            <FaChevronDown />
+          </span>
         </div>
-
-        {showBagianC && (
+        <div
+          className={`overflow-hidden transition-all duration-500 ease-in-out ${
+            showBagianC ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
+          }`}
+        >
           <div className="border rounded-md p-4 space-y-4">
-            {/* Sub-Bagian A.1 - Harta Tidak Bergerak */}
-            <div className="ml-4">{/* <UtangAkhir /> */}</div>
+            <div className="ml-4">
+              {/* <AnggotaKeluarga /> */}
+              <div className="text-gray-500 italic">Next Update sabar Inggih.</div>
+            </div>
           </div>
-        )}
+        </div>
       </div>
 
       {/* Bagian D - Penghasilan Neto Dalam Negeri Dari Pekerjaan */}
@@ -309,18 +394,27 @@ const Lampiran_1 = ({ data }) => {
           onClick={() => setShowBagianD(!showBagianD)}
         >
           <h3 className="text-lg font-semibold">D. PENGHASILAN NETO DALAM NEGERI DARI PEKERJAAN</h3>
-          {showBagianD ? <FaChevronUp /> : <FaChevronDown />}
+          <span
+            className={`transition-transform duration-500 ease-in-out ${
+              showBagianD ? "rotate-180" : "rotate-0"
+            }`}
+          >
+            <FaChevronDown />
+          </span>
         </div>
-
-        {showBagianD && (
+        <div
+          className={`overflow-hidden transition-all duration-500  ${
+            showBagianD ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
+          }`}
+        >
           <div className="border rounded-md p-4 space-y-4">
-            {/* Sub-Bagian A.1 - Harta Tidak Bergerak */}
             <div className="ml-4">
               <PenghasilanNeto />
             </div>
           </div>
-        )}
+        </div>
       </div>
+
       {/* Bagian E - Daftar Bukti Pemotongan/Pemungutan PPh */}
       <div>
         <div
@@ -328,17 +422,25 @@ const Lampiran_1 = ({ data }) => {
           onClick={() => setShowBagianE(!showBagianE)}
         >
           <h3 className="text-lg font-semibold">E. DAFTAR BUKTI PEMOTONGAN/PEMUNGUTAN PPH</h3>
-          {showBagianE ? <FaChevronUp /> : <FaChevronDown />}
+          <span
+            className={`transition-transform duration-500 ease-in-out ${
+              showBagianE ? "rotate-180" : "rotate-0"
+            }`}
+          >
+            <FaChevronDown />
+          </span>
         </div>
-
-        {showBagianE && (
+        <div
+          className={`overflow-hidden transition-all duration-500 ease-in-out ${
+            showBagianE ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
+          }`}
+        >
           <div className="border rounded-md p-4 space-y-4">
-            {/* Sub-Bagian A.1 - Harta Tidak Bergerak */}
             <div className="ml-4">
               <Pemotongan />
             </div>
           </div>
-        )}
+        </div>
       </div>
     </div>
   );

@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+import { FaChevronDown } from "react-icons/fa";
 
 const PertanyaanB = ({ onAnswerChange, answersState }) => {
-  const [showIkhtisarPenghasilanNeto, setShowIkhtisarPenghasilanNeto] =
-    useState(false);
+  const [showIkhtisarPenghasilanNeto, setShowIkhtisarPenghasilanNeto] = useState(false);
 
   // State untuk Bagian B - IKHTISAR PENGHASILAN NETO
   const [r1a, setR1a] = useState(null);
@@ -23,7 +22,7 @@ const PertanyaanB = ({ onAnswerChange, answersState }) => {
   const [r1d, setR1d] = useState(null);
   const [amt1d, setAmt1d] = useState(0);
 
-    // STEP 1: Sync dengan parent state
+  // STEP 1: Sync dengan parent state
 
   useEffect(() => {
     if (answersState) {
@@ -73,14 +72,22 @@ const PertanyaanB = ({ onAnswerChange, answersState }) => {
       {/* Ikhtisar Penghasilan Neto */}
       <div
         className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
-        onClick={() =>
-          setShowIkhtisarPenghasilanNeto(!showIkhtisarPenghasilanNeto)
-        }
+        onClick={() => setShowIkhtisarPenghasilanNeto(!showIkhtisarPenghasilanNeto)}
       >
         <h3 className="text-lg font-semibold">B. IKHTISAR PENGHASILAN NETO</h3>
-        {showIkhtisarPenghasilanNeto ? <FaChevronUp /> : <FaChevronDown />}
+        <span
+          className={`transition-transform duration-500 ease-in-out ${
+            showIkhtisarPenghasilanNeto ? "rotate-180" : "rotate-0"
+          }`}
+        >
+          <FaChevronDown />
+        </span>
       </div>
-      {showIkhtisarPenghasilanNeto && (
+      <div
+        className={`overflow-hidden transition-all duration-500 ease-in-out ${
+          showIkhtisarPenghasilanNeto ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
+        }`}
+      >
         <div className="border rounded-md p-4 mb-4">
           <div className="divide-y">
             {/* 1.a */}
@@ -88,9 +95,7 @@ const PertanyaanB = ({ onAnswerChange, answersState }) => {
 
             <div className="grid grid-cols-12 gap-3 items-center px-3 py-2">
               <div className="col-span-12 md:col-span-5 flex gap-3 items-center">
-                <span className="pt-1 text-gray-700 font-medium min-w-[3.5rem]">
-                  1.a.
-                </span>
+                <span className="pt-1 text-gray-700 font-medium min-w-[3.5rem]">1.a.</span>
                 <span className="text-gray-800 text-base font-medium">
                   Apakah Anda menerima penghasilan dalam negeri dari pekerjaan?{" "}
                   <span className="text-red-500">*</span>
@@ -139,12 +144,10 @@ const PertanyaanB = ({ onAnswerChange, answersState }) => {
             {/* 1.b.1 */}
             <div className="grid grid-cols-12 gap-3 items-center px-3 py-2">
               <div className="col-span-12 md:col-span-5 flex gap-3 items-center">
-                <span className="pt-1 text-gray-700 font-medium min-w-[3.5rem]">
-                  1. b. 1
-                </span>
+                <span className="pt-1 text-gray-700 font-medium min-w-[3.5rem]">1. b. 1</span>
                 <span className="text-gray-800 text-base font-medium">
-                  Apakah Anda menerima penghasilan dari usaha dan/atau pekerjaan
-                  bebas? <span className="text-red-500">*</span>
+                  Apakah Anda menerima penghasilan dari usaha dan/atau pekerjaan bebas?{" "}
+                  <span className="text-red-500">*</span>
                 </span>
               </div>
               <div className="col-span-12 md:col-span-2">
@@ -171,27 +174,21 @@ const PertanyaanB = ({ onAnswerChange, answersState }) => {
               </div>
               <div className="col-span-12 md:col-span-3 text-sm">
                 <div className="bg-blue-100 rounded px-3 py-2">
-                  {r1b1 === true &&
-                    "Ya, silahkan mengisi jumlah pajak yang dapat diangsur/ditunda"}
+                  {r1b1 === true && "Ya, silahkan mengisi jumlah pajak yang dapat diangsur/ditunda"}
                   {r1b1 === false && "Tidak, Lanjutkan pertanyaan 1.c"}
                   {r1b1 === null && "Pilih salah satu Ya/Tidak"}
                 </div>
               </div>
-              <div className="col-span-12 md:col-span-2">
-                {/* Tidak ada input untuk 1.b.1 */}
-              </div>
+              <div className="col-span-12 md:col-span-2">{/* Tidak ada input untuk 1.b.1 */}</div>
             </div>
 
             {/* 1.b.2 */}
             <div className="grid grid-cols-12 gap-3 items-center px-3 py-2">
               <div className="col-span-12 md:col-span-5 flex gap-3 items-center">
-                <span className="pt-1 text-gray-700 font-medium min-w-[3.5rem]">
-                  1. b. 2
-                </span>
+                <span className="pt-1 text-gray-700 font-medium min-w-[3.5rem]">1. b. 2</span>
                 <span className="text-gray-800 text-base font-medium">
-                  Apakah Anda termasuk Wajib Pajak Orang Pribadi yang memiliki
-                  peredaran bruto tertentu atau Orang Pribadi Pengusaha Tertentu
-                  (OPPT)?
+                  Apakah Anda termasuk Wajib Pajak Orang Pribadi yang memiliki peredaran bruto
+                  tertentu atau Orang Pribadi Pengusaha Tertentu (OPPT)?
                 </span>
               </div>
               <div className="col-span-12 md:col-span-2">
@@ -201,12 +198,9 @@ const PertanyaanB = ({ onAnswerChange, answersState }) => {
                   onChange={(e) => setR1b2(e.target.value)}
                 >
                   <option value="">Please select</option>
-                  <option
-                    value="ya_final"
-                    className="whitespace-normal break-words"
-                  >
-                    Ya, termasuk WP OP yang memiliki peredaran bruto tertentu
-                    yang dikenakan PPh final
+                  <option value="ya_final" className="whitespace-normal break-words">
+                    Ya, termasuk WP OP yang memiliki peredaran bruto tertentu yang dikenakan PPh
+                    final
                   </option>
                   <option value="ya_oppt">Ya, termasuk WP OPPT</option>
                   <option value="tidak">Tidak</option>
@@ -216,27 +210,21 @@ const PertanyaanB = ({ onAnswerChange, answersState }) => {
                 <div className="bg-blue-100 rounded px-3 py-2">
                   {r1b2 === "ya_final" &&
                     "Anda memilih WP OP dengan peredaran bruto tertentu yang dikenakan PPh final. Silakan isi Lampiran 3B."}
-                  {r1b2 === "ya_oppt" &&
-                    "Anda termasuk WP OPPT. Silakan isi Lampiran 3B Bagian B."}
+                  {r1b2 === "ya_oppt" && "Anda termasuk WP OPPT. Silakan isi Lampiran 3B Bagian B."}
                   {r1b2 === "tidak" &&
                     "Anda tidak termasuk kategori ini. Lanjutkan ke pertanyaan berikutnya 1.b.4."}
                   {r1b2 === "" && "Pilih salah satu opsi"}
                 </div>
               </div>
-              <div className="col-span-12 md:col-span-2">
-                {/* Tidak ada input untuk 1.b.2 */}
-              </div>
+              <div className="col-span-12 md:col-span-2">{/* Tidak ada input untuk 1.b.2 */}</div>
             </div>
 
             {/* 1.b.3 */}
             <div className="grid grid-cols-12 gap-3 items-center px-3 py-2">
               <div className="col-span-12 md:col-span-5 flex gap-3 items-center">
-                <span className="pt-1 text-gray-700 font-medium min-w-[3.5rem]">
-                  1. b. 3
-                </span>
+                <span className="pt-1 text-gray-700 font-medium min-w-[3.5rem]">1. b. 3</span>
                 <span className="text-gray-800 text-base font-medium">
-                  Apakah Anda menggunakan Norma dalam menghitung penghasilan
-                  neto?
+                  Apakah Anda menggunakan Norma dalam menghitung penghasilan neto?
                 </span>
               </div>
               <div className="col-span-12 md:col-span-2">
@@ -247,9 +235,7 @@ const PertanyaanB = ({ onAnswerChange, answersState }) => {
                 >
                   <option value="">Please select</option>
                   <option value="ya">Ya, saya menggunakan Norma.</option>
-                  <option value="tidak">
-                    Tidak, saya menyelenggarakan pembukuan.
-                  </option>
+                  <option value="tidak">Tidak, saya menyelenggarakan pembukuan.</option>
                 </select>
               </div>
               <div className="col-span-12 md:col-span-3 text-sm">
@@ -261,20 +247,15 @@ const PertanyaanB = ({ onAnswerChange, answersState }) => {
                   {r1b3 === "" && "Pilih salah satu opsi"}
                 </div>
               </div>
-              <div className="col-span-12 md:col-span-2">
-                {/* Tidak ada input untuk 1.b.3 */}
-              </div>
+              <div className="col-span-12 md:col-span-2">{/* Tidak ada input untuk 1.b.3 */}</div>
             </div>
 
             {/* 1.b.4 */}
             <div className="grid grid-cols-12 gap-3 items-center px-3 py-2">
               <div className="col-span-12 md:col-span-5 flex gap-3 items-center">
-                <span className="pt-1 text-gray-700 font-medium min-w-[3.5rem]">
-                  1. b. 4
-                </span>
+                <span className="pt-1 text-gray-700 font-medium min-w-[3.5rem]">1. b. 4</span>
                 <span className="text-gray-800 text-base font-medium">
-                  Anda menyelenggarakan pembukuan. Sebutkan sektor usaha yang
-                  Anda lakukan?
+                  Anda menyelenggarakan pembukuan. Sebutkan sektor usaha yang Anda lakukan?
                 </span>
               </div>
               <div className="col-span-12 md:col-span-2">
@@ -303,17 +284,13 @@ const PertanyaanB = ({ onAnswerChange, answersState }) => {
                   {r1b4 === "" && "Pilih salah satu opsi"}
                 </div>
               </div>
-              <div className="col-span-12 md:col-span-2">
-                {/* Tidak ada input untuk 1.b.4 */}
-              </div>
+              <div className="col-span-12 md:col-span-2">{/* Tidak ada input untuk 1.b.4 */}</div>
             </div>
 
             {/* 1.b.5 */}
             <div className="grid grid-cols-12 gap-3 items-center px-3 py-2">
               <div className="col-span-12 md:col-span-5 flex gap-3 items-center">
-                <span className="pt-1 text-gray-700 font-medium min-w-[3.5rem]">
-                  1. b. 5
-                </span>
+                <span className="pt-1 text-gray-700 font-medium min-w-[3.5rem]">1. b. 5</span>
                 <span className="text-gray-800 text-base font-medium">
                   Penghasilan neto dari usaha dan/atau pekerjaan bebas
                 </span>
@@ -333,9 +310,7 @@ const PertanyaanB = ({ onAnswerChange, answersState }) => {
             {/* 1.c */}
             <div className="grid grid-cols-12 gap-3 items-center px-3 py-2">
               <div className="col-span-12 md:col-span-5 flex gap-3 items-center">
-                <span className="pt-1 text-gray-700 font-medium min-w-[3.5rem]">
-                  1.c.
-                </span>
+                <span className="pt-1 text-gray-700 font-medium min-w-[3.5rem]">1.c.</span>
                 <span className="text-gray-800 text-base font-medium">
                   Apakah Anda menerima penghasilan dalam negeri lainnya?
                 </span>
@@ -364,10 +339,8 @@ const PertanyaanB = ({ onAnswerChange, answersState }) => {
               </div>
               <div className="col-span-12 md:col-span-3 text-sm">
                 <div className="bg-blue-100 rounded px-3 py-2">
-                  {r1c === true &&
-                    "Ya. Silahkan mengisi lampiran 3A-4 Bagian B"}
-                  {r1c === false &&
-                    "Tidak. Silahkan Melanjutkan ke pertanyaan berikutnya 1.d."}
+                  {r1c === true && "Ya. Silahkan mengisi lampiran 3A-4 Bagian B"}
+                  {r1c === false && "Tidak. Silahkan Melanjutkan ke pertanyaan berikutnya 1.d."}
                   {r1c === null && "Pilih salah satu Ya/Tidak"}
                 </div>
               </div>
@@ -385,9 +358,7 @@ const PertanyaanB = ({ onAnswerChange, answersState }) => {
             {/* 1.d */}
             <div className="grid grid-cols-12 gap-3 items-center px-3 py-2">
               <div className="col-span-12 md:col-span-5 flex gap-3 items-center">
-                <span className="pt-1 text-gray-700 font-medium min-w-[3.5rem]">
-                  1.d.
-                </span>
+                <span className="pt-1 text-gray-700 font-medium min-w-[3.5rem]">1.d.</span>
                 <span className="text-gray-800 text-base font-medium">
                   Apakah Anda menerima penghasilan luar negeri?
                 </span>
@@ -417,8 +388,7 @@ const PertanyaanB = ({ onAnswerChange, answersState }) => {
               <div className="col-span-12 md:col-span-3 text-sm">
                 <div className="bg-blue-100 rounded px-3 py-2">
                   {r1d === true && "Ya, silahkan mengisi lampiran 2 Bagian C"}
-                  {r1d === false &&
-                    "Tidak. Silahkan Melanjutkan ke pertanyaan berikutnya."}
+                  {r1d === false && "Tidak. Silahkan Melanjutkan ke pertanyaan berikutnya."}
                   {r1d === null && "Pilih salah satu Ya/Tidak"}
                 </div>
               </div>
@@ -434,7 +404,7 @@ const PertanyaanB = ({ onAnswerChange, answersState }) => {
             </div>
           </div>
         </div>
-      )}
+      </div>
     </>
   );
 };

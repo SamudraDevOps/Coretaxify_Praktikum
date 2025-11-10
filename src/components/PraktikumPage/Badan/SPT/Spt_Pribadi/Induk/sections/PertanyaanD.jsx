@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+import { FaChevronDown } from "react-icons/fa";
 
 const PertanyaanD = () => {
   const [showKreditPajak, setShowKreditPajak] = useState(false);
-  
+
   // State untuk Bagian D - KREDIT PAJAK
   const [r10a, setR10a] = useState(null);
   const [amt10a, setAmt10a] = useState(0);
@@ -22,20 +22,27 @@ const PertanyaanD = () => {
         onClick={() => setShowKreditPajak(!showKreditPajak)}
       >
         <h3 className="text-lg font-semibold">D. KREDIT PAJAK</h3>
-        {showKreditPajak ? <FaChevronUp /> : <FaChevronDown />}
+        <span
+          className={`transition-transform duration-500 ease-in-out ${
+            showKreditPajak ? "rotate-180" : "rotate-0"
+          }`}
+        >
+          <FaChevronDown />
+        </span>
       </div>
-      {showKreditPajak && (
+      <div
+        className={`overflow-hidden transition-all duration-500 ease-in-out ${
+          showKreditPajak ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
+        }`}
+      >
         <div className="border rounded-md p-4 mb-4">
           <div className="divide-y">
             {/* 10a */}
             <div className="grid grid-cols-12 gap-3 items-center px-3 py-2">
               <div className="col-span-12 md:col-span-5 flex gap-3 items-center">
-                <span className="pt-1 text-gray-700 font-medium min-w-[3.5rem]">
-                  10a
-                </span>
+                <span className="pt-1 text-gray-700 font-medium min-w-[3.5rem]">10a</span>
                 <span className="text-gray-800 text-base font-medium">
-                  Apakah Terdapat Pengurangan PPh Yang Telah
-                  Dipotong/Dipungut oleh pihak lain ?
+                  Apakah Terdapat Pengurangan PPh Yang Telah Dipotong/Dipungut oleh pihak lain ?
                   <span className="text-red-500">*</span>
                 </span>
               </div>
@@ -63,10 +70,8 @@ const PertanyaanD = () => {
               </div>
               <div className="col-span-12 md:col-span-3 text-sm">
                 <div className="bg-blue-100 rounded px-3 py-2">
-                  {r10a === true &&
-                    "Ya, Silahkan Mengisi Lampiran 1 Bagian E "}
-                  {r10a === false &&
-                    "Tidak. Silahkan Melanjutkan ke pertanyaan berikutnya."}
+                  {r10a === true && "Ya, Silahkan Mengisi Lampiran 1 Bagian E "}
+                  {r10a === false && "Tidak. Silahkan Melanjutkan ke pertanyaan berikutnya."}
                   {r10a === null && "Pilih salah satu Ya/Tidak"}
                 </div>
               </div>
@@ -84,12 +89,8 @@ const PertanyaanD = () => {
             {/* 10b */}
             <div className="grid grid-cols-12 gap-3 items-center px-3 py-2">
               <div className="col-span-12 md:col-span-5 flex gap-3 items-center">
-                <span className="pt-1 text-gray-700 font-medium min-w-[3.5rem]">
-                  10b
-                </span>
-                <span className="text-gray-800 text-base font-medium">
-                  Angsuran Pph Pasal 25
-                </span>
+                <span className="pt-1 text-gray-700 font-medium min-w-[3.5rem]">10b</span>
+                <span className="text-gray-800 text-base font-medium">Angsuran Pph Pasal 25</span>
               </div>
               <div className="col-span-12 md:col-span-5"></div>
               <div className="col-span-12 md:col-span-2">
@@ -106,9 +107,7 @@ const PertanyaanD = () => {
             {/* 10c */}
             <div className="grid grid-cols-12 gap-3 items-center px-3 py-2">
               <div className="col-span-12 md:col-span-5 flex gap-3 items-center">
-                <span className="pt-1 text-gray-700 font-medium min-w-[3.5rem]">
-                  10c
-                </span>
+                <span className="pt-1 text-gray-700 font-medium min-w-[3.5rem]">10c</span>
                 <span className="text-gray-800 text-base font-medium">
                   SPT PPh pasal 25 (Hanya Pokok Pajak){" "}
                 </span>
@@ -128,12 +127,9 @@ const PertanyaanD = () => {
             {/* 10d */}
             <div className="grid grid-cols-12 gap-3 items-center px-3 py-2">
               <div className="col-span-12 md:col-span-5 flex gap-3 items-center">
-                <span className="pt-1 text-gray-700 font-medium min-w-[3.5rem]">
-                  10d
-                </span>
+                <span className="pt-1 text-gray-700 font-medium min-w-[3.5rem]">10d</span>
                 <span className="text-gray-800 text-base font-medium">
-                  Apakah Terdapat Pengurangan PPh Yang Telah
-                  Dipotong/Dipungut oleh pihak lain ?
+                  Apakah Terdapat Pengurangan PPh Yang Telah Dipotong/Dipungut oleh pihak lain ?
                   <span className="text-red-500">*</span>
                 </span>
               </div>
@@ -163,8 +159,7 @@ const PertanyaanD = () => {
                 <div className="bg-blue-100 rounded px-3 py-2">
                   {r10d === true &&
                     "Ya, Isi dengan Jumlah Pengembalian/Pengurangan Kredit PPh Luar Negeri "}
-                  {r10d === false &&
-                    "Tidak. Silahkan Melanjutkan ke pertanyaan berikutnya."}
+                  {r10d === false && "Tidak. Silahkan Melanjutkan ke pertanyaan berikutnya."}
                   {r10d === null && "Pilih salah satu Ya/Tidak"}
                 </div>
               </div>
@@ -180,7 +175,7 @@ const PertanyaanD = () => {
             </div>
           </div>
         </div>
-      )}
+      </div>
     </>
   );
 };

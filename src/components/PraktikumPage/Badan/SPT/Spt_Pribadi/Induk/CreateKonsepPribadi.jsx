@@ -172,16 +172,25 @@ const CreateKonsepPribadi = () => {
     // const newDynamicLampiran = [];
 
     // Lampiran I - Penghasilan dari Pekerjaan (1.a = Ya)
-    if (answersState.r1a === true) {
-      allLampiran.push({
-        id: "lampiran-1",
-        title: "L-I",
-        subtitle: "Lampiran I - Penghasilan dari Pekerjaan",
-        component: "Lampiran_1",
-        badge: "Wajib Diisi",
-        order: 1, // Urutan pertama
-      });
-    }
+    allLampiran.push({
+      id: "lampiran-1",
+      title: "L-I",
+      subtitle: "Lampiran I - Penghasilan dari Pekerjaan",
+      component: "Lampiran_1",
+      badge: "Tersedia",
+      order: 1, // Urutan pertama
+    });
+
+    // if (answersState.r1a === true) {
+    //   allLampiran.push({
+    //     id: "lampiran-1",
+    //     title: "L-I",
+    //     subtitle: "Lampiran I - Penghasilan dari Pekerjaan",
+    //     component: "Lampiran_1",
+    //     badge: "Wajib Diisi",
+    //     order: 1, // Urutan pertama
+    //   });
+    // }
 
     // Lampiran 2 - SELALU TERSEDIA
 
@@ -331,10 +340,19 @@ const CreateKonsepPribadi = () => {
                   onClick={() => setShowHeaderInduk(!showHeaderInduk)}
                 >
                   <h3 className="text-lg font-semibold">HEADER</h3>
-                  {showHeaderInduk ? <FaChevronUp /> : <FaChevronDown />}
+                  <span
+                    className={`transition-transform duration-500 ${
+                      showHeaderInduk ? "rotate-180" : "rotate-0"
+                    }`}
+                  >
+                    <FaChevronDown />
+                  </span>
                 </div>
-
-                {showHeaderInduk && (
+                <div
+                  className={`overflow-hidden transition-all duration-500 ${
+                    showHeaderInduk ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
+                  }`}
+                >
                   <div className="border rounded-md p-4 mb-4">
                     <div className="grid grid-cols-12 gap-4 items-center">
                       <div className="col-span-12 md:col-span-3">
@@ -414,7 +432,7 @@ const CreateKonsepPribadi = () => {
                       </div>
                     </div>
                   </div>
-                )}
+                </div>
               </div>
 
               {/* Identitas Waib Pajak */}

@@ -3,7 +3,7 @@ import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 
 const PertanyaanF = () => {
   const [showPembetulanSPT, setShowPembetulanSPT] = useState(false);
-  
+
   // State untuk Bagian F - PEMBETULAN
   const [r12a, setR12a] = useState(null);
   const [amt12a, setAmt12a] = useState(0);
@@ -20,17 +20,26 @@ const PertanyaanF = () => {
         <h3 className="text-lg font-semibold">
           F. PEMBETULAN (DIISI JIKA STATUS SPT ADALAH PEMBETULAN)
         </h3>
-        {showPembetulanSPT ? <FaChevronUp /> : <FaChevronDown />}
+        <span
+          className={`transition-transform duration-500 ease-in-out ${
+            showPembetulanSPT ? "rotate-180" : "rotate-0"
+          }`}
+        >
+          <FaChevronDown />
+        </span>
       </div>
-      {showPembetulanSPT && (
+
+      <div
+        className={`overflow-hidden transition-all duration-500 ease-in-out ${
+          showPembetulanSPT ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
+        }`}
+      >
         <div className="border rounded-md p-4 mb-4">
           <div className="divide-y">
             {/* 12a */}
             <div className="grid grid-cols-12 gap-3 items-center px-3 py-2">
               <div className="col-span-12 md:col-span-5 flex gap-3 items-center">
-                <span className="pt-1 text-gray-700 font-medium min-w-[3.5rem]">
-                  12a
-                </span>
+                <span className="pt-1 text-gray-700 font-medium min-w-[3.5rem]">12a</span>
                 <span className="text-gray-800 text-base font-medium">
                   PPh Kurang/Lebih Bayar pada SPT yang dibetulkan{" "}
                 </span>
@@ -50,9 +59,7 @@ const PertanyaanF = () => {
             {/* 12b */}
             <div className="grid grid-cols-12 gap-3 items-center px-3 py-2">
               <div className="col-span-12 md:col-span-5 flex gap-3 items-center">
-                <span className="pt-1 text-gray-700 font-medium min-w-[3.5rem]">
-                  12b
-                </span>
+                <span className="pt-1 text-gray-700 font-medium min-w-[3.5rem]">12b</span>
                 <span className="text-gray-800 text-base font-medium">
                   PPh Kurang/Lebih Bayar Karena Pembetulan (11a - 12a){" "}
                 </span>
@@ -70,7 +77,7 @@ const PertanyaanF = () => {
             </div>
           </div>
         </div>
-      )}
+      </div>
     </>
   );
 };

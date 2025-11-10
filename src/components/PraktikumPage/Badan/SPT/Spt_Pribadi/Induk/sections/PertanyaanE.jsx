@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+import { FaChevronDown } from "react-icons/fa";
 
 const PertanyaanE = () => {
   const [showKurangLebihBayar, setShowKurangLebihBayar] = useState(false);
-  
+
   // State untuk Bagian E - PPh KURANG/LEBIH BAYAR
   const [r11a, setR11a] = useState(null);
   const [amt11a, setAmt11a] = useState(0);
@@ -15,24 +15,30 @@ const PertanyaanE = () => {
   return (
     <>
       {/* PPh KURANG/LEBIH BAYAR */}
-      <div
+      <div 
         className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
         onClick={() => setShowKurangLebihBayar(!showKurangLebihBayar)}
       >
-        <h3 className="text-lg font-semibold">
-          E. PPh KURANG/LEBIH BAYAR
-        </h3>
-        {showKurangLebihBayar ? <FaChevronUp /> : <FaChevronDown />}
+        <h3 className="text-lg font-semibold">E. PPh KURANG/LEBIH BAYAR</h3>
+        <span
+          className={`transition-transform duration-500 ease-in-out ${
+            showKurangLebihBayar ? "rotate-180" : "rotate-0"
+          }`}
+        >
+          <FaChevronDown />
+        </span>
       </div>
-      {showKurangLebihBayar && (
+      <div
+        className={`overflow-hidden transition-all duration-500 ease-in-out ${
+          showKurangLebihBayar ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
+        }`}
+      >
         <div className="border rounded-md p-4 mb-4">
           <div className="divide-y">
             {/* 11a */}
             <div className="grid grid-cols-12 gap-3 items-center px-3 py-2">
               <div className="col-span-12 md:col-span-5 flex gap-3 items-center">
-                <span className="pt-1 text-gray-700 font-medium min-w-[3.5rem]">
-                  11a
-                </span>
+                <span className="pt-1 text-gray-700 font-medium min-w-[3.5rem]">11a</span>
                 <span className="text-gray-800 text-base font-medium">
                   PPh Kurang/Lebih Bayar (9 - 10a - 10b - 10c + 10d){" "}
                 </span>
@@ -52,12 +58,10 @@ const PertanyaanE = () => {
             {/* 11b */}
             <div className="grid grid-cols-12 gap-3 items-center px-3 py-2">
               <div className="col-span-12 md:col-span-5 flex gap-3 items-center">
-                <span className="pt-1 text-gray-700 font-medium min-w-[3.5rem]">
-                  11b
-                </span>
+                <span className="pt-1 text-gray-700 font-medium min-w-[3.5rem]">11b</span>
                 <span className="text-gray-800 text-base font-medium">
-                  Apakah Terdapat Surat Keputusan Persetujuan
-                  Pengangsuran atau Penundaan Pembayaran Pajak?
+                  Apakah Terdapat Surat Keputusan Persetujuan Pengangsuran atau Penundaan Pembayaran
+                  Pajak?
                 </span>
               </div>
               <div className="col-span-12 md:col-span-2">
@@ -104,9 +108,7 @@ const PertanyaanE = () => {
             {/* 11c */}
             <div className="grid grid-cols-12 gap-3 items-center px-3 py-2">
               <div className="col-span-12 md:col-span-5 flex gap-3 items-center">
-                <span className="pt-1 text-gray-700 font-medium min-w-[3.5rem]">
-                  11c
-                </span>
+                <span className="pt-1 text-gray-700 font-medium min-w-[3.5rem]">11c</span>
                 <span className="text-gray-800 text-base font-medium">
                   PPh yang masih harus dibayar (11a-11b){" "}
                 </span>
@@ -124,7 +126,7 @@ const PertanyaanE = () => {
             </div>
           </div>
         </div>
-      )}
+      </div>
     </>
   );
 };
