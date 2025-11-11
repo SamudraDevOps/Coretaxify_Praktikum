@@ -33,6 +33,7 @@ export default function FormFieldPajakFinal({
   };
 
   // Handle input numeric dengan format currency
+
   const handleNumericChange = (fieldName) => (e) => {
     const numericValue = parseFormattedNumber(e.target.value);
     setForm((prev) => {
@@ -101,6 +102,23 @@ export default function FormFieldPajakFinal({
         {hasError && <p className="text-red-500 text-xs mt-1 ml-52">{hasError}</p>}
       </div>
     );
+
+    if (/^\d{4}$/.test(name)) {
+      return fieldWrapper(
+        <input
+          type="text"
+          className={baseInputClass}
+          value={formatNumber(values[name] || 0)}
+          onChange={(e) => {
+            const numericValue = parseFormattedNumber(e.target.value);
+            setValues((prev) => ({ ...prev, [name]: numericValue }));
+          }}
+          placeholder={placeholder || ""}
+          readOnly={!!readOnly}
+          inputMode="numeric"
+        />
+      );
+    }
 
     // Render berdasarkan type
     if (type === "number") {
