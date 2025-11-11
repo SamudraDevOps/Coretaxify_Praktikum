@@ -13,7 +13,6 @@ const ROWS = [
   //   level: 0,
   //   keterangan: "REKAPITULASI PENGHASILAN YANG DIKENAKAN PPh FINAL",
   // },
-
   {
     id: "TKU-1",
     type: "line",

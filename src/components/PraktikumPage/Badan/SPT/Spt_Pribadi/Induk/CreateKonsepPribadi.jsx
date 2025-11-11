@@ -52,6 +52,7 @@ import {
   Lampiran_3C,
   Lampiran_3D,
   Lampiran_4,
+  Lampiran_5,
 } from "../Lampiran";
 
 const CreateKonsepPribadi = () => {
@@ -257,6 +258,16 @@ const CreateKonsepPribadi = () => {
       order: 7,
     });
 
+    // Lampiran 5 - SELALU TERSEDIA
+    allLampiran.push({
+      id: "lampiran-5",
+      title: "L-5",
+      subtitle: "Lampiran 5 - Perhitungan Angsuran PPh Pasal 25 Tahun Berikutnya",
+      component: "Lampiran_5",
+      badge: "Tersedia",
+      order: 7,
+    });
+
     // Lampiran 3A-4 - Penghasilan dari Usaha (1.b.1 = Ya)
     if (answersState.hasPenghasilanUsaha === true) {
       allLampiran.push({
@@ -293,6 +304,8 @@ const CreateKonsepPribadi = () => {
         return <Lampiran_3D data={data} />;
       case "Lampiran_4":
         return <Lampiran_4 data={data} />;
+      case "Lampiran_5":
+        return <Lampiran_5 data={data} />;
       default:
         return (
           <div className="text-center py-8">
