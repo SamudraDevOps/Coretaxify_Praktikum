@@ -11,6 +11,7 @@ import { useCookies } from "react-cookie";
 import Swal from "sweetalert2";
 import { useMutation } from "@tanstack/react-query";
 import PenilaianSPT from "./PenilaianSPT";
+import { IoMdDownload } from "react-icons/io";
 
 const KonsepSPT = ({
   data,
@@ -326,6 +327,27 @@ const KonsepSPT = ({
                           >
                             Lihat PDF
                           </button>
+                        )}
+
+                        {item.status === "DILAPORKAN" && (
+                          <IoMdDownload
+                            className="mr-2"
+                              onClick={() => {
+                              if (item.jenis_pajak === "PPN") {
+                                navigate(
+                                  `/praktikum/${id}/sistem/${akun}/spt/bpe/${item.id}`
+                                );
+                              } else if (item.jenis_pajak === "PPH") {
+                                navigate(
+                                  `/praktikum/${id}/sistem/${akun}/spt-pph/bpe/${item.id}`
+                                );
+                              } else if (item.jenis_pajak === "PPHUNIFIKASI") {
+                                navigate(
+                                  `/praktikum/${id}/sistem/${akun}/spt-unifikasi/bpe/${item.id}`
+                                );
+                              }
+                            }}
+                          />
                         )}
 
                         <button

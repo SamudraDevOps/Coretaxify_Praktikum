@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const BpeSptPdf = () => (
+const BpeSptPdf = ({ data }) => (
   <Document>
     <Page size="A4" style={styles.page}>
       {/* Header */}
@@ -78,8 +78,8 @@ const BpeSptPdf = () => (
 
       {/* Nomor & Tanggal */}
       <View style={styles.section}>
-        <Text>Nomor: BPE-11907/CT/KPP.1214/2025</Text>
-        <Text>Tanggal: 08 Mei 2025</Text>
+        <Text>Nomor: BPE-11907/CT/KPP.1214/{data.masa_tahun}</Text>
+        <Text>Tanggal: {data.tanggal_dibuat}</Text>
       </View>
 
       {/* Taxpayer Info */}
@@ -87,32 +87,32 @@ const BpeSptPdf = () => (
         <View style={styles.fieldRow}>
           <Text style={styles.fieldLabel}>NPWP</Text>
           <Text style={styles.fieldColon}>:</Text>
-          <Text style={styles.fieldValue}>0127905768623000</Text>
+          <Text style={styles.fieldValue}>{data.npwp}</Text>
         </View>
         <View style={styles.fieldRow}>
           <Text style={styles.fieldLabel}>Nama Wajib Pajak</Text>
           <Text style={styles.fieldColon}>:</Text>
-          <Text style={styles.fieldValue}>SAMUDRA EDUKASI TEKNOLOGI</Text>
+          <Text style={styles.fieldValue}>{data.nama_pengusaha}</Text>
         </View>
         <View style={styles.fieldRow}>
           <Text style={styles.fieldLabel}>Jenis SPT</Text>
           <Text style={styles.fieldColon}>:</Text>
-          <Text style={styles.fieldValue}>SPT Masa PPh Pasal 21/26</Text>
+          <Text style={styles.fieldValue}>{data.jenis_pajak}</Text>
         </View>
         <View style={styles.fieldRow}>
           <Text style={styles.fieldLabel}>Tahun Pajak</Text>
           <Text style={styles.fieldColon}>:</Text>
-          <Text style={styles.fieldValue}>2025</Text>
+          <Text style={styles.fieldValue}>{data.masa_tahun}</Text>
         </View>
         <View style={styles.fieldRow}>
           <Text style={styles.fieldLabel}>Masa Pajak</Text>
           <Text style={styles.fieldColon}>:</Text>
-          <Text style={styles.fieldValue}>April 2025</Text>
+          <Text style={styles.fieldValue}>{data.masa_bulan} {data.masa_tahun}</Text>
         </View>
         <View style={styles.fieldRow}>
           <Text style={styles.fieldLabel}>Status SPT</Text>
           <Text style={styles.fieldColon}>:</Text>
-          <Text style={styles.fieldValue}>Normal</Text>
+          <Text style={styles.fieldValue}>{data.model}</Text>
         </View>
         <View style={styles.fieldRow}>
           <Text style={styles.fieldLabel}>Saluran</Text>
@@ -122,7 +122,7 @@ const BpeSptPdf = () => (
         <View style={styles.fieldRow}>
           <Text style={styles.fieldLabel}>Tanggal Terima SPT</Text>
           <Text style={styles.fieldColon}>:</Text>
-          <Text style={styles.fieldValue}>08 Mei 2025</Text>
+          <Text style={styles.fieldValue}>{data.updated_at}</Text>
         </View>
       </View>
 
@@ -134,7 +134,7 @@ const BpeSptPdf = () => (
         berwenang sehingga tidak diperlukan tanda tangan. */}
       </Text>
 
-      <Text style={styles.footer}>Diterima pada: 2025-05-08T07:19:01+0000</Text>
+      <Text style={styles.footer}>Diterima pada: {data.updated_at}</Text>
     </Page>
   </Document>
 );
