@@ -1,10 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import HeaderLampiran from "./HeaderLampiran";
-import KompensasiKerugian from "@sections/Lampiran5";
+import KompensasiKerugian from "@sections/Lampiran5/BagianA";
+import PenguranganNeto from "@sections/Lampiran5/BagianB";
+import GlobalFormField from "@lampiran/shared/GlobalFormField";
 
 export default function Lampiran_5({ data }) {
   const [showBagianA, setShowBagianA] = useState(true);
+  const [showBagianB, setShowBagianB] = useState(true);
+
+  const [form, setForm] = useState({
+    komFiskal: 0,
+    PenguranganNeto: 0,
+  });
+
+  // Handler untuk menerima total dari BagianA
+  const handleKompensasiTotal = (total2025) => {
+    setForm((prev) => ({ ...prev, komFiskal: total2025 }));
+  };
+
+  // Handler untuk menerima total dari BagianB (totalPengurangL5B)
+  // const handlePenguranganTotal = (totalPengurangL5B) => {
+  //   setForm((prev) => ({ ...prev, PenguranganNeto: totalPengurangL5B }));
+
+  // };
+
+  const handlePenguranganTotal = (totalPengurangL5B) => {
+    console.log("Parent menerima PenguranganNeto:", totalPengurangL5B);
+    setForm((prev) => ({ ...prev, PenguranganNeto: totalPengurangL5B }));
+  };
 
   return (
     <div className="space-y-4">
@@ -36,9 +60,52 @@ export default function Lampiran_5({ data }) {
         </div>
         {showBagianA && (
           <div className="border rounded-md p-4 space-y-4">
-            <KompensasiKerugian />
+            <KompensasiKerugian onTotalChange={handleKompensasiTotal} />
           </div>
         )}
+      </div>
+
+      {/* Bagian B */}
+      <div>
+        <div
+          className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
+          onClick={() => setShowBagianB(!showBagianB)}
+        >
+          <h3 className="text-lg font-semibold">B. PENGURANGAN PENGHASILAN NETO</h3>
+          {showBagianB ? <FaChevronUp /> : <FaChevronDown />}
+        </div>
+        {showBagianB && (
+          <div className="border rounded-md p-4 space-y-4">
+            <PenguranganNeto
+              totalKompensasi2025={form.komFiskal || 0}
+              onTotalChange={handlePenguranganTotal}
+            />
+          </div>
+        )}
+      </div>
+
+      <div className="border rounded-md p-4 space-y-4">
+        <GlobalFormField
+          customChildren={[
+            {
+              key: "komFiskal",
+              type: "currency",
+              title: "Kompensasi Kerugian Fiskal",
+              placeholder: "",
+              readOnly: true,
+            },
+            {
+              key: "PenguranganNeto",
+              type: "currency",
+              title: "Pengurangan Neto",
+              placeholder: "",
+              readOnly: true,
+            },
+          ]}
+          formData={form}
+          onFieldChange={(key, value) => setForm((prev) => ({ ...prev, [key]: value }))}
+          labelWidth="w-80"
+        />
       </div>
     </div>
   );

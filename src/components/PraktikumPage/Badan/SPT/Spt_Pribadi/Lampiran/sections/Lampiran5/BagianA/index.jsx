@@ -145,7 +145,8 @@ const ROWS = [
   },
 ];
 
-export default function BagianA() {
+export default function BagianA({ onTotalChange }) {
+  // const [rows, setRows] = useState(() => updateTotalRow(ROWS));
   const [rows, setRows] = useState(ROWS);
   const [open, setOpen] = useState(false);
   const [schema, setSchema] = useState([]);
@@ -157,12 +158,12 @@ export default function BagianA() {
       ? [
           { name: "tahunPajak", readOnly: true },
           { name: "labaRugi", readOnly: true },
-          { name: "2021 ", readOnly: true },
-          { name: "2022 ", readOnly: true },
-          { name: "2023 ", readOnly: true },
-          { name: "2024 ", readOnly: true },
-          { name: "2025 ", readOnly: true },
-          { name: "2026 ", readOnly: true },
+          { name: "2021", readOnly: true },
+          { name: "2022", readOnly: true },
+          { name: "2023", readOnly: true },
+          { name: "2024", readOnly: true },
+          { name: "2025", readOnly: true },
+          { name: "2026", readOnly: true },
         ]
       : [{ name: "tahunPajak", readOnly: true }];
 
@@ -182,18 +183,24 @@ export default function BagianA() {
     setRows((prev) => {
       const updated = prev.map((r) => (r.id === selected.id ? { ...r, ...values } : r));
       const result = updateTotalRow(updated);
-      console.log("updated rows:", result);
+      // console.log("updated rows:", result);
+
+      // Kirim total 2025 ke parent
+      const totalRow = result.find((r) => r.type === "total");
+      if (onTotalChange && totalRow) {
+        onTotalChange(totalRow["2025"] || 0);
+      }
+
       return result;
     });
     closeModal();
   };
-
   // rows yang dikirim ke tabel sudah terupdate baris totalnya
-  const tableRows = updateTotalRow(rows);
+  // const tableRows = updateTotalRow(rows);
 
   return (
     <>
-      <KompensasiKerugian rows={tableRows} openModal={openModal} />
+      <KompensasiKerugian rows={rows} openModal={openModal} />
       <ModalA
         open={open}
         onClose={closeModal}
