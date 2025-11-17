@@ -15,7 +15,7 @@ const bagianAConfig = {
   customChildren: [
     {
       key: "jenis",
-      type: "select",
+      type: "select-search",
       title: "Jenis Penghasilan",
       placeholder: "Pilih Jenis Penghasilan",
       required: true,

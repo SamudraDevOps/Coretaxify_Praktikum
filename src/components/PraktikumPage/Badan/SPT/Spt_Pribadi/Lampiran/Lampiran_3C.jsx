@@ -65,10 +65,19 @@ export default function Lampiran_3C({ data }) {
           onClick={() => setShowBagianA(!showBagianA)}
         >
           <h3 className="text-lg font-semibold">HARTA BERWUJUD</h3>
-          {showBagianA ? <FaChevronUp /> : <FaChevronDown />}
+        <span
+            className={`transition-transform duration-500 ease-in-out ${
+              showBagianA ? "rotate-180" : "rotate-0"
+            }`}
+          >
+            <FaChevronDown />
+          </span>
         </div>
-
-        {showBagianA && (
+        <div
+          className={`overflow-hidden transition-all duration-500 ease-in-out ${
+            showBagianA ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
+          }`}
+        >
           <div className="border rounded-md p-4 space-y-4">
             {/* Sub-Bagian Harta Berwujud - Kelompok 1 */}
             <div className="ml-4">
@@ -77,17 +86,26 @@ export default function Lampiran_3C({ data }) {
                 onClick={() => setShowKelompok1Berwujud(!showKelompok1Berwujud)}
               >
                 <h4 className="text-lg font-semibold">KELOMPOK 1</h4>
-                {showKelompok1Berwujud ? <FaChevronUp /> : <FaChevronDown />}
-              </div>
-
-              {showKelompok1Berwujud && (
+                <span
+                  className={`transition-transform duration-500 ease-in-out ${
+                    showKelompok1Berwujud ? "rotate-180" : "rotate-0"
+                   }`}
+                  >
+                    <FaChevronDown />
+                  </span>
+                </div>
+              <div
+                className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                  showKelompok1Berwujud ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
+                }`}
+              >
                 <div className="border rounded-md p-4">
                   <Kelompok1IndexBerwujud />
                 </div>
-              )}
+                </div>
             </div>
           </div>
-        )}
+          </div>
       </div>
 
       {/* Bagian B - BANGUNAN */}
@@ -97,10 +115,19 @@ export default function Lampiran_3C({ data }) {
           onClick={() => setShowBagianB(!showBagianB)}
         >
           <h3 className="text-lg font-semibold">BAGUNAN</h3>
-          {showBagianB ? <FaChevronUp /> : <FaChevronDown />}
+        <span
+            className={`transition-transform duration-500 ease-in-out ${
+              showBagianB ? "rotate-180" : "rotate-0"
+            }`}
+          >
+            <FaChevronDown />
+          </span>
         </div>
-
-        {showBagianB && (
+        <div
+          className={`overflow-hidden transition-all duration-500 ease-in-out ${
+            showBagianB ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
+          }`}
+        >
           <div className="border rounded-md p-4 space-y-4">
             {/* Sub-Bagian Harta Berwujud - Kelompok 1 */}
             <div className="ml-4">
@@ -109,17 +136,26 @@ export default function Lampiran_3C({ data }) {
                 onClick={() => setShowTidakPermanen(!showTidakPermanen)}
               >
                 <h4 className="text-lg font-semibold"> TIDAK PERMANEN</h4>
-                {showTidakPermanen ? <FaChevronUp /> : <FaChevronDown />}
-              </div>
-
-              {showTidakPermanen && (
+                <span
+                  className={`transition-transform duration-500 ease-in-out ${
+                    showTidakPermanen ? "rotate-180" : "rotate-0"
+                   }`}
+                  >
+                    <FaChevronDown />
+                  </span>
+                </div>
+              <div
+                className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                  showTidakPermanen ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
+                }`}
+              >
                 <div className="border rounded-md p-4">
                   <BangunanTidakPermanenIndex />
                 </div>
-              )}
+                </div>
             </div>
           </div>
-        )}
+          </div>
       </div>
 
       <div className="border rounded-md p-4 space-y-4">
@@ -161,10 +197,19 @@ export default function Lampiran_3C({ data }) {
           onClick={() => setShowBagianC(!showBagianC)}
         >
           <h3 className="text-lg font-semibold">HARTA TIDAK BERWUJUD</h3>
-          {showBagianC ? <FaChevronUp /> : <FaChevronDown />}
+        <span
+            className={`transition-transform duration-500 ease-in-out ${
+              showBagianC ? "rotate-180" : "rotate-0"
+            }`}
+          >
+            <FaChevronDown />
+          </span>
         </div>
-
-        {showBagianC && (
+        <div
+          className={`overflow-hidden transition-all duration-500 ease-in-out ${
+            showBagianC ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
+          }`}
+        >
           <div className="border rounded-md p-4 space-y-4">
             {/* Sub-Bagian Harta Tidak Berwujud - Kelompok 1 */}
             <div className="ml-4">
@@ -173,17 +218,26 @@ export default function Lampiran_3C({ data }) {
                 onClick={() => setShowKelompok1TidakBerwujud(!showKelompok1TidakBerwujud)}
               >
                 <h4 className="text-lg font-semibold">KELOMPOK 1</h4>
-                {showKelompok1TidakBerwujud ? <FaChevronUp /> : <FaChevronDown />}
-              </div>
-
-              {showKelompok1TidakBerwujud && (
+                <span
+                  className={`transition-transform duration-500 ease-in-out ${
+                    showKelompok1TidakBerwujud ? "rotate-180" : "rotate-0"
+                   }`}
+                  >
+                    <FaChevronDown />
+                  </span>
+                </div>
+              <div
+                className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                  showKelompok1TidakBerwujud ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
+                }`}
+              >
                 <div className="border rounded-md p-4">
                   <Kelompok1IndexTidakBerwujud />
                 </div>
-              )}
+                </div>
             </div>
           </div>
-        )}
+          </div>
       </div>
 
       <div className="border rounded-md p-4 space-y-4">

@@ -40,17 +40,26 @@ export default function Lampiran_3A1({ data }) {
           className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
           onClick={() => setShowBagianA(!showBagianA)}
         >
-          <h3 className="text-lg font-semibold">A.1. LAPORAN LABA RUGI</h3>
-          {showBagianA ? <FaChevronUp /> : <FaChevronDown />}
+          <h3 className="text-lg font-semibold">A.1. LAPORAN LABA RUGI</h3>   
+          <span
+            className={`transition-transform duration-500 ease-in-out ${
+              showBagianA ? "rotate-180" : "rotate-0"
+            }`}
+          >
+            <FaChevronDown />
+          </span>
         </div>
-
-        {showBagianA && (
+        <div
+          className={`overflow-hidden transition-all duration-500 ease-in-out ${
+            showBagianA ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
+          }`}
+        >
           <div className="border rounded-md p-4 space-y-4">
             <div className="ml-4">
               <LaporanLabaRugi />
             </div>
           </div>
-        )}
+      </div>
       </div>
 
       {/* Bagian B - Laporan Posisi Keuangan (Neraca) */}
@@ -60,16 +69,25 @@ export default function Lampiran_3A1({ data }) {
           onClick={() => setShowBagianB(!showBagianB)}
         >
           <h3 className="text-lg font-semibold">A.2. LAPORAN POSISI KEUANGAN (NERACA)</h3>
-          {showBagianB ? <FaChevronUp /> : <FaChevronDown />}
+          <span
+            className={`transition-transform duration-500 ease-in-out ${
+              showBagianB ? "rotate-180" : "rotate-0"
+            }`}
+          >
+            <FaChevronDown />
+          </span>
         </div>
-
-        {showBagianB && (
+        <div
+          className={`overflow-hidden transition-all duration-500 ease-in-out ${
+            showBagianB ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
+          }`}
+        >
           <div className="border rounded-md p-4 space-y-4">
             <div className="ml-4">
               <LaporanNeraca />
             </div>
           </div>
-        )}
+      </div>
       </div>
 
       {/* Bagian C - Laporan Keuangan */}
@@ -79,10 +97,19 @@ export default function Lampiran_3A1({ data }) {
           onClick={() => setShowBagianC(!showBagianC)}
         >
           <h3 className="text-lg font-semibold">A.3. LAPORAN KUANGAN</h3>
-          {showBagianC ? <FaChevronUp /> : <FaChevronDown />}
+          <span
+            className={`transition-transform duration-500 ease-in-out ${
+              showBagianC ? "rotate-180" : "rotate-0"
+            }`}
+          >
+            <FaChevronDown />
+          </span>
         </div>
-
-        {showBagianC && (
+        <div
+          className={`overflow-hidden transition-all duration-500 ease-in-out ${
+            showBagianC ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
+          }`}
+        >
           <div className="border rounded-md p-4 space-y-4">
             <div className="ml-4">
               {/* tampilkan seluruh form + tabel di sini */}
@@ -92,8 +119,8 @@ export default function Lampiran_3A1({ data }) {
               />
             </div>
           </div>
-        )}
       </div>
+       </div>
     </div>
   );
 }

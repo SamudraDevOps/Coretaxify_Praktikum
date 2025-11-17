@@ -96,9 +96,19 @@ export default function Lampiran_4({ data }) {
           <h3 className="text-lg font-semibold">
             A. PERHITUNGAN ANGSURAN PAJAK PENGHASILAN UNTUK TAHUN PAJAK BERIKUTNYA
           </h3>
-          {showBagianA ? <FaChevronUp /> : <FaChevronDown />}
+        <span
+            className={`transition-transform duration-500 ease-in-out ${
+              showBagianA ? "rotate-180" : "rotate-0"
+            }`}
+          >
+            <FaChevronDown />
+          </span>
         </div>
-        {showBagianA && (
+        <div
+          className={`overflow-hidden transition-all duration-500 ease-in-out ${
+            showBagianA ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
+          }`}
+        >
           <div className="border rounded-md p-4 space-y-4">
             <GlobalFormField
               baseFields={BagianAConfig.baseFields}
@@ -107,7 +117,7 @@ export default function Lampiran_4({ data }) {
               onFieldChange={handleFieldChangeBagianA}
             />
           </div>
-        )}
+          </div>
       </div>
 
       {/* Bagian B */}
@@ -119,9 +129,19 @@ export default function Lampiran_4({ data }) {
           <h3 className="text-lg font-semibold">
             B. PERHITUNGAN PPh TERUTANG WAJIB PAJAK DAN SUAMI/ISTRI
           </h3>
-          {showBagianB ? <FaChevronUp /> : <FaChevronDown />}
+          <span
+            className={`transition-transform duration-500 ease-in-out ${
+              showBagianB ? "rotate-180" : "rotate-0"
+            }`}
+          >
+            <FaChevronDown />
+          </span>
         </div>
-        {showBagianB && (
+        <div
+          className={`overflow-hidden transition-all duration-500 ease-in-out ${
+            showBagianB ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
+          }`}
+        >
           <div className="border rounded-md p-4 space-y-4">
             <GlobalFormField
               baseFields={BagianBConfig.baseFields}
@@ -130,7 +150,7 @@ export default function Lampiran_4({ data }) {
               onFieldChange={handleFieldChangeBagianB}
             />
           </div>
-        )}
+          </div>
       </div>
 
       {/* Bagian C */}
@@ -140,9 +160,19 @@ export default function Lampiran_4({ data }) {
           onClick={() => setShowBagianC(!showBagianC)}
         >
           <h3 className="text-lg font-semibold">Wajib Pajak</h3>
-          {showBagianC ? <FaChevronUp /> : <FaChevronDown />}
+          <span
+            className={`transition-transform duration-500 ease-in-out ${
+              showBagianC ? "rotate-180" : "rotate-0"
+            }`}
+          >
+            <FaChevronDown />
+          </span>
         </div>
-        {showBagianC && (
+        <div
+          className={`overflow-hidden transition-all duration-500 ease-in-out ${
+            showBagianC ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
+          }`}
+        >
           <div className="border rounded-md p-4 space-y-4">
             <GlobalFormField
               baseFields={WajibPajakConfig.baseFields}
@@ -151,7 +181,7 @@ export default function Lampiran_4({ data }) {
               // onFieldChange={handleFieldChangeWajibPajak}
             />
           </div>
-        )}
+          </div>
       </div>
 
       {/* Bagian D */}
@@ -161,9 +191,19 @@ export default function Lampiran_4({ data }) {
           onClick={() => setShowBagianD(!showBagianD)}
         >
           <h3 className="text-lg font-semibold">Suami/Istri</h3>
-          {showBagianD ? <FaChevronUp /> : <FaChevronDown />}
+          <span
+            className={`transition-transform duration-500 ease-in-out ${
+              showBagianD ? "rotate-180" : "rotate-0"
+            }`}
+          >
+            <FaChevronDown />
+          </span>
         </div>
-        {showBagianD && (
+        <div
+          className={`overflow-hidden transition-all duration-500 ease-in-out ${
+            showBagianD ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
+          }`}
+        >
           <div className="border rounded-md p-4 space-y-4">
             <GlobalFormField
               baseFields={SuamiIstriConfig.baseFields}
@@ -172,7 +212,7 @@ export default function Lampiran_4({ data }) {
               // onFieldChange={handleFieldChangeSuamiIstri}
             />
           </div>
-        )}
+        </div>
       </div>
     </div>
   );

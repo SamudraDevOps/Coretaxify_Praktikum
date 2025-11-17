@@ -41,18 +41,27 @@ const Lampiran_2 = ({ data }) => {
           <h3 className="text-lg font-semibold">
             A. PENGHASILAN YANG DIKENAKAN PAJAK PENGHASILAN BERSIFAT FINAL
           </h3>
-          {showBagianA ? <FaChevronUp /> : <FaChevronDown />}
+          <span
+            className={`transition-transform duration-500 ease-in-out ${
+              showBagianA ? "rotate-180" : "rotate-0"
+            }`}
+          >
+            <FaChevronDown />
+          </span>
         </div>
-
-        {showBagianA && (
+        <div
+          className={`overflow-hidden transition-all duration-500 ease-in-out ${
+            showBagianA ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
+          }`}
+        >
           <div className="border rounded-md p-4 space-y-4">
             {/* Sub-Bagian A.1 - Harta Tidak Bergerak */}
             <div className="ml-4">
               <BagianAIndex />
             </div>
           </div>
-        )}
-      </div>
+          </div>
+        </div>
 
       {/* Bagian B - Penghasilan yang Tidak Termasuk Objek Pajak */}
       <div>
@@ -61,17 +70,26 @@ const Lampiran_2 = ({ data }) => {
           onClick={() => setShowBagianB(!showBagianB)}
         >
           <h3 className="text-lg font-semibold">B. PENGHASILAN YANG TIDAK TERMASUK OBJEK PAJAK</h3>
-          {showBagianB ? <FaChevronUp /> : <FaChevronDown />}
+          <span
+            className={`transition-transform duration-500 ease-in-out ${
+              showBagianB ? "rotate-180" : "rotate-0"
+            }`}
+          >
+            <FaChevronDown />
+          </span>
         </div>
-
-        {showBagianB && (
+        <div
+          className={`overflow-hidden transition-all duration-500 ease-in-out ${
+            showBagianB ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
+          }`}
+        >
           <div className="border rounded-md p-4 space-y-4">
             {/* Sub-Bagian B.1 - Penghasilan Tidak Objek Pajak */}
             <div className="ml-4">
               <BagianBIndex />
             </div>
           </div>
-        )}
+      </div>
       </div>
 
       {/* Bagian C - Penghasilan Luar Negeri */}
@@ -81,18 +99,27 @@ const Lampiran_2 = ({ data }) => {
           onClick={() => setShowBagianC(!showBagianC)}
         >
           <h3 className="text-lg font-semibold">C. PENGHASILAN LUAR NEGERI</h3>
-          {showBagianC ? <FaChevronUp /> : <FaChevronDown />}
+          <span
+            className={`transition-transform duration-500 ease-in-out ${
+              showBagianC ? "rotate-180" : "rotate-0"
+            }`}
+          >
+            <FaChevronDown />
+          </span>
         </div>
-
-        {showBagianC && (
+        <div
+          className={`overflow-hidden transition-all duration-500 ease-in-out ${
+            showBagianC ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
+          }`}
+        >
           <div className="border rounded-md p-4 space-y-4">
             {/* Sub-Bagian C.1 - Penghasilan Luar Negeri */}
             <div className="ml-4">
               <BagianCIndex  />
             </div>
           </div>
-        )}
       </div>
+    </div>
     </div>
   );
 };
