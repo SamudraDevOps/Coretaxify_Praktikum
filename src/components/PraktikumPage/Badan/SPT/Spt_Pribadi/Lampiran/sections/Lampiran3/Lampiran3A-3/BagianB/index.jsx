@@ -64,9 +64,25 @@ export default function BagianB() {
       nilaiKomersial: 0,
     },
     {
-      id: 1401,
-      kodeAkun: "1401",
-      keterangan: "Persediaan",
+      id: 1402,
+      kodeAkun: "1402",
+      keterangan: "Persediaan Bahan Baku",
+      type: "line",
+      level: 1,
+      nilaiKomersial: 0,
+    },
+    {
+      id: 1403,
+      kodeAkun: "1403",
+      keterangan: "Persediaan Barang dalam Proses",
+      type: "line",
+      level: 1,
+      nilaiKomersial: 0,
+    },
+    {
+      id: 1404,
+      kodeAkun: "1404",
+      keterangan: "Persediaan Barang Jadi",
       type: "line",
       level: 1,
       nilaiKomersial: 0,
@@ -134,6 +150,38 @@ export default function BagianB() {
     {
       id: 1524,
       kodeAkun: "1524",
+      keterangan: "(Dikurangi : Akumulasi Penyusutan)",
+      type: "line",
+      level: 3,
+      nilaiKomersial: 0,
+    },
+    {
+      id: 1525,
+      kodeAkun: "1525",
+      keterangan: "Peralatan",
+      type: "line",
+      level: 1,
+      nilaiKomersial: 0,
+    },
+    {
+      id: 1526,
+      kodeAkun: "1526",
+      keterangan: "(Dikurangi : Akumulasi Penyusutan)",
+      type: "line",
+      level: 3,
+      nilaiKomersial: 0,
+    }, 
+    {
+      id: 1527,
+      kodeAkun: "1527",
+      keterangan: "Mesin",
+      type: "line",
+      level: 1,
+      nilaiKomersial: 0,
+    },
+    {
+      id: 1528,
+      kodeAkun: "1528",
       keterangan: "(Dikurangi : Akumulasi Penyusutan)",
       type: "line",
       level: 3,
@@ -458,10 +506,10 @@ export default function BagianB() {
     return leftRows.map((row) => {
       if (row.id === "1700") {
         const addIds = [
-          1101, 1200, 1122, 1123, 1124, 1125, 1401, 1421, 1422, 1423, 1499, 1501, 1523, 1529, 1541,
+          1101, 1200, 1122, 1123, 1124, 1125, 1402, 1403, 1404, 1421, 1422, 1423, 1499, 1501, 1523, 1525, 1527, 1529, 1541,
           1599, 1600, 1611, 1698,
         ];
-        const subtractIds = [1131, 1524, 1530];
+        const subtractIds = [1131, 1524, 1526, 1528, 1530];
         const value = calculateWithDeductions(addIds, subtractIds, leftRows);
         console.log(" Calculating TOTAL ASET:", value);
         return { ...row, nilaiKomersial: value };

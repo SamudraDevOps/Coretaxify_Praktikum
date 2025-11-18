@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import HeaderLampiran from "./HeaderLampiran";
-import LaporanLabaRugi from "@sections/Lampiran3/Lampiran3A-1/BagianA";
-import LaporanNeraca from "@sections/Lampiran3/Lampiran3A-1/BagianB";
-import LaporanKeuangan from "@sections/Lampiran3/Lampiran3A-1/BagianC/LaporanKeuangan";
+import LaporanLabaRugi from "@sections/Lampiran3/Lampiran3A-3/BagianA";
+import LaporanNeraca from "@sections/Lampiran3/Lampiran3A-3/BagianB";
+import LaporanKeuangan from "@sections/Lampiran3/Lampiran3A-3/BagianC/LaporanKeuangan";
 
-export default function Lampiran_3A1({ data }) {
+export default function Lampiran_3A3({ data }) {
   const [showBagianA, setShowBagianA] = useState(true);
   const [showBagianB, setShowBagianB] = useState(true);
   const [showBagianC, setShowBagianC] = useState(true);
@@ -51,7 +51,7 @@ export default function Lampiran_3A1({ data }) {
         </div>
         <div
           className={`overflow-hidden transition-all duration-500 ease-in-out ${
-            showBagianA ? "block" : "hidden"
+            showBagianA ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
           }`}
         >
           <div className="border rounded-md p-4 space-y-4">

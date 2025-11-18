@@ -2,6 +2,8 @@ export { default as HeaderLampiran } from "./HeaderLampiran";
 export { default as Lampiran_1 } from "./Lampiran_1";
 export { default as Lampiran_2 } from "./Lampiran_2";
 export { default as Lampiran_3A1 } from "./Lampiran_3A1";
+export { default as Lampiran_3A2 } from "./Lampiran_3A2";
+export { default as Lampiran_3A3 } from "./Lampiran_3A3";
 export { default as Lampiran_3B } from "./Lampiran_3B";
 export { default as Lampiran_3C } from "./Lampiran_3C";
 export { default as Lampiran_3D } from "./Lampiran_3D";

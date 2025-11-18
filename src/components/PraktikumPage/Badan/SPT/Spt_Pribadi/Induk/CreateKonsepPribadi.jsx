@@ -48,6 +48,8 @@ import {
   Lampiran_1,
   Lampiran_2,
   Lampiran_3A1,
+  Lampiran_3A2,
+  Lampiran_3A3,
   Lampiran_3B,
   Lampiran_3C,
   Lampiran_3D,
@@ -215,6 +217,27 @@ const CreateKonsepPribadi = () => {
       order: 3,
     });
 
+    // Lampiran 3A2 - SELALU TERSEDIA
+
+    allLampiran.push({
+      id: "lampiran-3A2",
+      title: "L-3A-2",
+      subtitle: "Lampiran 3A2 - Rekonsiliasi Laporan Keuangan (Jasa)",
+      component: "Lampiran_3A2",
+      badge: "Tersedia",
+      order: 4,
+    });
+
+        // Lampiran 3A3 - SELALU TERSEDIA
+
+    allLampiran.push({
+      id: "lampiran-3A3",
+      title: "L-3A-3",
+      subtitle: "Lampiran 3A3 - Rekonsiliasi Laporan Keuangan Umum ",
+      component: "Lampiran_3A3",
+      badge: "Tersedia",
+      order: 5,
+    });
     // Lampiran 3B - SELALU TERSEDIA
 
     allLampiran.push({
@@ -223,7 +246,7 @@ const CreateKonsepPribadi = () => {
       subtitle: "Lampiran 3B - Daftar Tempat Kegiatan Usaha (TKU)",
       component: "Lampiran_3B",
       badge: "Tersedia",
-      order: 4,
+      order: 6,
     });
 
     // Lampiran 3C - SELALU TERSEDIA
@@ -234,7 +257,7 @@ const CreateKonsepPribadi = () => {
       subtitle: "Lampiran 3C - Daftar Harta Berwujud",
       component: "Lampiran_3C",
       badge: "Tersedia",
-      order: 5,
+      order: 7,
     });
 
     // Lampiran 3D - SELALU TERSEDIA
@@ -245,7 +268,7 @@ const CreateKonsepPribadi = () => {
       subtitle: "Lampiran 3D - Daftar Harta Tidak Berwujud",
       component: "Lampiran_3D",
       badge: "Tersedia",
-      order: 6,
+      order: 8,
     });
 
     // Lampiran 4 - SELALU TERSEDIA
@@ -255,7 +278,7 @@ const CreateKonsepPribadi = () => {
       subtitle: "Lampiran 4 - Perhitungan Angsuran PPh Pasal 25 Tahun Berikutnya",
       component: "Lampiran_4",
       badge: "Tersedia",
-      order: 7,
+      order: 9,
     });
 
     // Lampiran 5 - SELALU TERSEDIA
@@ -265,7 +288,7 @@ const CreateKonsepPribadi = () => {
       subtitle: "Lampiran 5 - Perhitungan Angsuran PPh Pasal 25 Tahun Berikutnya",
       component: "Lampiran_5",
       badge: "Tersedia",
-      order: 7,
+      order: 10,
     });
 
     // Lampiran 3A-4 - Penghasilan dari Usaha (1.b.1 = Ya)
@@ -296,6 +319,10 @@ const CreateKonsepPribadi = () => {
         return <Lampiran_2 data={data} />;
       case "Lampiran_3A1":
         return <Lampiran_3A1 data={data} />;
+      case "Lampiran_3A2":
+        return <Lampiran_3A2 data={data} />;
+      case "Lampiran_3A3":
+        return <Lampiran_3A3 data={data} />;
       case "Lampiran_3B":
         return <Lampiran_3B data={data} />;
       case "Lampiran_3C":
