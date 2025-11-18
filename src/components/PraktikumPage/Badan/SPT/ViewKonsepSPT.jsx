@@ -2558,7 +2558,7 @@ const ViewKonsepSPT = ({ data }) => {
                         {/* row 1 */}
                         <tr className="border-b">
                           <td className="p-2 whitespace-normal break-words text-sm">
-                            A. PPnMB yang harus dipungut sendiri (I.A.2 + I.A.3
+                            A. PPnBM yang harus dipungut sendiri (I.A.2 + I.A.3
                             + I.A.4 + I.A.5)
                           </td>
                           <td className="p-2"></td>
@@ -2577,7 +2577,7 @@ const ViewKonsepSPT = ({ data }) => {
                         {/* row 2 */}
                         <tr className="border-b">
                           <td className="p-2 whitespace-normal break-words text-sm">
-                            B. Kelebihan pemungutan PPnMB oleh Pemungut PPN
+                            B. Kelebihan pemungutan PPnBM oleh Pemungut PPN
                           </td>
                           <td className="p-2"></td>
                           <td className="p-2"></td>
@@ -2597,7 +2597,7 @@ const ViewKonsepSPT = ({ data }) => {
                         {/* row 3 */}
                         <tr className="border-b">
                           <td className="p-2 whitespace-normal break-words text-sm">
-                            C. PPnMB kurang atau (lebih) bayar (VI.A - VI.B)
+                            C. PPnBM kurang atau (lebih) bayar (VI.A - VI.B)
                           </td>
                           <td className="p-2"></td>
                           <td className="p-2"></td>
@@ -2615,7 +2615,7 @@ const ViewKonsepSPT = ({ data }) => {
                         {/* row 4 */}
                         <tr className="border-b">
                           <td className="p-2 whitespace-normal break-words text-sm">
-                            D. PPnMB kurang atau (lebih) pada SPT yang
+                            D. PPnBM kurang atau (lebih) pada SPT yang
                             dibetulkan sebelumnya
                           </td>
                           <td className="p-2"></td>
@@ -2636,7 +2636,7 @@ const ViewKonsepSPT = ({ data }) => {
                         {/* row 5 */}
                         <tr className="border-b">
                           <td className="p-2 whitespace-normal break-words text-sm">
-                            E. PPnMB kurang atau (lebih) karena pembetulan SPT
+                            E. PPnBM kurang atau (lebih) karena pembetulan SPT
                             (VI.C - VI.D)
                           </td>
                           <td className="p-2"></td>
@@ -2657,7 +2657,7 @@ const ViewKonsepSPT = ({ data }) => {
                         <tr className="border-b">
                           <td className="p-2 whitespace-normal break-words text-sm">
                             F. <input type="checkbox" className="ml-2 top-2" />{" "}
-                            PPnMB kurang atau (lebih) pada SPT yang dibetulkan
+                            PPnBM kurang atau (lebih) pada SPT yang dibetulkan
                             sebelumnya
                           </td>
 
@@ -3469,7 +3469,7 @@ const ViewKonsepSPT = ({ data }) => {
                             <input
                               type="text"
                               readOnly
-                              value="KANTOR AKUNTAN PUBLIK MOH WILDAN DAN ADI DARMAWAN"
+                              value={data?.nama_pengusaha || ""}
                               className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
                             />
                           </div>
@@ -3481,7 +3481,7 @@ const ViewKonsepSPT = ({ data }) => {
                             <input
                               type="text"
                               readOnly
-                              value="032025"
+                              value={data?.periode || ""}
                               className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
                             />
                           </div>
@@ -3492,7 +3492,7 @@ const ViewKonsepSPT = ({ data }) => {
                             <input
                               type="text"
                               readOnly
-                              value="0934274002429000"
+                              value={data?.npwp || ""}
                               className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
                             />
                           </div>
