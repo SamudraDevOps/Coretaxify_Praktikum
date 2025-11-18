@@ -148,6 +148,21 @@ const CreateKonsepPribadi = () => {
 
   const [answersState, setAnswersState] = useState({
     r1a: null, // 1.a - trigger Lampiran I
+    r1b1: null, // 1.b.1 - trigger Lampiran I
+    r1b2: null, // 1.b.2 - Trigger Lampiran 3B
+    r1b3: null, // 1.b.3
+    r1b4: null, // 1.b.4
+    r1c: null, // 1.c
+    r1d: null, // 1.d - trigger Lampiran 2
+    r3: null, // 3.C - trigger Lampiran 5
+    r8: null, // 8.C - trigger Lampiran 5
+    r10a: null, // 10a - trigger Lampiran 1 Bagian E
+    r13b: null, // 13b - triger lmapiran 4
+    r14b: null, // 14b - trigger Lampiran 1 Bagian B
+    r14c: null, // 14c - trigger Lampiran 2 Bagian A
+    r14d: null, // 14d - trigger Lampiran 2 Bagian B
+    r14e: null, // 14e - trigger Lampiran 3c
+    r14f: null, // 14f - trigger Lampiran 3d
     hasPenghasilanUsaha: null, // 1.b.1 - trigger Lampiran 3A-4
     hasPenghasilanLainnya: null, // 1.c
     hasPenghasilanLuarNegeri: null, // 1.d - trigger Lampiran 2
@@ -175,36 +190,38 @@ const CreateKonsepPribadi = () => {
     // const newDynamicLampiran = [];
 
     // Lampiran I - Penghasilan dari Pekerjaan (1.a = Ya)
-    allLampiran.push({
-      id: "lampiran-1",
-      title: "L-I",
-      subtitle: "Lampiran I - Penghasilan dari Pekerjaan",
-      component: "Lampiran_1",
-      badge: "Tersedia",
-      order: 1, // Urutan pertama
-    });
+    // allLampiran.push({
+    //   id: "lampiran-1",
+    //   title: "L-I",
+    //   subtitle: "Lampiran I - Penghasilan dari Pekerjaan",
+    //   component: "Lampiran_1",
+    //   badge: "Tersedia",
+    //   order: 1, // Urutan pertama
+    // });
 
-    // if (answersState.r1a === true) {
-    //   allLampiran.push({
-    //     id: "lampiran-1",
-    //     title: "L-I",
-    //     subtitle: "Lampiran I - Penghasilan dari Pekerjaan",
-    //     component: "Lampiran_1",
-    //     badge: "Wajib Diisi",
-    //     order: 1, // Urutan pertama
-    //   });
-    // }
+    if (answersState.r1a || answersState.r10a || answersState.r14b === true) {
+      allLampiran.push({
+        id: "lampiran-1",
+        title: "L-I",
+        subtitle: "Lampiran I - Penghasilan dari Pekerjaan",
+        component: "Lampiran_1",
+        badge: "Wajib Diisi",
+        order: 1, // Urutan pertama
+      });
+    }
 
     // Lampiran 2 - SELALU TERSEDIA
 
-    allLampiran.push({
-      id: "lampiran-2",
-      title: "L-II",
-      subtitle: "Lampiran 2 - Penghasilan Luar Negeri",
-      component: "Lampiran_2",
-      badge: "Tersedia",
-      order: 2, // Urutan kedua
-    });
+    if (answersState.r1d === true || answersState.r14c || answersState.r14d === true) {
+      allLampiran.push({
+        id: "lampiran-2",
+        title: "L-II",
+        subtitle: "Lampiran 2 - Penghasilan Luar Negeri",
+        component: "Lampiran_2",
+        badge: "Tersedia",
+        order: 2, // Urutan kedua
+      });
+    }
 
     // Lampiran 3A1 - SELALU TERSEDIA
 
@@ -248,48 +265,66 @@ const CreateKonsepPribadi = () => {
       badge: "Tersedia",
       order: 6,
     });
+    // Lampiran 3B - Muncul jika r1b2 === "ya_final" ATAU "ya_oppt"
+    if (answersState.r1b2 === "ya_final" || answersState.r1b2 === "ya_oppt") {
+      allLampiran.push({
+        id: "lampiran-3B",
+        title: "L-3B",
+        subtitle: "Lampiran 3B - Daftar Tempat Kegiatan Usaha (TKU)",
+        component: "Lampiran_3B",
+        badge: answersState.r1b2 === "ya_final" ? "Wajib Diisi" : "Wajib Diisi",
+        order: 4,
+      });
+    }
 
     // Lampiran 3C - SELALU TERSEDIA
-
-    allLampiran.push({
-      id: "lampiran-3C",
-      title: "L-3C",
-      subtitle: "Lampiran 3C - Daftar Harta Berwujud",
-      component: "Lampiran_3C",
-      badge: "Tersedia",
-      order: 7,
-    });
+    if (answersState.r14e === true) {
+      allLampiran.push({
+        id: "lampiran-3C",
+        title: "L-3C",
+        subtitle: "Lampiran 3C - Daftar Harta Berwujud",
+        component: "Lampiran_3C",
+        badge: "Tersedia",
+        order: 5,
+      });
+    }
 
     // Lampiran 3D - SELALU TERSEDIA
-
-    allLampiran.push({
-      id: "lampiran-3D",
-      title: "L-3D",
-      subtitle: "Lampiran 3D - Daftar Harta Tidak Berwujud",
-      component: "Lampiran_3D",
-      badge: "Tersedia",
-      order: 8,
-    });
+    if (answersState.r14f === true) {
+      allLampiran.push({
+        id: "lampiran-3D",
+        title: "L-3D",
+        subtitle: "Lampiran 3D - Daftar Harta Tidak Berwujud",
+        component: "Lampiran_3D",
+        badge: "Tersedia",
+        order: 6,
+      });
+    }
 
     // Lampiran 4 - SELALU TERSEDIA
-    allLampiran.push({
-      id: "lampiran-4",
-      title: "L-4",
-      subtitle: "Lampiran 4 - Perhitungan Angsuran PPh Pasal 25 Tahun Berikutnya",
-      component: "Lampiran_4",
-      badge: "Tersedia",
-      order: 9,
-    });
+    if (answersState.r13b === true) {
+      allLampiran.push({
+        id: "lampiran-4",
+        title: "L-4",
+        subtitle: "Lampiran 4 - Perhitungan Angsuran PPh Pasal 25 Tahun Berikutnya",
+        component: "Lampiran_4",
+        badge: "Tersedia",
+        order: 7,
+      });
+    }
 
     // Lampiran 5 - SELALU TERSEDIA
-    allLampiran.push({
-      id: "lampiran-5",
-      title: "L-5",
-      subtitle: "Lampiran 5 - Perhitungan Angsuran PPh Pasal 25 Tahun Berikutnya",
-      component: "Lampiran_5",
-      badge: "Tersedia",
-      order: 10,
-    });
+
+    if (answersState.r3 === true || answersState.r8 === true) {
+      allLampiran.push({
+        id: "lampiran-5",
+        title: "L-5",
+        subtitle: "Lampiran 5 - Perhitungan Angsuran PPh Pasal 25 Tahun Berikutnya",
+        component: "Lampiran_5",
+        badge: "wajib Diisi",
+        order: 7,
+      });
+    }
 
     // Lampiran 3A-4 - Penghasilan dari Usaha (1.b.1 = Ya)
     if (answersState.hasPenghasilanUsaha === true) {
@@ -483,11 +518,11 @@ const CreateKonsepPribadi = () => {
 
               {/* Perhitungan Pajak Teruntang */}
 
-              <PertanyaanC />
+              <PertanyaanC onAnswerChange={updateAnswer} answersState={answersState} />
 
               {/* Kredit Pajak */}
 
-              <PertanyaanD />
+              <PertanyaanD onAnswerChange={updateAnswer} answersState={answersState} />
               {/* PPh KURANG/LEBIH BAYAR */}
 
               <PertanyaanE />
@@ -501,11 +536,11 @@ const CreateKonsepPribadi = () => {
 
               {/* H. Angsuran PPh Pasal 25 Tahun Pajak Berikutnya  */}
 
-              <PertanyaanH />
+              <PertanyaanH onAnswerChange={updateAnswer} answersState={answersState} />
 
               {/* I. Pernyataan transaksi lainnya */}
 
-              <PertanyaanI />
+              <PertanyaanI onAnswerChange={updateAnswer} answersState={answersState} />
 
               {/* J. LAMPIRAN TAMBAHAN */}
 

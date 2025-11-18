@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 
-const PertanyaanI = () => {
+const PertanyaanI = ({ onAnswerChange, answersState }) => {
   const [showTransaksiLainnya, setShowTransaksiLainnya] = useState(false);
 
   // State untuk Bagian I - PERNYATAAN TRANSAKSI LAINNYA
@@ -20,6 +20,61 @@ const PertanyaanI = () => {
   const [r14g, setR14g] = useState(null);
   const [amt14g, setAmt14g] = useState(0);
 
+  useEffect(() => {
+    if (answersState) {
+      // Pertayaan 14b
+      setR14b(answersState.r14b ?? null);
+      setAmt14b(answersState.amt14b ?? 0);
+
+      // Pertayaan 14c
+      setR14c(answersState.r14c ?? null);
+      setAmt14c(answersState.amt14c ?? 0);
+
+      // Pertanyaan D
+      setR14d(answersState.r14d ?? null);
+      setAmt14d(answersState.amt14d ?? 0);
+
+      // Pertanyaan E
+      setR14e(answersState.r14e ?? null);
+      setAmt14e(answersState.amt14e ?? 0);
+
+      // Pertanyaan F
+      setR14f(answersState.r14f ?? null);
+      setAmt14f(answersState.amt14f ?? 0);
+
+  
+    }
+  }, [answersState]);
+
+  const handleR14bChange = (value) => {
+    console.log("🔄 14b changed to:", value); // Debug log
+    setR14b(value);
+    onAnswerChange?.("r14b", value);
+  };
+
+  const handleR14cChange = (value) => {
+    console.log("🔄 14c changed to:", value);
+    setR14c(value);
+    onAnswerChange?.("r14c", value);
+  };
+
+  const handleR14dChange = (value) => {
+    console.log("🔄 14d changed to:", value);
+    setR14d(value);
+    onAnswerChange?.("r14d", value);
+  };
+
+  const handleR14eChange = (value) => {
+    console.log("🔄 14e changed to:", value);
+    setR14e(value);
+    onAnswerChange?.("r14e", value);
+  };
+
+  const handleR14fChange = (value) => {
+    console.log("🔄 14f changed to:", value);
+    setR14f(value);
+    onAnswerChange?.("r14f", value);
+  };
   return (
     <>
       <div
@@ -82,7 +137,7 @@ const PertanyaanI = () => {
                       type="radio"
                       name="r14b"
                       checked={r14b === true}
-                      onChange={() => setR14b(true)}
+                      onChange={() => handleR14bChange(true)}
                     />
                     <span>Ya</span>
                   </label>
@@ -91,7 +146,7 @@ const PertanyaanI = () => {
                       type="radio"
                       name="r14b"
                       checked={r14b === false}
-                      onChange={() => setR14b(false)}
+                      onChange={() => handleR14bChange(false)}
                     />
                     <span>Tidak</span>
                   </label>
@@ -131,7 +186,7 @@ const PertanyaanI = () => {
                       type="radio"
                       name="r14c"
                       checked={r14c === true}
-                      onChange={() => setR14c(true)}
+                      onChange={() => handleR14cChange(true)}
                     />
                     <span>Ya</span>
                   </label>
@@ -140,7 +195,7 @@ const PertanyaanI = () => {
                       type="radio"
                       name="r14c"
                       checked={r14c === false}
-                      onChange={() => setR14c(false)}
+                      onChange={() => handleR14cChange(false)}
                     />
                     <span>Tidak</span>
                   </label>
@@ -180,7 +235,7 @@ const PertanyaanI = () => {
                       type="radio"
                       name="r14d"
                       checked={r14d === true}
-                      onChange={() => setR14d(true)}
+                      onChange={() => handleR14dChange(true)}
                     />
                     <span>Ya</span>
                   </label>
@@ -189,7 +244,7 @@ const PertanyaanI = () => {
                       type="radio"
                       name="r14d"
                       checked={r14d === false}
-                      onChange={() => setR14d(false)}
+                      onChange={() => handleR14dChange(false)}
                     />
                     <span>Tidak</span>
                   </label>
@@ -229,7 +284,7 @@ const PertanyaanI = () => {
                       type="radio"
                       name="r14e"
                       checked={r14e === true}
-                      onChange={() => setR14e(true)}
+                      onChange={() => handleR14eChange(true)}
                     />
                     <span>Ya</span>
                   </label>
@@ -238,7 +293,7 @@ const PertanyaanI = () => {
                       type="radio"
                       name="r14e"
                       checked={r14e === false}
-                      onChange={() => setR14e(false)}
+                      onChange={() => handleR14eChange(false)}
                     />
                     <span>Tidak</span>
                   </label>
@@ -280,7 +335,7 @@ const PertanyaanI = () => {
                       type="radio"
                       name="r14f"
                       checked={r14f === true}
-                      onChange={() => setR14f(true)}
+                      onChange={() => handleR14fChange(true)}
                     />
                     <span>Ya</span>
                   </label>
@@ -289,7 +344,7 @@ const PertanyaanI = () => {
                       type="radio"
                       name="r14f"
                       checked={r14f === false}
-                      onChange={() => setR14f(false)}
+                      onChange={() => handleR14fChange(false)}
                     />
                     <span>Tidak</span>
                   </label>

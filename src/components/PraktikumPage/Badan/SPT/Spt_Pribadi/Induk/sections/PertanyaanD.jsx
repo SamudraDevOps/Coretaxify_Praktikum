@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaChevronDown } from "react-icons/fa";
 
-const PertanyaanD = () => {
+const PertanyaanD = ({ onAnswerChange, answersState }) => {
   const [showKreditPajak, setShowKreditPajak] = useState(false);
 
   // State untuk Bagian D - KREDIT PAJAK
@@ -13,6 +13,20 @@ const PertanyaanD = () => {
   const [amt10c, setAmt10c] = useState(0);
   const [r10d, setR10d] = useState(null);
   const [amt10d, setAmt10d] = useState(0);
+
+  useEffect(() => {
+    if (answersState) {
+      // Pertayaan 10a
+      setR10a(answersState.r10a ?? null);
+      setAmt10a(answersState.amt10a ?? 0);
+    }
+  }, [answersState]);
+
+  const handleR10aChange = (value) => {
+    console.log("🔄 10a changed to:", value); // Debug log
+    setR10a(value);
+    onAnswerChange?.("r10a", value);
+  };
 
   return (
     <>
@@ -53,7 +67,7 @@ const PertanyaanD = () => {
                       type="radio"
                       name="r10a"
                       checked={r10a === true}
-                      onChange={() => setR10a(true)}
+                      onChange={() => handleR10aChange(true)}
                     />
                     <span>Ya</span>
                   </label>
@@ -62,7 +76,7 @@ const PertanyaanD = () => {
                       type="radio"
                       name="r10a"
                       checked={r10a === false}
-                      onChange={() => setR10a(false)}
+                      onChange={() => handleR10aChange(false)}
                     />
                     <span>Tidak</span>
                   </label>
