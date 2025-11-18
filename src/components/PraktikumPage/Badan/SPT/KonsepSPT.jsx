@@ -330,8 +330,8 @@ const KonsepSPT = ({
                         )}
 
                         {item.status === "DILAPORKAN" && (
-                          <IoMdDownload
-                            className="mr-2"
+                          <button
+                            className="download-button"
                               onClick={() => {
                               if (item.jenis_pajak === "PPN") {
                                 navigate(
@@ -347,7 +347,8 @@ const KonsepSPT = ({
                                 );
                               }
                             }}
-                          />
+                            >Lihat BPE</button>
+                          
                         )}
 
                         <button
