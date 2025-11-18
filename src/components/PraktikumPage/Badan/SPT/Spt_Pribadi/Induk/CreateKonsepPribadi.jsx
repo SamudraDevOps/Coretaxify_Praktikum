@@ -146,6 +146,8 @@ const CreateKonsepPribadi = () => {
 
   const [answersState, setAnswersState] = useState({
     r1a: null, // 1.a - trigger Lampiran I
+    r1b1: null, // 1.b.1 - trigger Lampiran I
+    r1b2: null, // 1.b.2 - Trigger Lampiran 3B
     hasPenghasilanUsaha: null, // 1.b.1 - trigger Lampiran 3A-4
     hasPenghasilanLainnya: null, // 1.c
     hasPenghasilanLuarNegeri: null, // 1.d - trigger Lampiran 2
@@ -173,25 +175,25 @@ const CreateKonsepPribadi = () => {
     // const newDynamicLampiran = [];
 
     // Lampiran I - Penghasilan dari Pekerjaan (1.a = Ya)
-    allLampiran.push({
-      id: "lampiran-1",
-      title: "L-I",
-      subtitle: "Lampiran I - Penghasilan dari Pekerjaan",
-      component: "Lampiran_1",
-      badge: "Tersedia",
-      order: 1, // Urutan pertama
-    });
+    // allLampiran.push({
+    //   id: "lampiran-1",
+    //   title: "L-I",
+    //   subtitle: "Lampiran I - Penghasilan dari Pekerjaan",
+    //   component: "Lampiran_1",
+    //   badge: "Tersedia",
+    //   order: 1, // Urutan pertama
+    // });
 
-    // if (answersState.r1a === true) {
-    //   allLampiran.push({
-    //     id: "lampiran-1",
-    //     title: "L-I",
-    //     subtitle: "Lampiran I - Penghasilan dari Pekerjaan",
-    //     component: "Lampiran_1",
-    //     badge: "Wajib Diisi",
-    //     order: 1, // Urutan pertama
-    //   });
-    // }
+    if (answersState.r1a === true) {
+      allLampiran.push({
+        id: "lampiran-1",
+        title: "L-I",
+        subtitle: "Lampiran I - Penghasilan dari Pekerjaan",
+        component: "Lampiran_1",
+        badge: "Wajib Diisi",
+        order: 1, // Urutan pertama
+      });
+    }
 
     // Lampiran 2 - SELALU TERSEDIA
 
@@ -215,16 +217,17 @@ const CreateKonsepPribadi = () => {
       order: 3,
     });
 
-    // Lampiran 3B - SELALU TERSEDIA
-
-    allLampiran.push({
-      id: "lampiran-3B",
-      title: "L-3B",
-      subtitle: "Lampiran 3B - Daftar Tempat Kegiatan Usaha (TKU)",
-      component: "Lampiran_3B",
-      badge: "Tersedia",
-      order: 4,
-    });
+    // Lampiran 3B - Muncul jika r1b2 === "ya_final" ATAU "ya_oppt"
+    if (answersState.r1b2 === "ya_final" || answersState.r1b2 === "ya_oppt") {
+      allLampiran.push({
+        id: "lampiran-3B",
+        title: "L-3B",
+        subtitle: "Lampiran 3B - Daftar Tempat Kegiatan Usaha (TKU)",
+        component: "Lampiran_3B",
+        badge: answersState.r1b2 === "ya_final" ? "Wajib Diisi" : "Wajib Diisi",
+        order: 4,
+      });
+    }
 
     // Lampiran 3C - SELALU TERSEDIA
 
