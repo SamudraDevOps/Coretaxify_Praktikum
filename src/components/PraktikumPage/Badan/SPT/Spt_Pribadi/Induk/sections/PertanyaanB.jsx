@@ -332,6 +332,7 @@ const PertanyaanB = ({ onAnswerChange, answersState }) => {
                   <option value="Dagang">Dagang</option>
                   <option value="Jasa">Jasa</option>
                   <option value="Manufaktur">Manufaktur</option>
+                  <option value="Umum">Umum</option>
                   <option value="Lainnya">Lainnya</option>
                 </select>
               </div>

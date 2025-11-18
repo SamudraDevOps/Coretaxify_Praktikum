@@ -223,48 +223,41 @@ const CreateKonsepPribadi = () => {
       });
     }
 
-    // Lampiran 3A1 - SELALU TERSEDIA
+    // Lampiran 3A1 - 
+    if (answersState.r1b4 === "Dagang") {
+      allLampiran.push({
+        id: "lampiran-3A1",
+        title: "L-3A-1",
+        subtitle: "Lampiran 3A1 - Rekonsiliasi Laporan Keuangan ",
+        component: "Lampiran_3A1",
+        badge: "Tersedia",
+        order: 3,
+      });
+    }
+    // Lampiran 3A2 - Muncul jika r1b3 === "Jasa"
 
-    allLampiran.push({
-      id: "lampiran-3A1",
-      title: "L-3A-1",
-      subtitle: "Lampiran 3A1 - Rekonsiliasi Laporan Keuangan ",
-      component: "Lampiran_3A1",
-      badge: "Tersedia",
-      order: 3,
-    });
+    if (answersState.r1b4 === "Jasa") {
+      allLampiran.push({
+        id: "lampiran-3A2",
+        title: "L-3A-2",
+        subtitle: "Lampiran 3A2 - Rekonsiliasi Laporan Keuangan (Jasa)",
+        component: "Lampiran_3A2",
+        badge: "Tersedia",
+        order: 4,
+      });
+    }
+    // Lampiran 3A3 - SELALU TERSEDIA
+    if (answersState.r1b4 === "Umum") {
+      allLampiran.push({
+        id: "lampiran-3A3",
+        title: "L-3A-3",
+        subtitle: "Lampiran 3A3 - Rekonsiliasi Laporan Keuangan Umum ",
+        component: "Lampiran_3A3",
+        badge: "Tersedia",
+        order: 5,
+      });
+    }
 
-    // Lampiran 3A2 - SELALU TERSEDIA
-
-    allLampiran.push({
-      id: "lampiran-3A2",
-      title: "L-3A-2",
-      subtitle: "Lampiran 3A2 - Rekonsiliasi Laporan Keuangan (Jasa)",
-      component: "Lampiran_3A2",
-      badge: "Tersedia",
-      order: 4,
-    });
-
-        // Lampiran 3A3 - SELALU TERSEDIA
-
-    allLampiran.push({
-      id: "lampiran-3A3",
-      title: "L-3A-3",
-      subtitle: "Lampiran 3A3 - Rekonsiliasi Laporan Keuangan Umum ",
-      component: "Lampiran_3A3",
-      badge: "Tersedia",
-      order: 5,
-    });
-    // Lampiran 3B - SELALU TERSEDIA
-
-    allLampiran.push({
-      id: "lampiran-3B",
-      title: "L-3B",
-      subtitle: "Lampiran 3B - Daftar Tempat Kegiatan Usaha (TKU)",
-      component: "Lampiran_3B",
-      badge: "Tersedia",
-      order: 6,
-    });
     // Lampiran 3B - Muncul jika r1b2 === "ya_final" ATAU "ya_oppt"
     if (answersState.r1b2 === "ya_final" || answersState.r1b2 === "ya_oppt") {
       allLampiran.push({
