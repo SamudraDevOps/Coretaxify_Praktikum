@@ -26,8 +26,22 @@ const PertanyaanB = ({ onAnswerChange, answersState }) => {
 
   useEffect(() => {
     if (answersState) {
+      // Pertayaan 1.a
       setR1a(answersState.r1a ?? null);
       setAmt1a(answersState.amt1a ?? 0);
+
+      // Pertanyaan 1.b.1
+      setR1b1(answersState.r1b1 ?? null);
+      setAmt1b1(answersState.amt1b1 ?? 0);
+
+      // Pertanyaan 1.b.2
+      setR1b2(answersState.r1b2 ?? "");
+      setAmt1b2(answersState.amt1b2 ?? 0);
+
+      // Pertanyaan 1.b.4
+      setR1b4(answersState.r1b4 ?? "");
+      setAmt1b4(answersState.amt1b4 ?? 0);
+
       // setR1b1(answersState.hasPenghasilanUsaha ?? null);
       //   setAmt1b1(answersState.amt1b1 ?? 0);
       //   setR1b2(answersState.r1b2 ?? "");
@@ -59,6 +73,25 @@ const PertanyaanB = ({ onAnswerChange, answersState }) => {
     if (value) {
       onAnswerChange?.("amt1a", amt1a);
     }
+  };
+
+  const handleR1b1Change = (value) => {
+    console.log("🔄 1.b.1 changed to:", value); // Debug log
+    setR1b1(value);
+    onAnswerChange?.("r1b1", value);
+  };
+
+  const handleR1b2Change = (value) => {
+    console.log("🔄 1.b.2 changed to:", value); // Debug log
+
+    setR1b2(value);
+    onAnswerChange?.("r1b2", value);
+  };
+
+  const handleR1b4Change = (value) => {
+    console.log("🔄 1.b.4 changed to:", value); // Debug log
+    setR1b4(value);
+    onAnswerChange?.("r1b4", value);
   };
 
   // Handler untuk amount 1.a
@@ -108,6 +141,7 @@ const PertanyaanB = ({ onAnswerChange, answersState }) => {
                       type="radio"
                       name="r1a"
                       checked={r1a === true}
+                      // change
                       onChange={() => handleR1aChange(true)}
                     />
                     <span>Ya</span>
@@ -157,7 +191,7 @@ const PertanyaanB = ({ onAnswerChange, answersState }) => {
                       type="radio"
                       name="r1b1"
                       checked={r1b1 === true}
-                      onChange={() => setR1b1(true)}
+                      onChange={() => handleR1b1Change(true)}
                     />
                     <span>Ya</span>
                   </label>
@@ -166,7 +200,7 @@ const PertanyaanB = ({ onAnswerChange, answersState }) => {
                       type="radio"
                       name="r1b1"
                       checked={r1b1 === false}
-                      onChange={() => setR1b1(false)}
+                      onChange={() => handleR1b1Change(false)}
                     />
                     <span>Tidak</span>
                   </label>
@@ -195,7 +229,7 @@ const PertanyaanB = ({ onAnswerChange, answersState }) => {
                 <select
                   className="w-full p-2 border rounded-md text-sm truncate"
                   value={r1b2}
-                  onChange={(e) => setR1b2(e.target.value)}
+                  onChange={(e) => handleR1b2Change(e.target.value)}
                 >
                   <option value="">Please select</option>
                   <option value="ya_final" className="whitespace-normal break-words">
@@ -262,7 +296,7 @@ const PertanyaanB = ({ onAnswerChange, answersState }) => {
                 <select
                   className="w-full p-2 border rounded-md text-sm"
                   value={r1b4}
-                  onChange={(e) => setR1b4(e.target.value)}
+                  onChange={(e) => handleR1b4Change(e.target.value)}
                 >
                   <option value="">Please select</option>
                   <option value="Dagang">Dagang</option>
