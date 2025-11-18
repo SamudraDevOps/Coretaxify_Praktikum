@@ -38,9 +38,21 @@ const PertanyaanB = ({ onAnswerChange, answersState }) => {
       setR1b2(answersState.r1b2 ?? "");
       setAmt1b2(answersState.amt1b2 ?? 0);
 
+      // Pertanyaan 1.b.3
+      setR1b3(answersState.r1b3 ?? "");
+      setAmt1b3(answersState.amt1b3 ?? 0);
+
       // Pertanyaan 1.b.4
       setR1b4(answersState.r1b4 ?? "");
       setAmt1b4(answersState.amt1b4 ?? 0);
+
+      // Pertanyaan 1.C
+      setR1c(answersState.r1c ?? null);
+      setAmt1c(answersState.amt1c ?? 0);
+
+      // Pertanyaan 1.D
+      setR1d(answersState.r1d ?? null);
+      setAmt1d(answersState.amt1d ?? 0);
 
       // setR1b1(answersState.hasPenghasilanUsaha ?? null);
       //   setAmt1b1(answersState.amt1b1 ?? 0);
@@ -88,10 +100,28 @@ const PertanyaanB = ({ onAnswerChange, answersState }) => {
     onAnswerChange?.("r1b2", value);
   };
 
+  const handleR1B3Change = (value) => {
+    console.log("🔄 1.b.3 changed to:", value);
+    setR1b3(value);
+    onAnswerChange?.("r1b3", value);
+  };
+
   const handleR1b4Change = (value) => {
     console.log("🔄 1.b.4 changed to:", value); // Debug log
     setR1b4(value);
     onAnswerChange?.("r1b4", value);
+  };
+
+  const handleR1cChange = (value) => {
+    console.log("🔄 1.c changed to:", value); // Debug log
+    setR1c(value);
+    onAnswerChange?.("r1c", value);
+  };
+
+  const handleR1dChange = (value) => {
+    console.log("🔄 1.d changed to:", value);
+    setR1d(value);
+    onAnswerChange?.("r1d", value);
   };
 
   // Handler untuk amount 1.a
@@ -265,7 +295,7 @@ const PertanyaanB = ({ onAnswerChange, answersState }) => {
                 <select
                   className="w-full p-2 border rounded-md text-sm"
                   value={r1b3}
-                  onChange={(e) => setR1b3(e.target.value)}
+                  onChange={(e) => handleR1B3Change(e.target.value)}
                 >
                   <option value="">Please select</option>
                   <option value="ya">Ya, saya menggunakan Norma.</option>

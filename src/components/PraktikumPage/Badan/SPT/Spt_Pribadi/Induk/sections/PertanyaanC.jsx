@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 
-const PertanyaanC = () => {
+const PertanyaanC = ({ onAnswerChange, answersState }) => {
   const [showPerhitunganPajakTerutang, setShowPerhitunganPajakTerutang] = useState(false);
 
   // State untuk Bagian C - PERHITUNGAN PAJAK TERUTANG
@@ -19,6 +19,30 @@ const PertanyaanC = () => {
   const [amt7, setAmt7] = useState(0);
   const [r8, setR8] = useState(null);
   const [amt8, setAmt8] = useState(0);
+
+  useEffect(() => {
+    if (answersState) {
+      // Pertayaan 3
+      setR3(answersState.r3 ?? null);
+      setAmt3(answersState.amt3 ?? 0);
+
+      // Pertayaan 8
+      setR8(answersState.r8 ?? null);
+      setAmt8(answersState.amt8 ?? 0);
+    }
+  }, [answersState]);
+
+  const handleR3Change = (value) => {
+    console.log("🔄 3 changed to:", value); // Debug log
+    setR3(value);
+    onAnswerChange?.("r3", value);
+  };
+
+  const HandleR8Change = (value) => {
+    console.log("🔄 8 changed to:", value);
+    setR8(value);
+    onAnswerChange?.("r8", value);
+  };
 
   return (
     <>
@@ -81,7 +105,7 @@ const PertanyaanC = () => {
                       type="radio"
                       name="r3"
                       checked={r3 === true}
-                      onChange={() => setR3(true)}
+                      onChange={() => handleR3Change(true)}
                     />
                     <span>Ya</span>
                   </label>
@@ -90,7 +114,7 @@ const PertanyaanC = () => {
                       type="radio"
                       name="r3"
                       checked={r3 === false}
-                      onChange={() => setR3(false)}
+                      onChange={() => handleR3Change(false)}
                     />
                     <span>Tidak</span>
                   </label>
@@ -224,7 +248,7 @@ const PertanyaanC = () => {
                       type="radio"
                       name="r8"
                       checked={r8 === true}
-                      onChange={() => setR8(true)}
+                      onChange={() => HandleR8Change(true)}
                     />
                     <span>Ya</span>
                   </label>
@@ -233,7 +257,7 @@ const PertanyaanC = () => {
                       type="radio"
                       name="r8"
                       checked={r8 === false}
-                      onChange={() => setR8(false)}
+                      onChange={() => HandleR8Change(false)}
                     />
                     <span>Tidak</span>
                   </label>

@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 
-const PertanyaanH = () => {
+const PertanyaanH = ({ onAnswerChange, answersState }) => {
   const [showAngsuran, setShowAngsuran] = useState(false);
 
   // State untuk Bagian H - ANGSURAN PPh PASAL 25
@@ -11,6 +11,20 @@ const PertanyaanH = () => {
   const [amt13b, setAmt13b] = useState(0);
   const [r13c, setR13c] = useState(null);
   const [amt13c, setAmt13c] = useState(0);
+
+  useEffect(() => {
+    if (answersState) {
+      // Pertayaan 13b
+      setR13b(answersState.r13b ?? null);
+      setAmt13b(answersState.amt13b ?? 0);
+    }
+  }, [answersState]);
+
+  const handleR13bChange = (value) => {
+    console.log("🔄 13b changed to:", value); // Debug log
+    setR13b(value);
+    onAnswerChange?.("r13b", value);
+  };
 
   return (
     <>
@@ -102,7 +116,7 @@ const PertanyaanH = () => {
                       type="radio"
                       name="r13b"
                       checked={r13b === true}
-                      onChange={() => setR13b(true)}
+                      onChange={() => handleR13bChange(true)}
                     />
                     <span>Ya</span>
                   </label>
@@ -111,7 +125,7 @@ const PertanyaanH = () => {
                       type="radio"
                       name="r13b"
                       checked={r13b === false}
-                      onChange={() => setR13b(false)}
+                      onChange={() => handleR13bChange(false)}
                     />
                     <span>Tidak</span>
                   </label>
