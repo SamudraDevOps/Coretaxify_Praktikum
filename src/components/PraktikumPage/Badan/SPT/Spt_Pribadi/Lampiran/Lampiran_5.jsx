@@ -3,11 +3,13 @@ import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import HeaderLampiran from "./HeaderLampiran";
 import KompensasiKerugian from "@sections/Lampiran5/BagianA";
 import PenguranganNeto from "@sections/Lampiran5/BagianB";
+import PengurangPph from "@sections/Lampiran5/BagianC";
 import GlobalFormField from "@lampiran/shared/GlobalFormField";
 
 export default function Lampiran_5({ data }) {
   const [showBagianA, setShowBagianA] = useState(true);
   const [showBagianB, setShowBagianB] = useState(true);
+  const [showBagianC, setShowBagianC] = useState(true);
 
   const [form, setForm] = useState({
     komFiskal: 0,
@@ -106,6 +108,22 @@ export default function Lampiran_5({ data }) {
           onFieldChange={(key, value) => setForm((prev) => ({ ...prev, [key]: value }))}
           labelWidth="w-80"
         />
+      </div>
+
+      {/* Bagian C */}
+      <div>
+        <div
+          className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
+          onClick={() => setShowBagianC(!showBagianC)}
+        >
+          <h3 className="text-lg font-semibold">C. PENGURANGAN PPh Terutang</h3>
+          {showBagianC ? <FaChevronUp /> : <FaChevronDown />}
+        </div>
+        {showBagianC && (
+          <div className="border rounded-md p-4 space-y-4">
+            <PengurangPph />
+          </div>
+        )}
       </div>
     </div>
   );
