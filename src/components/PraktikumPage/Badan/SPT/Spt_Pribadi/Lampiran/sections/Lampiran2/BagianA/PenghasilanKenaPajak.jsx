@@ -7,7 +7,7 @@ const PenghasilanKenaPajak = ({ config }) => {
   const {
     baseFields = [
       "namaPemotong",
-      "npwpPemotong",
+      "npwp",
       "kode",
       "jenis",
       "dasarPengenaanPajak",
@@ -110,7 +110,7 @@ const PenghasilanKenaPajak = ({ config }) => {
                 <tr key={item.id} className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}>
                   <td className="p-2 border-b text-center">{index + 1}</td>
                   <td className="p-2 border-b">{item.namaPemotong}</td>
-                  <td className="p-2 border-b">{item.npwpPemotong}</td>
+                  <td className="p-2 border-b">{item.npwp}</td>
                   <td className="p-2 border-b">{item.kode}</td>
                   <td className="p-2 border-b max-w-xs truncate">
                     {customChildren

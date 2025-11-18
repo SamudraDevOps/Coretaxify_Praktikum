@@ -24,16 +24,25 @@ export default function Lampiran_3B({ data }) {
             A. REKAPITULASI PEREDARAN BRUTO UNTUK WP PEREDARAN BRUTO TERTENTU YANG DIKENAI PAJAK
             FINAL
           </h3>
-          {showBagianA ? <FaChevronUp /> : <FaChevronDown />}
-        </div>
-
-        {showBagianA && (
+          <span
+            className={`transition-transform duration-500 ease-in-out ${
+              showBagianA ? "rotate-180" : "rotate-0"
+            }`}
+          >
+            <FaChevronDown />
+            </span>
+          </div>
+        <div
+          className={`overflow-hidden transition-all duration-500 ease-in-out ${
+            showBagianA ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
+          }`}
+        >
           <div className="border rounded-md p-4 space-y-4">
             <div className="ml-4">
               <RekapitulasiPajakFinal />
             </div>
           </div>
-        )}
+      </div>
       </div>
 
       {/* Bagian B - Rekapitulasi Peredaran Bruto Untuk Wajib pajak Orang Pribadi Pengusaha Tertentu (OPPT) */}
@@ -46,16 +55,25 @@ export default function Lampiran_3B({ data }) {
             B. REKAPITULASI PEREDARAN BRUTO UNTUK WAJIB PAJAK ORANG PRIBADI PENGUSAHA TERTENTU
             (OPPT)
           </h3>
-          {showBagianB ? <FaChevronUp /> : <FaChevronDown />}
+          <span
+            className={`transition-transform duration-500 ease-in-out ${
+              showBagianB ? "rotate-180" : "rotate-0"
+            }`}
+          >
+            <FaChevronDown />
+          </span>
         </div>
-
-        {showBagianB && (
+        <div
+          className={`overflow-hidden transition-all duration-500 ease-in-out ${
+            showBagianB ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
+          }`}
+        >
           <div className="border rounded-md p-4 space-y-4">
             <div className="ml-4">
               <RekapitulasiPengusaha />
             </div>
           </div>
-        )}
+      </div>
       </div>
 
       {/* Bagian C  - Rekapitulasi Peredaran Bruto Untuk Pengguna norma perhitungan Penghasilan Neto (NPPN) */}
@@ -67,16 +85,25 @@ export default function Lampiran_3B({ data }) {
           <h3 className="text-lg font-semibold">
             C. REKAPITULASI PEREDARAN BRUTO UNTUK PENGGUNA NORMA PERHITUNGAN PENGHASILAN NETO (NPPN)
           </h3>
-          {showBagianC ? <FaChevronUp /> : <FaChevronDown />}
+          <span
+            className={`transition-transform duration-500 ease-in-out ${
+              showBagianC ? "rotate-180" : "rotate-0"
+            }`}
+          >
+            <FaChevronDown />
+          </span>
         </div>
-
-        {showBagianC && (
+        <div
+          className={`overflow-hidden transition-all duration-500 ease-in-out ${
+            showBagianC ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
+          }`}
+        >
           <div className="border rounded-md p-4 space-y-4">
             <div className="ml-4">
               <RekapitulasiPenghasilanNeto />
             </div>
           </div>
-        )}
+      </div>
       </div>
     </div>
   );

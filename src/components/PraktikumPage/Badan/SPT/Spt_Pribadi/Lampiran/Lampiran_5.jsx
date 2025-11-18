@@ -58,13 +58,23 @@ export default function Lampiran_5({ data }) {
           onClick={() => setShowBagianA(!showBagianA)}
         >
           <h3 className="text-lg font-semibold">A. PERHITUNGAN KOMPENSASI KERUGIAN FISKAL</h3>
-          {showBagianA ? <FaChevronUp /> : <FaChevronDown />}
+          <span
+            className={`transition-transform duration-500 ease-in-out ${
+              showBagianA ? "rotate-180" : "rotate-0"
+            }`}
+          >
+            <FaChevronDown />
+          </span>
         </div>
-        {showBagianA && (
+        <div
+          className={`overflow-hidden transition-all duration-500 ease-in-out ${
+            showBagianA ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
+          }`}
+        >
           <div className="border rounded-md p-4 space-y-4">
             <KompensasiKerugian onTotalChange={handleKompensasiTotal} />
           </div>
-        )}
+        </div>
       </div>
 
       {/* Bagian B */}
@@ -74,16 +84,26 @@ export default function Lampiran_5({ data }) {
           onClick={() => setShowBagianB(!showBagianB)}
         >
           <h3 className="text-lg font-semibold">B. PENGURANGAN PENGHASILAN NETO</h3>
-          {showBagianB ? <FaChevronUp /> : <FaChevronDown />}
+          <span
+            className={`transition-transform duration-500 ease-in-out ${
+              showBagianB ? "rotate-180" : "rotate-0"
+            }`}
+          >
+            <FaChevronDown />
+          </span>
         </div>
-        {showBagianB && (
+        <div
+          className={`overflow-hidden transition-all duration-500 ease-in-out ${
+            showBagianB ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
+          }`}
+        >
           <div className="border rounded-md p-4 space-y-4">
             <PenguranganNeto
               totalKompensasi2025={form.komFiskal || 0}
               onTotalChange={handlePenguranganTotal}
             />
           </div>
-        )}
+        </div>
       </div>
 
       <div className="border rounded-md p-4 space-y-4">
