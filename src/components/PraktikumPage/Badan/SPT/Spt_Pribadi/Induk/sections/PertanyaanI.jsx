@@ -75,9 +75,6 @@ const PertanyaanI = ({ onAnswerChange, answersState }) => {
     setR14f(value);
     onAnswerChange?.("r14f", value);
   };
-
-  };
-
   return (
     <>
       <div
