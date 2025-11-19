@@ -4,8 +4,7 @@ import HeaderLampiran from "./HeaderLampiran";
 import KompensasiKerugian from "@sections/Lampiran5/BagianA";
 import PenguranganNeto from "@sections/Lampiran5/BagianB";
 import PengurangPph from "@sections/Lampiran5/BagianC";
-import GlobalFormField from "@lampiran/shared/GlobalFormField";
-
+import GlobalFormField from "@shared/GlobalFormField";
 export default function Lampiran_5({ data }) {
   const [showBagianA, setShowBagianA] = useState(true);
   const [showBagianB, setShowBagianB] = useState(true);
@@ -145,7 +144,7 @@ export default function Lampiran_5({ data }) {
             <FaChevronDown />
           </span>
         </div>
-                <div
+        <div
           className={`overflow-hidden transition-all duration-500 ease-in-out ${
             showBagianC ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
           }`}
@@ -153,7 +152,7 @@ export default function Lampiran_5({ data }) {
           <div className="border rounded-md p-4 space-y-4">
             <PengurangPph />
           </div>
-      </div>
+        </div>
       </div>
     </div>
   );

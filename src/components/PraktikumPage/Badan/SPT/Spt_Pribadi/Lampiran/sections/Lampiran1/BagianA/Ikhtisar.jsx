@@ -1,6 +1,6 @@
 import React from "react";
 import { FaTrash, FaEdit } from "react-icons/fa";
-import { formatRupiah } from "../../../utils/formatCurrency";
+import { formatNumber, parseFormattedNumber, formatRupiah } from "@utils/formatCurrency";
 
 const Ikhtisar = () => {
   const data = [
@@ -29,9 +29,7 @@ const Ikhtisar = () => {
                 {item.deskripsi}
               </td>
               <td className="border border-gray-300 py-2 px-3 text-right font-semibold text-gray-800">
-                <span>
-                  {formatRupiah(item.hargaPerolehan)}
-                </span>
+                <span>{formatRupiah(item.hargaPerolehan)}</span>
               </td>
               <td className="border border-gray-300 py-2 px-3 text-right font-semibold text-gray-800">
                 {formatRupiah(item.nilaiSaatIni)}

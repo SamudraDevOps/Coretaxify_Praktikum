@@ -1,6 +1,6 @@
 import React from "react";
 import { FaTrash, FaEdit } from "react-icons/fa";
-import { formatRupiah } from "../../../utils/formatCurrency";
+import { formatNumber, parseFormattedNumber, formatRupiah } from "@utils/formatCurrency";
 
 const TablePenghasilan = ({ data, onEdit, onDelete }) => {
   return (
@@ -10,13 +10,9 @@ const TablePenghasilan = ({ data, onEdit, onDelete }) => {
           <tr>
             <th className="p-2 border-b">No</th>
             <th className="p-2 border-b min-w-[200px]">Nama Pemberi Kerja</th>
-            <th className="p-2 border-b min-w-[200px]">
-              Nomor Identitas Pemberi Kerja
-            </th>
+            <th className="p-2 border-b min-w-[200px]">Nomor Identitas Pemberi Kerja</th>
             <th className="p-2 border-b min-w-[200px]">Penghasilan Bruto</th>
-            <th className="p-2 border-b min-w-[150px]">
-              Pengurangan Penghasilan Bruto/Biaya
-            </th>
+            <th className="p-2 border-b min-w-[150px]">Pengurangan Penghasilan Bruto/Biaya</th>
             <th className="p-2 border-b min-w-[150px]">Penghasilan Neto</th>
             <th className="p-2 border-b min-w-[100px]">Aksi</th>
           </tr>
@@ -30,23 +26,14 @@ const TablePenghasilan = ({ data, onEdit, onDelete }) => {
             </tr>
           ) : (
             data.map((item, index) => (
-              <tr
-                key={item.id}
-                className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}
-              >
+              <tr key={item.id} className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}>
                 <td className="p-2 border-b text-center">{index + 1}</td>
                 <td className="p-2 border-b">{item.namaPemberiKerja || "-"}</td>
 
                 <td className="p-2 border-b">{item.pemberiKerja || "-"}</td>
-                <td className="p-2 border-b">
-                  {formatRupiah(item.penghasilanBruto) || "-"}
-                </td>
-                <td className="p-2 border-b">
-                  {formatRupiah(item.pengurangan) || "-"}
-                </td>
-                <td className="p-2 border-b">
-                  {formatRupiah(item.penghasilanNeto) || "-"}
-                </td>
+                <td className="p-2 border-b">{formatRupiah(item.penghasilanBruto) || "-"}</td>
+                <td className="p-2 border-b">{formatRupiah(item.pengurangan) || "-"}</td>
+                <td className="p-2 border-b">{formatRupiah(item.penghasilanNeto) || "-"}</td>
                 <td className="p-2 border-b">
                   <div className="flex gap-1 justify-center">
                     <button

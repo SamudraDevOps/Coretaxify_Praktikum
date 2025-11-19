@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { Plus, Edit, Trash2 } from "lucide-react";
-import { formatRupiah } from "../../../../utils/formatCurrency";
-import GlobalModal from "../../../../components/shared/GlobalModal";
-
+import { formatNumber, parseFormattedNumber, formatRupiah } from "@utils/formatCurrency";
+import GlobalModal from "@shared/GlobalModal";
 export default function DaftarHartaLainnya({ config }) {
   const {
     baseFields = [
@@ -131,9 +130,7 @@ export default function DaftarHartaLainnya({ config }) {
                   <td className="p-2 border-b">{formatRupiah(item.nilaiSaatIni)}</td>
                   <td className="p-2 border-b">{item.buktiKepemilikan || "-"}</td>
                   <td className="p-2 border-b">{item.InformasiTambahan || "-"}</td>
-                  <td className="p-2 border-b">
-                    {item.keterangan || item.keteranganHarta || "-"}
-                  </td>
+                  <td className="p-2 border-b">{item.keterangan || item.keteranganHarta || "-"}</td>
 
                   <td className="px-4 py-3 text-sm">
                     <div className="flex gap-2 justify-center">

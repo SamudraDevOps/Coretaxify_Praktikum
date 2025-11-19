@@ -1,6 +1,6 @@
 import React from "react";
 import { FaTrash, FaEdit } from "react-icons/fa";
-import { formatRupiah } from "../../../utils/formatCurrency";
+import { formatNumber, parseFormattedNumber, formatRupiah } from "@utils/formatCurrency";
 
 const TableA3 = ({ data, onEdit, onDelete }) => {
   const calculateTotalPenghasilanBruto = () => {

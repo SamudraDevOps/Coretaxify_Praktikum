@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import HeaderLampiran from "./HeaderLampiran";
-import GlobalFormField from "./components/shared/GlobalFormField";
+import GlobalFormField from "@shared/GlobalFormField";
 import { BagianAConfig } from "./sections/Lampiran4/PerhitunganAngsuran";
 import {
   BagianBConfig,
@@ -96,7 +96,7 @@ export default function Lampiran_4({ data }) {
           <h3 className="text-lg font-semibold">
             A. PERHITUNGAN ANGSURAN PAJAK PENGHASILAN UNTUK TAHUN PAJAK BERIKUTNYA
           </h3>
-        <span
+          <span
             className={`transition-transform duration-500 ease-in-out ${
               showBagianA ? "rotate-180" : "rotate-0"
             }`}
@@ -117,7 +117,7 @@ export default function Lampiran_4({ data }) {
               onFieldChange={handleFieldChangeBagianA}
             />
           </div>
-          </div>
+        </div>
       </div>
 
       {/* Bagian B */}
@@ -150,7 +150,7 @@ export default function Lampiran_4({ data }) {
               onFieldChange={handleFieldChangeBagianB}
             />
           </div>
-          </div>
+        </div>
       </div>
 
       {/* Bagian C */}
@@ -181,7 +181,7 @@ export default function Lampiran_4({ data }) {
               // onFieldChange={handleFieldChangeWajibPajak}
             />
           </div>
-          </div>
+        </div>
       </div>
 
       {/* Bagian D */}

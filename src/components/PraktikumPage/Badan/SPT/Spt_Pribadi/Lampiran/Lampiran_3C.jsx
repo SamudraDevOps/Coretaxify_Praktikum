@@ -6,7 +6,7 @@ import HeaderLampiran from "./HeaderLampiran";
 import Kelompok1IndexBerwujud from "./sections/Lampiran3/Lampiran3C/HartaBerwujud";
 import Kelompok1IndexTidakBerwujud from "./sections/Lampiran3/Lampiran3C/HartaTidakBerwujud";
 import BangunanTidakPermanenIndex from "@sections/Lampiran3/Lampiran3C/Bangunan";
-import GlobalFormField from "./components/shared/GlobalFormField";
+import GlobalFormField from "@shared/GlobalFormField";
 
 export default function Lampiran_3C({ data }) {
   const [showBagianA, setShowBagianA] = useState(true);
@@ -65,7 +65,7 @@ export default function Lampiran_3C({ data }) {
           onClick={() => setShowBagianA(!showBagianA)}
         >
           <h3 className="text-lg font-semibold">HARTA BERWUJUD</h3>
-        <span
+          <span
             className={`transition-transform duration-500 ease-in-out ${
               showBagianA ? "rotate-180" : "rotate-0"
             }`}
@@ -89,11 +89,11 @@ export default function Lampiran_3C({ data }) {
                 <span
                   className={`transition-transform duration-500 ease-in-out ${
                     showKelompok1Berwujud ? "rotate-180" : "rotate-0"
-                   }`}
-                  >
-                    <FaChevronDown />
-                  </span>
-                </div>
+                  }`}
+                >
+                  <FaChevronDown />
+                </span>
+              </div>
               <div
                 className={`overflow-hidden transition-all duration-500 ease-in-out ${
                   showKelompok1Berwujud ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
@@ -102,10 +102,10 @@ export default function Lampiran_3C({ data }) {
                 <div className="border rounded-md p-4">
                   <Kelompok1IndexBerwujud />
                 </div>
-                </div>
+              </div>
             </div>
           </div>
-          </div>
+        </div>
       </div>
 
       {/* Bagian B - BANGUNAN */}
@@ -115,7 +115,7 @@ export default function Lampiran_3C({ data }) {
           onClick={() => setShowBagianB(!showBagianB)}
         >
           <h3 className="text-lg font-semibold">BAGUNAN</h3>
-        <span
+          <span
             className={`transition-transform duration-500 ease-in-out ${
               showBagianB ? "rotate-180" : "rotate-0"
             }`}
@@ -139,11 +139,11 @@ export default function Lampiran_3C({ data }) {
                 <span
                   className={`transition-transform duration-500 ease-in-out ${
                     showTidakPermanen ? "rotate-180" : "rotate-0"
-                   }`}
-                  >
-                    <FaChevronDown />
-                  </span>
-                </div>
+                  }`}
+                >
+                  <FaChevronDown />
+                </span>
+              </div>
               <div
                 className={`overflow-hidden transition-all duration-500 ease-in-out ${
                   showTidakPermanen ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
@@ -152,10 +152,10 @@ export default function Lampiran_3C({ data }) {
                 <div className="border rounded-md p-4">
                   <BangunanTidakPermanenIndex />
                 </div>
-                </div>
+              </div>
             </div>
           </div>
-          </div>
+        </div>
       </div>
 
       <div className="border rounded-md p-4 space-y-4">
@@ -197,7 +197,7 @@ export default function Lampiran_3C({ data }) {
           onClick={() => setShowBagianC(!showBagianC)}
         >
           <h3 className="text-lg font-semibold">HARTA TIDAK BERWUJUD</h3>
-        <span
+          <span
             className={`transition-transform duration-500 ease-in-out ${
               showBagianC ? "rotate-180" : "rotate-0"
             }`}
@@ -221,11 +221,11 @@ export default function Lampiran_3C({ data }) {
                 <span
                   className={`transition-transform duration-500 ease-in-out ${
                     showKelompok1TidakBerwujud ? "rotate-180" : "rotate-0"
-                   }`}
-                  >
-                    <FaChevronDown />
-                  </span>
-                </div>
+                  }`}
+                >
+                  <FaChevronDown />
+                </span>
+              </div>
               <div
                 className={`overflow-hidden transition-all duration-500 ease-in-out ${
                   showKelompok1TidakBerwujud ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
@@ -234,10 +234,10 @@ export default function Lampiran_3C({ data }) {
                 <div className="border rounded-md p-4">
                   <Kelompok1IndexTidakBerwujud />
                 </div>
-                </div>
+              </div>
             </div>
           </div>
-          </div>
+        </div>
       </div>
 
       <div className="border rounded-md p-4 space-y-4">

@@ -1,10 +1,8 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import { Plus, Edit, Trash2 } from "lucide-react";
 import { formatRupiah } from "@utils/formatCurrency";
-import GlobalModal from "@lampiran/shared/GlobalModal";
-
+import GlobalModal from "@shared/GlobalModal";
 export default function PenguranganNeto({ config, totalKompensasi2025, onTotalChange }) {
-
   const {
     baseFields = ["kode", "jenis", "nilaiPengurang"],
     customChildren = [],

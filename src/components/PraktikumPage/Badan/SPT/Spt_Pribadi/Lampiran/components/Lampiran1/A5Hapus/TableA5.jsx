@@ -1,18 +1,24 @@
 import React from "react";
 import { FaTrash, FaEdit } from "react-icons/fa";
-import { formatRupiah } from "../../../utils/formatCurrency";
+import { formatNumber, parseFormattedNumber, formatRupiah } from "@utils/formatCurrency";
 
 const TableA5 = ({ data, onEdit, onDelete }) => {
-
-    const getKepemilikanText = (value) => {
-    switch(value) {
-      case "1": return "Warisan";
-      case "2": return "Hasil Sendiri";
-      case "3": return "Utang";
-      case "4": return "Hibah";
-      case "5": return "Hadiah";
-      case "6": return "Sumber Lainnya";
-      default: return "-";
+  const getKepemilikanText = (value) => {
+    switch (value) {
+      case "1":
+        return "Warisan";
+      case "2":
+        return "Hasil Sendiri";
+      case "3":
+        return "Utang";
+      case "4":
+        return "Hibah";
+      case "5":
+        return "Hadiah";
+      case "6":
+        return "Sumber Lainnya";
+      default:
+        return "-";
     }
   };
 
@@ -25,9 +31,7 @@ const TableA5 = ({ data, onEdit, onDelete }) => {
             <th className="p-2 border-b min-w-[200px]">Kode</th>
             <th className="p-2 border-b min-w-[200px]">Deskripsi</th>
             <th className="p-2 border-b min-w-[200px]">Lokasi Harta</th>
-            <th className="p-2 border-b min-w-[200px]">
-              Ukuran Properti - Tanah (m2)
-            </th>
+            <th className="p-2 border-b min-w-[200px]">Ukuran Properti - Tanah (m2)</th>
             <th className="p-2 border-b min-w-[150px]">Ukuran Properti - Bangunan (m2)</th>
             <th className="p-2 border-b min-w-[150px]"> Sumber Kepemilikan</th>
             <th className="p-2 border-b min-w-[150px]">Nomor Sertifikat</th>
@@ -47,15 +51,10 @@ const TableA5 = ({ data, onEdit, onDelete }) => {
             </tr>
           ) : (
             data.map((item, index) => (
-              <tr
-                key={item.id}
-                className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}
-              >
+              <tr key={item.id} className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}>
                 <td className="p-2 border-b text-center">{index + 1}</td>
                 <td className="p-2 border-b">{item.kode || "-"}</td>
-                <td className="p-2 border-b">
-                  {item.deskripsi.replace(/^\d{4}:\s*/, "") || "-"}
-                </td>
+                <td className="p-2 border-b">{item.deskripsi.replace(/^\d{4}:\s*/, "") || "-"}</td>
                 {/* <td className="p-2 border-b">{item.deskripsi  || "-"}</td> */}
                 <td className="p-2 border-b">{item.lokasiHarta || "-"}</td>
                 <td className="p-2 border-b">{item.ukuranTanah || "-"}</td>
@@ -63,12 +62,8 @@ const TableA5 = ({ data, onEdit, onDelete }) => {
                 <td className="p-2 border-b">{getKepemilikanText(item.sumberKepemilikan)}</td>
                 <td className="p-2 border-b">{item.nomorSertifikat || "-"}</td>
                 <td className="p-2 border-b">{item.tahunPerolehan}</td>
-                <td className="p-2 border-b">
-                  {formatRupiah(item.biayaPerolehan)}
-                </td>
-                <td className="p-2 border-b">
-                  {formatRupiah(item.nilaiSaatIni)}
-                </td>
+                <td className="p-2 border-b">{formatRupiah(item.biayaPerolehan)}</td>
+                <td className="p-2 border-b">{formatRupiah(item.nilaiSaatIni)}</td>
                 <td className="p-2 border-b">{item.keterangan || "-"}</td>
 
                 <td className="p-2 border-b">

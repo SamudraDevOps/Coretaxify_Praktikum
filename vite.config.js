@@ -8,27 +8,27 @@ export default defineConfig({
     alias: {
       "@": path.resolve(__dirname, "./src"),
       "@components": path.resolve(__dirname, "./src/components"),
+
+      "@shared": path.resolve(__dirname, "./src/components/PraktikumPage/Badan/SPT/shared"),
+
+      "@utils": path.resolve(__dirname, "./src/components/PraktikumPage/Badan/SPT/utils"),
+
       "@sections": path.resolve(
         __dirname,
         "./src/components/PraktikumPage/Badan/SPT/Spt_Pribadi/Lampiran/sections"
       ),
+
       "@lampiran": path.resolve(
         __dirname,
         "./src/components/PraktikumPage/Badan/SPT/Spt_Pribadi/Lampiran/components"
       ),
-      "@utils": path.resolve(
-        __dirname,
-        "./src/components/PraktikumPage/Badan/SPT/Spt_Pribadi/Lampiran/utils"
-      ),
     },
   },
+
   server: {
-    allowedHosts: [
-      ".ngrok-free.app", // mengizinkan semua subdomain dari ngrok-free.app
-      ".loca.lt",
-    ],
+    allowedHosts: [".ngrok-free.app", ".loca.lt"],
   },
   build: {
-    sourcemap: false, // Enable source maps for production
+    sourcemap: false,
   },
 });

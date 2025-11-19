@@ -1,17 +1,12 @@
 import React from "react";
 import { FaTrash, FaEdit } from "react-icons/fa";
-import { formatRupiah } from "../../../utils/formatCurrency";
+import { formatNumber, parseFormattedNumber, formatRupiah } from "@utils/formatCurrency";
 
 const TableA1 = ({ data, onEdit, onDelete }) => {
-
   // Function untuk menghitung total saldo
   const calculateTotalSaldo = () => {
-    return data.reduce(
-      (total, item) => total + (item.saldo || 0),
-      0
-    );
+    return data.reduce((total, item) => total + (item.saldo || 0), 0);
   };
-
 
   return (
     <div className="w-full overflow-x-auto bg-white shadow-md rounded-lg">
@@ -21,9 +16,7 @@ const TableA1 = ({ data, onEdit, onDelete }) => {
             <th className="p-2 border-b">No</th>
             <th className="p-2 border-b min-w-[200px]">Kode</th>
             <th className="p-2 border-b min-w-[150px]">Deskripsi</th>
-            <th className="p-2 border-b min-w-[150px]">
-              Bukti Kepemilikan/Nomor Akun
-            </th>
+            <th className="p-2 border-b min-w-[150px]">Bukti Kepemilikan/Nomor Akun</th>
             <th className="p-2 border-b min-w-[150px]">Atas Nama</th>
             <th className="p-2 border-b min-w-[150px]">Nama Bank/Institusi</th>
             <th className="p-2 border-b min-w-[150px]">Lokasi Harta</th>
@@ -42,10 +35,7 @@ const TableA1 = ({ data, onEdit, onDelete }) => {
             </tr>
           ) : (
             data.map((item, index) => (
-              <tr
-                key={item.id}
-                className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}
-              >
+              <tr key={item.id} className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}>
                 <td className="p-2 border-b text-center">{index + 1}</td>
                 <td className="p-2 border-b">{item.kode || "-"}</td>
                 <td className="p-2 border-b">
@@ -92,17 +82,17 @@ const TableA1 = ({ data, onEdit, onDelete }) => {
           )}
         </tbody>
 
-           {/* Footer dengan total saldo */}
+        {/* Footer dengan total saldo */}
         {data.length > 0 && (
           <tfoot className="text-gray-800 font-semibold bg-gray-100">
             <tr>
-              <td className="p-2 text-right" colSpan={8}> 
+              <td className="p-2 text-right" colSpan={8}>
                 Total Saldo:
               </td>
-              <td className="p-2 text-center bg-green-100"> 
+              <td className="p-2 text-center bg-green-100">
                 {formatRupiah(calculateTotalSaldo())}
               </td>
-              <td className="p-2" colSpan={2}></td> 
+              <td className="p-2" colSpan={2}></td>
             </tr>
             <tr>
               {/* <td className="p-2 text-right" colSpan={10}> 

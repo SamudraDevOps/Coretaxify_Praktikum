@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { formatNumber, parseFormattedNumber } from "../../utils/formatCurrency";
-import { defaultYearPickerProps } from "../../utils/datePickerUtils";
+import { formatNumber, parseFormattedNumber } from "@utils/formatCurrency";
+import { defaultYearPickerProps } from "@utils/datePickerUtils";
 import Select from "react-select";
 
 function cn(...cls) {

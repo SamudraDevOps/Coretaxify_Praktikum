@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { Plus, Edit, Trash2 } from "lucide-react";
-import { formatRupiah } from "../../../../utils/formatCurrency";
-import GlobalModal from "../../../../components/shared/GlobalModal";
-
+import { formatNumber, parseFormattedNumber, formatRupiah } from "@utils/formatCurrency";
+import GlobalModal from "@shared/GlobalModal";
 export default function Kelompok1({ config }) {
   const {
     baseFields = [

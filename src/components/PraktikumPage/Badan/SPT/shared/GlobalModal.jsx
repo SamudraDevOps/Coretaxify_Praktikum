@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { X } from "lucide-react";
-import { formatNumber, parseFormattedNumber } from "../../utils/formatCurrency";
-import { defaultYearPickerProps, yearToDate, dateToYear } from "../../utils/datePickerUtils";
+import { formatNumber, parseFormattedNumber } from "@utils/formatCurrency";
+import { defaultYearPickerProps, yearToDate, dateToYear } from "@utils/datePickerUtils";
 import DatePicker from "react-datepicker";
 import Select from "react-select";
 function cn(...cls) {

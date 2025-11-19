@@ -169,7 +169,7 @@ const PertanyaanC = ({ onAnswerChange, answersState }) => {
               <div className="col-span-12 md:col-span-2">
                 <select
                   className="w-full p-2 border rounded-md text-sm"
-                  value={r5}
+                  value={r5 || ""}
                   onChange={(e) => setR5(e.target.value)}
                 >
                   <option value="">Please select</option>

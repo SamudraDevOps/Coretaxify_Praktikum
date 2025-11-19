@@ -39,7 +39,7 @@ const PertanyaanG = () => {
                   </label>
                   <select
                     className="w-full p-2 border rounded-md text-sm bg-white"
-                    value={pilihan}
+                    value={pilihan || ""}
                     onChange={(e) => setPilihan(e.target.value)}
                   >
                     <option value="">Silakan Pilih</option>

@@ -1,6 +1,6 @@
 import React from "react";
 import { FaTrash, FaEdit } from "react-icons/fa";
-import { formatRupiah } from "../../../utils/formatCurrency";
+import { formatNumber, parseFormattedNumber, formatRupiah } from "@utils/formatCurrency";
 
 const TableUtang = ({ data, onEdit, onDelete }) => {
   return (
@@ -54,15 +54,10 @@ const TableUtang = ({ data, onEdit, onDelete }) => {
             </tr>
           ) : (
             data.map((item, index) => (
-              <tr
-                key={item.id}
-                className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}
-              >
+              <tr key={item.id} className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}>
                 <td className="p-2 border-b text-center">{index + 1}</td>
                 <td className="p-2 border-b">{item.kode || "-"}</td>
-                <td className="p-2 border-b">
-                  {item.deskripsi?.replace(/^\d{4}:\s*/, "") || "-"}
-                </td>
+                <td className="p-2 border-b">{item.deskripsi?.replace(/^\d{4}:\s*/, "") || "-"}</td>
 
                 {/* NPWP dan Nama di bawah grup Pemberi Pinjaman */}
                 <td className="p-2 border-b">{item.npwpKreditur || "-"}</td>
@@ -74,9 +69,7 @@ const TableUtang = ({ data, onEdit, onDelete }) => {
                 <td className="p-2 border-b">
                   {item.tahunPerolehan || item.tahunPeminjaman || "-"}
                 </td>
-                <td className="p-2 border-b">
-                  {formatRupiah(item.saldo) || "-"}
-                </td>
+                <td className="p-2 border-b">{formatRupiah(item.saldo) || "-"}</td>
                 <td className="p-2 border-b">{item.keterangan || "-"}</td>
 
                 <td className="p-2 border-b">

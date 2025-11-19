@@ -258,7 +258,7 @@ const PertanyaanB = ({ onAnswerChange, answersState }) => {
               <div className="col-span-12 md:col-span-2">
                 <select
                   className="w-full p-2 border rounded-md text-sm truncate"
-                  value={r1b2}
+                  value={r1b2 || ""}
                   onChange={(e) => handleR1b2Change(e.target.value)}
                 >
                   <option value="">Please select</option>
@@ -294,7 +294,7 @@ const PertanyaanB = ({ onAnswerChange, answersState }) => {
               <div className="col-span-12 md:col-span-2">
                 <select
                   className="w-full p-2 border rounded-md text-sm"
-                  value={r1b3}
+                  value={r1b3 || ""}
                   onChange={(e) => handleR1B3Change(e.target.value)}
                 >
                   <option value="">Please select</option>
@@ -325,7 +325,7 @@ const PertanyaanB = ({ onAnswerChange, answersState }) => {
               <div className="col-span-12 md:col-span-2">
                 <select
                   className="w-full p-2 border rounded-md text-sm"
-                  value={r1b4}
+                  value={r1b4 || ""}
                   onChange={(e) => handleR1b4Change(e.target.value)}
                 >
                   <option value="">Please select</option>

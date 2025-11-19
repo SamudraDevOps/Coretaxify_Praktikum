@@ -1,20 +1,14 @@
 import React from "react";
 import { FaTrash, FaEdit } from "react-icons/fa";
-import { formatRupiah } from "../../../utils/formatCurrency";
+import { formatNumber, parseFormattedNumber, formatRupiah } from "@utils/formatCurrency";
 
 const TableA2 = ({ data, onEdit, onDelete }) => {
   const calculateTotalPenghasilanBruto = () => {
-    return data.reduce(
-      (total, item) => total + (item.penghasilanBruto || 0),
-      0
-    );
+    return data.reduce((total, item) => total + (item.penghasilanBruto || 0), 0);
   };
 
   const calculateTotalPajakPenghasilan = () => {
-    return data.reduce(
-      (total, item) => total + (item.pajakPenghasilan || 0),
-      0
-    );
+    return data.reduce((total, item) => total + (item.pajakPenghasilan || 0), 0);
   };
 
   return (
@@ -27,9 +21,7 @@ const TableA2 = ({ data, onEdit, onDelete }) => {
             <th className="p-2 border-b min-w-[200px]">Deskripsi</th>
             <th className="p-2 border-b min-w-[200px]">Lokasi Penerima</th>
             <th className="p-2 border-b min-w-[150px]">Nomor Identitas</th>
-            <th className="p-2 border-b min-w-[200px]">
-              Nama Penerima Pinjaman
-            </th>
+            <th className="p-2 border-b min-w-[200px]">Nama Penerima Pinjaman</th>
             <th className="p-2 border-b min-w-[150px]">Nilai Piutang</th>
             <th className="p-2 border-b min-w-[150px]">Tahun Dimulai</th>
             <th className="p-2 border-b min-w-[150px]">Saldo Piutang</th>
@@ -47,28 +39,19 @@ const TableA2 = ({ data, onEdit, onDelete }) => {
             </tr>
           ) : (
             data.map((item, index) => (
-              <tr
-                key={item.id}
-                className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}
-              >
+              <tr key={item.id} className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}>
                 <td className="p-2 border-b text-center">{index + 1}</td>
                 <td className="p-2 border-b">{item.kode || "-"}</td>
-                <td className="p-2 border-b">
-                  {item.deskripsi.replace(/^\d{4}:\s*/, "") || "-"}
-                </td>
+                <td className="p-2 border-b">{item.deskripsi.replace(/^\d{4}:\s*/, "") || "-"}</td>
                 {/* <td className="p-2 border-b">{item.deskripsi  || "-"}</td> */}
                 <td className="p-2 border-b">{item.lokasipenerima || "-"}</td>
                 <td className="p-2 border-b">{item.nomoridentitas || "-"}</td>
                 <td className="p-2 border-b">{item.penerimaPinjaman || "-"}</td>
-                <td className="p-2 border-b">
-                  {formatRupiah(item.nilaiPiutang)}
-                </td>
+                <td className="p-2 border-b">{formatRupiah(item.nilaiPiutang)}</td>
                 <td className="p-2 border-b">{item.tahunDimulai || "-"}</td>
-                <td className="p-2 border-b">
-                  {formatRupiah(item.SaldoPiutang)}
-                </td>
+                <td className="p-2 border-b">{formatRupiah(item.SaldoPiutang)}</td>
                 <td className="p-2 border-b">{item.keterangan || "-"}</td>
-              
+
                 <td className="p-2 border-b">
                   <div className="flex gap-1 justify-center">
                     <button

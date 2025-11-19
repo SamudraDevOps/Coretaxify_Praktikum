@@ -2,10 +2,15 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
+      "@/*": ["src/*"],
+      "@components/*": ["src/components/*"],
+
+      "@shared/*": ["src/components/PraktikumPage/Badan/SPT/shared/*"],
+
       "@sections/*": ["src/components/PraktikumPage/Badan/SPT/Spt_Pribadi/Lampiran/sections/*"],
       "@lampiran/*": ["src/components/PraktikumPage/Badan/SPT/Spt_Pribadi/Lampiran/components/*"],
-      "@utils/*": ["src/components/PraktikumPage/Badan/SPT/Spt_Pribadi/Lampiran/utils/*"]
+      "@utils/*": ["src/components/PraktikumPage/Badan/SPT/utils/*"]
     }
-  }
+  },
+  "exclude": ["node_modules", "dist"]
 }
