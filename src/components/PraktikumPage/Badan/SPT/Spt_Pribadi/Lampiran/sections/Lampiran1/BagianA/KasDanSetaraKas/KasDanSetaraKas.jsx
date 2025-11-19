@@ -10,7 +10,7 @@ export default function DaftarKasDanSetaraKas({ config }) {
       "buktikepemilikan",
       "atasnama",
       "namabank",
-      "negara",
+      "lokasiHarta",
       "tahunPerolehan",
       "saldo",
       "keterangan",
@@ -22,7 +22,7 @@ export default function DaftarKasDanSetaraKas({ config }) {
       buktikepemilikan: "",
       atasnama: "",
       namabank: "",
-      negara: "",
+      lokasiHarta: "",
       tahunPerolehan: "",
       saldo: 0,
       keterangan: "",
@@ -127,7 +127,7 @@ export default function DaftarKasDanSetaraKas({ config }) {
                   <td className="p-2 border-b">{item.buktikepemilikan || "-"}</td>
                   <td className="p-2 border-b">{item.atasnama || "-"}</td>
                   <td className="p-2 border-b">{item.namabank || "-"}</td>
-                  <td className="p-2 border-b">{item.negara || "-"}</td>
+                  <td className="p-2 border-b">{item.lokasiHarta || "-"}</td>
                   <td className="p-2 border-b">{item.tahunPerolehan || "-"}</td>
                   <td className="p-2 border-b">{formatRupiah(item.saldo)}</td>
                   <td className="p-2 border-b">{item.keterangan || "-"}</td>
