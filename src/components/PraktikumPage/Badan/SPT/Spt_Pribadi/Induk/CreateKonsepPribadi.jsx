@@ -223,7 +223,7 @@ const CreateKonsepPribadi = () => {
       });
     }
 
-    // Lampiran 3A1 - 
+    // Lampiran 3A1 -
     if (answersState.r1b4 === "Dagang") {
       allLampiran.push({
         id: "lampiran-3A1",
@@ -266,7 +266,7 @@ const CreateKonsepPribadi = () => {
         subtitle: "Lampiran 3B - Daftar Tempat Kegiatan Usaha (TKU)",
         component: "Lampiran_3B",
         badge: answersState.r1b2 === "ya_final" ? "Wajib Diisi" : "Wajib Diisi",
-        order: 4,
+        order: 6,
       });
     }
 
@@ -278,7 +278,7 @@ const CreateKonsepPribadi = () => {
         subtitle: "Lampiran 3C - Daftar Harta Berwujud",
         component: "Lampiran_3C",
         badge: "Tersedia",
-        order: 5,
+        order: 7,
       });
     }
 
@@ -290,7 +290,7 @@ const CreateKonsepPribadi = () => {
         subtitle: "Lampiran 3D - Daftar Harta Tidak Berwujud",
         component: "Lampiran_3D",
         badge: "Tersedia",
-        order: 6,
+        order: 8,
       });
     }
 
@@ -302,7 +302,7 @@ const CreateKonsepPribadi = () => {
         subtitle: "Lampiran 4 - Perhitungan Angsuran PPh Pasal 25 Tahun Berikutnya",
         component: "Lampiran_4",
         badge: "Tersedia",
-        order: 7,
+        order: 9,
       });
     }
 
@@ -315,20 +315,20 @@ const CreateKonsepPribadi = () => {
         subtitle: "Lampiran 5 - Perhitungan Angsuran PPh Pasal 25 Tahun Berikutnya",
         component: "Lampiran_5",
         badge: "wajib Diisi",
-        order: 7,
+        order: 10,
       });
     }
 
     // Lampiran 3A-4 - Penghasilan dari Usaha (1.b.1 = Ya)
-    if (answersState.hasPenghasilanUsaha === true) {
-      allLampiran.push({
-        id: "lampiran-3a4",
-        title: "L-3A4",
-        subtitle: "Lampiran 3A-4 - Penghasilan dari Usaha",
-        component: "Lampiran_3A4",
-        badge: "Wajib Diisi",
-      });
-    }
+    // if (answersState.hasPenghasilanUsaha === true) {
+    //   allLampiran.push({
+    //     id: "lampiran-3a4",
+    //     title: "L-3A4",
+    //     subtitle: "Lampiran 3A-4 - Penghasilan dari Usaha",
+    //     component: "Lampiran_3A4",
+    //     badge: "Wajib Diisi",
+    //   });
+    // }
 
     // CUSTOM SORTING berdasarkan property 'order'
     const sortedLampiran = allLampiran.sort((a, b) => {
