@@ -1,5 +1,5 @@
 import React from "react";
-import GlobalModal from "@shared/GlobalModal";
+import GlobalFormField from "@shared/GlobalFormField";
 const laporanKeuanganFields = [
   {
     key: "jenis_laporan",
