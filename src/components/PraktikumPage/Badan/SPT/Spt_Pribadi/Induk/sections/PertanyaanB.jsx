@@ -331,21 +331,24 @@ const PertanyaanB = ({ onAnswerChange, answersState }) => {
                   <option value="">Please select</option>
                   <option value="Dagang">Dagang</option>
                   <option value="Jasa">Jasa</option>
-                  <option value="Manufaktur">Manufaktur</option>
                   <option value="Umum">Umum</option>
+                  <option value="Manufaktur">Manufaktur</option>
                   <option value="Lainnya">Lainnya</option>
                 </select>
               </div>
               <div className="col-span-12 md:col-span-3 text-sm">
                 <div className="bg-blue-100 rounded px-3 py-2">
                   {r1b4 === "Dagang" &&
-                    "Anda memilih sektor usaha Dagang. Silakan isi Lampiran 3A-4 Bagian A."}
+                    "Anda memilih sektor usaha Dagang. Silakan isi Lampiran 3A-1 Bagian A."}
                   {r1b4 === "Jasa" &&
-                    "Anda memilih sektor usaha Jasa. Silakan isi Lampiran 3A-4 Bagian A."}
+                    "Anda memilih sektor usaha Jasa. Silakan isi Lampiran 3A-2 Bagian A."}
+                  {r1b4 === "Umum" &&
+                    "Anda memilih sektor usaha Umum. Silakan isi Lampiran 3A-4 Bagian A."}
                   {r1b4 === "Manufaktur" &&
-                    "Anda memilih sektor usaha Manufaktur. Silakan isi Lampiran 3A-4 Bagian A."}
+                    "Anda memilih sektor usaha Manufaktur. Silakan isi Lampiran 3A-3 Bagian A."}
+
                   {r1b4 === "Lainnya" &&
-                    "Anda memilih sektor usaha Lainnya. Silakan isi Lampiran 3A-4 Bagian A."}
+                    "Anda memilih sektor usaha Lainnya. Silakan isi Lampiran 3A-1 Bagian A."}
                   {r1b4 === "" && "Pilih salah satu opsi"}
                 </div>
               </div>
