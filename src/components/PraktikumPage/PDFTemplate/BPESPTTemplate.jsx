@@ -1,5 +1,7 @@
 import React from "react";
-import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
+import { Document, Page, Text, View, StyleSheet, Image } from "@react-pdf/renderer";
+
+import kopImage from "../../../assets/images/KOP/BPE.png";
 
 const styles = StyleSheet.create({
   page: {
@@ -56,25 +58,31 @@ const BpeSptPdf = ({ data }) => (
   <Document>
     <Page size="A4" style={styles.page}>
       {/* Header */}
-      <Text style={styles.header}>SAMUDERA EDUKASI </Text>
+      {/* <Text style={styles.header}>SAMUDERA EDUKASI </Text>
       <Text style={styles.subHeader}>TEKNOLOGI</Text>
       <Text style={styles.subHeader}>KANTOR PIRANHA</Text>
       <Text style={styles.subHeader}>
         JALAN PIRANHA
-      </Text>
-      <Text style={styles.contactInfo}>
+      </Text> */}
+      <View style={{ width: "100%", textAlign: "center" }}>
+        <Image
+          style={{ width: "100%", height: "auto", marginBottom: 5 }}
+          src={kopImage}
+        />
+      </View>
+      {/* <Text style={styles.contactInfo}>
         JALAN MERDEKA UTARA NO. 3, MALANG, 65119 • TELP (0341) 361121, 361971,
         365167 • FAX (0341) 364407 • www.pajak.go.id
-      </Text>
-      <Text style={styles.contactInfo}>
-        {/* LAYANAN INFORMASI DAN PENGADUAN: KRING PAJAK (021)1500200 • SUREL:
-        pengaduan@pajak.go.id, informasi@pajak.go.id */}
-      </Text>
+      </Text> */}
+      {/* <Text style={styles.contactInfo}>
+        LAYANAN INFORMASI DAN PENGADUAN: KRING PAJAK (021)1500200 • SUREL:
+        pengaduan@pajak.go.id, informasi@pajak.go.id
+      </Text> */}
 
       {/* Title */}
-      <Text style={{ ...styles.header, marginTop: 10 }}>
+      {/* <Text style={{ ...styles.header, marginTop: 10 }}>
         BUKTI PENERIMAAN ELEKTRONIK
-      </Text>
+      </Text> */}
 
       {/* Nomor & Tanggal */}
       <View style={styles.section}>
