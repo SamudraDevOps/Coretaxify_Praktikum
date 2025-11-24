@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Plus, Edit, Trash2 } from "lucide-react";
 import { formatNumber, parseFormattedNumber, formatRupiah } from "@utils/formatCurrency";
 import GlobalModal from "@shared/GlobalModal";
+import GlobalTable from "@shared/GlobalTable";
 
 const PenghasilanKenaPajak = ({ config }) => {
   const {
@@ -63,79 +64,97 @@ const PenghasilanKenaPajak = ({ config }) => {
     }
   };
 
+  const columns = [
+    {
+      key: "no",
+      title: "NO",
+      width: 60,
+      align: "center",
+      render: (_r, i) => i + 1,
+    },
+    {
+      key: "namaPemotong",
+      title: "NAMA PEMOTONG",
+      width: 200,
+      render: (r) => r.namaPemotong,
+    },
+    {
+      key: "npwp",
+      title: "NPWP",
+      width: 150,
+      render: (r) => r.npwp,
+    },
+    {
+      key: "kode",
+      title: "KODE",
+      width: 100,
+      render: (r) => r.kode,
+    },
+    {
+      key: "Jenis Penhasilan",
+      title: "JENIS PENHASILAN",
+      width: 200,
+      render: (r) => r.jenis,
+    },
+    {
+      key: "dasarpengenaanpajak",
+      title: "DASAR PENGENAAN PAJAK",
+      width: 150,
+      render: (r) => formatRupiah(r.dasarPengenaanPajak),
+    },
+    {
+      key: "pphdipotong",
+      title: "PPH YANG DIPOTONG",
+      width: 150,
+      render: (r) => formatRupiah(r.pphdipotong),
+    },
+    {
+      key: "_aksi",
+      title: "AKSI",
+      width: 100,
+      align: "center",
+      render: (row) => (
+        <div className="flex items-center justify-center gap-2">
+          <button
+            className="p-1 text-blue-600 hover:bg-blue-50 rounded"
+            onClick={() => openEditModal(row)}
+          >
+            <Edit size={16} />
+          </button>
+          <button
+            className="p-1 text-red-600 hover:bg-red-50 rounded"
+            onClick={() => deleteData(row.id)}
+          >
+            <Trash2 size={16} />
+          </button>
+        </div>
+      ),
+    },
+  ];
+
   return (
     <div className="space-y-4">
-      {/* Header */}
+      {/* HEADER */}
       <div className="flex items-center justify-between">
         <button
           onClick={openAddModal}
-          className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
         >
-          <Plus size={16} />
-          Tambah Data
+          <Plus size={16} /> Tambah Data
         </button>
       </div>
 
-      {/* Table */}
-      <div className="w-full overflow-x-auto bg-white shadow-md rounded-lg">
-        <table className="table-auto text-sm text-left border overflow-hidden">
-          <thead className="bg-purple-700 text-white text-center">
-            <tr>
-              <th className="p-2 border-b">No</th>
-              <th className="p-2 border-b min-w-[200px]">Nama Pemotong</th>
-              <th className="p-2 border-b min-w-[200px]">NPWP</th>
-              <th className="p-2 border-b min-w-[150px]">Kode</th>
-              <th className="p-2 border-b min-w-[150px]">Jenis Penhasilan</th>
-              <th className="p-2 border-b min-w-[150px]">Dasar Pengenaan Pajak</th>
-              <th className="p-2 border-b min-w-[150px]">PPh Yang Dipotong</th>
-              <th className="p-2 border-b uppercase">Aksi</th>
-            </tr>
-          </thead>
-          <tbody className="text-gray-600 text-center">
-            {dataPenghasilan.length === 0 ? (
-              <tr>
-                <td colSpan="8" className="px-4 py-8 text-center text-gray-500">
-                  Belum ada data. Klik "Tambah Data" untuk menambah data baru.
-                </td>
-              </tr>
-            ) : (
-              dataPenghasilan.map((item, index) => (
-                <tr key={item.id} className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}>
-                  <td className="p-2 border-b text-center">{index + 1}</td>
-                  <td className="p-2 border-b">{item.namaPemotong}</td>
-                  <td className="p-2 border-b">{item.npwp}</td>
-                  <td className="p-2 border-b">{item.kode}</td>
-                  <td className="p-2 border-b max-w-xs truncate">
-                    {customChildren
-                      ?.find((f) => f.key === "jenis")
-                      ?.options?.find((opt) => opt.value === item.jenis)?.label || item.jenis}
-                  </td>
-                  <td className="p-2 border-b">{formatRupiah(item.dasarPengenaanPajak) || "-"}</td>
-                  <td className="p-2 border-b">{formatRupiah(item.pphdipotong) || "-"}</td>
-                  <td className="px-4 py-3 text-sm">
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() => openEditModal(item)}
-                        className="p-1 text-blue-600 hover:bg-blue-50 rounded"
-                      >
-                        <Edit size={16} />
-                      </button>
-                      <button
-                        onClick={() => deleteData(item.id)}
-                        className="p-1 text-red-600 hover:bg-red-50 rounded"
-                      >
-                        <Trash2 size={16} />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
+      <GlobalTable
+        columns={columns}
+        data={dataPenghasilan}
+        page={1}
+        pageSize={9999} // Tidak pakai pagination
+        total={dataPenghasilan.length}
+        onPageChange={() => {}}
+        stickyHeader
+      />
 
-      {/*  MODAL dengan Safe Config */}
+      {/* MODAL */}
       <GlobalModal
         isOpen={showModal}
         onClose={closeModal}

@@ -29,14 +29,44 @@ export default function GlobalTable({
     return columns ?? [];
   }, [columns, columnGroups]);
 
-  const pageStart = total === 0 ? 0 : (page - 1) * pageSize + 1;
-  const pageEnd = Math.min(page * pageSize, total);
-  const pageCount = Math.max(1, Math.ceil(total / pageSize));
+  //  BARU: cek apakah pagination aktif / lengkap props-nya
+  const hasPagination =
+    typeof onPageChange === "function" &&
+    typeof page === "number" &&
+    typeof pageSize === "number" &&
+    typeof total === "number";
 
-  const goFirst = () => onPageChange(1);
-  const goPrev = () => onPageChange(Math.max(1, page - 1));
-  const goNext = () => onPageChange(Math.min(pageCount, page + 1));
-  const goLast = () => onPageChange(pageCount);
+  //  DIUBAH: pageStart, pageEnd, pageCount sekarang hanya dihitung kalau hasPagination = true
+  let pageStart = 0;
+  let pageEnd = 0;
+  let pageCount = 1;
+
+  if (hasPagination) {
+    pageStart = total === 0 ? 0 : (page - 1) * pageSize + 1;
+    pageEnd = Math.min(page * pageSize, total);
+    pageCount = Math.max(1, Math.ceil(total / pageSize));
+  }
+
+  //  DIUBAH: fungsi navigasi aman kalau pagination tidak dipakai
+  const goFirst = () => {
+    if (!hasPagination) return;
+    onPageChange(1);
+  };
+
+  const goPrev = () => {
+    if (!hasPagination) return;
+    onPageChange(Math.max(1, page - 1));
+  };
+
+  const goNext = () => {
+    if (!hasPagination) return;
+    onPageChange(Math.min(pageCount, page + 1));
+  };
+
+  const goLast = () => {
+    if (!hasPagination) return;
+    onPageChange(pageCount);
+  };
 
   return (
     <div className="w-full overflow-x-auto rounded-md border border-slate-200 bg-white">
@@ -101,12 +131,13 @@ export default function GlobalTable({
                 className={cn(bodyCellBase, "text-center text-slate-500")}
                 colSpan={leafColumns.length}
               >
-                Tidak ada data.
+                Belum ada data. Klik "Tambah Data" untuk menambah data baru.
               </td>
             </tr>
           ) : (
             data.map((row, idx) => {
-              const rKey = (rowKey ? rowKey(row, idx) : undefined) ?? `${page}-${idx}`;
+              const defaultKey = hasPagination ? `${page}-${idx}` : `${idx}`;
+              const rKey = (rowKey ? rowKey(row, idx) : undefined) ?? defaultKey;
               return (
                 <tr key={rKey} className="even:bg-slate-50/50">
                   {leafColumns.map((c, ci) => {
@@ -143,49 +174,51 @@ export default function GlobalTable({
       </table>
 
       {/* Pagination */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-3 py-3">
-        <div className="text-[12px] text-slate-600">
-          Showing {pageStart} to {pageEnd} of {total} entries
-        </div>
-
-        <div className="flex items-center gap-1">
-          <button
-            onClick={goFirst}
-            className="inline-flex items-center gap-1 rounded-md border px-2 py-1 text-[12px] hover:bg-slate-50 disabled:opacity-40"
-            disabled={page <= 1}
-            aria-label="First"
-          >
-            <ChevronsLeft size={16} />
-          </button>
-          <button
-            onClick={goPrev}
-            className="inline-flex items-center gap-1 rounded-md border px-2 py-1 text-[12px] hover:bg-slate-50 disabled:opacity-40"
-            disabled={page <= 1}
-            aria-label="Prev"
-          >
-            <ChevronLeft size={16} />
-          </button>
-          <div className="min-w-[28px] text-center text-[12px] font-medium rounded-md border px-2 py-1 bg-white">
-            {page}
+      {hasPagination && (
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-3 py-3">
+          <div className="text-[12px] text-slate-600">
+            {total === 0 ? "No entries" : `Showing ${pageStart} to ${pageEnd} of ${total} entries`}
           </div>
-          <button
-            onClick={goNext}
-            className="inline-flex items-center gap-1 rounded-md border px-2 py-1 text-[12px] hover:bg-slate-50 disabled:opacity-40"
-            disabled={page >= pageCount}
-            aria-label="Next"
-          >
-            <ChevronRight size={16} />
-          </button>
-          <button
-            onClick={goLast}
-            className="inline-flex items-center gap-1 rounded-md border px-2 py-1 text-[12px] hover:bg-slate-50 disabled:opacity-40"
-            disabled={page >= pageCount}
-            aria-label="Last"
-          >
-            <ChevronsRight size={16} />
-          </button>
+
+          <div className="flex items-center gap-1">
+            <button
+              onClick={goFirst}
+              className="inline-flex items-center gap-1 rounded-md border px-2 py-1 text-[12px] hover:bg-slate-50 disabled:opacity-40"
+              disabled={page <= 1}
+              aria-label="First"
+            >
+              <ChevronsLeft size={16} />
+            </button>
+            <button
+              onClick={goPrev}
+              className="inline-flex items-center gap-1 rounded-md border px-2 py-1 text-[12px] hover:bg-slate-50 disabled:opacity-40"
+              disabled={page <= 1}
+              aria-label="Prev"
+            >
+              <ChevronLeft size={16} />
+            </button>
+            <div className="min-w-[28px] text-center text-[12px] font-medium rounded-md border px-2 py-1 bg-white">
+              {page}
+            </div>
+            <button
+              onClick={goNext}
+              className="inline-flex items-center gap-1 rounded-md border px-2 py-1 text-[12px] hover:bg-slate-50 disabled:opacity-40"
+              disabled={page >= pageCount}
+              aria-label="Next"
+            >
+              <ChevronRight size={16} />
+            </button>
+            <button
+              onClick={goLast}
+              className="inline-flex items-center gap-1 rounded-md border px-2 py-1 text-[12px] hover:bg-slate-50 disabled:opacity-40"
+              disabled={page >= pageCount}
+              aria-label="Last"
+            >
+              <ChevronsRight size={16} />
+            </button>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

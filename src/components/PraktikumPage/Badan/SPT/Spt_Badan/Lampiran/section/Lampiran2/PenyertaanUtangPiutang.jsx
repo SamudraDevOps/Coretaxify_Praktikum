@@ -1,13 +1,7 @@
 import React from "react";
 import GlobalTable from "@shared/GlobalTable";
+import { formatNumber, parseFormattedNumber, formatRupiah } from "@utils/formatCurrency";
 import { Pencil, Trash2, Plus } from "lucide-react";
-
-const fmtRp = (v) =>
-  new Intl.NumberFormat("id-ID", {
-    style: "currency",
-    currency: "IDR",
-    maximumFractionDigits: 0,
-  }).format(v ?? 0);
 
 export default function PenyertaanUtangPiutang() {
   const [rows, setRows] = React.useState([]);
@@ -44,6 +38,7 @@ export default function PenyertaanUtangPiutang() {
               </button>
               <button
                 className="rounded border px-2 py-1 text-[12px] hover:bg-slate-50"
+                //  DIUBAH: delete harus menghitung index global
                 onClick={() =>
                   setRows((prev) => prev.filter((_, idx) => idx !== (page - 1) * pageSize + i))
                 }
@@ -78,7 +73,7 @@ export default function PenyertaanUtangPiutang() {
           title: "NILAI (Rp)",
           width: 140,
           align: "right",
-          render: (r) => fmtRp(r.nilaiModal),
+          render: (r) => formatRupiah(r.nilaiModal),
         },
         {
           key: "persenModal",
@@ -97,7 +92,7 @@ export default function PenyertaanUtangPiutang() {
           title: "NILAI (Rp)",
           width: 140,
           align: "right",
-          render: (r) => fmtRp(r.nilaiUtang),
+          render: (r) => formatRupiah(r.nilaiUtang),
         },
         { key: "tahunUtang", title: "TAHUN/BAGIAN TAHUN PAJAK", width: 200, align: "center" },
         {
@@ -105,7 +100,7 @@ export default function PenyertaanUtangPiutang() {
           title: "BUNGA UTANG/TAHUN",
           width: 180,
           align: "right",
-          render: (r) => fmtRp(r.bungaUtang),
+          render: (r) => formatRupiah(r.bungaUtang),
         },
       ],
     },
@@ -117,7 +112,7 @@ export default function PenyertaanUtangPiutang() {
           title: "NILAI (Rp)",
           width: 140,
           align: "right",
-          render: (r) => fmtRp(r.nilaiPiutang),
+          render: (r) => formatRupiah(r.nilaiPiutang),
         },
         { key: "tahunPiutang", title: "TAHUN/BAGIAN TAHUN PAJAK", width: 200, align: "center" },
         {
@@ -125,11 +120,60 @@ export default function PenyertaanUtangPiutang() {
           title: "BUNGA PIUTANG/TAHUN",
           width: 180,
           align: "right",
-          render: (r) => fmtRp(r.bungaPiutang),
+          render: (r) => formatRupiah(r.bungaPiutang),
         },
       ],
     },
   ];
+
+  //  BARU — FooterRow dipisah supaya rapi
+  const footerRow = (
+    <div className="flex">
+      <div className="flex-1">
+        <div
+          className="grid"
+          style={{
+            // 🔁 DIUBAH: dijadikan dalam variabel sendiri
+            gridTemplateColumns:
+              "52px 48px 180px 120px 160px 140px 80px 140px 200px 180px 140px 200px 180px",
+          }}
+        >
+          {/* JUMLAH (gabung 5 kolom pertama) */}
+          <div className="col-span-5 border border-slate-200 px-3 py-2 text-right text-[13px] font-semibold text-slate-700">
+            JUMLAH
+          </div>
+
+          {/* TOTAL PENYERTAAN */}
+          <div className="border border-slate-200 px-3 py-2 text-right text-[13px] font-semibold text-slate-700">
+            {formatRupiah(totalPenyertaan)}
+          </div>
+
+          {/* Kosong (% kolom) */}
+          <div className="border border-slate-200"></div>
+
+          {/* TOTAL UTANG */}
+          <div className="border border-slate-200 px-3 py-2 text-right text-[13px] font-semibold text-slate-700">
+            {formatRupiah(totalUtang)}
+          </div>
+
+          {/* Kosong Tahun Utang */}
+          <div className="border border-slate-200"></div>
+          {/* Kosong Bunga Utang */}
+          <div className="border border-slate-200"></div>
+
+          {/* TOTAL PIUTANG */}
+          <div className="border border-slate-200 px-3 py-2 text-right text-[13px] font-semibold text-slate-700">
+            {formatRupiah(totalPiutang)}
+          </div>
+
+          {/* Kosong Tahun Piutang */}
+          <div className="border border-slate-200"></div>
+          {/* Kosong Bunga Piutang */}
+          <div className="border border-slate-200"></div>
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <div className="space-y-3">
@@ -164,42 +208,14 @@ export default function PenyertaanUtangPiutang() {
       <GlobalTable
         columnGroups={columnGroups}
         data={pageData}
+        //  BARU — tambahkan rowKey untuk konsistensi
+        rowKey={(r, i) => r.id ?? `row-${i}`}
         page={page}
         pageSize={pageSize}
         total={total}
         onPageChange={setPage}
         stickyHeader
-        footerRow={
-          <div className="flex">
-            <div className="flex-1">
-              <div
-                className="grid"
-                style={{
-                  gridTemplateColumns:
-                    "52px 48px 180px 120px 160px 140px 80px 140px 200px 180px 140px 200px 180px",
-                }}
-              >
-                <div className="col-span-5 border border-slate-200 px-3 py-2 text-right text-[13px] font-semibold text-slate-700">
-                  JUMLAH
-                </div>
-                <div className="border border-slate-200 px-3 py-2 text-right text-[13px] font-semibold text-slate-700">
-                  {fmtRp(totalPenyertaan)}
-                </div>
-                <div className="border border-slate-200"></div>
-                <div className="border border-slate-200 px-3 py-2 text-right text-[13px] font-semibold text-slate-700">
-                  {fmtRp(totalUtang)}
-                </div>
-                <div className="border border-slate-200"></div>
-                <div className="border border-slate-200"></div>
-                <div className="border border-slate-200 px-3 py-2 text-right text-[13px] font-semibold text-slate-700">
-                  {fmtRp(totalPiutang)}
-                </div>
-                <div className="border border-slate-200"></div>
-                <div className="border border-slate-200"></div>
-              </div>
-            </div>
-          </div>
-        }
+        footerRow={footerRow} //  DIUBAH: kini pakai variabel
       />
     </div>
   );
