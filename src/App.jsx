@@ -25,6 +25,10 @@ import EditKelas from "./components/Dashboard/Admin/Pengguna/Kelas/EditKelas";
 // ADMIN
 import AdminCoretaxify from "./components/Dashboard/Admin/Coretaxify/AdminCoretaxify";
 import Instansi from "./components/Dashboard/Admin/Instansi/Index";
+import BupotObjekPajak from "./components/Dashboard/Admin/MasterData/BupotObjekPajak/Index";
+import KodeTransaksi from "./components/Dashboard/Admin/MasterData/KodeTransaksi/Index";
+import KapKjs from "./components/Dashboard/Admin/MasterData/KapKjs/Index";
+import Satuan from "./components/Dashboard/Admin/MasterData/Satuan/Index";
 
 // DOSEN
 import DosenCoretaxify from "./components/Dashboard/Dosen/Coretaxify/DosenCoretaxify";
@@ -337,6 +341,10 @@ const Main = () => {
           <Route path="/admin/kontrak-backup" element={<KontrakBackup />} />
           <Route path="/admin/praktikum-backup" element={<PraktikumBackup />} />
           <Route path="/admin/praktikum" element={<Praktikum />} />
+          <Route path="/admin/kap-kjs-master" element={<KapKjs />} />
+          <Route path="/admin/satuan-master" element={<Satuan />} />
+          <Route path="/admin/kode-transaksi-master" element={<KodeTransaksi />} />
+          <Route path="/admin/bupot-objek-pajak-master" element={<BupotObjekPajak />} />
         </Route>
 
         {/* DOSEN ROUTE */}
