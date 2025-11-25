@@ -21,6 +21,9 @@ export default function GlobalTable({
   onPageChange,
   stickyHeader = true,
   footerRow,
+  emptyText = 'Belum ada data. Klik "Tambah Data" untuk menambah data baru.',
+  loading = false,
+  rowClassName,
 }) {
   const leafColumns = React.useMemo(() => {
     if (columnGroups && columnGroups.length) {
@@ -96,7 +99,7 @@ export default function GlobalTable({
                         c.align === "center" && "text-center",
                         c.align === "right" && "text-right"
                       )}
-                      style={{ width: c.width }}
+                      style={{ width: c.width ?? "auto" }}
                     >
                       {c.title}
                     </th>
@@ -125,21 +128,34 @@ export default function GlobalTable({
         </thead>
 
         <tbody>
-          {!data || data.length === 0 ? (
+          {loading ? (
             <tr>
               <td
                 className={cn(bodyCellBase, "text-center text-slate-500")}
-                colSpan={leafColumns.length}
+                colSpan={leafColumns.length || 1}
               >
-                Belum ada data. Klik "Tambah Data" untuk menambah data baru.
+                Memuat data...
+              </td>
+            </tr>
+          ) : !data || data.length === 0 ? (
+            <tr>
+              <td
+                className={cn(bodyCellBase, "text-center text-slate-500")}
+                colSpan={leafColumns.length || 1}
+              >
+                {emptyText}
               </td>
             </tr>
           ) : (
             data.map((row, idx) => {
               const defaultKey = hasPagination ? `${page}-${idx}` : `${idx}`;
               const rKey = (rowKey ? rowKey(row, idx) : undefined) ?? defaultKey;
+
+              const extraRowClass =
+                typeof rowClassName === "function" ? rowClassName(row, idx) : rowClassName;
+
               return (
-                <tr key={rKey} className="even:bg-slate-50/50">
+                <tr key={rKey} className={cn("even:bg-slate-50/50", extraRowClass)}>
                   {leafColumns.map((c, ci) => {
                     const content = c.render ? c.render(row, idx) : row?.[c.key] ?? "";
                     return (

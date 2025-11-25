@@ -3,6 +3,7 @@ import { Plus, Edit, Trash2 } from "lucide-react";
 import { formatNumber, parseFormattedNumber, formatRupiah } from "@utils/formatCurrency";
 import GlobalModal from "@shared/GlobalModal";
 import GlobalTable from "@shared/GlobalTable";
+import { hitungTotalGlobal, createTotalRow } from "@utils/helperTotal";
 
 const PenghasilanKenaPajak = ({ config }) => {
   const {
@@ -64,13 +65,37 @@ const PenghasilanKenaPajak = ({ config }) => {
     }
   };
 
+  //  HITUNG TOTAL & BUAT BARIS TOTAL
+  const totals = hitungTotalGlobal(dataPenghasilan, ["dasarPengenaanPajak", "pphdipotong"]);
+
+  const tableData =
+    dataPenghasilan.length === 0
+      ? []
+      : [
+          ...dataPenghasilan,
+          createTotalRow("JUMLAH", totals, {
+            labelField: "namaPemotong", // teks "JUMLAH" di kolom Nama Pemotong
+            base: {
+              npwp: "",
+              kode: "",
+              jenis: "",
+              // dasarPengenaanPajak: "",
+            },
+          }),
+        ];
+
+  // const tableData = [
+  //   ...dataPenghasilan,
+  //   createTotalRow("JUMLAH", totals, { labelField: "namaPemotong" }),
+  // ];
+
   const columns = [
     {
       key: "no",
       title: "NO",
       width: 60,
       align: "center",
-      render: (_r, i) => i + 1,
+      render: (row, i) => (row.type === "total" ? "" : i + 1),
     },
     {
       key: "namaPemotong",
@@ -91,17 +116,28 @@ const PenghasilanKenaPajak = ({ config }) => {
       render: (r) => r.kode,
     },
     {
-      key: "Jenis Penhasilan",
+      key: "Jenis",
       title: "JENIS PENHASILAN",
       width: 200,
       render: (r) => r.jenis,
     },
     {
-      key: "dasarpengenaanpajak",
+      key: "dasarPengenaanPajak",
       title: "DASAR PENGENAAN PAJAK",
       width: 150,
       render: (r) => formatRupiah(r.dasarPengenaanPajak),
     },
+    //  Jika tidak ingin menampilkan total kolom DASAR PENGENAAN PAJAK
+    // {
+    //   key: "dasarPengenaanPajak",
+    //   title: "DASAR PENGENAAN PAJAK",
+    //   width: 150,
+    //   align: "right",
+    //   render: (r) =>
+    //     r.type === "total"
+    //       ? "" // total tidak dihitung → tampil kosong
+    //       : formatRupiah(r.dasarPengenaanPajak),
+    // },
     {
       key: "pphdipotong",
       title: "PPH YANG DIPOTONG",
@@ -113,22 +149,23 @@ const PenghasilanKenaPajak = ({ config }) => {
       title: "AKSI",
       width: 100,
       align: "center",
-      render: (row) => (
-        <div className="flex items-center justify-center gap-2">
-          <button
-            className="p-1 text-blue-600 hover:bg-blue-50 rounded"
-            onClick={() => openEditModal(row)}
-          >
-            <Edit size={16} />
-          </button>
-          <button
-            className="p-1 text-red-600 hover:bg-red-50 rounded"
-            onClick={() => deleteData(row.id)}
-          >
-            <Trash2 size={16} />
-          </button>
-        </div>
-      ),
+      render: (row) =>
+        row.type === "total" ? null : (
+          <div className="flex items-center justify-center gap-2">
+            <button
+              className="p-1 text-blue-600 hover:bg-blue-50 rounded"
+              onClick={() => openEditModal(row)}
+            >
+              <Edit size={16} />
+            </button>
+            <button
+              className="p-1 text-red-600 hover:bg-red-50 rounded"
+              onClick={() => deleteData(row.id)}
+            >
+              <Trash2 size={16} />
+            </button>
+          </div>
+        ),
     },
   ];
 
@@ -146,12 +183,14 @@ const PenghasilanKenaPajak = ({ config }) => {
 
       <GlobalTable
         columns={columns}
-        data={dataPenghasilan}
+        data={tableData}
         page={1}
         pageSize={9999} // Tidak pakai pagination
         total={dataPenghasilan.length}
         onPageChange={() => {}}
         stickyHeader
+        // emptyText="Belum ada data penghasilan kena pajak."
+        rowClassName={(row) => (row.type === "total" ? "bg-yellow-50 font-semibold" : "")}
       />
 
       {/* MODAL */}
