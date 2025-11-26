@@ -1,45 +1,97 @@
 import React, { useState, useEffect } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+import { parseFormattedNumber, formatRupiah } from "@utils/formatCurrency";
 
 const PertanyaanC = ({ onAnswerChange, answersState }) => {
   const [showSection, setShowSection] = useState(false);
 
   const [r1a, setR1a] = useState(null);
-  const [amt1a, setAmt1a] = useState(0);
   const [r1b, setR1b] = useState(null);
-  const [amt1b, setAmt1b] = useState(0);
   const [r2, setR2] = useState(null);
-  const [amt2, setAmt2] = useState(0);
   const [r3, setR3] = useState(null);
-  const [amt3, setAmt3] = useState(0);
 
   useEffect(() => {
     if (answersState) {
     }
   }, [answersState]);
 
-  const handler1aChange = (value) => {
-    console.log("1.a changed:", value);
-    setR1a(value);
-    onAnswerChange?.("r1a", value);
+  const [amounts, setAmounts] = useState({
+    r2: 0,
+    r3: 0,
+  });
+
+  const [radios, setRadios] = useState({
+    r1a: null,
+    r1b: null,
+    r2: null,
+    r3: null,
+  });
+
+  const handleAmountChange = (field) => (e) => {
+    const raw = e.target.value;
+
+    if (raw.trim() === "") {
+      setAmounts((prev) => ({ ...prev, [field]: 0 }));
+      return;
+    }
+
+    const numeric = parseFormattedNumber(raw);
+    setAmounts((prev) => ({ ...prev, [field]: numeric }));
+    console.log("Amount changed:", field, numeric);
   };
 
-  const handler1bChange = (value) => {
-    console.log("1.b changed:", value);
-    setR1b(value);
-    onAnswerChange?.("r1b", value);
+  const handleRadioChange = (field, value) => {
+    setRadios((prev) => ({ ...prev, [field]: value }));
+    onAnswerChange?.(field, value);
+    console.log("Radio changed:", field, value);
+
+    // logic khusus: kalau field = false, reset amount
+    // if (field === "r13" && value === false) {
+    //   setAmounts((prev) => ({ ...prev, r13: 0 }));
+    // }
   };
 
-  const handler2Change = (value) => {
-    console.log("2 changed:", value);
-    setR2(value);
-    onAnswerChange?.("r2", value);
+  const handleSelectChange = (field, value) => {
+    setRadios((prev) => ({ ...prev, [field]: value }));
+    onAnswerChange?.(field, value);
   };
 
-  const handler3Change = (value) => {
-    console.log("3 changed:", value);
-    setR3(value);
-    onAnswerChange?.("r3", value);
+  const DEFAULT_NULL_TEXT = "Pilih salah satu Ya/Tidak";
+
+  const HELPER_CONFIG = {
+    r1a: {
+      yes: "Ya, silahkan mengisi lampiran 5",
+      no: "Tidak, silahkan lanjut pertanyaan berikutnya",
+    },
+    r2: {
+      yes: "Ya, silahkan mengisi Lampiran 4 Bagian A ",
+      no: "Tidak, silahkan lanjut pertanyaan berikutnya",
+    },
+    r3: {
+      yes: "Ya, silahkan mengisi Lampiran 4 Bagian B ",
+      no: "Tidak, silahkan lanjut pertanyaan berikutnya",
+    },
+  };
+
+  const getHelperMessage = (field, value) => {
+    const cfg = HELPER_CONFIG[field];
+    if (!cfg) return "";
+
+    if (value === null || value === undefined || value === "") {
+      return DEFAULT_NULL_TEXT;
+    }
+
+    // Case 1: Boolean (YES/NO)
+    if (typeof value === "boolean") {
+      return value ? cfg.yes : cfg.no;
+    }
+
+    // Case 2: Option select (option1, option2, dst)
+    if (cfg[value]) {
+      return cfg[value];
+    }
+
+    return DEFAULT_NULL_TEXT;
   };
 
   return (
@@ -62,9 +114,7 @@ const PertanyaanC = ({ onAnswerChange, answersState }) => {
 
       <div
         className={`transition-all duration-500 ease-in-out ${
-          showSection
-            ? "max-h-[1000px] opacity-100 overflow-visible"
-            : "max-h-0 opacity-0 overflow-hidden"
+          showSection ? " opacity-100 overflow-visible" : "max-h-0 opacity-0 overflow-hidden"
         }`}
       >
         <div className="border rounded-md p-4 mb-4">
@@ -85,9 +135,9 @@ const PertanyaanC = ({ onAnswerChange, answersState }) => {
                     <input
                       type="radio"
                       name="r1a"
-                      checked={r1a === true}
+                      checked={radios.r1a === true}
                       // change
-                      onChange={() => handler1aChange(true)}
+                      onChange={() => handleRadioChange("r1a", true)}
                     />
                     <span>Ya</span>
                   </label>
@@ -95,8 +145,8 @@ const PertanyaanC = ({ onAnswerChange, answersState }) => {
                     <input
                       type="radio"
                       name="r1a"
-                      checked={r1a === false}
-                      onChange={() => handler1aChange(false)}
+                      checked={radios.r1a === false}
+                      onChange={() => handleRadioChange("r1a", false)}
                     />
                     <span>Tidak</span>
                   </label>
@@ -105,9 +155,7 @@ const PertanyaanC = ({ onAnswerChange, answersState }) => {
               <div className="col-span-12 md:col-span-2">{/* Tidak ada input  */}</div>
               <div className="col-span-12 md:col-span-3 text-sm">
                 <div className="bg-blue-100 rounded px-3 py-2">
-                  {r1a === true && "Ya, silahkan mengisi lampiran 5 "}
-                  {r1a === false && "Tidak, silahkan lanjut pertanyaan berikutnya"}
-                  {r1a === null && "Pilih salah satu Ya/Tidak"}
+                  {getHelperMessage("r1a", radios.r1a)}
                 </div>
               </div>
             </div>
@@ -178,9 +226,9 @@ const PertanyaanC = ({ onAnswerChange, answersState }) => {
                     <input
                       type="radio"
                       name="r2"
-                      checked={r2 === true}
+                      checked={radios.r2 === true}
                       // change
-                      onChange={() => handler2Change(true)}
+                      onChange={() => handleRadioChange("r2", true)}
                     />
                     <span>Ya</span>
                   </label>
@@ -188,8 +236,8 @@ const PertanyaanC = ({ onAnswerChange, answersState }) => {
                     <input
                       type="radio"
                       name="r2"
-                      checked={r2 === false}
-                      onChange={() => handler2Change(false)}
+                      checked={radios.r2 === false}
+                      onChange={() => handleRadioChange("r2", false)}
                     />
                     <span>Tidak</span>
                   </label>
@@ -197,18 +245,16 @@ const PertanyaanC = ({ onAnswerChange, answersState }) => {
               </div>
               <div className="col-span-12 md:col-span-2">
                 <input
-                  type="number"
+                  type="text"
                   min={0}
-                  value={amt2}
-                  onChange={(e) => setamt2(+e.target.value || 0)}
+                  value={formatRupiah(amounts.r2).replace(/^Rp\s?/, "")} // Hilangkan "Rp" di depan dengan menggunakan replace(/^Rp\s?/, "")
+                  onChange={handleAmountChange("r2")}
                   className="w-full text-center p-2 border rounded-md bg-gray-200 text-sm"
                 />
               </div>
               <div className="col-span-12 md:col-span-3 text-sm">
                 <div className="bg-blue-100 rounded px-3 py-2">
-                  {r2 === true && "Ya, silahkan mengisi Lampiran 4 Bagian A "}
-                  {r2 === false && "Tidak, silahkan lanjut pertanyaan berikutnya"}
-                  {r2 === null && "Pilih salah satu Ya/Tidak"}
+                  {getHelperMessage("r2", radios.r2)}
                 </div>
               </div>
             </div>
@@ -228,9 +274,9 @@ const PertanyaanC = ({ onAnswerChange, answersState }) => {
                     <input
                       type="radio"
                       name="r3"
-                      checked={r3 === true}
+                      checked={radios.r3 === true}
                       // change
-                      onChange={() => handler3Change(true)}
+                      onChange={() => handleRadioChange("r3", true)}
                     />
                     <span>Ya</span>
                   </label>
@@ -238,8 +284,8 @@ const PertanyaanC = ({ onAnswerChange, answersState }) => {
                     <input
                       type="radio"
                       name="r3"
-                      checked={r3 === false}
-                      onChange={() => handler3Change(false)}
+                      checked={radios.r3 === false}
+                      onChange={() => handleRadioChange("r3", false)}
                     />
                     <span>Tidak</span>
                   </label>
@@ -247,18 +293,16 @@ const PertanyaanC = ({ onAnswerChange, answersState }) => {
               </div>
               <div className="col-span-12 md:col-span-2">
                 <input
-                  type="number"
+                  type="text"
                   min={0}
-                  value={amt3}
-                  onChange={(e) => setamt3(+e.target.value || 0)}
+                  value={formatRupiah(amounts.r3).replace(/^Rp\s?/, "")} // Hilangkan "Rp" di depan dengan menggunakan replace(/^Rp\s?/, "")
+                  onChange={handleAmountChange("r3")}
                   className="w-full text-center p-2 border rounded-md bg-gray-200 text-sm"
                 />
               </div>
               <div className="col-span-12 md:col-span-3 text-sm">
                 <div className="bg-blue-100 rounded px-3 py-2">
-                  {r3 === true && "Ya, silahkan mengisi Lampiran 4 Bagian B "}
-                  {r3 === false && "Tidak, silahkan lanjut pertanyaan berikutnya"}
-                  {r3 === null && "Pilih salah satu Ya/Tidak"}
+                  {getHelperMessage("r3", radios.r3)}
                 </div>
               </div>
             </div>

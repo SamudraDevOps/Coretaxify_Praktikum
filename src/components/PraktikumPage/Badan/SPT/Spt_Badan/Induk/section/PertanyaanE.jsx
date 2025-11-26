@@ -6,39 +6,72 @@ const PertanyaanE = ({ onAnswerChange, answersState }) => {
   const [showSection, setShowSection] = useState(false);
 
   const [r13, setR13] = useState(null);
-  const [amt13, setAmt13] = useState(0);
-  const [amt14, setAmt14] = useState(0);
-  const [amt15, setAmt15] = useState(0);
+  const [r14, setR14] = useState(null);
+  const [r15, setR15] = useState(null);
   const [r16, setR16] = useState(null);
-  const [amt16, setAmt16] = useState(0);
 
   useEffect(() => {
     if (answersState) {
     }
   }, [answersState]);
 
-  const handler13Change = (value) => {
-    console.log("13 changed:", value);
-    setR13(value);
-    onAnswerChange?.("r13", value);
-  };
+  const [amounts, setAmounts] = useState({
+    r13: 0,
+    r14: 0,
+    r15: 0,
+    r16: 0,
+  });
 
-  const handler15Change = (value) => {
-    const raw = value.target.value;
-    // Jika kosong, set 0
+  const [radios, setRadios] = useState({
+    r13: null,
+    r16: null,
+  });
+
+  const handleAmountChange = (field) => (e) => {
+    const raw = e.target.value;
+
     if (raw.trim() === "") {
-      setAmt15(0);
+      setAmounts((prev) => ({ ...prev, [field]: 0 }));
       return;
     }
-    // Ambil angka dari string
+
     const numeric = parseFormattedNumber(raw);
-    setAmt15(numeric);
-    // console.log("15 changed:", numeric);
+    setAmounts((prev) => ({ ...prev, [field]: numeric }));
+    console.log("Amount changed:", field, numeric);
   };
-  const handler16Change = (value) => {
-    console.log("16 changed:", value);
-    setR16(value);
-    onAnswerChange?.("r16", value);
+
+  const handleRadioChange = (field, value) => {
+    setRadios((prev) => ({ ...prev, [field]: value }));
+    onAnswerChange?.(field, value);
+    console.log("Radio changed:", field, value);
+
+    // logic khusus: kalau field = false, reset amount
+    // if (field === "r13" && value === false) {
+    //   setAmounts((prev) => ({ ...prev, r13: 0 }));
+    // }
+  };
+
+  const HELPER_CONFIG = {
+    r13: {
+      yes: "Ya, silahkan mengisi lampiran 3",
+      no: "Tidak, silahkan lanjut pertanyaan berikutnya",
+    },
+    r16: {
+      yes: "Ya, silahkan mengisi lampiran 13C",
+      no: "Tidak, silahkan lanjut pertanyaan berikutnya",
+    },
+  };
+
+  const DEFAULT_NULL_TEXT = "Pilih salah satu Ya/Tidak";
+
+  const getHelperMessage = (field, value) => {
+    const cfg = HELPER_CONFIG[field];
+    if (!cfg) return "";
+
+    if (value === true) return cfg.yes;
+    if (value === false) return cfg.no;
+
+    return DEFAULT_NULL_TEXT;
   };
 
   return (
@@ -59,9 +92,7 @@ const PertanyaanE = ({ onAnswerChange, answersState }) => {
 
       <div
         className={`transition-all duration-500 ease-in-out ${
-          showSection
-            ? "max-h-[1000px] opacity-100 overflow-visible"
-            : "max-h-0 opacity-0 overflow-hidden"
+          showSection ? " opacity-100 overflow-visible" : "max-h-0 opacity-0 overflow-hidden"
         }`}
       >
         <div className="border rounded-md p-4 mb-4">
@@ -82,9 +113,9 @@ const PertanyaanE = ({ onAnswerChange, answersState }) => {
                     <input
                       type="radio"
                       name="r13"
-                      checked={r13 === true}
+                      checked={radios.r13 === true}
                       // change
-                      onChange={() => handler13Change(true)}
+                      onChange={() => handleRadioChange("r13", true)}
                     />
                     <span>Ya</span>
                   </label>
@@ -92,8 +123,8 @@ const PertanyaanE = ({ onAnswerChange, answersState }) => {
                     <input
                       type="radio"
                       name="r13"
-                      checked={r13 === false}
-                      onChange={() => handler13Change(false)}
+                      checked={radios.r13 === false}
+                      onChange={() => handleRadioChange("r13", false)}
                     />
                     <span>Tidak</span>
                   </label>
@@ -101,18 +132,16 @@ const PertanyaanE = ({ onAnswerChange, answersState }) => {
               </div>
               <div className="col-span-12 md:col-span-2">
                 <input
-                  type="number"
+                  type="text"
                   min={0}
-                  value={amt13}
-                  onChange={(e) => setAmt13(+e.target.value || 0)}
+                  value={formatRupiah(amounts.r13).replace(/^Rp\s?/, "")} // Hilangkan "Rp" di depan dengan menggunakan replace(/^Rp\s?/, "")
+                  onChange={handleAmountChange("r13")}
                   className="w-full text-center p-2 border rounded-md bg-gray-200 text-sm"
                 />
               </div>
               <div className="col-span-12 md:col-span-3 text-sm">
                 <div className="bg-blue-100 rounded px-3 py-2">
-                  {r13 === true && "Ya, silahkan mengisi lampiran 3 "}
-                  {r13 === false && "Tidak, silahkan lanjut pertanyaan berikutnya"}
-                  {r13 === null && "Pilih salah satu Ya/Tidak"}
+                  {getHelperMessage("r13", radios.r13)}
                 </div>
               </div>
             </div>
@@ -129,10 +158,10 @@ const PertanyaanE = ({ onAnswerChange, answersState }) => {
               <div className="col-span-12 md:col-span-2"></div>
               <div className="col-span-12 md:col-span-2">
                 <input
-                  type="number"
+                  type="text"
                   min={0}
-                  value={amt14}
-                  onChange={(e) => setAmt14(+e.target.value || 0)}
+                  value={formatRupiah(amounts.r14).replace(/^Rp\s?/, "")}
+                  onChange={handleAmountChange("r14")}
                   className="w-full text-center p-2 border rounded-md bg-gray-200 text-sm"
                 />
               </div>
@@ -152,8 +181,8 @@ const PertanyaanE = ({ onAnswerChange, answersState }) => {
                 <input
                   type="text"
                   min={0}
-                  value={formatRupiah(amt15).replace(/^Rp\s?/, "")} // Hilangkan "Rp" di depan dengan menggunakan replace(/^Rp\s?/, "")
-                  onChange={handler15Change}
+                  value={formatRupiah(amounts.r15).replace(/^Rp\s?/, "")} // Hilangkan "Rp" di depan dengan menggunakan replace(/^Rp\s?/, "")
+                  onChange={handleAmountChange("r15")}
                   className="w-full text-center p-2 border rounded-md text-sm"
                 />
               </div>
@@ -174,9 +203,9 @@ const PertanyaanE = ({ onAnswerChange, answersState }) => {
                     <input
                       type="radio"
                       name="r16"
-                      checked={r16 === true}
+                      checked={radios.r16 === true}
                       // change
-                      onChange={() => handler16Change(true)}
+                      onChange={() => handleRadioChange("r16", true)}
                     />
                     <span>Ya</span>
                   </label>
@@ -184,8 +213,8 @@ const PertanyaanE = ({ onAnswerChange, answersState }) => {
                     <input
                       type="radio"
                       name="r16"
-                      checked={r16 === false}
-                      onChange={() => handler16Change(false)}
+                      checked={radios.r16 === false}
+                      onChange={() => handleRadioChange("r16", false)}
                     />
                     <span>Tidak</span>
                   </label>
@@ -195,16 +224,14 @@ const PertanyaanE = ({ onAnswerChange, answersState }) => {
                 <input
                   type="text"
                   min={0}
-                  value={formatRupiah(amt16).replace(/^Rp\s?/, "")} // Hilangkan "Rp" di depan dengan menggunakan replace(/^Rp\s?/, "")
-                  onChange={handler16Change}
+                  value={formatRupiah(amounts.r16).replace(/^Rp\s?/, "")} // Hilangkan "Rp" di depan dengan menggunakan replace(/^Rp\s?/, "")
+                  onChange={handleAmountChange("r16")}
                   className="w-full text-center p-2 border rounded-md bg-gray-200 text-sm"
                 />
               </div>
               <div className="col-span-12 md:col-span-3 text-sm">
                 <div className="bg-blue-100 rounded px-3 py-2">
-                  {r16 === true && "Ya, silahkan mengisi lampiran 13C"}
-                  {r16 === false && "Tidak, silahkan lanjut pertanyaan berikutnya"}
-                  {r16 === null && "Pilih salah satu Ya/Tidak"}
+                  {getHelperMessage("r16", radios.r16)}
                 </div>
               </div>
             </div>
