@@ -27,19 +27,30 @@ export default function GlobalTable({
 }) {
   const leafColumns = React.useMemo(() => {
     if (columnGroups && columnGroups.length) {
-      return columnGroups.flatMap((g) => g.children);
+      // Kalau group punya children → pakai children
+      // Kalau tidak punya children → treat dia sendiri sebagai column
+      return columnGroups.flatMap((g) =>
+        Array.isArray(g.children) && g.children.length ? g.children : [g]
+      );
     }
     return columns ?? [];
   }, [columns, columnGroups]);
 
-  //  BARU: cek apakah pagination aktif / lengkap props-nya
+  // const leafColumns = React.useMemo(() => {
+  //   if (columnGroups && columnGroups.length) {
+  //     return columnGroups.flatMap((g) => g.children);
+  //   }
+  //   return columns ?? [];
+  // }, [columns, columnGroups]);
+
+  // cek apakah pagination aktif / lengkap props-nya
   const hasPagination =
     typeof onPageChange === "function" &&
     typeof page === "number" &&
     typeof pageSize === "number" &&
     typeof total === "number";
 
-  //  DIUBAH: pageStart, pageEnd, pageCount sekarang hanya dihitung kalau hasPagination = true
+  // pageStart, pageEnd, pageCount sekarang hanya dihitung kalau hasPagination = true
   let pageStart = 0;
   let pageEnd = 0;
   let pageCount = 1;
@@ -50,7 +61,7 @@ export default function GlobalTable({
     pageCount = Math.max(1, Math.ceil(total / pageSize));
   }
 
-  //  DIUBAH: fungsi navigasi aman kalau pagination tidak dipakai
+  //  fungsi navigasi aman kalau pagination tidak dipakai
   const goFirst = () => {
     if (!hasPagination) return;
     onPageChange(1);
@@ -76,38 +87,99 @@ export default function GlobalTable({
       <table className="min-w-[900px] w-full border-collapse">
         <thead className={cn(stickyHeader && "sticky top-0 z-10")}>
           {columnGroups && columnGroups.length ? (
-            <>
-              <tr className={cn(headerPrimaryDark)}>
-                {columnGroups.map((g, i) => (
-                  <th
-                    key={`g-${i}`}
-                    className={cn(headerCellBase, "text-center")}
-                    colSpan={g.children.length}
-                  >
-                    {g.title}
-                  </th>
-                ))}
-              </tr>
-              <tr className={headerPrimary}>
-                {columnGroups.flatMap((g) =>
-                  g.children.map((c) => (
-                    <th
-                      key={`c-${c.key}`}
-                      className={cn(
-                        headerCellBase,
-                        c.className,
-                        c.align === "center" && "text-center",
-                        c.align === "right" && "text-right"
-                      )}
-                      style={{ width: c.width ?? "auto" }}
-                    >
-                      {c.title}
-                    </th>
-                  ))
-                )}
-              </tr>
-            </>
+            (() => {
+              const hasChildGroup = columnGroups.some(
+                (g) => Array.isArray(g.children) && g.children.length
+              );
+
+              // Kalau TIDAK ada group dengan children sama sekali ⇒ header biasa
+              if (!hasChildGroup) {
+                return (
+                  <tr className={headerPrimary}>
+                    {columnGroups.map((c) => (
+                      <th
+                        key={c.key}
+                        className={cn(
+                          headerCellBase,
+                          c.className,
+                          c.align === "center" && "text-center",
+                          c.align === "right" && "text-right"
+                        )}
+                        style={{ width: c.width ?? "auto" }}
+                      >
+                        {c.title}
+                      </th>
+                    ))}
+                  </tr>
+                );
+              }
+
+              // Ada paling tidak satu group dengan children ⇒ 2 baris header
+              return (
+                <>
+                  {/* Baris 1: judul group (rowSpan / colSpan) */}
+                  <tr className={cn(headerPrimary)}>
+                    {columnGroups.map((g, i) => {
+                      const hasChildren = Array.isArray(g.children) && g.children.length;
+
+                      if (hasChildren) {
+                        return (
+                          <th
+                            key={`g-${i}`}
+                            className={cn(headerCellBase, "text-center", g.className)}
+                            colSpan={g.children.length}
+                          >
+                            {g.title}
+                          </th>
+                        );
+                      }
+
+                      // group tanpa children → span 2 baris
+                      return (
+                        <th
+                          key={`g-${i}`}
+                          className={cn(
+                            headerCellBase,
+                            "text-center",
+                            g.className,
+                            g.align === "center" && "text-center",
+                            g.align === "right" && "text-right"
+                          )}
+                          rowSpan={2}
+                          style={{ width: g.width ?? "auto" }}
+                        >
+                          {g.title}
+                        </th>
+                      );
+                    })}
+                  </tr>
+
+                  {/* Baris 2: hanya children dari group yang punya children */}
+                  <tr className={headerPrimary}>
+                    {columnGroups.map((g) =>
+                      Array.isArray(g.children) && g.children.length
+                        ? g.children.map((c) => (
+                            <th
+                              key={`c-${c.key}`}
+                              className={cn(
+                                headerCellBase,
+                                c.className,
+                                c.align === "center" && "text-center",
+                                c.align === "right" && "text-right"
+                              )}
+                              style={{ width: c.width ?? "auto" }}
+                            >
+                              {c.title}
+                            </th>
+                          ))
+                        : null
+                    )}
+                  </tr>
+                </>
+              );
+            })()
           ) : (
+            // fallback lama pakai `columns`
             <tr className={headerPrimary}>
               {leafColumns.map((c) => (
                 <th
