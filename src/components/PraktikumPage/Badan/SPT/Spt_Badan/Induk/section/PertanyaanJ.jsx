@@ -1,187 +1,172 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 
 const PertanyaanJ = ({ onAnswerChange, answersState }) => {
-    const [showSection, setShowSection] = useState(false);
+  const [showSection, setShowSection] = useState(false);
+  const [isStatementChecked, setIsStatementChecked] = useState(false);
 
-    // State untuk checkbox pernyataan
-    const [isConfirmed, setIsConfirmed] = useState(false);
+  const [persetujuan, setPersetujuan] = useState(null);
+  const [penandatangan, setPenandatangan] = useState(null);
 
-    // State untuk radio penandatangan
-    const [penandatangan, setPenandatangan] = useState('wajibPajak'); // default: Wajib Pajak
+  // Load initial values from parent if available
+  useEffect(() => {
+    if (answersState) {
+    }
+  }, [answersState]);
 
-    // State untuk input teks
-    const [npwp, setNpwp] = useState('210683975602000');
-    const [nama, setNama] = useState('HOKI LANGGENG MAKMUR');
-    const [jabatan, setJabatan] = useState('');
+  const [textInputStyle, setTextInputStyle] = useState({
+    nama: "",
+    npwp: "",
+    jabatan: "",
+  });
 
-    // Load initial values from parent if available
-    useEffect(() => {
-        if (answersState) {
-            setIsConfirmed(answersState.isConfirmed || false);
-            setPenandatangan(answersState.penandatangan || 'wajibPajak');
-            setNpwp(answersState.npwp || '210683975602000');
-            setNama(answersState.nama || 'HOKI LANGGENG MAKMUR');
-            setJabatan(answersState.jabatan || '');
-        }
-    }, [answersState]);
+  const [radios, setRadios] = useState({
+    penandatangan: null,
+    persetujuan: null,
+  });
 
-    // Handler checkbox
-    const handleConfirmChange = (e) => {
-        const checked = e.target.checked;
-        setIsConfirmed(checked);
-        onAnswerChange?.('isConfirmed', checked);
-    };
+  const handleRadioChange = (field, value) => {
+    setRadios((prev) => ({ ...prev, [field]: value }));
+    onAnswerChange?.(field, value);
+    console.log("Radio changed:", field, value);
 
-    // Handler radio penandatangan
-    const handlePenandatanganChange = (value) => {
-        setPenandatangan(value);
-        onAnswerChange?.('penandatangan', value);
-    };
+    // logic khusus: kalau field = false, reset
+    if (field === "persetujuan" && value === false) {
+      setRadios((prev) => ({ ...prev, nama: "", npwp: "", jabatan: "" }));
+    }
+  };
 
-    // Handler input
-    const handleInputChange = (field, value) => {
-        switch (field) {
-            case 'npwp':
-                setNpwp(value);
-                onAnswerChange?.('npwp', value);
-                break;
-            case 'nama':
-                setNama(value);
-                onAnswerChange?.('nama', value);
-                break;
-            case 'jabatan':
-                setJabatan(value);
-                onAnswerChange?.('jabatan', value);
-                break;
-            default:
-                break;
-        }
-    };
+  return (
+    <>
+      <div
+        className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
+        onClick={() => setShowSection(!showSection)}
+      >
+        <h3 className="text-lg font-semibold">J. PERNYATAAN</h3>
+        <span
+          className={`transition-transform duration-500 ease-in-out ${
+            showSection ? "rotate-180" : "rotate-0"
+          }`}
+        >
+          <FaChevronDown />
+        </span>
+      </div>
 
-    return (
-        <div>
-            {/* Header Toggle */}
-            <div
-                className='border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full'
-                onClick={() => setShowSection(!showSection)}
-            >
-                <h3 className='text-lg font-semibold'>J. PERNYATAAN</h3>
-                {showSection ? <FaChevronUp /> : <FaChevronDown />}
+      <div
+        className={`transition-all duration-500 ease-in-out ${
+          showSection ? "opacity-100 overflow-visible" : "max-h-0 opacity-0 overflow-hidden"
+        }`}
+      >
+        <div className="divide-y">
+          <div className="border rounded-md p-4 mb-4">
+            <div className="text-sm font-bold italic">
+              <input
+                type="checkbox"
+                className="m-2"
+                checked={radios.persetujuan === true}
+                onChange={(e) => handleRadioChange("persetujuan", e.target.checked)}
+              />
+              Dengan menyadari sepenuhnya akan segala akibatnya termasuk sanksi-sanksi sesuai dengan
+              ketentuan perundang-undangan yang berlaku, saya menyatakan bahwa apa yang telah saya
+              beritahukan di atas beserta lampiran-lampirannya adalah benar, lengkap dan jelas.
+              Penandatangan
+              {radios.persetujuan !== true && (
+                <span className="text-red-500 text-l ml-2"> (Wajib dicentang)</span>
+              )}
             </div>
-
-            {/* Konten Section */}
-            {showSection && (
-                <div className="border rounded-md p-4 mb-4">
-                    {/* Pernyataan Checkbox */}
-                    <div className="mb-4">
-                        <label className="flex items-start gap-2">
-                            <input
-                                type="checkbox"
-                                checked={isConfirmed}
-                                onChange={handleConfirmChange}
-                                className="mt-1"
-                            />
-                            <span className="text-sm text-gray-700">
-                                Dengan menyadari sepenuhnya akan segala akibatnya termasuk sanksi-sanksi sesuai dengan ketentuan perundang-undangan yang berlaku, Saya menyatakan bahwa apa yang Saya beritahukan di atas adalah benar, lengkap, dan jelas.
-                            </span>
-                        </label>
-                    </div>
-
-                    {/* Penandatangan */}
-                    <div className="grid grid-cols-12 gap-3 items-center px-3 py-2 border-b border-gray-200 pb-3">
-                        <div className="col-span-12 md:col-span-5 flex gap-3 items-start">
-                            <span className="pt-1 text-gray-700 font-medium min-w-[3.5rem]">Penandatangan *</span>
-                        </div>
-                        <div className="col-span-12 md:col-span-7 flex gap-6">
-                            <div className="flex items-center gap-2">
-                                <input
-                                    type="radio"
-                                    name="penandatangan"
-                                    id="penandatangan-wajib"
-                                    value="wajibPajak"
-                                    checked={penandatangan === "wajibPajak"}
-                                    onChange={() => handlePenandatanganChange("wajibPajak")}
-                                />
-                                <label htmlFor="penandatangan-wajib">Wajib Pajak</label>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <input
-                                    type="radio"
-                                    name="penandatangan"
-                                    id="penandatangan-kuasa"
-                                    value="kuasaWajibPajak"
-                                    checked={penandatangan === "kuasaWajibPajak"}
-                                    onChange={() => handlePenandatanganChange("kuasaWajibPajak")}
-                                />
-                                <label htmlFor="penandatangan-kuasa">Kuasa Wajib Pajak</label>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Tanda Tangan (placeholder) */}
-                    <div className="grid grid-cols-12 gap-3 items-center px-3 py-2 border-b border-gray-200 pb-3 pt-3">
-                        <div className="col-span-12 md:col-span-5 flex gap-3 items-start">
-                            <span className="pt-1 text-gray-700 font-medium min-w-[3.5rem]">Tanda Tangan</span>
-                        </div>
-                        <div className="col-span-12 md:col-span-7">
-                            <div className="bg-gray-100 rounded px-3 py-2 text-gray-500 text-sm italic">
-                                (Tanda tangan digital akan muncul di sini saat diklik atau diunggah)
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* NPWP */}
-                    <div className="grid grid-cols-12 gap-3 items-center px-3 py-2 border-b border-gray-200 pb-3 pt-3">
-                        <div className="col-span-12 md:col-span-5 flex gap-3 items-start">
-                            <span className="pt-1 text-gray-700 font-medium min-w-[3.5rem]">NPWP</span>
-                        </div>
-                        <div className="col-span-12 md:col-span-7">
-                            <input
-                                type="text"
-                                value={npwp}
-                                onChange={(e) => handleInputChange('npwp', e.target.value)}
-                                className="w-full px-3 py-2 border border-gray-300 rounded"
-                                placeholder="Masukkan NPWP"
-                            />
-                        </div>
-                    </div>
-
-                    {/* Nama */}
-                    <div className="grid grid-cols-12 gap-3 items-center px-3 py-2 border-b border-gray-200 pb-3 pt-3">
-                        <div className="col-span-12 md:col-span-5 flex gap-3 items-start">
-                            <span className="pt-1 text-gray-700 font-medium min-w-[3.5rem]">Nama</span>
-                        </div>
-                        <div className="col-span-12 md:col-span-7">
-                            <input
-                                type="text"
-                                value={nama}
-                                onChange={(e) => handleInputChange('nama', e.target.value)}
-                                className="w-full px-3 py-2 border border-gray-300 rounded"
-                                placeholder="Masukkan nama lengkap"
-                            />
-                        </div>
-                    </div>
-
-                    {/* Jabatan */}
-                    <div className="grid grid-cols-12 gap-3 items-center px-3 py-2 pt-3">
-                        <div className="col-span-12 md:col-span-5 flex gap-3 items-start">
-                            <span className="pt-1 text-gray-700 font-medium min-w-[3.5rem]">Jabatan</span>
-                        </div>
-                        <div className="col-span-12 md:col-span-7">
-                            <input
-                                type="text"
-                                value={jabatan}
-                                onChange={(e) => handleInputChange('jabatan', e.target.value)}
-                                className="w-full px-3 py-2 border border-gray-300 rounded"
-                                placeholder="Contoh: Direktur Utama"
-                            />
-                        </div>
-                    </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+              <div className="grid grid-cols-2 gap-4">
+                <label className="block text-sm font-medium text-gray-700 col-span-1">
+                  Penandatangan
+                  <span className="text-red-500">*</span>
+                </label>
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="radio"
+                    id="TaxPayer"
+                    checked={radios.penandatangan === "TaxPayer"}
+                    onChange={() => handleRadioChange("penandatangan", "TaxPayer")}
+                    name="ditandatangani"
+                    className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
+                  />
+                  <label htmlFor="PKP" className="text-gray-700 text-sm">
+                    TaxPayer
+                  </label>
+                  <input
+                    type="radio"
+                    id="Representative"
+                    checked={radios.penandatangan === "Representative"}
+                    onChange={() => handleRadioChange("penandatangan", "Representative")}
+                    name="ditandatangani"
+                    className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
+                    // onClick={(e) => e.target.parentElement.previousElementSibling.click()}
+                  />
+                  <label htmlFor="Representative" className="text-gray-700 text-sm">
+                    Representative
+                  </label>
                 </div>
-            )}
+              </div>
+            </div>
+            <label className="block text-sm font-medium text-gray-700 col-span-1 pt-5">
+              Tanda Tangan
+            </label>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+              <div className="grid grid-cols-2 gap-4">
+                <label className="block text-sm font-medium text-gray-700 col-span-1">NPWP</label>
+                <div className="flex items-center space-x-2 w-full">
+                  <input
+                    type="text"
+                    value={textInputStyle.npwp}
+                    readOnly={radios.persetujuan !== true}
+                    onChange={(e) => setTextInputStyle({ ...textInputStyle, npwp: e.target.value })}
+                    className={`w-full text-center p-2 border rounded-md text-sm ${
+                      radios.persetujuan === true ? "bg-white" : "bg-gray-200"
+                    }`}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+              <div className="grid grid-cols-2 gap-4">
+                <label className="block text-sm font-medium text-gray-700 col-span-1">Nama</label>
+                <div className="flex items-center space-x-2 w-full">
+                  <input
+                    type="text"
+                    value={textInputStyle.nama}
+                    readOnly={radios.persetujuan !== true}
+                    onChange={(e) => setTextInputStyle({ ...textInputStyle, nama: e.target.value })}
+                    className={`w-full text-center p-2 border rounded-md text-sm ${
+                      radios.persetujuan === true ? "bg-white" : "bg-gray-200"
+                    }`}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+              <div className="grid grid-cols-2 gap-4">
+                <label className="block text-sm font-medium text-gray-700 col-span-1">
+                  Jabatan
+                </label>
+                <div className="flex items-center space-x-2 w-full">
+                  <input
+                    type="text"
+                    value={textInputStyle.jabatan}
+                    readOnly={radios.persetujuan !== true}
+                    onChange={(e) =>
+                      setTextInputStyle({ ...textInputStyle, jabatan: e.target.value })
+                    }
+                    className={`w-full text-center p-2 border rounded-md text-sm ${
+                      radios.persetujuan === true ? "bg-white" : "bg-gray-200"
+                    }`}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-    );
+      </div>
+    </>
+  );
 };
 
 export default PertanyaanJ;
