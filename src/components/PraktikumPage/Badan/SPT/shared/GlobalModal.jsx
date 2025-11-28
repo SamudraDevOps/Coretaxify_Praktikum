@@ -111,7 +111,7 @@ const BASE_FIELD_TEMPLATES = {
   },
 
   namaPemotong: {
-    key: "nama",
+    key: "namaPemotong",
     type: "text",
     title: "Nama ",
     placeholder: "Nama ",
@@ -441,7 +441,7 @@ const GlobalModal = ({
     const isReadOnly = readOnlyFields.includes(key) || field.readOnly;
     const hasError = errors[key];
 
-    const value = type === "currency" ? formData[key] : formData[key] || "";
+    const value = type === "currency" || type === "number" ? formData[key] : formData[key] || "";
 
     const baseInputClass = cn(
       "flex-1 p-2 border rounded-md text-sm transition-colors",
