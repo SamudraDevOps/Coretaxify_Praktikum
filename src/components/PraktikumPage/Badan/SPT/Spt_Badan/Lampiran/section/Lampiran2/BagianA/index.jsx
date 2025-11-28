@@ -3,16 +3,7 @@ import PemegangSaham from "./PemegangSaham";
 
 //  CONFIG
 const ConfigComponent = {
-  baseFields: [
-    "namaPemotong",
-    "npwpPemotong",
-    "alamatPemotong",
-    "negara",
-    "jabatan",
-    "nilai",
-    "persen",
-    "dividen",
-  ],
+  baseFields: ["namaPemotong", "npwp", "alamatPemotong", "negara", "jabatan", "nilai", "persen", "dividen"],
 
   customChildren: [
     {

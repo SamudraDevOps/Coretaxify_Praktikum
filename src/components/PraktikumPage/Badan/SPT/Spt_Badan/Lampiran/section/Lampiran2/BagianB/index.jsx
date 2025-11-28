@@ -6,7 +6,7 @@ const ConfigComponent = {
   baseFields: [
     "namaPemotong",
     "negara",
-    "npwpPemotong",
+    "npwp",
     "nilaiModal",
     "persenModal",
     "nilaiUtang",

@@ -1,32 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Plus, Edit, Trash2 } from "lucide-react";
 import { formatNumber, parseFormattedNumber, formatRupiah } from "@utils/formatCurrency";
 import GlobalModal from "@shared/GlobalModal";
 import GlobalTable from "@shared/GlobalTable";
+
 import { hitungTotalGlobal, createTotalRow } from "@utils/helperTotal";
 
-export default function PemegangSaham({ config }) {
+export default function PenghasilanKenaPPh({ config }) {
   const {
-    baseFields = [
-      "namaPemotong",
-      "npwp",
-      "alamatPemotong",
-      "negara",
-      "jabatan",
-      "nilai",
-      "persen",
-      "dividen",
-    ],
+    baseFields = ["kode", "jenisPenghasilan", "sumberPenghasilan", "penghasilanBruto"],
     customChildren = [],
     defaultData = {
-      namaPemotong: "PT. Contoh Perusahaan",
-      npwp: "",
-      alamatPemotong: "",
-      negara: "",
-      jabatan: "",
-      nilai: "",
-      persen: "",
-      dividen: "",
+      kode: "",
+      jenisPenghasilan: "",
+      sumberPenghasilan: "",
+      penghasilanBruto: "",
     },
   } = config || {};
 
@@ -77,7 +65,7 @@ export default function PemegangSaham({ config }) {
   };
 
   //  HITUNG TOTAL & BUAT BARIS TOTAL
-  const totals = hitungTotalGlobal(data, ["nilai", "persen", "dividen"]);
+  const totals = hitungTotalGlobal(data, ["penghasilanBruto"]);
 
   const tableData =
     data.length === 0
@@ -85,20 +73,14 @@ export default function PemegangSaham({ config }) {
       : [
           ...data,
           createTotalRow("JUMLAH", totals, {
-            labelField: "jabatan", // teks "JUMLAH" di kolom Nama Pemotong
+            labelField: "sumberPenghasilan",
             base: {
-              namaPemotong: "",
-              npwp: "",
-              alamatPemotong: "",
-              negara: "",
+              kode: "",
+              jenisPenghasilan: "",
+              sumberPenghasilan: "",
             },
           }),
         ];
-
-  // const tableData = [
-  //   ...data,
-  //   createTotalRow("JUMLAH", totals, { labelField: "jabatan" }),
-  // ];
 
   const columnGroups = [
     {
@@ -136,37 +118,19 @@ export default function PemegangSaham({ config }) {
         },
       ],
     },
-
-    { key: "namaPemotong", title: "NAMA", width: 180 },
-    { key: "alamatPemotong", title: "ALAMAT", width: 180 },
-    { key: "negara", title: "KODE NEGARA", width: 120, align: "center" },
-    { key: "npwp", title: "NPWP/NIK", width: 160, align: "center" },
-    { key: "jabatan", title: "JABATAN", width: 160, align: "center" },
+    { key: "kode", title: "KODE", width: 120, align: "center" },
+    { key: "jenisPenghasilan", title: "JENIS PENGHASILAN  ", width: 180, align: "center" },
+    { key: "sumberPenghasilan", title: "SUMBER PENGHASILAN", width: 120, align: "center" },
 
     {
-      title: "MODAL DISETOR",
-      children: [
-        {
-          key: "nilai",
-          title: "NILAI (Rp)",
-          width: 140,
-          align: "center",
-          render: (r) => formatRupiah(r.nilai),
-        },
-        {
-          key: "persen",
-          title: "%",
-          width: 80,
-          align: "center",
-        },
-      ],
-    },
-
-    {
-      title: " ",
-      children: [
-        { key: "dividen", title: "DIVIDEN", width: 180, render: (r) => formatRupiah(r.dividen) },
-      ],
+      key: "penghasilanBruto",
+      title: "PENGHASILAN BRUTO (RUPIAH) ",
+      width: 160,
+      align: "center",
+      render: (r) => {
+        if (r.type === "total" && r.penghasilanBruto === "") return "";
+        return formatRupiah(r.penghasilanBruto);
+      },
     },
   ];
 
@@ -199,7 +163,11 @@ export default function PemegangSaham({ config }) {
         isOpen={showModal}
         onClose={closeModal}
         onSave={saveData}
-        title={editingId ? "Edit Daftar Pemegang Saham" : "Tambah Daftar Pemegang Saham"}
+        title={
+          editingId
+            ? "Edit Penghasilan yang dikenakan PPh Bersifat Final"
+            : "Tambah Penghasilan yang dikenakan PPh Bersifat Final"
+        }
         baseFields={baseFields}
         customChildren={customChildren}
         data={selected || {}}
