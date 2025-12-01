@@ -1,145 +1,262 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
-import DatePicker from 'react-datepicker';
+import DatePicker from "react-datepicker";
 import {
-    PertanyaanA,
-    PertanyaanB,
-    PertanyaanC,
-    PertanyaanD,
-    PertanyaanE,
-    PertanyaanF,
-    PertanyaanG,
-    PertanyaanH,
-    PertanyaanI,
-    PertanyaanJ
-}
-    from './section';
-import { Header, LampiranL1B } from '../Lampiran'
-import LampiranL1C from '../Lampiran/LampiranL1-C';
-import Lampiran2 from '../Lampiran/Lampiran2';
+  PertanyaanA,
+  PertanyaanB,
+  PertanyaanC,
+  PertanyaanD,
+  PertanyaanE,
+  PertanyaanF,
+  PertanyaanG,
+  PertanyaanH,
+  PertanyaanI,
+  PertanyaanJ,
+} from "./section";
+import { Header, LampiranL1B, LampiranL1C, Lampiran2, Lampiran3, Lampiran4 } from "../Lampiran";
 
 const CreateKonsepBadan = () => {
-    const [showHeaderInduk, setShowHeaderInduk] = useState(true);
-    return (
-        <div className="flex h-screen bg-gray-100">
-            <div className="flex-auto p-3 bg-white rounded-md h-full min-w-0">
-                <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-3xl text-blue-900 mt-4">SPT TAHUNAN PAJAK PENGHASILAN (PPh) WAJIB PAJAK BADAN</h2>
-                </div>
+  const [showHeaderInduk, setShowHeaderInduk] = useState(true);
+  const [showScrollTop, setShowScrollTop] = useState(false);
 
-                <div className="w-full p-2 ml-0 border-t text-lg">
-                    <Tabs defaultValue="induk" onValueChange={(val) => setShowHeaderInduk(val === 'induk')}>
-                        <TabsList className="flex justify-start gap-2 text-blue-700 text-lg">
-                            <TabsTrigger value="induk">Induk</TabsTrigger>
-                            <TabsTrigger value="L1-B">L1-B</TabsTrigger>
-                            <TabsTrigger value="L1-C">L1-C</TabsTrigger>
-                            <TabsTrigger value="L2">L2</TabsTrigger>
-                        </TabsList>
-                        <TabsContent value="induk">
-                            <div className="mt-4">
-                                <div
-                                    className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
-                                    onClick={() => setShowHeaderInduk(!showHeaderInduk)}
-                                >
-                                    <h3 className="text-lg font-semibold">HEADER</h3>
-                                    {showHeaderInduk ? <FaChevronUp /> : <FaChevronDown />}
-                                </div>
-                                {showHeaderInduk && (
-                                    <div className="border rounded-md p-4 mb-4">
-                                        <div className=" grid grid-cols-2 md:grid-cols-2 gap-4">
-                                            <div >
-                                                <label className="text-gray-700 font-medium mb-2 block">
-                                                    Tahun Pajak
-                                                </label>
-                                                <DatePicker
-                                                    className="w-72 p-2 border rounded-md bg-white text-gray-600"
-                                                    showYearPicker
-                                                    dateFormat="yyyy"
-                                                />
-                                            </div>
-                                            <div>
-                                                <label className="text-gray-700 font-medium mb-2 block">
-                                                    Status
-                                                </label>
-                                                <select className="w-72 p-2 border rounded-md bg-gray-100 text-gray-600">
-                                                    <option id='1'>Normal</option>
-                                                    <option id='2'>Pembetulan</option>
-                                                </select>
-                                            </div>
-                                            <div>
-                                                <label className="text-gray-700 font-medium mb-2 block">
-                                                    Periode Pembukuan
-                                                </label>
-                                                <div className="flex gap-4">
-                                                    <input
-                                                        type="text"
-                                                        className="w-32 p-2 border rounded-md bg-white text-gray-600"
-                                                        value="01"
-                                                        readOnly
-                                                    />
-                                                    <input
-                                                        type="text"
-                                                        className="w-32 p-2 border rounded-md bg-white text-gray-600"
-                                                        value="12"
-                                                        readOnly
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <label className='text-gray-700 font-medium mb-2 block'>
-                                                    Metode Pembukuan
-                                                </label>
-                                                <select className="w-72 p-2 border rounded-md bg-gray-100 text-gray-600">
-                                                    <option id='1'>Penuh</option>
-                                                    <option id='2'>Sederhana</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                )}
-                                <PertanyaanA />
-                                <PertanyaanB />
-                                <PertanyaanC />
-                                <PertanyaanD />
-                                <PertanyaanE />
-                                <PertanyaanF />
-                                <PertanyaanG />
-                                <PertanyaanH />
-                                <PertanyaanI />
-                                <PertanyaanJ />
-                            </div>
-                        </TabsContent>
-                        <TabsContent value="L1-B">
-                            <div className="mt-4">
-                                <div className=" font-medium mb-4 text-lg mt-3">
-                                    Rekonsiliasi Laporan Keuangan - Manufaktur
-                                </div>
-                                <LampiranL1B />
-                            </div>
-                        </TabsContent>
-                        <TabsContent value="L1-C">
-                            <div className="mt-4">
-                                <div className=" font-medium mb-4 text-lg mt-3">
-                                    Rekonsiliasi Laporan Keuangan - Dagang
-                                </div>
-                                <LampiranL1C />
-                            </div>
-                        </TabsContent>
-                        <TabsContent value="L2">
-                            <div className="mt-4">
-                                <div className=" font-medium mb-4 text-lg mt-3">
-                                    Daftar Pemegang Saham/Anggota dan Pembagian Dividen atau Bagian Laba
-                                </div>
-                                <Lampiran2 />   
-                            </div>
-                        </TabsContent>
-                    </Tabs>
+  // STEP 4: Central state untuk semua jawaban
+  const [answersState, setAnswersState] = useState({
+    r1a: null, // 1.a - trigger Lampiran I
+    // r1b1: null, // 1.b.1 - trigger Lampiran I
+  });
 
-                </div>
-            </div>
+  // STEP 5: State untuk lampiran yang aktif
+  const [dynamicLampiran, setDynamicLampiran] = useState([]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollTop(window.scrollY > 200);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const updateAnswer = (questionKey, value) => {
+    setAnswersState((prev) => ({
+      ...prev,
+      [questionKey]: value,
+    }));
+  };
+
+  // STEP 7: Effect untuk mengelola lampiran berdasarkan jawaban
+  useEffect(() => {
+    const allLampiran = [];
+
+    allLampiran.push({
+      id: "lampiran-1B",
+      title: "L-1B",
+      subtitle: "Lampiran I - Penghasilan dari Pekerjaan",
+      component: "Lampiran_1B",
+      badge: "Tersedia",
+      order: 1, // Urutan pertama
+    });
+    allLampiran.push({
+      id: "lampiran-1C",
+      title: "L-1C",
+      subtitle: "Lampiran I - Penghasilan dari Usaha dan/atau Pekerjaan Bebas",
+      component: "Lampiran_1C",
+      badge: "Tersedia",
+      order: 2, // Urutan kedua
+    });
+    allLampiran.push({
+      id: "lampiran-2",
+      title: "L2",
+      subtitle: "Lampiran II - Daftar Harta dan Kewajiban",
+      component: "Lampiran_2",
+      badge: "Tersedia",
+      order: 3, // Urutan ketiga
+    });
+    allLampiran.push({
+      id: "lampiran-3",
+      title: "L3",
+      subtitle: "Lampiran III - Penghasilan dari Luar Negeri",
+      component: "Lampiran_3",
+      badge: "Tersedia",
+      order: 4, // Urutan keempat
+    });
+    allLampiran.push({
+      id: "lampiran-4",
+      title: "L4",
+      subtitle: "Lampiran IV - Kredit Pajak",
+      component: "Lampiran_4",
+      badge: "Tersedia",
+      order: 5, // Urutan kelima
+    });
+
+    // if (answersState.r1a === true) {
+    //   allLampiran.push({
+    //     id: "lampiran-1",
+    //     title: "L-1B",
+    //     subtitle: "Lampiran I - Penghasilan dari Pekerjaan",
+    //     component: "Lampiran_1B",
+    //     badge: "Wajib Diisi",
+    //     order: 1, // Urutan pertama
+    //   });
+    // }
+
+    // CUSTOM SORTING berdasarkan property 'order'
+    const sortedLampiran = allLampiran.sort((a, b) => {
+      return a.order - b.order; // Sort berdasarkan order, bukan ID
+    });
+
+    setDynamicLampiran(sortedLampiran);
+  }, [answersState]);
+
+  // STEP 8: Function untuk render content lampiran (Import lampiran ditampilkan di atas)
+  const renderLampiranContent = (componentName, data) => {
+    switch (componentName) {
+      case "Lampiran_1B":
+        return <LampiranL1B data={data} />;
+      case "Lampiran_1C":
+        return <LampiranL1C data={data} />;
+      case "Lampiran_2":
+        return <Lampiran2 data={data} />;
+      case "Lampiran_3":
+        return <Lampiran3 data={data} />;
+      case "Lampiran_4":
+        return <Lampiran4 data={data} />;
+      default:
+        return (
+          <div className="text-center py-8">
+            <p className="text-gray-500">Lampiran dalam pengembangan</p>
+          </div>
+        );
+    }
+  };
+
+  return (
+    <div className="flex h-screen bg-gray-100">
+      <div className="flex-auto p-3 bg-white rounded-md h-full min-w-0">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-3xl text-blue-900 mt-4">
+            SPT TAHUNAN PAJAK PENGHASILAN (PPh) WAJIB PAJAK BADAN
+          </h2>
         </div>
-    )
-}
 
-export default CreateKonsepBadan
+        <div className="w-full p-2 ml-0 border-t text-lg">
+          <Tabs defaultValue="induk" onValueChange={(val) => setShowHeaderInduk(val === "induk")}>
+            <TabsList className="flex justify-start gap-2 text-blue-700 text-lg">
+              <TabsTrigger value="induk">Induk</TabsTrigger>
+              {/* Dynamic Lampiran Tabs */}
+              {dynamicLampiran.map((lampiran) => (
+                <TabsTrigger
+                  key={lampiran.id}
+                  value={lampiran.id}
+                  className="whitespace-nowrap relative"
+                  title={lampiran.subtitle}
+                >
+                  {lampiran.title}
+                  {lampiran.badge && (
+                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs px-1 rounded-full">
+                      !
+                    </span>
+                  )}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+
+            <TabsContent value="induk">
+              <div className="mt-4">
+                <div
+                  className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
+                  onClick={() => setShowHeaderInduk(!showHeaderInduk)}
+                >
+                  <h3 className="text-lg font-semibold">HEADER</h3>
+                  {showHeaderInduk ? <FaChevronUp /> : <FaChevronDown />}
+                </div>
+
+                <div
+                  className={`overflow-hidden transition-all duration-500 ${
+                    showHeaderInduk ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
+                  }`}
+                >
+                  <div className="border rounded-md p-4 mb-4">
+                    <div className="grid grid-cols-2 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-gray-700 font-medium mb-2 block">Tahun Pajak</label>
+                        <DatePicker
+                          className="w-72 p-2 border rounded-md bg-white text-gray-600"
+                          showYearPicker
+                          dateFormat="yyyy"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-gray-700 font-medium mb-2 block">Status</label>
+                        <select className="w-72 p-2 border rounded-md bg-gray-100 text-gray-600">
+                          <option value="1">Normal</option>
+                          <option value="2">Pembetulan</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="text-gray-700 font-medium mb-2 block">
+                          Periode Pembukuan
+                        </label>
+                        <div className="flex gap-4">
+                          <input
+                            type="text"
+                            className="w-32 p-2 border rounded-md bg-white text-gray-600"
+                            value="01"
+                            readOnly
+                          />
+                          <input
+                            type="text"
+                            className="w-32 p-2 border rounded-md bg-white text-gray-600"
+                            value="12"
+                            readOnly
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <label className="text-gray-700 font-medium mb-2 block">
+                          Metode Pembukuan
+                        </label>
+                        <select className="w-72 p-2 border rounded-md bg-gray-100 text-gray-600">
+                          <option value="1">Penuh</option>
+                          <option value="2">Sederhana</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <PertanyaanA />
+              <PertanyaanB />
+              <PertanyaanC />
+              <PertanyaanD />
+              <PertanyaanE />
+              <PertanyaanF />
+              <PertanyaanG />
+              <PertanyaanH />
+              <PertanyaanI />
+              <PertanyaanJ />
+            </TabsContent>
+
+            {/* Dynamic Lampiran Content */}
+            {dynamicLampiran.map((lampiran) => (
+              <TabsContent key={lampiran.id} value={lampiran.id}>
+                <div className="mt-4">
+                  {/* Render komponen lampiran */}
+                  {renderLampiranContent(lampiran.component, answersState)}
+                </div>
+              </TabsContent>
+            ))}
+          </Tabs>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default CreateKonsepBadan;

@@ -36,13 +36,6 @@ export default function GlobalTable({
     return columns ?? [];
   }, [columns, columnGroups]);
 
-  // const leafColumns = React.useMemo(() => {
-  //   if (columnGroups && columnGroups.length) {
-  //     return columnGroups.flatMap((g) => g.children);
-  //   }
-  //   return columns ?? [];
-  // }, [columns, columnGroups]);
-
   // cek apakah pagination aktif / lengkap props-nya
   const hasPagination =
     typeof onPageChange === "function" &&
@@ -83,187 +76,190 @@ export default function GlobalTable({
   };
 
   return (
-    <div className="w-full overflow-x-auto rounded-md border border-slate-200 bg-white">
-      <table className="min-w-[900px] w-full border-collapse">
-        <thead className={cn(stickyHeader && "sticky top-0 z-10")}>
-          {columnGroups && columnGroups.length ? (
-            (() => {
-              const hasChildGroup = columnGroups.some(
-                (g) => Array.isArray(g.children) && g.children.length
-              );
-
-              // Kalau TIDAK ada group dengan children sama sekali ⇒ header biasa
-              if (!hasChildGroup) {
-                return (
-                  <tr className={headerPrimary}>
-                    {columnGroups.map((c) => (
-                      <th
-                        key={c.key}
-                        className={cn(
-                          headerCellBase,
-                          c.className,
-                          c.align === "center" && "text-center",
-                          c.align === "right" && "text-right"
-                        )}
-                        style={{ width: c.width ?? "auto" }}
-                      >
-                        {c.title}
-                      </th>
-                    ))}
-                  </tr>
+    <div className="w-full rounded-md border border-slate-200 bg-white">
+      {/* Container tabel dengan scroll */}
+      <div className="overflow-x-auto">
+        <table className="min-w-[900px] w-full border-collapse">
+          <thead className={cn(stickyHeader && "sticky top-0 z-10")}>
+            {columnGroups && columnGroups.length ? (
+              (() => {
+                const hasChildGroup = columnGroups.some(
+                  (g) => Array.isArray(g.children) && g.children.length
                 );
-              }
 
-              // Ada paling tidak satu group dengan children ⇒ 2 baris header
-              return (
-                <>
-                  {/* Baris 1: judul group (rowSpan / colSpan) */}
-                  <tr className={cn(headerPrimary)}>
-                    {columnGroups.map((g, i) => {
-                      const hasChildren = Array.isArray(g.children) && g.children.length;
+                // Kalau TIDAK ada group dengan children sama sekali ⇒ header biasa
+                if (!hasChildGroup) {
+                  return (
+                    <tr className={headerPrimary}>
+                      {columnGroups.map((c) => (
+                        <th
+                          key={c.key}
+                          className={cn(
+                            headerCellBase,
+                            c.className,
+                            c.align === "center" && "text-center",
+                            c.align === "right" && "text-right"
+                          )}
+                          style={{ width: c.width ?? "auto" }}
+                        >
+                          {c.title}
+                        </th>
+                      ))}
+                    </tr>
+                  );
+                }
 
-                      if (hasChildren) {
+                // Ada paling tidak satu group dengan children ⇒ 2 baris header
+                return (
+                  <>
+                    {/* Baris 1: judul group (rowSpan / colSpan) */}
+                    <tr className={cn(headerPrimary)}>
+                      {columnGroups.map((g, i) => {
+                        const hasChildren = Array.isArray(g.children) && g.children.length;
+
+                        if (hasChildren) {
+                          return (
+                            <th
+                              key={`g-${i}`}
+                              className={cn(headerCellBase, "text-center", g.className)}
+                              colSpan={g.children.length}
+                            >
+                              {g.title}
+                            </th>
+                          );
+                        }
+
+                        // group tanpa children → span 2 baris
                         return (
                           <th
                             key={`g-${i}`}
-                            className={cn(headerCellBase, "text-center", g.className)}
-                            colSpan={g.children.length}
+                            className={cn(
+                              headerCellBase,
+                              "text-center",
+                              g.className,
+                              g.align === "center" && "text-center",
+                              g.align === "right" && "text-right"
+                            )}
+                            rowSpan={2}
+                            style={{ width: g.width ?? "auto" }}
                           >
                             {g.title}
                           </th>
                         );
-                      }
+                      })}
+                    </tr>
 
-                      // group tanpa children → span 2 baris
+                    {/* Baris 2: hanya children dari group yang punya children */}
+                    <tr className={headerPrimary}>
+                      {columnGroups.map((g) =>
+                        Array.isArray(g.children) && g.children.length
+                          ? g.children.map((c) => (
+                              <th
+                                key={`c-${c.key}`}
+                                className={cn(
+                                  headerCellBase,
+                                  c.className,
+                                  c.align === "center" && "text-center",
+                                  c.align === "right" && "text-right"
+                                )}
+                                style={{ width: c.width ?? "auto" }}
+                              >
+                                {c.title}
+                              </th>
+                            ))
+                          : null
+                      )}
+                    </tr>
+                  </>
+                );
+              })()
+            ) : (
+              // fallback lama pakai `columns`
+              <tr className={headerPrimary}>
+                {leafColumns.map((c) => (
+                  <th
+                    key={c.key}
+                    className={cn(
+                      headerCellBase,
+                      c.className,
+                      c.align === "center" && "text-center",
+                      c.align === "right" && "text-right"
+                    )}
+                    style={{ width: c.width }}
+                  >
+                    {c.title}
+                  </th>
+                ))}
+              </tr>
+            )}
+          </thead>
+
+          <tbody>
+            {loading ? (
+              <tr>
+                <td
+                  className={cn(bodyCellBase, "text-center text-slate-500")}
+                  colSpan={leafColumns.length || 1}
+                >
+                  Memuat data...
+                </td>
+              </tr>
+            ) : !data || data.length === 0 ? (
+              <tr>
+                <td
+                  className={cn(bodyCellBase, "text-center text-slate-500")}
+                  colSpan={leafColumns.length || 1}
+                >
+                  {emptyText}
+                </td>
+              </tr>
+            ) : (
+              data.map((row, idx) => {
+                const defaultKey = hasPagination ? `${page}-${idx}` : `${idx}`;
+                const rKey = (rowKey ? rowKey(row, idx) : undefined) ?? defaultKey;
+
+                const extraRowClass =
+                  typeof rowClassName === "function" ? rowClassName(row, idx) : rowClassName;
+
+                return (
+                  <tr key={rKey} className={cn("even:bg-slate-50/50", extraRowClass)}>
+                    {leafColumns.map((c, ci) => {
+                      const content = c.render ? c.render(row, idx) : row?.[c.key] ?? "";
                       return (
-                        <th
-                          key={`g-${i}`}
+                        <td
+                          key={`${rKey}-${ci}`}
                           className={cn(
-                            headerCellBase,
-                            "text-center",
-                            g.className,
-                            g.align === "center" && "text-center",
-                            g.align === "right" && "text-right"
+                            bodyCellBase,
+                            c.className,
+                            c.align === "center" && "text-center",
+                            c.align === "right" && "text-right"
                           )}
-                          rowSpan={2}
-                          style={{ width: g.width ?? "auto" }}
                         >
-                          {g.title}
-                        </th>
+                          {content}
+                        </td>
                       );
                     })}
                   </tr>
+                );
+              })
+            )}
+          </tbody>
 
-                  {/* Baris 2: hanya children dari group yang punya children */}
-                  <tr className={headerPrimary}>
-                    {columnGroups.map((g) =>
-                      Array.isArray(g.children) && g.children.length
-                        ? g.children.map((c) => (
-                            <th
-                              key={`c-${c.key}`}
-                              className={cn(
-                                headerCellBase,
-                                c.className,
-                                c.align === "center" && "text-center",
-                                c.align === "right" && "text-right"
-                              )}
-                              style={{ width: c.width ?? "auto" }}
-                            >
-                              {c.title}
-                            </th>
-                          ))
-                        : null
-                    )}
-                  </tr>
-                </>
-              );
-            })()
-          ) : (
-            // fallback lama pakai `columns`
-            <tr className={headerPrimary}>
-              {leafColumns.map((c) => (
-                <th
-                  key={c.key}
-                  className={cn(
-                    headerCellBase,
-                    c.className,
-                    c.align === "center" && "text-center",
-                    c.align === "right" && "text-right"
-                  )}
-                  style={{ width: c.width }}
-                >
-                  {c.title}
-                </th>
-              ))}
-            </tr>
-          )}
-        </thead>
+          {footerRow ? (
+            <tfoot>
+              <tr className="bg-slate-50">
+                <td colSpan={leafColumns.length} className="p-0">
+                  {footerRow}
+                </td>
+              </tr>
+            </tfoot>
+          ) : null}
+        </table>
+      </div>
 
-        <tbody>
-          {loading ? (
-            <tr>
-              <td
-                className={cn(bodyCellBase, "text-center text-slate-500")}
-                colSpan={leafColumns.length || 1}
-              >
-                Memuat data...
-              </td>
-            </tr>
-          ) : !data || data.length === 0 ? (
-            <tr>
-              <td
-                className={cn(bodyCellBase, "text-center text-slate-500")}
-                colSpan={leafColumns.length || 1}
-              >
-                {emptyText}
-              </td>
-            </tr>
-          ) : (
-            data.map((row, idx) => {
-              const defaultKey = hasPagination ? `${page}-${idx}` : `${idx}`;
-              const rKey = (rowKey ? rowKey(row, idx) : undefined) ?? defaultKey;
-
-              const extraRowClass =
-                typeof rowClassName === "function" ? rowClassName(row, idx) : rowClassName;
-
-              return (
-                <tr key={rKey} className={cn("even:bg-slate-50/50", extraRowClass)}>
-                  {leafColumns.map((c, ci) => {
-                    const content = c.render ? c.render(row, idx) : row?.[c.key] ?? "";
-                    return (
-                      <td
-                        key={`${rKey}-${ci}`}
-                        className={cn(
-                          bodyCellBase,
-                          c.className,
-                          c.align === "center" && "text-center",
-                          c.align === "right" && "text-right"
-                        )}
-                      >
-                        {content}
-                      </td>
-                    );
-                  })}
-                </tr>
-              );
-            })
-          )}
-        </tbody>
-
-        {footerRow ? (
-          <tfoot>
-            <tr className="bg-slate-50">
-              <td colSpan={leafColumns.length} className="p-0">
-                {footerRow}
-              </td>
-            </tr>
-          </tfoot>
-        ) : null}
-      </table>
-
-      {/* Pagination */}
+      {/* Pagination - DI LUAR overflow container */}
       {hasPagination && (
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-3 py-3">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-3 py-3 border-t border-slate-200">
           <div className="text-[12px] text-slate-600">
             {total === 0 ? "No entries" : `Showing ${pageStart} to ${pageEnd} of ${total} entries`}
           </div>

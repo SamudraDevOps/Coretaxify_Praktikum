@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import Header from "./Header";
-// import Lampiran2Section from './section/Lampiran2';
-import PemegangSahamIndex from "./section/Lampiran2/BagianA";
-import DaftarPenyetoranIndex from "./section/Lampiran2/BagianB";
 
-const Lampiran2 = ({ data }) => {
+import PenghasilanKenaPPhIndex from "./section/Lampiran4/BagianA";
+import PenghasilanTidakObjekPajakIndex from "./section/Lampiran4/BagianB";
+
+const Lampiran4 = ({ data }) => {
   const [showBagianA, setShowBagianA] = useState(true);
   const [showBagianB, setShowBagianB] = useState(true);
 
@@ -13,16 +13,14 @@ const Lampiran2 = ({ data }) => {
     <div className="space-y-4">
       <Header />
 
-      {/* Bagian A - DAFTAR PEMEGANG SAHAM/PEMILIK MODAL DAN JUMLAH DIVIDEN/PEMBAGIAN LABA YANG DIBAGIKAN
-            DAFTAR SUSUNAN PENGIRIS DAN KOMISARIS */}
+      {/* Bagian A - PENGHASILAN YANG DIKENAKAN PPh BERSIFAT FINAL */}
       <div>
         <div
           className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
           onClick={() => setShowBagianA(!showBagianA)}
         >
           <h3 className="text-lg font-semibold">
-            A. DAFTAR PEMEGANG SAHAM/PEMILIK MODAL DAN JUMLAH DIVIDEN/PEMBAGIAN LABA YANG DIBAGIKAN
-            DAFTAR SUSUNAN PENGIRIS DAN KOMISARIS
+            A. PENGHASILAN YANG DIKENAKAN PPh BERSIFAT FINAL
           </h3>
           <span
             className={`transition-transform duration-500 ease-in-out ${
@@ -39,21 +37,19 @@ const Lampiran2 = ({ data }) => {
         >
           <div className="border rounded-md p-4 space-y-4">
             <div className="ml-4">
-              <PemegangSahamIndex />
+              <PenghasilanKenaPPhIndex />
             </div>
           </div>
         </div>
       </div>
 
-      {/* Bagian B - DAFTAR PENYERTAAN MODAL, UTANG, DAN/ATAU PIUTANG PADA PERUSAHAAN AFILIASI  */}
+      {/* Bagian B - PENGHASILAN YANG TIDAK TERMASUK OBEJEK PAJAK */}
       <div>
         <div
           className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
           onClick={() => setShowBagianB(!showBagianB)}
         >
-          <h3 className="text-lg font-semibold">
-            B. DAFTAR PENYERTAAN MODAL, UTANG, DAN/ATAU PIUTANG PADA PERUSAHAAN AFILIASI
-          </h3>
+          <h3 className="text-lg font-semibold">A. PENGHASILAN YANG TIDAK TERMASUK OBEJEK PAJAK</h3>
           <span
             className={`transition-transform duration-500 ease-in-out ${
               showBagianB ? "rotate-180" : "rotate-0"
@@ -69,7 +65,7 @@ const Lampiran2 = ({ data }) => {
         >
           <div className="border rounded-md p-4 space-y-4">
             <div className="ml-4">
-              <DaftarPenyetoranIndex />
+              <PenghasilanTidakObjekPajakIndex />
             </div>
           </div>
         </div>
@@ -78,4 +74,4 @@ const Lampiran2 = ({ data }) => {
   );
 };
 
-export default Lampiran2;
+export default Lampiran4;

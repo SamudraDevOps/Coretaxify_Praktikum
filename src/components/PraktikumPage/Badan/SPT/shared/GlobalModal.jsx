@@ -111,7 +111,7 @@ const BASE_FIELD_TEMPLATES = {
   },
 
   namaPemotong: {
-    key: "nama",
+    key: "namaPemotong",
     type: "text",
     title: "Nama ",
     placeholder: "Nama ",
@@ -163,7 +163,7 @@ const BASE_FIELD_TEMPLATES = {
     onChange: (value, updateField, selectedOption) => {
       updateField("negara", value);
       updateField("kodeNegara", selectedOption?.kodeNegara || "");
-      updateField("nama", value);
+      updateField("namaNegara", value);
 
       if (selectedOption?.mataUangPrefill && selectedOption.mataUangPrefill !== "—") {
         updateField("mataUang", selectedOption.mataUangPrefill);
@@ -182,7 +182,7 @@ const BASE_FIELD_TEMPLATES = {
     onChange: (value, updateField, selectedOption) => {
       updateField("lokasiHarta", value);
       updateField("kodeNegara", selectedOption?.kodeNegara || "");
-      updateField("nama", value);
+      updateField("namaNegara", value);
 
       if (selectedOption?.mataUangPrefill && selectedOption.mataUangPrefill !== "—") {
         updateField("mataUang", selectedOption.mataUangPrefill);
@@ -441,7 +441,7 @@ const GlobalModal = ({
     const isReadOnly = readOnlyFields.includes(key) || field.readOnly;
     const hasError = errors[key];
 
-    const value = type === "currency" ? formData[key] : formData[key] || "";
+    const value = type === "currency" || type === "number" ? formData[key] : formData[key] || "";
 
     const baseInputClass = cn(
       "flex-1 p-2 border rounded-md text-sm transition-colors",
@@ -619,18 +619,40 @@ const GlobalModal = ({
 
       case "year":
         return fieldWrapper(
-          <DatePicker
-            selected={yearToDate(value)}
-            onChange={(date) => {
-              const year = dateToYear(date);
-              updateField(key, year);
-            }}
-            showYearPicker
-            dateFormat="yyyy"
-            placeholderText={placeholder}
-            className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            {...(field.yearPickerProps || {})}
-          />
+          <div className="flex-1 relative">
+            <DatePicker
+              selected={yearToDate(value)}
+              onChange={(date) => {
+                const year = dateToYear(date);
+                updateField(key, year);
+              }}
+              showYearPicker
+              dateFormat="yyyy"
+              placeholderText={placeholder}
+              readOnly={isReadOnly}
+              disabled={isReadOnly}
+              className={cn(baseInputClass, "w-full pr-8 cursor-pointer")}
+              wrapperClassName="w-full"
+              calendarClassName="text-sm"
+              {...(field.yearPickerProps || {})}
+            />
+            {/* Icon panah dropdown */}
+            <div className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none">
+              <svg
+                className={cn("w-4 h-4", isReadOnly ? "text-gray-400" : "text-gray-500")}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </div>
+          </div>
         );
 
       case "text":
