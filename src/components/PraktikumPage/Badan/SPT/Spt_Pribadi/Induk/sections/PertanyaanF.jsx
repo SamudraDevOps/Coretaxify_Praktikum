@@ -1,15 +1,80 @@
-import React, { useState } from "react";
-import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+import React, { useState, useEffect } from "react";
+import { FaChevronDown } from "react-icons/fa";
+import Select from "react-select";
+import { parseFormattedNumber, formatRupiah } from "@utils/formatCurrency";
 
 const PertanyaanF = () => {
   const [showPembetulanSPT, setShowPembetulanSPT] = useState(false);
 
   // State untuk Bagian F - PEMBETULAN
-  const [r12a, setR12a] = useState(null);
-  const [amt12a, setAmt12a] = useState(0);
-  const [r12b, setR12b] = useState(null);
-  const [amt12b, setAmt12b] = useState(0);
+  const [amounts, setAmounts] = useState({
+    r12a: 0,
+    r12b: 0,
+  });
 
+    const handleAmountChange = (field) => (e) => {
+      const raw = e.target.value;
+  
+      if (raw.trim() === "") {
+        setAmounts((prev) => ({ ...prev, [field]: 0 }));
+        return;
+      }
+  
+      const numeric = parseFormattedNumber(raw);
+      setAmounts((prev) => ({ ...prev, [field]: numeric }));
+      console.log("Amount changed:", field, numeric);
+    };
+  
+    const handleRadioChange = (field, value) => {
+      setRadios((prev) => ({ ...prev, [field]: value }));
+      onAnswerChange?.(field, value);
+      console.log("Radio changed:", field, value);
+  
+      // logic khusus: kalau field = false, reset amount
+      // if (field === "r13" && value === false) {
+      //   setAmounts((prev) => ({ ...prev, r13: 0 }));
+      // }
+    };
+  
+    const handleSelectChange = (field, value) => {
+      setRadios((prev) => ({ ...prev, [field]: value }));
+      onAnswerChange?.(field, value);
+    };
+  
+    const DEFAULT_NULL_TEXT = "Pilih salah satu Ya/Tidak";
+  
+      const HELPER_CONFIG = {
+      r10a: {
+        yes: "Ya, Silahkan Mengisi Lampiran 1 Bagian E",
+        no: "Tidak, Lanjutkan pertanyaan 1.b.1",
+      },
+      r10d: {
+        yes: "Ya, Isi dengan Jumlah Pengembalian/Pengurangan Kredit PPh Luar Negeri",
+        no: "Tidak, Lanjutkan pertanyaan 1.c",
+      },
+    };
+  
+      const getHelperMessage = (field, value) => {
+      const cfg = HELPER_CONFIG[field];
+      if (!cfg) return "";
+  
+      if (value === null || value === undefined || value === "") {
+        return DEFAULT_NULL_TEXT;
+      }
+  
+      // Case 1: Boolean (YES/NO)
+      if (typeof value === "boolean") {
+        return value ? cfg.yes : cfg.no;
+      }
+  
+      // Case 2: Option select (option1, option2, dst)
+      if (cfg[value]) {
+        return cfg[value];
+      }
+  
+      return DEFAULT_NULL_TEXT;
+    };
+  
   return (
     <>
       {/* F. PEMBETULAN */}
@@ -47,10 +112,10 @@ const PertanyaanF = () => {
               <div className="col-span-12 md:col-span-5"></div>
               <div className="col-span-12 md:col-span-2">
                 <input
-                  type="number"
+                  type="text"
                   min={0}
-                  value={amt12a}
-                  onChange={(e) => setAmt12a(+e.target.value || 0)}
+                  value={formatRupiah(amounts.r12a).replace(/^Rp\s?/, "")} // Hilangkan "Rp" di depan dengan menggunakan replace(/^Rp\s?/, "")
+                  onChange={handleAmountChange("r12a")}
                   className="w-full text-center p-2 border rounded-md bg-gray-200 text-sm"
                 />
               </div>
@@ -67,10 +132,10 @@ const PertanyaanF = () => {
               <div className="col-span-12 md:col-span-5"></div>
               <div className="col-span-12 md:col-span-2">
                 <input
-                  type="number"
+                  type="text"
                   min={0}
-                  value={amt12b}
-                  onChange={(e) => setAmt12b(+e.target.value || 0)}
+                  value={formatRupiah(amounts.r12b).replace(/^Rp\s?/, "")} // Hilangkan "Rp" di depan dengan menggunakan replace(/^Rp\s?/, "")
+                  onChange={handleAmountChange("r12b")}
                   className="w-full text-center p-2 border rounded-md bg-gray-200 text-sm"
                 />
               </div>
