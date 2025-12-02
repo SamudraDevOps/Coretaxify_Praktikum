@@ -374,7 +374,7 @@ const BUPOTForm = ({
     const viewAsParam = urlParams.get("viewAs");
 
     if (viewAsParam) {
-      return id;
+      return akun;
     }
 
     return null;
