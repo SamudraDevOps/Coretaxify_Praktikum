@@ -369,6 +369,16 @@ const BUPOTForm = ({
     return null;
   };
 
+  const getRepresentatifFromUrl = () => {
+    const viewAsParam = urlParams.get("viewAs");
+
+    if (viewAsParam) {
+      return id;
+    }
+
+    return null;
+  }
+
   // Helper to toggle sections
   const toggleSection = (section) => {
     setOpenSections({
@@ -472,6 +482,7 @@ const BUPOTForm = ({
       const updatedFormData = {
         ...formData,
         ["tipe_bupot"]: currentBupot,
+        ["representatif_id"]: getRepresentatifFromUrl(),
         ["pembuat_id"]: getIdFromUrl(),
         ["status_penerbitan"]: "draft",
       };
@@ -484,6 +495,7 @@ const BUPOTForm = ({
       const updatedFormData = {
         ...formData,
         ["tipe_bupot"]: currentBupot,
+        ["representatif_id"]: getRepresentatifFromUrl(),
         ["pembuat_id"]: getIdFromUrl(),
         ["status_penerbitan"]: "draft",
         ["status"]: "invalid",
