@@ -1,135 +1,147 @@
 import React, { useEffect, useState } from "react";
 import { FaChevronDown } from "react-icons/fa";
+import Select from "react-select";
+import { parseFormattedNumber, formatRupiah } from "@utils/formatCurrency";
 
 const PertanyaanB = ({ onAnswerChange, answersState }) => {
   const [showIkhtisarPenghasilanNeto, setShowIkhtisarPenghasilanNeto] = useState(false);
 
-  // State untuk Bagian B - IKHTISAR PENGHASILAN NETO
-  const [r1a, setR1a] = useState(null);
-  const [amt1a, setAmt1a] = useState(0);
-  const [r1b1, setR1b1] = useState(null);
-  const [amt1b1, setAmt1b1] = useState(0);
-  const [r1b2, setR1b2] = useState("");
-  const [amt1b2, setAmt1b2] = useState(0);
-  const [r1b3, setR1b3] = useState("");
-  const [amt1b3, setAmt1b3] = useState(0);
-  const [r1b4, setR1b4] = useState("");
-  const [amt1b4, setAmt1b4] = useState(0);
-  const [r1b5, setR1b5] = useState(null);
-  const [amt1b5, setAmt1b5] = useState(0);
-  const [r1c, setR1c] = useState(null);
-  const [amt1c, setAmt1c] = useState(0);
-  const [r1d, setR1d] = useState(null);
-  const [amt1d, setAmt1d] = useState(0);
+  const r1b2Options = [
+    { value: 0, label: "Please select" },
+    {
+      value: 1,
+      label:
+        "Ya, termasuk WP OP yang memiliki peredaran bruto tertentu yang dikenakan PPh final",
+    },
+    { value: 2, label: "Ya, termasuk WP OPPT" },
+    { value: 3, label: "Tidak" },
+  ];
 
-  // STEP 1: Sync dengan parent state
+  const r1b3Options = [
+    { value: 0, label: "Please select" },
+    { value: 1, label: "Ya, saya menggunakan Norma." },
+    { value: 2, label: "Tidak, saya menyelenggarakan pembukuan." },
+  ];
+
+  const r1b4Options = [
+    { value: 0, label: "Please select" },
+    { value: 1, label: "Dagang" },
+    { value: 2, label: "Jasa" },
+    { value: 3, label: "Umum" },
+    { value: 4, label: "Manufaktur" },
+    { value: 5, label: "Lainnya" },
+  ];
+
 
   useEffect(() => {
     if (answersState) {
-      // Pertayaan 1.a
-      setR1a(answersState.r1a ?? null);
-      setAmt1a(answersState.amt1a ?? 0);
-
-      // Pertanyaan 1.b.1
-      setR1b1(answersState.r1b1 ?? null);
-      setAmt1b1(answersState.amt1b1 ?? 0);
-
-      // Pertanyaan 1.b.2
-      setR1b2(answersState.r1b2 ?? "");
-      setAmt1b2(answersState.amt1b2 ?? 0);
-
-      // Pertanyaan 1.b.3
-      setR1b3(answersState.r1b3 ?? "");
-      setAmt1b3(answersState.amt1b3 ?? 0);
-
-      // Pertanyaan 1.b.4
-      setR1b4(answersState.r1b4 ?? "");
-      setAmt1b4(answersState.amt1b4 ?? 0);
-
-      // Pertanyaan 1.C
-      setR1c(answersState.r1c ?? null);
-      setAmt1c(answersState.amt1c ?? 0);
-
-      // Pertanyaan 1.D
-      setR1d(answersState.r1d ?? null);
-      setAmt1d(answersState.amt1d ?? 0);
-
-      // setR1b1(answersState.hasPenghasilanUsaha ?? null);
-      //   setAmt1b1(answersState.amt1b1 ?? 0);
-      //   setR1b2(answersState.r1b2 ?? "");
-      //   setAmt1b2(answersState.amt1b2 ?? 0);
-      //   setR1b3(answersState.r1b3 ?? "");
-      //   setAmt1b3(answersState.amt1b3 ?? 0);
-      //   setR1b4(answersState.r1b4 ?? "");
-      //   setAmt1b4(answersState.amt1b4 ?? 0);
-      //   setR1b5(answersState.r1b5 ?? null);
-      //   setAmt1b5(answersState.amt1b5 ?? 0);
-      //   setR1c(answersState.hasPenghasilanLainnya ?? null);
-      //   setAmt1c(answersState.amt1c ?? 0);
-      //   setR1d(answersState.hasPenghasilanLuarNegeri ?? null);
-      //   setAmt1d(answersState.amt1d ?? 0);
     }
   }, [answersState]);
 
-  // STEP 2: Handler untuk mengirim data ke parent
-  const handleR1aChange = (value) => {
-    console.log("🔄 1.a changed to:", value); // Debug log
+   const [amounts, setAmounts] = useState({
+      r1a: 0,
+      r1b1: 0,
+      r1b5: 0,
+      r1c: 0,
+      r1d: 0,
+    });
 
-    // Update local state dulu
-    setR1a(value);
+    const[radios, setRadios] = useState({
+      r1a: null,
+      r1b1: null,
+      r1c: null,
+      r1d: null,
+    })
 
-    // Kirim ke parent melalui onAnswerChange
-    onAnswerChange?.("r1a", value);
+  const handleAmountChange = (field) => (e) => {
+    const raw = e.target.value;
 
-    // Kirim amount juga jika diperlukan
-    if (value) {
-      onAnswerChange?.("amt1a", amt1a);
+    if (raw.trim() === "") {
+      setAmounts((prev) => ({ ...prev, [field]: 0 }));
+      return;
     }
+
+    const numeric = parseFormattedNumber(raw);
+    setAmounts((prev) => ({ ...prev, [field]: numeric }));
+    console.log("Amount changed:", field, numeric);
   };
 
-  const handleR1b1Change = (value) => {
-    console.log("🔄 1.b.1 changed to:", value); // Debug log
-    setR1b1(value);
-    onAnswerChange?.("r1b1", value);
+  const handleRadioChange = (field, value) => {
+    setRadios((prev) => ({ ...prev, [field]: value }));
+    onAnswerChange?.(field, value);
+    console.log("Radio changed:", field, value);
+
+    // logic khusus: kalau field = false, reset amount
+    // if (field === "r13" && value === false) {
+    //   setAmounts((prev) => ({ ...prev, r13: 0 }));
+    // }
   };
 
-  const handleR1b2Change = (value) => {
-    console.log("🔄 1.b.2 changed to:", value); // Debug log
-
-    setR1b2(value);
-    onAnswerChange?.("r1b2", value);
+  const handleSelectChange = (field, value) => {
+    setRadios((prev) => ({ ...prev, [field]: value }));
+    onAnswerChange?.(field, value);
   };
 
-  const handleR1B3Change = (value) => {
-    console.log("🔄 1.b.3 changed to:", value);
-    setR1b3(value);
-    onAnswerChange?.("r1b3", value);
+  const DEFAULT_NULL_TEXT = "Pilih salah satu Ya/Tidak";
+
+    const HELPER_CONFIG = {
+    r1a: {
+      yes: "Ya, silahkan mengisi lampiran I Bagian D",
+      no: "Tidak, Lanjutkan pertanyaan 1.b.1",
+    },
+    r1b1: {
+      yes: "Ya, silahkan mengisi jumlah pajak yang dapat diangsur/ditunda",
+      no: "Tidak, Lanjutkan pertanyaan 1.c",
+    },
+    r1b2: {
+      1: "Anda memilih WP OP dengan peredaran bruto tertentu yang dikenakan PPh final. Silakan isi Lampiran 3B.",
+      2: "Anda termasuk WP OPPT. Silakan isi Lampiran 3B Bagian B.",
+      3: "Anda tidak termasuk kategori ini. Lanjutkan ke pertanyaan berikutnya 1.b.4.",
+    },
+    r1b3: {
+      1: "Ya, saya menyusun laporan keuangan berbasis kas/laporan keuangan.",
+      2: "Tidak, saya tidak menyusun laporan keuangan berbasis kas/laporan keuangan. Lanjutkan ke pertanyaan berikutnya.",
+    },
+    r1b4: {
+      0: "Pilih salah satu opsi",
+      1: "Anda memilih sektor usaha Dagang. Silakan isi Lampiran 3A-1 Bagian A.",
+      2: "Anda memilih sektor usaha Jasa. Silakan isi Lampiran 3A-2 Bagian A.",
+      3: "Anda memilih sektor usaha Umum. Silakan isi Lampiran 3A-4 Bagian A.",
+      4: "Anda memilih sektor usaha Manufaktur. Silakan isi Lampiran 3A-3 Bagian A.",
+      5: "Anda memilih sektor usaha Lainnya. Silakan isi Lampiran 3A-1 Bagian A."
+    },
+    r1c: {
+      yes: "Ya. Silahkan mengisi lampiran 3A-4 Bagian B",
+      no: "Tidak. Silahkan Melanjutkan ke pertanyaan berikutnya 1.d.",
+    },
+    r1d: {
+      yes: "Ya, silahkan mengisi lampiran 2 Bagian C",
+      no: "Tidak, silahkan lanjut pertanyaan berikutnya",
+    },
   };
 
-  const handleR1b4Change = (value) => {
-    console.log("🔄 1.b.4 changed to:", value); // Debug log
-    setR1b4(value);
-    onAnswerChange?.("r1b4", value);
+    const getHelperMessage = (field, value) => {
+    const cfg = HELPER_CONFIG[field];
+    if (!cfg) return "";
+
+    if (value === null || value === undefined || value === "") {
+      return DEFAULT_NULL_TEXT;
+    }
+
+    // Case 1: Boolean (YES/NO)
+    if (typeof value === "boolean") {
+      return value ? cfg.yes : cfg.no;
+    }
+
+    // Case 2: Option select (option1, option2, dst)
+    if (cfg[value]) {
+      return cfg[value];
+    }
+
+    return DEFAULT_NULL_TEXT;
   };
 
-  const handleR1cChange = (value) => {
-    console.log("🔄 1.c changed to:", value); // Debug log
-    setR1c(value);
-    onAnswerChange?.("r1c", value);
-  };
-
-  const handleR1dChange = (value) => {
-    console.log("🔄 1.d changed to:", value);
-    setR1d(value);
-    onAnswerChange?.("r1d", value);
-  };
-
-  // Handler untuk amount 1.a
-  const handleAmt1aChange = (value) => {
-    setAmt1a(value);
-    onAnswerChange?.("amt1a", value);
-  };
-
+  
   return (
     <>
       {/* Ikhtisar Penghasilan Neto */}
@@ -170,9 +182,9 @@ const PertanyaanB = ({ onAnswerChange, answersState }) => {
                     <input
                       type="radio"
                       name="r1a"
-                      checked={r1a === true}
+                      checked={radios.r1a === true}
                       // change
-                      onChange={() => handleR1aChange(true)}
+                      onChange={() => handleRadioChange("r1a", true)}
                     />
                     <span>Ya</span>
                   </label>
@@ -180,8 +192,8 @@ const PertanyaanB = ({ onAnswerChange, answersState }) => {
                     <input
                       type="radio"
                       name="r1a"
-                      checked={r1a === false}
-                      onChange={() => handleR1aChange(false)}
+                      checked={radios.r1a === false}
+                      onChange={() => handleRadioChange("r1a", false)}
                     />
                     <span>Tidak</span>
                   </label>
@@ -189,17 +201,15 @@ const PertanyaanB = ({ onAnswerChange, answersState }) => {
               </div>
               <div className="col-span-12 md:col-span-3 text-sm">
                 <div className="bg-blue-100 rounded px-3 py-2">
-                  {r1a === true && "Ya, silahkan mengisi lampiran I Bagian D"}
-                  {r1a === false && "Tidak, Lanjutkan pertanyaan 1.b.1"}
-                  {r1a === null && "Pilih salah satu Ya/Tidak"}
+                  {getHelperMessage("r1a", radios.r1a)}
                 </div>
               </div>
               <div className="col-span-12 md:col-span-2">
                 <input
-                  type="number"
+                  type="text"
                   min={0}
-                  value={amt1a}
-                  onChange={(e) => handleAmt1aChange(+e.target.value || 0)}
+                  value={formatRupiah(amounts.r3).replace(/^Rp\s?/, "")} // Hilangkan "Rp" di depan dengan menggunakan replace(/^Rp\s?/, "")
+                  onChange={handleAmountChange("r3")}
                   className="w-full text-center p-2 border rounded-md bg-gray-200 text-sm"
                 />
               </div>
@@ -220,17 +230,19 @@ const PertanyaanB = ({ onAnswerChange, answersState }) => {
                     <input
                       type="radio"
                       name="r1b1"
-                      checked={r1b1 === true}
-                      onChange={() => handleR1b1Change(true)}
+                      checked={radios.r1b1 === true}
+                      // change
+                      onChange={() => handleRadioChange("r1b1", true)}
                     />
                     <span>Ya</span>
                   </label>
                   <label className="inline-flex items-center gap-2">
-                    <input
+                  <input
                       type="radio"
                       name="r1b1"
-                      checked={r1b1 === false}
-                      onChange={() => handleR1b1Change(false)}
+                      checked={radios.r1b1 === false}
+                      // change
+                      onChange={() => handleRadioChange("r1b1", false)}
                     />
                     <span>Tidak</span>
                   </label>
@@ -238,9 +250,7 @@ const PertanyaanB = ({ onAnswerChange, answersState }) => {
               </div>
               <div className="col-span-12 md:col-span-3 text-sm">
                 <div className="bg-blue-100 rounded px-3 py-2">
-                  {r1b1 === true && "Ya, silahkan mengisi jumlah pajak yang dapat diangsur/ditunda"}
-                  {r1b1 === false && "Tidak, Lanjutkan pertanyaan 1.c"}
-                  {r1b1 === null && "Pilih salah satu Ya/Tidak"}
+                  {getHelperMessage("r1b1", radios.r1b1)}
                 </div>
               </div>
               <div className="col-span-12 md:col-span-2">{/* Tidak ada input untuk 1.b.1 */}</div>
@@ -256,28 +266,21 @@ const PertanyaanB = ({ onAnswerChange, answersState }) => {
                 </span>
               </div>
               <div className="col-span-12 md:col-span-2">
-                <select
-                  className="w-full p-2 border rounded-md text-sm truncate"
-                  value={r1b2 || ""}
-                  onChange={(e) => handleR1b2Change(e.target.value)}
-                >
-                  <option value="">Please select</option>
-                  <option value="ya_final" className="whitespace-normal break-words">
-                    Ya, termasuk WP OP yang memiliki peredaran bruto tertentu yang dikenakan PPh
-                    final
-                  </option>
-                  <option value="ya_oppt">Ya, termasuk WP OPPT</option>
-                  <option value="tidak">Tidak</option>
-                </select>
+                <Select
+                  value={r1b2Options.find((option) => option.value === radios.r1b2) || null}
+                  onChange={(selectedOption) =>
+                    handleSelectChange("r1b2", selectedOption?.value || "")
+                  }
+                  options={r1b2Options}
+                  className="text-sm"
+                  classNamePrefix="react-select"
+                  placeholder="Please select"
+                  isClearable={false} // opsional, jika ingin membiarkan "Please select" tetap terpilih
+                />
               </div>
               <div className="col-span-12 md:col-span-3 text-sm">
                 <div className="bg-blue-100 rounded px-3 py-2">
-                  {r1b2 === "ya_final" &&
-                    "Anda memilih WP OP dengan peredaran bruto tertentu yang dikenakan PPh final. Silakan isi Lampiran 3B."}
-                  {r1b2 === "ya_oppt" && "Anda termasuk WP OPPT. Silakan isi Lampiran 3B Bagian B."}
-                  {r1b2 === "tidak" &&
-                    "Anda tidak termasuk kategori ini. Lanjutkan ke pertanyaan berikutnya 1.b.4."}
-                  {r1b2 === "" && "Pilih salah satu opsi"}
+                  {getHelperMessage("r1b2", radios.r1b2)}
                 </div>
               </div>
               <div className="col-span-12 md:col-span-2">{/* Tidak ada input untuk 1.b.2 */}</div>
@@ -292,23 +295,21 @@ const PertanyaanB = ({ onAnswerChange, answersState }) => {
                 </span>
               </div>
               <div className="col-span-12 md:col-span-2">
-                <select
-                  className="w-full p-2 border rounded-md text-sm"
-                  value={r1b3 || ""}
-                  onChange={(e) => handleR1B3Change(e.target.value)}
-                >
-                  <option value="">Please select</option>
-                  <option value="ya">Ya, saya menggunakan Norma.</option>
-                  <option value="tidak">Tidak, saya menyelenggarakan pembukuan.</option>
-                </select>
+                <Select
+                  value={r1b3Options.find((option) => option.value === radios.r1b3) || null}
+                  onChange={(selectedOption) =>
+                    handleSelectChange("r1b3", selectedOption?.value || "")
+                  }
+                  options={r1b3Options}
+                  className="text-sm"
+                  classNamePrefix="react-select"
+                  placeholder="Please select"
+                  isClearable={false} // opsional, jika ingin membiarkan "Please select" tetap terpilih
+                />
               </div>
               <div className="col-span-12 md:col-span-3 text-sm">
                 <div className="bg-blue-100 rounded px-3 py-2">
-                  {r1b3 === "ya" &&
-                    "Ya, saya menyusun laporan keuangan berbasis kas/laporan keuangan."}
-                  {r1b3 === "tidak" &&
-                    "Tidak, saya tidak menyusun laporan keuangan berbasis kas/laporan keuangan. Lanjutkan ke pertanyaan berikutnya."}
-                  {r1b3 === "" && "Pilih salah satu opsi"}
+                  {getHelperMessage("r1b3", radios.r1b3)}
                 </div>
               </div>
               <div className="col-span-12 md:col-span-2">{/* Tidak ada input untuk 1.b.3 */}</div>
@@ -323,36 +324,24 @@ const PertanyaanB = ({ onAnswerChange, answersState }) => {
                 </span>
               </div>
               <div className="col-span-12 md:col-span-2">
-                <select
-                  className="w-full p-2 border rounded-md text-sm"
-                  value={r1b4 || ""}
-                  onChange={(e) => handleR1b4Change(e.target.value)}
-                >
-                  <option value="">Please select</option>
-                  <option value="Dagang">Dagang</option>
-                  <option value="Jasa">Jasa</option>
-                  <option value="Umum">Umum</option>
-                  <option value="Manufaktur">Manufaktur</option>
-                  <option value="Lainnya">Lainnya</option>
-                </select>
+                <Select
+                  value={r1b4Options.find((option) => option.value === radios.r1b4) || null}
+                  onChange={(selectedOption) =>
+                    handleSelectChange("r1b4", selectedOption?.value || "")
+                  }
+                  options={r1b4Options}
+                  className="text-sm"
+                  classNamePrefix="react-select"
+                  placeholder="Please select"
+                  isClearable={false} // opsional, jika ingin membiarkan "Please select" tetap terpilih
+                />
               </div>
               <div className="col-span-12 md:col-span-3 text-sm">
                 <div className="bg-blue-100 rounded px-3 py-2">
-                  {r1b4 === "Dagang" &&
-                    "Anda memilih sektor usaha Dagang. Silakan isi Lampiran 3A-1 Bagian A."}
-                  {r1b4 === "Jasa" &&
-                    "Anda memilih sektor usaha Jasa. Silakan isi Lampiran 3A-2 Bagian A."}
-                  {r1b4 === "Umum" &&
-                    "Anda memilih sektor usaha Umum. Silakan isi Lampiran 3A-4 Bagian A."}
-                  {r1b4 === "Manufaktur" &&
-                    "Anda memilih sektor usaha Manufaktur. Silakan isi Lampiran 3A-3 Bagian A."}
-
-                  {r1b4 === "Lainnya" &&
-                    "Anda memilih sektor usaha Lainnya. Silakan isi Lampiran 3A-1 Bagian A."}
-                  {r1b4 === "" && "Pilih salah satu opsi"}
+                  {getHelperMessage("r1b4", radios.r1b4)}
                 </div>
               </div>
-              <div className="col-span-12 md:col-span-2">{/* Tidak ada input untuk 1.b.4 */}</div>
+              <div className="col-span-12 md:col-span-2">{/* Tidak ada input untuk 2 */}</div>
             </div>
 
             {/* 1.b.5 */}
@@ -366,10 +355,10 @@ const PertanyaanB = ({ onAnswerChange, answersState }) => {
               <div className="col-span-12 md:col-span-5"></div>
               <div className="col-span-12 md:col-span-2">
                 <input
-                  type="number"
+                  type="text"
                   min={0}
-                  value={amt1b5}
-                  onChange={(e) => setAmt1b5(+e.target.value || 0)}
+                  value={formatRupiah(amounts.r1b5).replace(/^Rp\s?/, "")} // Hilangkan "Rp" di depan dengan menggunakan replace(/^Rp\s?/, "")
+                  onChange={handleAmountChange("r1b5")}
                   className="w-full text-center p-2 border rounded-md bg-gray-200 text-sm"
                 />
               </div>
@@ -385,21 +374,23 @@ const PertanyaanB = ({ onAnswerChange, answersState }) => {
               </div>
               <div className="col-span-12 md:col-span-2">
                 <div className="flex items-center gap-6">
-                  <label className="inline-flex items-center gap-2">
+                 <label className="inline-flex items-center gap-2">
                     <input
                       type="radio"
                       name="r1c"
-                      checked={r1c === true}
-                      onChange={() => handleR1cChange(true)}
+                      checked={radios.r1c === true}
+                      // change
+                      onChange={() => handleRadioChange("r1c", true)}
                     />
                     <span>Ya</span>
                   </label>
                   <label className="inline-flex items-center gap-2">
-                    <input
+                  <input
                       type="radio"
                       name="r1c"
-                      checked={r1c === false}
-                      onChange={() => handleR1cChange(false)}
+                      checked={radios.r1c === false}
+                      // change
+                      onChange={() => handleRadioChange("r1c", false)}
                     />
                     <span>Tidak</span>
                   </label>
@@ -407,17 +398,15 @@ const PertanyaanB = ({ onAnswerChange, answersState }) => {
               </div>
               <div className="col-span-12 md:col-span-3 text-sm">
                 <div className="bg-blue-100 rounded px-3 py-2">
-                  {r1c === true && "Ya. Silahkan mengisi lampiran 3A-4 Bagian B"}
-                  {r1c === false && "Tidak. Silahkan Melanjutkan ke pertanyaan berikutnya 1.d."}
-                  {r1c === null && "Pilih salah satu Ya/Tidak"}
+                  {getHelperMessage("r1c", radios.r1c)}
                 </div>
               </div>
               <div className="col-span-12 md:col-span-2">
                 <input
-                  type="number"
+                  type="text"
                   min={0}
-                  value={amt1c}
-                  onChange={(e) => setAmt1c(+e.target.value || 0)}
+                  value={formatRupiah(amounts.r1c).replace(/^Rp\s?/, "")} // Hilangkan "Rp" di depan dengan menggunakan replace(/^Rp\s?/, "")
+                  onChange={handleAmountChange("r1c")}
                   className="w-full text-center p-2 border rounded-md bg-gray-200 text-sm"
                 />
               </div>
@@ -437,8 +426,9 @@ const PertanyaanB = ({ onAnswerChange, answersState }) => {
                     <input
                       type="radio"
                       name="r1d"
-                      checked={r1d === true}
-                      onChange={() => handleR1dChange(true)}
+                      checked={radios.r1d === true}
+                      // change
+                      onChange={() => handleRadioChange("r1d", true)}
                     />
                     <span>Ya</span>
                   </label>
@@ -446,8 +436,8 @@ const PertanyaanB = ({ onAnswerChange, answersState }) => {
                     <input
                       type="radio"
                       name="r1d"
-                      checked={r1d === false}
-                      onChange={() => handleR1dChange(false)}
+                      checked={radios.r1d === false}
+                      onChange={() => handleRadioChange("r1d", false)}
                     />
                     <span>Tidak</span>
                   </label>
@@ -455,17 +445,15 @@ const PertanyaanB = ({ onAnswerChange, answersState }) => {
               </div>
               <div className="col-span-12 md:col-span-3 text-sm">
                 <div className="bg-blue-100 rounded px-3 py-2">
-                  {r1d === true && "Ya, silahkan mengisi lampiran 2 Bagian C"}
-                  {r1d === false && "Tidak. Silahkan Melanjutkan ke pertanyaan berikutnya."}
-                  {r1d === null && "Pilih salah satu Ya/Tidak"}
+                  {getHelperMessage("r1d", radios.r1d)}
                 </div>
               </div>
               <div className="col-span-12 md:col-span-2">
                 <input
-                  type="number"
+                  type="text"
                   min={0}
-                  value={amt1d}
-                  onChange={(e) => setAmt1d(+e.target.value || 0)}
+                  value={formatRupiah(amounts.r1d).replace(/^Rp\s?/, "")} // Hilangkan "Rp" di depan dengan menggunakan replace(/^Rp\s?/, "")
+                  onChange={handleAmountChange("r1d")}
                   className="w-full text-center p-2 border rounded-md bg-gray-200 text-sm"
                 />
               </div>

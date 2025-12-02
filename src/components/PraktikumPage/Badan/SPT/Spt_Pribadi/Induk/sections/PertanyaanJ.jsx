@@ -1,15 +1,94 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaChevronDown } from "react-icons/fa";
+import Select from "react-select";
+import { parseFormattedNumber, formatRupiah } from "@utils/formatCurrency";
 
 const PertanyaanJ = () => {
   const [showLampiranTambahan, setShowLampiranTambahan] = useState(false);
 
   // State untuk Bagian J - LAMPIRAN TAMBAHAN
-  const [ra, setRa] = useState(null);
-  const [rb, setRb] = useState(null);
-  const [rc, setRc] = useState(null);
-  const [rd, setRd] = useState(null);
-  const [re, setRe] = useState(null);
+  const[radios, setRadios] = useState({
+    ra: null,
+    rb: null,
+    rc: null,
+    rd: null,
+    re: null,
+  })
+
+  const handleAmountChange = (field) => (e) => {
+    const raw = e.target.value;
+
+    if (raw.trim() === "") {
+      setAmounts((prev) => ({ ...prev, [field]: 0 }));
+      return;
+    }
+
+    const numeric = parseFormattedNumber(raw);
+    setAmounts((prev) => ({ ...prev, [field]: numeric }));
+    console.log("Amount changed:", field, numeric);
+  };
+
+  const handleRadioChange = (field, value) => {
+    setRadios((prev) => ({ ...prev, [field]: value }));
+    onAnswerChange?.(field, value);
+    console.log("Radio changed:", field, value);
+
+    // logic khusus: kalau field = false, reset amount
+    // if (field === "r13" && value === false) {
+    //   setAmounts((prev) => ({ ...prev, r13: 0 }));
+    // }
+  };
+
+  const handleSelectChange = (field, value) => {
+    setRadios((prev) => ({ ...prev, [field]: value }));
+    onAnswerChange?.(field, value);
+  };
+
+  const DEFAULT_NULL_TEXT = "Pilih salah satu Ya/Tidak";
+
+    const HELPER_CONFIG = {
+    ra: {
+      yes: "Ya, Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      no: "Tidak, Lanjutkan pertanyaan berikutnya", 
+    },
+    rb: {
+      yes: "Ya, Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      no: "Tidak, Tidak ada Berkas yang perlu dilampirkan ",
+    },
+    rc: {
+      yes: "Ya, Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      no: "Tidak, Tidak ada Berkas yang perlu dilampirkan ",
+    },
+    rd: {
+      yes: "Ya, Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      no: "Tidak, Tidak ada Berkas yang perlu dilampirkan ",
+    },
+    re: {
+      yes: "Ya, Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      no: "Tidak, Tidak ada Berkas yang perlu dilampirkan ",
+    },
+  };
+
+    const getHelperMessage = (field, value) => {
+    const cfg = HELPER_CONFIG[field];
+    if (!cfg) return "";
+
+    if (value === null || value === undefined || value === "") {
+      return DEFAULT_NULL_TEXT;
+    }
+
+    // Case 1: Boolean (YES/NO)
+    if (typeof value === "boolean") {
+      return value ? cfg.yes : cfg.no;
+    }
+
+    // Case 2: Option select (option1, option2, dst)
+    if (cfg[value]) {
+      return cfg[value];
+    }
+
+    return DEFAULT_NULL_TEXT;
+  };
 
   return (
     <>
@@ -47,8 +126,9 @@ const PertanyaanJ = () => {
                     <input
                       type="radio"
                       name="ra"
-                      checked={ra === true}
-                      onChange={() => setRa(true)}
+                      checked={radios.ra === true}
+                      // change
+                      onChange={() => handleRadioChange("ra", true)}
                     />
                     <span>Ya</span>
                   </label>
@@ -56,8 +136,8 @@ const PertanyaanJ = () => {
                     <input
                       type="radio"
                       name="ra"
-                      checked={ra === false}
-                      onChange={() => setRa(false)}
+                      checked={radios.ra === false}
+                      onChange={() => handleRadioChange("ra", false)}
                     />
                     <span>Tidak</span>
                   </label>
@@ -65,9 +145,7 @@ const PertanyaanJ = () => {
               </div>
               <div className="col-span-12 md:col-span-3 text-sm">
                 <div className="bg-blue-100 rounded px-3 py-2">
-                  {ra === true && "Ya, Lorem ipsum dolor sit amet, consectetur adipiscing elit."}
-                  {ra === false && "Tidak, Jenis Pembukaan adalah Pembukaan Sederhana"}
-                  {ra === null && "Pilih salah satu Ya/Tidak"}
+                  {getHelperMessage("ra", radios.ra)}
                 </div>
               </div>
             </div>
@@ -87,8 +165,8 @@ const PertanyaanJ = () => {
                     <input
                       type="radio"
                       name="rb"
-                      checked={rb === true}
-                      onChange={() => setRb(true)}
+                      checked={radios.rb === true}
+                      onChange={() => handleRadioChange("rb", true)}
                     />
                     <span>Ya</span>
                   </label>
@@ -96,8 +174,8 @@ const PertanyaanJ = () => {
                     <input
                       type="radio"
                       name="rb"
-                      checked={rb === false}
-                      onChange={() => setRb(false)}
+                      checked={radios.rb === false}
+                      onChange={() => handleRadioChange("rb", false)}
                     />
                     <span>Tidak</span>
                   </label>
@@ -105,9 +183,7 @@ const PertanyaanJ = () => {
               </div>
               <div className="col-span-12 md:col-span-3 text-sm">
                 <div className="bg-blue-100 rounded px-3 py-2">
-                  {rb === true && "Ya, Lorem ipsum dolor sit amet, consectetur adipiscing elit."}
-                  {rb === false && "Tidak, Tidak ada Berkas yang perlu dilampirkan "}
-                  {rb === null && "Pilih salah satu Ya/Tidak"}
+                  {getHelperMessage("rb", radios.rb)}
                 </div>
               </div>
             </div>
@@ -127,8 +203,8 @@ const PertanyaanJ = () => {
                     <input
                       type="radio"
                       name="rc"
-                      checked={rc === true}
-                      onChange={() => setRc(true)}
+                      checked={radios.rc === true}
+                      onChange={() => handleRadioChange("rc", true)}
                     />
                     <span>Ya</span>
                   </label>
@@ -136,8 +212,8 @@ const PertanyaanJ = () => {
                     <input
                       type="radio"
                       name="rc"
-                      checked={rc === false}
-                      onChange={() => setRc(false)}
+                      checked={radios.rc === false}
+                      onChange={() => handleRadioChange("rc", false)}
                     />
                     <span>Tidak</span>
                   </label>
@@ -145,9 +221,7 @@ const PertanyaanJ = () => {
               </div>
               <div className="col-span-12 md:col-span-3 text-sm">
                 <div className="bg-blue-100 rounded px-3 py-2">
-                  {rc === true && "Ya, Lorem ipsum dolor sit amet, consectetur adipiscing elit."}
-                  {rc === false && "Tidak, Tidak ada Berkas yang perlu dilampirkan "}
-                  {rc === null && "Pilih salah satu Ya/Tidak"}
+                  {getHelperMessage("rc", radios.rc)}
                 </div>
               </div>
             </div>
@@ -167,8 +241,8 @@ const PertanyaanJ = () => {
                     <input
                       type="radio"
                       name="rd"
-                      checked={rd === true}
-                      onChange={() => setRd(true)}
+                      checked={radios.rd === true}
+                      onChange={() => handleRadioChange("rd", true)}
                     />
                     <span>Ya</span>
                   </label>
@@ -176,8 +250,8 @@ const PertanyaanJ = () => {
                     <input
                       type="radio"
                       name="rd"
-                      checked={rd === false}
-                      onChange={() => setRd(false)}
+                      checked={radios.rd === false}
+                      onChange={() => handleRadioChange("rd", false)}
                     />
                     <span>Tidak</span>
                   </label>
@@ -185,10 +259,7 @@ const PertanyaanJ = () => {
               </div>
               <div className="col-span-12 md:col-span-3 text-sm">
                 <div className="bg-blue-100 rounded px-3 py-2">
-                  {rd === true && "Ya, Lorem ipsum dolor sit amet, consectetur adipiscing elit."}
-                  {rd === false &&
-                    "Tidak, Lorem ipsum dolor sit amet, consectetur adipiscing elit. "}
-                  {rd === null && "Pilih salah satu Ya/Tidak"}
+                  {getHelperMessage("rd", radios.rd)}
                 </div>
               </div>
             </div>
@@ -208,8 +279,8 @@ const PertanyaanJ = () => {
                     <input
                       type="radio"
                       name="re"
-                      checked={re === true}
-                      onChange={() => setRe(true)}
+                      checked={radios.re === true}
+                      onChange={() => handleRadioChange("re", true)}
                     />
                     <span>Ya</span>
                   </label>
@@ -217,8 +288,8 @@ const PertanyaanJ = () => {
                     <input
                       type="radio"
                       name="re"
-                      checked={re === false}
-                      onChange={() => setRe(false)}
+                      checked={radios.re === false}
+                      onChange={() => handleRadioChange("re", false)}
                     />
                     <span>Tidak</span>
                   </label>
@@ -226,10 +297,7 @@ const PertanyaanJ = () => {
               </div>
               <div className="col-span-12 md:col-span-3 text-sm">
                 <div className="bg-blue-100 rounded px-3 py-2">
-                  {re === true && "Ya, Lorem ipsum dolor sit amet, consectetur adipiscing elit."}
-                  {re === false &&
-                    "Tidak, Lorem ipsum dolor sit amet, consectetur adipiscing elit. "}
-                  {re === null && "Pilih salah satu Ya/Tidak"}
+                  {getHelperMessage("re", radios.re)}
                 </div>
               </div>
             </div>
