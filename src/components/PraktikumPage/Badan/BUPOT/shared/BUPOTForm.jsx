@@ -370,6 +370,7 @@ const BUPOTForm = ({
   };
 
   const getRepresentatifFromUrl = () => {
+    const urlParams = new URLSearchParams(window.location.search);
     const viewAsParam = urlParams.get("viewAs");
 
     if (viewAsParam) {
