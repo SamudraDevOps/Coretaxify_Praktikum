@@ -16,9 +16,9 @@ export default function Lampiran_5({ data }) {
   });
 
   // Handler untuk menerima total dari BagianA
-  const handleKompensasiTotal = (total2025) => {
+  const handleKompensasiTotal = useCallback((total2025) => {
     setForm((prev) => ({ ...prev, komFiskal: total2025 }));
-  };
+  }, []);
 
   // Handler untuk menerima total dari BagianB (totalPengurangL5B)
   // const handlePenguranganTotal = (totalPengurangL5B) => {
@@ -26,10 +26,10 @@ export default function Lampiran_5({ data }) {
 
   // };
 
-  const handlePenguranganTotal = (totalPengurangL5B) => {
+  const handlePenguranganTotal = useCallback((totalPengurangL5B) => {
     console.log("Parent menerima PenguranganNeto:", totalPengurangL5B);
     setForm((prev) => ({ ...prev, PenguranganNeto: totalPengurangL5B }));
-  };
+  }, []);
 
   return (
     <div className="space-y-4">

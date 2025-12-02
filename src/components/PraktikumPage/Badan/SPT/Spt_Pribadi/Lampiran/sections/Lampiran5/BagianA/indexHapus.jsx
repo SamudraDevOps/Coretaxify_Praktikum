@@ -1,3 +1,4 @@
+// d:\Coretaxify_Praktikum\src\components\PraktikumPage\Badan\SPT\Spt_Pribadi\Lampiran\sections\Lampiran5\BagianA\index.jsx
 
 import React, { useState, useMemo, useEffect } from "react";
 import KompensasiKerugian from "./KompensasiKerugian";
@@ -237,11 +238,11 @@ export default function BagianA({ onTotalChange }) {
           readOnly: isReadOnlyRow,
           className: isReadOnlyRow ? "bg-gray-100 text-gray-600" : "",
         },
-        // {
-        //   key: "group-kompensasi",
-        //   type: "group-label",
-        //   title: "Kompensasi Kerugian Fiskal",
-        // },
+        {
+          key: "group-kompensasi",
+          type: "group-label",
+          title: "Kompensasi Kerugian Fiskal",
+        },
         {
           key: "2021",
           type: "currency",
