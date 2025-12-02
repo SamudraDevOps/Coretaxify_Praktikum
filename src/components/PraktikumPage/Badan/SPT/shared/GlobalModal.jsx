@@ -4,6 +4,7 @@ import { formatNumber, parseFormattedNumber } from "@utils/formatCurrency";
 import { defaultYearPickerProps, yearToDate, dateToYear } from "@utils/datePickerUtils";
 import DatePicker from "react-datepicker";
 import Select from "react-select";
+import RegionSelector from "./RegionSelector";
 function cn(...cls) {
   return cls.filter(Boolean).join(" ");
 }
@@ -441,7 +442,12 @@ const GlobalModal = ({
     const isReadOnly = readOnlyFields.includes(key) || field.readOnly;
     const hasError = errors[key];
 
-    const value = type === "currency" || type === "number" ? formData[key] : formData[key] || "";
+    const value = (() => {
+      if (type === "currency" || type === "number") {
+        return formData[key] !== undefined ? formData[key] : "";
+      }
+      return formData[key] || "";
+    })();
 
     const baseInputClass = cn(
       "flex-1 p-2 border rounded-md text-sm transition-colors",
@@ -648,10 +654,31 @@ const GlobalModal = ({
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
+                  s
                   d="M19 9l-7 7-7-7"
                 />
               </svg>
             </div>
+          </div>
+        );
+      case "select-wilayah":
+        return (
+          <div key={field.key} className="space-y-1">
+            {/* RegionSelector sudah punya label sendiri, jadi kita wrapper saja */}
+            <RegionSelector
+              value={formData[field.key] || {}}
+              onChange={(selected) => {
+                updateField(field.key, {
+                  province: selected.province,
+                  regency: selected.regency,
+                  district: selected.district,
+                  village: selected.village,
+                });
+              }}
+              disabled={isReadOnly}
+            />
+
+            {hasError && <p className="text-red-500 text-xs mt-1 ml-52">{hasError}</p>}
           </div>
         );
 
