@@ -14,7 +14,15 @@ import {
   PertanyaanI,
   PertanyaanJ,
 } from "./section";
-import { Header, LampiranL1B, LampiranL1C, Lampiran2, Lampiran3, Lampiran4 } from "../Lampiran";
+import {
+  Header,
+  LampiranL1B,
+  LampiranL1C,
+  Lampiran2,
+  Lampiran3,
+  Lampiran4,
+  Lampiran5,
+} from "../Lampiran";
 
 const CreateKonsepBadan = () => {
   const [showHeaderInduk, setShowHeaderInduk] = useState(true);
@@ -88,10 +96,20 @@ const CreateKonsepBadan = () => {
     allLampiran.push({
       id: "lampiran-4",
       title: "L4",
-      subtitle: "Lampiran IV - Kredit Pajak",
+      subtitle:
+        "Lampiran IV - Penghasilan yang Dikenalakn Pajak Final dan Daftar Penghasilan yang Bukan Objek Pajak",
       component: "Lampiran_4",
       badge: "Tersedia",
       order: 5, // Urutan kelima
+    });
+
+    allLampiran.push({
+      id: "lampiran-5",
+      title: "L5",
+      subtitle: "Lampiran v -Rekapitulasi Peredaran Bruto",
+      component: "Lampiran_5",
+      badge: "Tersedia",
+      order: 5,
     });
 
     // if (answersState.r1a === true) {
@@ -126,6 +144,8 @@ const CreateKonsepBadan = () => {
         return <Lampiran3 data={data} />;
       case "Lampiran_4":
         return <Lampiran4 data={data} />;
+      case "Lampiran_5":
+        return <Lampiran5 data={data} />;
       default:
         return (
           <div className="text-center py-8">

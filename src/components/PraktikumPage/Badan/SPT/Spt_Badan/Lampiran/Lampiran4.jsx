@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import Header from "./Header";
-
 import PenghasilanKenaPPhIndex from "./section/Lampiran4/BagianA";
 import PenghasilanTidakObjekPajakIndex from "./section/Lampiran4/BagianB";
 
@@ -49,7 +48,7 @@ const Lampiran4 = ({ data }) => {
           className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
           onClick={() => setShowBagianB(!showBagianB)}
         >
-          <h3 className="text-lg font-semibold">A. PENGHASILAN YANG TIDAK TERMASUK OBEJEK PAJAK</h3>
+          <h3 className="text-lg font-semibold">B. PENGHASILAN YANG TIDAK TERMASUK OBEJEK PAJAK</h3>
           <span
             className={`transition-transform duration-500 ease-in-out ${
               showBagianB ? "rotate-180" : "rotate-0"

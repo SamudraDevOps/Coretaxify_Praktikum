@@ -4,3 +4,4 @@ export { default as LampiranL1C } from "./LampiranL1-C";
 export { default as Lampiran2 } from "./Lampiran2";
 export { default as Lampiran3 } from "./Lampiran3";
 export { default as Lampiran4 } from "./Lampiran4";
+export { default as Lampiran5 } from "./Lampiran5";
