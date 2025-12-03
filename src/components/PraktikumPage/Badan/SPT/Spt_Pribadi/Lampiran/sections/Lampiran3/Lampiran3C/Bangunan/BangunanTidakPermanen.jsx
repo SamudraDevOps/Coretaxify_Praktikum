@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Plus, Edit, Trash2 } from "lucide-react";
 import { formatNumber, parseFormattedNumber, formatRupiah } from "@utils/formatCurrency";
 import GlobalModal from "@shared/GlobalModal";
-export default function BangunanTidakPermanen({ config }) {
+export default function HartaBerwujud({ config }) {
   const {
     baseFields = [
       "kode",

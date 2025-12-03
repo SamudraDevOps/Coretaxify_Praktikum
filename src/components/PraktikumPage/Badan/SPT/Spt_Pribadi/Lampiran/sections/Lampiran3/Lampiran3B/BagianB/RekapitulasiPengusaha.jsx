@@ -3,7 +3,7 @@ import { Edit } from "lucide-react";
 import { formatRupiah } from "@utils/formatCurrency";
 import GlobalTable from "@shared/GlobalTable";
 
-export default function RekapitulasiPengusaha({ rows, openEditModal }) {
+export default function RekapitulasiBruto({ rows, openEditModal }) {
   const columnGroups = [
     {
       title: "TINDAKAN",
