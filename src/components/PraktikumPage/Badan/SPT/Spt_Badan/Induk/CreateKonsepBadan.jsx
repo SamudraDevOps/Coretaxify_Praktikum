@@ -22,6 +22,7 @@ import {
   Lampiran3,
   Lampiran4,
   Lampiran5,
+  Lampiran9,
 } from "../Lampiran";
 
 const CreateKonsepBadan = () => {
@@ -112,6 +113,15 @@ const CreateKonsepBadan = () => {
       order: 5,
     });
 
+    allLampiran.push({
+      id: "lampiran-9",
+      title: "L9",
+      subtitle: "Lampiran IX - Harta Berwujud",
+      component: "Lampiran_9",
+      badge: "Tersedia",
+      order: 5,
+    });
+
     // if (answersState.r1a === true) {
     //   allLampiran.push({
     //     id: "lampiran-1",
@@ -146,6 +156,8 @@ const CreateKonsepBadan = () => {
         return <Lampiran4 data={data} />;
       case "Lampiran_5":
         return <Lampiran5 data={data} />;
+      case "Lampiran_9":
+        return <Lampiran9 data={data} />;
       default:
         return (
           <div className="text-center py-8">
