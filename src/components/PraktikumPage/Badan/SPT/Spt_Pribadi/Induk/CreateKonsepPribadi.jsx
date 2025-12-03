@@ -223,8 +223,8 @@ const CreateKonsepPribadi = () => {
       });
     }
 
-    // Lampiran 3A1 -
-    if (answersState.r1b4 === "Dagang") {
+    // Lampiran 3A1 - Dagang
+    if (answersState.r1b4 === 1) {
       allLampiran.push({
         id: "lampiran-3A1",
         title: "L-3A-1",
@@ -236,7 +236,7 @@ const CreateKonsepPribadi = () => {
     }
     // Lampiran 3A2 - Muncul jika r1b3 === "Jasa"
 
-    if (answersState.r1b4 === "Jasa") {
+    if (answersState.r1b4 === 2) {
       allLampiran.push({
         id: "lampiran-3A2",
         title: "L-3A-2",
@@ -247,7 +247,7 @@ const CreateKonsepPribadi = () => {
       });
     }
     // Lampiran 3A3 - SELALU TERSEDIA
-    if (answersState.r1b4 === "Umum") {
+    if (answersState.r1b4 === 3) {
       allLampiran.push({
         id: "lampiran-3A3",
         title: "L-3A-3",
@@ -259,7 +259,7 @@ const CreateKonsepPribadi = () => {
     }
 
     // Lampiran 3B - Muncul jika r1b2 === "ya_final" ATAU "ya_oppt"
-    if (answersState.r1b2 === "ya_final" || answersState.r1b2 === "ya_oppt") {
+    if (answersState.r1b2 === 1 || answersState.r1b2 === 2) {
       allLampiran.push({
         id: "lampiran-3B",
         title: "L-3B",

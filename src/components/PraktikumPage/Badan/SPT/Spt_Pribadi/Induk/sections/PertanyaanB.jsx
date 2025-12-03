@@ -10,8 +10,7 @@ const PertanyaanB = ({ onAnswerChange, answersState }) => {
     { value: 0, label: "Please select" },
     {
       value: 1,
-      label:
-        "Ya, termasuk WP OP yang memiliki peredaran bruto tertentu yang dikenakan PPh final",
+      label: "Ya, termasuk WP OP yang memiliki peredaran bruto tertentu yang dikenakan PPh final",
     },
     { value: 2, label: "Ya, termasuk WP OPPT" },
     { value: 3, label: "Tidak" },
@@ -32,26 +31,25 @@ const PertanyaanB = ({ onAnswerChange, answersState }) => {
     { value: 5, label: "Lainnya" },
   ];
 
-
   useEffect(() => {
     if (answersState) {
     }
   }, [answersState]);
 
-   const [amounts, setAmounts] = useState({
-      r1a: 0,
-      r1b1: 0,
-      r1b5: 0,
-      r1c: 0,
-      r1d: 0,
-    });
+  const [amounts, setAmounts] = useState({
+    r1a: 0,
+    r1b1: 0,
+    r1b5: 0,
+    r1c: 0,
+    r1d: 0,
+  });
 
-    const[radios, setRadios] = useState({
-      r1a: null,
-      r1b1: null,
-      r1c: null,
-      r1d: null,
-    })
+  const [radios, setRadios] = useState({
+    r1a: null,
+    r1b1: null,
+    r1c: null,
+    r1d: null,
+  });
 
   const handleAmountChange = (field) => (e) => {
     const raw = e.target.value;
@@ -80,11 +78,12 @@ const PertanyaanB = ({ onAnswerChange, answersState }) => {
   const handleSelectChange = (field, value) => {
     setRadios((prev) => ({ ...prev, [field]: value }));
     onAnswerChange?.(field, value);
+    console.log("Radio changed:", field, value);
   };
 
   const DEFAULT_NULL_TEXT = "Pilih salah satu Ya/Tidak";
 
-    const HELPER_CONFIG = {
+  const HELPER_CONFIG = {
     r1a: {
       yes: "Ya, silahkan mengisi lampiran I Bagian D",
       no: "Tidak, Lanjutkan pertanyaan 1.b.1",
@@ -108,7 +107,7 @@ const PertanyaanB = ({ onAnswerChange, answersState }) => {
       2: "Anda memilih sektor usaha Jasa. Silakan isi Lampiran 3A-2 Bagian A.",
       3: "Anda memilih sektor usaha Umum. Silakan isi Lampiran 3A-4 Bagian A.",
       4: "Anda memilih sektor usaha Manufaktur. Silakan isi Lampiran 3A-3 Bagian A.",
-      5: "Anda memilih sektor usaha Lainnya. Silakan isi Lampiran 3A-1 Bagian A."
+      5: "Anda memilih sektor usaha Lainnya. Silakan isi Lampiran 3A-1 Bagian A.",
     },
     r1c: {
       yes: "Ya. Silahkan mengisi lampiran 3A-4 Bagian B",
@@ -120,7 +119,7 @@ const PertanyaanB = ({ onAnswerChange, answersState }) => {
     },
   };
 
-    const getHelperMessage = (field, value) => {
+  const getHelperMessage = (field, value) => {
     const cfg = HELPER_CONFIG[field];
     if (!cfg) return "";
 
@@ -141,7 +140,6 @@ const PertanyaanB = ({ onAnswerChange, answersState }) => {
     return DEFAULT_NULL_TEXT;
   };
 
-  
   return (
     <>
       {/* Ikhtisar Penghasilan Neto */}
@@ -237,7 +235,7 @@ const PertanyaanB = ({ onAnswerChange, answersState }) => {
                     <span>Ya</span>
                   </label>
                   <label className="inline-flex items-center gap-2">
-                  <input
+                    <input
                       type="radio"
                       name="r1b1"
                       checked={radios.r1b1 === false}
@@ -374,7 +372,7 @@ const PertanyaanB = ({ onAnswerChange, answersState }) => {
               </div>
               <div className="col-span-12 md:col-span-2">
                 <div className="flex items-center gap-6">
-                 <label className="inline-flex items-center gap-2">
+                  <label className="inline-flex items-center gap-2">
                     <input
                       type="radio"
                       name="r1c"
@@ -385,7 +383,7 @@ const PertanyaanB = ({ onAnswerChange, answersState }) => {
                     <span>Ya</span>
                   </label>
                   <label className="inline-flex items-center gap-2">
-                  <input
+                    <input
                       type="radio"
                       name="r1c"
                       checked={radios.r1c === false}
