@@ -3,11 +3,19 @@ import { Plus, Edit, Trash2 } from "lucide-react";
 import { formatNumber, parseFormattedNumber, formatRupiah } from "@utils/formatCurrency";
 import GlobalModal from "@shared/GlobalModal";
 import GlobalTable from "@shared/GlobalTable";
+
 import { hitungTotalGlobal, createTotalRow } from "@utils/helperTotal";
 
-const PenghasilanKenaPajak = ({ config }) => {
+export default function PenghasilanKenaPajak({ config }) {
   const {
-    baseFields = ["namaPemotong", "npwp", "kode", "jenis", "dasarPengenaanPajak", "pphdipotong"],
+    baseFields = [
+      "namaPemotong", 
+      "npwp", 
+      "kode", 
+      "jenis", 
+      "dasarPengenaanPajak", 
+      "pphdipotong"
+    ],
     customChildren = [],
     defaultData = {
       namaPemotong: "PT. Contoh Perusahaan",
@@ -24,14 +32,14 @@ const PenghasilanKenaPajak = ({ config }) => {
   const [editingId, setEditingId] = useState(null);
   const [selected, setSelected] = useState(null);
 
-  // Open modal untuk add
+  // Open modal add
   const openAddModal = () => {
     setSelected({ ...defaultData });
     setEditingId(null);
     setShowModal(true);
   };
 
-  // Open modal untuk edit
+  // Open modal edit
   const openEditModal = (item) => {
     setSelected(item);
     setEditingId(item.id);
@@ -45,9 +53,8 @@ const PenghasilanKenaPajak = ({ config }) => {
     setSelected(null);
   };
 
-  // Save data
+  // Save
   const saveData = (values) => {
-    console.log("Saved values:", values);
     if (editingId) {
       setDataPenghasilan((prev) =>
         prev.map((item) => (item.id === editingId ? { ...values, id: editingId } : item))
@@ -58,14 +65,14 @@ const PenghasilanKenaPajak = ({ config }) => {
     closeModal();
   };
 
-  // Delete data
+  // Delete
   const deleteData = (id) => {
     if (confirm("Apakah Anda yakin ingin menghapus data ini?")) {
       setDataPenghasilan((prev) => prev.filter((item) => item.id !== id));
     }
   };
 
-  //  HITUNG TOTAL & BUAT BARIS TOTAL
+  // TOTAL
   const totals = hitungTotalGlobal(dataPenghasilan, ["dasarPengenaanPajak", "pphdipotong"]);
 
   const tableData =
@@ -74,98 +81,94 @@ const PenghasilanKenaPajak = ({ config }) => {
       : [
           ...dataPenghasilan,
           createTotalRow("JUMLAH", totals, {
-            labelField: "namaPemotong", // teks "JUMLAH" di kolom Nama Pemotong
+            labelField: "namaPemotong",
             base: {
               npwp: "",
               kode: "",
               jenis: "",
-              // dasarPengenaanPajak: "",
             },
           }),
         ];
 
-  // const tableData = [
-  //   ...dataPenghasilan,
-  //   createTotalRow("JUMLAH", totals, { labelField: "namaPemotong" }),
-  // ];
+  // ============================
+  // COLUMN GROUPS (LIKE PPhDipotong)
+  // ============================
+  const columnGroups = [
+    {
+      title: "TINDAKAN",
+      children: [
+        {
+          key: "no",
+          title: "NO",
+          width: 60,
+          align: "center",
+          render: (row, i) => (row.type === "total" ? "" : i + 1),
+        },
+        {
+          key: "_aksi",
+          title: "AKSI",
+          width: 100,
+          align: "center",
+          render: (row) =>
+            row.type === "total" ? null : (
+              <div className="flex items-center justify-center gap-2">
+                <button
+                  className="p-1 text-blue-600 hover:bg-blue-50 rounded"
+                  onClick={() => openEditModal(row)}
+                >
+                  <Edit size={16} />
+                </button>
+                <button
+                  className="p-1 text-red-600 hover:bg-red-50 rounded"
+                  onClick={() => deleteData(row.id)}
+                >
+                  <Trash2 size={16} />
+                </button>
+              </div>
+            ),
+        },
+      ],
+    },
 
-  const columns = [
     {
-      key: "no",
-      title: "NO",
-      width: 60,
-      align: "center",
-      render: (row, i) => (row.type === "total" ? "" : i + 1),
+      title: "IDENTITAS PEMOTONG",
+      children: [
+        {
+          key: "namaPemotong",
+          title: "NAMA PEMOTONG",
+          width: 200,
+        },
+        {
+          key: "npwp",
+          title: "NPWP",
+          width: 150,
+        },
+      ],
     },
-    {
-      key: "namaPemotong",
-      title: "NAMA PEMOTONG",
-      width: 200,
-      render: (r) => r.namaPemotong,
-    },
-    {
-      key: "npwp",
-      title: "NPWP",
-      width: 150,
-      render: (r) => r.npwp,
-    },
-    {
-      key: "kode",
-      title: "KODE",
-      width: 100,
-      render: (r) => r.kode,
-    },
-    {
-      key: "Jenis",
-      title: "JENIS PENHASILAN",
-      width: 200,
-      render: (r) => r.jenis,
-    },
+
+    { key: "kode", title: "KODE", width: 100 },
+    { key: "jenis", title: "JENIS PENGHASILAN", width: 200 },
+
     {
       key: "dasarPengenaanPajak",
       title: "DASAR PENGENAAN PAJAK",
-      width: 150,
-      render: (r) => formatRupiah(r.dasarPengenaanPajak),
+      width: 160,
+      align: "center",
+      render: (r) => {
+        if (r.type === "total" && r.dasarPengenaanPajak === "") return "";
+        return formatRupiah(r.dasarPengenaanPajak);
+      },
     },
-    //  Jika tidak ingin menampilkan total kolom DASAR PENGENAAN PAJAK
-    // {
-    //   key: "dasarPengenaanPajak",
-    //   title: "DASAR PENGENAAN PAJAK",
-    //   width: 150,
-    //   align: "right",
-    //   render: (r) =>
-    //     r.type === "total"
-    //       ? "" // total tidak dihitung → tampil kosong
-    //       : formatRupiah(r.dasarPengenaanPajak),
-    // },
+
     {
       key: "pphdipotong",
       title: "PPH YANG DIPOTONG",
       width: 150,
-      render: (r) => formatRupiah(r.pphdipotong),
-    },
-    {
-      key: "_aksi",
-      title: "AKSI",
-      width: 100,
       align: "center",
-      render: (row) =>
-        row.type === "total" ? null : (
-          <div className="flex items-center justify-center gap-2">
-            <button
-              className="p-1 text-blue-600 hover:bg-blue-50 rounded"
-              onClick={() => openEditModal(row)}
-            >
-              <Edit size={16} />
-            </button>
-            <button
-              className="p-1 text-red-600 hover:bg-red-50 rounded"
-              onClick={() => deleteData(row.id)}
-            >
-              <Trash2 size={16} />
-            </button>
-          </div>
-        ),
+      render: (r) => {
+        if (r.type === "total" && r.pphdipotong === "") return "";
+        return formatRupiah(r.pphdipotong);
+      },
     },
   ];
 
@@ -182,14 +185,13 @@ const PenghasilanKenaPajak = ({ config }) => {
       </div>
 
       <GlobalTable
-        columns={columns}
+        columnGroups={columnGroups}
         data={tableData}
         page={1}
-        pageSize={9999} // Tidak pakai pagination
+        pageSize={9999}
         total={dataPenghasilan.length}
         onPageChange={() => {}}
         stickyHeader
-        // emptyText="Belum ada data penghasilan kena pajak."
         rowClassName={(row) => (row.type === "total" ? "bg-yellow-50 font-semibold" : "")}
       />
 
@@ -206,6 +208,4 @@ const PenghasilanKenaPajak = ({ config }) => {
       />
     </div>
   );
-};
-
-export default PenghasilanKenaPajak;
+}
