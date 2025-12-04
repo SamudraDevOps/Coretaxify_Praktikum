@@ -137,10 +137,10 @@ const ConfigComponent = {
 
 // console.log(" Kelompok1 defined:", Kelompok1);
 
-const Kelompok4Index = () => {
+const Kelompok4Index = ({ onTotalChange }) => {
   return (
     <div className="space-y-4">
-      <Kelompok4 config={ConfigComponent} />
+      <Kelompok4 config={ConfigComponent} onTotalChange={onTotalChange} />
     </div>
   );
 };

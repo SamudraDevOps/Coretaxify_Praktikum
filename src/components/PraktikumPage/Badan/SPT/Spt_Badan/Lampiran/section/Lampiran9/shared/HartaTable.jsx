@@ -1,12 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { Plus, Edit, Trash2 } from "lucide-react";
 import { formatNumber, parseFormattedNumber, formatRupiah } from "@utils/formatCurrency";
 import GlobalModal from "@shared/GlobalModal";
 import GlobalTable from "@shared/GlobalTable";
 import { hitungTotalGlobal, createTotalRow } from "@utils/helperTotal";
 
-export default function HartaTable({ jenisHartaOptions, title = "Daftar Harta" }) {
-  const baseFields = [
+export default function HartaTable({
+  jenisHartaOptions,
+  title = "Daftar Harta",
+  customConfig = {},
+  onTotalChange,
+}) {
+  const defaultBaseFields = [
     "kode",
     "jenis",
     "bulanTahun",
@@ -18,7 +23,7 @@ export default function HartaTable({ jenisHartaOptions, title = "Daftar Harta" }
     "keterangan",
   ];
 
-  const customChildren = [
+  const defaultCustomChildren = [
     {
       key: "jenis",
       type: "select-search",
@@ -82,7 +87,7 @@ export default function HartaTable({ jenisHartaOptions, title = "Daftar Harta" }
     },
   ];
 
-  const defaultData = {
+  const defaultDefaultData = {
     kode: "",
     jenis: "",
     bulanTahun: "",
@@ -94,6 +99,15 @@ export default function HartaTable({ jenisHartaOptions, title = "Daftar Harta" }
     keterangan: "",
   };
 
+  const baseFields = customConfig.baseFields || defaultBaseFields;
+  const customChildren = (customConfig.customChildren || defaultCustomChildren).map((field) => {
+    if (field.key === "jenis") {
+      return { ...field, options: jenisHartaOptions };
+    }
+    return field;
+  });
+
+  const defaultData = customConfig.defaultData || defaultDefaultData;
   const [data, setData] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [editingId, setEditingId] = useState(null);
@@ -134,8 +148,16 @@ export default function HartaTable({ jenisHartaOptions, title = "Daftar Harta" }
     }
   };
 
-  const totals = hitungTotalGlobal(data, ["penyusutanDanAmortisasi"]);
+  const totals = useMemo(() => {
+    return hitungTotalGlobal(data, ["penyusutanDanAmortisasi"]);
+  }, [data]);
 
+  useEffect(() => {
+    if (onTotalChange) {
+      const total = totals.penyusutanDanAmortisasi || 0;
+      onTotalChange(total);
+    }
+  }, [totals.penyusutanDanAmortisasi]);
   const tableData =
     data.length === 0
       ? []
@@ -261,7 +283,7 @@ export default function HartaTable({ jenisHartaOptions, title = "Daftar Harta" }
           align: "center",
           render: (row) =>
             row.type === "total"
-              ? "JUMLAH" // Menampilkan "JUMLAH" pada baris total di kolom FISKAL untuk case render khsus bang
+              ? "JUMLAH"
               : customChildren
                   ?.find((f) => f.key === "fiskal")
                   ?.options?.find((opt) => opt.value === row.fiskal)?.label ||
@@ -272,7 +294,7 @@ export default function HartaTable({ jenisHartaOptions, title = "Daftar Harta" }
     },
     {
       key: "penyusutanDanAmortisasi",
-      title: "PENYUSUTAN/AMORTISASI FISKAL TAHUN INI (Rp)",
+      title: "PENYUSUTAN/AMORTISASI FISKAL TAHUN INI",
       width: 180,
       render: (r) => {
         if (r.type === "total" && r.penyusutanDanAmortisasi === "") return "";

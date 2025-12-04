@@ -1,6 +1,6 @@
 import React from "react";
 import Kelompok2 from "./Kelompok2";
-import { jenisHartaGlobal } from "../../config/jenisHartaOptions";
+import { jenisHartaTidakBerwujud } from "../../config/jenisHartaOptions";
 
 const ConfigComponent = {
   baseFields: [
@@ -23,7 +23,7 @@ const ConfigComponent = {
       placeholder: "Pilih Jenis Harta",
       required: true,
       span: 1,
-      options: jenisHartaGlobal,
+      options: jenisHartaTidakBerwujud,
       onChange: (value, updateField) => {
         updateField("kode", value);
       },

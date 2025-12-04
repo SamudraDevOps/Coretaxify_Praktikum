@@ -30,10 +30,32 @@ export const jenisHartaKelompok2 = [
   ...jenisHartaGlobal.filter((j) => j.value === "10" || j.value === "13"), // contoh ambil "Mesin" dan "Peralatan"
 ];
 
-// Contoh custom untuk kelompok Bangunan
+//  custom untuk kelompok Bangunan
 export const jenisHartaBangunan = [
-  { id: 1, kode: "B01", value: "B01", label: "Gedung Permanen" },
-  { id: 2, kode: "B02", value: "B02", label: "Gedung Semi Permanen" },
-  { id: 3, kode: "B03", value: "B03", label: "Ruko" },
-  // dst...
+  { id: 1, kode: "B01", value: "B01", label: "Bangunan untuk Tempat Tinggal" },
+  {
+    id: 2,
+    kode: "B02",
+    value: "B02",
+    label: "Bangunan untuk Usaha (Toko, Pabrik, Kantor, Gudang, dan Sejenisnya)",
+  },
+  { id: 3, kode: "B03", value: "B03", label: "Bangunan Yang Disewakan" },
+  { id: 4, kode: "B04", value: "B04", label: "Apartemnen" },
+  { id: 5, kode: "B05", value: "B05", label: "Aset Tidak Bergerak Lainnya" },
+];
+
+//  custom untuk kelompok Harta Tidak Bergerwujud
+export const jenisHartaTidakBerwujud = [
+  { id: 1, kode: "H01", value: "H01", label: "Paten" },
+  { id: 2, kode: "H02", value: "H02", label: "Royalti" },
+  { id: 3, kode: "H03", value: "H03", label: "Merek Dagang" },
+  { id: 4, kode: "H04", value: "H04", label: "Merek Hak Bangunan" },
+  { id: 5, kode: "H05", value: "H05", label: "Merek Hak Budidaya" },
+  { id: 6, kode: "H06", value: "H06", label: "Hak Penggunaan" },
+  { id: 7, kode: "H07", value: "H07", label: "Goodwill" },
+  { id: 8, kode: "H08", value: "H08", label: "Hak Pengusahaan Hutan" },
+  { id: 9, kode: "H09", value: "H09", label: "Hak di Lapangan Minyak dan Gas" },
+  { id: 10, kode: "H10", value: "H10", label: "Hak Eksploitasi Sumber Daya Alam dan Hasil Alam Lainnya" },
+  { id: 11, kode: "H11", value: "H11", label: "Aset Tidak Berwujud Lainnya" },
+
 ];

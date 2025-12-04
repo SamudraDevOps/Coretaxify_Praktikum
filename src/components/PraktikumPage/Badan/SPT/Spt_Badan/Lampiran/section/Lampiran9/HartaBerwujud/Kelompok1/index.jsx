@@ -2,7 +2,6 @@ import React from "react";
 import Kelompok1 from "./Kelompok1";
 import { jenisHartaGlobal } from "../../config/jenisHartaOptions";
 
-//  CONFIG Bangunan Tidak Permanen
 const ConfigComponent = {
   baseFields: [
     "kode",
@@ -137,10 +136,10 @@ const ConfigComponent = {
 
 // console.log(" Kelompok1 defined:", Kelompok1);
 
-const Kelompok1Index = () => {
+const Kelompok1Index = ({ onTotalChange }) => {
   return (
     <div className="space-y-4">
-      <Kelompok1 config={ConfigComponent} />
+      <Kelompok1 config={ConfigComponent} onTotalChange={onTotalChange} />
     </div>
   );
 };

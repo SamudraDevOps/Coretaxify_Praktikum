@@ -1,6 +1,6 @@
 import React from "react";
-import Kelompok2 from "./Kelompok2";
-import { jenisHartaGlobal } from "../../config/jenisHartaOptions";
+import TidakPermanen from "./TidakPermanen";
+import { jenisHartaBangunan } from "../../config/jenisHartaOptions";
 
 const ConfigComponent = {
   baseFields: [
@@ -23,7 +23,7 @@ const ConfigComponent = {
       placeholder: "Pilih Jenis Harta",
       required: true,
       span: 1,
-      options: jenisHartaGlobal,
+      options: jenisHartaBangunan,
       onChange: (value, updateField) => {
         updateField("kode", value);
       },
@@ -119,7 +119,7 @@ const ConfigComponent = {
     {
       key: "penyusutanDanAmortisasi",
       type: "currency",
-      title: "PENYUSUTAN/AMORTISASI FISKAL TAHUN INI ",
+      title: "PENYUSUTAN/AMORTISASI FISKAL TAHUN INI  ",
       placeholder: "Pentusutan / Amortisasi",
       required: false,
     },
@@ -136,14 +136,12 @@ const ConfigComponent = {
 
 // console.log(" Kelompok1 defined:", Kelompok1);
 
-const Kelompok2Index = ({ onTotalChange }) => {
+const TidakPermanenIndex = ({ onTotalChange }) => {
   return (
     <div className="space-y-4">
-      <Kelompok2 config={ConfigComponent} onTotalChange={onTotalChange} />
+      <TidakPermanen config={ConfigComponent} onTotalChange={onTotalChange} />
     </div>
   );
 };
 
-// console.log(" Kelompok1Index component exported");
-
-export default Kelompok2Index;
+export default TidakPermanenIndex;
