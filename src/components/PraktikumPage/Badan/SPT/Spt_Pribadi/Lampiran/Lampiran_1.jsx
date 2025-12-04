@@ -143,7 +143,7 @@ const Lampiran_1 = ({ data }) => {
         </div>
         <div
           className={`overflow-hidden transition-all duration-500 ease-in-out ${
-            showBagianA ? "max-h-[2000px] opacity-100" : "max-h-0 opacity-0"
+            showBagianA ? " opacity-100" : "max-h-0 opacity-0"
           }`}
         >
           <div className="border rounded-md p-4 space-y-4">
