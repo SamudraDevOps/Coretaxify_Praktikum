@@ -23,6 +23,8 @@ import {
   Lampiran4,
   Lampiran5,
   Lampiran9,
+  Lampiran10A,
+  Lampiran10B,
 } from "../Lampiran";
 
 const CreateKonsepBadan = () => {
@@ -110,7 +112,7 @@ const CreateKonsepBadan = () => {
       subtitle: "Lampiran v -Rekapitulasi Peredaran Bruto",
       component: "Lampiran_5",
       badge: "Tersedia",
-      order: 5,
+      order: 6,
     });
 
     allLampiran.push({
@@ -119,7 +121,24 @@ const CreateKonsepBadan = () => {
       subtitle: "Lampiran IX - Harta Berwujud",
       component: "Lampiran_9",
       badge: "Tersedia",
-      order: 5,
+      order: 7,
+    });
+
+    allLampiran.push({
+      id: "lampiran-10A",
+      title: "L10-A",
+      subtitle: "Lampiran 10A - Daftar Transaksi yang Dipengaruhi Hubungan Istimewa",
+      component: "Lampiran_10A",
+      badge: "Tersedia",
+      order: 8,
+    });
+    allLampiran.push({
+      id: "lampiran-10B",
+      title: "L10-B",
+      subtitle: "Lampiran 10B - Pernyataan Terkait Transaksi yang Dipengaruhi Hubungan Istimewa",
+      component: "Lampiran_10B",
+      badge: "Tersedia",
+      order: 9,
     });
 
     // if (answersState.r1a === true) {
@@ -158,6 +177,10 @@ const CreateKonsepBadan = () => {
         return <Lampiran5 data={data} />;
       case "Lampiran_9":
         return <Lampiran9 data={data} />;
+      case "Lampiran_10A":
+        return <Lampiran10A data={data} />;
+      case "Lampiran_10B":
+        return <Lampiran10B data={data} />;
       default:
         return (
           <div className="text-center py-8">

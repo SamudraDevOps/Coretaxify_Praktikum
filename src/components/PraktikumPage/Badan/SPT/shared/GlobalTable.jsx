@@ -244,7 +244,7 @@ export default function GlobalTable({
                   );
                 }
 
-                //  2 LEVEL HEADER 
+                //  2 LEVEL HEADER
                 return (
                   <>
                     {/* Baris 1: judul group (rowSpan / colSpan) */}

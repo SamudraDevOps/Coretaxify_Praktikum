@@ -132,7 +132,7 @@ const Lampiran9 = ({ data }) => {
           className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
           onClick={() => setShowBagian1(!showBagian1)}
         >
-          <h3 className="text-lg font-semibold">A. HARTA BERWUJUD </h3>
+          <h3 className="text-lg font-semibold">HARTA BERWUJUD </h3>
           <span
             className={`transition-transform duration-500 ease-in-out ${
               showBagian1 ? "rotate-180" : "rotate-0"
@@ -142,7 +142,7 @@ const Lampiran9 = ({ data }) => {
           </span>
         </div>
         <div
-          className={`overflow-hidden transition-all duration-500 ease-in-out ${
+          className={`overflow-hidden transition-all duration-1000 ease-in-out ${
             showBagian1 ? " opacity-100" : "max-h-0 opacity-0"
           }`}
         >
@@ -163,7 +163,7 @@ const Lampiran9 = ({ data }) => {
                 </span>
               </div>
               <div
-                className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                className={`overflow-hidden transition-all duration-1000 ease-in-out ${
                   showsubKelompok1 ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
                 }`}
               >
@@ -191,7 +191,7 @@ const Lampiran9 = ({ data }) => {
                 </span>
               </div>
               <div
-                className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                className={`overflow-hidden transition-all duration-1000 ease-in-out ${
                   showsubKelompok2 ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
                 }`}
               >
@@ -219,7 +219,7 @@ const Lampiran9 = ({ data }) => {
                 </span>
               </div>
               <div
-                className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                className={`overflow-hidden transition-all duration-1000 ease-in-out ${
                   showsubKelompok3 ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
                 }`}
               >
@@ -247,7 +247,7 @@ const Lampiran9 = ({ data }) => {
                 </span>
               </div>
               <div
-                className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                className={`overflow-hidden transition-all duration-1000 ease-in-out ${
                   showsubKelompok4 ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
                 }`}
               >
@@ -275,7 +275,7 @@ const Lampiran9 = ({ data }) => {
                 </span>
               </div>
               <div
-                className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                className={`overflow-hidden transition-all duration-1000 ease-in-out ${
                   showsubKelompokLainnya ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
                 }`}
               >
@@ -296,7 +296,7 @@ const Lampiran9 = ({ data }) => {
           className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
           onClick={() => setShowBagian2(!showBagian2)}
         >
-          <h3 className="text-lg font-semibold">B. BANGUNAN </h3>
+          <h3 className="text-lg font-semibold">BANGUNAN </h3>
           <span
             className={`transition-transform duration-500 ease-in-out ${
               showBagian2 ? "rotate-180" : "rotate-0"
@@ -306,7 +306,7 @@ const Lampiran9 = ({ data }) => {
           </span>
         </div>
         <div
-          className={`overflow-hidden transition-all duration-500 ease-in-out ${
+          className={`overflow-hidden transition-all duration-1000 ease-in-out ${
             showBagian2 ? " opacity-100" : "max-h-0 opacity-0"
           }`}
         >
@@ -327,7 +327,7 @@ const Lampiran9 = ({ data }) => {
                 </span>
               </div>
               <div
-                className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                className={`overflow-hidden transition-all duration-1000 ease-in-out ${
                   showBangunanPermanen ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
                 }`}
               >
@@ -355,7 +355,7 @@ const Lampiran9 = ({ data }) => {
                 </span>
               </div>
               <div
-                className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                className={`overflow-hidden transition-all duration-1000 ease-in-out ${
                   showBangunanTidakPermanen ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
                 }`}
               >
@@ -408,7 +408,7 @@ const Lampiran9 = ({ data }) => {
           className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
           onClick={() => setShowBagian1(!showBagian1)}
         >
-          <h3 className="text-lg font-semibold">A. HARTA TIDAK BERWUJUD </h3>
+          <h3 className="text-lg font-semibold">HARTA TIDAK BERWUJUD </h3>
           <span
             className={`transition-transform duration-500 ease-in-out ${
               showBagian1 ? "rotate-180" : "rotate-0"
@@ -418,7 +418,7 @@ const Lampiran9 = ({ data }) => {
           </span>
         </div>
         <div
-          className={`overflow-hidden transition-all duration-500 ease-in-out ${
+          className={`overflow-hidden transition-all duration-1000 ease-in-out ${
             showBagian1 ? " opacity-100" : "max-h-0 opacity-0"
           }`}
         >
@@ -439,7 +439,7 @@ const Lampiran9 = ({ data }) => {
                 </span>
               </div>
               <div
-                className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                className={`overflow-hidden transition-all duration-1000 ease-in-out ${
                   showsubKelompok1 ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
                 }`}
               >
@@ -467,7 +467,7 @@ const Lampiran9 = ({ data }) => {
                 </span>
               </div>
               <div
-                className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                className={`overflow-hidden transition-all duration-1000 ease-in-out ${
                   showsubKelompok2 ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
                 }`}
               >
@@ -495,7 +495,7 @@ const Lampiran9 = ({ data }) => {
                 </span>
               </div>
               <div
-                className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                className={`overflow-hidden transition-all duration-1000 ease-in-out ${
                   showsubKelompok3 ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
                 }`}
               >
@@ -523,7 +523,7 @@ const Lampiran9 = ({ data }) => {
                 </span>
               </div>
               <div
-                className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                className={`overflow-hidden transition-all duration-1000 ease-in-out ${
                   showsubKelompok4 ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
                 }`}
               >
@@ -551,7 +551,7 @@ const Lampiran9 = ({ data }) => {
                 </span>
               </div>
               <div
-                className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                className={`overflow-hidden transition-all duration-1000 ease-in-out ${
                   showsubKelompokLainnya ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
                 }`}
               >
