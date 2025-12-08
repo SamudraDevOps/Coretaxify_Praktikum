@@ -652,6 +652,13 @@ const BUPOTForm = ({
         const penghasilanNetoPphPasal21 = netto + nettoSebelumnya;
         const potonganPTKP = getBPA1PTKP(formData.ptkp_akun);
         const penghasilanKenaPajak = penghasilanNetoPphPasal21 - potonganPTKP;
+        const tarifPph21 = penghasilanKenaPajak > 0 ? getPs17(penghasilanKenaPajak) : 0;
+        const pph21 = penghasilanKenaPajak > 0 ? Math.round(penghasilanKenaPajak * (tarifPph21 / 100)) : 0;
+        const pph21Terutang = pph21;
+        const pph21DipotongBupot = 0;
+        const pph21TerutangBupotIni = pph21Terutang - pph21DipotongBupot;
+        const pph21DTP = 0;
+        const pph21MasaPajakTerakhir = pph21TerutangBupotIni - pph21DTP;
         // const 
         
         // console.log({
@@ -675,6 +682,12 @@ const BUPOTForm = ({
           penghasilan_neto_pph_pasal_21: penghasilanNetoPphPasal21,
           penghasilan_tidak_kena_pajak: potonganPTKP,
           penghasilan_kena_pajak: penghasilanKenaPajak,
+          pph_pasal_21_penghasilan_kena_pajak: pph21,
+          pph_pasal_21_terutang: pph21Terutang,
+          pph_pasal_21_potongan_bpa1_sebelumnya: pph21DipotongBupot,
+          pph_pasal_21_terutang_bupot_ini: pph21TerutangBupotIni,
+          pph_pasal_21_ditanggung_pemerintah: pph21DTP,
+          pph_pasal_21_masa_pajak_terakhir: pph21MasaPajakTerakhir
         });
         break;
 
@@ -3305,7 +3318,7 @@ const BUPOTForm = ({
                   </label>
                   <input
                     type="text"
-                    className="w-64 flex-auto border p-2 rounded"
+                    className="w-64 flex-auto border p-2 rounded bg-gray-200"
                     placeholder="Wajib Diisi"
                     value={formatRupiah(formData.penghasilan_kena_pajak) || ""}
                     onChange={(e) => {
@@ -3314,6 +3327,7 @@ const BUPOTForm = ({
                       // updateFormData("penghasilan_bruto_raw", Number(rawValue));
                     }}
                     onWheel={(e) => e.target.blur()}
+                    readOnly={true}
                   />
                 </div>
 
@@ -3326,7 +3340,7 @@ const BUPOTForm = ({
                   </label>
                   <input
                     type="text"
-                    className="w-64 flex-auto border p-2 rounded"
+                    className="w-64 flex-auto border p-2 rounded bg-gray-200"
                     placeholder="Wajib Diisi"
                     value={
                       formatRupiah(
@@ -3342,6 +3356,7 @@ const BUPOTForm = ({
                       // updateFormData("penghasilan_bruto_raw", Number(rawValue));
                     }}
                     onWheel={(e) => e.target.blur()}
+                    readOnly={true}
                   />
                 </div>
 
@@ -3353,7 +3368,7 @@ const BUPOTForm = ({
                   </label>
                   <input
                     type="text"
-                    className="w-64 flex-auto border p-2 rounded"
+                    className="w-64 flex-auto border p-2 rounded bg-gray-200"
                     placeholder="Wajib Diisi"
                     value={formatRupiah(formData.pph_pasal_21_terutang) || ""}
                     onChange={(e) => {
@@ -3362,6 +3377,7 @@ const BUPOTForm = ({
                       // updateFormData("penghasilan_bruto_raw", Number(rawValue));
                     }}
                     onWheel={(e) => e.target.blur()}
+                    readOnly={true}
                   />
                 </div>
 
@@ -3373,7 +3389,7 @@ const BUPOTForm = ({
                   </label>
                   <input
                     type="text"
-                    className="w-64 flex-auto border p-2 rounded"
+                    className="w-64 flex-auto border p-2 rounded bg-gray-200"
                     placeholder="Wajib Diisi"
                     value={
                       formatRupiah(
@@ -3389,6 +3405,7 @@ const BUPOTForm = ({
                       // updateFormData("penghasilan_bruto_raw", Number(rawValue));
                     }}
                     onWheel={(e) => e.target.blur()}
+                    readOnly={true}
                   />
                 </div>
 
@@ -3401,7 +3418,7 @@ const BUPOTForm = ({
                   </label>
                   <input
                     type="text"
-                    className="w-64 flex-auto border p-2 rounded"
+                    className="w-64 flex-auto border p-2 rounded bg-gray-200"
                     placeholder="Wajib Diisi"
                     value={
                       formatRupiah(formData.pph_pasal_21_terutang_bupot_ini) ||
@@ -3416,6 +3433,7 @@ const BUPOTForm = ({
                       // updateFormData("penghasilan_bruto_raw", Number(rawValue));
                     }}
                     onWheel={(e) => e.target.blur()}
+                    readOnly={true}
                   />
                 </div>
 
@@ -3427,7 +3445,7 @@ const BUPOTForm = ({
                   </label>
                   <input
                     type="text"
-                    className="w-64 flex-auto border p-2 rounded"
+                    className="w-64 flex-auto border p-2 rounded bg-gray-200"
                     placeholder="Wajib Diisi"
                     value={
                       formatRupiah(
@@ -3443,6 +3461,7 @@ const BUPOTForm = ({
                       // updateFormData("penghasilan_bruto_raw", Number(rawValue));
                     }}
                     onWheel={(e) => e.target.blur()}
+                    readOnly={true}
                   />
                 </div>
 
@@ -3455,7 +3474,7 @@ const BUPOTForm = ({
                   </label>
                   <input
                     type="text"
-                    className="w-64 flex-auto border p-2 rounded"
+                    className="w-64 flex-auto border p-2 rounded bg-gray-200"
                     placeholder="Wajib Diisi"
                     value={
                       formatRupiah(formData.pph_pasal_21_masa_pajak_terakhir) ||
@@ -3470,6 +3489,7 @@ const BUPOTForm = ({
                       // updateFormData("penghasilan_bruto_raw", Number(rawValue));
                     }}
                     onWheel={(e) => e.target.blur()}
+                    readOnly={true}
                   />
                 </div>
 
