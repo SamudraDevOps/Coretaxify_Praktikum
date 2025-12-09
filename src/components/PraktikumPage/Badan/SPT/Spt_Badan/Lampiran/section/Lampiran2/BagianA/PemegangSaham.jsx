@@ -77,7 +77,7 @@ export default function PemegangSaham({ config }) {
   };
 
   //  HITUNG TOTAL & BUAT BARIS TOTAL
-  const totals = hitungTotalGlobal(data, ["nilai", "persen", "dividen"]);
+  const totals = hitungTotalGlobal(data, [ "persen", "dividen"]);
 
   const tableData =
     data.length === 0
@@ -91,6 +91,7 @@ export default function PemegangSaham({ config }) {
               npwp: "",
               alamatPemotong: "",
               negara: "",
+              nilai: "",
             },
           }),
         ];
@@ -151,8 +152,10 @@ export default function PemegangSaham({ config }) {
           title: "NILAI (Rp)",
           width: 140,
           align: "center",
-          render: (r) => formatRupiah(r.nilai),
-        },
+  render: (r) => {
+        if (r.type === "total" && r.nilai === "") return "";
+        return formatRupiah(r.nilai);
+      },        },
         {
           key: "persen",
           title: "%",
