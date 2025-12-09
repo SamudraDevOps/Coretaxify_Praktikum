@@ -3,6 +3,7 @@ import { Plus, Edit, Trash2 } from "lucide-react";
 import { formatRupiah } from "@utils/formatCurrency";
 import GlobalModal from "@shared/GlobalModal";
 import GlobalTable from "@shared/GlobalTable";
+import { hitungTotalGlobal, createTotalRow } from "@utils/helperTotal"; 
 
 export default function DaftarHartaLainnya({ config }) {
   const {
@@ -68,6 +69,25 @@ export default function DaftarHartaLainnya({ config }) {
       setData((prev) => prev.filter((item) => item.id !== id));
     }
   };
+  // Hitung total untuk kolom biayaPerolehan dan nilaiSaatIni
+  const totals = hitungTotalGlobal(dataHarta, ["biayaPerolehan", "nilaiSaatIni"]);
+
+  const tableData = 
+    dataHarta.length === 0
+      ? []
+      : [
+          ...dataHarta,
+          createTotalRow("JUMLAH", totals, {
+            labelField: "tahunPerolehan",
+            base: {
+              kode: "",
+              deskripsi: "",
+              buktiKepemilikan: "",
+              InformasiTambahan: "",
+              keteranganHarta: "",
+            },
+          }),
+        ];
 
   // helper label dari option
   const getLabel = (key, value) => {
@@ -85,14 +105,15 @@ export default function DaftarHartaLainnya({ config }) {
           title: "No",
           width: 60,
           align: "center",
-          render: (row, i) => i + 1,
+          render: (row, i) => (row.type === "total" ? "" : i + 1),
         },
         {
           key: "_aksi",
           title: "Aksi",
           width: 100,
           align: "center",
-          render: (row) => (
+          render: (row) => 
+            row.type === "total" ? null : (
             <div className="flex justify-center gap-2">
               <button
                 onClick={() => openEditModal(row)}
@@ -118,7 +139,7 @@ export default function DaftarHartaLainnya({ config }) {
       key: "deskripsi",
       title: "Deskripsi",
       width: 220,
-      render: (r) => getLabel("deskripsi", r.deskripsi),
+      render: (r) => r.type === "total" ? "" : getLabel("deskripsi", r.deskripsi),
     },
 
     { key: "tahunPerolehan", title: "Tahun Perolehan", width: 150, align: "center" },
@@ -128,7 +149,10 @@ export default function DaftarHartaLainnya({ config }) {
       title: "Biaya Perolehan",
       width: 150,
       align: "center",
-      render: (r) => formatRupiah(r.biayaPerolehan),
+      render: (r) => {
+        if (r.type === "total" && r.biayaPerolehan === "") return "";
+        return formatRupiah(r.biayaPerolehan);
+      },
     },
 
     {
@@ -136,7 +160,10 @@ export default function DaftarHartaLainnya({ config }) {
       title: "Nilai Saat Ini",
       width: 150,
       align: "center",
-      render: (r) => formatRupiah(r.nilaiSaatIni),
+      render: (r) => {
+        if (r.type === "total" && r.nilaiSaatIni === "") return "";
+        return formatRupiah(r.nilaiSaatIni);
+      },
     },
 
     { key: "buktiKepemilikan", title: "Bukti Kepemilikan", width: 200 },
@@ -147,7 +174,7 @@ export default function DaftarHartaLainnya({ config }) {
       key: "keteranganHarta",
       title: "Keterangan",
       width: 150,
-      render: (r) => r.keterangan || r.keteranganHarta || "-",
+      render: (r) => r.type === "total" ? "" : (r.keterangan || r.keteranganHarta || "-"),
     },
   ];
 
@@ -167,13 +194,14 @@ export default function DaftarHartaLainnya({ config }) {
       {/* TABLE */}
       <GlobalTable
         columnGroups={columnGroups}
-        data={dataHarta}
+        data={tableData}
         page={1}
         pageSize={9999}
         total={dataHarta.length}
         onPageChange={() => {}}
         stickyHeader
-        emptyText='Belum ada data. Klik "Tambah Data" untuk menambah data baru.'
+        //emptyText='Belum ada data. Klik "Tambah Data" untuk menambah data baru.'
+        rowClassName={(row) => (row.type === "total" ? "bg-yellow-50 font-semibold" : "")}
       />
 
       {/* MODAL */}

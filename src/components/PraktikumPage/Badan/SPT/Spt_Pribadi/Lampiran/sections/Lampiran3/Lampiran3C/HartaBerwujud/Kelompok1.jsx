@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { Plus, Edit, Trash2 } from "lucide-react";
-import { formatNumber, parseFormattedNumber, formatRupiah } from "@utils/formatCurrency";
+import { formatRupiah } from "@utils/formatCurrency";
 import GlobalModal from "@shared/GlobalModal";
+import GlobalTable from "@shared/GlobalTable";
+import { hitungTotalGlobal, createTotalRow } from "@utils/helperTotal";
+
 export default function Kelompok1({ config }) {
   const {
     baseFields = [
@@ -20,11 +23,11 @@ export default function Kelompok1({ config }) {
       kode: "",
       jenis: "",
       bulanTahun: "",
-      biayaPerolehan: "",
-      nilaiSisaBukuFiskal: "",
+      biayaPerolehan: 0,
+      nilaiSisaBukuFiskal: 0,
       komersial: "",
       fiskal: "",
-      penyusutanDanAmortisasi: "",
+      penyusutanDanAmortisasi: 0,
       keterangan: "",
     },
   } = config || {};
@@ -34,30 +37,29 @@ export default function Kelompok1({ config }) {
   const [editingId, setEditingId] = useState(null);
   const [selected, setSelected] = useState(null);
 
-  // Open modal untuk add
+  // Add
   const openAddModal = () => {
     setSelected({ ...defaultData });
     setEditingId(null);
     setShowModal(true);
   };
 
-  // Open modal untuk edit
+  // Edit
   const openEditModal = (item) => {
     setSelected(item);
     setEditingId(item.id);
     setShowModal(true);
   };
 
-  // Close modal
+  // Close
   const closeModal = () => {
     setShowModal(false);
     setEditingId(null);
     setSelected(null);
   };
 
-  // Save data
+  // Save
   const saveData = (values) => {
-    console.log("Saved values:", values);
     if (editingId) {
       setDataPenghasilan((prev) =>
         prev.map((item) => (item.id === editingId ? { ...values, id: editingId } : item))
@@ -68,107 +70,170 @@ export default function Kelompok1({ config }) {
     closeModal();
   };
 
-  // Delete data
+  // Delete
   const deleteData = (id) => {
     if (confirm("Apakah Anda yakin ingin menghapus data ini?")) {
       setDataPenghasilan((prev) => prev.filter((item) => item.id !== id));
     }
   };
 
+  // Ambil label dari customChildren
+  const getLabel = (key, value) => {
+    const field = customChildren?.find((f) => f.key === key);
+    const option = field?.options?.find((o) => o.value === value);
+    return option?.label || value || "-";
+  };
+
+  const totals = hitungTotalGlobal(dataPenghasilan, [
+    "biayaPerolehan",
+    "nilaiSisaBukuFiskal",
+    "penyusutanDanAmortisasi",
+  ]);
+
+  // ===== TABLE DATA WITH TOTAL ROW =====
+    const tableData =
+      dataPenghasilan.length === 0
+        ? []
+        : [
+            ...dataPenghasilan,
+            createTotalRow("JUMLAH", totals, {
+              labelField: "jenis",
+              base: {
+                kode: "",
+                bulanTahun: "",
+                komersial: "",
+                fiskal: "",
+                keterangan: "",
+              },
+            }),
+          ];
+  // ================= COLUMN GROUP =================
+  const columnGroups = [
+    {
+      title: "TINDAKAN",
+      children: [
+        {
+          key: "no",
+          title: "NO",
+          width: 60,
+          align: "center",
+          render: (row, i) => row.type === "total" ? "" : i + 1,
+        },
+        {
+          key: "_aksi",
+          title: "AKSI",
+          width: 100,
+          align: "center",
+          render: (row) => 
+            row.type === "total" ? null : (
+            <div className="flex justify-center gap-2">
+              <button
+                onClick={() => openEditModal(row)}
+                className="p-1 text-blue-600 hover:bg-blue-50 rounded"
+              >
+                <Edit size={16} />
+              </button>
+              <button
+                onClick={() => deleteData(row.id)}
+                className="p-1 text-red-600 hover:bg-red-50 rounded"
+              >
+                <Trash2 size={16} />
+              </button>
+            </div>
+          ),
+        },
+      ],
+    },
+
+    { key: "kode", title: "KODE", width: 120 },
+    {
+      key: "jenis",
+      title: "JENIS HARTA",
+      width: 180,
+      render: (row) =>  row.type === "total" ? row.jenis : getLabel("jenis", row.jenis)
+    },
+    {
+      key: "biayaPerolehan",
+      title: "BIAYA PEROLEHAN",
+      width: 160,
+      align: "center",
+      render: (r) => {
+        if (r.type === "total" && r.biayaPerolehan === "") return "";
+        return formatRupiah(r.biayaPerolehan);
+      },
+    },
+    {
+      key: "bulanTahun",
+      title: "BULAN / TAHUN PEROLEHAN",
+      width: 170,
+      align: "center",
+    },
+    {
+      key: "nilaiSisaBukuFiskal",
+      title: "NILAI SISA BUKU FISKAL",
+      width: 180,
+      align: "center",
+      render: (r) => {
+        if (r.type === "total" && r.nilaiSisaBukuFiskal === "") return "";
+        return formatRupiah(r.nilaiSisaBukuFiskal);
+      },
+    },
+    {
+      key: "komersial",
+      title: "METODE PENYUSUTAN KOMERSIAL",
+      width: 200,
+      render: (row) =>  row.type === "total" ? "" :  getLabel("komersial", row.komersial),
+    },
+    {
+      key: "fiskal",
+      title: "METODE PENYUSUTAN FISKAL",
+      width: 200,
+      render: (row) =>  row.type === "total" ? "" : getLabel("fiskal", row.fiskal),
+    },
+    {
+      key: "penyusutanDanAmortisasi",
+      title: "PENYUSUTAN & AMORTISASI",
+      width: 180,
+      align: "center",
+      render: (r) => {
+        if (r.type === "total" && r.penyusutanDanAmortisasi === "") return "";
+        return formatRupiah(r.penyusutanDanAmortisasi);
+      },
+    },
+    { key: "keterangan", title: "KETERANGAN", width: 200 },
+  ];
+
   return (
     <div className="space-y-4">
-      {/* Header */}
-      <div className="flex items-center justify-between">
+      {/* HEADER */}
+      <div className="flex justify-between items-center">
         <button
           onClick={openAddModal}
-          className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
         >
-          <Plus size={16} />
-          Tambah Data
+          <Plus size={16} /> Tambah Data
         </button>
       </div>
 
-      {/* Table */}
-      <div className="w-full overflow-x-auto bg-white shadow-md rounded-lg">
-        <table className="table-auto text-sm text-left border overflow-hidden">
-          <thead className="bg-purple-700 text-white text-center">
-            <tr>
-              <th className="p-2 border-b">No</th>
-              <th className="p-2 border-b min-w-[150px]">Kode</th>
-              <th className="p-2 border-b min-w-[150px]">Jenis Harta</th>
-              <th className="p-2 border-b min-w-[150px]">Biaya Perolehan</th>
-              <th className="p-2 border-b min-w-[150px]">Bulan / Tahun Perolehan </th>
-              <th className="p-2 border-b min-w-[150px]">Nilai Sisa Buku Fiskal</th>
-              <th className="p-2 border-b min-w-[150px]">Metode Penyusutan Komersial</th>
-              <th className="p-2 border-b min-w-[150px]">Metode Penyusutan Fiskal</th>
-              <th className="p-2 border-b min-w-[150px]">Penyusutan dan Amortisasi</th>
-              <th className="p-2 border-b min-w-[150px]">Keterangan</th>
-              <th className="p-2 border-b uppercase">Aksi</th>
-            </tr>
-          </thead>
-          <tbody className="text-gray-600 text-center">
-            {dataPenghasilan.length === 0 ? (
-              <tr>
-                <td colSpan="8" className="px-4 py-8 text-center text-gray-500">
-                  Belum ada data. Klik "Tambah Data" untuk menambah data baru.
-                </td>
-              </tr>
-            ) : (
-              dataPenghasilan.map((item, index) => (
-                <tr key={item.id} className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}>
-                  <td className="p-2 border-b text-center">{index + 1}</td>
-                  <td className="p-2 border-b">{item.kode}</td>
-                  <td className="p-2 border-b max-w-xs truncate">
-                    {customChildren
-                      ?.find((f) => f.key === "jenis")
-                      ?.options?.find((opt) => opt.value === item.jenis)?.label || item.jenis}
-                  </td>
-                  <td className="p-2 border-b">{item.bulanTahun}</td>
-                  <td className="p-2 border-b">{formatRupiah(item.biayaPerolehan)}</td>
-                  <td className="p-2 border-b">{formatRupiah(item.nilaiSisaBukuFiskal)}</td>
-                  <td className="p-2 border-b max-w-xs truncate">
-                    {customChildren
-                      ?.find((f) => f.key === "komersial")
-                      ?.options?.find((opt) => opt.value === item.komersial)?.label ||
-                      item.komersial}
-                  </td>
-                  <td className="p-2 border-b max-w-xs truncate">
-                    {customChildren
-                      ?.find((f) => f.key === "fiskal")
-                      ?.options?.find((opt) => opt.value === item.fiskal)?.label || item.fiskal}
-                  </td>
-                  <td className="p-2 border-b">{formatRupiah(item.penyusutanDanAmortisasi)}</td>
-                  <td className="p-2 border-b max-w-xs truncate">{item.keterangan}</td>
+      {/* TABLE */}
+      <GlobalTable
+        columnGroups={columnGroups}
+        data={tableData}
+        page={1}
+        pageSize={9999}
+        total={dataPenghasilan.length}
+        onPageChange={() => {}}
+        stickyHeader
+        //emptyText='Belum ada data. Klik "Tambah Data" untuk menambah data baru.'
+        rowClassName={(row) => (row.type === "total" ? "bg-yellow-50 font-semibold" : "")}
+      />
 
-                  <td className="px-4 py-3 text-sm">
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() => openEditModal(item)}
-                        className="p-1 text-blue-600 hover:bg-blue-50 rounded"
-                      >
-                        <Edit size={16} />
-                      </button>
-                      <button
-                        onClick={() => deleteData(item.id)}
-                        className="p-1 text-red-600 hover:bg-red-50 rounded"
-                      >
-                        <Trash2 size={16} />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
-
-      {/*  MODAL dengan Safe Config */}
+      {/* MODAL */}
       <GlobalModal
         isOpen={showModal}
         onClose={closeModal}
         onSave={saveData}
-        title={editingId ? "Edit Penghasilan Kena Pajak" : "Tambah Penghasilan Kena Pajak"}
+        title={editingId ? "Edit Data Kelompok 1" : "Tambah Data Kelompok 1"}
         baseFields={baseFields}
         customChildren={customChildren}
         data={selected || {}}

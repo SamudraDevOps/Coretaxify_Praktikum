@@ -3,6 +3,7 @@ import { Plus, Edit, Trash2 } from "lucide-react";
 import { formatRupiah } from "@utils/formatCurrency";
 import GlobalModal from "@shared/GlobalModal";
 import GlobalTable from "@shared/GlobalTable";
+import { hitungTotalGlobal, createTotalRow } from "@utils/helperTotal";
 
 export default function PenghasilanTidakObjekPajak({ config }) {
   const {
@@ -10,7 +11,7 @@ export default function PenghasilanTidakObjekPajak({ config }) {
     customChildren = [],
     defaultData = {
       namaPemotong: "PT. Contoh Perusahaan",
-      npwpPemotong: "",
+      npwp: "",
       kode: "",
       jenis: "",
       labakotor: "",
@@ -69,6 +70,23 @@ export default function PenghasilanTidakObjekPajak({ config }) {
     return option?.label || value || "-";
   };
 
+  const totals = hitungTotalGlobal(data, ["labakotor"]);
+
+      const tableData =
+        data.length === 0
+          ? []
+          : [
+              ...data,
+              createTotalRow("JUMLAH", totals, {
+                labelField: "npwp",
+                base: {
+                  namaPemotong: "",
+                  kode: "",
+                  jenis: "",
+                },
+              }),
+            ];
+
   // === COLUMN GROUPS (SAMA STRUKTUR DENGAN CONTOH) ===
   const columnGroups = [
     {
@@ -79,14 +97,15 @@ export default function PenghasilanTidakObjekPajak({ config }) {
           title: "NO",
           width: 60,
           align: "center",
-          render: (row, i) => i + 1,
+          render: (row, i) => row.type === "total" ? "" : i + 1
         },
         {
           key: "_aksi",
           title: "AKSI",
           width: 100,
           align: "center",
-          render: (row) => (
+          render: (row) => 
+            row.type === "total" ? null : (
             <div className="flex justify-center gap-2">
               <button
                 onClick={() => openEditModal(row)}
@@ -110,7 +129,7 @@ export default function PenghasilanTidakObjekPajak({ config }) {
       key: "jenis",
       title: "JENIS PENGHASILAN",
       width: 180,
-      render: (row) => getJenisLabel(row.jenis),
+      render: (row) => row.type === "total" ? "" : getJenisLabel(row.jenis),
     },
     { key: "kode", title: "KODE", width: 120 },
     { key: "namaPemotong", title: "NAMA PEMOTONG", width: 220 },
@@ -120,7 +139,10 @@ export default function PenghasilanTidakObjekPajak({ config }) {
       title: "LABA KOTOR",
       width: 160,
       align: "center",
-      render: (row) => formatRupiah(row.labakotor),
+      render: (row) => {
+        if (row.type === "total" && row.labakotor === "") return "";
+        return formatRupiah(row.labakotor);
+      },
     },
   ];
 
@@ -139,13 +161,14 @@ export default function PenghasilanTidakObjekPajak({ config }) {
       {/* TABLE */}
       <GlobalTable
         columnGroups={columnGroups}
-        data={data}
+        data={tableData}
         page={1}
         pageSize={9999}
         total={data.length}
         onPageChange={() => {}}
         stickyHeader
-        emptyText='Belum ada data. Klik "Tambah Data" untuk menambah data baru.'
+        //emptyText='Belum ada data. Klik "Tambah Data" untuk menambah data baru.'
+        rowClassName={(row) => (row.type === "total" ? "bg-yellow-50 font-semibold" : "")}
       />
 
       {/* MODAL */}

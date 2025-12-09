@@ -3,6 +3,7 @@ import { Plus, Edit, Trash2 } from "lucide-react";
 import { formatRupiah } from "@utils/formatCurrency";
 import GlobalModal from "@shared/GlobalModal";
 import GlobalTable from "@shared/GlobalTable";
+import { hitungTotalGlobal, createTotalRow } from "@utils/helperTotal";
 
 export default function DaftarKasDanSetaraKas({ config }) {
   const {
@@ -74,12 +75,35 @@ export default function DaftarKasDanSetaraKas({ config }) {
     }
   };
 
+  //  HITUNG TOTAL & BUAT BARIS TOTAL
+  const totals = hitungTotalGlobal(dataKas, ["saldo"]);
+
+
   // helper label dari option
   const getLabel = (key, value) => {
     const field = customChildren?.find((f) => f.key === key);
     const option = field?.options?.find((o) => o.value === value);
     return option?.label || value || "-";
   };
+    const tableData =
+      dataKas.length === 0
+        ? []
+        : [
+            ...dataKas,
+            createTotalRow("JUMLAH", totals, {
+              labelField: "tahunPerolehan",
+              base: {
+                kode: "",
+                deskripsi: "",
+                buktikepemilikan: "",
+                atasnama: "",
+                namabank: "",
+                lokasiHarta: "",
+                keterangan: "",
+              },
+            }),
+          ];
+  
 
   // ===== COLUMN DEFINITIONS =====
   const columnGroups = [
@@ -91,14 +115,15 @@ export default function DaftarKasDanSetaraKas({ config }) {
           title: "No",
           width: 60,
           align: "center",
-          render: (row, i) => i + 1,
+          render: (row, i) => row.type === "total" ? "" : i + 1,
         },
         {
           key: "_aksi",
           title: "Aksi",
           width: 100,
           align: "center",
-          render: (row) => (
+          render: (row) => 
+            row.type === "total" ? null : (
             <div className="flex justify-center gap-2">
               <button
                 onClick={() => openEditModal(row)}
@@ -124,7 +149,7 @@ export default function DaftarKasDanSetaraKas({ config }) {
       key: "deskripsi",
       title: "Deskripsi",
       width: 200,
-      render: (r) => getLabel("deskripsi", r.deskripsi),
+      render: (r) => r.type === "total" ? "" : getLabel("deskripsi", r.deskripsi),
     },
 
     { key: "buktikepemilikan", title: "Bukti Kepemilikan / No Akun", width: 200 },
@@ -142,7 +167,10 @@ export default function DaftarKasDanSetaraKas({ config }) {
       title: "Saldo",
       width: 160,
       align: "center",
-      render: (r) => formatRupiah(r.saldo),
+      render: (r) => {
+        if (r.type === "total" && r.saldo === "") return "";
+        return formatRupiah(r.saldo);
+      },
     },
 
     { key: "keterangan", title: "Keterangan", width: 180 },
@@ -164,13 +192,14 @@ export default function DaftarKasDanSetaraKas({ config }) {
       {/* TABLE */}
       <GlobalTable
         columnGroups={columnGroups}
-        data={dataKas}
+        data={tableData}
         page={1}
         pageSize={9999}
         total={dataKas.length}
         onPageChange={() => {}}
         stickyHeader
-        emptyText='Belum ada data. Klik "Tambah Data" untuk menambah data baru.'
+        //emptyText='Belum ada data. Klik "Tambah Data" untuk menambah data baru.'
+        rowClassName={(row) => (row.type === "total" ? "bg-yellow-50 font-semibold" : "")}
       />
 
       {/* MODAL */}

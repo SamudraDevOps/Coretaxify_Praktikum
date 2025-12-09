@@ -112,7 +112,20 @@ const BangunanTidakPermanenConfig = {
         },
       ],
     },
-
+    {
+      key: "nilaiSisaBukuFiskal",
+      type: "currency",
+      title: "Nilai Sisa Buku Fiskal",
+      placeholder: "Masukkan jumlah nilai sisa buku fiskal",
+      required: true,
+    },
+    {
+      key: "penyusutanDanAmortisasi",
+      type: "currency",
+      title: "Penyusutan dan Amortisasi",
+      placeholder: "Masukkan jumlah penyusutan dan amortisasi",
+      required: true,
+    },
     {
       key: "fiskal",
       type: "select-search",

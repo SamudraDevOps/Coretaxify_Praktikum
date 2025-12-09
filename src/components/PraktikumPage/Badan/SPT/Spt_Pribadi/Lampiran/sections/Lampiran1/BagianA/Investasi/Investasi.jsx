@@ -3,6 +3,7 @@ import { Plus, Edit, Trash2 } from "lucide-react";
 import { formatRupiah } from "@utils/formatCurrency";
 import GlobalModal from "@shared/GlobalModal";
 import GlobalTable from "@shared/GlobalTable";
+import { hitungTotalGlobal, createTotalRow } from "@utils/helperTotal";
 
 export default function DaftarInvestasi({ config }) {
   const {
@@ -76,12 +77,35 @@ export default function DaftarInvestasi({ config }) {
     }
   };
 
+  //  HITUNG TOTAL & BUAT BARIS TOTAL
+  const totals = hitungTotalGlobal(dataInvestasi, ["biayaPerolehan", "nilaiSaatIni"]);
+
   // ===== Helper Label Option =====
   const getLabel = (key, value) => {
     const field = customChildren?.find((f) => f.key === key);
     const option = field?.options?.find((o) => o.value === value);
     return option?.label || value || "-";
   };
+
+      const tableData =
+        dataInvestasi.length === 0
+          ? []
+          : [
+              ...dataInvestasi,
+              createTotalRow("JUMLAH", totals, {
+                labelField: "buktiKepemilikan",
+                base: {
+                  kode: "",
+                  deskripsi: "",
+                  lokasiharta: "",
+                  nomoridentitas: "",
+                  penerimaInvestasi: "",
+                  tahunPerolehan: "",
+                  keteranganHarta: "",
+                },
+              }),
+            ];
+  
 
   // ===== Column GlobalTable =====
   const columnGroups = [
@@ -93,14 +117,15 @@ export default function DaftarInvestasi({ config }) {
           title: "No",
           width: 60,
           align: "center",
-          render: (row, i) => i + 1,
+          render: (row, i) => row.type === "total" ? "" : i + 1,
         },
         {
           key: "_aksi",
           title: "Aksi",
           width: 100,
           align: "center",
-          render: (row) => (
+          render: (row) => 
+            row.type === "total" ? null : (
             <div className="flex justify-center gap-2">
               <button
                 onClick={() => openEditModal(row)}
@@ -126,7 +151,7 @@ export default function DaftarInvestasi({ config }) {
       key: "deskripsi",
       title: "Deskripsi",
       width: 200,
-      render: (r) => getLabel("deskripsi", r.deskripsi),
+      render: (r) => r.type === "total" ? "" : getLabel("deskripsi", r.deskripsi),
     },
 
     { key: "lokasiharta", title: "Lokasi Harta", width: 200 },
@@ -145,8 +170,11 @@ export default function DaftarInvestasi({ config }) {
       key: "biayaPerolehan",
       title: "Biaya Perolehan",
       width: 150,
-      align: "right",
-      render: (r) => formatRupiah(r.biayaPerolehan),
+      align: "center",
+      render: (r) => {
+        if (r.type === "total" && r.biayaPerolehan === "") return "";
+        return formatRupiah(r.biayaPerolehan);
+      },
     },
 
     { key: "tahunPerolehan", title: "Tahun Perolehan", width: 150, align: "center" },
@@ -156,15 +184,17 @@ export default function DaftarInvestasi({ config }) {
       title: "Nilai Saat ini",
       width: 150,
       align: "center",
-      render: (r) => formatRupiah(r.nilaiSaatIni),
+      render: (r) => {
+        if (r.type === "total" && r.nilaiSaatIni === "") return "";
+        return formatRupiah(r.nilaiSaatIni);
+      },
     },
 
     {
       key: "keteranganHarta",
       title: "Keterangan",
       width: 150,
-      render: (r) =>
-        getLabel("keterangan", r.keteranganHarta || r.keterangan),
+      render: (r) => r.type === "total" ? "" : getLabel("keterangan", r.keteranganHarta || r.keterangan),
     },
   ];
 
@@ -184,13 +214,14 @@ export default function DaftarInvestasi({ config }) {
       {/* TABLE */}
       <GlobalTable
         columnGroups={columnGroups}
-        data={dataInvestasi}
+        data={tableData}
         page={1}
         pageSize={9999}
         total={dataInvestasi.length}
         onPageChange={() => {}}
         stickyHeader
-        emptyText='Belum ada data. Klik "Tambah Data" untuk menambah data baru.'
+        //emptyText='Belum ada data. Klik "Tambah Data" untuk menambah data baru.'
+        rowClassName={(row) => (row.type === "total" ? "bg-yellow-50 font-semibold" : "")}
       />
 
       {/* MODAL */}

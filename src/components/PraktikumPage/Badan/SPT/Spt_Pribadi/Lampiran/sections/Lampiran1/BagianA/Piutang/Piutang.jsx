@@ -3,6 +3,7 @@ import { Plus, Edit, Trash2 } from "lucide-react";
 import { formatRupiah } from "@utils/formatCurrency";
 import GlobalModal from "@shared/GlobalModal";
 import GlobalTable from "@shared/GlobalTable";
+import { hitungTotalGlobal, createTotalRow } from "@utils/helperTotal";
 
 export default function DaftarPiutang({ config }) {
   const {
@@ -74,6 +75,9 @@ export default function DaftarPiutang({ config }) {
     }
   };
 
+  //  HITUNG TOTAL & BUAT BARIS TOTAL
+  const totals = hitungTotalGlobal(data, [ "nilaiPiutang", "SaldoPiutang"]);
+
   // ===== HELPER =====
   const getLabel = (key, value) => {
     const field = customChildren?.find((f) => f.key === key);
@@ -81,6 +85,25 @@ export default function DaftarPiutang({ config }) {
     return opt?.label || value || "-";
   };
 
+  // ===== TABLE DATA WITH TOTAL ROW =====
+    const tableData =
+      data.length === 0
+        ? []
+        : [
+            ...data,
+            createTotalRow("JUMLAH", totals, {
+              labelField: "penerimaPinjaman",
+              base: {
+                kode: "",
+                deskripsi: "",
+                lokasipenerima: "",
+                nomoridentitas: "",
+                penerimaPinjaman: "",
+                tahunDimulai: "",
+                keterangan: "",
+              },
+            }),
+          ];
   // ===== COLUMNS =====
   const columnGroups = [
     {
@@ -91,14 +114,15 @@ export default function DaftarPiutang({ config }) {
           title: "No",
           width: 60,
           align: "center",
-          render: (r, i) => i + 1,
+          render: (row, i) => row.type === "total" ? "" : i + 1,
         },
         {
           key: "_aksi",
           title: "Aksi",
           width: 100,
           align: "center",
-          render: (row) => (
+          render: (row) => 
+            row.type === "total" ? null : (
             <div className="flex justify-center gap-2">
               <button
                 onClick={() => openEditModal(row)}
@@ -138,7 +162,10 @@ export default function DaftarPiutang({ config }) {
       title: "Nilai Piutang",
       width: 150,
       align: "center",
-      render: (r) => formatRupiah(r.nilaiPiutang),
+      render: (r) => {
+        if (r.type === "total" && r.nilaiPiutang === "") return "";
+        return formatRupiah(r.nilaiPiutang);
+      },
     },
 
     {
@@ -153,7 +180,10 @@ export default function DaftarPiutang({ config }) {
       title: "Saldo Piutang",
       width: 160,
       align: "center",
-      render: (r) => formatRupiah(r.SaldoPiutang),
+      render: (r) => {
+        if (r.type === "total" && r.SaldoPiutang === "") return "";
+        return formatRupiah(r.SaldoPiutang);
+      },
     },
 
     {
@@ -179,13 +209,14 @@ export default function DaftarPiutang({ config }) {
       {/* TABLE */}
       <GlobalTable
         columnGroups={columnGroups}
-        data={data}
+        data={tableData}
         page={1}
         pageSize={9999}
         total={data.length}
         onPageChange={() => {}}
         stickyHeader
-        emptyText='Belum ada data. Klik "Tambah Data" untuk menambah data baru.'
+        //emptyText='Belum ada data. Klik "Tambah Data" untuk menambah data baru.'
+        rowClassName={(row) => (row.type === "total" ? "bg-yellow-50 font-semibold" : "")}
       />
 
       {/* MODAL */}

@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { Plus, Edit, Trash2 } from "lucide-react";
-import { formatNumber, parseFormattedNumber, formatRupiah } from "@utils/formatCurrency";
+import { formatRupiah } from "@utils/formatCurrency";
 import GlobalModal from "@shared/GlobalModal";
+import GlobalTable from "@shared/GlobalTable";
+import { hitungTotalGlobal, createTotalRow } from "@utils/helperTotal";
+
 export default function PenguranganNeto({ config }) {
   const {
     baseFields = [
@@ -36,30 +39,26 @@ export default function PenguranganNeto({ config }) {
   const [editingId, setEditingId] = useState(null);
   const [selected, setSelected] = useState(null);
 
-  // Open modal untuk add
+  // ================= CRUD =================
   const openAddModal = () => {
     setSelected({ ...defaultData });
     setEditingId(null);
     setShowModal(true);
   };
 
-  // Open modal untuk edit
   const openEditModal = (item) => {
     setSelected(item);
     setEditingId(item.id);
     setShowModal(true);
   };
 
-  // Close modal
   const closeModal = () => {
     setShowModal(false);
     setEditingId(null);
     setSelected(null);
   };
 
-  // Save data
   const saveData = (values) => {
-    console.log("Saved values:", values);
     if (editingId) {
       setDataPenghasilan((prev) =>
         prev.map((item) => (item.id === editingId ? { ...values, id: editingId } : item))
@@ -70,102 +69,174 @@ export default function PenguranganNeto({ config }) {
     closeModal();
   };
 
-  // Delete data
   const deleteData = (id) => {
     if (confirm("Apakah Anda yakin ingin menghapus data ini?")) {
       setDataPenghasilan((prev) => prev.filter((item) => item.id !== id));
     }
   };
 
+  // =============== HELPERS ===============
+  const getLabel = (key, value) => {
+    const field = customChildren?.find((f) => f.key === key);
+    const option = field?.options?.find((o) => o.value === value);
+    return option?.label || value || "-";
+  };
+
+  const totals = hitungTotalGlobal(dataPenghasilan, ["biayaEntertainment"]);
+
+  // ===== TABLE DATA WITH TOTAL ROW =====
+  const tableData =
+    dataPenghasilan.length === 0
+      ? []  
+      : [
+          ...dataPenghasilan,
+          createTotalRow("JUMLAH", totals, {
+            labelField: "jenisEntertainment",
+            base: {
+              calender: "",
+              alamat: "",
+              namaTempatEntertainment: "",
+              namaRelasiDiberikanEntertainment: "",
+              jabatan: "",
+              namaPerusahaan: "",
+              usahaDiberikanEntertainment: "",
+              keterangan: "",
+            },
+          }),
+        ];
+
+  // ================= COLUMN GROUP =================
+  const columnGroups = [
+    {
+      title: "TINDAKAN",
+      children: [
+        {
+          key: "no",
+          title: "NO",
+          width: 60,
+          align: "center",
+          render: (row, i) => row.type === "total" ? "" : i + 1,
+        },
+        {
+          key: "_aksi",
+          title: "AKSI",
+          width: 100,
+          align: "center",
+          render: (row) => 
+            row.type === "total" ? null : (
+            <div className="flex justify-center gap-2">
+              <button
+                onClick={() => openEditModal(row)}
+                className="p-1 text-blue-600 hover:bg-blue-50 rounded"
+              >
+                <Edit size={16} />
+              </button>
+              <button
+                onClick={() => deleteData(row.id)}
+                className="p-1 text-red-600 hover:bg-red-50 rounded"
+              >
+                <Trash2 size={16} />
+              </button>
+            </div>
+          ),
+        },
+      ],
+    },
+
+    {
+      key: "calender",
+      title: "TANGGAL",
+      width: 140,
+      align: "center",
+    },
+
+    {
+      key: "namaTempatEntertainment",
+      title: "NAMA TEMPAT ENTERTAINMENT",
+      width: 220,
+    },
+
+    {
+      key: "alamat",
+      title: "ALAMAT",
+      width: 200,
+    },
+
+    {
+      key: "jenisEntertainment",
+      title: "JENIS ENTERTAINMENT",
+      width: 180,
+      render: (row) => getLabel("jenisEntertainment", row.jenisEntertainment),
+    },
+
+    {
+      key: "biayaEntertainment",
+      title: "BIAYA ENTERTAINMENT",
+      width: 160,
+      align: "center",
+      render: (row) => {
+        if (row.type === "total" && row.biayaEntertainment === "") return "";
+        return formatRupiah(row.biayaEntertainment);
+      },
+    },
+
+    {
+      key: "namaRelasiDiberikanEntertainment",
+      title: "NAMA RELASI DIBERIKAN ENTERTAINMENT",
+      width: 240,
+    },
+
+    {
+      key: "jabatan",
+      title: "JABATAN",
+      width: 160,
+    },
+
+    {
+      key: "namaPerusahaan",
+      title: "NAMA PERUSAHAAN",
+      width: 200,
+    },
+
+    {
+      key: "usahaDiberikanEntertainment",
+      title: "JENIS USAHA RELASI YANG DIBERIKAN ENTERTAIMENT",
+      width: 220,
+    },
+
+    {
+      key: "keterangan",
+      title: "KETERANGAN",
+      width: 200,
+    },
+  ];
+
   return (
     <div className="space-y-4">
-      {/* Header */}
-      <div className="flex items-center justify-between">
+      {/* HEADER */}
+      <div className="flex justify-between items-center">
         <button
           onClick={openAddModal}
-          className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
         >
-          <Plus size={16} />
-          Tambah Data
+          <Plus size={16} /> Tambah Data
         </button>
       </div>
 
-      {/* Table */}
-      <div className="w-full overflow-x-auto bg-white shadow-md rounded-lg">
-        <table className="table-auto text-sm text-left border overflow-hidden">
-          <thead className="bg-purple-700 text-white text-center">
-            <tr>
-              <th className="p-2 border-b">No</th>
-              <th className="p-2 border-b min-w-[150px]">Tanggal</th>
-              <th className="p-2 border-b min-w-[150px]">Nama Tempat Entertainment</th>
-              <th className="p-2 border-b min-w-[150px]">Alamat </th>
-              <th className="p-2 border-b min-w-[150px]">Jenis Entertainment</th>
+      {/* TABLE */}
+      <GlobalTable
+        columnGroups={columnGroups}
+        data={tableData}
+        page={1}
+        pageSize={9999}
+        total={dataPenghasilan.length}
+        onPageChange={() => {}}
+        stickyHeader
+        //emptyText='Belum ada data. Klik "Tambah Data" untuk menambah data baru.'
+        rowClassName={(row) => (row.type === "total" ? "bg-yellow-50 font-semibold" : "")}
+      />
 
-              <th className="p-2 border-b min-w-[150px]">Biaya Entertainment</th>
-              <th className="p-2 border-b min-w-[150px]">
-                Nama Relasi yang Diberikan Entertainment
-              </th>
-              <th className="p-2 border-b min-w-[150px]">Jabatan</th>
-              <th className="p-2 border-b min-w-[150px]">Nama Perusahaan</th>
-              <th className="p-2 border-b min-w-[150px]">
-                Jenis Usaha Relasi yang Diberikan Entertainment
-              </th>
-
-              <th className="p-2 border-b min-w-[150px]">Keterangan</th>
-              <th className="p-2 border-b uppercase">Aksi</th>
-            </tr>
-          </thead>
-          <tbody className="text-gray-600 text-center">
-            {dataPenghasilan.length === 0 ? (
-              <tr>
-                <td colSpan="8" className="px-4 py-8 text-center text-gray-500">
-                  Belum ada data. Klik "Tambah Data" untuk menambah data baru.
-                </td>
-              </tr>
-            ) : (
-              dataPenghasilan.map((item, index) => (
-                <tr key={item.id} className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}>
-                  <td className="p-2 border-b text-center">{index + 1}</td>
-                  <td className="p-2 border-b">{item.calender}</td>
-                  <td className="p-2 border-b ">{item.namaTempatEntertainment}</td>
-                  <td className="p-2 border-b ">{item.alamat}</td>
-                  <td className="p-2 border-b max-w-xs trunate">
-                    {customChildren
-                      ?.find((f) => f.key === "jenisEntertainment")
-                      ?.options?.find((opt) => opt.value === item.jenisEntertainment)?.label ||
-                      item.jenisEntertainment}
-                  </td>
-                  <td className="p-2 border-b ">{formatRupiah(item.biayaEntertainment)}</td>
-                  <td className="p-2 border-b ">{item.namaRelasiDiberikanEntertainment}</td>
-                  <td className="p-2 border-b ">{item.jabatan}</td>
-                  <td className="p-2 border-b ">{item.namaPerusahaan}</td>
-                  <td className="p-2 border-b ">{item.usahaDiberikanEntertainment}</td>
-                  <td className="p-2 border-b ">{item.keterangan}</td>
-
-                  <td className="px-4 py-3 text-sm">
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() => openEditModal(item)}
-                        className="p-1 text-blue-600 hover:bg-blue-50 rounded"
-                      >
-                        <Edit size={16} />
-                      </button>
-                      <button
-                        onClick={() => deleteData(item.id)}
-                        className="p-1 text-red-600 hover:bg-red-50 rounded"
-                      >
-                        <Trash2 size={16} />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
-
-      {/*  MODAL dengan Safe Config */}
+      {/* MODAL */}
       <GlobalModal
         isOpen={showModal}
         onClose={closeModal}

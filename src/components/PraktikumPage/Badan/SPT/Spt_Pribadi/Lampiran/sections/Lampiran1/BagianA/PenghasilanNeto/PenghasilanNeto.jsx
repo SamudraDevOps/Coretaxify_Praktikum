@@ -3,6 +3,7 @@ import { Plus, Edit, Trash2 } from "lucide-react";
 import { formatRupiah } from "@utils/formatCurrency";
 import GlobalModal from "@shared/GlobalModal";
 import GlobalTable from "@shared/GlobalTable";
+import { hitungTotalGlobal, createTotalRow } from "@utils/helperTotal";
 
 export default function DaftarPenghasilanNeto({ config }) {
   const {
@@ -76,6 +77,25 @@ export default function DaftarPenghasilanNeto({ config }) {
       setRows((prev) => prev.filter((r) => r.id !== id));
     }
   };
+  
+  //  HITUNG TOTAL & BUAT BARIS TOTAL
+  const totals = hitungTotalGlobal(rows, ["penghasilanBruto", "pengurangan", "penghasilanNeto"]);
+
+  const tableData = 
+    rows.length === 0 
+    ? [] 
+    : [
+      ...rows,
+       createTotalRow( "JUMLAH", totals, {
+        labelField: "nama",
+        base: {
+          nomoridentitas: "",
+          nama: "",
+          keteranganHarta: "",
+        },
+       }
+      )
+    ];
 
   // ===== COLUMN DEFINITIONS =====
   const columnGroups = [
@@ -87,14 +107,15 @@ export default function DaftarPenghasilanNeto({ config }) {
           title: "No",
           width: 60,
           align: "center",
-          render: (row, i) => i + 1,
+          render: (row, i) => (row.type === "total" ? "" : i + 1),
         },
         {
           key: "_aksi",
           title: "Aksi",
           width: 100,
           align: "center",
-          render: (row) => (
+          render: (row) => 
+            row.type === "total" ? null : (
             <div className="flex justify-center gap-2">
               <button
                 onClick={() => openEditModal(row)}
@@ -131,7 +152,10 @@ export default function DaftarPenghasilanNeto({ config }) {
       title: "Penghasilan Bruto",
       width: 180,
       align: "center",
-      render: (r) => formatRupiah(r.penghasilanBruto),
+      render: (r) => {
+        if (r.type === "total" && r.penghasilanBruto === "") return "";
+        return formatRupiah(r.penghasilanBruto);
+      }
     },
 
     {
@@ -139,7 +163,10 @@ export default function DaftarPenghasilanNeto({ config }) {
       title: "Pengurangan",
       width: 180,
       align: "center",
-      render: (r) => formatRupiah(r.pengurangan),
+      render: (r) => {
+        if (r.type === "total" && r.pengurangan === "") return "";
+        return formatRupiah(r.pengurangan);
+      }
     },
 
     {
@@ -178,13 +205,14 @@ export default function DaftarPenghasilanNeto({ config }) {
       {/* TABLE */}
       <GlobalTable
         columnGroups={columnGroups}
-        data={rows}
+        data={tableData}
         page={1}
         pageSize={9999}
         total={rows.length}
         onPageChange={() => {}}
         stickyHeader
-        emptyText='Belum ada data. Klik "Tambah Data" untuk menambah data baru.'
+        //emptyText='Belum ada data. Klik "Tambah Data" untuk menambah data baru.'
+        rowClassName={(row) => (row.type === "total" ? "bg-yellow-50 font-semibold" : "")}
       />
 
       {/* MODAL */}
