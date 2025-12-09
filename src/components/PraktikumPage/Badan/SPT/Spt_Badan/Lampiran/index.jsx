@@ -10,3 +10,4 @@ export { default as Lampiran10A } from "./Lampiran10A";
 export { default as Lampiran10B } from "./Lampiran10B";
 export { default as Lampiran10C } from "./Lampiran10C";
 export { default as Lampiran10D } from "./Lampiran10D";
+export { default as Lampiran11A } from "./Lampiran11A";

@@ -27,6 +27,7 @@ import {
   Lampiran10B,
   Lampiran10C,
   Lampiran10D,
+  Lampiran11A,
 } from "../Lampiran";
 
 const CreateKonsepBadan = () => {
@@ -161,6 +162,15 @@ const CreateKonsepBadan = () => {
       badge: "Tersedia",
       order: 11,
     });
+
+    allLampiran.push({
+      id: "lampiran-11A",
+      title: "L11-A",
+      subtitle: "Lampiran 11A - RINCIAN BIAYA TERTENTU",
+      component: "Lampiran_11A",
+      badge: "Tersedia",
+      order: 12,
+    });
     // if (answersState.r1a === true) {
     //   allLampiran.push({
     //     id: "lampiran-1",
@@ -205,6 +215,8 @@ const CreateKonsepBadan = () => {
         return <Lampiran10C data={data} />;
       case "Lampiran_10D":
         return <Lampiran10D data={data} />;
+      case "Lampiran_11A":
+        return <Lampiran11A data={data} />;
       default:
         return (
           <div className="text-center py-8">
