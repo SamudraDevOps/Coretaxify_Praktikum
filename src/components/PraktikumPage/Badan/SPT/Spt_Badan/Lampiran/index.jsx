@@ -8,3 +8,5 @@ export { default as Lampiran5 } from "./Lampiran5";
 export { default as Lampiran9 } from "./Lampiran9";
 export { default as Lampiran10A } from "./Lampiran10A";
 export { default as Lampiran10B } from "./Lampiran10B";
+export { default as Lampiran10C } from "./Lampiran10C";
+export { default as Lampiran10D } from "./Lampiran10D";

@@ -162,8 +162,8 @@ const optionMetodePenentuanHarga = [
 //  CONFIG
 const ConfigComponent = {
   baseFields: [
-    "npwpPemotong",
-    "namaPemotong",
+    "npwpMitra",
+    "namaMitra",
     "negara",
     "hubungan",
     "kegiatanUsaha",
@@ -175,13 +175,13 @@ const ConfigComponent = {
 
   customChildren: [
     {
-      key: "npwpPemotong",
+      key: "npwpMitra",
       type: "text",
       title: "NPWP/TIN (Pihak Yang Dipengaruhi Hubungan Istimewa)",
       placeholder: "NPWP/TIN Mitra Transaksi",
     },
     {
-      key: "namaPemotong",
+      key: "namaMitra",
       type: "text",
       title: "Nama ",
       placeholder: "Nama Mitra Transaksi",

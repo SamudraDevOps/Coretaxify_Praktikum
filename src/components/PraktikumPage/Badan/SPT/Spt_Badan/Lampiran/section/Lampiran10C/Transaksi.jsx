@@ -4,22 +4,11 @@ import { formatNumber, parseFormattedNumber, formatRupiah } from "@utils/formatC
 import GlobalModal from "@shared/GlobalModal";
 import GlobalTable from "@shared/GlobalTable";
 
-export default function DaftarTransaksi({ config }) {
+export default function Transaksi({ config }) {
   const {
-    baseFields = [
-      "npwpMitra",
-      "namaMitra",
-      "negara",
-      "hubungan",
-      "kegiatanUsaha",
-      "jenis-transaksi",
-      "nilaiTransaksi",
-      "metodePenentuanHarga",
-      "alasanPemilihanMetode",
-    ],
+    baseFields = ["namaMitra", "jenis-transaksi", "negara", "nilaiTransaksi"],
     customChildren = [],
     defaultData = {
-      npwpMitra: "",
       namaMitra: "PT. Hj.Galih Previand Wicaksono",
     },
   } = config || {};
@@ -116,17 +105,7 @@ export default function DaftarTransaksi({ config }) {
       ],
     },
 
-    { key: "npwpMitra", title: " NPWP/TIN", width: 120, align: "center" },
-    { key: "namaMitra", title: "Nama ", width: 180, align: "center" },
-    { key: "negara", title: "Negara", width: 120, align: "center" },
-    {
-      key: "hubungan",
-      title: "Bentuk Hubungan",
-      width: 150,
-      align: "center",
-      render: (row) => getLabel("hubungan", row.hubungan),
-    },
-    { key: "kegiatanUsaha", title: "Kegiatan Usaha", width: 200, align: "center" },
+    { key: "namaMitra", title: " Nama Mitra", width: 180, align: "center" },
     {
       key: "jenis-transaksi",
       title: "Jenis Transaksi",
@@ -134,6 +113,7 @@ export default function DaftarTransaksi({ config }) {
       align: "center",
       render: (row) => getLabel("jenis-transaksi", row["jenis-transaksi"]),
     },
+    { key: "negara", title: "Negara", width: 120, align: "center" },
     {
       key: "nilaiTransaksi",
       title: "Nilai Transaksi",
@@ -143,19 +123,6 @@ export default function DaftarTransaksi({ config }) {
         if (r.type === "total" && r.nilaiTransaksi === "") return "";
         return formatRupiah(r.nilaiTransaksi);
       },
-    },
-    {
-      key: "metodePenentuanHarga",
-      title: "Metode Penentuan Transfer Yang Digunakan",
-      width: 150,
-      align: "center",
-      render: (row) => getLabel("metodePenentuanHarga", row.metodePenentuanHarga),
-    },
-    {
-      key: "alasanPemilihanMetode",
-      title: "Alasan Pemilihan Metode",
-      width: 200,
-      align: "center",
     },
   ];
 

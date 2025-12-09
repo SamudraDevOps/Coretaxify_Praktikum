@@ -25,6 +25,8 @@ import {
   Lampiran9,
   Lampiran10A,
   Lampiran10B,
+  Lampiran10C,
+  Lampiran10D,
 } from "../Lampiran";
 
 const CreateKonsepBadan = () => {
@@ -141,6 +143,24 @@ const CreateKonsepBadan = () => {
       order: 9,
     });
 
+    allLampiran.push({
+      id: "lampiran-10C",
+      title: "L10-C",
+      subtitle:
+        "Lampiran 10C - PERNYATAAN TRANSAKSI DENGAN PIHAK YANG MERUPAKAN PENDUDUK TAX HAVEN COUNTRY",
+      component: "Lampiran_10C",
+      badge: "Tersedia",
+      order: 10,
+    });
+
+    allLampiran.push({
+      id: "lampiran-10D",
+      title: "L10-D",
+      subtitle: "Lampiran 10D - IKHTISAR DOKUMEN INDUK DAN DOKUMEN LOKAL",
+      component: "Lampiran_10D",
+      badge: "Tersedia",
+      order: 11,
+    });
     // if (answersState.r1a === true) {
     //   allLampiran.push({
     //     id: "lampiran-1",
@@ -181,6 +201,10 @@ const CreateKonsepBadan = () => {
         return <Lampiran10A data={data} />;
       case "Lampiran_10B":
         return <Lampiran10B data={data} />;
+      case "Lampiran_10C":
+        return <Lampiran10C data={data} />;
+      case "Lampiran_10D":
+        return <Lampiran10D data={data} />;
       default:
         return (
           <div className="text-center py-8">
