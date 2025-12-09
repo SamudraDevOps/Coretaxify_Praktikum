@@ -3,6 +3,7 @@ import { Plus, Edit, Trash2 } from "lucide-react";
 import { formatRupiah } from "@utils/formatCurrency";
 import GlobalModal from "@shared/GlobalModal";
 import GlobalTable from "@shared/GlobalTable";
+import { hitungTotalGlobal, createTotalRow } from "@utils/helperTotal";
 
 export default function DaftarUtangAkhir({ config }) {
   const {
@@ -75,12 +76,35 @@ export default function DaftarUtangAkhir({ config }) {
     }
   };
 
+  //  HITUNG TOTAL & BUAT BARIS TOTAL
+  const totals = hitungTotalGlobal(dataHarta, ["biayaPerolehan", "nilaiSaatIni"]);
+
   // helper ambil label dari option
   const getLabel = (key, value) => {
     const field = customChildren?.find((f) => f.key === key);
     const option = field?.options?.find((o) => o.value === value);
     return option?.label || value || "-";
   };
+
+  const tableData =  
+    dataHarta.length === 0
+      ? []
+      : [ 
+        ...dataHarta,
+        createTotalRow("JUMLAH", totals, {
+          labelField: "tahunPerolehan",
+          base: {
+            kode: "",
+            tipe: "",
+            merk: "",
+            nopol: "",
+            kepemilikan: "",
+            npwp: "",
+            namaPemotongPajak: "",
+            keterangan: "",
+          },
+        }),
+      ];
 
   // === COLUMN GROUPS (SAMA DENGAN TEKS ASLI) ===
   const columnGroups = [
@@ -92,14 +116,15 @@ export default function DaftarUtangAkhir({ config }) {
           title: "No",
           width: 60,
           align: "center",
-          render: (row, i) => i + 1,
+          render: (row, i) => (row.type === "total" ? "" : i + 1),
         },
         {
           key: "_aksi",
           title: "Aksi",
           width: 100,
           align: "center",
-          render: (row) => (
+          render: (row) => 
+            row.type === "total" ? null : (
             <div className="flex justify-center gap-2">
               <button
                 onClick={() => openEditModal(row)}
@@ -124,15 +149,15 @@ export default function DaftarUtangAkhir({ config }) {
       key: "tipe",
       title: "Tipe",
       width: 200,
-      render: (r) => getLabel("tipe", r.tipe),
-    },
+      render: (r) => r.type === "total" ? "" : getLabel("tipe", r.tipe),
+     },
     { key: "merk", title: "Merk/Model", width: 200 },
     { key: "nopol", title: "Nomor Polisi/Registrasi", width: 200 },
     {
       key: "kepemilikan",
       title: "Kepemilikan",
       width: 150,
-      render: (r) => getLabel("kepemilikan", r.kepemilikan),
+      render: (r) => r.type === "total" ? "" : getLabel("kepemilikan", r.kepemilikan),
     },
     { key: "npwp", title: "NPWP", width: 150, align: "center" },
     { key: "namaPemotongPajak", title: "Nama Pemotong Pajak", width: 180 },
@@ -142,14 +167,20 @@ export default function DaftarUtangAkhir({ config }) {
       title: "Biaya Perolehan",
       width: 160,
       align: "center",
-      render: (r) => formatRupiah(r.biayaPerolehan),
+      render: (r) => {
+        if (r.type === "total" && r.biayaPerolehan === "") return "";
+        return formatRupiah(r.biayaPerolehan);
+      },
     },
     {
       key: "nilaiSaatIni",
       title: "Nilai Saat ini",
       width: 160,
       align: "center",
-      render: (r) => formatRupiah(r.nilaiSaatIni),
+      render: (r) => {
+        if (r.type === "total" && r.nilaiSaatIni === "") return "";
+        return formatRupiah(r.nilaiSaatIni);
+      },
     },
     { key: "keterangan", title: "Keterangan", width: 200 },
   ];
@@ -170,13 +201,14 @@ export default function DaftarUtangAkhir({ config }) {
       {/* TABLE */}
       <GlobalTable
         columnGroups={columnGroups}
-        data={dataHarta}
+        data={tableData}
         page={1}
         pageSize={9999}
         total={dataHarta.length}
         onPageChange={() => {}}
         stickyHeader
-        emptyText='Belum ada data. Klik "Tambah Data" untuk menambah data baru.'
+        //emptyText='Belum ada data. Klik "Tambah Data" untuk menambah data baru.'
+        rowClassName={(row) => (row.type === "total" ? "bg-yellow-50 font-semibold" : "")}
       />
 
       {/* MODAL */}

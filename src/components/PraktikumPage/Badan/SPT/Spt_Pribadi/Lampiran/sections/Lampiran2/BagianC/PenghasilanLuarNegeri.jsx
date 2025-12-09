@@ -3,6 +3,7 @@ import { Plus, Edit, Trash2 } from "lucide-react";
 import { formatRupiah } from "@utils/formatCurrency";
 import GlobalModal from "@shared/GlobalModal";
 import GlobalTable from "@shared/GlobalTable";
+import { hitungTotalGlobal, createTotalRow } from "@utils/helperTotal";
 
 export default function PenghasilanLuarNegeri({ config }) {
   const {
@@ -29,11 +30,11 @@ export default function PenghasilanLuarNegeri({ config }) {
       namaPemberi: "",
       negara: "",
       tanggalPemotongan: "",
-      penghasilanNeto: "",
-      pajakDibayarLuarNegeri: "",
+      penghasilanNeto: 0,
+      pajakDibayarLuarNegeri: 0,
       mataUang: "",
-      pajakDibayarRupiah: "",
-      kreditYangDapatDiperhitungkan: "",
+      pajakDibayarRupiah: 0,
+      kreditYangDapatDiperhitungkan: 0,
     },
   } = config || {};
 
@@ -89,6 +90,27 @@ export default function PenghasilanLuarNegeri({ config }) {
     return option?.label || value || "-";
   };
 
+  const totals = hitungTotalGlobal(data, ["penghasilanNeto", "pajakDibayarLuarNegeri", "pajakDibayarRupiah", "kreditYangDapatDiperhitungkan"]);
+
+  const tableData =
+    data.length === 0
+      ? []
+        : [
+            ...data,
+          createTotalRow("JUMLAH", totals, {
+            labelField: "jenis",
+            base: {
+              namaPemotong: "",
+              npwpPemotong: "",
+              tanggalPemotongan: "",
+              jenis: "",
+              namaPemberi: "",
+              negara: "",
+              mataUang: "",
+            },
+          }),
+        ];
+
   // === COLUMN GROUPS (SAMA STRUKTUR DENGAN CONTOH) ===
   const columnGroups = [
     {
@@ -99,14 +121,15 @@ export default function PenghasilanLuarNegeri({ config }) {
           title: "NO",
           width: 60,
           align: "center",
-          render: (row, i) => i + 1,
+          render: (row, i) => row.type === "total" ? "" : i + 1
         },
         {
           key: "_aksi",
           title: "AKSI",
           width: 100,
           align: "center",
-          render: (row) => (
+          render: (row) => 
+          row.type === "total" ? "" : (
             <div className="flex justify-center gap-2">
               <button
                 onClick={() => openEditModal(row)}
@@ -146,14 +169,20 @@ export default function PenghasilanLuarNegeri({ config }) {
       title: "PENGHASILAN NETO",
       width: 160,
       align: "center",
-      render: (row) => formatRupiah(row.penghasilanNeto),
+      render: (r) => {
+        if (r.type === "total" && r.penghasilanNeto === "") return "";
+        return formatRupiah(r.penghasilanNeto);
+      },
     },
     {
       key: "pajakDibayarLuarNegeri",
       title: "PAJAK YANG DIBAYAR/DIPOTONG/TERUTANG DI LUAR NEGERI DALAM MATA UANG ASING",
       width: 200,
       align: "center",
-      render: (row) => formatRupiah(row.pajakDibayarLuarNegeri),
+      render: (r) => {
+        if (r.type === "total" && r.pajakDibayarLuarNegeri === "") return "";
+        return formatRupiah(r.pajakDibayarLuarNegeri);
+      },
     },
     { key: "mataUang", title: "MATA UANG", width: 120, align: "center" },
     {
@@ -161,14 +190,20 @@ export default function PenghasilanLuarNegeri({ config }) {
       title: "PAJAK YANG DIBAYAR/DIPOTONG/TERUTANG DI LUAR NEGERI DALAM MATA UANG RUPIAH",
       width: 180,
       align: "center",
-      render: (row) => formatRupiah(row.pajakDibayarRupiah),
+      render: (r) => {
+        if (r.type === "total" && r.pajakDibayarRupiah === "") return "";
+        return formatRupiah(r.pajakDibayarRupiah);
+      },
     },
     {
       key: "kreditYangDapatDiperhitungkan",
       title: "KREDIT YANG DAPAT DIPERHITUNGKAN",
       width: 220,
       align: "center",
-      render: (row) => formatRupiah(row.kreditYangDapatDiperhitungkan),
+      render: (r) => {
+        if (r.type === "total" && r.kreditYangDapatDiperhitungkan === "") return "";
+        return formatRupiah(r.kreditYangDapatDiperhitungkan);
+      },
     },
   ];
 
@@ -187,13 +222,14 @@ export default function PenghasilanLuarNegeri({ config }) {
       {/* TABLE */}
       <GlobalTable
         columnGroups={columnGroups}
-        data={data}
+        data={tableData}
         page={1}
         pageSize={9999}
         total={data.length}
         onPageChange={() => {}}
         stickyHeader
-        emptyText='Belum ada data. Klik "Tambah Data" untuk menambah data baru.'
+        //emptyText='Belum ada data. Klik "Tambah Data" untuk menambah data baru.'
+        rowClassName={(row) => (row.type === "total" ? "bg-yellow-50 font-semibold" : "")}
       />
 
       {/* MODAL */}

@@ -3,6 +3,7 @@ import { Plus, Edit, Trash2 } from "lucide-react";
 import { formatRupiah } from "@utils/formatCurrency";
 import GlobalModal from "@shared/GlobalModal";
 import GlobalTable from "@shared/GlobalTable";
+import { hitungTotalGlobal, createTotalRow } from "@utils/helperTotal";
 
 export default function DaftarHartaBergerak({ config }) {
   const {
@@ -70,6 +71,25 @@ export default function DaftarHartaBergerak({ config }) {
     }
   };
 
+  const totals = hitungTotalGlobal(data, ["saldo"]);
+
+  const tableData = 
+    data.length === 0
+    ? []
+    : [
+        ...data,
+        createTotalRow("JUMLAH", totals, {
+          labelField: "tahunPerolehan",
+          base: {
+            kode: "",
+            deskripsi: "",
+            npwp: "",
+            negara: "",
+            keteranganHarta: "",
+          },
+        }),
+      ];
+
   // ===== HELPER LABEL =====
   const getLabel = (key, value) => {
     const field = customChildren?.find((f) => f.key === key);
@@ -87,14 +107,15 @@ export default function DaftarHartaBergerak({ config }) {
           title: "No",
           width: 60,
           align: "center",
-          render: (r, i) => i + 1,
+          render: (r, i) => (r.type === "total" ? "" : i + 1),
         },
         {
           key: "_aksi",
           title: "Aksi",
           width: 100,
           align: "center",
-          render: (row) => (
+          render: (row) => 
+            row.type === "total" ? null : (
             <div className="flex justify-center gap-2">
               <button
                 onClick={() => openEditModal(row)}
@@ -120,7 +141,7 @@ export default function DaftarHartaBergerak({ config }) {
       key: "deskripsi",
       title: "Deskripsi",
       width: 250,
-      render: (r) => getLabel("deskripsi", r.deskripsi),
+      render: (r) => r.type === "total" ? "" : getLabel("deskripsi", r.deskripsi),
     },
 
     { key: "npwp", title: "NPWP Kreditur", width: 180 },
@@ -139,7 +160,10 @@ export default function DaftarHartaBergerak({ config }) {
       title: "Saldo",
       width: 150,
       align: "center",
-      render: (r) => formatRupiah(r.saldo),
+      render: (r) => {
+        if (r.type === "total" && r.saldo === "") return "";
+        return formatRupiah(r.saldo);
+      }
     },
 
     {
@@ -165,13 +189,14 @@ export default function DaftarHartaBergerak({ config }) {
       {/* TABLE */}
       <GlobalTable
         columnGroups={columnGroups}
-        data={data}
+        data={tableData}
         page={1}
         pageSize={9999}
         total={data.length}
         onPageChange={() => {}}
         stickyHeader
-        emptyText='Belum ada data. Klik "Tambah Data" untuk menambah data baru.'
+        //emptyText='Belum ada data. Klik "Tambah Data" untuk menambah data baru.'
+        rowClassName={(row) => (row.type === "total" ? "bg-yellow-50 font-semibold" : "")}
       />
 
       {/* MODAL */}
