@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import { X } from "lucide-react";
 import { formatNumber, parseFormattedNumber } from "@utils/formatCurrency";
 import { defaultYearPickerProps, yearToDate, dateToYear } from "@utils/datePickerUtils";
@@ -249,6 +249,9 @@ const GlobalModal = ({
   onFieldChange,
   validation = {},
   children,
+  closeOnEsc = true,
+  closeOnBackdrop = true,
+  isFixed = true,
 }) => {
   const [formData, setFormData] = useState({});
   const [errors, setErrors] = useState({});
@@ -259,6 +262,7 @@ const GlobalModal = ({
     currencies: [],
     loading: false,
   });
+  const prevBodyOverflowRef = useRef(null);
 
   // Initialize form data
   useEffect(() => {
@@ -267,6 +271,79 @@ const GlobalModal = ({
       setErrors({});
     }
   }, [isOpen, data]);
+
+  // Hanya block body scroll jika modal fixed (mode lama) & terbuka
+  useEffect(() => {
+    if (!isFixed) return; // kalau modal non-fixed jangan ubah body overflow
+
+    // inisialisasi counter jika belum ada
+    if (typeof window !== "undefined" && typeof window.__modalOpenCount === "undefined") {
+      window.__modalOpenCount = 0;
+    }
+
+    if (isOpen) {
+      // kalau ini modal pertama yang buka, simpan overflow sebelumnya
+      if (window.__modalOpenCount === 0) {
+        prevBodyOverflowRef.current = document.body.style.overflow;
+        document.body.style.overflow = "hidden";
+      }
+      window.__modalOpenCount = (window.__modalOpenCount || 0) + 1;
+    } else {
+      // menutup modal: turunkan counter dan restore jika tidak ada modal lagi
+      if ((window.__modalOpenCount || 0) > 0) {
+        window.__modalOpenCount = Math.max(0, window.__modalOpenCount - 1);
+      }
+      if ((window.__modalOpenCount || 0) === 0) {
+        document.body.style.overflow = prevBodyOverflowRef.current || "";
+        prevBodyOverflowRef.current = null;
+      }
+    }
+
+    // cleanup saat unmount komponen (mis. route change)
+    return () => {
+      if (!isFixed) return;
+      if ((window.__modalOpenCount || 0) > 0) {
+        window.__modalOpenCount = Math.max(0, window.__modalOpenCount - 1);
+      }
+      if ((window.__modalOpenCount || 0) === 0) {
+        document.body.style.overflow = prevBodyOverflowRef.current || "";
+        prevBodyOverflowRef.current = null;
+      }
+    };
+  }, [isOpen, isFixed]);
+
+  // ESC handler (selalu aktif, terlepas fixed/non-fixed)
+  useEffect(() => {
+    if (!isOpen || !closeOnEsc) return;
+    const onKey = (e) => {
+      if (e.key === "Escape") {
+        onClose && onClose();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [isOpen, closeOnEsc, onClose]);
+
+  // prevent body scroll saat modal terbuka
+  useEffect(() => {
+    if (isOpen) {
+      const prev = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = prev;
+      };
+    }
+    return;
+  }, [isOpen]);
+
+  useEffect(() => {
+    function handleKey(e) {
+      if (e.key === "Escape") onClose();
+    }
+
+    if (isOpen) window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, [isOpen, onClose]);
 
   //  HELPER FUNCTION UNTUK CURRENCY LABEL
   const currencyLabel = (currencies) => {
@@ -654,7 +731,6 @@ const GlobalModal = ({
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  s
                   d="M19 9l-7 7-7-7"
                 />
               </svg>
@@ -711,26 +787,53 @@ const GlobalModal = ({
     full: "max-w-full mx-4",
   };
 
+  // Wrapper props berbeda bila modal fixed atau non-fixed
+  const wrapperProps = isFixed
+    ? {
+        className: "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4",
+        role: "dialog",
+        "aria-modal": "true",
+        onMouseDown: (e) => {
+          if (!closeOnBackdrop) return;
+          if (e.target === e.currentTarget) onClose && onClose();
+        },
+      }
+    : {
+        className: "relative w-full", // non-fixed: letakkan relatif di alur dokumen
+        role: "dialog",
+        "aria-modal": "true",
+        onMouseDown: (e) => {
+          if (!closeOnBackdrop) return;
+          // untuk non-fixed, backdrop mungkin tidak ada; kita cek target sama dengan currentTarget
+          if (e.target === e.currentTarget) onClose && onClose();
+        },
+      };
+
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className={cn("bg-white rounded-lg shadow-xl w-full", sizeClasses[size])}>
-        {/* Header */}
+    <div {...wrapperProps}>
+      <div
+        className={cn("bg-white rounded-lg shadow-xl w-full", sizeClasses[size])}
+        onMouseDown={(e) => e.stopPropagation()}
+        style={{ maxHeight: "80vh", display: "flex", flexDirection: "column" }}
+      >
+        {/* Header (tetap) */}
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
           <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
           <button
             onClick={onClose}
             className="p-1 hover:bg-gray-100 rounded-full transition-colors"
+            aria-label="Tutup"
           >
             <X size={20} className="text-gray-500" />
           </button>
         </div>
 
-        {/* Body */}
-        <div className="p-6 overflow-y-auto max-h-96">
+        {/* Body: sekarang flex-1 sehingga mengambil sisa tinggi dan dapat discroll */}
+        <div className="p-6 overflow-auto flex-1">
           {children || <div className="space-y-3">{visibleFields.map(renderField)}</div>}
         </div>
 
-        {/* Footer */}
+        {/* Footer: tetap berada di dalam modal */}
         {showFooter && (
           <div className="flex items-center justify-end gap-3 p-6 border-t border-gray-200">
             <button
