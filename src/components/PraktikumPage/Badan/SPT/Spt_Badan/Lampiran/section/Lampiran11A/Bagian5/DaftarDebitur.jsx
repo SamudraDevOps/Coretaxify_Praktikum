@@ -4,16 +4,16 @@ import { formatNumber, parseFormattedNumber, formatRupiah } from "@utils/formatC
 import GlobalModal from "@shared/GlobalModal";
 import GlobalTable from "@shared/GlobalTable";
 
-export default function BiayaEntertaiment({ config }) {
+export default function DaftarDebitur({ config }) {
   const {
     baseFields = [
       "nomorIdentitas",
       "nama",
       "alamat",
-      "plafonPiutang",
-      "piutangTidakDptDitagih",
-      "metode-Pembebanan",
-      "jenis-Dokumen",
+      "kreditKurangLancarAwalTahun",
+      "kreditKurangLancarAkhirTahun",
+      "jumlahBunga",
+      "kategori",
     ],
     customChildren = [],
     defaultData = {
@@ -113,52 +113,47 @@ export default function BiayaEntertaiment({ config }) {
       ],
     },
 
-    // "nomorIdentitas",
-    // "nama",
-    // "alamat",
-    // "plafonPiutang",
-    // "piutangTidakDptDitagih",
-    // "metode-Pembebanan",
-    // "jenis-Dokumen",
-
     { key: "nomorIdentitas", title: "NOMOR IDENTITAS", width: 180, align: "center" },
     { key: "nama", title: " NAMA DEBITUR ", width: 120, align: "center" },
     { key: "alamat", title: "ALAMAT", width: 120, align: "center" },
     {
-      key: "plafonPiutang",
-      title: "PLAFON PIUTANG",
+      key: "kreditKurangLancarAwalTahun",
+      title: "KREDIT KURANG LANCAR - AWAL TAHUN BUKU",
       width: 150,
       align: "center",
       render: (r) => {
-        if (r.type === "total" && r.plafonPiutang === "") return "";
-        return formatRupiah(r.plafonPiutang);
+        if (r.type === "total" && r.kreditKurangLancarAwalTahun === "") return "";
+        return formatRupiah(r.kreditKurangLancarAwalTahun);
       },
     },
 
     {
-      key: "piutangTidakDptDitagih",
-      title: "PIUTANG YANG NYATA-NYATA TIDAK DAPAT DITAGIH",
+      key: "kreditKurangLancarAkhirTahun",
+      title: "KREDIT KURANG LANCAR - AKHIR TAHUN BUKU",
       width: 150,
       align: "center",
       render: (r) => {
-        if (r.type === "total" && r.piutangTidakDptDitagih === "") return "";
-        return formatRupiah(r.piutangTidakDptDitagih);
+        if (r.type === "total" && r.kreditKurangLancarAkhirTahun === "") return "";
+        return formatRupiah(r.kreditKurangLancarAkhirTahun);
       },
     },
     {
-      key: "metode-Pembebanan",
-      title: "METODE PEMBEBANAN",
+      key: "jumlahBunga",
+      title: "JUMLAH BUNGA PADA TAHUN BUKU (AKRUAL)",
       width: 150,
       align: "center",
-      render: (row) => getLabel("metode-Pembebanan", row["metode-Pembebanan"]),
+      render: (r) => {
+        if (r.type === "total" && r.jumlahBunga === "") return "";
+        return formatRupiah(r.jumlahBunga);
+      },
     },
 
     {
-      key: "jenis-Dokumen",
-      title: "JENIS DOKUMEN PEMBUKTIAN PEMENUHAN PERSYARATAN",
+      key: "kategori",
+      title: "KATEGORI",
       width: 150,
       align: "center",
-      render: (row) => getLabel("jenis-Dokumen", row["jenis-Dokumen"]),
+      render: (row) => getLabel("kategori", row["kategori"]),
     },
   ];
 
@@ -191,7 +186,11 @@ export default function BiayaEntertaiment({ config }) {
         isOpen={showModal}
         onClose={closeModal}
         onSave={saveData}
-        title={editingId ? "Edit DAFTAR PIUTANG YANG NYATA-NYATA TIDAK DAPAT DITAGIH" : "Tambah DAFTAR PIUTANG YANG NYATA-NYATA TIDAK DAPAT DITAGIH"}
+        title={
+          editingId
+            ? "Edit DAFTAR DEBITUR NON-PERFORMING LOAN"
+            : "Tambah DAFTAR DEBITUR NON-PERFORMING LOAN"
+        }
         baseFields={baseFields}
         customChildren={customChildren}
         data={selected || {}}

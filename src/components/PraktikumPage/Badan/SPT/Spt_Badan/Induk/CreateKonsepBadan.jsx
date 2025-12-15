@@ -28,6 +28,9 @@ import {
   Lampiran10C,
   Lampiran10D,
   Lampiran11A,
+  Lampiran11B,
+  Lampiran11C,
+  Lampiran13A,
 } from "../Lampiran";
 
 const CreateKonsepBadan = () => {
@@ -171,6 +174,34 @@ const CreateKonsepBadan = () => {
       badge: "Tersedia",
       order: 12,
     });
+
+    allLampiran.push({
+      id: "lampiran-11B",
+      title: "L11-B",
+      subtitle:
+        "Lampiran 11B - PENGHITUNGAN BIAYA PINJAMAN YANG DAPAT DIBEBANKAN UNTUK KEPERLUAN PENGHITUNGAN PAJAK PENGHASILAN",
+      component: "Lampiran_11B",
+      badge: "Tersedia",
+      order: 13,
+    });
+
+    allLampiran.push({
+      id: "lampiran-11C",
+      title: "L11-C",
+      subtitle: "Lampiran 11C - LAPORAN UTANG SWASTA LUAR NEGERI",
+      component: "Lampiran_11C",
+      badge: "Tersedia",
+      order: 13,
+    });
+
+    allLampiran.push({
+      id: "lampiran-13A",
+      title: "L13-A",
+      subtitle: "Lampiran 13A - FASILITAS PERPAJAKAN DALAM RANGKA PENANAMAN MODAL",
+      component: "Lampiran_13A",
+      badge: "Tersedia",
+      order: 13,
+    });
     // if (answersState.r1a === true) {
     //   allLampiran.push({
     //     id: "lampiran-1",
@@ -217,6 +248,12 @@ const CreateKonsepBadan = () => {
         return <Lampiran10D data={data} />;
       case "Lampiran_11A":
         return <Lampiran11A data={data} />;
+      case "Lampiran_11B":
+        return <Lampiran11B data={data} />;
+      case "Lampiran_11C":
+        return <Lampiran11C data={data} />;
+      case "Lampiran_13A":
+        return <Lampiran13A data={data} />;
       default:
         return (
           <div className="text-center py-8">
