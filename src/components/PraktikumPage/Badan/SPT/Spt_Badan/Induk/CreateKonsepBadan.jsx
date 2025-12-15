@@ -31,6 +31,7 @@ import {
   Lampiran11B,
   Lampiran11C,
   Lampiran13A,
+  Lampiran14,
 } from "../Lampiran";
 
 const CreateKonsepBadan = () => {
@@ -202,6 +203,16 @@ const CreateKonsepBadan = () => {
       badge: "Tersedia",
       order: 13,
     });
+
+    allLampiran.push({
+      id: "lampiran-14",
+      title: "L14",
+      subtitle:
+        "Lampiran 14 - PENGGUNAAN SISA LEBIH UNTUK PEMBANGUNAN DAN PENGADAAN SARANA DAN PRASARANA",
+      component: "Lampiran_14",
+      badge: "Tersedia",
+      order: 14,
+    });
     // if (answersState.r1a === true) {
     //   allLampiran.push({
     //     id: "lampiran-1",
@@ -254,6 +265,8 @@ const CreateKonsepBadan = () => {
         return <Lampiran11C data={data} />;
       case "Lampiran_13A":
         return <Lampiran13A data={data} />;
+      case "Lampiran_14":
+        return <Lampiran14 data={data} />;
       default:
         return (
           <div className="text-center py-8">
