@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./editPopupMahasiswa.css";
 import EditPopupMahasiswa from "./EditPopupMahasiswa";
+import TambahMahasiswa from "./TambahMahasiswa";
 import Swal from "sweetalert2";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
@@ -26,6 +27,7 @@ const useDebounce = (value, delay) => {
 
 const EditMahasiswa = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [tambahPopupOpen, setTambahPopupOpen] = useState(false);
   const [sortConfig, setSortConfig] = useState({ key: 'created_at', direction: 'desc' });
   const [selectedData, setSelectedData] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -131,6 +133,9 @@ const EditMahasiswa = () => {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
+            </div>
+            <div className="add-button-container">
+              <button className="add-button" onClick={() => setTambahPopupOpen(true)}>+ Tambah</button>
             </div>
           </div>
           <div className="table-container">
@@ -251,11 +256,10 @@ const EditMahasiswa = () => {
                             </button>
                         ))} */}
                 <button
-                  className={`page-item ${
-                    currentPage === Math.ceil(data.length / itemsPerPage)
+                  className={`page-item ${currentPage === Math.ceil(data.length / itemsPerPage)
                       ? "disabled"
                       : ""
-                  }`}
+                    }`}
                   onClick={() => {
                     console.log(data.links.next);
                     setUrl(data.links.next);
@@ -273,6 +277,16 @@ const EditMahasiswa = () => {
               onClose={() => setIsOpen(false)}
               data={selectedData}
               onSave={handleUpdateMahasiswa}
+            />
+          )}
+          {tambahPopupOpen && (
+            <TambahMahasiswa
+              onClose={() => setTambahPopupOpen(false)}
+              onSave={(newStudents) => {
+                Swal.fire("Berhasil!", `${newStudents.length} mahasiswa siap ditambahkan.`, "success");
+                queryClient.invalidateQueries({ queryKey: ['mahasiswa'] });
+                setTambahPopupOpen(false);
+              }}
             />
           )}
         </div>
