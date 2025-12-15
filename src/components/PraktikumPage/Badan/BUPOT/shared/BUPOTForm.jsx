@@ -292,7 +292,9 @@ const BUPOTForm = ({
   };
 
   // Form data state
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({
+    pembulatan_kotor: "0"
+  });
 
   // Initialize form data
   useEffect(() => {
@@ -2709,15 +2711,17 @@ const BUPOTForm = ({
                     </label>
                     <input
                       type="checkbox"
-                      checked={formData.pembulatan_kotor}
+                      checked={String(formData.pembulatan_kotor) === "1"}
                       className="flex-none border p-2 rounded"
                       placeholder="Pembulatan Kotor"
-                      value={formData.pembulatan_kotor || ""}
                       onChange={(e) => {
-                        updateFormData("pembulatan_kotor", e.target.checked);
                         if (e.target.checked === false) {
-                          updateFormData("tunjangan_pph", 0);
+                          updateMultipleFields({
+                            pembulatan_kotor: 0,
+                            tunjangan_pph: 0
+                          });
                         } else if (e.target.checked === true) {
+                          updateFormData("pembulatan_kotor", 1);
                           setTunjanganPPh();
                         }
                       }}
@@ -2735,7 +2739,7 @@ const BUPOTForm = ({
                     <input
                       type="text"
                       className={`w-64 flex-auto border p-2 rounded appearance-none
-                        ${formData.pembulatan_kotor === true ? "bg-gray-200" : "bg-white"}
+                        ${String(formData.pembulatan_kotor) === "1" ? "bg-gray-200" : "bg-white"}
                         `}
                       placeholder="Tunjangan PPH"
                       value={formatRupiah(formData.tunjangan_pph) || ""}
@@ -2745,7 +2749,7 @@ const BUPOTForm = ({
                         // updateFormData("penghasilan_bruto_raw", Number(rawValue));
                       }}
                       onWheel={(e) => e.target.blur()}
-                      readOnly={formData.pembulatan_kotor === true
+                      readOnly={String(formData.pembulatan_kotor) === "1"
                         ? true
                         : false
                       }
@@ -3076,7 +3080,7 @@ const BUPOTForm = ({
                   </label>
                   <input
                     type="text"
-                    className="w-64 flex-auto border p-2 rounded bg-gray-rounded"
+                    className="w-64 flex-auto border p-2 rounded bg-gray-200"
                     placeholder="Biaya Jabatan / Biaya Pensiun"
                     value={formatRupiah(formData.biaya_jabatan) || ""}
                     onChange={(e) => {
