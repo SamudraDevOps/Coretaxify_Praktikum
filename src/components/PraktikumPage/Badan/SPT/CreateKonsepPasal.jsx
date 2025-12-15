@@ -436,7 +436,7 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
   // const activeTabContent = activeTab !== "induk" ? activeTab : null;
 
   const activeTabContent =
-    activeTab !== "l-ib" && activeTab !== "l-ii" ? activeTab : null;
+    activeTab !== "l-ib" ? activeTab : null;
 
   const handleTabChange = (value) => {
     // Prevent any default behavior if this is called from an event
@@ -464,6 +464,7 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
   } = useQuery({
     queryKey: [activeTabContent],
     queryFn: async () => {
+      console.log("activeTabContent: ", activeTabContent);
       const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
       const data = await axios.get(
         RoutesApi.apiUrl +
@@ -501,7 +502,7 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
               <TabsTrigger value="induk">Induk</TabsTrigger>
               <TabsTrigger value="L1">L-I</TabsTrigger>
               <TabsTrigger value="l-ib">L-IB</TabsTrigger>
-              <TabsTrigger value="l-ii">L-II</TabsTrigger>
+              <TabsTrigger value="L2">L-II</TabsTrigger>
               <TabsTrigger value="L3">L-III</TabsTrigger>
             </TabsList>
             <TabsContent value="induk">
@@ -1299,7 +1300,7 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                             <input
                               type="text"
                               readOnly
-                              value="2002909301990"
+                              value={data.npwp}
                               className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
                             />
                           </div>
@@ -1310,7 +1311,7 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                             <input
                               type="text"
                               readOnly
-                              value="2025"
+                              value={data.masa_bulan + " - " + data.masa_tahun}
                               className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
                             />
                           </div>
@@ -1343,7 +1344,7 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                             </tr>
                           </thead>
                           <tbody className="text-gray-600 text-center">
-                            {sptOther?.data ? (
+                            {sptOther?.data && sptOther?.data.length > 0 ? (
                               sptOther.data.map((item, index) => (
                                 <tr key={item.id}>
                                   <td className="p-2 border-b text-center">
@@ -1381,16 +1382,18 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                                 </tr>
                               ))
                             ) : (
-                              <tr>
-                                <td className="p-2 border-b text-center">-</td>
-                                <td className="p-2 border-b">-</td>
-                                <td className="p-2 border-b">-</td>
-                                <td className="p-2 border-b">-</td>
-                                <td className="p-2 border-b">-</td>
-                                <td className="p-2 border-b">-</td>
-                                <td className="p-2 border-b">-</td>
-                                <td className="p-2 border-b">-</td>
-                              </tr>
+                              <>
+                                <tr>
+                                  <td className="p-2 border-b text-center">-</td>
+                                  <td className="p-2 border-b">-</td>
+                                  <td className="p-2 border-b">-</td>
+                                  <td className="p-2 border-b">-</td>
+                                  <td className="p-2 border-b">-</td>
+                                  <td className="p-2 border-b">-</td>
+                                  <td className="p-2 border-b">-</td>
+                                  <td className="p-2 border-b">-</td>
+                                </tr>
+                              </>
                             )}
                           </tbody>
 
@@ -1761,7 +1764,7 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                     </div>
                   </div>
                 </TabsContent>
-                <TabsContent value="l-ii">
+                <TabsContent value="L2">
                   <div className="flex justify-between items-center mb-6">
                     <h2 className="text-black mt-4">
                       DAFTAR PEMOTONGAN SATU TAHUN PAJAK ATAU BAGIAN TAHUN PAJAK
@@ -1790,7 +1793,7 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                             <input
                               type="text"
                               readOnly
-                              value="2002909301990"
+                              value={data.npwp}
                               className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
                             />
                           </div>
@@ -1801,7 +1804,7 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                             <input
                               type="text"
                               readOnly
-                              value="2025"
+                              value={data.masa_bulan + " - " + data.masa_tahun}
                               className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
                             />
                           </div>
@@ -1856,21 +1859,77 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                             </tr>
                           </thead>
                           <tbody className="text-gray-600 text-center">
-                            <tr>
-                              <td className="p-2 border-b text-center"></td>
-                              <td className="p-2 border-b"></td>
-                              <td className="p-2 border-b">-</td>
-                              <td className="p-2 border-b">-</td>
-                              <td className="p-2 border-b">-</td>
-                              <td className="p-2 border-b">-</td>
-                              <td className="p-2 border-b">-</td>
-                              <td className="p-2 border-b">-</td>
-                              <td className="p-2 border-b">-</td>
-                              <td className="p-2 border-b">-</td>
-                              <td className="p-2 border-b">-</td>
-                              <td className="p-2 border-b">-</td>
-                              <td className="p-2 border-b">-</td>
-                            </tr>
+                            {sptOther?.data && sptOther?.data.length > 0 && sptOther.data.filter((item) => item.tipe_bupot === "BP A1").length > 0 ? (
+                              sptOther.data.filter(
+                                (item) => item.tipe_bupot === "BP A1"
+                              ).map((item, index) => (
+                                <>
+                                  <tr key={item.id}>
+                                    <td className="p-2 border-b text-center">
+                                      {index + 1}
+                                    </td>
+                                    <td className="p-2 border-b">
+                                      {item.npwp_akun || "-"}
+                                    </td>
+                                    <td className="p-2 border-b">
+                                      {item.nama_akun || "-"}
+                                    </td>
+                                    <td className="p-2 border-b">
+                                      {item.nomor_pemotongan || "-"}
+                                    </td>
+                                    <td className="p-2 border-b">
+                                      {item.masa_awal 
+                                        ? new Date(
+                                          item.masa_awal
+                                        ).toLocaleDateString("id-ID") 
+                                        : "-"}
+                                    </td>
+                                    <td className="p-2 border-b">
+                                      {item.kode_objek_pajak || "-"}
+                                    </td>
+                                    <td className="p-2 border-b">
+                                      {item.dasar_pengenaan_pajak || "-"}
+                                    </td>
+                                    <td className="p-2 border-b">
+                                      {item.pph_pasal_21_penghasilan_kena_pajak || "-"}
+                                    </td>
+                                    <td className="p-2 border-b">
+                                      {item.fasilitas_pajak || "-"}
+                                    </td>
+                                    <td className="p-2 border-b">
+                                      {item.negara_akun || "-"}
+                                    </td>
+                                    <td className="p-2 border-b">
+                                      {item.nitku || "-"}
+                                    </td>
+                                    <td className="p-2 border-b">
+                                      {item.kap || "-"}
+                                    </td>
+                                    <td className="p-2 border-b">
+                                      {item.status || "-"}
+                                    </td>
+                                  </tr>
+                                </>
+                              ))
+                            ) : (
+                              <>
+                                <tr>
+                                  <td className="p-2 border-b text-center"></td>
+                                  <td className="p-2 border-b"></td>
+                                  <td className="p-2 border-b">-</td>
+                                  <td className="p-2 border-b">-</td>
+                                  <td className="p-2 border-b">-</td>
+                                  <td className="p-2 border-b">-</td>
+                                  <td className="p-2 border-b">-</td>
+                                  <td className="p-2 border-b">-</td>
+                                  <td className="p-2 border-b">-</td>
+                                  <td className="p-2 border-b">-</td>
+                                  <td className="p-2 border-b">-</td>
+                                  <td className="p-2 border-b">-</td>
+                                  <td className="p-2 border-b">-</td>
+                                </tr>
+                              </>
+                            )}
                           </tbody>
                           {/* <tfoot className="text-gray-800 font-semibold bg-gray-100">
                                                 <tr>
@@ -1940,21 +1999,77 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                             </tr>
                           </thead>
                           <tbody className="text-gray-600 text-center">
-                            <tr>
-                              <td className="p-2 border-b text-center"></td>
-                              <td className="p-2 border-b"></td>
-                              <td className="p-2 border-b">-</td>
-                              <td className="p-2 border-b">-</td>
-                              <td className="p-2 border-b">-</td>
-                              <td className="p-2 border-b">-</td>
-                              <td className="p-2 border-b">-</td>
-                              <td className="p-2 border-b">-</td>
-                              <td className="p-2 border-b">-</td>
-                              <td className="p-2 border-b">-</td>
-                              <td className="p-2 border-b">-</td>
-                              <td className="p-2 border-b">-</td>
-                              <td className="p-2 border-b">-</td>
-                            </tr>
+                            {sptOther?.data && sptOther?.data.length > 0 && sptOther.data.filter((item) => item.kodeObjekPajak === "BP A2").length > 0 ? (
+                              sptOther.data.filter(
+                                (item) => item.kodeObjekPajak === "BP A2"
+                              ).map((item, index) => (
+                                <>
+                                  <tr key={item.id}>
+                                    <td className="p-2 border-b text-center">
+                                      {index + 1}
+                                    </td>
+                                    <td className="p-2 border-b">
+                                      {item.npwp_akun || "-"}
+                                    </td>
+                                    <td className="p-2 border-b">
+                                      {item.nama_akun || "-"}
+                                    </td>
+                                    <td className="p-2 border-b">
+                                      {item.nomor_pemotongan || "-"}
+                                    </td>
+                                    <td className="p-2 border-b">
+                                      {item.masa_awal 
+                                        ? new Date(
+                                          item.masa_awal
+                                        ).toLocaleDateString("id-ID") 
+                                        : "-"}
+                                    </td>
+                                    <td className="p-2 border-b">
+                                      {item.kode_objek_pajak || "-"}
+                                    </td>
+                                    <td className="p-2 border-b">
+                                      {item.dasar_pengenaan_pajak || "-"}
+                                    </td>
+                                    <td className="p-2 border-b">
+                                      {item.pph_pasal_21_penghasilan_kena_pajak || "-"}
+                                    </td>
+                                    <td className="p-2 border-b">
+                                      {item.fasilitas_pajak || "-"}
+                                    </td>
+                                    <td className="p-2 border-b">
+                                      {item.negara_akun || "-"}
+                                    </td>
+                                    <td className="p-2 border-b">
+                                      {item.nitku || "-"}
+                                    </td>
+                                    <td className="p-2 border-b">
+                                      {item.kap || "-"}
+                                    </td>
+                                    <td className="p-2 border-b">
+                                      {item.status || "-"}
+                                    </td>
+                                  </tr>
+                                </>
+                              ))
+                            ) : (
+                              <>
+                                <tr>
+                                  <td className="p-2 border-b text-center"></td>
+                                  <td className="p-2 border-b"></td>
+                                  <td className="p-2 border-b">-</td>
+                                  <td className="p-2 border-b">-</td>
+                                  <td className="p-2 border-b">-</td>
+                                  <td className="p-2 border-b">-</td>
+                                  <td className="p-2 border-b">-</td>
+                                  <td className="p-2 border-b">-</td>
+                                  <td className="p-2 border-b">-</td>
+                                  <td className="p-2 border-b">-</td>
+                                  <td className="p-2 border-b">-</td>
+                                  <td className="p-2 border-b">-</td>
+                                  <td className="p-2 border-b">-</td>
+                                </tr>
+                              </>
+                            )}
                           </tbody>
                           <tfoot className="text-gray-800 font-semibold bg-gray-100">
                             <tr>
