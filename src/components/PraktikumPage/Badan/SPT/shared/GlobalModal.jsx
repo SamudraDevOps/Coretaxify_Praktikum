@@ -233,6 +233,7 @@ const GlobalModal = ({
   isOpen = false,
   onClose,
   onSave,
+  beforeSave,
   title = "",
   size = "lg",
 
@@ -450,6 +451,8 @@ const GlobalModal = ({
       return newData;
     });
 
+    console.log("UPDATED:", key, value);
+
     // Clear error untuk field ini
     if (errors[key]) {
       setErrors((prev) => ({ ...prev, [key]: null }));
@@ -507,16 +510,39 @@ const GlobalModal = ({
   };
 
   // Handle save
+
   const handleSave = () => {
-    if (validateForm()) {
-      onSave(formData);
+    if (beforeSave) {
+      const result = beforeSave(formData);
+
+      if (typeof result === "string") {
+        alert(result);
+        return;
+      }
+
+      // Jika return false → stop
+      if (result === false) {
+        return;
+      }
     }
+
+    if (!validateForm()) return;
+
+    onSave(formData);
   };
+
+  // const handleSave = () => {
+  //   if (validateForm()) {
+  //     onSave(formData);
+  //   }
+  // };
 
   //  RENDER FIELD - HORIZONTAL LAYOUT
   const renderField = (field) => {
     const { key, type, title, placeholder, className, rows = 3, format, parse } = field;
-    const isReadOnly = readOnlyFields.includes(key) || field.readOnly;
+    const isReadOnly =
+      readOnlyFields.includes(key) ||
+      (typeof field.readOnly === "function" ? field.readOnly(formData) : field.readOnly);
     const hasError = errors[key];
 
     const value = (() => {
@@ -612,6 +638,7 @@ const GlobalModal = ({
             type="text"
             value={formatNumber(value)}
             onChange={(e) => {
+              if (isReadOnly) return;
               const numericValue = parseFormattedNumber(e.target.value);
               updateField(key, numericValue);
             }}
