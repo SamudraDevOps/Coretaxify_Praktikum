@@ -301,6 +301,8 @@ const BUPOTForm = ({
     }
   }, [initialData]);
 
+  console.log(formData);
+
   // 2nd Form data state
   const [supportingFormData, setSupportingFormData] = useState({});
 
@@ -651,7 +653,7 @@ const BUPOTForm = ({
         const nettoSebelumnya = parseFloat(formData.penghasilan_neto_sebelumnya || 0);
         const penghasilanNetoPphPasal21 = netto + nettoSebelumnya;
         const potonganPTKP = getBPA1PTKP(formData.ptkp_akun);
-        const penghasilanKenaPajak = penghasilanNetoPphPasal21 - potonganPTKP;
+        const penghasilanKenaPajak = penghasilanNetoPphPasal21 > potonganPTKP ? (penghasilanNetoPphPasal21 - potonganPTKP) : 0;
         const tarifPph21 = penghasilanKenaPajak > 0 ? getPs17(penghasilanKenaPajak) : 0;
         const pph21 = penghasilanKenaPajak > 0 ? Math.round(penghasilanKenaPajak * (tarifPph21 / 100)) : 0;
         const pph21Terutang = pph21;
@@ -1011,7 +1013,7 @@ const BUPOTForm = ({
                       <Select
                           className="w-64 flex-auto"
                           value={
-                            formData.bekerja_di_lebih_dari_satu_pemberi_kerja
+                            formData.bekerja_di_lebih_dari_satu_pemberi_kerja !== null && formData.bekerja_di_lebih_dari_satu_pemberi_kerja !== undefined
                               ? { value: String(formData.bekerja_di_lebih_dari_satu_pemberi_kerja), label: formData.bekerja_di_lebih_dari_satu_pemberi_kerja === "1" ? "Ya" : "Tidak" }
                               : null
                           }
@@ -1123,7 +1125,7 @@ const BUPOTForm = ({
                         <Select
                           className="w-64 flex-auto"
                           value={
-                            formData.pegawai_asing
+                            formData.pegawai_asing !== null && formData.pegawai_asing !== undefined
                               ? { value: String(formData.pegawai_asing), label: formData.pegawai_asing === "1" ? "Ya" : "Tidak" }
                               : null
                           }
