@@ -157,8 +157,10 @@ const PertanyaanB = ({ onAnswerChange, answersState }) => {
         </span>
       </div>
       <div
-        className={`overflow-hidden transition-all duration-500 ease-in-out ${
-          showIkhtisarPenghasilanNeto ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
+        className={` transition-all duration-500 ease-in-out ${
+          showIkhtisarPenghasilanNeto
+            ? "opacity-100 overflow-visible"
+            : "max-h-0 opacity-0 overflow-hidden"
         }`}
       >
         <div className="border rounded-md p-4 mb-4">
