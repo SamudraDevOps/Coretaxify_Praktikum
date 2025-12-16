@@ -8,7 +8,8 @@ function cn(...cls) {
 const headerPrimary = "bg-purple-700 text-slate-900";
 const headerPrimaryDark = "bg-purple-800 text-slate-900";
 const headerCellBase = "px-3 py-2 text-[12px] font-semibold border border-slate-200";
-const bodyCellBase = "px-3 py-[10px] text-[13px] border border-slate-200 text-slate-700 align-top";
+const bodyCellBase =
+  "px-3 py-0 h-[44px] text-[13px] border border-slate-200 text-slate-700 align-middle";
 
 export default function GlobalTable({
   columns,
