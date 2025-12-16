@@ -1,23 +1,15 @@
 import React, { useState } from "react";
 import LaporanLabaRugi from "./LaporanLabaRugi";
-import GlobalModal from "@shared/GlobalModal";
+import ModalLabaRugi from "@lampiran/Lampiran3/LaporanLabaRugi/form/ModalLabaRugi";
+import { buildSchema } from "@lampiran/Lampiran3/LaporanLabaRugi/form/schemas";
 
-// Opsi dropdown Kode Koreksi Fiskal
-const KODE_KOREKSI_OPTIONS = [
-  { value: "", label: "" },
-  { value: "FPO-01", label: "FPO-01 Biaya yang dibebankan/..." },
-  { value: "FPO-02", label: "FPO-02 Biaya natura/kenikmatan" },
-  { value: "FPO-03", label: "FPO-03 Sanksi administrasi" },
-  // Tambahkan sesuai kebutuhan
-];
-
-// Helper untuk convert value ke number
-const toNum = (v) => (v === "" || v == null ? 0 : Number(v));
-
-// ROWS STATIS
-const INITIAL_ROWS = [
+//  ROWS PATEN: isi lengkap sesuai yang dipingin bang pusing pala aing
+const ROWS = [
   // GROUP PENJUALAN
-  { id: "g-penjualan", type: "header", level: 0, keterangan: "Penjualan" },
+  { id: "g-penjualan", 
+    type: "header", 
+    level: 0, 
+    keterangan: "Penjualan" },
   {
     id: 4002,
     kodeAkun: "4002",
@@ -50,14 +42,17 @@ const INITIAL_ROWS = [
   },
   {
     id: 4004,
-    kodeAkun: "4004",
+    kodeAkun : "4004",
     type: "subtotal",
     level: 0,
     keterangan: "Penjualan Bruto",
   },
 
-  // DIKURANGI:
-  { id: "label-dikurangi", type: "label", level: 0, keterangan: "Dikurangi :" },
+    // DIKURANGI:
+  { id: "label-dikurangi",
+    type: "label",
+    level: 0,
+    keterangan: "Dikurangi :" },
 
   {
     id: 4011,
@@ -96,7 +91,7 @@ const INITIAL_ROWS = [
     type: "subtotal",
     level: 2,
   },
-  {
+    {
     id: 5040,
     kodeAkun: "5040",
     keterangan: "Biaya Bahan Baku",
@@ -111,7 +106,7 @@ const INITIAL_ROWS = [
     kodePenyesuaian: "",
     nilaiFiskal: 0,
   },
-  {
+    {
     id: 5050,
     kodeAkun: "5050",
     keterangan: "Biaya Tenaga Kerja Langsung",
@@ -126,9 +121,12 @@ const INITIAL_ROWS = [
     kodePenyesuaian: "",
     nilaiFiskal: 0,
   },
-  { id: "g-biaya-pabrikasi", type: "header", level: 0, keterangan: "Biaya Pabrikasi" },
+    { id: "g-biaya-pabrikasi", 
+    type: "header", 
+    level: 0, 
+    keterangan: "Biaya Pabrikasi" },
 
-  {
+    {
     id: 5051,
     kodeAkun: "5051",
     keterangan: "Biaya Tenaga Kerja Tidak Langsung",
@@ -143,7 +141,7 @@ const INITIAL_ROWS = [
     kodePenyesuaian: "",
     nilaiFiskal: 0,
   },
-  {
+    {
     id: 5052,
     kodeAkun: "5052",
     keterangan: "Biaya Pemeliharaan dan Perbaikan Mesin",
@@ -158,7 +156,7 @@ const INITIAL_ROWS = [
     kodePenyesuaian: "",
     nilaiFiskal: 0,
   },
-  {
+    {
     id: 5058,
     kodeAkun: "5058",
     keterangan: "Biaya Penyusutan dan Amortisasi",
@@ -173,7 +171,7 @@ const INITIAL_ROWS = [
     kodePenyesuaian: "",
     nilaiFiskal: 0,
   },
-  {
+    {
     id: 5059,
     kodeAkun: "5059",
     keterangan: "Biaya Utilitas",
@@ -188,7 +186,7 @@ const INITIAL_ROWS = [
     kodePenyesuaian: "",
     nilaiFiskal: 0,
   },
-  {
+    {
     id: 5069,
     kodeAkun: "5069",
     keterangan: "Biaya Pabrikasi Lainnya (termasuk pita cukai)",
@@ -218,7 +216,7 @@ const INITIAL_ROWS = [
     level: 0,
   },
 
-  {
+    {
     id: 5090,
     kodeAkun: "5090",
     keterangan: "Persediaan Awal Barang Dalam Proses ",
@@ -299,7 +297,7 @@ const INITIAL_ROWS = [
     type: "subtotal",
     level: 0,
   },
-  {
+    {
     id: "g-beban-operasional",
     type: "header",
     level: 0,
@@ -350,7 +348,7 @@ const INITIAL_ROWS = [
     kodePenyesuaian: "",
     nilaiFiskal: 0,
   },
-  {
+    {
     id: 5315,
     kodeAkun: "5315",
     keterangan: "Biaya Bunga",
@@ -365,7 +363,7 @@ const INITIAL_ROWS = [
     kodePenyesuaian: "",
     nilaiFiskal: 0,
   },
-  {
+    {
     id: 5316,
     kodeAkun: "5316",
     keterangan: "Beban Bunga",
@@ -380,7 +378,7 @@ const INITIAL_ROWS = [
     kodePenyesuaian: "",
     nilaiFiskal: 0,
   },
-  {
+    {
     id: 5317,
     kodeAkun: "5317",
     keterangan: "Beban Sehubungan Dengan Jasa",
@@ -395,7 +393,7 @@ const INITIAL_ROWS = [
     kodePenyesuaian: "",
     nilaiFiskal: 0,
   },
-  {
+    {
     id: 5318,
     kodeAkun: "5318",
     keterangan: "Beban Piutang Tidak Tertagih",
@@ -410,7 +408,7 @@ const INITIAL_ROWS = [
     kodePenyesuaian: "",
     nilaiFiskal: 0,
   },
-  {
+    {
     id: 5320,
     kodeAkun: "5320",
     keterangan: "Biaya Pemasaran/Promosi",
@@ -425,7 +423,7 @@ const INITIAL_ROWS = [
     kodePenyesuaian: "",
     nilaiFiskal: 0,
   },
-  {
+    {
     id: 5321,
     kodeAkun: "5321",
     keterangan: "Beban Entertaiment",
@@ -440,7 +438,7 @@ const INITIAL_ROWS = [
     kodePenyesuaian: "",
     nilaiFiskal: 0,
   },
-  {
+    {
     id: 5322,
     kodeAkun: "5322",
     keterangan: "Beban Umum dan Administrasi",
@@ -455,7 +453,7 @@ const INITIAL_ROWS = [
     kodePenyesuaian: "",
     nilaiFiskal: 0,
   },
-  {
+    {
     id: 5399,
     kodeAkun: "5399",
     keterangan: "Beban Operasional Lainnya",
@@ -487,189 +485,62 @@ const INITIAL_ROWS = [
 ];
 
 export default function LabaRugi() {
-  const [rows, setRows] = useState(INITIAL_ROWS);
-  const [showModal, setShowModal] = useState(false);
-  const [selectedRow, setSelectedRow] = useState(null);
+  const [rows, setRows] = useState(ROWS);
+  const [open, setOpen] = useState(false);
+  const [schema, setSchema] = useState([]);
+  const [selected, setSelected] = useState(null);
 
-  // Open modal edit
-  const openEditModal = (row) => {
-    setSelectedRow(row);
-    setShowModal(true);
+  const openModal = (row) => {
+    // untuk header/label/subtotal → lock semua field (tidak bisa edit) Keseleuruhan King kalo ini
+    const isReadOnlyRow = row.type !== "line";
+    const dyn = isReadOnlyRow
+      ? [
+          { name: "kodeAkun", readOnly: true },
+          { name: "keterangan", readOnly: true },
+          { name: "nilaiKomersial", readOnly: true },
+          { name: "nonObjekPajak", readOnly: true },
+          { name: "pphFinal", readOnly: true },
+          { name: "tidakFinal", readOnly: true },
+          { name: "penyesuaianPositif", readOnly: true },
+          { name: "penyesuaianNegatif", readOnly: true },
+          { name: "kodePenyesuaian", readOnly: true },
+          { name: "nilaiFiskal", readOnly: true },
+        ]
+      : [
+          // contoh: untuk baris angka tetap, identitas dikunci( Untuk baris biasa, Tetapi buat semuanya)
+          { name: "kodeAkun", readOnly: true },
+          { name: "keterangan", readOnly: true },
+          { name: "nilaiFiskal", readOnly: true },
+        ];
+
+    setSchema(buildSchema(row, dyn));
+    setSelected(row);
+    setOpen(true);
   };
 
-  // Close modal
   const closeModal = () => {
-    setShowModal(false);
-    setSelectedRow(null);
+    setOpen(false);
+    setSelected(null);
   };
 
-  // Auto-calculate handler (real-time di modal)
-  const handleFieldChange = (key, value) => {
-    setSelectedRow((prev) => {
-      const newData = { ...prev, [key]: value };
-
-      // Auto-calculate nilaiFiskal
-      // Rumus: nilaiKomersial - (nonObjekPajak + pphFinal) + tidakFinal + (penyesuaianPositif - penyesuaianNegatif)
-      const fieldsToWatch = [
-        "nilaiKomersial",
-        "nonObjekPajak",
-        "pphFinal",
-        "tidakFinal",
-        "penyesuaianPositif",
-        "penyesuaianNegatif",
-      ];
-
-      if (fieldsToWatch.includes(key)) {
-        const k = toNum(newData.nilaiKomersial);
-        const ttop = toNum(newData.nonObjekPajak) + toNum(newData.pphFinal);
-        const tf = toNum(newData.tidakFinal);
-        const adj = toNum(newData.penyesuaianPositif) - toNum(newData.penyesuaianNegatif);
-        newData.nilaiFiskal = k - ttop + tf + adj;
-      }
-
-      return newData;
-    });
-  };
-
-  // Save & recalculate subtotals
-  const handleSave = (values) => {
-    // Update row yang diedit
-    let updatedRows = rows.map((r) => (r.id === selectedRow.id ? { ...r, ...values } : r));
-
-    // TODO: Auto-calculate subtotal rows jika diperlukan
-    // Contoh: hitung "Penjualan Bruto" = sum(4002, 4003)
-    
-    // Implementasikan logic subtotal sesuai kebutuhan bisnis
-
-    setRows(updatedRows);
+  const onSubmit = (values) => {
+    console.log(">>> submit dari modal", values);
+    setRows((prev) =>
+      prev.map((r) => (r.id === selected.id ? { ...r, ...values } : r))
+    );
     closeModal();
-    console.log("Saved values:", values);
   };
-
-  // Build field config berdasarkan row type
-  const getFieldConfig = () => {
-    if (!selectedRow) return { baseFields: [], customChildren: [] };
-
-    const isReadOnlyRow = selectedRow.type !== "line";
-
-    return {
-      baseFields: [],
-      customChildren: [
-        {
-          key: "kodeAkun",
-          type: "text",
-          title: "Kode Akun",
-          placeholder: "Kode Akun",
-          required: true,
-          readOnly: true,
-          className: "bg-gray-100 text-gray-600",
-        },
-        {
-          key: "keterangan",
-          type: "text",
-          title: "Keterangan",
-          placeholder: "Keterangan",
-          required: true,
-          readOnly: true,
-          className: "bg-gray-100 text-gray-600",
-        },
-        {
-          key: "nilaiKomersial",
-          type: "currency",
-          title: "Nilai Komersial",
-          placeholder: "0",
-          required: false,
-          readOnly: isReadOnlyRow,
-          className: isReadOnlyRow ? "bg-gray-100 text-gray-600" : "",
-        },
-        {
-          key: "nonObjekPajak",
-          type: "currency",
-          title: "Tidak Termasuk Objek Pajak",
-          placeholder: "0",
-          required: false,
-          readOnly: isReadOnlyRow,
-          className: isReadOnlyRow ? "bg-gray-100 text-gray-600" : "",
-        },
-        {
-          key: "pphFinal",
-          type: "currency",
-          title: "Dikenakan PPh Final",
-          placeholder: "0",
-          required: false,
-          readOnly: isReadOnlyRow,
-          className: isReadOnlyRow ? "bg-gray-100 text-gray-600" : "",
-        },
-        {
-          key: "tidakFinal",
-          type: "currency",
-          title: "Objek Pajak Tidak Final",
-          placeholder: "0",
-          required: false,
-          readOnly: isReadOnlyRow,
-          className: isReadOnlyRow ? "bg-gray-100 text-gray-600" : "",
-        },
-        {
-          key: "penyesuaianPositif",
-          type: "currency",
-          title: "Koreksi Fiskal (+)",
-          placeholder: "0",
-          required: false,
-          readOnly: isReadOnlyRow,
-          className: isReadOnlyRow ? "bg-gray-100 text-gray-600" : "",
-        },
-        {
-          key: "penyesuaianNegatif",
-          type: "currency",
-          title: "Koreksi Fiskal (−)",
-          placeholder: "0",
-          required: false,
-          readOnly: isReadOnlyRow,
-          className: isReadOnlyRow ? "bg-gray-100 text-gray-600" : "",
-        },
-        {
-          key: "kodePenyesuaian",
-          type: "select-search",
-          title: "Kode Koreksi Fiskal",
-          placeholder: "Silahkan pilih kode koreksi fiskal",
-          required: false,
-          options: KODE_KOREKSI_OPTIONS,
-          readOnly: isReadOnlyRow,
-          className: isReadOnlyRow ? "bg-gray-100 text-gray-600" : "",
-        },
-        {
-          key: "nilaiFiskal",
-          type: "currency",
-          title: "Nilai Fiskal (Sebelum Fasilitas Perpajakan)",
-          placeholder: "Auto Calculate",
-          required: false,
-          readOnly: true,
-          className: "bg-gray-100 text-gray-600",
-        },
-      ],
-    };
-  };
-
-  const fieldConfig = getFieldConfig();
 
   return (
     <>
-      <LaporanLabaRugi
-        rows={rows}
-        openEditModal={openEditModal}
-        kodeOptions={KODE_KOREKSI_OPTIONS}
-      />
-
-      <GlobalModal
-        isOpen={showModal}
+      <LaporanLabaRugi rows={rows} openModal={openModal} />
+      <ModalLabaRugi
+        open={open}
         onClose={closeModal}
-        onSave={handleSave}
-        title={`Edit ${selectedRow?.keterangan || ""}`}
-        baseFields={fieldConfig.baseFields}
-        customChildren={fieldConfig.customChildren}
-        data={selectedRow || {}}
-        size="2xl"
-        onFieldChange={handleFieldChange}
+        title={selected ? "UBAH" : "UBAH"}
+        schema={schema}
+        initialData={selected || {}}
+        onSubmit={onSubmit}
       />
     </>
   );
