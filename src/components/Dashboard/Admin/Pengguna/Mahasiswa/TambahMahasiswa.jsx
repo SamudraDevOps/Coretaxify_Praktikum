@@ -11,7 +11,15 @@ import * as XLSX from "xlsx";
 import Swal from "sweetalert2";
 import { RxCross1 } from "react-icons/rx";
 
-const TambahMahasiswa = ({ onClose, onSave, isLoading = false, title = "Tambah Mahasiswa", isMultipleMode = true, initialStudents = null, dataContract = { data: [] } }) => {
+const TambahMahasiswa = ({
+    onClose,
+    onSave,
+    isLoading,
+    title = "Tambah Mahasiswa",
+    isMultipleMode = true,
+    initialStudents = null,
+    dataContract
+}) => {
     const [students, setStudents] = useState(
         initialStudents || (isMultipleMode ? [{ name: "", email: "", password: "", contract_code: "", status: "ACTIVE" }] : [])
     );
@@ -237,7 +245,7 @@ const TambahMahasiswa = ({ onClose, onSave, isLoading = false, title = "Tambah M
                         </div>
 
                         <div className="edit-popup-actions-mahasiswa">
-                            <button className="edit-save-button" type="button" onClick={handleSaveMultiple} disabled={isLoading || saving}>{(isLoading || saving) ? "Menyimpan..." : "Simpan Semua"}</button>
+                            <button className="edit-save-button" type="button" onClick={onSave} disabled={isLoading}>{(isLoading) ? "Menyimpan..." : "Simpan Semua"}</button>
                             <button className="edit-cancel-button" type="button" onClick={onClose}>Batal</button>
                         </div>
                     </div>

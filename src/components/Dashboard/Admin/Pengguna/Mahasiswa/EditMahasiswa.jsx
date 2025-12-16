@@ -3,13 +3,16 @@ import "./editPopupMahasiswa.css";
 import EditPopupMahasiswa from "./EditPopupMahasiswa";
 import TambahMahasiswa from "./TambahMahasiswa";
 import Swal from "sweetalert2";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { RoutesApi } from "@/Routes";
 import { ClipLoader } from "react-spinners";
 import { useCookies } from "react-cookie";
 import { deleteMahasiswa, getMahasiswa } from "@/hooks/dashboard/useMahasiswa";
-import { getCookie } from "@/service";
+import { getCookie, getCookieToken } from "@/service";
+import { getContracts } from "@/hooks/dashboard";
+import { getCsrf } from "@/service/getCsrf";
+import { IntentEnum } from "@/enums/IntentEnum";
 
 const useDebounce = (value, delay) => {
   const [debouncedValue, setDebouncedValue] = useState(value);
@@ -37,6 +40,127 @@ const EditMahasiswa = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
   const queryClient = useQueryClient();
+  const [invalidStudents, setInvalidStudents] = useState([]);
+
+  const {
+    isLoading: isLoadingContract,
+    isError: isErrorContract,
+    data: dataContract,
+    error: errorContract,
+  } = getContracts(RoutesApi.url + "api/admin/contract", getCookieToken(), 10000, "desc");
+
+  const mutationCreate = useMutation({
+    mutationFn: async ({ students, contract_id }) => {
+      const csrf = await getCsrf();
+
+      const createPromises = students.map((mahasiswa) => {
+        return axios.post(
+          RoutesApi.url + "api/admin/users",
+          {
+            contract_id: contract_id,
+            name: mahasiswa.name,
+            email: mahasiswa.email,
+            status: mahasiswa.status,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+              "X-CSRF-TOKEN": csrf,
+              Authorization: `Bearer ${cookies.token}`,
+            },
+            params: {
+              intent: IntentEnum.API_USER_CREATE_MAHASISWA,
+            },
+          }
+        );
+      });
+      return Promise.all(createPromises);
+    },
+    onError: (error) => {
+      console.log(error);
+      if (error.response === undefined) {
+        Swal.fire("Gagal !", error.message, "error");
+        return;
+      }
+
+      Swal.fire({
+        title: "Gagal !",
+        text: error?.response?.data?.message,
+        icon: "error",
+        timer: 2000,
+        showConfirmButton: false,
+        timerProgressBar: true,
+      });
+    },
+    onSuccess: (data) => {
+      Swal.fire({
+        title: "Berhasil!",
+        text: "Mahasiswa berhasil ditambahkan!",
+        icon: "success",
+        timer: 2000,
+        showConfirmButton: false,
+        timerProgressBar: true,
+      });
+    },
+  });
+
+  const handleCreateMultipleStudents = (
+    validStudents,
+    contract_id,
+    invalidStudents = [],
+    errors = []
+  ) => {
+    if (!contract_id) {
+      Swal.fire("Gagal", "Harap pilih kontrak terlebih dahulu.", "error");
+      return;
+    }
+
+    Swal.fire({
+      title: "Tambah Mahasiswa",
+      text: `Anda akan menambahkan ${validStudents.length + invalidStudents.length
+        } mahasiswa baru. Lanjutkan?`,
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Ya, lanjutkan",
+      cancelButtonText: "Batal",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        mutationCreate.mutate(
+          { students: validStudents, contract_id },
+          {
+            onSuccess: () => {
+              if (invalidStudents.length > 0) {
+                setTambahPopupOpen(true);
+                setInvalidStudents(invalidStudents);
+                Swal.fire({
+                  title: "Sebagian Data Berhasil Disimpan",
+                  html: `${validLecturers.length
+                    } mahasiswa berhasil disimpan.<br><br>
+                         ${invalidLecturers.length
+                    } mahasiswa gagal disimpan dengan error:<br>
+                         ${errors.join("<br>")}`,
+                  icon: "warning",
+                  timer: 2000,
+                  showConfirmButton: false,
+                  timerProgressBar: true,
+                });
+              } else {
+                Swal.fire({
+                  title: "Berhasil!",
+                  text: "Semua mahasiswa berhasil ditambahkan!",
+                  icon: "success",
+                  timer: 2000,
+                  showConfirmButton: false,
+                  timerProgressBar: true,
+                });
+              } 
+            },
+          }
+        );
+      }
+    });
+  };
 
   const constructApiUrl = () => {
     const baseUrl = RoutesApi.getUserAdmin.url;
@@ -281,12 +405,10 @@ const EditMahasiswa = () => {
           )}
           {tambahPopupOpen && (
             <TambahMahasiswa
+              isLoading={mutationCreate.isPending}
               onClose={() => setTambahPopupOpen(false)}
-              onSave={(newStudents) => {
-                Swal.fire("Berhasil!", `${newStudents.length} mahasiswa siap ditambahkan.`, "success");
-                queryClient.invalidateQueries({ queryKey: ['mahasiswa'] });
-                setTambahPopupOpen(false);
-              }}
+              onSave={handleCreateMultipleStudents}
+              dataContract={dataContract}
             />
           )}
         </div>
