@@ -537,10 +537,6 @@ const BUPOTForm = ({
         "nitku_dokumen",
         sidebar.npwp_akun + "000000 - " + sidebar.nama_akun
       );
-      updateFormData(
-        "nitku",
-        sidebar.npwp_akun + "000000 - " + sidebar.nama_akun
-      )
     }
   }, [formData.jenis_dokumen]);
 
@@ -1172,7 +1168,7 @@ const BUPOTForm = ({
                           );
 
                           if (selectedObject) {
-                            if (currentBupot === "Bukti Pemotongan Bulanan Pegawai Tetap") {
+                            if (currentBupot = "Bukti Pemotongan Bulanan Pegawai Tetap") {
                               updateMultipleFields({
                                 npwp_akun: selectedObject.npwp_akun,
                                 nama_akun: selectedObject.nama_akun,
@@ -1191,6 +1187,16 @@ const BUPOTForm = ({
                                   sidebar.npwp_akun +
                                   "000000 - " +
                                   sidebar.nama_akun,
+                              });
+                            } else {
+                              updateMultipleFields({
+                                npwp_akun: selectedObject.npwp_akun,
+                                nama_akun: selectedObject.nama_akun,
+                                alamat_utama_akun: selectedObject.alamat_utama_akun,
+                                nitku:
+                                  selectedObject.npwp_akun +
+                                  "000000 - " +
+                                  selectedObject.nama_akun,
                               });
                             }
                           } else {
