@@ -3,6 +3,7 @@ import { Plus, Edit, Trash2 } from "lucide-react";
 import { formatNumber, parseFormattedNumber, formatRupiah } from "@utils/formatCurrency";
 import GlobalModal from "@shared/GlobalModal";
 import GlobalTable from "@shared/GlobalTable";
+import { hitungTotalGlobal, createTotalRow } from "@utils/helperTotal";
 
 export default function PembangunanDanPengadaan({ configGenerator, form, setForm, getReadOnly }) {
   const [data, setData] = useState([]);
@@ -26,21 +27,20 @@ export default function PembangunanDanPengadaan({ configGenerator, form, setForm
 
   const {
     baseFields = [
-      "npwpMitra",
-      "namaMitra",
-      "negara",
-      "hubungan",
-      "kegiatanUsaha",
-      "jenis-transaksi",
-      "nilaiTransaksi",
-      "metodePenentuanHarga",
-      "alasanPemilihanMetode",
+      "tahunPajak",
+      "sisaLebih4Tahun",
+      "sisahLebih",
+      "sisaLebihTahun1",
+      "sisaLebihTahun2",
+      "sisaLebihTahun3",
+      "sisaLebihTahun4",
+      "sisaLebihTahun5",
+      "jumlahTotalSisaLebih",
+      "sisahLebihBelumDitanamkan",
+      "sisahLebihLeat4Tahun",
     ],
     customChildren = [],
-    defaultData = {
-      npwpMitra: "",
-      namaMitra: "PT. Hj.Galih Previand Wicaksono",
-    },
+    defaultData = {},
   } = config || {};
 
   // Open modal untuk add
@@ -80,12 +80,63 @@ export default function PembangunanDanPengadaan({ configGenerator, form, setForm
     closeModal();
   };
 
+  // AUTO CALCULATE FUNCTION - Real-time di modal
+  const handleFieldChange = (key, value) => {
+    setSelected((prev) => {
+      const newData = { ...prev, [key]: value };
+
+      const sisaLebihKeys = [
+        "sisaLebihTahun1",
+        "sisaLebihTahun2",
+        "sisaLebihTahun3",
+        "sisaLebihTahun4",
+        "sisaLebihTahun5",
+      ];
+
+      // Hitung total sisa lebih
+      let total = 0;
+      sisaLebihKeys.forEach((k) => {
+        const val = k === key ? parseFloat(value) || 0 : parseFloat(newData[k]) || 0;
+
+        total += val;
+      });
+
+      newData.jumlahTotalSisaLebih = total;
+
+      return newData;
+    });
+  };
+
   // Delete data
   const deleteData = (id) => {
     if (confirm("Apakah Anda yakin ingin menghapus data ini?")) {
       setData((prev) => prev.filter((item) => item.id !== id));
     }
   };
+
+  //  HITUNG TOTAL & BUAT BARIS TOTAL
+  const totals = hitungTotalGlobal(data, ["sisahLebihBelumDitanamkan", "sisahLebihLeat4Tahun"]);
+
+  const tableData =
+    data.length === 0
+      ? []
+      : [
+          ...data,
+          createTotalRow("JUMLAH", totals, {
+            labelField: "jumlahTotalSisaLebih",
+            base: {
+              tahunPajak: "",
+              sisaLebih4Tahun: "",
+              sisahLebih: "",
+              sisaLebihTahun1: "",
+              sisaLebihTahun2: "",
+              sisaLebihTahun3: "",
+              sisaLebihTahun4: "",
+              sisaLebihTahun5: "",
+              jumlahTotalSisaLebih: "",
+            },
+          }),
+        ];
 
   // Get utnuk mengambil Label dari Option
 
@@ -133,46 +184,145 @@ export default function PembangunanDanPengadaan({ configGenerator, form, setForm
       ],
     },
 
-    { key: "npwpMitra", title: " NPWP/TIN", width: 120, align: "center" },
-    { key: "namaMitra", title: "Nama ", width: 180, align: "center" },
-    { key: "negara", title: "Negara", width: 120, align: "center" },
+    { key: "tahunPajak", title: " Tahun Pajak Bagian Tahun Pajak", width: 120, align: "center" },
+
     {
-      key: "hubungan",
-      title: "Bentuk Hubungan",
-      width: 150,
-      align: "center",
-      render: (row) => getLabel("hubungan", row.hubungan),
-    },
-    { key: "kegiatanUsaha", title: "Kegiatan Usaha", width: 200, align: "center" },
-    {
-      key: "jenis-transaksi",
-      title: "Jenis Transaksi",
-      width: 150,
-      align: "center",
-      render: (row) => getLabel("jenis-transaksi", row["jenis-transaksi"]),
+      title: "PENYEDIAAN SISA LEBIH UNTUK DITANAMKAN KEMBALI SELAMA 4 TAHUN",
+      children: [{ key: "sisaLebih4Tahun", title: "RUPIAH ", width: 180 }],
     },
     {
-      key: "nilaiTransaksi",
-      title: "Nilai Transaksi",
-      width: 150,
+      key: "sisahLebih",
+      title: " BENTUK PENANAMAN KEMBALI SISA LEBIH ",
+      width: 120,
       align: "center",
-      render: (r) => {
-        if (r.type === "total" && r.nilaiTransaksi === "") return "";
-        return formatRupiah(r.nilaiTransaksi);
-      },
+      render: (row) => (row.type === "total" ? "" : getLabel("sisahLebih", row.sisahLebih)),
     },
+
     {
-      key: "metodePenentuanHarga",
-      title: "Metode Penentuan Transfer Yang Digunakan",
-      width: 150,
-      align: "center",
-      render: (row) => getLabel("metodePenentuanHarga", row.metodePenentuanHarga),
+      title: "PENGGUNAAN SISA LEBIH UNTUK PEMBANGUNAN DAN PENGADAAN SARANA DAN PRASARANA",
+      children: [
+        {
+          title: "Tahun ke-1",
+          children: [
+            {
+              key: "sisaLebihTahun1",
+              title: "RUPIAH",
+              width: 120,
+              align: "center",
+              render: (r) => {
+                if (r.type === "total" && r.sisaLebihTahun1 === "") return "";
+                return formatRupiah(r.sisaLebihTahun1);
+              },
+            },
+          ],
+        },
+
+        {
+          title: "Tahun ke-2",
+          children: [
+            {
+              key: "sisaLebihTahun2",
+              title: "RUPIAH",
+              width: 120,
+              align: "center",
+              render: (r) => {
+                if (r.type === "total" && r.sisaLebihTahun2 === "") return "";
+                return formatRupiah(r.sisaLebihTahun2);
+              },
+            },
+          ],
+        },
+
+        {
+          title: "Tahun ke-3",
+          children: [
+            {
+              key: "sisaLebihTahun3",
+              title: "RUPIAH",
+              width: 120,
+              align: "center",
+              render: (r) => {
+                if (r.type === "total" && r.sisaLebihTahun3 === "") return "";
+                return formatRupiah(r.sisaLebihTahun3);
+              },
+            },
+          ],
+        },
+
+        {
+          title: "Tahun ke-4",
+          children: [
+            {
+              key: "sisaLebihTahun4",
+              title: "RUPIAH",
+              width: 120,
+              align: "center",
+              render: (r) => {
+                if (r.type === "total" && r.sisaLebihTahun4 === "") return "";
+                return formatRupiah(r.sisaLebihTahun4);
+              },
+            },
+          ],
+        },
+
+        {
+          title: "Tahun ke-5",
+          children: [
+            {
+              key: "sisaLebihTahun5",
+              title: "RUPIAH",
+              width: 120,
+              align: "center",
+              render: (r) => {
+                if (r.type === "total" && r.sisaLebihTahun5 === "") return "";
+                return formatRupiah(r.sisaLebihTahun5);
+              },
+            },
+          ],
+        },
+      ],
     },
+
     {
-      key: "alasanPemilihanMetode",
-      title: "Alasan Pemilihan Metode",
-      width: 200,
-      align: "center",
+      title: "JUMLAH PENGGUNAAN SISA LEBIH",
+      children: [
+        {
+          key: "jumlahTotalSisaLebih",
+          title: "RUPIAH ",
+          width: 180,
+          render: (r) => (r.type === "total" ? "JUMLAH" : formatRupiah(r.jumlahTotalSisaLebih)),
+        },
+      ],
+    },
+
+    {
+      title: "SISA LEBIH YANG BELUM DITANAMKAN KEMBALI",
+      children: [
+        {
+          key: "sisahLebihBelumDitanamkan",
+          title: "RUPIAH ",
+          width: 180,
+          render: (r) => {
+            if (r.type === "total" && r.sisahLebihBelumDitanamkan === "") return "";
+            return formatRupiah(r.sisahLebihBelumDitanamkan);
+          },
+        },
+      ],
+    },
+
+    {
+      title: " SISA LEBIH YANG MELEWATI JANGKA WAKTU PENANAMAN KEMBALI DALAM JANGKA WAKTU 4 TAHUN ",
+      children: [
+        {
+          key: "sisahLebihLeat4Tahun",
+          title: "RUPIAH ",
+          width: 180,
+          render: (r) => {
+            if (r.type === "total" && r.sisahLebihLeat4Tahun === "") return "";
+            return formatRupiah(r.sisahLebihLeat4Tahun);
+          },
+        },
+      ],
     },
   ];
 
@@ -190,7 +340,7 @@ export default function PembangunanDanPengadaan({ configGenerator, form, setForm
 
       <GlobalTable
         columnGroups={columnGroups}
-        data={data}
+        data={tableData}
         page={1}
         pageSize={9999} // Tidak pakai pagination
         total={data.length}
@@ -240,6 +390,7 @@ export default function PembangunanDanPengadaan({ configGenerator, form, setForm
           setModalForm(updatedForm);
           if (setForm) setForm(updatedForm);
         }}
+        onFieldChange={handleFieldChange}
       />
     </div>
   );

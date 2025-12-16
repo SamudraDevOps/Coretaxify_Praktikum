@@ -107,7 +107,6 @@ const ConfigComponent = (form = {}) => ({
     "sisaLebihTahun3",
     "sisaLebihTahun4",
     "sisaLebihTahun5",
-    "kegiatanUsaha",
     "jumlahTotalSisaLebih",
     "sisahLebihBelumDitanamkan",
     "sisahLebihLeat4Tahun",
