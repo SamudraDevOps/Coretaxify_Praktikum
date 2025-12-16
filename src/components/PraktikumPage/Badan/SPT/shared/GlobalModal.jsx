@@ -451,7 +451,7 @@ const GlobalModal = ({
       return newData;
     });
 
-    console.log("UPDATED:", key, value);
+    // console.log("UPDATED:", key, value);
 
     // Clear error untuk field ini
     if (errors[key]) {

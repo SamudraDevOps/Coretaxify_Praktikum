@@ -91,7 +91,6 @@ export default function UtangSwastaLuarNegeri({ config, onAnswerChange }) {
   };
 
   //  AUTO CALCULATE FUNCTION - Real-time di modal
-  // ...existing code...
   const handleFieldChange = (key, value) => {
     setSelected((prev) => {
       const newData = { ...prev, [key]: value };
@@ -115,7 +114,6 @@ export default function UtangSwastaLuarNegeri({ config, onAnswerChange }) {
       return newData;
     });
   };
-  // ...existing code...
   // Save data
   const saveData = (values) => {
     console.log("Saved values:", values);
