@@ -19,7 +19,7 @@ const EditDosen = () => {
   const toHTTPS = (u) => (u ? u.replace(/^http:\/\//i, "https://") : u);
   const [isOpen, setIsOpen] = useState(false);
   const [id, setId] = useState(0);
-  const [url, setUrl] = useState(RoutesApi.getDosenAdmin.url);
+  const [url, setUrl] = useState(toHTTPS(RoutesApi.getDosenAdmin.url));
   const [editPopupOpen, setEditPopupOpen] = useState(false);
   const [tambahPopupOpen, setTambahPopupOpen] = useState(false);
   const [selectedDosen, setSelectedDosen] = useState(null);
@@ -33,7 +33,7 @@ const EditDosen = () => {
   const { isLoading, isError, data, error, refetch } = useQuery({
     queryKey: ["dosenadmin", url],
     queryFn: async () => {
-      const { data } = await axios.get(url, {
+      const { data } = await axios.get(toHTTPS(url), {
         headers: {
           Authorization: `Bearer ${cookies.token}`,
         },
@@ -51,7 +51,7 @@ const EditDosen = () => {
     isError: isErrorContract,
     data: dataContract,
     error: errorContract,
-  } = getContracts(RoutesApi.url + "api/admin/contract", getCookieToken(), 10000, "desc");
+  } = getContracts(toHTTPS(RoutesApi.url) + "api/admin/contract", getCookieToken());
 
   const handleData = (newData) => {
     setData([...data, { id: data.length + 1, ...newData }]);
@@ -178,8 +178,9 @@ const EditDosen = () => {
 
     Swal.fire({
       title: "Tambah Dosen",
-      text: `Anda akan menambahkan ${validLecturers.length + invalidLecturers.length
-        } dosen baru. Lanjutkan?`,
+      text: `Anda akan menambahkan ${
+        validLecturers.length + invalidLecturers.length
+      } dosen baru. Lanjutkan?`,
       icon: "question",
       showCancelButton: true,
       confirmButtonText: "Ya, lanjutkan",
@@ -200,10 +201,8 @@ const EditDosen = () => {
                 // Show alert about partial success
                 Swal.fire({
                   title: "Sebagian Data Berhasil Disimpan",
-                  html: `${validLecturers.length
-                    } dosen berhasil disimpan.<br><br>
-                         ${invalidLecturers.length
-                    } dosen gagal disimpan dengan error:<br>
+                  html: `${validLecturers.length} dosen berhasil disimpan.<br><br>
+                         ${invalidLecturers.length} dosen gagal disimpan dengan error:<br>
                          ${errors.join("<br>")}`,
                   icon: "warning",
                   timer: 2000, // auto close after 2 seconds
@@ -366,12 +365,12 @@ const EditDosen = () => {
               placeholder="Cari Data Dosen 🔎"
               onChange={(e) => setSearch(e.target.value)}
             />
-          <button
-            className="bg-blue-500 p-2 rounded-md text-white text-sm ml-2 hover:cursor-pointer hover:bg-blue-700"
-            onClick={() => refetch()}
-          >
-            Cari
-          </button>
+            <button
+              className="bg-blue-500 p-2 rounded-md text-white text-sm ml-2 hover:cursor-pointer hover:bg-blue-700"
+              onClick={() => refetch()}
+            >
+              Cari
+            </button>
           </div>
           {/* <button
             className="add-button mr-3"
@@ -393,11 +392,7 @@ const EditDosen = () => {
             + Tambah Dosen
           </button>
         </div>
-        <ImportDosen
-          isOpen={isOpen}
-          onClose={() => setIsOpen(false)}
-          onSave={handleData}
-        />
+        <ImportDosen isOpen={isOpen} onClose={() => setIsOpen(false)} onSave={handleData} />
         {/* <TambahDosen
           isOpen={tambahPopupOpen}
           onClose={() => setTambahPopupOpen(false)}
@@ -412,7 +407,7 @@ const EditDosen = () => {
             dosen={selectedDosen}
             onSave={handleCreateMultipleDosen}
             initialStudents={invalidLecturers}
-          // id={id}
+            // id={id}
           />
         )}
         <EditPopupDosen
@@ -421,7 +416,7 @@ const EditDosen = () => {
           dosen={selectedDosen}
           onSave={handleUpdateDosen}
           refetch={refetch}
-        // id={id}
+          // id={id}
         />
         <div className="table-container">
           <table>
@@ -467,10 +462,7 @@ const EditDosen = () => {
                   <td>{item.kodePembelian}</td>
                   <td>{item.status}</td> */}
                   <td>
-                    <button
-                      className="action-button"
-                      onClick={() => handleEdit(item)}
-                    >
+                    <button className="action-button" onClick={() => handleEdit(item)}>
                       Edit
                     </button>
                     {/* <button
