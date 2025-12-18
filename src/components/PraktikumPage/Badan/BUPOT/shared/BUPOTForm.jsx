@@ -1168,7 +1168,7 @@ const BUPOTForm = ({
                           );
 
                           if (selectedObject) {
-                            if (currentBupot = "Bukti Pemotongan Bulanan Pegawai Tetap") {
+                            if (currentBupot === "Bukti Pemotongan Bulanan Pegawai Tetap" || currentBupot === "BP A1") {
                               updateMultipleFields({
                                 npwp_akun: selectedObject.npwp_akun,
                                 nama_akun: selectedObject.nama_akun,
@@ -1178,16 +1178,16 @@ const BUPOTForm = ({
                                   "000000 - " +
                                   sidebar.nama_akun,
                               });
-                            } if (currentBupot === "BP A1") {
-                              updateMultipleFields({
-                                npwp_akun: selectedObject.npwp_akun,
-                                nama_akun: selectedObject.nama_akun,
-                                alamat_utama_akun: selectedObject.alamat_utama_akun,
-                                nitku:
-                                  sidebar.npwp_akun +
-                                  "000000 - " +
-                                  sidebar.nama_akun,
-                              });
+                            // } if (currentBupot === "BP A1") {
+                            //   updateMultipleFields({
+                            //     npwp_akun: selectedObject.npwp_akun,
+                            //     nama_akun: selectedObject.nama_akun,
+                            //     alamat_utama_akun: selectedObject.alamat_utama_akun,
+                            //     nitku:
+                            //       sidebar.npwp_akun +
+                            //       "000000 - " +
+                            //       sidebar.nama_akun,
+                            //   });
                             } else {
                               updateMultipleFields({
                                 npwp_akun: selectedObject.npwp_akun,
