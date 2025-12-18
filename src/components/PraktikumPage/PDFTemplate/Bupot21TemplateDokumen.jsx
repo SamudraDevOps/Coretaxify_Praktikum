@@ -311,5 +311,5 @@ const BP21PDFDokumen = ({ data = {}, kopImageBP21: kopImageProp, qrImage: qrImag
     </Document>
   );
 };
-
-export default BP21PDFDokumen; 
+  
+export default BP21PDFDokumen;   
