@@ -49,15 +49,40 @@ const EditMahasiswa = () => {
     error: errorContract,
   } = getContracts(RoutesApi.url + "api/admin/contract", getCookieToken(), 10000, "desc");
 
+  const [contractMap, setContractMap] = useState({});
+
+  useEffect(() => {
+    if (dataContract?.data) {
+      const map = {};
+      dataContract.data.forEach(item => {
+        // Pastikan item punya id dan contract_code
+        if (item.id && item.contract_code) {
+          map[item.contract_code] = item.id;
+        }
+      });
+      setContractMap(map);
+      console.log("[DEBUG] Contract Map created:", map); // <-- untuk cek
+    }
+  }, [dataContract]);
+
   const mutationCreate = useMutation({
     mutationFn: async ({ students, contract_id }) => {
       const csrf = await getCsrf();
+
+      // ✅ Ambil ID integer dari mapping
+      const contractIdInt = contractMap[contract_id];
+
+      if (!contractIdInt) {
+        throw new Error(`Kontrak "${contract_id}" tidak ditemukan dalam daftar.`);
+      }
+
+      console.log("[DEBUG] Sending contract_id as integer:", contractIdInt);
 
       const createPromises = students.map((mahasiswa) => {
         return axios.post(
           RoutesApi.url + "api/admin/users",
           {
-            contract_id: contract_id,
+            contract_id: contractIdInt, // ✅ SEKARANG INTEGER!
             name: mahasiswa.name,
             email: mahasiswa.email,
             status: mahasiswa.status,
@@ -75,32 +100,26 @@ const EditMahasiswa = () => {
           }
         );
       });
+
       return Promise.all(createPromises);
     },
     onError: (error) => {
       console.log(error);
-      if (error.response === undefined) {
-        Swal.fire("Gagal !", error.message, "error");
-        return;
-      }
-
-      Swal.fire({
-        title: "Gagal !",
-        text: error?.response?.data?.message,
-        icon: "error",
-        timer: 2000,
-        showConfirmButton: false,
-        timerProgressBar: true,
-      });
+      Swal.fire("Gagal !", error?.response?.data?.message || error.message, "error");
     },
     onSuccess: (data) => {
       Swal.fire({
         title: "Berhasil!",
         text: "Mahasiswa berhasil ditambahkan!",
         icon: "success",
-        timer: 2000,
+        timer: 1500,
         showConfirmButton: false,
         timerProgressBar: true,
+      }).then(() => {
+        // ✅ Tutup popup setelah sukses
+        setTambahPopupOpen(false);
+        // Opsional: invalidate cache agar tabel refresh
+        queryClient.invalidateQueries({ queryKey: ['mahasiswa'] });
       });
     },
   });
@@ -405,7 +424,7 @@ const EditMahasiswa = () => {
           )}
           {tambahPopupOpen && (
             <TambahMahasiswa
-              isLoading={mutationCreate.isPending}
+              isLoading={mutationCreate.isPending} // ✅ ini sudah benar
               onClose={() => setTambahPopupOpen(false)}
               onSave={handleCreateMultipleStudents}
               dataContract={dataContract}
