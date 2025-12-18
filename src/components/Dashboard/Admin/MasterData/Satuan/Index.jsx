@@ -1,97 +1,103 @@
-import React, { useState } from "react";
-import "./kontrak.css";
-import TambahKontrak from "./TambahKontrak";
+import React, { useState } from 'react';
 import Swal from "sweetalert2";
-import { CookiesProvider, useCookies } from "react-cookie";
+import { useCookies } from "react-cookie";
 import axios from "axios";
 import { RoutesApi } from "@/Routes";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import ClipLoader from "react-spinners/ClipLoader";
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
-import { FaRegCopy, FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import EditSatuan from "./Edit";
+import TambahSatuan from "./Create";
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { Routes } from 'react-router';
+import { ClipLoader } from "react-spinners";
 
-import EditKontrak from "./EditKontrak";
-import { deleteContract, getContracts, testAlert } from "@/hooks/dashboard";
-import { getCookie, getCookieToken } from "@/service";
-
-const Kontrak = () => {
-  // === Sama seperti EditDosen.jsx: paksa semua URL -> HTTPS ===
-  const toHTTPS = (u) => (u ? String(u).replace(/^http:\/\//i, "http://") : u);
-
+const Satuan = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenEdit, setIsOpenEdit] = useState(false);
   const [idEdit, setIdEdit] = useState(-1);
+  const [namaEdit, setNamaEdit] = useState();
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 20;
-  const [cookies] = useCookies([]);
-  // Inisialisasi URL list kontrak sudah di-HTTPS-kan
-  const [url, setUrl] = useState(toHTTPS(RoutesApi.contractAdmin));
-  const [sortDirection, setSortDirection] = useState("asc");
-  const [inputSearch, setInputSearch] = useState("");
   const [search, setSearch] = useState("");
+  const itemsPerPage = 20;
+  const [cookies, setCookie] = useCookies([]);
+  const [url, setUrl] = useState(`${RoutesApi.apiUrl}satuan`);
   const { toast } = useToast();
 
-  // Data kontrak (gunakan url yang selalu https)
-  const { isLoading, isError, data, error, refetch } = getContracts(
-    url,
-    getCookieToken(),
-    itemsPerPage,
-    sortDirection,
-    search,
-    currentPage
-  );
-
-  // Data task (pakai toHTTPS juga)
-  const {
-    isLoading: isLoadingTask,
-    isError: isErrorTask,
-    data: taskData,
-    error: errorTask,
-  } = useQuery({
-    queryKey: ["task"],
+  const { isLoading, isError, data, error, refetch } = useQuery({
+    queryKey: ["satuan", url, currentPage],
     queryFn: async () => {
-      const { data } = await axios.get(toHTTPS(RoutesApi.tasksAdmin), {
-        headers: { Authorization: `Bearer ${cookies.token}` },
+      const { data } = await axios.get(url, {
+        headers: {
+          Authorization: `Bearer ${cookies.token}`,
+        },
+        params: {
+          page: currentPage,
+          perPage: itemsPerPage,
+          search: search,
+          intent: "api.admin",
+        },
       });
       return data;
     },
   });
 
-  // Data universitas (pakai toHTTPS juga)
-  const {
-    isLoading: isLoadingUni,
-    isError: isErrorUni,
-    data: dataUni,
-    error: errorUni,
-  } = useQuery({
-    queryKey: ["univerities"],
-    queryFn: async () => {
-      const { data } = await axios.get(toHTTPS(RoutesApi.uniAdmin), {
-        headers: { Authorization: `Bearer ${cookies.token}` },
-        params: { perPage: 10000 },
+  console.log(data);
+
+  const mutation = useMutation({
+    mutationFn: async ({id}) => {
+      const response = await axios.get(RoutesApi.csrf, {
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+          Accept: "application/json",
+        },
+      })
+      axios.defaults.headers.common["X-CSRF-TOKEN"] = response.data.token;
+    //   const deleteEndpoint = RoutesApi.admin.universities.destroy(id);
+      const deleteEndpoint = `${RoutesApi.apiUrl}satuan/${id}`;
+      return await axios.delete(deleteEndpoint.url, {
+        headers: {
+          "X-CSRF-TOKEN": response.data.token,
+          Authorization: `Bearer ${cookies.token}`,
+        },
+      })
+    },
+    onSuccess: () => {
+      Swal.fire({
+        title: "Berhasil!",
+        text: "Satuan Berhasil Dihapus!",
+        icon: "success",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        refetch();
       });
-      return data.data;
+    },
+    onError: (error) => {
+      console.log(error);
+      Swal.fire({
+        title: "Gagal!",
+        text: error.message,
+        icon: "error",
+        timer: 2000, // auto close after 2 seconds
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        refetch();
+      });
     },
   });
 
-  const mutation = deleteContract(getCookie());
-
-  // Function to refresh data after actions
   const handleDataRefresh = () => {
-    setSearch(inputSearch);
     refetch();
   };
 
   // Handle page change
   const handlePageChange = (page) => {
     setCurrentPage(page);
-  };
-
-  const handleData = () => {
-    refetch();
   };
 
   // Pagination
@@ -122,36 +128,21 @@ const Kontrak = () => {
     }
   };
 
-  const handleSort = (key) => {
-    // (Catatan: data dari react-query, jadi kalau mau sort client-side
-    // lebih aman sorting saat render atau simpan ke state terpisah.)
-    let direction = "ascending";
-    if (sortConfig.key === key && sortConfig.direction === "ascending") {
-      direction = "descending";
+  if (isError) {
+    {
+      console.log(error);
     }
-    setSortConfig({ key, direction });
-  };
-
-  if (isLoading || isLoadingUni) {
-    return (
-      <div className="loading">
-        <ClipLoader color="#7502B5" size={50} />
-      </div>
-    );
-  }
-
-  if (isError || isErrorTask || isErrorUni) {
     return (
       <div className="h-screen w-full justify-center items-center flex ">
         <Alert variant="destructive" className="w-1/2 bg-white ">
           <AlertCircle className="h-4 w-4" />
           <AlertTitle>Error !</AlertTitle>
-          <div>
+          <div className="">
             <p>{error?.message ?? "error !"}</p>
             <div className="w-full flex justify-end">
               <button
                 className="bg-green-500 p-2 rounded-md text-white"
-                onClick={() => refetch()}
+                onClick={() => handleDataRefresh()}
               >
                 Ulangi
               </button>
@@ -164,17 +155,16 @@ const Kontrak = () => {
 
   return (
     <div className="kontrak-container">
-      <div className="header-kontrak ">
-        <h2>Data Kontrak Instansi</h2>
+      <div className="header-kontrak">
+        <h2>Data Satuan</h2>
       </div>
-
       <div className="search-add-container">
         <div className="flex items-center">
           <input
             type="text"
             className="search-input"
-            placeholder="Cari Data Kontrak 🔎"
-            onChange={(e) => setInputSearch(e.target.value)}
+            placeholder="Cari Data Satuan"
+            onChange={(e) => setSearch(e.target.value)}
           />
           <button
             className="bg-blue-500 p-2 rounded-md text-white text-sm ml-2 hover:cursor-pointer hover:bg-blue-700"
@@ -184,137 +174,82 @@ const Kontrak = () => {
           </button>
         </div>
         <button className="add-button" onClick={() => setIsOpen(true)}>
-          + Tambah Data Kontrak
+          Tambah Data Satuan
         </button>
       </div>
-
-      <TambahKontrak
+      <TambahSatuan
         refetch={refetch}
-        UniData={dataUni}
-        taskData={taskData}
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
-        onSave={handleData}
-        setOpen={setIsOpen}
+        onSave={handleDataRefresh}
+        setOpen={setIsOpen} 
       />
-
-      <EditKontrak
+      <EditSatuan 
         refetch={refetch}
-        UniData={dataUni}
         isOpen={isOpenEdit}
-        taskData={taskData}
         id={idEdit}
         onClose={() => setIsOpenEdit(false)}
-        onSave={handleData}
-        setEdit={setIdEdit}
+        onSave={handleDataRefresh}
+        setOpen={setIsOpenEdit}
+        data={data?.data?.find((item) => item.id === idEdit)}
       />
 
       <div className="table-container">
         <table>
           <thead>
             <tr>
-              <th onClick={() => handleSort("jenisKontrak")}>Jenis Kontrak</th>
-              <th onClick={() => handleSort("instansi")}>Instansi</th>
-              <th onClick={() => handleSort("mahasiswa")}>Jumlah Mahasiswa</th>
-              <th>Periode Awal</th>
-              <th>Periode Akhir</th>
-              <th>SPT</th>
-              <th>Bupot</th>
-              <th>Faktur</th>
-              <th>Kode Pembelian</th>
-              <th>Kolom Soal</th>
-              <th>Status</th>
+              <th>No</th>
+              <th>Satuan</th>
+              <th>Jenis</th>
               <th>Action</th>
             </tr>
           </thead>
-
           <tbody>
-            {data?.data?.map((item, index) => (
-              <tr key={index}>
-                <td>{item.contract_type}</td>
-                <td>{item.university?.name}</td>
-                <td>{item.qty_student}</td>
-                <td>{item.start_period}</td>
-                <td>{item.end_period}</td>
-                <td>{item.spt}</td>
-                <td>{item.bupot}</td>
-                <td>{item.faktur}</td>
-                <td>
-                  <div className="flex justify-center items-center gap-3">
-                    {item.contract_code}
-                    <FaRegCopy
-                      onClick={(e) => {
-                        e.preventDefault();
-                        navigator.clipboard.writeText(item.contract_code);
-                        toast({
-                          title: "Copy berhasil",
-                          description: "Kode Kelas berhasil dicopy",
-                        });
+            {!isLoading &&
+              data?.data?.map((item, index) => (
+                <tr key={index}>
+                  <td>{(currentPage - 1) * itemsPerPage + index + 1}</td>
+                  <td className="whitespace-normal break-words max-w-[200px]">{item.satuan}</td>
+                  <td className="whitespace-normal break-words max-w-[200px]">{item.jenis}</td>
+                  <td>
+                    <button
+                      className="bg-blue-500 p-2 rounded-md text-white text-sm hover:cursor-pointer hover:bg-blue-700"
+                      onClick={() => {
+                        setIdEdit(item.id);
+                        setIsOpenEdit(true);
                       }}
-                      className="hover:bg-slate-300 p-1 rounded-md"
-                      size={25}
-                    />
-                  </div>
-                </td>
-                <td>{item.is_buy_task === 1 ? "Ya" : "Tidak"}</td>
-                <td>{item.status}</td>
-                <td>
-                  <button
-                    className="action-button"
-                    onClick={() => {
-                      setIdEdit(item.id);
-                      setIsOpenEdit(true);
-                    }}
-                  >
-                    Edit
-                  </button>
-
-                  <button
-                    className="action-button delete"
-                    onClick={() => {
-                      Swal.fire({
-                        title: "Hapus Kelas?",
-                        text: "Kelas akan dihapus secara permanen!",
-                        icon: "warning",
-                        showCancelButton: true,
-                        confirmButtonText: "Ya, hapus!",
-                        cancelButtonText: "Batal",
-                      }).then((result) => {
-                        if (result.isConfirmed) {
-                          mutation.mutate(item.id);
-                        }
-                      });
-                    }}
-                  >
-                    {mutation.status === "pending" ? "Loading..." : "Delete"}
-                  </button>
-                </td>
-              </tr>
-            ))}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="bg-red-500 p-2 rounded-md text-white text-sm ml-2 hover:cursor-pointer hover:bg-red-700"
+                      onClick={() => {
+                        Swal.fire({
+                          title: "Hapus Satuan?",
+                          text: "Objek Pajak akan dihapus secara permanen!",
+                          icon: "warning",
+                          showCancelButton: true,
+                          confirmButtonText: "Ya, hapus!",
+                          cancelButtonText: "Batal",
+                        }).then((result) => {
+                          if (result.isConfirmed) {
+                            mutation.mutate({ id: item.id });
+                          }
+                        })
+                      }}
+                    >
+                      {mutation.status == "pending" ? (
+                        <p>Loading...</p>
+                      ) : (
+                        <>Hapus</>
+                      )}
+                    </button>
+                  </td>
+                </tr>
+              ))}
+              {isLoading && <tr><td colSpan="5" className="text-center"><ClipLoader /></td></tr>}
           </tbody>
         </table>
-
-        {/* <div className="pagination-container">
-          <div className="pagination">
-            <button
-              className="page-item"
-              onClick={() => data?.links?.prev && setUrl(toHTTPS(data.links.prev))}
-              disabled={data?.meta?.current_page === 1 || !data?.links?.prev}
-            >
-              &lt;
-            </button>
-
-            <button className="page-item">{data?.meta?.current_page}</button>
-
-            <button
-              className="page-item"
-              onClick={() => data?.links?.next && setUrl(toHTTPS(data.links.next))}
-              disabled={!data?.links?.next}
-            >
-              &gt;
-            </button>
-          </div>
-        </div> */}
         <div className="pagination-container flex-justify-between">
           <div className="flex space-x-2">
             <p className="text-sm text-gray-700">
@@ -417,7 +352,7 @@ const Kontrak = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Kontrak;
+export default Satuan;

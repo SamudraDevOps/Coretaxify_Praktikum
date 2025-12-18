@@ -25,6 +25,10 @@ import EditKelas from "./components/Dashboard/Admin/Pengguna/Kelas/EditKelas";
 // ADMIN
 import AdminCoretaxify from "./components/Dashboard/Admin/Coretaxify/AdminCoretaxify";
 import Instansi from "./components/Dashboard/Admin/Instansi/Index";
+import BupotObjekPajak from "./components/Dashboard/Admin/MasterData/BupotObjekPajak/Index";
+import KodeTransaksi from "./components/Dashboard/Admin/MasterData/KodeTransaksi/Index";
+import KapKjs from "./components/Dashboard/Admin/MasterData/KapKjs/Index";
+import Satuan from "./components/Dashboard/Admin/MasterData/Satuan/Index";
 
 // DOSEN
 import DosenCoretaxify from "./components/Dashboard/Dosen/Coretaxify/DosenCoretaxify";
@@ -200,6 +204,9 @@ import SPTViewPDF from "./components/PraktikumPage/Badan/SPT/SPTViewPDF";
 import SPTPPHViewPDF from "./components/PraktikumPage/Badan/SPT/SPTPPHViewPDF";
 import SPTUnifikasiPDF from "./components/PraktikumPage/PDFTemplate/SPTUnifikasiTemplate";
 import SPTUnifikasiViewPDF from "./components/PraktikumPage/Badan/SPT/SPTUnifikasiViewPDF";
+import SPTViewBPE from "./components/PraktikumPage/Badan/SPT/SPTViewBPE";
+import SPTPPHViewBPE from "./components/PraktikumPage/Badan/SPT/SPTPPHViewBPE";
+import SPTUnifikasiViewBPE from "./components/PraktikumPage/Badan/SPT/SPTUnifikasiViewBPE";
 import ViewKonsepSPT from "./components/PraktikumPage/Badan/SPT/ViewKonsepSPT";
 import LihatKonsepPasal from "./components/PraktikumPage/Badan/SPT/ViewKonsepPasal";
 import LihatKonsepUnifikasi from "./components/PraktikumPage/Badan/SPT/ViewKonsepUnifikasi";
@@ -339,6 +346,10 @@ const Main = () => {
           <Route path="/admin/kontrak-backup" element={<KontrakBackup />} />
           <Route path="/admin/praktikum-backup" element={<PraktikumBackup />} />
           <Route path="/admin/praktikum" element={<Praktikum />} />
+          <Route path="/admin/kap-kjs-master" element={<KapKjs />} />
+          <Route path="/admin/satuan-master" element={<Satuan />} />
+          <Route path="/admin/kode-transaksi-master" element={<KodeTransaksi />} />
+          <Route path="/admin/bupot-objek-pajak-master" element={<BupotObjekPajak />} />
         </Route>
 
         {/* DOSEN ROUTE */}
@@ -994,6 +1005,26 @@ const Main = () => {
           }
         />
         <Route
+          path="/praktikum/:id/sistem/:akun/spt/bpe/:idSpt"
+          // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/spt/:idSpt`}
+                intent={""}
+                OrangPribadi={SPTViewBPE}
+                Badan={SPTViewBPE}
+                query={""}
+              ></RoleBasedRenderer>
+
+            </>
+            // <>
+            //   <yHeader />
+            //   <KonsepSPT />
+            // </>
+          }
+        />
+        <Route
           path="/praktikum/:id/sistem/:akun/buat-konsep-spt-pph/:idSpt"
           // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
           element={
@@ -1057,6 +1088,29 @@ const Main = () => {
                 // Badan={LihatKonsepUnifikasi}
                 OrangPribadi={SPTPPHViewPDF}
                 Badan={SPTPPHViewPDF}
+                query={""}
+              ></RoleBasedRenderer>
+            </>
+            // <>
+            //   <Header />
+            //   <KonsepSPT />
+            // </>
+          }
+        />
+        <Route
+          path="/praktikum/:id/sistem/:akun/spt-pph/bpe/:idSpt"
+
+          // path="/praktikum/:id/sistem/:akun/lihat-konsep-spt-unifikasi/:idSpt"
+          // path="/admin/praktikum/2/surat-pemberitahuan-(spt)"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/spt/:idSpt`}
+                intent={""}
+                // OrangPribadi={LihatKonsepUnifikasi}
+                // Badan={LihatKonsepUnifikasi}
+                OrangPribadi={SPTPPHViewBPE}
+                Badan={SPTPPHViewBPE}
                 query={""}
               ></RoleBasedRenderer>
             </>
@@ -1215,6 +1269,20 @@ const Main = () => {
             //   <Header />
             //   <KonsepSPT />
             // </>
+          }
+        />
+        <Route
+          path="/praktikum/:id/sistem/:akun/spt-unifikasi/bpe/:idSpt"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/spt/:idSpt`}
+                intent={""}
+                OrangPribadi={SPTUnifikasiViewBPE}
+                Badan={SPTUnifikasiViewBPE}
+                query={""}
+              ></RoleBasedRenderer>
+            </>
           }
         />
         <Route

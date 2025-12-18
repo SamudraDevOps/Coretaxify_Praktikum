@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { FaRegEye, FaEyeSlash } from "react-icons/fa";
 import CTaxifyLogo from "../../../../assets/images/4.png";
 import { Link, useNavigate } from "react-router-dom";
@@ -29,6 +29,8 @@ const Register = () => {
   const navigate = useNavigate();
 
   const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const submittingRef = useRef(false);
 
   const validate = () => {
     let newErrors = {};
@@ -120,6 +122,10 @@ const Register = () => {
       const errorMessage = error.response?.data?.message || error.message;
       Swal.fire("Registrasi Gagal!", errorMessage, "error");
     },
+    onSettled: () => {
+      submittingRef.current = false;
+      setIsSubmitting(false);
+    },
   });
 
   const handleEmailChange = (event) => {
@@ -182,8 +188,12 @@ const Register = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
+    if (submittingRef.current) return;
+
     // Only validate when form is submitted
     if (validate()) {
+      submittingRef.current = true;
+      setIsSubmitting(true);
       mutation.mutate();
     }
   };
@@ -310,9 +320,9 @@ const Register = () => {
               <button
                 type="submit"
                 className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600"
-                disabled={mutation.isPending}
+                disabled={isSubmitting || mutation.isLoading || mutation.isPending}
               >
-                {mutation.isPending ? "Mendaftar..." : "Coba Gratis 14 Hari"}
+                {isSubmitting || mutation.isLoading || mutation.isPending ? "Mendaftar..." : "Coba Gratis 14 Hari"}
               </button>
               <button
                 type="button"
@@ -349,9 +359,9 @@ const Register = () => {
               <button
                 type="submit"
                 className="mt-4 w-full bg-purple-900 text-white py-2 rounded-md hover:bg-purple-950"
-                disabled={mutation.isPending}
+                disabled={isSubmitting || mutation.isLoading || mutation.isPending}
               >
-                {mutation.isPending ? "Mendaftar..." : "Daftar Sekarang"}
+                {isSubmitting || mutation.isLoading || mutation.isPending ? "Mendaftar..." : "Daftar Sekarang"}
               </button>
             </div>
           )}

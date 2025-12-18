@@ -17,6 +17,9 @@ import { useObjekPajak } from "@/hooks/bupot/useObjekPajak";
 import { useNpwp } from "@/hooks/bupot/useNpwp";
 import { useNavigateWithParams } from "@/hooks/useNavigateWithParams";
 import Select from "react-select";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
+import { CookiesProvider, useCookies } from "react-cookie";
 
 const BUPOTForm = ({
   type,
@@ -33,6 +36,8 @@ const BUPOTForm = ({
   const navigate = useNavigateWithParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const monitoredUserId = searchParams.get('user_id');
+  const { id, akun, faktur } = useParams();
+  const [cookies] = useCookies(["token"]);
 
   // State for accordion sections
   const [openSections, setOpenSections] = useState({
@@ -256,6 +261,28 @@ const BUPOTForm = ({
 
   const { npwp, loading: loadingNpwp } = useNpwp();
 
+  // GET DATA BPA1
+  const {
+      data: getData,
+      loading: getDataIsLoading,
+      error: getDataIsError,
+      refetch: getDataRefetch,
+    } = useQuery({
+      queryKey: [id, akun],
+      queryFn: async () => {
+        const url = `${RoutesApi.apiUrl}student/assignments/${id}/sistem/${akun}/bupot/get-data`;
+        const { data } = await axios.get(url, {
+          headers: {
+            Authorization: `Bearer ${cookies.token}`,
+          },
+        });
+        console.log(data);
+        return data;
+      },
+      // enabled: false,
+      // refetchOnWindowFocus: false,
+    });
+
   // Helper to update multiple form fields
   const updateMultipleFields = (updates) => {
     setFormData((prevData) => ({
@@ -265,7 +292,9 @@ const BUPOTForm = ({
   };
 
   // Form data state
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({
+    pembulatan_kotor: "0"
+  });
 
   // Initialize form data
   useEffect(() => {
@@ -273,6 +302,8 @@ const BUPOTForm = ({
       setFormData(initialData);
     }
   }, [initialData]);
+
+  console.log(formData);
 
   // 2nd Form data state
   const [supportingFormData, setSupportingFormData] = useState({});
@@ -342,6 +373,17 @@ const BUPOTForm = ({
     return null;
   };
 
+  const getRepresentatifFromUrl = () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const viewAsParam = urlParams.get("viewAs");
+
+    if (viewAsParam) {
+      return akun;
+    }
+
+    return null;
+  }
+
   // Helper to toggle sections
   const toggleSection = (section) => {
     setOpenSections({
@@ -379,7 +421,7 @@ const BUPOTForm = ({
 
       if (value === "0") {
         newData.nomor_paspor_akun = "";
-        newData.negara_akun = "";
+        newData.negara_akun = "Indonesia";
         return newData;
       } else if (value === "1") {
         newData.nomor_paspor_akun = tempData.nomor_paspor_akun || "";
@@ -445,6 +487,7 @@ const BUPOTForm = ({
       const updatedFormData = {
         ...formData,
         ["tipe_bupot"]: currentBupot,
+        ["representatif_id"]: getRepresentatifFromUrl(),
         ["pembuat_id"]: getIdFromUrl(),
         ["status_penerbitan"]: "draft",
       };
@@ -457,6 +500,7 @@ const BUPOTForm = ({
       const updatedFormData = {
         ...formData,
         ["tipe_bupot"]: currentBupot,
+        ["representatif_id"]: getRepresentatifFromUrl(),
         ["pembuat_id"]: getIdFromUrl(),
         ["status_penerbitan"]: "draft",
         ["status"]: "invalid",
@@ -485,8 +529,6 @@ const BUPOTForm = ({
     const numberString = stringValue?.replace(/[^\d]/g, "") || "";
     return new Intl.NumberFormat("id-ID").format(numberString);
   };
-
-  const { id, akun, faktur } = useParams();
 
   // set nitku_dokumen to current
   useEffect(() => {
@@ -591,6 +633,66 @@ const BUPOTForm = ({
         break;
 
       case "BP A1":
+        // LABA KOTOR
+        const gajiPokokPensiun = parseFloat(formData.gaji_pokok_pensiun || 0);
+        const tunjanganPPh = parseFloat(formData.tunjangan_pph || 0);
+        const tunjanganLainnya = parseFloat(formData.tunjangan_lainnya || 0);
+        const honorariumImbalanLainnya = parseFloat(formData.honorarium_imbalan_lainnya || 0);
+        const premiAsuransiPemberiKerja = parseFloat(formData.premi_asuransi_pemberi_kerja || 0);
+        const naturaPPhPasal21 = parseFloat(formData.natura_pph_pasal_21 || 0);
+        const tantiemBonusGratifikasiJasaThr = parseFloat(formData.tantiem_bonus_gratifikasi_jasa_thr || 0);
+        const bruto = gajiPokokPensiun + tunjanganPPh + tunjanganLainnya + honorariumImbalanLainnya + premiAsuransiPemberiKerja + naturaPPhPasal21 + tantiemBonusGratifikasiJasaThr;
+        console.log({"bruto": bruto});
+
+        // PENGURANG
+        const biayaJabatan = Math.round(getBiayaJabatan(bruto));
+        const iuranPensiun = parseFloat(formData.iuran_pensiun || 0);
+        const sumbanganKeagamaanPemberiKerja = parseFloat(formData.sumbangan_keagamaan_pemberi_kerja || 0);
+        const totalPengurangan = biayaJabatan + iuranPensiun + sumbanganKeagamaanPemberiKerja;
+
+        // PERHITUNGAN PPH
+        const netto = bruto - totalPengurangan;
+        const nettoSebelumnya = parseFloat(formData.penghasilan_neto_sebelumnya || 0);
+        const penghasilanNetoPphPasal21 = netto + nettoSebelumnya;
+        const potonganPTKP = getBPA1PTKP(formData.ptkp_akun);
+        const penghasilanKenaPajak = penghasilanNetoPphPasal21 > potonganPTKP ? (penghasilanNetoPphPasal21 - potonganPTKP) : 0;
+        const tarifPph21 = penghasilanKenaPajak > 0 ? getPs17(penghasilanKenaPajak) : 0;
+        const pph21 = penghasilanKenaPajak > 0 ? Math.round(penghasilanKenaPajak * (tarifPph21 / 100)) : 0;
+        const pph21Terutang = pph21;
+        const pph21DipotongBupot = 0;
+        const pph21TerutangBupotIni = pph21Terutang - pph21DipotongBupot;
+        const pph21DTP = 0;
+        const pph21MasaPajakTerakhir = pph21TerutangBupotIni - pph21DTP;
+        // const 
+        
+        // console.log({
+        //   "gajiPokokPensiun": gajiPokokPensiun,
+        //   "tunjanganPPh": tunjanganPPh,
+        //   "tunjanganLainnya": tunjanganLainnya,
+        //   "honorariumImbalanLainnya": honorariumImbalanLainnya,
+        //   "premiAsuransiPemberiKerja": premiAsuransiPemberiKerja,
+        //   "naturaPPhPasal21": naturaPPhPasal21,
+        //   "tantiemBonusGratifikasiJasaThr": tantiemBonusGratifikasiJasaThr,
+        //   "bruto": bruto,
+        //   "biayaJabatan": biayaJabatan,
+        // });
+
+        // FIELD UPDATES
+        updateMultipleFields({
+          dasar_pengenaan_pajak: bruto,
+          biaya_jabatan: biayaJabatan,
+          jumlah_pengurangan: totalPengurangan,
+          jumlah_penghasilan_neto: netto,
+          penghasilan_neto_pph_pasal_21: penghasilanNetoPphPasal21,
+          penghasilan_tidak_kena_pajak: potonganPTKP,
+          penghasilan_kena_pajak: penghasilanKenaPajak,
+          pph_pasal_21_penghasilan_kena_pajak: pph21,
+          pph_pasal_21_terutang: pph21Terutang,
+          pph_pasal_21_potongan_bpa1_sebelumnya: pph21DipotongBupot,
+          pph_pasal_21_terutang_bupot_ini: pph21TerutangBupotIni,
+          pph_pasal_21_ditanggung_pemerintah: pph21DTP,
+          pph_pasal_21_masa_pajak_terakhir: pph21MasaPajakTerakhir
+        });
         break;
 
       case "BP A2":
@@ -625,6 +727,19 @@ const BUPOTForm = ({
     supportingFormData.penghasilan_ln,
     supportingFormData.penghasilan_kredit,
     supportingFormData.penghasilan_dipotong,
+
+    // bpa1
+    formData.gaji_pokok_pensiun,
+    formData.tunjangan_pph,
+    formData.tunjangan_lainnya,
+    formData.honorarium_imbalan_lainnya,
+    formData.premi_asuransi_pemberi_kerja,
+    formData.natura_pph_pasal_21,
+    formData.tantiem_bonus_gratifikasi_jasa_thr,
+
+    formData.biaya_jabatan,
+    formData.iuran_pensiun,
+    formData.sumbangan_keagamaan_pemberi_kerja,
   ]);
 
   // Helper untuk BP 21 -> get cara perhitungan, get status TER,
@@ -764,6 +879,71 @@ const BUPOTForm = ({
     return tarifByGolonganTerMP || 0;
   };
 
+  // Helper Bupot A1
+  const PTKP_DATA = {
+    "TK/0": 54000000,
+    "TK/1": 58500000,
+    "TK/2": 63000000,
+    "TK/3": 67500000,
+    "K/0": 58500000,
+    "K/1": 63000000,
+    "K/2": 67500000,
+    "K/3": 72000000,
+  }
+
+  const getBPA1PTKP = (ptkpStatus) => {
+    return PTKP_DATA[ptkpStatus] || '';
+  }
+
+  const getBiayaJabatan = (bruto) => {
+    const masaAwal = formData.masa_awal;
+    const masaAkhir = formData.masa_akhir;
+
+    if (!masaAwal || !masaAkhir) return 0;
+
+    // Ubah string "YYYY-MM-DD" jadi objek Date
+    const start = new Date(masaAwal);
+    const end = new Date(masaAkhir);
+
+    // Validasi tanggal
+    if (isNaN(start) || isNaN(end)) return 0;
+
+    // Hitung selisih bulan antara dua tanggal
+    const totalMonths =
+      (end.getFullYear() - start.getFullYear()) * 12 +
+      (end.getMonth() - start.getMonth()) +
+      1; // +1 agar inklusif
+
+    // Hitung biaya jabatan berdasarkan bulan atau 5% bruto
+    const biayaJabatanByMonths = totalMonths * 500000;
+    const biayaJabatanByTotal = bruto * 0.05;
+
+    return Math.min(biayaJabatanByMonths, biayaJabatanByTotal);
+  }
+
+  const setTunjanganPPh = () => {
+    const golongan = getTer(formData.ptkp_akun);
+    const gaji = parseFloat(formData.gaji_pokok_pensiun);
+    const tarif = getTarifByGolonganTer(
+      golongan,
+      formData.gaji_pokok_pensiun
+    );
+    
+    const tambahanGaji = Math.round((parseFloat(gaji) * tarif) / 100);
+    const total = parseFloat(gaji) + parseFloat(tambahanGaji);
+
+    const tarif2 = getTarifByGolonganTer(
+      golongan,
+      total,
+    );
+
+    const tunjanganPph = Math.round((parseFloat(total) * tarif2) / 100);
+
+    console.log(tunjanganPph);
+
+    updateFormData("tunjangan_pph", tunjanganPph); 
+  }
+
   // set status
   useEffect(() => {
     const newStatus = (location.pathname.includes("/create") || formData.status_penerbitan === "draft")
@@ -814,7 +994,7 @@ const BUPOTForm = ({
                         Bekerja di Lebih dari Satu Pemberi Kerja
                         <span className="text-red-500">*</span>
                       </label>
-                      <select
+                      {/* <select
                         className="w-64 flex-auto border p-2 rounded appearance-none"
                         value={
                           formData.bekerja_di_lebih_dari_satu_pemberi_kerja ||
@@ -831,7 +1011,24 @@ const BUPOTForm = ({
                         <option value="">Please Select</option>
                         <option value="true">Ya</option>
                         <option value="false">Tidak</option>
-                      </select>
+                      </select> */}
+                      <Select
+                          className="w-64 flex-auto"
+                          value={
+                            formData.bekerja_di_lebih_dari_satu_pemberi_kerja !== null && formData.bekerja_di_lebih_dari_satu_pemberi_kerja !== undefined
+                              ? { value: String(formData.bekerja_di_lebih_dari_satu_pemberi_kerja), label: formData.bekerja_di_lebih_dari_satu_pemberi_kerja === "1" ? "Ya" : "Tidak" }
+                              : null
+                          }
+                          onChange={(selectedOption) =>
+                            updateFormData("bekerja_di_lebih_dari_satu_pemberi_kerja", (selectedOption ? selectedOption.value : ""))
+                          }
+                          options={[
+                            { value: "1", label: "Ya" },
+                            { value: "0", label: "Tidak" }
+                          ]}
+                          placeholder="Please Select"
+                          isClearable
+                        />
                     </div>
                   </>
                 )}
@@ -930,7 +1127,7 @@ const BUPOTForm = ({
                         <Select
                           className="w-64 flex-auto"
                           value={
-                            formData.pegawai_asing
+                            formData.pegawai_asing !== null && formData.pegawai_asing !== undefined
                               ? { value: String(formData.pegawai_asing), label: formData.pegawai_asing === "1" ? "Ya" : "Tidak" }
                               : null
                           }
@@ -971,7 +1168,17 @@ const BUPOTForm = ({
                           );
 
                           if (selectedObject) {
-                            if (currentBupot === "Bukti Pemotongan Bulanan Pegawai Tetap") {
+                            if (currentBupot = "Bukti Pemotongan Bulanan Pegawai Tetap") {
+                              updateMultipleFields({
+                                npwp_akun: selectedObject.npwp_akun,
+                                nama_akun: selectedObject.nama_akun,
+                                alamat_utama_akun: selectedObject.alamat_utama_akun,
+                                nitku:
+                                  sidebar.npwp_akun +
+                                  "000000 - " +
+                                  sidebar.nama_akun,
+                              });
+                            } if (currentBupot === "BP A1") {
                               updateMultipleFields({
                                 npwp_akun: selectedObject.npwp_akun,
                                 nama_akun: selectedObject.nama_akun,
@@ -991,7 +1198,6 @@ const BUPOTForm = ({
                                   "000000 - " +
                                   selectedObject.nama_akun,
                               });
-
                             }
                           } else {
                             updateFormData("npwp_akun", e.target.value);
@@ -1100,7 +1306,7 @@ const BUPOTForm = ({
                         value={
                           String(formData.pegawai_asing) === "1"
                             ? formData.negara_akun || ""
-                            : ""
+                            : "Indonesia"
                         }
                         onChange={(e) =>
                           updateFormData("negara_akun", e.target.value)
@@ -1157,7 +1363,7 @@ const BUPOTForm = ({
                         placehoder="Please Select"
                       >
                         <option value="">Please Select</option>
-                        <option value="Laki-Laki">Laki-Laki</option>
+                        <option value="Laki-laki">Laki-Laki</option>
                         <option value="Perempuan">Perempuan</option>
                         <option value="Lainnya">Lainnya</option>
                       </select>
@@ -1240,22 +1446,69 @@ const BUPOTForm = ({
                 {(currentBupot === "BP A1" || currentBupot === "BP A2") && (
                   <div className="mt-4 flex justify-between gap-4">
                     <label className="w-64 flex-none block text-sm font-medium text-gray-700">
-                      Nama Objek Pajak (Under Construction)
+                      Nama Objek Pajak
                       <span className="text-red-500">*</span>
                     </label>
-                    <select
-                      className="w-64 flex-auto border p-2 rounded appearance-none"
-                      value={formData.nama_objek_pajak || ""}
-                      onChange={(e) =>
-                        updateFormData("nama_objek_pajak", e.target.value)
-                      }
-                      placehoder="Please Select"
-                    >
-                      <option value="">Please Select</option>
-                      <option value="objek1">objek1</option>
-                      <option value="objek2">objek2</option>
-                      <option value="objek3">objek3</option>
-                    </select>
+                    <div className="w-64 flex-auto">
+                      <Select
+                        options={objekPajak.map((obj) => ({
+                          value: obj.nama_objek_pajak,
+                          label: obj.nama_objek_pajak,
+                          data: obj
+                        }))}
+                        value={
+                          formData.nama_objek_pajak
+                          ? {
+                            value: formData.nama_objek_pajak,
+                            label: formData.nama_objek_pajak,
+                          }
+                          : null
+                        }
+                        onChange={(selectedOption) => {
+                          if (!selectedOption) {
+                            // Jika di-clear
+                            updateFormData("nama_objek_pajak", "");
+                            return
+                          }
+
+                          const selectedObject = selectedOption.data;
+
+                          const updates = {
+                            nama_objek_pajak: selectedObject.nama_objek_pajak,
+                            jenis_pajak: selectedObject.jenis_pajak,
+                            kode_objek_pajak: selectedObject.kode_objek_pajak,
+                            kap: selectedObject.kap,
+                          }
+
+                          updateMultipleFields(updates);
+                        }}
+                        isDisabled={loadingObjekPajak}
+                        placeholder="Please Select"
+                        noOptionMessage={() => "Tidak ada opsi"}
+                        loadingMessage={() => "Memuat..."}
+                        isLoading={loadingObjekPajak}
+                        className="text-sm"
+                        styles={{
+                          control: (base, state) => ({
+                            ...base,
+                            borderColor: state.isDisabled ? "#d1d5db" : "#e5e7eb",
+                            boxShadow: state.isFocused ? "0 0 0 1px #7502B5" : "none",
+                            "&:hover": {
+                              borederColor: state.isDisabled ? "#d1d5db" : "#e5e7eb",
+                            },
+                          }),
+                          option: (base, { isSelected, isFocused }) => ({
+                            ...base,
+                            backgroundColor: isSelected
+                              ? "#7502B5"
+                              : isFocused
+                                ? "#f3e8ff"
+                                : base.backgroundColor,
+                            color: isSelected ? "white" : "black",
+                          }),
+                        }}
+                      />
+                    </div>
                   </div>
                 )}
 
@@ -1268,12 +1521,13 @@ const BUPOTForm = ({
                     </label>
                     <input
                       type="text"
-                      className="w-64 flex-auto border p-2 rounded"
+                      className="w-64 flex-auto border p-2 rounded bg-gray-200"
                       placeholder="Jenis Pajak"
                       value={formData.jenis_pajak || ""}
                       onChange={(e) => {
                         updateFormData("jenis_pajak", e.target.value);
                       }}
+                      readOnly={true}
                     />
                   </div>
                 )}
@@ -1287,7 +1541,7 @@ const BUPOTForm = ({
                     </label>
                     <input
                       type="text"
-                      className="w-64 flex-auto border p-2 rounded"
+                      className="w-64 flex-auto border p-2 rounded bg-gray-200"
                       placeholder="Kode Objek Pajak"
                       value={formData.kode_objek_pajak || ""}
                       onChange={(e) => {
@@ -1334,7 +1588,7 @@ const BUPOTForm = ({
                     </label>
                     <input
                       type="text"
-                      className="w-64 flex-auto border p-2 rounded"
+                      className="w-64 flex-auto border p-2 rounded bg-gray-200"
                       placeholder="Nama"
                       value={formData.nitku || ""}
                       onChange={(e) => {
@@ -2449,22 +2703,27 @@ const BUPOTForm = ({
 
                 {/* Pembulatan Kotor */}
                 {currentBupot === "BP A1" && (
-                  <div className="mt-4 flex justify-between gap-4">
+                  <div className="mt-4 flex gap-4">
                     <label className="w-64 flex-none block text-sm font-medium text-gray-700">
-                      Pembulatan Kotor
+                      Gross Up
                       <span className="text-red-500">*</span>
                     </label>
                     <input
-                      type="text"
-                      className="w-64 flex-auto border p-2 rounded"
+                      type="checkbox"
+                      checked={String(formData.pembulatan_kotor) === "1"}
+                      className="flex-none border p-2 rounded"
                       placeholder="Pembulatan Kotor"
-                      value={formatRupiah(formData.pembulatan_kotor) || ""}
                       onChange={(e) => {
-                        const rawValue = e.target.value.replace(/[^\d]/g, "");
-                        updateFormData("pembulatan_kotor", rawValue);
-                        // updateFormData("penghasilan_bruto_raw", Number(rawValue));
+                        if (e.target.checked === false) {
+                          updateMultipleFields({
+                            pembulatan_kotor: 0,
+                            tunjangan_pph: 0
+                          });
+                        } else if (e.target.checked === true) {
+                          updateFormData("pembulatan_kotor", 1);
+                          setTunjanganPPh();
+                        }
                       }}
-                      onWheel={(e) => e.target.blur()}
                     />
                   </div>
                 )}
@@ -2478,7 +2737,9 @@ const BUPOTForm = ({
                     </label>
                     <input
                       type="text"
-                      className="w-64 flex-auto border p-2 rounded"
+                      className={`w-64 flex-auto border p-2 rounded appearance-none
+                        ${String(formData.pembulatan_kotor) === "1" ? "bg-gray-200" : "bg-white"}
+                        `}
                       placeholder="Tunjangan PPH"
                       value={formatRupiah(formData.tunjangan_pph) || ""}
                       onChange={(e) => {
@@ -2487,6 +2748,10 @@ const BUPOTForm = ({
                         // updateFormData("penghasilan_bruto_raw", Number(rawValue));
                       }}
                       onWheel={(e) => e.target.blur()}
+                      readOnly={String(formData.pembulatan_kotor) === "1"
+                        ? true
+                        : false
+                      }
                     />
                   </div>
                 )}
@@ -2772,7 +3037,7 @@ const BUPOTForm = ({
                   </label>
                   <input
                     type="text"
-                    className="w-64 flex-auto border p-2 rounded"
+                    className="w-64 flex-auto border p-2 rounded bg-gray-200"
                     placeholder="Masukkan Jumlah Penghasilan Bruto"
                     value={formatRupiah(formData.dasar_pengenaan_pajak) || ""}
                     onChange={(e) => {
@@ -2781,6 +3046,7 @@ const BUPOTForm = ({
                       // updateFormData("penghasilan_bruto_raw", Number(rawValue));
                     }}
                     onWheel={(e) => e.target.blur()}
+                    readOnly={true}
                   />
                 </div>
 
@@ -2813,7 +3079,7 @@ const BUPOTForm = ({
                   </label>
                   <input
                     type="text"
-                    className="w-64 flex-auto border p-2 rounded"
+                    className="w-64 flex-auto border p-2 rounded bg-gray-200"
                     placeholder="Biaya Jabatan / Biaya Pensiun"
                     value={formatRupiah(formData.biaya_jabatan) || ""}
                     onChange={(e) => {
@@ -2822,6 +3088,7 @@ const BUPOTForm = ({
                       // updateFormData("penghasilan_bruto_raw", Number(rawValue));
                     }}
                     onWheel={(e) => e.target.blur()}
+                    readOnly={true}
                   />
                 </div>
 
@@ -2881,7 +3148,7 @@ const BUPOTForm = ({
                   </label>
                   <input
                     type="text"
-                    className="w-64 flex-auto border p-2 rounded"
+                    className="w-64 flex-auto border p-2 rounded bg-gray-200"
                     placeholder="Jumlah Pengurangan"
                     value={formatRupiah(formData.jumlah_pengurangan) || ""}
                     onChange={(e) => {
@@ -2890,6 +3157,7 @@ const BUPOTForm = ({
                       // updateFormData("penghasilan_bruto_raw", Number(rawValue));
                     }}
                     onWheel={(e) => e.target.blur()}
+                    readOnly={true}
                   />
                 </div>
 
@@ -2926,7 +3194,7 @@ const BUPOTForm = ({
                   </label>
                   <input
                     type="text"
-                    className="w-64 flex-auto border p-2 rounded"
+                    className="w-64 flex-auto border p-2 rounded bg-gray-200"
                     placeholder="Jumlah Penghasilan Neto"
                     value={formatRupiah(formData.jumlah_penghasilan_neto) || ""}
                     onChange={(e) => {
@@ -2935,6 +3203,7 @@ const BUPOTForm = ({
                       // updateFormData("penghasilan_bruto_raw", Number(rawValue));
                     }}
                     onWheel={(e) => e.target.blur()}
+                    readOnly={true}
                   />
                 </div>
 
@@ -2956,6 +3225,27 @@ const BUPOTForm = ({
                     readOnly={true}
                   />
                 </div>
+
+                {/* Tombol Untuk Get Data */}
+                {/* <div className="mt-4 flex justify-between gap-4">
+                  <button
+                    onClick={() => {
+                      getDataRefetch();
+                      console.log(getData);
+                    }}
+                    disabled={getDataIsLoading}
+                    className="bg-blue-600 text-white px-4 py-2 rounded"
+                  >
+                    {getDataIsLoading ? "Loading..." : "Get Data"}
+                  </button>
+
+                  {getDataIsError && <p className="text-red-500">Error fetching data</p>}
+                  {getData && (
+                    <pre className="mt-4 bg-gray-100 p-2 rounded">
+                      {JSON.stringify(getData, null, 2)}
+                    </pre>
+                  )}
+                </div> */}
 
                 {/* Penghasilan Neto dari Pemotongan Sebelumnya */}
                 <div className="mt-4 flex justify-between gap-4">
@@ -3010,7 +3300,7 @@ const BUPOTForm = ({
                   </label>
                   <input
                     type="text"
-                    className="w-64 flex-auto border p-2 rounded"
+                    className="w-64 flex-auto border p-2 rounded bg-gray-200"
                     placeholder="Wajib Diisi"
                     value={
                       formatRupiah(formData.penghasilan_tidak_kena_pajak) || ""
@@ -3021,6 +3311,7 @@ const BUPOTForm = ({
                       // updateFormData("penghasilan_bruto_raw", Number(rawValue));
                     }}
                     onWheel={(e) => e.target.blur()}
+                    readOnly={true}
                   />
                 </div>
 
@@ -3032,7 +3323,7 @@ const BUPOTForm = ({
                   </label>
                   <input
                     type="text"
-                    className="w-64 flex-auto border p-2 rounded"
+                    className="w-64 flex-auto border p-2 rounded bg-gray-200"
                     placeholder="Wajib Diisi"
                     value={formatRupiah(formData.penghasilan_kena_pajak) || ""}
                     onChange={(e) => {
@@ -3041,6 +3332,7 @@ const BUPOTForm = ({
                       // updateFormData("penghasilan_bruto_raw", Number(rawValue));
                     }}
                     onWheel={(e) => e.target.blur()}
+                    readOnly={true}
                   />
                 </div>
 
@@ -3053,7 +3345,7 @@ const BUPOTForm = ({
                   </label>
                   <input
                     type="text"
-                    className="w-64 flex-auto border p-2 rounded"
+                    className="w-64 flex-auto border p-2 rounded bg-gray-200"
                     placeholder="Wajib Diisi"
                     value={
                       formatRupiah(
@@ -3069,6 +3361,7 @@ const BUPOTForm = ({
                       // updateFormData("penghasilan_bruto_raw", Number(rawValue));
                     }}
                     onWheel={(e) => e.target.blur()}
+                    readOnly={true}
                   />
                 </div>
 
@@ -3080,7 +3373,7 @@ const BUPOTForm = ({
                   </label>
                   <input
                     type="text"
-                    className="w-64 flex-auto border p-2 rounded"
+                    className="w-64 flex-auto border p-2 rounded bg-gray-200"
                     placeholder="Wajib Diisi"
                     value={formatRupiah(formData.pph_pasal_21_terutang) || ""}
                     onChange={(e) => {
@@ -3089,6 +3382,7 @@ const BUPOTForm = ({
                       // updateFormData("penghasilan_bruto_raw", Number(rawValue));
                     }}
                     onWheel={(e) => e.target.blur()}
+                    readOnly={true}
                   />
                 </div>
 
@@ -3100,7 +3394,7 @@ const BUPOTForm = ({
                   </label>
                   <input
                     type="text"
-                    className="w-64 flex-auto border p-2 rounded"
+                    className="w-64 flex-auto border p-2 rounded bg-gray-200"
                     placeholder="Wajib Diisi"
                     value={
                       formatRupiah(
@@ -3116,6 +3410,7 @@ const BUPOTForm = ({
                       // updateFormData("penghasilan_bruto_raw", Number(rawValue));
                     }}
                     onWheel={(e) => e.target.blur()}
+                    readOnly={true}
                   />
                 </div>
 
@@ -3128,7 +3423,7 @@ const BUPOTForm = ({
                   </label>
                   <input
                     type="text"
-                    className="w-64 flex-auto border p-2 rounded"
+                    className="w-64 flex-auto border p-2 rounded bg-gray-200"
                     placeholder="Wajib Diisi"
                     value={
                       formatRupiah(formData.pph_pasal_21_terutang_bupot_ini) ||
@@ -3143,6 +3438,7 @@ const BUPOTForm = ({
                       // updateFormData("penghasilan_bruto_raw", Number(rawValue));
                     }}
                     onWheel={(e) => e.target.blur()}
+                    readOnly={true}
                   />
                 </div>
 
@@ -3154,7 +3450,7 @@ const BUPOTForm = ({
                   </label>
                   <input
                     type="text"
-                    className="w-64 flex-auto border p-2 rounded"
+                    className="w-64 flex-auto border p-2 rounded bg-gray-200"
                     placeholder="Wajib Diisi"
                     value={
                       formatRupiah(
@@ -3170,6 +3466,7 @@ const BUPOTForm = ({
                       // updateFormData("penghasilan_bruto_raw", Number(rawValue));
                     }}
                     onWheel={(e) => e.target.blur()}
+                    readOnly={true}
                   />
                 </div>
 
@@ -3182,7 +3479,7 @@ const BUPOTForm = ({
                   </label>
                   <input
                     type="text"
-                    className="w-64 flex-auto border p-2 rounded"
+                    className="w-64 flex-auto border p-2 rounded bg-gray-200"
                     placeholder="Wajib Diisi"
                     value={
                       formatRupiah(formData.pph_pasal_21_masa_pajak_terakhir) ||
@@ -3197,6 +3494,7 @@ const BUPOTForm = ({
                       // updateFormData("penghasilan_bruto_raw", Number(rawValue));
                     }}
                     onWheel={(e) => e.target.blur()}
+                    readOnly={true}
                   />
                 </div>
 
@@ -3242,22 +3540,21 @@ const BUPOTForm = ({
                 </div>
 
                 {/* NITKU */}
-                {(currentBupot === "BPPU" || currentBupot === "BP 21") && (
+                {(currentBupot === "BP A1" || currentBupot === "BP A2") && (
                   <div className="mt-4 flex justify-between gap-4">
                     <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                       NITKU/Nomor Identitas Sub Unit Organisasi
                       <span className="text-red-500">*</span>
                     </label>
-                    <select
-                      className="w-64 flex-auto border p-2 rounded appearance-none"
+                    <input
+                      className="w-64 flex-auto border p-2 rounded bg-gray-200"
+                      placehoder="NITKU"
                       value={formData.nitku || ""}
-                      onChange={(e) => updateFormData("nitku", e.target.value)}
-                      placehoder="Please Select"
-                    >
-                      <option value="">Please Select</option>
-                      <option value="NITKU1">NITKU1</option>
-                      <option value="NITKU2">NITKU2</option>
-                    </select>
+                      onChange={(e) => {
+                        updateFormData("nitku", e.target.value);
+                      }}
+                      readOnly={true}
+                    />
                   </div>
                 )}
 

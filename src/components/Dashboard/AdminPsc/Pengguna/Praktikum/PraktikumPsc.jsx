@@ -55,6 +55,7 @@ const PraktikumPsc = () => {
         },
         params: {
           intent: IntentEnum.API_GET_GROUP_BY_ROLES,
+          perPage: 'all',
         },
       });
       return data;
@@ -104,8 +105,6 @@ const PraktikumPsc = () => {
           search: search,
         }
       });
-
-      console.log(data);
       return data;
     },
   });
