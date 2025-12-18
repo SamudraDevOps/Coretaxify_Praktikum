@@ -306,7 +306,8 @@ const BP21PDFDokumen = ({ data = {}, kopImageBP21: kopImageProp, qrImage: qrImag
           </Text>
 
         </View>
-
+ 
+ 
       </Page>
     </Document>
   );
