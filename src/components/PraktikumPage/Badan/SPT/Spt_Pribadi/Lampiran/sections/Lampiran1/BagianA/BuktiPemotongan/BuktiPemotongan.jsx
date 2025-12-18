@@ -208,4 +208,6 @@ export default function DaftarBuktiPemotongan({ config }) {
       />
     </div>
   );
+
+  
 }
