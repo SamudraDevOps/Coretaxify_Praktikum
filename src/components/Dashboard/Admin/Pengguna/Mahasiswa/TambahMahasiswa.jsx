@@ -84,7 +84,6 @@ const TambahMahasiswa = ({
             return;
         }
 
-        // ✅ DELEGATE ke EditMahasiswa — biar dia yang handle axios
         if (onSave) {
             onSave(valid, selectedContractId, invalid, []);
         } else {
@@ -125,7 +124,6 @@ const TambahMahasiswa = ({
                     throw new Error("File harus memiliki kolom: name, email.");
                 }
 
-                // ✅ Hanya ambil name, email, password, status — TIDAK ADA contract_id di sini
                 const imported = jsonData.slice(1).map(row => {
                     const name = (row[nameIdx] || "").toString().trim();
                     const email = (row[emailIdx] || "").toString().trim();
