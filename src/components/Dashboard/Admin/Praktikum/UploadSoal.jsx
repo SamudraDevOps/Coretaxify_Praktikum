@@ -28,7 +28,7 @@ export default function UploadSoal() {
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
   const [selectedData, setSelectedData] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 1;
+  const itemsPerPage = 20;
   const [cookies, setCookie] = useCookies(["user"]);
   const [url, setUrl] = useState(RoutesApi.tasksAdmin);
   const [search, setSearch] = useState("");
