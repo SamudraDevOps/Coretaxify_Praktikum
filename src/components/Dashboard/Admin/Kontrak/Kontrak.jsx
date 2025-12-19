@@ -55,6 +55,7 @@ const Kontrak = () => {
     queryFn: async () => {
       const { data } = await axios.get(toHTTPS(RoutesApi.tasksAdmin), {
         headers: { Authorization: `Bearer ${cookies.token}` },
+        params: { perPage: 10000, sortDirection: "desc" },
       });
       return data;
     },
