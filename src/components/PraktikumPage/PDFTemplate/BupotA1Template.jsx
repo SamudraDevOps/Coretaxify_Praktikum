@@ -90,7 +90,18 @@ const BPA1PDF = ({ data = {}, kopImage: kopProp, qrImage: qrProp }) => {
   const kop = kopProp || kopImage;
   const qr = qrProp || qrImage;
 
-  const d = data?.bupot_resource || data || {};
+  const raw = data?.bupot_resource || data || {};
+  const d = JSON.parse(raw);
+
+  const brutoRows = [
+    { no: 1, label: "Gaji/Pensiun atau THT/JHT", key: "gaji_pokok_pensiun" },
+    { no: 2, label: "Tunjangan PPh", key: "tunjangan_pph" },
+    { no: 3, label: "Tunjangan Lainnya, Uang Lembur dan Sebagainya", key: "tunjangan_lainnya" },
+    { no: 4, label: "Honorarium dan Imbalan Lain Sejenisnya", key: "honorarium_imbalan_lainnya" },
+    { no: 5, label: "Premi Asuransi yang Dibayar Pemberi Kerja", key: "premi_asuransi_pemberi_kerja" },
+    { no: 6, label: "Penerimaan Natura yang Dikenakan PPh Pasal 21", key: "natura_pph_pasal_21" },
+    { no: 7, label: "Tantiem, Bonus, Gratifikasi, Jasa Produksi dan THR", key: "tantiem_bonus_gratifikasi_jasa_thr" },
+  ];
 
   return (
     <Document>
@@ -102,7 +113,7 @@ const BPA1PDF = ({ data = {}, kopImage: kopProp, qrImage: qrProp }) => {
         <View style={styles.metaRow}>
           <View style={styles.metaCell}>
             <Text style={styles.metaLabel}>NOMOR BUKTI PEMOTONGAN</Text>
-            <Text style={styles.metaValue}>{d.nomor_dokumen || "-"}</Text>
+            <Text style={styles.metaValue}>{d.nomor_pemotongan || "-"}</Text>
           </View>
           <View style={styles.metaCell}>
             <Text style={styles.metaLabel}>PERIODE PENGHASILAN</Text>
@@ -110,7 +121,7 @@ const BPA1PDF = ({ data = {}, kopImage: kopProp, qrImage: qrProp }) => {
           </View>
           <View style={styles.metaCell}>
             <Text style={styles.metaLabel}>SIFAT PEMOTONGAN</Text>
-            <Text style={styles.metaValue}>{(d.sifat || "TIDAK FINAL").toUpperCase()}</Text>
+            <Text style={styles.metaValue}>{(d.sifat_pemotongan || "TIDAK FINAL").toUpperCase()}</Text>
           </View>
           <View style={[styles.metaCell, styles.metaLast]}>
             <Text style={styles.metaLabel}>STATUS BUKTI PEMOTONGAN</Text>
@@ -122,39 +133,53 @@ const BPA1PDF = ({ data = {}, kopImage: kopProp, qrImage: qrProp }) => {
         <Text style={styles.sectionTitle}>A. IDENTITAS PENERIMA PENGHASILAN</Text>
         <RowField label="A.1 NIK/NPWP" value={d.npwp_akun || "-"} />
         <RowField label="A.2 Nama" value={d.nama_akun || "-"} />
-        <RowField label="A.3 Alamat" value={d.alamat_akun || "-"} />
-        <RowField label="A.4 Jenis Kelamin" value={d.jenis_kelamin || "-"} />
-        <RowField label="A.5 Status PTKP" value={d.ptkp || "-"} />
-        <RowField label="A.6 Posisi" value={d.posisi || "-"} />
+        <RowField label="A.3 Alamat" value={d.alamat_utama_akun || "-"} />
+        <RowField label="A.4 Jenis Kelamin" value={d.jenis_kelamin_akun || "-"} />
+        <RowField label="A.5 Status PTKP" value={d.ptkp_akun || "-"} />
+        <RowField label="A.6 Posisi" value={d.posisi_akun || "-"} />
         <RowField label="A.7 Pegawai Asing" value={d.pegawai_asing || "Tidak"} />
-        <RowField label="A.8 Nomor Paspor" value={d.nomor_paspor || "-"} />
-        <RowField label="A.9 Kode Negara" value={d.kode_negara || "IDN"} />
-        <RowField label="A.10 Bekerja di Lebih dari Satu Pemberi Kerja" value={d.multi_employer || "Tidak"} />
+        <RowField label="A.8 Nomor Paspor" value={d.nomor_paspor_akun || "-"} />
+        <RowField label="A.9 Kode Negara" value={d.negara_akun || "IDN"} />
+        <RowField label="A.10 Bekerja di Lebih dari Satu Pemberi Kerja" value={d.bekerja_di_lebih_dari_satu_pemberi_kerja || "Tidak"} />
 
         {/* B */}
         <Text style={styles.sectionTitle}>B. RINCIAN PENGHASILAN DAN PENGHITUNGAN PPh PASAL 21</Text>
-        <RowField label="B.1.1 Kode Objek Pajak" value={d.kode_objek || "-"} />
-        <RowField label="B.1.2 Objek Pajak" value={d.objek_pajak || "-"} />
+        <RowField label="B.1.1 Kode Objek Pajak" value={d.kode_objek_pajak || "-"} />
+        <RowField label="B.1.2 Objek Pajak" value={d.nama_objek_pajak || "-"} />
         <RowField label="B.2 Jenis Pemotongan" value={d.jenis_pemotongan || "-"} />
 
         <View style={styles.table}>
-          {["Gaji/Pensiun atau THT/JHT","Tunjangan PPh","Tunjangan Lainnya, Uang Lembur dan Sebagainya","Honorarium dan Imbalan Lain Sejenisnya","Premi Asuransi yang Dibayar Pemberi Kerja","Penerimaan Natura yang Dikenakan PPh 21","Tantiem, Bonus, Gratifikasi, Jasa Produksi dan THR","Jumlah Penghasilan Bruto"].map((label, i) => (
-            <View key={i} style={styles.tr}>
-              <Text style={[styles.td, { flex: 4 }]}>{i + 1}. {label}</Text>
-              <Text style={[styles.td, { flex: 2 }, styles.right, styles.lastCell]}>{formatRupiah(d[`b${i + 1}`])}</Text>
+          {brutoRows.map((row) => (
+            <View key={row.no} style={styles.tr}>
+              <Text style={[styles.td, { flex: 4 }]}>
+                {row.no}. {row.label}
+              </Text>
+              <Text style={[styles.td, { flex: 2 }, styles.right, styles.lastCell]}>
+                {formatRupiah(d[row.key])}
+              </Text>
             </View>
           ))}
+
+          {/* JUMLAH */}
+          <View style={[styles.tr, { backgroundColor: "#f2f2f2" }]}>
+            <Text style={[styles.td, { flex: 4, fontWeight: 700 }]}>
+              8. Jumlah Penghasilan Bruto (1 s.d 7)
+            </Text>
+            <Text style={[styles.td, { flex: 2 }, styles.right, styles.lastCell]}>
+              {formatRupiah(d.dasar_pengenaan_pajak)}
+            </Text>
+          </View>
         </View>
 
-        <RowField label="B.6 Jenis Fasilitas" value={d.fasilitas || "Tanpa Fasilitas"} />
+        <RowField label="B.6 Jenis Fasilitas" value={d.fasilitas_pajak || "Tanpa Fasilitas"} />
 
         {/* C */}
         <Text style={styles.sectionTitle}>C. IDENTITAS PEMOTONG PPh</Text>
-        <RowField label="C.1 NPWP/NIK" value={d.pemotong_npwp || "-"} />
-        <RowField label="C.2 NITKU" value={d.pemotong_nitku || "-"} />
-        <RowField label="C.3 Nama Pemotong" value={d.pemotong_nama || "-"} />
-        <RowField label="C.4 Tanggal" value={formatDate(d.tanggal_dokumen)} />
-        <RowField label="C.5 Nama Penandatangan" value={d.penandatangan || "-"} />
+        <RowField label="C.1 NPWP/NIK" value={d.nitku?.split(" - ")[0] || "-"} />
+        <RowField label="C.2 NITKU" value={d.nitku || "-"} />
+        <RowField label="C.3 Nama Pemotong" value={d.nitku?.split(" - ")[1] || "-"} />
+        <RowField label="C.4 Tanggal" value={formatDate(d.masa_akhir)} />
+        <RowField label="C.5 Nama Penandatangan" value={d.nitku?.split(" - ")[1] || "-"} />
         <RowField
           label="C.6 Pernyataan"
           value="Dengan ini saya menyatakan bahwa Bukti Pemotongan ini telah saya isi dengan benar dan telah saya tandatangani secara elektronik."

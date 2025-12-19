@@ -208,6 +208,7 @@ import LihatKonsepUnifikasi from "./components/PraktikumPage/Badan/SPT/ViewKonse
 import EditReturFaktur from "./components/PraktikumPage/Badan/EFaktur/EditReturFaktur";
 import BupotViewPDF from "./components/PraktikumPage/Badan/BUPOT/BPPU/BupotViewPDF";
 import Bupot21ViewPDF from "./components/PraktikumPage/Badan/BUPOT/Bupot21ViewPDF";
+import BupotA1ViewPDF from "./components/PraktikumPage/Badan/BUPOT/BupotA1ViewPDF";
 import BP21PDF from "./components/PraktikumPage/PDFTemplate/Bupot21Template";
 import ReturFakturViewPDF from "./components/PraktikumPage/Badan/EFaktur/ReturFakturViewPDF";
 
@@ -1313,7 +1314,21 @@ const Main = () => {
                 OrangPribadi={Bupot21ViewPDFDokumen}
                 Badan={Bupot21ViewPDFDokumen}
                 query={"notifikasi"}
-                               ></RoleBasedRenderer>
+              ></RoleBasedRenderer>
+            </>
+          }
+        />
+        <Route
+          path="/praktikum/:id/sistem/:akun/dokumen-saya/pdf/:dokumen/bpa1"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/notification/:dokumen`}
+                intent={""}
+                OrangPribadi={BupotA1ViewPDF}
+                Badan={BupotA1ViewPDF}
+                query={"notifikasi"}
+              ></RoleBasedRenderer>
             </>
           }
         />
