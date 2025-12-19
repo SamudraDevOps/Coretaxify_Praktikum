@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from "react";
 import "./editPopupMahasiswa.css";
 import EditPopupMahasiswa from "./EditPopupMahasiswa";
+import TambahMahasiswa from "./TambahMahasiswa";
 import Swal from "sweetalert2";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { RoutesApi } from "@/Routes";
 import { ClipLoader } from "react-spinners";
 import { useCookies } from "react-cookie";
 import { deleteMahasiswa, getMahasiswa } from "@/hooks/dashboard/useMahasiswa";
-import { getCookie } from "@/service";
+import { getCookie, getCookieToken } from "@/service";
+import { getContracts } from "@/hooks/dashboard";
+import { getCsrf } from "@/service/getCsrf";
+import { IntentEnum } from "@/enums/IntentEnum";
 
 const useDebounce = (value, delay) => {
   const [debouncedValue, setDebouncedValue] = useState(value);
@@ -26,6 +30,7 @@ const useDebounce = (value, delay) => {
 
 const EditMahasiswa = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [tambahPopupOpen, setTambahPopupOpen] = useState(false);
   const [sortConfig, setSortConfig] = useState({ key: 'created_at', direction: 'desc' });
   const [selectedData, setSelectedData] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -35,6 +40,146 @@ const EditMahasiswa = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
   const queryClient = useQueryClient();
+  const [invalidStudents, setInvalidStudents] = useState([]);
+
+  const {
+    isLoading: isLoadingContract,
+    isError: isErrorContract,
+    data: dataContract,
+    error: errorContract,
+  } = getContracts(RoutesApi.url + "api/admin/contract", getCookieToken(), 10000, "desc");
+
+  const [contractMap, setContractMap] = useState({});
+
+  useEffect(() => {
+    if (dataContract?.data) {
+      const map = {};
+      dataContract.data.forEach(item => {
+        // Pastikan item punya id dan contract_code
+        if (item.id && item.contract_code) {
+          map[item.contract_code] = item.id;
+        }
+      });
+      setContractMap(map);
+      console.log("[DEBUG] Contract Map created:", map); // <-- untuk cek
+    }
+  }, [dataContract]);
+
+  const mutationCreate = useMutation({
+    mutationFn: async ({ students, contract_id }) => {
+      const csrf = await getCsrf();
+
+      // ✅ Ambil ID integer dari mapping
+      const contractIdInt = contractMap[contract_id];
+
+      if (!contractIdInt) {
+        throw new Error(`Kontrak "${contract_id}" tidak ditemukan dalam daftar.`);
+      }
+
+      console.log("[DEBUG] Sending contract_id as integer:", contractIdInt);
+
+      const createPromises = students.map((mahasiswa) => {
+        return axios.post(
+          RoutesApi.url + "api/admin/users",
+          {
+            contract_id: contractIdInt, // ✅ SEKARANG INTEGER!
+            name: mahasiswa.name,
+            email: mahasiswa.email,
+            status: mahasiswa.status,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+              "X-CSRF-TOKEN": csrf,
+              Authorization: `Bearer ${cookies.token}`,
+            },
+            params: {
+              intent: IntentEnum.API_USER_CREATE_MAHASISWA,
+            },
+          }
+        );
+      });
+
+      return Promise.all(createPromises);
+    },
+    onError: (error) => {
+      console.log(error);
+      Swal.fire("Gagal !", error?.response?.data?.message || error.message, "error");
+    },
+    onSuccess: (data) => {
+      Swal.fire({
+        title: "Berhasil!",
+        text: "Mahasiswa berhasil ditambahkan!",
+        icon: "success",
+        timer: 1500,
+        showConfirmButton: false,
+        timerProgressBar: true,
+      }).then(() => {
+        // ✅ Tutup popup setelah sukses
+        setTambahPopupOpen(false);
+        // Opsional: invalidate cache agar tabel refresh
+        queryClient.invalidateQueries({ queryKey: ['mahasiswa'] });
+      });
+    },
+  });
+
+  const handleCreateMultipleStudents = (
+    validStudents,
+    contract_id,
+    invalidStudents = [],
+    errors = []
+  ) => {
+    if (!contract_id) {
+      Swal.fire("Gagal", "Harap pilih kontrak terlebih dahulu.", "error");
+      return;
+    }
+
+    Swal.fire({
+      title: "Tambah Mahasiswa",
+      text: `Anda akan menambahkan ${validStudents.length + invalidStudents.length
+        } mahasiswa baru. Lanjutkan?`,
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Ya, lanjutkan",
+      cancelButtonText: "Batal",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        mutationCreate.mutate(
+          { students: validStudents, contract_id },
+          {
+            onSuccess: () => {
+              if (invalidStudents.length > 0) {
+                setTambahPopupOpen(true);
+                setInvalidStudents(invalidStudents);
+                Swal.fire({
+                  title: "Sebagian Data Berhasil Disimpan",
+                  html: `${validLecturers.length
+                    } mahasiswa berhasil disimpan.<br><br>
+                         ${invalidLecturers.length
+                    } mahasiswa gagal disimpan dengan error:<br>
+                         ${errors.join("<br>")}`,
+                  icon: "warning",
+                  timer: 2000,
+                  showConfirmButton: false,
+                  timerProgressBar: true,
+                });
+              } else {
+                Swal.fire({
+                  title: "Berhasil!",
+                  text: "Semua mahasiswa berhasil ditambahkan!",
+                  icon: "success",
+                  timer: 2000,
+                  showConfirmButton: false,
+                  timerProgressBar: true,
+                });
+              } 
+            },
+          }
+        );
+      }
+    });
+  };
 
   const constructApiUrl = () => {
     const baseUrl = RoutesApi.getUserAdmin.url;
@@ -131,6 +276,9 @@ const EditMahasiswa = () => {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
+            </div>
+            <div className="add-button-container">
+              <button className="add-button" onClick={() => setTambahPopupOpen(true)}>+ Tambah</button>
             </div>
           </div>
           <div className="table-container">
@@ -251,11 +399,10 @@ const EditMahasiswa = () => {
                             </button>
                         ))} */}
                 <button
-                  className={`page-item ${
-                    currentPage === Math.ceil(data.length / itemsPerPage)
+                  className={`page-item ${currentPage === Math.ceil(data.length / itemsPerPage)
                       ? "disabled"
                       : ""
-                  }`}
+                    }`}
                   onClick={() => {
                     console.log(data.links.next);
                     setUrl(data.links.next);
@@ -273,6 +420,14 @@ const EditMahasiswa = () => {
               onClose={() => setIsOpen(false)}
               data={selectedData}
               onSave={handleUpdateMahasiswa}
+            />
+          )}
+          {tambahPopupOpen && (
+            <TambahMahasiswa
+              isLoading={mutationCreate.isPending} // ✅ ini sudah benar
+              onClose={() => setTambahPopupOpen(false)}
+              onSave={handleCreateMultipleStudents}
+              dataContract={dataContract}
             />
           )}
         </div>

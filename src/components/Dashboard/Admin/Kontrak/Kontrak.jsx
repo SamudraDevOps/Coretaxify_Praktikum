@@ -30,6 +30,7 @@ const Kontrak = () => {
   // Inisialisasi URL list kontrak sudah di-HTTPS-kan
   const [url, setUrl] = useState(toHTTPS(RoutesApi.contractAdmin));
   const [sortDirection, setSortDirection] = useState("asc");
+  const [inputSearch, setInputSearch] = useState("");
   const [search, setSearch] = useState("");
   const { toast } = useToast();
 
@@ -42,8 +43,6 @@ const Kontrak = () => {
     search,
     currentPage
   );
-
-  console.log(data);
 
   // Data task (pakai toHTTPS juga)
   const {
@@ -82,6 +81,7 @@ const Kontrak = () => {
 
   // Function to refresh data after actions
   const handleDataRefresh = () => {
+    setSearch(inputSearch);
     refetch();
   };
 
@@ -173,8 +173,8 @@ const Kontrak = () => {
           <input
             type="text"
             className="search-input"
-            placeholder="Cari Data Instansi 🔎"
-            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Cari Data Kontrak 🔎"
+            onChange={(e) => setInputSearch(e.target.value)}
           />
           <button
             className="bg-blue-500 p-2 rounded-md text-white text-sm ml-2 hover:cursor-pointer hover:bg-blue-700"
