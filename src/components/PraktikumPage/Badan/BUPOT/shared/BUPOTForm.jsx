@@ -20,6 +20,7 @@ import Select from "react-select";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { CookiesProvider, useCookies } from "react-cookie";
+import { RoutesApi } from "@/Routes";
 
 const BUPOTForm = ({
   type,
@@ -213,6 +214,23 @@ const BUPOTForm = ({
     countryData.sort((a, b) => a.name.common.localeCompare(b.name.common))
   );
 
+  // Form data state
+  const [formData, setFormData] = useState({
+    pembulatan_kotor: "0"
+  });
+
+  // Initialize form data
+  useEffect(() => {
+    if (initialData && Object.keys(initialData).length > 0) {
+      setFormData(initialData);
+    }
+  }, [initialData]);
+
+  console.log(formData);
+
+  // 2nd Form data state
+  const [supportingFormData, setSupportingFormData] = useState({});
+
   const getBupot = () => {
     const pathSegments = location.pathname.split("/");
     const bupotType = pathSegments.find((segment) =>
@@ -275,12 +293,17 @@ const BUPOTForm = ({
           headers: {
             Authorization: `Bearer ${cookies.token}`,
           },
+          params: {
+            npwp_akun: formData.npwp_akun,
+            masa_awal: formData.masa_awal,
+            masa_akhir: formData.masa_akhir,
+          }
         });
         console.log(data);
         return data;
       },
-      // enabled: false,
-      // refetchOnWindowFocus: false,
+      enabled: formData.npwp_akun !== undefined && formData.masa_awal !== undefined && formData.masa_akhir !== undefined,
+      refetchOnWindowFocus: false,
     });
 
   // Helper to update multiple form fields
@@ -290,23 +313,6 @@ const BUPOTForm = ({
       ...updates,
     }));
   };
-
-  // Form data state
-  const [formData, setFormData] = useState({
-    pembulatan_kotor: "0"
-  });
-
-  // Initialize form data
-  useEffect(() => {
-    if (initialData && Object.keys(initialData).length > 0) {
-      setFormData(initialData);
-    }
-  }, [initialData]);
-
-  console.log(formData);
-
-  // 2nd Form data state
-  const [supportingFormData, setSupportingFormData] = useState({});
 
   // State for month options
   const [monthOption, setMonthOption] = useState([]);
@@ -740,6 +746,7 @@ const BUPOTForm = ({
     formData.biaya_jabatan,
     formData.iuran_pensiun,
     formData.sumbangan_keagamaan_pemberi_kerja,
+    getData,
   ]);
 
   // Helper untuk BP 21 -> get cara perhitungan, get status TER,
@@ -3218,7 +3225,7 @@ const BUPOTForm = ({
                     type="text"
                     className="w-64 flex-auto border p-2 rounded"
                     placeholder="Bupot A1 Sebelumnya"
-                    value={formData.nomor_bpa1_sebelumnya || ""}
+                    value={getData?.nomor_bpa1_sebelumnya || ""}
                     onChange={(e) => {
                       updateFormData("nomor_bpa1_sebelumnya", e.target.value);
                     }}
@@ -3227,11 +3234,10 @@ const BUPOTForm = ({
                 </div>
 
                 {/* Tombol Untuk Get Data */}
-                {/* <div className="mt-4 flex justify-between gap-4">
+                <div className="mt-4 flex justify-between gap-4">
                   <button
                     onClick={() => {
                       getDataRefetch();
-                      console.log(getData);
                     }}
                     disabled={getDataIsLoading}
                     className="bg-blue-600 text-white px-4 py-2 rounded"
@@ -3239,13 +3245,10 @@ const BUPOTForm = ({
                     {getDataIsLoading ? "Loading..." : "Get Data"}
                   </button>
 
-                  {getDataIsError && <p className="text-red-500">Error fetching data</p>}
-                  {getData && (
-                    <pre className="mt-4 bg-gray-100 p-2 rounded">
-                      {JSON.stringify(getData, null, 2)}
-                    </pre>
+                  {getData?.length > 0 && (
+                    <p className="text-green-500">Data fetched successfully</p>
                   )}
-                </div> */}
+                </div>
 
                 {/* Penghasilan Neto dari Pemotongan Sebelumnya */}
                 <div className="mt-4 flex justify-between gap-4">
@@ -3258,7 +3261,7 @@ const BUPOTForm = ({
                     className="w-64 flex-auto border p-2 rounded"
                     placeholder="Wajib Diisi"
                     value={
-                      formatRupiah(formData.penghasilan_neto_sebelumnya) || ""
+                      formatRupiah(getData?.penghasilan_neto_sebelumnya) || 0
                     }
                     onChange={(e) => {
                       const rawValue = e.target.value.replace(/[^\d]/g, "");
@@ -3398,7 +3401,7 @@ const BUPOTForm = ({
                     placeholder="Wajib Diisi"
                     value={
                       formatRupiah(
-                        formData.pph_pasal_21_potongan_bpa1_sebelumnya
+                        getData?.pph_pasal_21_potongan_bpa1_sebelumnya
                       ) || ""
                     }
                     onChange={(e) => {
@@ -3454,7 +3457,7 @@ const BUPOTForm = ({
                     placeholder="Wajib Diisi"
                     value={
                       formatRupiah(
-                        formData.pph_pasal_21_ditanggung_pemerintah
+                        getData?.pph_pasal_21_ditanggung_pemerintah
                       ) || ""
                     }
                     onChange={(e) => {
