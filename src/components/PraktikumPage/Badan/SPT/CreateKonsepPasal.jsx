@@ -36,18 +36,20 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
   console.log(data);
   const [cookies] = useCookies(["token"]);
   const { id, akun, idSpt } = useParams();
-  // const [form, setForm] = useState({
-  //   cl_bp1_2: "",
-  //   cl_bp1_3: "",
-  //   cl_bp1_5: "",
-  //   cl_bp1_4: "0.00", // calculated
-  //   cl_bp1_6: "0.00", // calculated
-  //   cl_bp2_2: "",
-  //   cl_bp2_3: "",
-  //   cl_bp2_5: "",
-  //   cl_bp2_4: "0.00", // calculated
-  //   cl_bp2_6: "0.00",
-  // });
+  const [posted, setPosted] = useState(false);
+  const [isPosting, setIsPosting] = useState(false);
+  const [form, setForm] = useState({
+    cl_bp1_2: 0,
+    cl_bp1_3: 0,
+    cl_bp1_5: 0,
+    cl_bp1_4: 0,
+    cl_bp1_6: 0,
+    cl_bp2_2: 0,
+    cl_bp2_3: 0,
+    cl_bp2_5: 0,
+    cl_bp2_4: 0,
+    cl_bp2_6: 0,
+  });
   const formatRupiah = (number) => {
     if (typeof number !== "number" && typeof number !== "string") return "";
 
@@ -69,18 +71,62 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
     }).format(numericValue);
   };
 
-  const [form, setForm] = useState({
-    cl_bp1_2: formatRupiah(data.detail_spt.cl_bp1_2) || 0,
-    cl_bp1_3: formatRupiah(data.detail_spt.cl_bp1_3) || 0,
-    cl_bp1_5: formatRupiah(data.detail_spt.cl_bp1_5) || 0,
-    cl_bp1_4: formatRupiah(data.detail_spt.cl_bp1_4) || 0, // calculated
-    cl_bp1_6: formatRupiah(data.detail_spt.cl_bp1_6) || 0, // calculated
-    cl_bp2_2: formatRupiah(data.detail_spt.cl_bp2_2) || 0,
-    cl_bp2_3: formatRupiah(data.detail_spt.cl_bp2_3) || 0,
-    cl_bp2_5: formatRupiah(data.detail_spt.cl_bp2_5) || 0,
-    cl_bp2_4: formatRupiah(data.detail_spt.cl_bp2_4) || 0, // calculated
-    cl_bp2_6: formatRupiah(data.detail_spt.cl_bp2_6) || 0,
-  });
+  const fakePost = () => {
+    setIsPosting(true);
+
+    setTimeout(() => {
+      try {
+        setPosted(true);
+
+        setForm({
+          cl_bp1_2: formatRupiah(data.detail_spt.cl_bp1_2) || 0,
+          cl_bp1_3: formatRupiah(data.detail_spt.cl_bp1_3) || 0,
+          cl_bp1_5: formatRupiah(data.detail_spt.cl_bp1_5) || 0,
+          cl_bp1_4: formatRupiah(data.detail_spt.cl_bp1_4) || 0, // calculated
+          cl_bp1_6: formatRupiah(data.detail_spt.cl_bp1_6) || 0, // calculated
+          cl_bp2_2: formatRupiah(data.detail_spt.cl_bp2_2) || 0,
+          cl_bp2_3: formatRupiah(data.detail_spt.cl_bp2_3) || 0,
+          cl_bp2_5: formatRupiah(data.detail_spt.cl_bp2_5) || 0,
+          cl_bp2_4: formatRupiah(data.detail_spt.cl_bp2_4) || 0, // calculated
+          cl_bp2_6: formatRupiah(data.detail_spt.cl_bp2_6) || 0,
+        });
+
+        Swal.fire({
+          title: "Berhasil!",
+          text: "Konsep SPT berhasil dihitung.",
+          icon: "success",
+          timer: 2000,
+          showConfirmButton: false,
+          timerProgressBar: true,
+        });
+
+      } catch (error) {
+        console.error("Error saving data:", error);
+
+        Swal.fire(
+          "Gagal!",
+          "Terjadi kesalahan saat menyimpan data.",
+          "error"
+        );
+      } finally {
+        setIsPosting(false);
+      }
+
+    }, 2000);
+  }
+
+  // const [form, setForm] = useState({
+  //   cl_bp1_2: formatRupiah(data.detail_spt.cl_bp1_2) || 0,
+  //   cl_bp1_3: formatRupiah(data.detail_spt.cl_bp1_3) || 0,
+  //   cl_bp1_5: formatRupiah(data.detail_spt.cl_bp1_5) || 0,
+  //   cl_bp1_4: formatRupiah(data.detail_spt.cl_bp1_4) || 0, // calculated
+  //   cl_bp1_6: formatRupiah(data.detail_spt.cl_bp1_6) || 0, // calculated
+  //   cl_bp2_2: formatRupiah(data.detail_spt.cl_bp2_2) || 0,
+  //   cl_bp2_3: formatRupiah(data.detail_spt.cl_bp2_3) || 0,
+  //   cl_bp2_5: formatRupiah(data.detail_spt.cl_bp2_5) || 0,
+  //   cl_bp2_4: formatRupiah(data.detail_spt.cl_bp2_4) || 0, // calculated
+  //   cl_bp2_6: formatRupiah(data.detail_spt.cl_bp2_6) || 0,
+  // });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -481,7 +527,7 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
       console.log("other data : ", data.data);
       return data.data;
     },
-    enabled: activeTabContent !== null && activeTabContent !== undefined,
+    enabled: posted === true && activeTabContent !== null && activeTabContent !== undefined,
     // Add these options to prevent unnecessary refetches
     staleTime: 5 * 60 * 1000, // 5 minutes
     cacheTime: 10 * 60 * 1000, // 10 minutes
@@ -550,6 +596,55 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                           <option value="normal">{data.status}</option>
                         </select>
                       </div>
+                    </div>
+
+                    <div className="mt-4 flex items-center gap-4">
+                      {/* <button
+                        onClick={() => calculateSpt.mutate()}
+                        className="bg-yellow-500 text-white px-4 py-2 rounded-md shadow-sm hover:bg-yellow-600 transition"
+                      >
+                        Posting SPT
+                      </button> */}
+                      <button
+                        onClick={fakePost}
+                        disabled={isPosting || posted}
+                        className={`flex items-center justify-center gap-2 px-4 py-2 rounded-md shadow-sm transition ${isPosting || posted
+                          ? "bg-yellow-300 text-white cursor-not-allowed"
+                          : "bg-yellow-500 hover:bg-yellow-600 text-white"
+                          }`}
+                      >
+                        {isPosting ? (
+                          <>
+                            <svg
+                              className="animate-spin h-4 w-4 text-white"
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                            >
+                              <circle
+                                className="opacity-25"
+                                cx="12"
+                                cy="12"
+                                r="10"
+                                stroke="currentColor"
+                                strokeWidth="4"
+                              ></circle>
+                              <path
+                                className="opacity-75"
+                                fill="currentColor"
+                                d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                              ></path>
+                            </svg>
+                            Memposting...
+                          </>
+                        ) : (
+                          "Posting SPT"
+                        )}
+                      </button>
+                      <p className="text-sm text-red-500">
+                        {/* WAJIB DI CLICK{" "} */}
+                        <strong>WAJIB DI CLICK *</strong>
+                      </p>
                     </div>
                   </div>
                 )}
