@@ -1557,7 +1557,7 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                             <input
                               type="text"
                               readOnly
-                              value="2002909301990"
+                              value={data.npwp}
                               className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
                             />
                           </div>
@@ -1568,7 +1568,7 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                             <input
                               type="text"
                               readOnly
-                              value="2025"
+                              value={data.masa_tahun}
                               className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
                             />
                           </div>
@@ -1762,7 +1762,26 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                                 Jumlah Pendapatan Kotor dan Pajak Penghasilan
                                 Yang Ditanggung Oleh Pemerintah
                               </td>
-                              <td className="p-2 text-center">0</td>
+                              <td className="p-2 text-center">
+                                {sptOther?.data
+                                  ? formatRupiah(
+                                    sptOther.data
+                                      .filter(
+                                        (item) =>
+                                          item.fasilitas_pajak ===
+                                          "pph_ditanggung_pemerintah"
+                                      )
+                                      .reduce(
+                                        (total, item) =>
+                                          total +
+                                          (parseFloat(
+                                            item.pph_pasal_21_terutang
+                                          ) || 0),
+                                        0
+                                      )
+                                  )
+                                  : "0"}
+                              </td>
                               <td className="p-2"></td>
                             </tr>
                             <tr>
@@ -1773,7 +1792,26 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                                 Jumlah Pendapatan Kotor dan Pajak Penghasilan
                                 Yang Dipotong
                               </td>
-                              <td className="p-2 text-center">0</td>
+                              <td className="p-2 text-center">
+                                {sptOther?.data
+                                  ? formatRupiah(
+                                    sptOther.data
+                                      .filter(
+                                        (item) =>
+                                          item.fasilitas_pajak !==
+                                          "pph_ditanggung_pemerintah"
+                                      )
+                                      .reduce(
+                                        (total, item) =>
+                                          total +
+                                          (parseFloat(
+                                            item.pph_pasal_21_terutang
+                                          ) || 0),
+                                        0
+                                      )
+                                  )
+                                  : "0"}
+                              </td>
                               <td className="p-2"></td>
                             </tr>
                             <tr>
@@ -1785,7 +1823,26 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                                 Penghasilan Yang Ditanggung Oleh Pemerintah{" "}
                                 <br /> serta Pajak penghasilan Yang Dipotong
                               </td>
-                              <td className="p-2 text-center">0</td>
+                              <td className="p-2 text-center">
+                                {sptOther?.data
+                                  ? formatRupiah(
+                                    sptOther.data
+                                      .filter(
+                                        (item) =>
+                                          item.fasilitas_pajak ===
+                                          "pph_ditanggung_pemerintah"
+                                      )
+                                      .reduce(
+                                        (total, item) =>
+                                          total +
+                                          (parseFloat(
+                                            item.dasar_pengenaan_pajak
+                                          ) || 0),
+                                        0
+                                      )
+                                  )
+                                  : "0"}
+                              </td>
                               <td className="p-2"></td>
                             </tr>
                           </tfoot>
@@ -2109,7 +2166,25 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                               >
                                 Total
                               </td>
-                              <td className="p-2 text-center">0</td>
+                              <td className="p-2 text-center">
+                                {sptOther?.data
+                                  ? formatRupiah(
+                                    sptOther.data
+                                      .filter(
+                                        (item) => item.fasilitas_pajak !== "pph_ditanggung_pemerintah"
+                                      )
+                                      .reduce(
+                                        (total, item) =>
+                                          total +
+                                          (parseFloat(
+                                            item.pph_pasal_21_penghasilan_kena_pajak
+                                          ) || 0),
+                                        0
+                                      )
+                                  )
+                                  : "0"
+                                }
+                              </td>
                               <td className="p-2"></td>
                             </tr>
                           </tfoot>
