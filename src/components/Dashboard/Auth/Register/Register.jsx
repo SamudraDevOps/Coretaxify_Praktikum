@@ -1,12 +1,14 @@
 import React, { useState, useRef } from "react";
 import { FaRegEye, FaEyeSlash } from "react-icons/fa";
-import CTaxifyLogo from "../../../../assets/images/4.png";
+// import CTaxifyLogo from "../../../../assets/images/4.png";
+import CTaxifyLogo from "../../../../assets/images/Event/ntl3.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { RoutesApi } from "@/Routes";
 import { useCookies } from "react-cookie";
 import Swal from "sweetalert2";
+import Snowfall from "react-snowfall";
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -199,7 +201,10 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-300 p-4">
+      <Snowfall 
+        color="snow"
+      />
       <div className="bg-white shadow-md rounded-lg p-8 max-w-md w-full">
         <img
           src={CTaxifyLogo}
@@ -207,6 +212,7 @@ const Register = () => {
           className="w-50 mx-auto mb-4"
         />
         <p className="text-center text-gray-600 mb-6">
+          <h1 className="text-xl font-bold text-blue-900 p-2">Selamat Merayakan Hari Natal dan Tahun Baru</h1>
           Mari gabung dengan kami menjadi masa depan sadar pajak
         </p>
         <form className="space-y-4" onSubmit={handleSubmit}>
