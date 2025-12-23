@@ -9,7 +9,10 @@
 
       "@sections/*": ["src/components/PraktikumPage/Badan/SPT/Spt_Pribadi/Lampiran/sections/*"],
       "@lampiran/*": ["src/components/PraktikumPage/Badan/SPT/Spt_Pribadi/Lampiran/components/*"],
-      "@utils/*": ["src/components/PraktikumPage/Badan/SPT/utils/*"]
+      "@utils/*": ["src/components/PraktikumPage/Badan/SPT/utils/*"],
+
+      "@badanSections/*": ["src/components/PraktikumPage/Badan/SPT/Spt_Badan/Lampiran/section/*"],
+      "@bandaLampiran/*": ["src/components/PraktikumPage/Badan/SPT/Spt_Badan/Lampiran/components/*"]
     }
   },
   "exclude": ["node_modules", "dist"]
