@@ -57,3 +57,13 @@ export const useFormattedNumberInput = (value, onChange) => {
     handleChange,
   };
 };
+
+// Helper function untuk memastikan nilai selalu angka
+export const toNumber = (val) => {
+  if (val === null || val === undefined || val === "") return 0;
+  // Jika sudah angka, return langsung
+  if (typeof val === "number") return val;
+  // Jika string, parse dulu dengan parseFormattedNumber
+  const parsed = parseFormattedNumber(val);
+  return parsed === null ? 0 : parsed;
+};
