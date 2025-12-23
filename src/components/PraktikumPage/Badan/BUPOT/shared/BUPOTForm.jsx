@@ -282,11 +282,12 @@ const BUPOTForm = ({
   // GET DATA BPA1
   const {
       data: getData,
-      loading: getDataIsLoading,
+      isLoading: getDataIsLoading,
+      isFetching: getDataIsFetching,
       error: getDataIsError,
       refetch: getDataRefetch,
     } = useQuery({
-      queryKey: [id, akun],
+      queryKey: ['bupot-get-data', id, akun],
       queryFn: async () => {
         const url = `${RoutesApi.apiUrl}student/assignments/${id}/sistem/${akun}/bupot/get-data`;
         const { data } = await axios.get(url, {
@@ -300,11 +301,50 @@ const BUPOTForm = ({
           }
         });
         console.log(data);
+        updateMultipleFields({
+          nomor_bpa1_sebelumnya: data?.nomor_bpa1_sebelumnya,
+          penghasilan_neto_sebelumnya: data?.penghasilan_neto_sebelumnya,
+          pph_pasal_21_potongan_bpa1_sebelumnya: data?.pph_pasal_21_potongan_bpa1_sebelumnya,
+        });
         return data;
       },
-      enabled: formData.npwp_akun !== undefined && formData.masa_awal !== undefined && formData.masa_akhir !== undefined,
+      enabled: false,
+      refetchOnMount: false,
       refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
     });
+
+  // handle get data
+  const handleGetData = () => {
+    // cek form data
+    if (!formData.npwp_akun || !formData.masa_awal || !formData.masa_akhir) {
+      return;
+    }
+
+    getDataRefetch();
+  }
+
+  const {
+    data: bpbptData
+  } = useQuery({
+    queryKey: ['bupot-bpbpt', formData.npwp_akun, formData.masa_awal, formData.masa_akhir],
+    queryFn: async () => {
+      const url = `${RoutesApi.apiUrl}student/assignments/${id}/sistem/${akun}/bupot/get-bupot-bpbpt`;
+      const { data } = await axios.get(url, {
+        headers: {
+          Authorization: `Bearer ${cookies.token}`,
+        },
+        params: {
+          npwp_akun: formData.npwp_akun,
+          masa_awal: formData.masa_awal,
+          masa_akhir: formData.masa_akhir,
+        }
+      });
+      console.log(data);
+      updateFormData("pph_pasal_21_ditanggung_pemerintah", data?.pph_pasal_21_ditanggung_pemerintah);
+      return data;
+    }
+  });
 
   // Helper to update multiple form fields
   const updateMultipleFields = (updates) => {
@@ -667,7 +707,7 @@ const BUPOTForm = ({
         const pph21Terutang = pph21;
         const pph21DipotongBupot = 0;
         const pph21TerutangBupotIni = pph21Terutang - pph21DipotongBupot;
-        const pph21DTP = 0;
+        const pph21DTP = parseFloat(formData.pph_pasal_21_ditanggung_pemerintah) || 0;
         const pph21MasaPajakTerakhir = pph21TerutangBupotIni - pph21DTP;
         // const 
         
@@ -699,6 +739,22 @@ const BUPOTForm = ({
           pph_pasal_21_ditanggung_pemerintah: pph21DTP,
           pph_pasal_21_masa_pajak_terakhir: pph21MasaPajakTerakhir
         });
+
+        console.log({
+          dasar_pengenaan_pajak: bruto,
+          biaya_jabatan: biayaJabatan,
+          jumlah_pengurangan: totalPengurangan,
+          jumlah_penghasilan_neto: netto,
+          penghasilan_neto_pph_pasal_21: penghasilanNetoPphPasal21,
+          penghasilan_tidak_kena_pajak: potonganPTKP,
+          penghasilan_kena_pajak: penghasilanKenaPajak,
+          pph_pasal_21_penghasilan_kena_pajak: pph21,
+          pph_pasal_21_terutang: pph21Terutang,
+          pph_pasal_21_potongan_bpa1_sebelumnya: pph21DipotongBupot,
+          pph_pasal_21_terutang_bupot_ini: pph21TerutangBupotIni,
+          pph_pasal_21_ditanggung_pemerintah: pph21DTP,
+          pph_pasal_21_masa_pajak_terakhir: pph21MasaPajakTerakhir
+        })
         break;
 
       case "BP A2":
@@ -3237,12 +3293,13 @@ const BUPOTForm = ({
                 <div className="mt-4 flex justify-between gap-4">
                   <button
                     onClick={() => {
-                      getDataRefetch();
+                      handleGetData();
+                      // getDataRefetch();
                     }}
-                    disabled={getDataIsLoading}
+                    disabled={getDataIsFetching}
                     className="bg-blue-600 text-white px-4 py-2 rounded"
                   >
-                    {getDataIsLoading ? "Loading..." : "Get Data"}
+                    {getDataIsFetching ? "Loading..." : "Get Data"}
                   </button>
 
                   {getData?.length > 0 && (
@@ -3261,7 +3318,7 @@ const BUPOTForm = ({
                     className="w-64 flex-auto border p-2 rounded"
                     placeholder="Wajib Diisi"
                     value={
-                      formatRupiah(getData?.penghasilan_neto_sebelumnya) || 0
+                      formatRupiah(getData?.penghasilan_neto_sebelumnya) || ""
                     }
                     onChange={(e) => {
                       const rawValue = e.target.value.replace(/[^\d]/g, "");
@@ -3457,7 +3514,7 @@ const BUPOTForm = ({
                     placeholder="Wajib Diisi"
                     value={
                       formatRupiah(
-                        getData?.pph_pasal_21_ditanggung_pemerintah
+                        bpbptData?.pph_pasal_21_ditanggung_pemerintah
                       ) || ""
                     }
                     onChange={(e) => {
