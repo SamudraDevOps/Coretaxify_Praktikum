@@ -1,12 +1,16 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaRegEye, FaEyeSlash } from "react-icons/fa";
-import CTaxifyLogo from "../../../../assets/images/4.png";
+// import CTaxifyLogo from "../../../../assets/images/4.png";
+import CTaxifyLogo from "../../../../assets/images/Event/ntl3.png";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { RoutesApi } from "@/Routes";
 import { useCookies } from "react-cookie";
+import Snowfall from "react-snowfall";
 import Swal from "sweetalert2";
+import Snow from "../../../../assets/images/snow.png"
+import bg1 from "../../../../assets/images/bg1.jpg"
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -15,6 +19,9 @@ const Login = () => {
   const [errors, setErrors] = useState({});
   const [cookies, setCookie] = useCookies(["token", "role"]);
   const navigate = useNavigate();
+  const snowflake1 = document.createElement('img')
+  snowflake1.src = Snow
+  const images = [snowflake1];
 
   // Check if already logged in
   React.useEffect(() => {
@@ -29,7 +36,7 @@ const Login = () => {
 
   const validate = () => {
     let newErrors = {};
-    
+
     if (!username) {
       newErrors.username = "Email dibutuhkan.";
     } else if (!/\S+@\S+\.\S+/.test(username)) {
@@ -50,7 +57,7 @@ const Login = () => {
     setUsername(e.target.value);
     // Clear the username error when user types
     if (errors.username) {
-      setErrors({...errors, username: ""});
+      setErrors({ ...errors, username: "" });
     }
   };
 
@@ -58,7 +65,7 @@ const Login = () => {
     setPassword(e.target.value);
     // Clear the password error when user types
     if (errors.password) {
-      setErrors({...errors, password: ""});
+      setErrors({ ...errors, password: "" });
     }
   };
 
@@ -71,9 +78,9 @@ const Login = () => {
           Accept: "application/json",
         },
       });
-      
+
       axios.defaults.headers.common["X-CSRF-TOKEN"] = response.data.token;
-      
+
       try {
         // Login
         const data = await axios.post(
@@ -93,9 +100,9 @@ const Login = () => {
         return data;
       } catch (error) {
         // Check if this is a 403 with verification_required flag
-        if (error.response && 
-            error.response.status === 403 && 
-            error.response.data.verification_required) {
+        if (error.response &&
+          error.response.status === 403 &&
+          error.response.data.verification_required) {
           // This is not a real error, but a signal that verification is needed
           return {
             status: 403,
@@ -109,21 +116,21 @@ const Login = () => {
     },
     onSuccess: (response) => {
       console.log("Login response:", response);
-      
+
       // Check if verification is required
       if (response.status === 403 && response.needsVerification) {
         // Store token for verification
         setCookie("token", response.data.token, { path: "/" });
-        
+
         // Store user email for verification
         localStorage.setItem("pendingVerificationEmail", username);
-        
+
         // Extract and store role information if available
         if (response.data.user && response.data.user.roles && response.data.user.roles.length > 0) {
           const role = response.data.user.roles[0].name;
           setCookie("role", role, { path: "/" });
         }
-        
+
         // Redirect to OTP verification
         Swal.fire({
           title: "Verifikasi Email Diperlukan",
@@ -135,12 +142,12 @@ const Login = () => {
         });
         return;
       }
-      
+
       // Normal login flow for verified users
       const role = response.data.user.roles[0].name;
       setCookie("token", response.data.token, { path: "/" });
       setCookie("role", role, { path: "/" });
-      
+
       // Redirect to dashboard
       navigate(`/${role}`);
     },
@@ -152,11 +159,11 @@ const Login = () => {
         "error"
       );
     },
-  });  
+  });
 
   const handleLogin = (e) => {
     e.preventDefault();
-    
+
     // Only validate when form is submitted
     if (validate()) {
       mutation.mutate();
@@ -164,7 +171,11 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4">
+    <div className="min-h-screen flex flex-col items-center bg-gray-300 justify-center p-4">
+      
+      <Snowfall
+        color="snow"
+      />
       <div className="bg-white shadow-md rounded-lg p-8 max-w-md w-full">
         <img
           src={CTaxifyLogo}
@@ -172,6 +183,7 @@ const Login = () => {
           className="w-50 mx-auto mb-4"
         />
         <p className="text-center text-gray-600 mb-6">
+          <h1 className="text-xl font-bold text-blue-900 p-2">Selamat Merayakan Hari Natal dan Tahun Baru</h1> 
           Mari gabung dengan kami menjadi masa depan sadar pajak
         </p>
         <form className="space-y-4" onSubmit={handleLogin}>
@@ -189,7 +201,7 @@ const Login = () => {
               placeholder="Masukkan email Anda"
               value={username}
               onChange={handleUsernameChange}
-              // required
+            // required
             />
             {errors.username && (
               <p className="text-red-500 text-sm">{errors.username}</p>
@@ -211,7 +223,7 @@ const Login = () => {
                 placeholder="Masukkan password Anda"
                 value={password}
                 onChange={handlePasswordChange}
-                // required
+              // required
               />
               <button
                 type="button"
@@ -221,9 +233,9 @@ const Login = () => {
                 {showPassword ? <FaEyeSlash /> : <FaRegEye />}
               </button>
             </div>
-              {errors.password && (
-                <p className="text-red-500 text-sm">{errors.password}</p>
-              )}
+            {errors.password && (
+              <p className="text-red-500 text-sm">{errors.password}</p>
+            )}
           </div>
 
           <div className="text-right">
@@ -242,7 +254,7 @@ const Login = () => {
           >
             {mutation.isPending ? "Memproses..." : "Login"}
           </button>
-          
+
           {mutation.isError && (
             <div className="text-xs mt-2 text-red-700">
               {mutation.error.response?.data?.message || "Terjadi kesalahan. Silakan coba lagi."}
@@ -260,7 +272,9 @@ const Login = () => {
           </Link>
         </p>
       </div>
+
     </div>
+
   );
 };
 
