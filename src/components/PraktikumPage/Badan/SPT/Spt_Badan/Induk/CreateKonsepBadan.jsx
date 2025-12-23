@@ -16,8 +16,7 @@ import {
 } from "./section";
 import {
   Header,
-  LampiranL1B,
-  LampiranL1C,
+  Lampiran1D,
   Lampiran2,
   Lampiran3,
   Lampiran4,
@@ -72,20 +71,12 @@ const CreateKonsepBadan = () => {
     const allLampiran = [];
 
     allLampiran.push({
-      id: "lampiran-1B",
-      title: "L-1B",
-      subtitle: "Lampiran I - Penghasilan dari Pekerjaan",
-      component: "Lampiran_1B",
+      id: "lampiran-1D",
+      title: "L1-D",
+      subtitle: "Lampiran 1D - ",
+      component: "Lampiran_1D",
       badge: "Tersedia",
       order: 1, // Urutan pertama
-    });
-    allLampiran.push({
-      id: "lampiran-1C",
-      title: "L-1C",
-      subtitle: "Lampiran I - Penghasilan dari Usaha dan/atau Pekerjaan Bebas",
-      component: "Lampiran_1C",
-      badge: "Tersedia",
-      order: 2, // Urutan kedua
     });
     allLampiran.push({
       id: "lampiran-2",
@@ -235,10 +226,8 @@ const CreateKonsepBadan = () => {
   // STEP 8: Function untuk render content lampiran (Import lampiran ditampilkan di atas)
   const renderLampiranContent = (componentName, data) => {
     switch (componentName) {
-      case "Lampiran_1B":
-        return <LampiranL1B data={data} />;
-      case "Lampiran_1C":
-        return <LampiranL1C data={data} />;
+      case "Lampiran_1D":
+        return <Lampiran1D data={data} />;
       case "Lampiran_2":
         return <Lampiran2 data={data} />;
       case "Lampiran_3":
@@ -267,6 +256,7 @@ const CreateKonsepBadan = () => {
         return <Lampiran13A data={data} />;
       case "Lampiran_14":
         return <Lampiran14 data={data} />;
+
       default:
         return (
           <div className="text-center py-8">
