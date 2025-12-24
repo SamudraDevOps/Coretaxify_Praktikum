@@ -708,7 +708,7 @@ const BUPOTForm = ({
         const pph21DipotongBupot = 0;
         const pph21TerutangBupotIni = pph21Terutang - pph21DipotongBupot;
         const pph21DTP = parseFloat(formData.pph_pasal_21_ditanggung_pemerintah) || 0;
-        const pph21MasaPajakTerakhir = pph21TerutangBupotIni - pph21DTP;
+        const pph21MasaPajakTerakhir = pph21TerutangBupotIni > pph21DTP ? (pph21TerutangBupotIni - pph21DTP) : (pph21DTP - pph21TerutangBupotIni);
         // const 
         
         // console.log({
