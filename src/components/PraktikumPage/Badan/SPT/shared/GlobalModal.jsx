@@ -325,6 +325,27 @@ const GlobalModal = ({
     return () => window.removeEventListener("keydown", onKey);
   }, [isOpen, closeOnEsc, onClose]);
 
+  // Enter handler untuk save
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const onKey = (e) => {
+      // Cek jika user sedang mengetik di textarea, jangan trigger save
+      if (e.target.tagName === "TEXTAREA") return;
+
+      // Cek jika user sedang mengetik di select search, jangan trigger save
+      if (e.target.closest(".select__input")) return;
+
+      if (e.key === "Enter" && !e.shiftKey && !e.ctrlKey && !e.altKey && !e.metaKey) {
+        e.preventDefault();
+        handleSave();
+      }
+    };
+
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [isOpen, formData]); // dependency formData agar selalu dapat data terbaru
+
   // prevent body scroll saat modal terbuka
   useEffect(() => {
     if (isOpen) {
