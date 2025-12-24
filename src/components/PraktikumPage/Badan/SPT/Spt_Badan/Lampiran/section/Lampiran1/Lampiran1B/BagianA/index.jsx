@@ -5,6 +5,14 @@ import { getLampiran1FieldConfig } from "@shared/lampiran1FieldConfig";
 import LaporanLabaRugiTabel from "../../shared/LaporanLabaRugiTabel";
 import GlobalModal from "@shared/GlobalModal";
 import {
+  hitungSubtotal4004,
+  hitungSubtotal4020,
+  hitungSubtotal5020,
+  hitungSubtotal5030,
+  hitungSubtotal5040,
+  hitungSubtotal5070,
+  hitungSubtotal5080,
+  hitungSubtotal5100,
   hitungSubtotal4300,
   hitungSubtotal5400,
   hitungSubtotal4500,
@@ -89,47 +97,82 @@ const KODE_KOREKSI_OPTIONS = [
 ];
 
 const AKUN_KONTEKS = {
-  // Pendapatan
-  4021: ["jasa"],
-  4013: ["jasa"],
-  5020: ["jasa"],
-  4300: ["jasa"],
-  4199: ["jasa"],
+  // Penjualan
+  4002: ["manufaktur"],
+  4003: ["manufaktur"],
+  4004: ["manufaktur"],
 
-  //Beban
+  // Penjualan Dikurangi
 
-  5311: ["jasa"],
-  5312: ["jasa"],
-  5313: ["jasa"],
-  5314: ["jasa"],
-  5315: ["jasa"],
-  5316: ["jasa"],
-  5317: ["jasa"],
-  5318: ["jasa"],
-  5319: ["jasa"],
-  5320: ["jasa"],
-  5321: ["jasa"],
-  5399: ["jasa"],
-  5400: ["jasa"],
-  4500: ["jasa"],
+  4011: ["manufaktur"],
+  4012: ["manufaktur"],
+  4013: ["manufaktur"],
+  4020: ["manufaktur"],
+
+  // Harga Pokok Porduksi
+
+  5021: ["manufaktur"],
+  5022: ["manufaktur"],
+  5029: ["manufaktur"],
+  5030: ["manufaktur"],
+  5031: ["manufaktur"],
+  5032: ["manufaktur"],
+  5040: ["manufaktur"],
+  5050: ["manufaktur"],
+
+  // Biaya Pabrikasi
+
+  5051: ["manufaktur"],
+  5052: ["manufaktur"],
+  5058: ["manufaktur"],
+  5059: ["manufaktur"],
+  5069: ["manufaktur"],
+  5070: ["manufaktur"],
+  5080: ["manufaktur"],
+  5090: ["manufaktur"],
+  5099: ["manufaktur"],
+  5100: ["manufaktur"],
+  5008: ["manufaktur"],
+  5009: ["manufaktur"],
+  5020: ["manufaktur"],
+  4300: ["manufaktur"],
+  4199: ["manufaktur"],
+
+  // Beban Usaha
+
+  5311: ["manufaktur"],
+  5312: ["manufaktur"],
+  5313: ["manufaktur"],
+  5314: ["manufaktur"],
+  5315: ["manufaktur"],
+  5316: ["manufaktur"],
+  5317: ["manufaktur"],
+  5318: ["manufaktur"],
+  5319: ["manufaktur"],
+  5320: ["manufaktur"],
+  5321: ["manufaktur"],
+  5322: ["manufaktur"],
+  5399: ["manufaktur"],
+  5400: ["manufaktur"],
+  4500: ["manufaktur"],
 
   // Pendapatan Non Usaha
 
-  4501: ["jasa"],
-  4503: ["jasa"],
-  4511: ["jasa"],
-  4599: ["jasa"],
-  4600: ["jasa"],
+  4501: ["manufaktur"],
+  4503: ["manufaktur"],
+  4511: ["manufaktur"],
+  4599: ["manufaktur"],
+  4600: ["manufaktur"],
 
   // Beban Non Usaha
 
-  5405: ["jasa"],
-  5409: ["jasa"],
-  5421: ["jasa"],
-  5499: ["jasa"],
-  5500: ["jasa"],
-  4700: ["jasa"],
-  4800: ["jasa"],
+  5405: ["manufaktur"],
+  5409: ["manufaktur"],
+  5421: ["manufaktur"],
+  5499: ["manufaktur"],
+  5500: ["manufaktur"],
+  4700: ["manufaktur"],
+  4800: ["manufaktur"],
 };
 
 const LINE_ROWS = [];
@@ -175,13 +218,27 @@ const pickByKode = (kodes) => {
 };
 // ROWS STATIS
 const INITIAL_ROWS = [
-  // GROUP PENDAPATAN
-  { id: "g-pendapatan", type: "header", level: 0, keterangan: "Pendapatan" },
+  // GROUP PENJUALAN
+  { id: "g-penjualan", type: "header", level: 0, keterangan: "Penjualan" },
 
-  ...pickByKode(["4021"]),
+  ...pickByKode(["4002", "4003"]),
 
-  ...pickByKode(["4013", "5020"]).map((row) => {
-    if ((row.kodeAkun === "4013", "4013")) {
+  ...pickByKode(["4004"]).map((row) => {
+    if (row.kodeAkun === "4004") {
+      return {
+        ...row,
+        type: "label",
+        variant: "bold",
+      };
+    }
+    return row;
+  }),
+
+  // DIKURANGI:
+  { id: "label-dikurangi", type: "label", level: 0, keterangan: "Dikurangi :", variant: "bold" },
+
+  ...pickByKode(["4011", "4012", "4013"]).map((row) => {
+    if ((row.kodeAkun === "4011", "4012", "4013")) {
       return {
         ...row,
         level: 1,
@@ -190,13 +247,141 @@ const INITIAL_ROWS = [
     return row;
   }),
 
-  ...pickByKode(["4300"]).map((row) => {
-    if (row.kodeAkun === "4300") {
+  ...pickByKode(["4020"]).map((row) => {
+    if (row.kodeAkun === "4020") {
       return {
         ...row,
         type: "label",
         variant: "bold",
-        level: 0,
+      };
+    }
+    return row;
+  }),
+
+  // GROUP Harga Pokok Produksi
+  { id: "g-harga-pokok-produksi", type: "header", level: 0, keterangan: "Harga Pokok Produksi" },
+  { id: "g-biaya-bahan-baku", type: "header", level: 0, keterangan: "Biaya Bahan Baku" },
+
+  ...pickByKode(["5021"]).map((row) => {
+    if (row.kodeAkun === "5021") {
+      return {
+        ...row,
+        level: 1,
+      };
+    }
+    return row;
+  }),
+
+  ...pickByKode(["5022"]).map((row) => {
+    if (row.kodeAkun === "5022") {
+      return {
+        ...row,
+        level: 2,
+      };
+    }
+    return row;
+  }),
+
+  ...pickByKode(["5029"]).map((row) => {
+    if (row.kodeAkun === "5029") {
+      return {
+        ...row,
+        level: 2,
+      };
+    }
+    return row;
+  }),
+
+  ...pickByKode(["5030"]).map((row) => {
+    if (row.kodeAkun === "5030") {
+      return {
+        ...row,
+        type: "label",
+        variant: "bold",
+        level: 1,
+      };
+    }
+    return row;
+  }),
+
+  ...pickByKode(["5031"]).map((row) => {
+    if (row.kodeAkun === "5031") {
+      return {
+        ...row,
+        type: "label",
+        variant: "bold",
+        level: 1,
+      };
+    }
+    return row;
+  }),
+  ...pickByKode(["5032"]).map((row) => {
+    if (row.kodeAkun === "5032") {
+      return {
+        ...row,
+        level: 1,
+      };
+    }
+    return row;
+  }),
+
+  ...pickByKode(["5040"]).map((row) => {
+    if (row.kodeAkun === "5040") {
+      return {
+        ...row,
+        type: "label",
+        variant: "bold",
+      };
+    }
+    return row;
+  }),
+
+  ...pickByKode(["5050"]),
+
+  // GROUP Biaya Pabrikasi
+  { id: "g-biaya-pabrikasi", type: "header", level: 0, keterangan: "Biaya Pabrikasi" },
+
+  ...pickByKode(["5051", "5052", "5058", "5059", "5069", ""]).map((row) => {
+    if ((row.kodeAkun === "5051", "5052", "5058", "5059", "5069")) {
+      return {
+        ...row,
+        level: 1,
+      };
+    }
+    return row;
+  }),
+  ...pickByKode(["5070", "5080"]).map((row) => {
+    if ((row.kodeAkun === "5070", "5080")) {
+      return {
+        ...row,
+        type: "label",
+        variant: "bold",
+      };
+    }
+    return row;
+  }),
+
+  ...pickByKode(["5090", "5099"]),
+
+  ...pickByKode(["5100"]).map((row) => {
+    if (row.kodeAkun === "5100") {
+      return {
+        ...row,
+        type: "label",
+        variant: "bold",
+      };
+    }
+    return row;
+  }),
+
+  ...pickByKode(["5008", "5009"]),
+
+  ...pickByKode(["5020", "4300"]).map((row) => {
+    if ((row.kodeAkun === "5020", "4300")) {
+      return {
+        ...row,
+        type: "label",
+        variant: "bold",
       };
     }
     return row;
@@ -204,8 +389,8 @@ const INITIAL_ROWS = [
 
   ...pickByKode(["4199"]),
 
-  // Group BEBAN
-  { id: "g-beban", type: "header", level: 0, keterangan: "Beban Usaha" },
+  // GROUP Beban Usaha
+  { id: "g-beban-usaha", type: "header", level: 0, keterangan: "Beban Usaha" },
 
   ...pickByKode([
     "5311",
@@ -219,6 +404,7 @@ const INITIAL_ROWS = [
     "5319",
     "5320",
     "5321",
+    "5322",
     "5399",
   ]),
   ...pickByKode(["5400"]).map((row) => {
@@ -286,9 +472,6 @@ const INITIAL_ROWS = [
     }
     return row;
   }),
-
-  // DIKURANGI:
-  // { id: "label-dikurangi", type: "label", level: 0, keterangan: "Dikurangi :" },
 ];
 
 export default function LabaRugi() {
@@ -314,7 +497,6 @@ export default function LabaRugi() {
       const newData = { ...prev, [key]: value };
 
       // Auto-calculate nilaiFiskal
-      // Rumus: nilaiKomersial - (nonObjekPajak + pphFinal) - (penyesuaianPositif - penyesuaianNegatif)
       const fieldsToWatch = [
         "nilaiKomersial",
         "nonObjekPajak",
@@ -348,7 +530,31 @@ export default function LabaRugi() {
     // Update row yang diedit
     let updatedRows = rows.map((r) => (r.id === selectedRow.id ? { ...r, ...values } : r));
 
-    // Recalculate subtotal Laba Kotor untuk kode 4300
+    // Recalculate subtotal untuk kode 4004 Penjualan Bruto
+    hitungSubtotal4004(updatedRows);
+
+    // Recalculate subtotal untuk kode 4020 Penjualan Bersih
+    hitungSubtotal4020(updatedRows);
+
+    // Recalculate subtotal untuk kode 5020 Jumlah HPP
+    hitungSubtotal5020(updatedRows);
+
+    // Recalculate subtotal untuk kode 5030 Jumlah Pembelian Bahan Baku
+    hitungSubtotal5030(updatedRows);
+
+    // Recalculate subtotal untuk kode 5040 Jumlah Jumlah Biaya Bahan Baku
+    hitungSubtotal5040(updatedRows);
+
+    // Recalculate subtotal untuk kode 5070 Jumlah Biaya Pabrikasi
+    hitungSubtotal5070(updatedRows);
+
+    // Recalculate subtotal untuk kode 5080 Jumlah Biaya Produksi
+    hitungSubtotal5080(updatedRows);
+
+    // Recalculate subtotal untuk kode 5100 Harga Pokok Produksi
+    hitungSubtotal5100(updatedRows);
+
+    // Recalculate subtotal Laba Kotor untuk kode 4300 Laba Kotor
     hitungSubtotal4300(updatedRows);
 
     // Recalculate subtotal Jumlah Beban Usaha untuk kode 5400
@@ -393,9 +599,16 @@ export default function LabaRugi() {
     // "penyesuaianNegatif",
 
     readOnlyFields: {
-      // id: [fieldKey, ...]
+      4011: ["nonObjekPajak", "pphFinal"],
+      4012: ["nonObjekPajak", "pphFinal"],
       4013: ["nonObjekPajak", "pphFinal"],
-      5020: ["nonObjekPajak", "pphFinal"],
+
+      5001: ["nonObjekPajak", "pphFinal"],
+      5003: ["nonObjekPajak", "pphFinal"],
+      5007: ["nonObjekPajak", "pphFinal"],
+      5008: ["nonObjekPajak", "pphFinal"],
+      5009: ["nonObjekPajak", "pphFinal"],
+
       5311: ["nonObjekPajak", "pphFinal"],
       5312: ["nonObjekPajak", "pphFinal"],
       5313: ["nonObjekPajak", "pphFinal"],
@@ -408,7 +621,7 @@ export default function LabaRugi() {
       5320: ["nonObjekPajak", "pphFinal"],
       5321: ["nonObjekPajak", "pphFinal"],
       5399: ["nonObjekPajak", "pphFinal"],
-      4599: ["penyesuaianPositif", "penyesuaianNegatif", "kodePenyesuaian"],
+
       5405: ["nonObjekPajak", "pphFinal"],
       5409: ["nonObjekPajak", "pphFinal"],
       5421: ["nonObjekPajak", "pphFinal"],

@@ -8,7 +8,7 @@ const isEditable = (row) => row.type === "line";
 const isBoldRow = (row) =>
   row.type === "header" || row.type === "subtotal" || row.variant === "bold";
 
-export default function LaporanLabaRugi({ rows, openEditModal, kodeOptions = [] }) {
+export default function LaporanLabaRugiTabel({ rows, openEditModal, kodeOptions = [] }) {
   const columnGroups = [
     {
       key: "_aksi",

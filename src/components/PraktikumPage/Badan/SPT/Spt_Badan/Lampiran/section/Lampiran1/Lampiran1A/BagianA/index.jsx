@@ -5,6 +5,9 @@ import { getLampiran1FieldConfig } from "@shared/lampiran1FieldConfig";
 import LaporanLabaRugiTabel from "../../shared/LaporanLabaRugiTabel";
 import GlobalModal from "@shared/GlobalModal";
 import {
+  hitungSubtotal4004,
+  hitungSubtotal4020,
+  hitungSubtotal5020,
   hitungSubtotal4300,
   hitungSubtotal5400,
   hitungSubtotal4500,
@@ -89,47 +92,64 @@ const KODE_KOREKSI_OPTIONS = [
 ];
 
 const AKUN_KONTEKS = {
-  // Pendapatan
-  4021: ["jasa"],
-  4013: ["jasa"],
-  5020: ["jasa"],
-  4300: ["jasa"],
-  4199: ["jasa"],
+  // Penjualan
+  4002: ["umum"],
+  4003: ["umum"],
+  4004: ["umum"],
 
-  //Beban
+  // Penjualan Dikurangi
 
-  5311: ["jasa"],
-  5312: ["jasa"],
-  5313: ["jasa"],
-  5314: ["jasa"],
-  5315: ["jasa"],
-  5316: ["jasa"],
-  5317: ["jasa"],
-  5318: ["jasa"],
-  5319: ["jasa"],
-  5320: ["jasa"],
-  5321: ["jasa"],
-  5399: ["jasa"],
-  5400: ["jasa"],
-  4500: ["jasa"],
+  4011: ["umum"],
+  4012: ["umum"],
+  4013: ["umum"],
+  4020: ["umum"],
+
+  // Harga Pokok Penjualan (HPP)
+
+  5001: ["umum"],
+  5003: ["umum"],
+  5007: ["umum"],
+  5008: ["umum"],
+  5009: ["umum"],
+  5020: ["umum"],
+  4300: ["umum"],
+  4199: ["umum"],
+
+  // Beban Usaha
+
+  5311: ["umum"],
+  5312: ["umum"],
+  5313: ["umum"],
+  5314: ["umum"],
+  5315: ["umum"],
+  5316: ["umum"],
+  5317: ["umum"],
+  5318: ["umum"],
+  5319: ["umum"],
+  5320: ["umum"],
+  5321: ["umum"],
+  5322: ["umum"],
+  5399: ["umum"],
+  5400: ["umum"],
+  4500: ["umum"],
 
   // Pendapatan Non Usaha
 
-  4501: ["jasa"],
-  4503: ["jasa"],
-  4511: ["jasa"],
-  4599: ["jasa"],
-  4600: ["jasa"],
+  4501: ["umum"],
+  4503: ["umum"],
+  4511: ["umum"],
+  4599: ["umum"],
+  4600: ["umum"],
 
   // Beban Non Usaha
 
-  5405: ["jasa"],
-  5409: ["jasa"],
-  5421: ["jasa"],
-  5499: ["jasa"],
-  5500: ["jasa"],
-  4700: ["jasa"],
-  4800: ["jasa"],
+  5405: ["umum"],
+  5409: ["umum"],
+  5421: ["umum"],
+  5499: ["umum"],
+  5500: ["umum"],
+  4700: ["umum"],
+  4800: ["umum"],
 };
 
 const LINE_ROWS = [];
@@ -175,16 +195,76 @@ const pickByKode = (kodes) => {
 };
 // ROWS STATIS
 const INITIAL_ROWS = [
-  // GROUP PENDAPATAN
-  { id: "g-pendapatan", type: "header", level: 0, keterangan: "Pendapatan" },
+  // GROUP PENJUALAN
+  { id: "g-penjualan", type: "header", level: 0, keterangan: "Penjualan" },
 
-  ...pickByKode(["4021"]),
+  ...pickByKode(["4002", "4003"]),
 
-  ...pickByKode(["4013", "5020"]).map((row) => {
-    if ((row.kodeAkun === "4013", "4013")) {
+  ...pickByKode(["4004"]).map((row) => {
+    if (row.kodeAkun === "4004") {
+      return {
+        ...row,
+        type: "label",
+        variant: "bold",
+      };
+    }
+    return row;
+  }),
+
+  // DIKURANGI:
+  { id: "label-dikurangi", type: "label", level: 0, keterangan: "Dikurangi :", variant: "bold" },
+
+  ...pickByKode(["4011", "4012", "4013"]).map((row) => {
+    if ((row.kodeAkun === "4011", "4012", "4013")) {
       return {
         ...row,
         level: 1,
+      };
+    }
+    return row;
+  }),
+
+  ...pickByKode(["4020"]).map((row) => {
+    if (row.kodeAkun === "4020") {
+      return {
+        ...row,
+        type: "label",
+        variant: "bold",
+      };
+    }
+    return row;
+  }),
+
+  // GROUP Harga Pokok Penjualan (HPP)
+  { id: "g-hpp", type: "header", level: 0, keterangan: "Harga Pokok Penjualan (HPP)" },
+
+  ...pickByKode(["5001", "5003", "5007", "5008"]).map((row) => {
+    if ((row.kodeAkun === "5001", "5003", "5007", "5008")) {
+      return {
+        ...row,
+        level: 1,
+      };
+    }
+    return row;
+  }),
+
+  ...pickByKode(["5009"]).map((row) => {
+    if (row.kodeAkun === "5009") {
+      return {
+        ...row,
+        level: 2,
+      };
+    }
+    return row;
+  }),
+
+  ...pickByKode(["5020"]).map((row) => {
+    if (row.kodeAkun === "5020") {
+      return {
+        ...row,
+        type: "label",
+        level: 1,
+        variant: "bold",
       };
     }
     return row;
@@ -196,7 +276,6 @@ const INITIAL_ROWS = [
         ...row,
         type: "label",
         variant: "bold",
-        level: 0,
       };
     }
     return row;
@@ -204,8 +283,8 @@ const INITIAL_ROWS = [
 
   ...pickByKode(["4199"]),
 
-  // Group BEBAN
-  { id: "g-beban", type: "header", level: 0, keterangan: "Beban Usaha" },
+  // GROUP Beban Usaha
+  { id: "g-beban-usaha", type: "header", level: 0, keterangan: "Beban Usaha" },
 
   ...pickByKode([
     "5311",
@@ -219,6 +298,7 @@ const INITIAL_ROWS = [
     "5319",
     "5320",
     "5321",
+    "5322",
     "5399",
   ]),
   ...pickByKode(["5400"]).map((row) => {
@@ -286,9 +366,6 @@ const INITIAL_ROWS = [
     }
     return row;
   }),
-
-  // DIKURANGI:
-  // { id: "label-dikurangi", type: "label", level: 0, keterangan: "Dikurangi :" },
 ];
 
 export default function LabaRugi() {
@@ -314,7 +391,6 @@ export default function LabaRugi() {
       const newData = { ...prev, [key]: value };
 
       // Auto-calculate nilaiFiskal
-      // Rumus: nilaiKomersial - (nonObjekPajak + pphFinal) - (penyesuaianPositif - penyesuaianNegatif)
       const fieldsToWatch = [
         "nilaiKomersial",
         "nonObjekPajak",
@@ -348,7 +424,16 @@ export default function LabaRugi() {
     // Update row yang diedit
     let updatedRows = rows.map((r) => (r.id === selectedRow.id ? { ...r, ...values } : r));
 
-    // Recalculate subtotal Laba Kotor untuk kode 4300
+    // Recalculate subtotal untuk kode 4004 Penjualan Bruto
+    hitungSubtotal4004(updatedRows);
+
+    // Recalculate subtotal untuk kode 4020 Penjualan Bersih
+    hitungSubtotal4020(updatedRows);
+
+    // Recalculate subtotal untuk kode 5020 Jumlah HPP
+    hitungSubtotal5020(updatedRows);
+
+    // Recalculate subtotal Laba Kotor untuk kode 4300 Laba Kotor
     hitungSubtotal4300(updatedRows);
 
     // Recalculate subtotal Jumlah Beban Usaha untuk kode 5400
@@ -393,9 +478,16 @@ export default function LabaRugi() {
     // "penyesuaianNegatif",
 
     readOnlyFields: {
-      // id: [fieldKey, ...]
+      4011: ["nonObjekPajak", "pphFinal"],
+      4012: ["nonObjekPajak", "pphFinal"],
       4013: ["nonObjekPajak", "pphFinal"],
-      5020: ["nonObjekPajak", "pphFinal"],
+
+      5001: ["nonObjekPajak", "pphFinal"],
+      5003: ["nonObjekPajak", "pphFinal"],
+      5007: ["nonObjekPajak", "pphFinal"],
+      5008: ["nonObjekPajak", "pphFinal"],
+      5009: ["nonObjekPajak", "pphFinal"],
+
       5311: ["nonObjekPajak", "pphFinal"],
       5312: ["nonObjekPajak", "pphFinal"],
       5313: ["nonObjekPajak", "pphFinal"],
@@ -408,7 +500,7 @@ export default function LabaRugi() {
       5320: ["nonObjekPajak", "pphFinal"],
       5321: ["nonObjekPajak", "pphFinal"],
       5399: ["nonObjekPajak", "pphFinal"],
-      4599: ["penyesuaianPositif", "penyesuaianNegatif", "kodePenyesuaian"],
+
       5405: ["nonObjekPajak", "pphFinal"],
       5409: ["nonObjekPajak", "pphFinal"],
       5421: ["nonObjekPajak", "pphFinal"],

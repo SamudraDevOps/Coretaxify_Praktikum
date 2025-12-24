@@ -3,11 +3,11 @@ import { FaChevronDown } from "react-icons/fa";
 import Header from "./Header";
 
 // import LaporanLabaRugi from "@sections/Lampiran1/Lampiran1D/BagianA";
-import LaporanLabaRugi from "@badanSections/Lampiran1/Lampiran1D/BagianA";
+import LaporanLabaRugi from "@badanSections/Lampiran1/Lampiran1A/BagianA";
 // import LaporanNeraca from "@sections/Lampiran3/Lampiran3A-1/BagianB";
 // import LaporanKeuangan from "@sections/Lampiran3/Lampiran3A-1/BagianC/LaporanKeuangan";
 
-const Lampiran1D = ({ data }) => {
+const Lampiran1A = ({ data }) => {
   const [showBagianA, setShowBagianA] = useState(true);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -62,7 +62,7 @@ const Lampiran1D = ({ data }) => {
 
         <div
           className={`overflow-hidden transition-all duration-700 ease-in-out ${
-            showBagianA ? "opacity-100" : "max-h-0 opacity-0"
+            showBagianA ? " opacity-100" : "max-h-0 opacity-0"
           }`}
         >
           <div className="border rounded-md p-4 space-y-4">
@@ -76,4 +76,4 @@ const Lampiran1D = ({ data }) => {
   );
 };
 
-export default Lampiran1D;
+export default Lampiran1A;

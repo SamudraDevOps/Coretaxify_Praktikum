@@ -16,6 +16,8 @@ import {
 } from "./section";
 import {
   Header,
+  Lampiran1A,
+  Lampiran1B,
   Lampiran1D,
   Lampiran2,
   Lampiran3,
@@ -69,6 +71,23 @@ const CreateKonsepBadan = () => {
   // STEP 7: Effect untuk mengelola lampiran berdasarkan jawaban
   useEffect(() => {
     const allLampiran = [];
+
+    allLampiran.push({
+      id: "lampiran-1A",
+      title: "L1-A",
+      subtitle: "Lampiran 1A - ",
+      component: "Lampiran_1A",
+      badge: "Tersedia",
+      order: 1,
+    });
+    allLampiran.push({
+      id: "lampiran-1B",
+      title: "L1-B",
+      subtitle: "Lampiran 1B - ",
+      component: "Lampiran_1B",
+      badge: "Tersedia",
+      order: 1, // Urutan pertama
+    });
 
     allLampiran.push({
       id: "lampiran-1D",
@@ -226,6 +245,10 @@ const CreateKonsepBadan = () => {
   // STEP 8: Function untuk render content lampiran (Import lampiran ditampilkan di atas)
   const renderLampiranContent = (componentName, data) => {
     switch (componentName) {
+      case "Lampiran_1A":
+        return <Lampiran1A data={data} />;
+      case "Lampiran_1B":
+        return <Lampiran1B data={data} />;
       case "Lampiran_1D":
         return <Lampiran1D data={data} />;
       case "Lampiran_2":

@@ -1,4 +1,6 @@
 export { default as Header } from "./Header";
+export { default as Lampiran1A } from "./Lampiran1A";
+export { default as Lampiran1B } from "./Lampiran1B";
 export { default as Lampiran1D } from "./Lampiran1D";
 export { default as Lampiran2 } from "./Lampiran2";
 export { default as Lampiran3 } from "./Lampiran3";
