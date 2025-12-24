@@ -42,7 +42,7 @@ export const MASTER_AKUN_LAPORAN_LABA_RUGI = [
   {
     kodeAkun: "4004",
     jenisPerusahaan: ["umum", "manufaktur", "dagang"],
-    namaAkun: "Penjualan Barang",
+    namaAkun: "Penjualan Bruto",
   },
   {
     kodeAkun: "4011",
@@ -61,7 +61,7 @@ export const MASTER_AKUN_LAPORAN_LABA_RUGI = [
   },
   {
     kodeAkun: "4020",
-    jenisPerusahaan: ["umum", "dagang"],
+    jenisPerusahaan: ["umum", "dagang", "manufaktur"],
     namaAkun: "Penjualan Bersih",
   },
   {
@@ -599,17 +599,17 @@ export const MASTER_AKUN_LAPORAN_LABA_RUGI = [
   },
   {
     kodeAkun: "5009",
-    namaAkun: "Persediaan Akhir",
+    namaAkun: "Dikurangi: Persediaan Akhir",
     jenisPerusahaan: ["umum", "dagang"],
   },
   {
     kodeAkun: "5009",
-    namaAkun: "Persediaan Akhir Barang Jadi",
+    namaAkun: "(Persediaan Akhir Barang Jadi)",
     jenisPerusahaan: ["manufaktur"],
   },
   {
     kodeAkun: "5020",
-    namaAkun: "Jumlah Harga Pokok Penjualan",
+    namaAkun: "Jumlah HPP",
     jenisPerusahaan: ["umum", "manufaktur", "dagang"],
   },
   {
