@@ -216,7 +216,31 @@ const BUPOTForm = ({
 
   // Form data state
   const [formData, setFormData] = useState({
-    pembulatan_kotor: "0"
+    gaji_pokok_pensiun: 0,
+    pembulatan_kotor: "0",
+    tunjangan_pph: 0,
+    tunjangan_lainnya: 0,
+    honorarium_imbalan_lainnya: 0,
+    premi_asuransi_pemberi_kerja: 0,
+    natura_pph_pasal_21: 0,
+    tantiem_bonus_gratifikasi_jasa_thr: 0,
+    dasar_pengenaan_pajak: 0,
+    biaya_jabatan: 0,
+    iuran_pensiun: 0,
+    sumbangan_keagamaan_pemberi_kerja: 0,
+    jumlah_pengurangan: 0,
+    jumlah_penghasilan_neto: 0,
+    nomor_bpa1_sebelumnya: "",
+    penghasilan_neto_sebelumnya: 0,
+    penghasilan_neto_pph_pasal_21: 0,
+    penghasilan_tidak_kena_pajak: 0,
+    penghasilan_kena_pajak: 0,
+    pph_pasal_21_penghasilan_kena_pajak: 0,
+    pph_pasal_21_terutang: 0,
+    pph_pasal_21_potongan_bpa1_sebelumnya: 0,
+    pph_pasal_21_terutang_bupot_ini: 0,
+    pph_pasal_21_ditanggung_pemerintah: 0,
+    pph_pasal_21_masa_pajak_terakhir: 0,
   });
 
   // Initialize form data
@@ -2799,7 +2823,7 @@ const BUPOTForm = ({
                       <span className="text-red-500">*</span>
                     </label>
                     <input
-                      type="text"
+                      type="number"
                       className={`w-64 flex-auto border p-2 rounded appearance-none
                         ${String(formData.pembulatan_kotor) === "1" ? "bg-gray-200" : "bg-white"}
                         `}
@@ -3279,7 +3303,7 @@ const BUPOTForm = ({
                   </label>
                   <input
                     type="text"
-                    className="w-64 flex-auto border p-2 rounded"
+                    className="w-64 flex-auto border p-2 rounded bg-gray-200"
                     placeholder="Bupot A1 Sebelumnya"
                     value={getData?.nomor_bpa1_sebelumnya || ""}
                     onChange={(e) => {
@@ -3315,7 +3339,7 @@ const BUPOTForm = ({
                   </label>
                   <input
                     type="text"
-                    className="w-64 flex-auto border p-2 rounded"
+                    className="w-64 flex-auto border p-2 rounded bg-gray-200"
                     placeholder="Wajib Diisi"
                     value={
                       formatRupiah(getData?.penghasilan_neto_sebelumnya) || ""
@@ -3326,6 +3350,7 @@ const BUPOTForm = ({
                       // updateFormData("penghasilan_bruto_raw", Number(rawValue));
                     }}
                     onWheel={(e) => e.target.blur()}
+                    readOnly={true}
                   />
                 </div>
 
