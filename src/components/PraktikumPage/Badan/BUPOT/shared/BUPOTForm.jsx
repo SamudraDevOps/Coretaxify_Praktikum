@@ -727,7 +727,8 @@ const BUPOTForm = ({
         const potonganPTKP = getBPA1PTKP(formData.ptkp_akun);
         const penghasilanKenaPajak = penghasilanNetoPphPasal21 > potonganPTKP ? (penghasilanNetoPphPasal21 - potonganPTKP) : 0;
         const tarifPph21 = penghasilanKenaPajak > 0 ? getPs17(penghasilanKenaPajak) : 0;
-        const pph21 = penghasilanKenaPajak > 0 ? Math.round(penghasilanKenaPajak * (tarifPph21 / 100)) : 0;
+        // const pph21 = penghasilanKenaPajak > 0 ? Math.round(penghasilanKenaPajak * (tarifPph21 / 100)) : 0;
+        const pph21 = penghasilanKenaPajak > 0 ? Math.round(bp21Ps17Calculation(tarifPph21, penghasilanKenaPajak)) : 0;
         const pph21Terutang = pph21;
         const pph21DipotongBupot = 0;
         const pph21TerutangBupotIni = pph21Terutang - pph21DipotongBupot;
@@ -927,27 +928,27 @@ const BUPOTForm = ({
     } else {
       if (effectiveIncome > 0 && effectiveIncome <= 60000000) {
         return effectiveIncome * (5 / 100);
-      } else if (effectiveIncome > 60000000 && effectiveIncome <= 310000000) {
+      } else if (effectiveIncome > 60000000 && effectiveIncome <= 250000000) {
         const fixedTax = 3000000;
         const excessIncome = effectiveIncome - 60000000;
         const excessIncomeTax = excessIncome * (15 / 100);
         const total = fixedTax + excessIncomeTax;
         return total;
-      } else if (effectiveIncome > 310000000 && effectiveIncome <= 810000000) {
-        const fixedTax = 40500000;
-        const excessIncome = effectiveIncome - 310000000;
+      } else if (effectiveIncome > 250000000 && effectiveIncome <= 500000000) {
+        const fixedTax = 31500000;
+        const excessIncome = effectiveIncome - 250000000;
         const excessIncomeTax = excessIncome * (25 / 100);
         const total = fixedTax + excessIncomeTax;
         return total;
-      } else if (effectiveIncome > 810000000 && effectiveIncome <= 5810000000) {
-        const fixedTax = 165500000;
-        const excessIncome = effectiveIncome - 810000000;
+      } else if (effectiveIncome > 500000000 && effectiveIncome <= 5000000000) {
+        const fixedTax = 94000000;
+        const excessIncome = effectiveIncome - 500000000;
         const excessIncomeTax = excessIncome * (30 / 100);
         const total = fixedTax + excessIncomeTax;
         return total;
       } else {
-        const fixedTax = 1665500000;
-        const excessIncome = effectiveIncome - 5810000000;
+        const fixedTax = 1444000000;
+        const excessIncome = effectiveIncome - 500000000;
         const excessIncomeTax = excessIncome * (35 / 100);
         const total = fixedTax + excessIncomeTax;
         return total;
@@ -2823,7 +2824,7 @@ const BUPOTForm = ({
                       <span className="text-red-500">*</span>
                     </label>
                     <input
-                      type="number"
+                      type="text"
                       className={`w-64 flex-auto border p-2 rounded appearance-none
                         ${String(formData.pembulatan_kotor) === "1" ? "bg-gray-200" : "bg-white"}
                         `}
@@ -3340,9 +3341,9 @@ const BUPOTForm = ({
                   <input
                     type="text"
                     className="w-64 flex-auto border p-2 rounded bg-gray-200"
-                    placeholder="Wajib Diisi"
+                    placeholder="Penghasilan Neto dari Pemotongan Sebelumnya"
                     value={
-                      formatRupiah(getData?.penghasilan_neto_sebelumnya) || ""
+                      formatRupiah(getData?.penghasilan_neto_sebelumnya) || "0"
                     }
                     onChange={(e) => {
                       const rawValue = e.target.value.replace(/[^\d]/g, "");
@@ -3484,7 +3485,7 @@ const BUPOTForm = ({
                     value={
                       formatRupiah(
                         getData?.pph_pasal_21_potongan_bpa1_sebelumnya
-                      ) || ""
+                      ) || "0"
                     }
                     onChange={(e) => {
                       const rawValue = e.target.value.replace(/[^\d]/g, "");
@@ -3540,7 +3541,7 @@ const BUPOTForm = ({
                     value={
                       formatRupiah(
                         bpbptData?.pph_pasal_21_ditanggung_pemerintah
-                      ) || ""
+                      ) || "0"
                     }
                     onChange={(e) => {
                       const rawValue = e.target.value.replace(/[^\d]/g, "");
