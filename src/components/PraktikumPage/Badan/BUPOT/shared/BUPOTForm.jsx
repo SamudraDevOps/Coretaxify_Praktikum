@@ -827,6 +827,7 @@ const BUPOTForm = ({
     formData.biaya_jabatan,
     formData.iuran_pensiun,
     formData.sumbangan_keagamaan_pemberi_kerja,
+    formData.pph_pasal_21_ditanggung_pemerintah,
     getData,
   ]);
 
