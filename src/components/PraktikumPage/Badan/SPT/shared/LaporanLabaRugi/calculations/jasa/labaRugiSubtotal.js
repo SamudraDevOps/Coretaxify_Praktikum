@@ -1,6 +1,42 @@
 import { parseFormattedNumber, toNumber } from "@utils/formatCurrency";
 
-// Rumus subtotal untuk kode 4300
+// Tambahkan fungsi yang hilang untuk perusahaan JASA
+
+// Rumus subtotal untuk kode 4004 Penjualan Bruto (TAMBAHAN)
+export function hitungSubtotal4004(rows) {
+  const kode4004 = rows.find((r) => r.kodeAkun === "4004");
+  const kode4003 = rows.find((r) => r.kodeAkun === "4003");
+  const kode4002 = rows.find((r) => r.kodeAkun === "4002");
+
+  if (kode4004 && kode4003 && kode4002) {
+    const kolomJumlah = ["nilaiKomersial", "nilaiFiskal"];
+    kolomJumlah.forEach((key) => {
+      kode4004[key] = toNumber(kode4003[key]) + toNumber(kode4002[key]);
+    });
+  }
+}
+
+// Rumus subtotal untuk kode 4020 Penjualan Bersih (TAMBAHAN)
+export function hitungSubtotal4020(rows) {
+  const kode4011 = rows.find((r) => r.kodeAkun === "4011");
+  const kode4012 = rows.find((r) => r.kodeAkun === "4012");
+  const kode4013 = rows.find((r) => r.kodeAkun === "4013");
+  const kode4020 = rows.find((r) => r.kodeAkun === "4020");
+  const kode4004 = rows.find((r) => r.kodeAkun === "4004");
+
+  if (kode4020 && kode4011 && kode4012 && kode4013 && kode4004) {
+    const kolomJumlah = ["nilaiKomersial", "nilaiFiskal"];
+    kolomJumlah.forEach((key) => {
+      kode4020[key] =
+        toNumber(kode4004[key]) -
+        (toNumber(kode4011[key]) +
+          toNumber(kode4012[key]) +
+          toNumber(kode4013[key]));
+    });
+  }
+}
+
+// Rumus subtotal untuk kode 4300 Laba Kotor
 export function hitungSubtotal4300(rows) {
   const kode4300 = rows.find((r) => r.kodeAkun === "4300");
   const kode4021 = rows.find((r) => r.kodeAkun === "4021");
@@ -10,7 +46,9 @@ export function hitungSubtotal4300(rows) {
   if (kode4300 && kode4021 && kode4013 && kode5020) {
     const kolomJumlah = ["nilaiKomersial", "nilaiFiskal"];
     kolomJumlah.forEach((key) => {
-      kode4300[key] = toNumber(kode4021[key]) - (toNumber(kode4013[key]) + toNumber(kode5020[key]));
+      kode4300[key] =
+        toNumber(kode4021[key]) -
+        (toNumber(kode4013[key]) + toNumber(kode5020[key]));
     });
   }
 }

@@ -28,7 +28,9 @@ export function hitungSubtotal4020(rows) {
     kolomJumlah.forEach((key) => {
       kode4020[key] =
         toNumber(kode4004[key]) -
-        (toNumber(kode4011[key]) + toNumber(kode4012[key]) + toNumber(kode4013[key]));
+        (toNumber(kode4011[key]) +
+          toNumber(kode4012[key]) +
+          toNumber(kode4013[key]));
     });
   }
 }
@@ -36,21 +38,116 @@ export function hitungSubtotal4020(rows) {
 // Rumus subtotal untuk kode 5020 Harga Pokok Penjualan
 export function hitungSubtotal5020(rows) {
   const kode5020 = rows.find((r) => r.kodeAkun === "5020");
-  const kode5001 = rows.find((r) => r.kodeAkun === "5001");
-  const kode5003 = rows.find((r) => r.kodeAkun === "5003");
-  const kode5007 = rows.find((r) => r.kodeAkun === "5007");
+  const kode5100 = rows.find((r) => r.kodeAkun === "5100");
   const kode5008 = rows.find((r) => r.kodeAkun === "5008");
   const kode5009 = rows.find((r) => r.kodeAkun === "5009");
 
-  if (kode5020 && kode5001 && kode5003 && kode5007 && kode5008 && kode5009) {
+  if (kode5020 && kode5100 && kode5008 && kode5009) {
     const kolomJumlah = ["nilaiKomersial", "nilaiFiskal"];
     kolomJumlah.forEach((key) => {
       kode5020[key] =
-        toNumber(kode5001[key]) +
-        toNumber(kode5003[key]) +
-        toNumber(kode5007[key]) +
+        toNumber(kode5100[key]) +
         toNumber(kode5008[key]) -
         toNumber(kode5009[key]);
+    });
+  }
+}
+
+// Rumus subtotal untuk kode 5030 Jumlah Pembelian Bahan Baku
+
+export function hitungSubtotal5030(rows) {
+  const kode5030 = rows.find((r) => r.kodeAkun === "5030");
+  const kode5021 = rows.find((r) => r.kodeAkun === "5021");
+  const kode5022 = rows.find((r) => r.kodeAkun === "5022");
+  const kode5029 = rows.find((r) => r.kodeAkun === "5029");
+
+  if (kode5030 && kode5021 && kode5029 && kode5022) {
+    const kolomJumlah = ["nilaiKomersial", "nilaiFiskal"];
+    kolomJumlah.forEach((key) => {
+      kode5030[key] =
+        toNumber(kode5021[key]) +
+        (toNumber(kode5022[key]) - toNumber(kode5029[key]));
+    });
+  }
+}
+
+// Rumus subtotal untuk kode 5040 Jumlah Biaya Bahan Baku
+
+export function hitungSubtotal5040(rows) {
+  const kode5040 = rows.find((r) => r.kodeAkun === "5040");
+  const kode5030 = rows.find((r) => r.kodeAkun === "5030");
+  // const kode5031 = rows.find((r) => r.kodeAkun === "5031");
+  const kode5032 = rows.find((r) => r.kodeAkun === "5032");
+
+  if (kode5040 && kode5030 && kode5032) {
+    const kolomJumlah = ["nilaiKomersial", "nilaiFiskal"];
+    kolomJumlah.forEach((key) => {
+      kode5040[key] = toNumber(kode5030[key]) - toNumber(kode5032[key]);
+    });
+  }
+}
+
+// Rumus subtotal untuk kode 5070 Jumlah Biaya Pabrikasi
+
+export function hitungSubtotal5070(rows) {
+  const kode5070 = rows.find((r) => r.kodeAkun === "5070");
+  const kode5051 = rows.find((r) => r.kodeAkun === "5051");
+  const kode5052 = rows.find((r) => r.kodeAkun === "5052");
+  const kode5058 = rows.find((r) => r.kodeAkun === "5058");
+  const kode5059 = rows.find((r) => r.kodeAkun === "5059");
+  const kode5069 = rows.find((r) => r.kodeAkun === "5069");
+
+  if (kode5070 && kode5051 && kode5052 && kode5058 && kode5059 && kode5069) {
+    const kolomJumlah = ["nilaiKomersial", "nilaiFiskal"];
+    kolomJumlah.forEach((key) => {
+      kode5070[key] =
+        toNumber(kode5051[key]) +
+        toNumber(kode5052[key]) +
+        toNumber(kode5058[key]) +
+        toNumber(kode5059[key]) +
+        toNumber(kode5069[key]);
+    });
+  }
+}
+
+// Rumus subtotal untuk kode 5080 Jumlah Biaya Prouksi
+
+export function hitungSubtotal5080(rows) {
+  const kode5080 = rows.find((r) => r.kodeAkun === "5080");
+  const kode5040 = rows.find((r) => r.kodeAkun === "5040");
+  const kode5050 = rows.find((r) => r.kodeAkun === "5050");
+  const kode5070 = rows.find((r) => r.kodeAkun === "5070");
+
+  if (kode5080 && kode5040 && kode5050 && kode5070) {
+    const kolomJumlah = ["nilaiKomersial", "nilaiFiskal"];
+    kolomJumlah.forEach((key) => {
+      kode5080[key] =
+        toNumber(kode5040[key]) +
+        toNumber(kode5050[key]) +
+        toNumber(kode5070[key]);
+    });
+  }
+}
+
+// Rumus subtotal untuk kode 5100 Jumlah Harga Pokok Prouksi
+
+export function hitungSubtotal5100(rows) {
+  const kode5100 = rows.find((r) => r.kodeAkun === "5100");
+  const kode5040 = rows.find((r) => r.kodeAkun === "5040");
+  const kode5050 = rows.find((r) => r.kodeAkun === "5050");
+  const kode5070 = rows.find((r) => r.kodeAkun === "5070");
+  const kode5090 = rows.find((r) => r.kodeAkun === "5090");
+  const kode5099 = rows.find((r) => r.kodeAkun === "5099");
+
+  if (kode5100 && kode5040 && kode5050 && kode5070 && kode5090 && kode5099) {
+    const kolomJumlah = ["nilaiKomersial", "nilaiFiskal"];
+    kolomJumlah.forEach((key) => {
+      kode5100[key] =
+        toNumber(kode5040[key]) +
+        toNumber(kode5050[key]) +
+        toNumber(kode5070[key]) +
+        toNumber(kode5090[key]) -
+        toNumber(kode5099[key]);
     });
   }
 }
@@ -83,7 +180,6 @@ export function hitungSubtotal5400(rows) {
   const kode5319 = rows.find((r) => r.kodeAkun === "5319");
   const kode5320 = rows.find((r) => r.kodeAkun === "5320");
   const kode5321 = rows.find((r) => r.kodeAkun === "5321");
-  const kode5322 = rows.find((r) => r.kodeAkun === "5322");
   const kode5399 = rows.find((r) => r.kodeAkun === "5399");
   if (
     kode5400 &&
@@ -98,7 +194,6 @@ export function hitungSubtotal5400(rows) {
     kode5319 &&
     kode5320 &&
     kode5321 &&
-    kode5322 &&
     kode5399
   ) {
     const kolomJumlah = ["nilaiKomersial", "nilaiFiskal"];
@@ -115,7 +210,6 @@ export function hitungSubtotal5400(rows) {
         toNumber(kode5319[key]) +
         toNumber(kode5320[key]) +
         toNumber(kode5321[key]) +
-        toNumber(kode5322[key]) +
         toNumber(kode5399[key]);
     });
   }
