@@ -3,26 +3,18 @@ import { MASTER_AKUN_LAPORAN_LABA_RUGI, createLineRow } from "../akunList";
 import { RowBuilder } from "./rowBuilders";
 
 // Mengabil seluruh export king dengan menggunakan import * as
-import * as UmumCalculations from "./calculations/umum/labaRugiSubtotal";
-import * as ManufakturCalculations from "./calculations/manufaktur/labaRugiSubtotal";
-import * as JasaCalculations from "./calculations/jasa/labaRugiSubtotal";
+import * as calculations from "./calculations";
 
 export class LabaRugiFactory {
   static createComponent(jenisPerusahaan, bagian = "A") {
     const config = PERUSAHAAN_CONFIG[jenisPerusahaan];
     if (!config) {
-      throw new Error(
-        `Konfigurasi untuk jenis perusahaan '${jenisPerusahaan}' tidak ditemukan`
-      );
+      throw new Error(`Konfigurasi untuk jenis perusahaan '${jenisPerusahaan}' tidak ditemukan`);
     }
 
     const lineRows = this.generateLineRows(config.akunKonteks);
     const pickByKode = this.createPickByKode(lineRows);
-    const initialRows = RowBuilder.buildRows(
-      jenisPerusahaan,
-      bagian,
-      pickByKode
-    );
+    const initialRows = RowBuilder.buildRows(jenisPerusahaan, bagian, pickByKode);
 
     return {
       initialRows,
@@ -36,9 +28,7 @@ export class LabaRugiFactory {
     const lineRows = [];
 
     Object.entries(akunKonteks).forEach(([kodeAkun, jenisAktif]) => {
-      const kandidat = MASTER_AKUN_LAPORAN_LABA_RUGI.filter(
-        (a) => a.kodeAkun === kodeAkun
-      );
+      const kandidat = MASTER_AKUN_LAPORAN_LABA_RUGI.filter((a) => a.kodeAkun === kodeAkun);
 
       if (!kandidat.length) {
         console.log(`Tidak ditemukan akun dengan kode ${kodeAkun}`);
@@ -74,9 +64,7 @@ export class LabaRugiFactory {
 
   static createPickByKode(lineRows) {
     return (kodes) => {
-      return kodes
-        .map((kode) => lineRows.find((r) => r.kodeAkun === kode))
-        .filter(Boolean);
+      return kodes.map((kode) => lineRows.find((r) => r.kodeAkun === kode)).filter(Boolean);
     };
   }
 
@@ -88,28 +76,10 @@ export class LabaRugiFactory {
     }
 
     const calculationNames = config.subtotalCalculations[bagian] || [];
-
-    // Gunakan calculation yang sesuai dengan jenis perusahaan
-    let calculationSource;
-    switch (jenisPerusahaan) {
-      case "umum":
-        calculationSource = UmumCalculations;
-        break;
-      case "manufaktur":
-        calculationSource = ManufakturCalculations;
-        break;
-      case "jasa":
-        calculationSource = JasaCalculations;
-        break;
-      default:
-        console.error(`Jenis perusahaan '${jenisPerusahaan}' tidak dikenal`);
-        return [];
-    }
+    const calculationSource = calculations[jenisPerusahaan];
 
     if (!calculationSource) {
-      console.error(
-        ` Calculation source tidak ditemukan untuk ${jenisPerusahaan}`
-      );
+      console.error(`Calculation source tidak ditemukan untuk ${jenisPerusahaan}`);
       return [];
     }
 
@@ -117,9 +87,7 @@ export class LabaRugiFactory {
       .map((calcName) => {
         const calcFunction = calculationSource[calcName];
         if (!calcFunction) {
-          console.warn(
-            `Function '${calcName}' tidak ditemukan untuk ${jenisPerusahaan}`
-          );
+          console.warn(`Function '${calcName}' tidak ditemukan untuk ${jenisPerusahaan}`);
         }
         return calcFunction;
       })
