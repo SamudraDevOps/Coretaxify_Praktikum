@@ -575,7 +575,7 @@ export const MASTER_AKUN_LAPORAN_LABA_RUGI = [
   {
     kodeAkun: "5001",
     namaAkun: "Pembelian",
-    jenisPerusahaan: ["umum"],
+    jenisPerusahaan: ["umum", "dagang"],
   },
   {
     kodeAkun: "5003",
