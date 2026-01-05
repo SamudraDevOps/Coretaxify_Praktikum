@@ -18,7 +18,10 @@ import {
   Header,
   Lampiran1A,
   Lampiran1B,
+  Lampiran1C,
   Lampiran1D,
+  Lampiran1E,
+  Lampiran1F,
   Lampiran2,
   Lampiran3,
   Lampiran4,
@@ -75,7 +78,7 @@ const CreateKonsepBadan = () => {
     allLampiran.push({
       id: "lampiran-1A",
       title: "L1-A",
-      subtitle: "Lampiran 1A - ",
+      subtitle: "Lampiran 1A - UMUM",
       component: "Lampiran_1A",
       badge: "Tersedia",
       order: 1,
@@ -83,8 +86,17 @@ const CreateKonsepBadan = () => {
     allLampiran.push({
       id: "lampiran-1B",
       title: "L1-B",
-      subtitle: "Lampiran 1B - ",
+      subtitle: "Lampiran 1B - MANUFAKTUR",
       component: "Lampiran_1B",
+      badge: "Tersedia",
+      order: 1, // Urutan pertama
+    });
+
+    allLampiran.push({
+      id: "lampiran-1C",
+      title: "L1-C",
+      subtitle: "Lampiran 1C - DAGANG",
+      component: "Lampiran_1C",
       badge: "Tersedia",
       order: 1, // Urutan pertama
     });
@@ -92,11 +104,29 @@ const CreateKonsepBadan = () => {
     allLampiran.push({
       id: "lampiran-1D",
       title: "L1-D",
-      subtitle: "Lampiran 1D - ",
+      subtitle: "Lampiran 1D - JASA",
       component: "Lampiran_1D",
       badge: "Tersedia",
       order: 1, // Urutan pertama
     });
+    allLampiran.push({
+      id: "lampiran-1E",
+      title: "L1-E",
+      subtitle: "Lampiran 1E - BANK KONVENSIONAL",
+      component: "Lampiran_1E",
+      badge: "Tersedia",
+      order: 1, // Urutan pertama
+    });
+
+    allLampiran.push({
+      id: "lampiran-1F",
+      title: "L1-F",
+      subtitle: "Lampiran 1F - DANA PENSIUN",
+      component: "Lampiran_1F",
+      badge: "Tersedia",
+      order: 1, // Urutan pertama
+    });
+
     allLampiran.push({
       id: "lampiran-2",
       title: "L2",
@@ -249,8 +279,14 @@ const CreateKonsepBadan = () => {
         return <Lampiran1A data={data} />;
       case "Lampiran_1B":
         return <Lampiran1B data={data} />;
+      case "Lampiran_1C":
+        return <Lampiran1C data={data} />;
       case "Lampiran_1D":
         return <Lampiran1D data={data} />;
+      case "Lampiran_1E":
+        return <Lampiran1E data={data} />;
+      case "Lampiran_1F":
+        return <Lampiran1F data={data} />;
       case "Lampiran_2":
         return <Lampiran2 data={data} />;
       case "Lampiran_3":

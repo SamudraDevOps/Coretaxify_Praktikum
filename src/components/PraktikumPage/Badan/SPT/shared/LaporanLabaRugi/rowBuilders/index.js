@@ -17,34 +17,6 @@ export class RowBuilder {
     return this.buildGeneric(pickByKode, jenisPerusahaan);
   }
 
-  static buildGeneric(pickByKode, jenisPerusahaan = "umum") {
-    return [
-      { id: "g-penjualan", type: "header", level: 0, keterangan: "Penjualan" },
-      ...pickByKode(["4002", "4003"]),
-      ...pickByKode(["4004"]).map((row) => ({
-        ...row,
-        type: "label",
-        variant: "bold",
-      })),
-      {
-        id: "label-dikurangi",
-        type: "label",
-        level: 0,
-        keterangan: "Dikurangi :",
-        variant: "bold",
-      },
-      ...pickByKode(["4011", "4012", "4013"]).map((row) => ({
-        ...row,
-        level: 1,
-      })),
-      ...pickByKode(["4020"]).map((row) => ({
-        ...row,
-        type: "label",
-        variant: "bold",
-      })),
-    ];
-  }
-
   // UMUM Bagian A
   static buildUmumA(pickByKode) {
     return [
@@ -170,7 +142,7 @@ export class RowBuilder {
     ];
   }
 
-  // MANUFAKTUR Bagian A (dari code Anda yang sekarang)
+  // MANUFAKTUR Bagian A
   static buildManufakturA(pickByKode) {
     return [
       // GROUP PENJUALAN
@@ -349,6 +321,131 @@ export class RowBuilder {
     ];
   }
 
+  //  Dagang Bagian A
+  static buildDagangA(pickByKode) {
+    return [
+      // GROUP PENJUALAN
+      { id: "g-penjualan", type: "header", level: 0, keterangan: "Penjualan" },
+      ...pickByKode(["4002", "4003"]),
+      ...pickByKode(["4004"]).map((row) => ({
+        ...row,
+        type: "label",
+        variant: "bold",
+      })),
+
+      // DIKURANGI
+      {
+        id: "label-dikurangi",
+        type: "label",
+        level: 0,
+        keterangan: "Dikurangi :",
+        variant: "bold",
+      },
+      ...pickByKode(["4011", "4012", "4013"]).map((row) => ({
+        ...row,
+        level: 1,
+      })),
+      ...pickByKode(["4020"]).map((row) => ({
+        ...row,
+        type: "label",
+        variant: "bold",
+      })),
+
+      // GROUP Harga Pokok Penjualan
+      {
+        id: "g-harga-pokok-penjualan",
+        type: "header",
+        level: 0,
+        keterangan: "Harga Pokok Penjualan",
+      },
+      ...pickByKode(["5001", "5003", "5007", "5008", "5009"]),
+      ...pickByKode(["5020"]).map((row) => ({
+        ...row,
+        type: "label",
+        variant: "bold",
+      })),
+
+      // Laba Kotor
+      ...pickByKode(["4300"]).map((row) => ({
+        ...row,
+        type: "label",
+        variant: "bold",
+      })),
+
+      ...pickByKode(["4199"]),
+
+      // GROUP Beban Usaha
+      {
+        id: "g-beban-usaha",
+        type: "header",
+        level: 0,
+        keterangan: "Beban Usaha",
+      },
+      ...pickByKode([
+        "5311",
+        "5312",
+        "5313",
+        "5314",
+        "5315",
+        "5316",
+        "5317",
+        "5318",
+        "5319",
+        "5320",
+        "5321",
+        "5322",
+        "5399",
+      ]),
+      ...pickByKode(["5400"]).map((row) => ({
+        ...row,
+        type: "label",
+        variant: "bold",
+      })),
+
+      // Laba Rugi Usaha
+      ...pickByKode(["4500"]).map((row) => ({
+        ...row,
+        type: "label",
+        variant: "bold",
+      })),
+
+      // Pendapatan Non Usaha
+      {
+        id: "g-pendapatan-non-usaha",
+        type: "header",
+        level: 0,
+        keterangan: "Pendapatan Non Usaha",
+      },
+      ...pickByKode(["4501", "4503", "4511", "4599"]),
+      ...pickByKode(["4600"]).map((row) => ({
+        ...row,
+        type: "label",
+        variant: "bold",
+      })),
+
+      // Beban Non Usaha
+      {
+        id: "g-beban-non-usaha",
+        type: "header",
+        level: 0,
+        keterangan: "Beban Non Usaha",
+      },
+      ...pickByKode(["5405", "5409", "5421", "5499"]),
+      ...pickByKode(["5500"]).map((row) => ({
+        ...row,
+        type: "label",
+        variant: "bold",
+      })),
+
+      // Total
+      ...pickByKode(["4700", "4800"]).map((row) => ({
+        ...row,
+        type: "label",
+        variant: "bold",
+      })),
+    ];
+  }
+
   // JASA Bagian A
   static buildJasaA(pickByKode) {
     return [
@@ -360,25 +457,12 @@ export class RowBuilder {
         keterangan: "Pendapatan Usaha",
       },
       ...pickByKode(["4021"]),
-      {
-        id: "label-dikurangi",
-        type: "label",
-        level: 0,
-        keterangan: "Dikurangi :",
-        variant: "bold",
-      },
+
       ...pickByKode(["4013"]).map((row) => ({
         ...row,
         level: 1,
       })),
 
-      // Harga Pokok Penjualan
-      {
-        id: "g-harga-pokok-penjualan",
-        type: "header",
-        level: 0,
-        keterangan: "Harga Pokok Penjualan",
-      },
       ...pickByKode(["5020"]),
 
       // Laba Kotor
@@ -458,6 +542,139 @@ export class RowBuilder {
         type: "label",
         variant: "bold",
       })),
+    ];
+  }
+
+  // BANK KONVENSIONAL Bagian A
+
+  static buildBank_konvensionalA(pickByKode) {
+    return [
+      // Pendapatan Bunga
+      {
+        id: "g-pendapatan-bunga",
+        type: "header",
+        level: 0,
+        keterangan: "Pendapatan Bunga",
+      },
+      ...pickByKode(["4027", "4028"]),
+
+      // Beban Bunga
+      {
+        id: "g-beban-bunga",
+        type: "header",
+        level: 0,
+        keterangan: "Beban Bunga",
+      },
+
+      ...pickByKode(["4031", "4033"]),
+
+      // Pendapatan (Beban) Bunga bersih
+
+      ...pickByKode(["4040"]).map((row) => ({
+        ...row,
+        type: "label",
+        variant: "bold",
+      })),
+
+      // Pendapatan Operasional Lain
+      {
+        id: "g-pendapatan-operasional-lain",
+        type: "header",
+        level: 0,
+        keterangan: "Pendapatan Operasional Lain",
+      },
+
+      ...pickByKode(["4071", "4072", "4073", "4074", "4091", "4092", "4093", "4094", "4199"]),
+
+      // Jumlah Pendapatan Operasional Lain
+
+      ...pickByKode(["4210"]).map((row) => ({
+        ...row,
+        type: "label",
+        variant: "bold",
+      })),
+
+      // Beban Operasional Lain
+      {
+        id: "g-beban-operasional-lain",
+        type: "header",
+        level: 0,
+        keterangan: "Beban Operasional Lain",
+      },
+
+      ...pickByKode([
+        "5350",
+        "5351",
+        "5352",
+        "5353",
+        "5354",
+        "5346",
+        "5356",
+        "5348",
+        "5358",
+        "5311",
+        "5312",
+        "5313",
+        "5314",
+        "5315",
+        "5316",
+        "5317",
+        "5318",
+        "5319",
+        "5320",
+        "5321",
+        "5322",
+        "5399",
+      ]).map((row) => ({
+        ...row,
+        level: 1,
+      })),
+
+      // Total Beban Operasional Lain
+
+      ...pickByKode(["5401"]).map((row) => ({
+        ...row,
+        type: "label",
+        variant: "bold",
+        level: 1,
+      })),
+
+      // Laba Rugi Operasional Lain-bersih
+
+      ...pickByKode(["4400"]).map((row) => ({
+        ...row,
+        type: "label",
+        variant: "bold",
+      })),
+
+      ...pickByKode(["4600"]),
+
+      ...pickByKode(["5500"]).map((row) => ({
+        ...row,
+        level: 1,
+      })),
+
+      // Laba Rugi non Operasional Bersih
+      ...pickByKode(["4700", "4800"]).map((row) => ({
+        ...row,
+        type: "label",
+        variant: "bold",
+      })),
+    ];
+  }
+
+  // DANA PENSIUN Bagian A
+
+  static buildDana_pensiunA(pickByKode) {
+    return [
+      // Pendapatan Dana Pensiun
+      {
+        id: "g-pendapatan-bunga",
+        type: "header",
+        level: 0,
+        keterangan: "Pendapatan Bunga",
+      },
+      ...pickByKode(["4026"]),
     ];
   }
 

@@ -1,8 +1,10 @@
 export const JENIS_PERUSAHAAN = {
   UMUM: "umum",
   MANUFAKTUR: "manufaktur",
-  // DAGANG: "dagang",
+  DAGANG: "dagang",
   JASA: "jasa",
+  BANK_KONVENSIONAL: "bank_konvensional",
+  DANA_PENSIUN: "dana_pensiun",
 };
 
 export const BAGIAN_LAMPIRAN = {
@@ -15,8 +17,7 @@ export const KODE_KOREKSI_OPTIONS = [
   { value: "", label: "" },
   {
     value: "FPO-01",
-    label:
-      "Fees charged/issued for the personal interest of the Taxpayer or his dependents",
+    label: "Fees charged/issued for the personal interest of the Taxpayer or his dependents",
   },
   {
     value: "FPO-02",
@@ -25,8 +26,7 @@ export const KODE_KOREKSI_OPTIONS = [
   },
   {
     value: "FPO-03",
-    label:
-      "Replacement or compensation for work or services in kind and enjoyment",
+    label: "Replacement or compensation for work or services in kind and enjoyment",
   },
   {
     value: "FPO-04",
@@ -51,13 +51,11 @@ export const KODE_KOREKSI_OPTIONS = [
   },
   {
     value: "FPO-09",
-    label:
-      "The difference between commercial depreciation over fiscal depreciation",
+    label: "The difference between commercial depreciation over fiscal depreciation",
   },
   {
     value: "FPO-10",
-    label:
-      "The difference between commercial amortization over fiscal amortization",
+    label: "The difference between commercial amortization over fiscal amortization",
   },
   {
     value: "FPO-11",
@@ -75,8 +73,7 @@ export const KODE_KOREKSI_OPTIONS = [
   },
   {
     value: "FNE-02",
-    label:
-      "The difference between commercial depreciation under fiscal depreciation",
+    label: "The difference between commercial depreciation under fiscal depreciation",
   },
   {
     value: "FNE-03",
@@ -297,6 +294,105 @@ export const PERUSAHAAN_CONFIG = {
     },
   },
 
+  [JENIS_PERUSAHAAN.DAGANG]: {
+    akunKonteks: {
+      // Penjualan
+      4002: ["dagang"],
+      4003: ["dagang"],
+      4004: ["dagang"],
+
+      //Dikuarngi
+      4011: ["dagang"],
+      4012: ["dagang"],
+      4013: ["dagang"],
+      4020: ["dagang"],
+
+      // Harga Pokok Penjualan (HPP)
+      5001: ["dagang"],
+      5003: ["dagang"],
+      5007: ["dagang"],
+      5008: ["dagang"],
+      5009: ["dagang"],
+      5020: ["dagang"],
+      4300: ["dagang"],
+      4199: ["dagang"],
+      // Beban Usaha
+      5311: ["dagang"],
+      5312: ["dagang"],
+      5313: ["dagang"],
+      5314: ["dagang"],
+      5315: ["dagang"],
+      5316: ["dagang"],
+      5317: ["dagang"],
+      5318: ["dagang"],
+      5319: ["dagang"],
+      5320: ["dagang"],
+      5321: ["dagang"],
+      5322: ["dagang"],
+      5399: ["dagang"],
+      5400: ["dagang"],
+      4500: ["dagang"],
+      // Pendapatan Non Usaha
+      4501: ["dagang"],
+      4503: ["dagang"],
+      4511: ["dagang"],
+      4599: ["dagang"],
+      4600: ["dagang"],
+      // Beban Non Usaha
+      5405: ["dagang"],
+      5409: ["dagang"],
+      5421: ["dagang"],
+      5499: ["dagang"],
+      5500: ["dagang"],
+      4700: ["dagang"],
+      4800: ["dagang"],
+    },
+    subtotalCalculations: {
+      [BAGIAN_LAMPIRAN.A]: [
+        "hitungSubtotal4004",
+        "hitungSubtotal4020",
+        "hitungSubtotal5020",
+        "hitungSubtotal4300",
+        "hitungSubtotal5400",
+        "hitungSubtotal4500",
+        "hitungSubtotal4600",
+        "hitungSubtotal5500",
+        "hitungTotal4700",
+        "hitungTotal4800",
+      ],
+      [BAGIAN_LAMPIRAN.B]: [],
+      [BAGIAN_LAMPIRAN.C]: [],
+    },
+    readOnlyFields: {
+      4011: ["nonObjekPajak", "pphFinal"],
+      4012: ["nonObjekPajak", "pphFinal"],
+      4013: ["nonObjekPajak", "pphFinal"],
+      5001: ["nonObjekPajak", "pphFinal"],
+      5003: ["nonObjekPajak", "pphFinal"],
+      5007: ["nonObjekPajak", "pphFinal"],
+      5008: ["nonObjekPajak", "pphFinal"],
+      5009: ["nonObjekPajak", "pphFinal"],
+
+      5311: ["nonObjekPajak", "pphFinal"],
+      5312: ["nonObjekPajak", "pphFinal"],
+      5313: ["nonObjekPajak", "pphFinal"],
+      5314: ["nonObjekPajak", "pphFinal"],
+      5315: ["nonObjekPajak", "pphFinal"],
+      5316: ["nonObjekPajak", "pphFinal"],
+      5317: ["nonObjekPajak", "pphFinal"],
+      5318: ["nonObjekPajak", "pphFinal"],
+      5319: ["nonObjekPajak", "pphFinal"],
+      5320: ["nonObjekPajak", "pphFinal"],
+      5321: ["nonObjekPajak", "pphFinal"],
+      5399: ["nonObjekPajak", "pphFinal"],
+      4599: ["penyesuaianPositif", "penyesuaianNegatif", "kodePenyesuaian"],
+      5405: ["nonObjekPajak", "pphFinal"],
+      5409: ["nonObjekPajak", "pphFinal"],
+      5421: ["nonObjekPajak", "pphFinal"],
+      5499: ["nonObjekPajak", "pphFinal"],
+    },
+  },
+
   [JENIS_PERUSAHAAN.JASA]: {
     akunKonteks: {
       // Pendapatan
@@ -349,7 +445,7 @@ export const PERUSAHAAN_CONFIG = {
       [BAGIAN_LAMPIRAN.C]: [],
     },
     readOnlyFields: {
-      44013: ["nonObjekPajak", "pphFinal"],
+      4013: ["nonObjekPajak", "pphFinal"],
       5020: ["nonObjekPajak", "pphFinal"],
       5311: ["nonObjekPajak", "pphFinal"],
       5312: ["nonObjekPajak", "pphFinal"],
@@ -368,6 +464,108 @@ export const PERUSAHAAN_CONFIG = {
       5409: ["nonObjekPajak", "pphFinal"],
       5421: ["nonObjekPajak", "pphFinal"],
       5499: ["nonObjekPajak", "pphFinal"],
+    },
+  },
+
+  [JENIS_PERUSAHAAN.BANK_KONVENSIONAL]: {
+    akunKonteks: {
+      // Pendapatan Bunga
+      4027: ["bank_konvensional"],
+      4028: ["bank_konvensional"],
+
+      // Beban Bunga
+
+      4031: ["bank_konvensional"],
+      4033: ["bank_konvensional"],
+      4040: ["bank_konvensional"],
+
+      // Pendapatan Operasional Lain
+
+      4071: ["bank_konvensional"],
+      4072: ["bank_konvensional"],
+      4073: ["bank_konvensional"],
+      4074: ["bank_konvensional"],
+      4091: ["bank_konvensional"],
+      4092: ["bank_konvensional"],
+      4093: ["bank_konvensional"],
+      4094: ["bank_konvensional"],
+      4199: ["bank_konvensional"],
+      4210: ["bank_konvensional"],
+
+      // beban Operasional Lain
+
+      5350: ["bank_konvensional"],
+      5351: ["bank_konvensional"],
+      5352: ["bank_konvensional"],
+      5353: ["bank_konvensional"],
+      5354: ["bank_konvensional"],
+      5346: ["bank_konvensional"],
+      5356: ["bank_konvensional"],
+      5348: ["bank_konvensional"],
+      5358: ["bank_konvensional"],
+      5311: ["bank_konvensional"],
+      5312: ["bank_konvensional"],
+      5313: ["bank_konvensional"],
+      5314: ["bank_konvensional"],
+      5315: ["bank_konvensional"],
+      5316: ["bank_konvensional"],
+      5317: ["bank_konvensional"],
+      5318: ["bank_konvensional"],
+      5320: ["bank_konvensional"],
+      5321: ["bank_konvensional"],
+      5322: ["bank_konvensional"],
+      5399: ["bank_konvensional"],
+      5401: ["bank_konvensional"],
+      4400: ["bank_konvensional"],
+      4600: ["bank_konvensional"],
+      5500: ["bank_konvensional"],
+      4700: ["bank_konvensional"],
+      4800: ["bank_konvensional"],
+    },
+    subtotalCalculations: {
+      [BAGIAN_LAMPIRAN.A]: [
+        "hitungSubtotal4040",
+        "hitungSubtotal4210",
+        "hitungSubtotal5401",
+        "hitungSubtotal4400",
+        "hitungSubtotal4700",
+        "hitungSubtotal4800",
+      ],
+      [BAGIAN_LAMPIRAN.B]: [],
+      [BAGIAN_LAMPIRAN.C]: [],
+    },
+    readOnlyFields: {
+      4031: ["nonObjekPajak", "pphFinal"],
+      4033: ["nonObjekPajak", "pphFinal"],
+
+      5350: ["nonObjekPajak", "pphFinal"],
+      5351: ["nonObjekPajak", "pphFinal"],
+      5352: ["nonObjekPajak", "pphFinal"],
+      5353: ["nonObjekPajak", "pphFinal"],
+      5354: ["nonObjekPajak", "pphFinal"],
+      5346: ["nonObjekPajak", "pphFinal"],
+      5356: ["nonObjekPajak", "pphFinal"],
+      5348: ["nonObjekPajak", "pphFinal"],
+      5358: ["nonObjekPajak", "pphFinal"],
+      5311: ["nonObjekPajak", "pphFinal"],
+      5312: ["nonObjekPajak", "pphFinal"],
+      5313: ["nonObjekPajak", "pphFinal"],
+      5314: ["nonObjekPajak", "pphFinal"],
+      5315: ["nonObjekPajak", "pphFinal"],
+      5316: ["nonObjekPajak", "pphFinal"],
+      5317: ["nonObjekPajak", "pphFinal"],
+      5318: ["nonObjekPajak", "pphFinal"],
+      5320: ["nonObjekPajak", "pphFinal"],
+      5321: ["nonObjekPajak", "pphFinal"],
+      5322: ["nonObjekPajak", "pphFinal"],
+      5399: ["nonObjekPajak", "pphFinal"],
+      5500: ["nonObjekPajak", "pphFinal"],
+    },
+  },
+
+  [JENIS_PERUSAHAAN.DANA_PENSIUN]: {
+    akunKonteks: {
+      4026: ["dana_pensiun"],
     },
   },
 };
