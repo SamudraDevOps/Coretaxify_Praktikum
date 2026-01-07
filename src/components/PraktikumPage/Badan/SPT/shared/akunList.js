@@ -815,6 +815,7 @@ export const MASTER_AKUN_LAPORAN_LABA_RUGI = [
       "dagang",
       "jasa",
       "bank_konvensional",
+      "dana_pensiun",
       "asuransi",
       "properti",
       "infrastruktur",
