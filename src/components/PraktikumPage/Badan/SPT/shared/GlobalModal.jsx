@@ -531,7 +531,6 @@ const GlobalModal = ({
   };
 
   // Handle save
-
   const handleSave = () => {
     if (beforeSave) {
       const result = beforeSave(formData);
@@ -540,8 +539,6 @@ const GlobalModal = ({
         alert(result);
         return;
       }
-
-      // Jika return false → stop
       if (result === false) {
         return;
       }
@@ -549,7 +546,16 @@ const GlobalModal = ({
 
     if (!validateForm()) return;
 
-    onSave(formData);
+    // Konversi semua field currency ke number sebelum save
+    const cleanedData = { ...formData };
+    visibleFields.forEach((field) => {
+      if (field.type === "currency" && typeof cleanedData[field.key] === "string") {
+        const parsed = parseFormattedNumber(cleanedData[field.key]);
+        cleanedData[field.key] = parsed !== null ? parsed : 0;
+      }
+    });
+
+    onSave(cleanedData);
   };
 
   // const handleSave = () => {
@@ -653,19 +659,64 @@ const GlobalModal = ({
           />
         );
 
+      // case "currency":
+      //   return fieldWrapper(
+      //     <input
+      //       type="text"
+      //       value={formatNumber(value)}
+      //       onChange={(e) => {
+      //         if (isReadOnly) return;
+      //         const numericValue = parseFormattedNumber(e.target.value);
+      //         updateField(key, numericValue);
+      //       }}
+      //       placeholder={placeholder}
+      //       readOnly={isReadOnly}
+      //       inputMode="numeric"
+      //       className={baseInputClass}
+      //     />
+      //   );
       case "currency":
         return fieldWrapper(
           <input
             type="text"
-            value={formatNumber(value)}
+            inputMode="decimal"
+            value={
+              value === 0 || value === "" || value === null || value === undefined
+                ? ""
+                : value === "-"
+                ? "-"
+                : typeof value === "string"
+                ? formatNumber(value)
+                : formatNumber(value)
+            }
             onChange={(e) => {
               if (isReadOnly) return;
-              const numericValue = parseFormattedNumber(e.target.value);
-              updateField(key, numericValue);
+
+              let raw = e.target.value.replace(/\./g, "");
+
+              // izinkan kosong dan "-" saja
+              if (raw === "" || raw === "-") {
+                updateField(key, raw);
+                return;
+              }
+
+              // hanya angka & minus
+              if (/^-?\d*$/.test(raw)) {
+                updateField(key, raw);
+              }
+            }}
+            onBlur={() => {
+              // normalisasi data tanpa mempengaruhi tampilan :)
+              if (value === "" || value === "-") {
+                updateField(key, 0);
+                return;
+              }
+
+              const num = Number(value);
+              updateField(key, isNaN(num) ? 0 : num);
             }}
             placeholder={placeholder}
             readOnly={isReadOnly}
-            inputMode="numeric"
             className={baseInputClass}
           />
         );
