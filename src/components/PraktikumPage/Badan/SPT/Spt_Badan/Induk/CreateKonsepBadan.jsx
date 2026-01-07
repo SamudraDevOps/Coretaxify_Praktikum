@@ -22,6 +22,7 @@ import {
   Lampiran1D,
   Lampiran1E,
   Lampiran1F,
+  Lampiran1G,
   Lampiran2,
   Lampiran3,
   Lampiran4,
@@ -123,6 +124,15 @@ const CreateKonsepBadan = () => {
       title: "L1-F",
       subtitle: "Lampiran 1F - DANA PENSIUN",
       component: "Lampiran_1F",
+      badge: "Tersedia",
+      order: 1, // Urutan pertama
+    });
+
+    allLampiran.push({
+      id: "lampiran-1G",
+      title: "L1-G",
+      subtitle: "Lampiran 1G - ASURANSI",
+      component: "Lampiran_1G",
       badge: "Tersedia",
       order: 1, // Urutan pertama
     });
@@ -287,6 +297,8 @@ const CreateKonsepBadan = () => {
         return <Lampiran1E data={data} />;
       case "Lampiran_1F":
         return <Lampiran1F data={data} />;
+      case "Lampiran_1G":
+        return <Lampiran1G data={data} />;
       case "Lampiran_2":
         return <Lampiran2 data={data} />;
       case "Lampiran_3":

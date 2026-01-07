@@ -5,6 +5,7 @@ export const JENIS_PERUSAHAAN = {
   JASA: "jasa",
   BANK_KONVENSIONAL: "bank_konvensional",
   DANA_PENSIUN: "dana_pensiun",
+  ASURANSI: "asuransi",
 };
 
 export const BAGIAN_LAMPIRAN = {
@@ -565,7 +566,158 @@ export const PERUSAHAAN_CONFIG = {
 
   [JENIS_PERUSAHAAN.DANA_PENSIUN]: {
     akunKonteks: {
+      // Pendapatan Investasi
       4026: ["dana_pensiun"],
+      4091: ["dana_pensiun"],
+      4101: ["dana_pensiun"],
+      4106: ["dana_pensiun"],
+      4118: ["dana_pensiun"],
+      4120: ["dana_pensiun"],
+
+      // Jumlah Pendapatan Investasi
+
+      5201: ["dana_pensiun"],
+      5202: ["dana_pensiun"],
+      5203: ["dana_pensiun"],
+      5204: ["dana_pensiun"],
+      5205: ["dana_pensiun"],
+      5299: ["dana_pensiun"],
+      5300: ["dana_pensiun"],
+      4300: ["dana_pensiun"],
+
+      // Beban Operasional
+
+      5311: ["dana_pensiun"],
+      5312: ["dana_pensiun"],
+      5323: ["dana_pensiun"],
+      5326: ["dana_pensiun"],
+      5314: ["dana_pensiun"],
+      5316: ["dana_pensiun"],
+      5317: ["dana_pensiun"],
+      5318: ["dana_pensiun"],
+      5320: ["dana_pensiun"],
+      5399: ["dana_pensiun"],
+      5400: ["dana_pensiun"],
+
+      // Laba Rugi Non Operasional
+
+      4512: ["dana_pensiun"],
+      4513: ["dana_pensiun"],
+      4514: ["dana_pensiun"],
+      4599: ["dana_pensiun"],
+      5499: ["dana_pensiun"],
+      4700: ["dana_pensiun"],
+      4800: ["dana_pensiun"],
+    },
+
+    subtotalCalculations: {
+      [BAGIAN_LAMPIRAN.A]: [
+        "hitungSubtotal4120",
+        "hitungSubtotal5300",
+        "hitungSubtotal4300",
+        "hitungSubtotal5400",
+        "hitungTotal4700",
+        "hitungTotal4800",
+      ],
+      [BAGIAN_LAMPIRAN.B]: [],
+      [BAGIAN_LAMPIRAN.C]: [],
+    },
+    readOnlyFields: {
+      5201: ["nonObjekPajak", "pphFinal"],
+      5202: ["nonObjekPajak", "pphFinal"],
+      5203: ["nonObjekPajak", "pphFinal"],
+      5204: ["nonObjekPajak", "pphFinal"],
+      5205: ["nonObjekPajak", "pphFinal"],
+      5299: ["nonObjekPajak", "pphFinal"],
+
+      5311: ["nonObjekPajak", "pphFinal"],
+      5312: ["nonObjekPajak", "pphFinal"],
+      5323: ["nonObjekPajak", "pphFinal"],
+      5326: ["nonObjekPajak", "pphFinal"],
+      5314: ["nonObjekPajak", "pphFinal"],
+      5316: ["nonObjekPajak", "pphFinal"],
+      5317: ["nonObjekPajak", "pphFinal"],
+      5318: ["nonObjekPajak", "pphFinal"],
+      5320: ["nonObjekPajak", "pphFinal"],
+      5399: ["nonObjekPajak", "pphFinal"],
+
+      5499: ["nonObjekPajak", "pphFinal"],
+    },
+  },
+
+  [JENIS_PERUSAHAAN.ASURANSI]: {
+    akunKonteks: {
+      4041: ["asuransi"],
+      4045: ["asuransi"],
+      4047: ["asuransi"],
+      4051: ["asuransi"],
+      4060: ["asuransi"],
+      4171: ["asuransi"],
+      4200: ["asuransi"],
+
+      // Beban UnderWriting
+
+      5101: ["asuransi"],
+      5102: ["asuransi"],
+      5103: ["asuransi"],
+      5109: ["asuransi"],
+      5200: ["asuransi"],
+      4300: ["asuransi"],
+      4120: ["asuransi"],
+      4199: ["asuransi"],
+
+      // Beban Operasional
+
+      5311: ["asuransi"],
+      5312: ["asuransi"],
+      5313: ["asuransi"],
+      5314: ["asuransi"],
+      5315: ["asuransi"],
+      5316: ["asuransi"],
+      5317: ["asuransi"],
+      5318: ["asuransi"],
+      5319: ["asuransi"],
+      5320: ["asuransi"],
+      5321: ["asuransi"],
+      5399: ["asuransi"],
+      5400: ["asuransi"],
+      4600: ["asuransi"],
+      5500: ["asuransi"],
+      4700: ["asuransi"],
+      4800: ["asuransi"],
+    },
+
+    subtotalCalculations: {
+      [BAGIAN_LAMPIRAN.A]: [
+        "hitungSubtotal4060",
+        "hitungSubtotal4200",
+        "hitungSubtotal5200",
+        "hitungSubtotal4300",
+        "hitungSubtotal5400",
+        "hitungTotal4700",
+        "hitungTotal4800",
+      ],
+      [BAGIAN_LAMPIRAN.B]: [],
+      [BAGIAN_LAMPIRAN.C]: [],
+    },
+    readOnlyFields: {
+      // 5201: ["nonObjekPajak", "pphFinal"],
+      // 5202: ["nonObjekPajak", "pphFinal"],
+      // 5203: ["nonObjekPajak", "pphFinal"],
+      // 5204: ["nonObjekPajak", "pphFinal"],
+      // 5205: ["nonObjekPajak", "pphFinal"],
+      // 5299: ["nonObjekPajak", "pphFinal"],
+      // 5311: ["nonObjekPajak", "pphFinal"],
+      // 5312: ["nonObjekPajak", "pphFinal"],
+      // 5323: ["nonObjekPajak", "pphFinal"],
+      // 5326: ["nonObjekPajak", "pphFinal"],
+      // 5314: ["nonObjekPajak", "pphFinal"],
+      // 5316: ["nonObjekPajak", "pphFinal"],
+      // 5317: ["nonObjekPajak", "pphFinal"],
+      // 5318: ["nonObjekPajak", "pphFinal"],
+      // 5320: ["nonObjekPajak", "pphFinal"],
+      // 5399: ["nonObjekPajak", "pphFinal"],
+      // 5499: ["nonObjekPajak", "pphFinal"],
     },
   },
 };

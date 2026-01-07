@@ -3,7 +3,7 @@ import { Edit } from "lucide-react";
 import { formatRupiah } from "@utils/formatCurrency";
 import GlobalTable from "@shared/GlobalTable";
 
-const isEditable = (row) => row.type === "line";
+const isEditable = (row) => row.type === "line" && row.derived !== true;
 
 const isBoldRow = (row) =>
   row.type === "header" || row.type === "subtotal" || row.variant === "bold";
@@ -120,7 +120,8 @@ export default function LaporanLabaRugiTabel({ rows, openEditModal, kodeOptions 
       render: (r) => {
         if (r.type === "header" || r.type === "subtotal") return "";
         const found = kodeOptions.find((opt) => opt.value === r.kodePenyesuaian);
-        return found ? found.label : r.kodePenyesuaian || "";
+        return r.kodePenyesuaian || "";
+        // return found ? found.label : r.kodePenyesuaian || "";
       },
     },
     {

@@ -9,6 +9,7 @@ const lampiranToJenisPerusahaan = {
   Lampiran1D: JENIS_PERUSAHAAN.JASA,
   Lampiran1E: JENIS_PERUSAHAAN.BANK_KONVENSIONAL,
   Lampiran1F: JENIS_PERUSAHAAN.DANA_PENSIUN,
+  Lampiran1G: JENIS_PERUSAHAAN.ASURANSI,
 };
 
 export default function UniversalBagianA({ lampiran }) {

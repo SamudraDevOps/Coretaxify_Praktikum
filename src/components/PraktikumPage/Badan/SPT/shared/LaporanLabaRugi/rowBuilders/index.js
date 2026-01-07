@@ -152,12 +152,15 @@ export class RowBuilder {
         ...row,
         type: "label",
         variant: "bold",
+        derived: true,
       })),
 
       // DIKURANGI
       {
         id: "label-dikurangi",
         type: "label",
+        derived: true,
+
         level: 0,
         keterangan: "Dikurangi :",
         variant: "bold",
@@ -170,6 +173,7 @@ export class RowBuilder {
         ...row,
         type: "label",
         variant: "bold",
+        derived: true,
       })),
 
       // GROUP Harga Pokok Produksi
@@ -203,12 +207,14 @@ export class RowBuilder {
         type: "label",
         variant: "bold",
         level: 1,
+        derived: true,
       })),
       ...pickByKode(["5031"]).map((row) => ({
         ...row,
         type: "label",
         variant: "bold",
         level: 1,
+        derived: true,
       })),
       ...pickByKode(["5032"]).map((row) => ({
         ...row,
@@ -218,6 +224,7 @@ export class RowBuilder {
         ...row,
         type: "label",
         variant: "bold",
+        derived: true,
       })),
       ...pickByKode(["5050"]),
 
@@ -236,18 +243,21 @@ export class RowBuilder {
         ...row,
         type: "label",
         variant: "bold",
+        derived: true,
       })),
       ...pickByKode(["5090", "5099"]),
       ...pickByKode(["5100"]).map((row) => ({
         ...row,
         type: "label",
         variant: "bold",
+        derived: true,
       })),
       ...pickByKode(["5008", "5009"]),
       ...pickByKode(["5020", "4300"]).map((row) => ({
         ...row,
         type: "label",
         variant: "bold",
+        derived: true,
       })),
       ...pickByKode(["4199"]),
 
@@ -277,12 +287,15 @@ export class RowBuilder {
         ...row,
         type: "label",
         variant: "bold",
+        derived: true,
+
         level: 1,
       })),
       ...pickByKode(["4500"]).map((row) => ({
         ...row,
         type: "label",
         variant: "bold",
+        derived: true,
       })),
 
       // Pendapatan Non Usaha
@@ -297,6 +310,7 @@ export class RowBuilder {
         ...row,
         type: "label",
         variant: "bold",
+        derived: true,
       })),
 
       // Beban Non Usaha
@@ -312,11 +326,13 @@ export class RowBuilder {
         type: "label",
         variant: "bold",
         level: 1,
+        derived: true,
       })),
       ...pickByKode(["4700", "4800"]).map((row) => ({
         ...row,
         type: "label",
         variant: "bold",
+        derived: true,
       })),
     ];
   }
@@ -331,6 +347,7 @@ export class RowBuilder {
         ...row,
         type: "label",
         variant: "bold",
+        derived: true,
       })),
 
       // DIKURANGI
@@ -340,6 +357,7 @@ export class RowBuilder {
         level: 0,
         keterangan: "Dikurangi :",
         variant: "bold",
+        derived: true,
       },
       ...pickByKode(["4011", "4012", "4013"]).map((row) => ({
         ...row,
@@ -349,6 +367,7 @@ export class RowBuilder {
         ...row,
         type: "label",
         variant: "bold",
+        derived: true,
       })),
 
       // GROUP Harga Pokok Penjualan
@@ -363,6 +382,7 @@ export class RowBuilder {
         ...row,
         type: "label",
         variant: "bold",
+        derived: true,
       })),
 
       // Laba Kotor
@@ -370,6 +390,7 @@ export class RowBuilder {
         ...row,
         type: "label",
         variant: "bold",
+        derived: true,
       })),
 
       ...pickByKode(["4199"]),
@@ -400,6 +421,7 @@ export class RowBuilder {
         ...row,
         type: "label",
         variant: "bold",
+        derived: true,
       })),
 
       // Laba Rugi Usaha
@@ -407,6 +429,7 @@ export class RowBuilder {
         ...row,
         type: "label",
         variant: "bold",
+        derived: true,
       })),
 
       // Pendapatan Non Usaha
@@ -421,6 +444,7 @@ export class RowBuilder {
         ...row,
         type: "label",
         variant: "bold",
+        derived: true,
       })),
 
       // Beban Non Usaha
@@ -435,6 +459,7 @@ export class RowBuilder {
         ...row,
         type: "label",
         variant: "bold",
+        derived: true,
       })),
 
       // Total
@@ -442,6 +467,7 @@ export class RowBuilder {
         ...row,
         type: "label",
         variant: "bold",
+        derived: true,
       })),
     ];
   }
@@ -470,6 +496,7 @@ export class RowBuilder {
         ...row,
         type: "label",
         variant: "bold",
+        derived: true,
       })),
 
       ...pickByKode(["4199"]),
@@ -499,6 +526,7 @@ export class RowBuilder {
         ...row,
         type: "label",
         variant: "bold",
+        derived: true,
       })),
 
       // Laba Rugi Usaha
@@ -506,6 +534,7 @@ export class RowBuilder {
         ...row,
         type: "label",
         variant: "bold",
+        derived: true,
       })),
 
       // Pendapatan Non Usaha
@@ -520,6 +549,7 @@ export class RowBuilder {
         ...row,
         type: "label",
         variant: "bold",
+        derived: true,
       })),
 
       // Beban Non Usaha
@@ -534,6 +564,7 @@ export class RowBuilder {
         ...row,
         type: "label",
         variant: "bold",
+        derived: true,
       })),
 
       // Total
@@ -541,6 +572,7 @@ export class RowBuilder {
         ...row,
         type: "label",
         variant: "bold",
+        derived: true,
       })),
     ];
   }
@@ -574,6 +606,7 @@ export class RowBuilder {
         ...row,
         type: "label",
         variant: "bold",
+        derived: true,
       })),
 
       // Pendapatan Operasional Lain
@@ -592,6 +625,7 @@ export class RowBuilder {
         ...row,
         type: "label",
         variant: "bold",
+        derived: true,
       })),
 
       // Beban Operasional Lain
@@ -637,6 +671,7 @@ export class RowBuilder {
         type: "label",
         variant: "bold",
         level: 1,
+        derived: true,
       })),
 
       // Laba Rugi Operasional Lain-bersih
@@ -645,6 +680,7 @@ export class RowBuilder {
         ...row,
         type: "label",
         variant: "bold",
+        derived: true,
       })),
 
       ...pickByKode(["4600"]),
@@ -659,6 +695,7 @@ export class RowBuilder {
         ...row,
         type: "label",
         variant: "bold",
+        derived: true,
       })),
     ];
   }
@@ -674,7 +711,187 @@ export class RowBuilder {
         level: 0,
         keterangan: "Pendapatan Bunga",
       },
-      ...pickByKode(["4026"]),
+      ...pickByKode(["4026", "4091", "4101", "4106", "4118"]),
+
+      ...pickByKode(["4120"]).map((row) => ({
+        ...row,
+        type: "label",
+        variant: "bold",
+        derived: true,
+      })),
+
+      // Beban Invenstasi
+      {
+        id: "g-beban-investasi",
+        type: "header",
+        level: 0,
+        keterangan: "Beban Investasi",
+      },
+
+      ...pickByKode(["5201", "5202", "5203", "5204", "5205", "5299"]).map((row) => ({
+        ...row,
+        level: 1,
+      })),
+
+      ...pickByKode(["5300", "4300"]).map((row) => ({
+        ...row,
+        type: "label",
+        variant: "bold",
+        derived: true,
+      })),
+
+      // Beban Operasional
+      {
+        id: "g-beban-operasional",
+        type: "header",
+        level: 0,
+        keterangan: "Beban Operasional",
+      },
+
+      ...pickByKode([
+        "5311",
+        "5312",
+        "5323",
+        "5326",
+        "5314",
+        "5316",
+        "5317",
+        "5318",
+        "5320",
+        "5399",
+      ]).map((row) => ({
+        ...row,
+        level: 1,
+      })),
+
+      ...pickByKode(["5400"]).map((row) => ({
+        ...row,
+        type: "label",
+        variant: "bold",
+        derived: true,
+      })),
+
+      // Laba Rugi non Operasional
+      {
+        id: "g-laba-rugi-nono-operasional",
+        type: "header",
+        level: 0,
+        keterangan: "Laba (Rugi) non Operasional",
+      },
+      ...pickByKode(["4512", "4513", "4514", "4599", "5499"]),
+
+      ...pickByKode(["4700", "4800"]).map((row) => ({
+        ...row,
+        type: "label",
+        variant: "bold",
+        derived: true,
+      })),
+    ];
+  }
+
+  static buildAsuransiA(pickByKode) {
+    return [
+      ...pickByKode(["4041"]),
+
+      ...pickByKode(["4045", "4047", "4051"]).map((row) => ({
+        ...row,
+        level: 1,
+      })),
+
+      ...pickByKode(["4060"]).map((row) => ({
+        ...row,
+        type: "label",
+        variant: "bold",
+        derived: true,
+      })),
+
+      ...pickByKode(["4171"]),
+
+      ...pickByKode(["4200"]).map((row) => ({
+        ...row,
+        type: "label",
+        variant: "bold",
+        derived: true,
+      })),
+
+      // Beban Underwriting
+
+      {
+        id: "g-beban-underwriting",
+        type: "header",
+        level: 0,
+        keterangan: "Beban Underwriting",
+      },
+
+      ...pickByKode(["5101", "5102", "5103", "5109"]).map((row) => ({
+        ...row,
+        level: 1,
+      })),
+      ...pickByKode(["5200"]).map((row) => ({
+        ...row,
+        type: "label",
+        variant: "bold",
+        derived: true,
+        level: 1,
+      })),
+
+      ...pickByKode(["4300"]).map((row) => ({
+        ...row,
+        type: "label",
+        variant: "bold",
+        derived: true,
+      })),
+
+      ...pickByKode(["4120", "4199"]),
+
+      // Beban Operasional
+
+      {
+        id: "g-beban-operasional",
+        type: "header",
+        level: 0,
+        keterangan: "Beban Operasional",
+      },
+
+      ...pickByKode([
+        "5311",
+        "5312",
+        "5313",
+        "5314",
+        "5315",
+        "5316",
+        "5317",
+        "5318",
+        "5319",
+        "5320",
+        "5321",
+        "5399",
+      ]).map((row) => ({
+        ...row,
+        level: 1,
+      })),
+
+      ...pickByKode(["5400"]).map((row) => ({
+        ...row,
+        type: "label",
+        variant: "bold",
+        derived: true,
+        level: 1,
+      })),
+
+      ...pickByKode(["4600"]),
+
+      ...pickByKode(["5500"]).map((row) => ({
+        ...row,
+        level: 1,
+      })),
+
+      ...pickByKode(["4700", "4800"]).map((row) => ({
+        ...row,
+        type: "label",
+        variant: "bold",
+        derived: true,
+      })),
     ];
   }
 
