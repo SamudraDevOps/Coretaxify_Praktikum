@@ -149,7 +149,7 @@ export default function LaporanLabaRugiTabel({ rows, openEditModal, kodeOptions 
         rowClassName={(row) => {
           if (row.type === "subtotal") return "bg-yellow-50 font-semibold";
           if (row.type === "header") return "bg-purple-100 font-semibold";
-          if (row.type === "label") return "bg-gray-50 italic";
+          if (row.type === "label") return "bg-gray-100 italic";
           if (row.variant === "bold") return " font-semibold";
           return "";
         }}

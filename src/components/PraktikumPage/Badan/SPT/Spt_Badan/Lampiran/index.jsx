@@ -6,6 +6,8 @@ export { default as Lampiran1D } from "./Lampiran1D";
 export { default as Lampiran1E } from "./Lampiran1E";
 export { default as Lampiran1F } from "./Lampiran1F";
 export { default as Lampiran1G } from "./Lampiran1G";
+export { default as Lampiran1H } from "./Lampiran1H";
+export { default as Lampiran1I } from "./Lampiran1I";
 export { default as Lampiran2 } from "./Lampiran2";
 export { default as Lampiran3 } from "./Lampiran3";
 export { default as Lampiran4 } from "./Lampiran4";

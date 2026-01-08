@@ -789,6 +789,8 @@ export class RowBuilder {
     ];
   }
 
+  // ASURANSI Bagian A
+
   static buildAsuransiA(pickByKode) {
     return [
       ...pickByKode(["4041"]),
@@ -895,34 +897,357 @@ export class RowBuilder {
     ];
   }
 
-  // TODO: Tambahkan builder untuk BagianB dan BagianC
-  static buildManufakturB(pickByKode) {
-    // Logic khusus untuk Bagian B manufaktur (untuk Laporan Posisi Keuangan)
-    return [];
+  // PROPERTI Bagian A
+
+  static buildPropertiA(pickByKode) {
+    return [
+      ...pickByKode(["4001"]),
+
+      ...pickByKode(["4013"]).map((row) => ({
+        ...row,
+        level: 1,
+      })),
+      ...pickByKode(["4026", "4101", "4071"]),
+
+      ...pickByKode(["5020"]).map((row) => ({
+        ...row,
+        level: 1,
+      })),
+
+      ...pickByKode(["4300"]).map((row) => ({
+        ...row,
+        type: "label",
+        variant: "bold",
+        derived: true,
+      })),
+
+      ...pickByKode(["4153", "4199"]),
+
+      ...pickByKode(["5324"]).map((row) => ({
+        ...row,
+        level: 1,
+      })),
+
+      // Beban Usaha
+
+      {
+        id: "g-beban-usaha",
+        type: "header",
+        level: 0,
+        keterangan: "Beban Usaha",
+      },
+
+      ...pickByKode([
+        "5311",
+        "5312",
+        "5313",
+        "5314",
+        "5315",
+        "5316",
+        "5317",
+        "5318",
+        "5319",
+        "5320",
+        "5321",
+        "5322",
+        "5399",
+      ]).map((row) => ({
+        ...row,
+        level: 1,
+      })),
+      ...pickByKode(["5400"]).map((row) => ({
+        ...row,
+        type: "label",
+        variant: "bold",
+        level: 1,
+        derived: true,
+      })),
+
+      ...pickByKode(["4500"]).map((row) => ({
+        ...row,
+        type: "label",
+        variant: "bold",
+        derived: true,
+      })),
+
+      // Pendapatan Non Usaha
+
+      {
+        id: "g-pendapatan-non-usaha",
+        type: "header",
+        level: 0,
+        keterangan: "Pendapatan Non Usaha",
+      },
+
+      ...pickByKode(["4511", "4501", "4599"]),
+
+      ...pickByKode(["4600"]).map((row) => ({
+        ...row,
+        type: "label",
+        variant: "bold",
+        derived: true,
+      })),
+
+      // Beban Non Usaha
+
+      {
+        id: "g-beban-non-usaha",
+        type: "header",
+        level: 0,
+        keterangan: "Beban Non Usaha",
+      },
+
+      ...pickByKode(["5405", "5409", "5421", "5499"]).map((row) => ({
+        ...row,
+        level: 1,
+      })),
+
+      ...pickByKode(["5500"]).map((row) => ({
+        ...row,
+        type: "label",
+        variant: "bold",
+        level: 1,
+        derived: true,
+      })),
+
+      ...pickByKode(["4700", "4800"]).map((row) => ({
+        ...row,
+        type: "label",
+        variant: "bold",
+        derived: true,
+      })),
+    ];
   }
 
-  static buildManufakturC(pickByKode) {
-    // Logic khusus untuk Bagian C manufaktur
-    return [];
+  // BANK SYARIAH Bagian A
+  static buildBank_syariahA(pickByKode) {
+    return [
+      // Pendapatan Dari Piutang
+      {
+        id: "g-pendapatan-Beban-Operasional",
+        type: "header",
+        level: 0,
+        keterangan: "Pendapatan dan Beban Operasional",
+      },
+
+      {
+        id: "g-pendapatan-Penyaluran-Dana",
+        type: "header",
+        level: 0,
+        keterangan: "Pendapatan dari Penyaluran Dana",
+      },
+      {
+        id: "g-pendapatan-Piutang",
+        type: "header",
+        level: 0,
+        keterangan: "Pendapatan dari Piutang",
+      },
+
+      ...pickByKode(["4120", "4121", "4122", "4123"]).map((row) => ({
+        ...row,
+        level: 1,
+      })),
+
+      ...pickByKode(["4130"]).map((row) => ({
+        ...row,
+        type: "label",
+        variant: "bold",
+        level: 1,
+        derived: true,
+      })),
+
+      // Pendapatan Bagi Hasil
+      {
+        id: "g-pendapatan-Bagi-Hasil",
+        type: "header",
+        level: 0,
+        keterangan: "Pendapatan Bagi Hasil",
+      },
+      ...pickByKode(["4131", "4132"]).map((row) => ({
+        ...row,
+        level: 1,
+      })),
+
+      ...pickByKode(["4140"]).map((row) => ({
+        ...row,
+        type: "label",
+        variant: "bold",
+        level: 1,
+        derived: true,
+      })),
+      ...pickByKode(["4149"]).map((row) => ({
+        ...row,
+        level: 1,
+      })),
+      ...pickByKode(["4150"]).map((row) => ({
+        ...row,
+        type: "label",
+        variant: "bold",
+        level: 1,
+        derived: true,
+      })),
+
+      // Pendapatan Untuk Pemilik Dana Investasi
+
+      {
+        id: "g-Bagi-Hasil-Pemmilik-Dana-Investasi",
+        type: "header",
+        level: 0,
+        keterangan: "Pendapatan Untuk Pemilik Dana Investasi",
+      },
+      ...pickByKode(["5301", "5302", "5310"]).map((row) => ({
+        ...row,
+        level: 1,
+      })),
+
+      ...pickByKode(["4300"]).map((row) => ({
+        ...row,
+        type: "label",
+        variant: "bold",
+        derived: true,
+      })),
+
+      // Pendapatan Operasional selain dari Penyaluran Dana
+
+      {
+        id: "g-pendapatan-dan-beban-operasional-selain-penyaluran-dana",
+        type: "header",
+        level: 0,
+        keterangan: "Pendapatan dan Beban Operasional selain dari Penyaluran Dana",
+      },
+      {
+        id: "g-pendapatan-operasional-lain",
+        type: "header",
+        level: 0,
+        keterangan: "Pendapatan Operasional Lain",
+      },
+
+      ...pickByKode(["4071", "4073", "4074", "4084", "4092", "4091", "4093", "4094", "4199"]).map(
+        (row) => ({
+          ...row,
+          level: 1,
+        })
+      ),
+      ...pickByKode(["4210"]).map((row) => ({
+        ...row,
+        type: "label",
+        variant: "bold",
+        level: 1,
+        derived: true,
+      })),
+
+      // Beban Operasional Lainnya
+
+      {
+        id: "g-Beban-Operasional-Lainnya",
+        type: "header",
+        level: 0,
+        keterangan: "Beban Operasional Lainnya",
+      },
+
+      ...pickByKode([
+        "5341",
+        "5342",
+        "5343",
+        "5344",
+        "5345",
+        "5346",
+        "5347",
+        "5348",
+        "5349",
+        "5311",
+        "5313",
+        "5315",
+        "5320",
+        "5321",
+        "5314",
+        "5399",
+      ]).map((row) => ({
+        ...row,
+        level: 1,
+      })),
+
+      ...pickByKode(["5401"]).map((row) => ({
+        ...row,
+        type: "label",
+        variant: "bold",
+        level: 1,
+        derived: true,
+      })),
+
+      ...pickByKode(["4220"]).map((row) => ({
+        ...row,
+        type: "label",
+        variant: "bold",
+        derived: true,
+      })),
+
+      ...pickByKode(["4500"]).map((row) => ({
+        ...row,
+        type: "label",
+        variant: "bold",
+        derived: true,
+      })),
+
+      // Pendapatan Non Operasional
+
+      {
+        id: "g-pendapatan-non-Operasional",
+        type: "header",
+        level: 0,
+        keterangan: "Pendapatan Non Operasional",
+      },
+
+      ...pickByKode(["4502", "4501", "4599"]),
+
+      // Beban Operasional
+
+      {
+        id: "g-Beban-non-Operasional",
+        type: "header",
+        level: 0,
+        keterangan: "Beban Non Operasional",
+      },
+
+      ...pickByKode(["5422", "5421", "5499"]),
+
+      ...pickByKode(["4700", "4800"]).map((row) => ({
+        ...row,
+        type: "label",
+        variant: "bold",
+        derived: true,
+      })),
+    ];
   }
 
-  static buildUmumB(pickByKode) {
-    // Logic khusus untuk Bagian B umum (untuk Laporan Posisi Keuangan)
-    return [];
-  }
+  // // TODO: Tambahkan builder untuk BagianB dan BagianC
+  // static buildManufakturB(pickByKode) {
+  //   // Logic khusus untuk Bagian B manufaktur (untuk Laporan Posisi Keuangan)
+  //   return [];
+  // }
 
-  static buildUmumC(pickByKode) {
-    // Logic khusus untuk Bagian C umum
-    return [];
-  }
+  // static buildManufakturC(pickByKode) {
+  //   // Logic khusus untuk Bagian C manufaktur
+  //   return [];
+  // }
 
-  static buildJasaB(pickByKode) {
-    // Logic khusus untuk Bagian B jasa
-    return [];
-  }
+  // static buildUmumB(pickByKode) {
+  //   // Logic khusus untuk Bagian B umum (untuk Laporan Posisi Keuangan)
+  //   return [];
+  // }
 
-  static buildJasaC(pickByKode) {
-    // Logic khusus untuk Bagian C jasa
-    return [];
-  }
+  // static buildUmumC(pickByKode) {
+  //   // Logic khusus untuk Bagian C umum
+  //   return [];
+  // }
+
+  // static buildJasaB(pickByKode) {
+  //   // Logic khusus untuk Bagian B jasa
+  //   return [];
+  // }
+
+  // static buildJasaC(pickByKode) {
+  //   // Logic khusus untuk Bagian C jasa
+  //   return [];
+  // }
 }

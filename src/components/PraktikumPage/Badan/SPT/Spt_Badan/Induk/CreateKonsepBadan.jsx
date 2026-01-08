@@ -23,6 +23,8 @@ import {
   Lampiran1E,
   Lampiran1F,
   Lampiran1G,
+  Lampiran1H,
+  Lampiran1I,
   Lampiran2,
   Lampiran3,
   Lampiran4,
@@ -133,6 +135,24 @@ const CreateKonsepBadan = () => {
       title: "L1-G",
       subtitle: "Lampiran 1G - ASURANSI",
       component: "Lampiran_1G",
+      badge: "Tersedia",
+      order: 1, // Urutan pertama
+    });
+
+    allLampiran.push({
+      id: "lampiran-1H",
+      title: "L1-H",
+      subtitle: "Lampiran 1H - PROPERTI",
+      component: "Lampiran_1H",
+      badge: "Tersedia",
+      order: 1, // Urutan pertama
+    });
+
+    allLampiran.push({
+      id: "lampiran-1I",
+      title: "L1-I",
+      subtitle: "Lampiran 1I - BANK SYARIAH",
+      component: "Lampiran_1I",
       badge: "Tersedia",
       order: 1, // Urutan pertama
     });
@@ -299,6 +319,10 @@ const CreateKonsepBadan = () => {
         return <Lampiran1F data={data} />;
       case "Lampiran_1G":
         return <Lampiran1G data={data} />;
+      case "Lampiran_1H":
+        return <Lampiran1H data={data} />;
+      case "Lampiran_1I":
+        return <Lampiran1I data={data} />;
       case "Lampiran_2":
         return <Lampiran2 data={data} />;
       case "Lampiran_3":
