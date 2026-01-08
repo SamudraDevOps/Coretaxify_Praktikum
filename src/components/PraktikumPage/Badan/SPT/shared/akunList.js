@@ -26,8 +26,8 @@ export const MASTER_AKUN_LAPORAN_LABA_RUGI = [
   // AKUN MAKNA GANDA (BERDASARKAN JENIS PERUSAHAAN)
   {
     kodeAkun: "4001",
-    jenisPerusahaan: ["manufaktur", "dagang"],
-    namaAkun: "'Penjualan dan Pendapatan Usaha",
+    jenisPerusahaan: ["properti", "infrastruktur"],
+    namaAkun: "Penjualan dan Pendapatan Usaha",
   },
   {
     kodeAkun: "4002",
@@ -56,7 +56,7 @@ export const MASTER_AKUN_LAPORAN_LABA_RUGI = [
   },
   {
     kodeAkun: "4013",
-    jenisPerusahaan: ["umum", "manufaktur", "dagang", "jasa", "proeperti", "infrastruktur"],
+    jenisPerusahaan: ["umum", "manufaktur", "dagang", "jasa", "properti", "infrastruktur"],
     namaAkun: "Penyesuaian Penjualan",
   },
   {
@@ -217,7 +217,7 @@ export const MASTER_AKUN_LAPORAN_LABA_RUGI = [
   {
     kodeAkun: "4084",
     namaAkun: "Pendapatan Bank Selaku Mudharib dalam Mudharabah Muqayyadah",
-    jenisPerusahaan: ["pembiayaan"],
+    jenisPerusahaan: ["pembiayaan", "bank_syariah"],
   },
   {
     kodeAkun: "4091",
@@ -277,47 +277,47 @@ export const MASTER_AKUN_LAPORAN_LABA_RUGI = [
   {
     kodeAkun: "4121",
     namaAkun: "Murabaha",
-    jenisPerusahaan: ["pembiayaan"],
+    jenisPerusahaan: ["pembiayaan", "bank_syariah"],
   },
   {
     kodeAkun: "4122",
     namaAkun: "Istishna'",
-    jenisPerusahaan: ["pembiayaan"],
+    jenisPerusahaan: ["pembiayaan", "bank_syariah"],
   },
   {
     kodeAkun: "4123",
     namaAkun: "Ujrah",
-    jenisPerusahaan: ["pembiayaan"],
+    jenisPerusahaan: ["pembiayaan", "bank_syariah"],
   },
   {
     kodeAkun: "4130",
     namaAkun: "Total Pendapatan dari Piutang",
-    jenisPerusahaan: ["pembiayaan"],
+    jenisPerusahaan: ["pembiayaan", "bank_syariah"],
   },
   {
     kodeAkun: "4131",
     namaAkun: "Mudharabah",
-    jenisPerusahaan: ["pembiayaan"],
+    jenisPerusahaan: ["pembiayaan", "bank_syariah"],
   },
   {
     kodeAkun: "4132",
     namaAkun: "Musyarakah",
-    jenisPerusahaan: ["pembiayaan"],
+    jenisPerusahaan: ["pembiayaan", "bank_syariah"],
   },
   {
     kodeAkun: "4140",
     namaAkun: "Jumlah Pendapatan Bagi Hasil",
-    jenisPerusahaan: ["pembiayaan"],
+    jenisPerusahaan: ["pembiayaan", "bank_syariah"],
   },
   {
     kodeAkun: "4149",
     namaAkun: "Pendapatan Lainnya dari Penyaluran Dana",
-    jenisPerusahaan: ["pembiayaan"],
+    jenisPerusahaan: ["pembiayaan", "bank_syariah"],
   },
   {
     kodeAkun: "4150",
     namaAkun: "Jumlah Pendapatan dari Penyaluran Dana",
-    jenisPerusahaan: ["pembiayaan"],
+    jenisPerusahaan: ["pembiayaan", "bank_syariah"],
   },
   {
     kodeAkun: "4153",
@@ -392,7 +392,7 @@ export const MASTER_AKUN_LAPORAN_LABA_RUGI = [
   {
     kodeAkun: "4220",
     namaAkun: "Pendapatan (Beban) Operasional Lain",
-    jenisPerusahaan: ["pembiayaan"],
+    jenisPerusahaan: ["pembiayaan", "bank_syariah"],
   },
   {
     kodeAkun: "4300",
@@ -618,6 +618,12 @@ export const MASTER_AKUN_LAPORAN_LABA_RUGI = [
     jenisPerusahaan: ["jasa"],
   },
   {
+    kodeAkun: "5020",
+    namaAkun: "Beban Pokok Penjualan dan Pendapatan",
+    jenisPerusahaan: ["properti", "infrastruktur"],
+  },
+
+  {
     kodeAkun: "5021",
     namaAkun: "Persediaan Awal Bahan Baku",
     jenisPerusahaan: ["manufaktur"],
@@ -707,12 +713,16 @@ export const MASTER_AKUN_LAPORAN_LABA_RUGI = [
   { kodeAkun: "5299", namaAkun: "Beban Investasi Lain", jenisPerusahaan: ["dana_pensiun"] },
   { kodeAkun: "5300", namaAkun: "Jumlah Beban Investasi", jenisPerusahaan: ["dana_pensiun"] },
 
-  { kodeAkun: "5301", namaAkun: "Non Profit Sharing", jenisPerusahaan: ["pembiayaan"] },
-  { kodeAkun: "5302", namaAkun: "Profit Sharing", jenisPerusahaan: ["pembiayaan"] },
+  {
+    kodeAkun: "5301",
+    namaAkun: "Non Profit Sharing",
+    jenisPerusahaan: ["pembiayaan", "bank_syariah"],
+  },
+  { kodeAkun: "5302", namaAkun: "Profit Sharing", jenisPerusahaan: ["pembiayaan", "bank_syariah"] },
   {
     kodeAkun: "5310",
     namaAkun: "Jumlah Bagi Hasil untuk Pemilik Dana Investasi",
-    jenisPerusahaan: ["pembiayaan"],
+    jenisPerusahaan: ["pembiayaan", "bank_syariah"],
   },
 
   {
@@ -766,6 +776,7 @@ export const MASTER_AKUN_LAPORAN_LABA_RUGI = [
       "infrastruktur",
       "sekuritas",
       "pembiayaan",
+      "properti",
     ],
     level: 1,
   },
@@ -963,26 +974,31 @@ export const MASTER_AKUN_LAPORAN_LABA_RUGI = [
     level: 1,
   },
 
-  { kodeAkun: "5341", namaAkun: "Beban Bonus Wadiah", jenisPerusahaan: ["pembiayaan"], level: 1 },
+  {
+    kodeAkun: "5341",
+    namaAkun: "Beban Bonus Wadiah",
+    jenisPerusahaan: ["pembiayaan", "bank_syariah"],
+    level: 1,
+  },
   {
     kodeAkun: "5342",
     namaAkun: "Kerugian dari Penurunan Nilai Wajar Aset Keuangan",
-    jenisPerusahaan: ["pembiayaan"],
+    jenisPerusahaan: ["pembiayaan", "bank_syariah"],
   },
   {
     kodeAkun: "5343",
     namaAkun: "Kerugian Penjualan Aset (Surat Berharga dan Ijarah)",
-    jenisPerusahaan: ["pembiayaan"],
+    jenisPerusahaan: ["pembiayaan", "bank_syariah"],
   },
   {
     kodeAkun: "5344",
     namaAkun: "Kerugian Transaksi Spot dan Forward (Realized)",
-    jenisPerusahaan: ["pembiayaan"],
+    jenisPerusahaan: ["pembiayaan", "bank_syariah"],
   },
   {
     kodeAkun: "5345",
     namaAkun: "Kerugian Penurunan Nilai Aset Keuangan (Impairment)",
-    jenisPerusahaan: ["pembiayaan"],
+    jenisPerusahaan: ["pembiayaan", "bank_syariah"],
   },
 
   {
@@ -993,7 +1009,7 @@ export const MASTER_AKUN_LAPORAN_LABA_RUGI = [
   {
     kodeAkun: "5347",
     namaAkun: "Kerugian dari Penyertaan dengan Equity Method",
-    jenisPerusahaan: ["pembiayaan"],
+    jenisPerusahaan: ["pembiayaan", "bank_syariah"],
   },
   {
     kodeAkun: "5348",
@@ -1003,7 +1019,7 @@ export const MASTER_AKUN_LAPORAN_LABA_RUGI = [
   {
     kodeAkun: "5349",
     namaAkun: "Kerugian Penurunan Nilai Aset Lainnya (Non Keuangan)",
-    jenisPerusahaan: ["pembiayaan"],
+    jenisPerusahaan: ["pembiayaan", "bank_syariah"],
   },
 
   {
@@ -1149,7 +1165,7 @@ export const MASTER_AKUN_LAPORAN_LABA_RUGI = [
   {
     kodeAkun: "5422",
     namaAkun: "Kerugian Penjualan Aset Tetap dan Inventaris",
-    jenisPerusahaan: ["pembiayaan"],
+    jenisPerusahaan: ["pembiayaan", "bank_syariah"],
   },
 
   {
