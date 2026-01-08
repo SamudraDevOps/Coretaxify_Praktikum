@@ -362,6 +362,7 @@ const BUPOTForm = ({
           npwp_akun: formData.npwp_akun,
           masa_awal: formData.masa_awal,
           masa_akhir: formData.masa_akhir,
+          pembuat_id: sidebar.id,
         }
       });
       console.log(data);
