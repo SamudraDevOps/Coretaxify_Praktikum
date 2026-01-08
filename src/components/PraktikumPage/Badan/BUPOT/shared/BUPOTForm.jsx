@@ -597,8 +597,13 @@ const BUPOTForm = ({
 
     // Convert to string first, then extract numbers
     const stringValue = String(value);
+
+    // Check if negative
+    const isNegative = stringValue.startsWith("-");
     const numberString = stringValue?.replace(/[^\d]/g, "") || "";
-    return new Intl.NumberFormat("id-ID").format(numberString);
+    const formatted = new Intl.NumberFormat("id-ID").format(numberString);
+
+    return isNegative ? `-${formatted}` : formatted;
   };
 
   // set nitku_dokumen to current
@@ -734,7 +739,7 @@ const BUPOTForm = ({
         const pph21DipotongBupot = 0;
         const pph21TerutangBupotIni = pph21Terutang - pph21DipotongBupot;
         const pph21DTP = parseFloat(formData.pph_pasal_21_ditanggung_pemerintah) || 0;
-        const pph21MasaPajakTerakhir = pph21TerutangBupotIni > pph21DTP ? (pph21TerutangBupotIni - pph21DTP) : (pph21DTP - pph21TerutangBupotIni);
+        const pph21MasaPajakTerakhir = pph21TerutangBupotIni - pph21DTP;
         // const 
         
         // console.log({
