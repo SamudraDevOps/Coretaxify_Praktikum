@@ -750,10 +750,11 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm bg-yellow-100"
                               name="cl_bp1_1"
-                              defaultValue={formatRupiah(
-                                data.detail_spt.cl_bp1_1
-                              )}
-                              disabled
+                              defaultValue={posted ? 
+                                formatRupiah(
+                                  data.detail_spt.cl_bp1_1
+                                ) : '0'}
+                              disabled  
                             />
                           </td>
                         </tr>
@@ -838,9 +839,10 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm bg-yellow-100"
                               name="cl_bp1_5"
-                              defaultValue={formatRupiah(
-                                data.detail_spt.cl_bp1_5
-                              )}
+                              defaultValue={posted ? 
+                                formatRupiah(
+                                  data.detail_spt.cl_bp1_5
+                                ) : '0'}
                               onChange={handleChange}
                               readOnly
                             />
@@ -900,9 +902,10 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                             <input
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              defaultValue={formatRupiah(
-                                data.detail_spt.cl_bp1_7
-                              )}
+                              defaultValue={posted ? 
+                                formatRupiah(
+                                  data.detail_spt.cl_bp1_7
+                                ) : '0'}
                               disabled
                             />
                           </td>
@@ -953,9 +956,10 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                               name="cl_bp2_1"
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm bg-yellow-100"
-                              defaultValue={formatRupiah(
-                                data.detail_spt.cl_bp2_1
-                              )}
+                              defaultValue={posted ?
+                                formatRupiah(
+                                  data.detail_spt.cl_bp2_1
+                                ) : '0'}
                               disabled
                             />
                           </td>
@@ -1041,7 +1045,10 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                               name="cl_bp2_5"
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm"
-                              value={formatRupiah(data.detail_spt.cl_bp2_5)}
+                              value={posted ? 
+                                formatRupiah(
+                                  data.detail_spt.cl_bp2_5
+                                ) : '0'}
                               disabled
                             />
                           </td>
@@ -1100,9 +1107,10 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                             <input
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              defaultValue={formatRupiah(
-                                data.detail_spt.cl_bp2_7
-                              )}
+                              defaultValue={posted ? 
+                                formatRupiah(
+                                  data.detail_spt.cl_bp2_7
+                                ) : '0'}
                               disabled
                             />
                           </td>
@@ -1738,7 +1746,7 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                                   </td>
                                   <td className="p-2 border-b">{item.kode_objek_pajak}</td>
                                   <td className="p-2 border-b">{item.dasar_pengenaan_pajak}</td>
-                                  <td className="p-2 border-b">{item.pph_pasal_21_terutang}</td>
+                                  <td className="p-2 border-b">{item.pph_pasal_21_terutang_bupot_ini}</td>
                                   <td className="p-2 border-b">{item.fasilitas_pajak}</td>
                                   <td className="p-2 border-b">{item.negara_akun}</td>
                                   <td className="p-2 border-b">{item.nitku}</td>
@@ -1870,7 +1878,7 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                                         (total, item) =>
                                           total +
                                           (parseFloat(
-                                            item.pph_pasal_21_terutang
+                                            item.pph_pasal_21_terutang_bupot_ini
                                           ) || 0),
                                         0
                                       )
@@ -1900,7 +1908,7 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                                         (total, item) =>
                                           total +
                                           (parseFloat(
-                                            item.pph_pasal_21_terutang
+                                            item.pph_pasal_21_terutang_bupot_ini
                                           ) || 0),
                                         0
                                       )
@@ -2024,17 +2032,20 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                                 Pajak Penghasilan (Rp)
                               </th>
                               <th className="p-2 border-b min-w-[150px]">
-                                Fasilitas Perpajakan
+                                Masa Perolehan
                               </th>
+                              {/* <th className="p-2 border-b min-w-[150px]">
+                                Fasilitas Perpajakan
+                              </th> */}
                               <th className="p-2 border-b min-w-[150px]">
                                 Negara
                               </th>
                               <th className="p-2 border-b min-w-[150px]">
                                 ID Tempat Kegiatan Usaha
                               </th>
-                              <th className="p-2 border-b min-w-[150px]">
+                              {/* <th className="p-2 border-b min-w-[150px]">
                                 KAP-KJS
-                              </th>
+                              </th> */}
                               <th className="p-2 border-b min-w-[150px]">
                                 Status
                               </th>
@@ -2060,9 +2071,9 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                                       {item.nomor_pemotongan || "-"}
                                     </td>
                                     <td className="p-2 border-b">
-                                      {item.masa_awal 
+                                      {item.masa_akhir 
                                         ? new Date(
-                                          item.masa_awal
+                                          item.masa_akhir
                                         ).toLocaleDateString("id-ID") 
                                         : "-"}
                                     </td>
@@ -2076,17 +2087,26 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                                       {item.pph_pasal_21_penghasilan_kena_pajak || "-"}
                                     </td>
                                     <td className="p-2 border-b">
-                                      {item.fasilitas_pajak || "-"}
+                                      {item.masa_awal && item.masa_akhir
+                                        ? new Date(
+                                          item.masa_awal
+                                        ).toLocaleDateString("id-ID") + " - " + new Date(
+                                          item.masa_akhir
+                                        ).toLocaleDateString("id-ID")
+                                        : "-"}
                                     </td>
+                                    {/* <td className="p-2 border-b">
+                                      {item.fasilitas_pajak || "-"}
+                                    </td> */}
                                     <td className="p-2 border-b">
                                       {item.negara_akun || "-"}
                                     </td>
                                     <td className="p-2 border-b">
                                       {item.nitku || "-"}
                                     </td>
-                                    <td className="p-2 border-b">
+                                    {/* <td className="p-2 border-b">
                                       {item.kap || "-"}
-                                    </td>
+                                    </td> */}
                                     <td className="p-2 border-b">
                                       {item.status || "-"}
                                     </td>
@@ -2164,17 +2184,20 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                                 Pajak Penghasilan (Rp)
                               </th>
                               <th className="p-2 border-b min-w-[150px]">
-                                Fasilitas Perpajakan
+                                Masa Perolehan
                               </th>
+                              {/* <th className="p-2 border-b min-w-[150px]">
+                                Fasilitas Perpajakan
+                              </th> */}
                               <th className="p-2 border-b min-w-[150px]">
                                 Negara
                               </th>
                               <th className="p-2 border-b min-w-[150px]">
                                 ID Tempat Kegiatan Usaha
                               </th>
-                              <th className="p-2 border-b min-w-[150px]">
+                              {/* <th className="p-2 border-b min-w-[150px]">
                                 KAP-KJS
-                              </th>
+                              </th> */}
                               <th className="p-2 border-b min-w-[150px]">
                                 Status
                               </th>
@@ -2200,9 +2223,9 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                                       {item.nomor_pemotongan || "-"}
                                     </td>
                                     <td className="p-2 border-b">
-                                      {item.masa_awal 
+                                      {item.masa_akhir 
                                         ? new Date(
-                                          item.masa_awal
+                                          item.masa_akhir
                                         ).toLocaleDateString("id-ID") 
                                         : "-"}
                                     </td>
@@ -2216,17 +2239,26 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                                       {item.pph_pasal_21_penghasilan_kena_pajak || "-"}
                                     </td>
                                     <td className="p-2 border-b">
-                                      {item.fasilitas_pajak || "-"}
+                                      {item.masa_awal && item.masa_akhir
+                                        ? new Date(
+                                          item.masa_awal
+                                        ).toLocaleDateString("id-ID") + " - " + new Date(
+                                          item.masa_akhir
+                                        ).toLocaleDateString("id-ID")
+                                        : "-"}
                                     </td>
+                                    {/* <td className="p-2 border-b">
+                                      {item.fasilitas_pajak || "-"}
+                                    </td> */}
                                     <td className="p-2 border-b">
                                       {item.negara_akun || "-"}
                                     </td>
                                     <td className="p-2 border-b">
                                       {item.nitku || "-"}
                                     </td>
-                                    <td className="p-2 border-b">
+                                    {/* <td className="p-2 border-b">
                                       {item.kap || "-"}
-                                    </td>
+                                    </td> */}
                                     <td className="p-2 border-b">
                                       {item.status || "-"}
                                     </td>

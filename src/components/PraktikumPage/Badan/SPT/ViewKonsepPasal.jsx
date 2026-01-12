@@ -1875,7 +1875,7 @@ const LihatKonsepPasal = ({ data }) => {
                                 Pajak Penghasilan (Rp)
                               </th>
                               <th className="p-2 border-b min-w-[150px]">
-                                Fasilitas Perpajakan
+                                Masa Perolehan
                               </th>
                               <th className="p-2 border-b min-w-[150px]">
                                 Negara
@@ -1883,9 +1883,9 @@ const LihatKonsepPasal = ({ data }) => {
                               <th className="p-2 border-b min-w-[150px]">
                                 ID Tempat Kegiatan Usaha
                               </th>
-                              <th className="p-2 border-b min-w-[150px]">
+                              {/* <th className="p-2 border-b min-w-[150px]">
                                 KAP-KJS
-                              </th>
+                              </th> */}
                               <th className="p-2 border-b min-w-[150px]">
                                 Status
                               </th>
@@ -1911,9 +1911,9 @@ const LihatKonsepPasal = ({ data }) => {
                                       {item.nomor_pemotongan || "-"}
                                     </td>
                                     <td className="p-2 border-b">
-                                      {item.masa_awal 
+                                      {item.masa_akhir 
                                         ? new Date(
-                                          item.masa_awal
+                                          item.masa_akhir
                                         ).toLocaleDateString("id-ID") 
                                         : "-"}
                                     </td>
@@ -1927,7 +1927,13 @@ const LihatKonsepPasal = ({ data }) => {
                                       {item.pph_pasal_21_penghasilan_kena_pajak || "-"}
                                     </td>
                                     <td className="p-2 border-b">
-                                      {item.fasilitas_pajak || "-"}
+                                      {item.masa_awal && item.masa_akhir
+                                        ? new Date(
+                                          item.masa_awal
+                                        ).toLocaleDateString("id-ID") + " - " + new Date(
+                                          item.masa_akhir
+                                        ).toLocaleDateString("id-ID")
+                                        : "-"}
                                     </td>
                                     <td className="p-2 border-b">
                                       {item.negara_akun || "-"}
@@ -1935,9 +1941,9 @@ const LihatKonsepPasal = ({ data }) => {
                                     <td className="p-2 border-b">
                                       {item.nitku || "-"}
                                     </td>
-                                    <td className="p-2 border-b">
+                                    {/* <td className="p-2 border-b">
                                       {item.kap || "-"}
-                                    </td>
+                                    </td> */}
                                     <td className="p-2 border-b">
                                       {item.status || "-"}
                                     </td>
@@ -2015,7 +2021,7 @@ const LihatKonsepPasal = ({ data }) => {
                                 Pajak Penghasilan (Rp)
                               </th>
                               <th className="p-2 border-b min-w-[150px]">
-                                Fasilitas Perpajakan
+                                Masa Perolehan
                               </th>
                               <th className="p-2 border-b min-w-[150px]">
                                 Negara
@@ -2023,9 +2029,9 @@ const LihatKonsepPasal = ({ data }) => {
                               <th className="p-2 border-b min-w-[150px]">
                                 ID Tempat Kegiatan Usaha
                               </th>
-                              <th className="p-2 border-b min-w-[150px]">
+                              {/* <th className="p-2 border-b min-w-[150px]">
                                 KAP-KJS
-                              </th>
+                              </th> */}
                               <th className="p-2 border-b min-w-[150px]">
                                 Status
                               </th>
@@ -2051,9 +2057,9 @@ const LihatKonsepPasal = ({ data }) => {
                                       {item.nomor_pemotongan || "-"}
                                     </td>
                                     <td className="p-2 border-b">
-                                      {item.masa_awal 
+                                      {item.masa_akhir 
                                         ? new Date(
-                                          item.masa_awal
+                                          item.masa_akhir
                                         ).toLocaleDateString("id-ID") 
                                         : "-"}
                                     </td>
@@ -2067,7 +2073,13 @@ const LihatKonsepPasal = ({ data }) => {
                                       {item.pph_pasal_21_penghasilan_kena_pajak || "-"}
                                     </td>
                                     <td className="p-2 border-b">
-                                      {item.fasilitas_pajak || "-"}
+                                      {item.masa_awal && item.masa_akhir
+                                        ? new Date(
+                                          item.masa_awal
+                                        ).toLocaleDateString("id-ID") + " - " + new Date(
+                                          item.masa_akhir
+                                        ).toLocaleDateString("id-ID")
+                                        : "-"}
                                     </td>
                                     <td className="p-2 border-b">
                                       {item.negara_akun || "-"}
@@ -2075,9 +2087,9 @@ const LihatKonsepPasal = ({ data }) => {
                                     <td className="p-2 border-b">
                                       {item.nitku || "-"}
                                     </td>
-                                    <td className="p-2 border-b">
+                                    {/* <td className="p-2 border-b">
                                       {item.kap || "-"}
-                                    </td>
+                                    </td> */}
                                     <td className="p-2 border-b">
                                       {item.status || "-"}
                                     </td>
