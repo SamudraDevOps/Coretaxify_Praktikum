@@ -1587,7 +1587,7 @@ const LihatKonsepPasal = ({ data }) => {
                                   </td>
                                   <td className="p-2 border-b">{item.kode_objek_pajak}</td>
                                   <td className="p-2 border-b">{item.dasar_pengenaan_pajak}</td>
-                                  <td className="p-2 border-b">{item.pph_pasal_21_terutang}</td>
+                                  <td className="p-2 border-b">{item.pph_pasal_21_masa_pajak_terakhir}</td>
                                   <td className="p-2 border-b">{item.fasilitas_pajak}</td>
                                   <td className="p-2 border-b">{item.negara_akun}</td>
                                   <td className="p-2 border-b">{item.nitku}</td>
@@ -1721,7 +1721,7 @@ const LihatKonsepPasal = ({ data }) => {
                                         (total, item) =>
                                           total +
                                           (parseFloat(
-                                            item.pph_pasal_21_terutang
+                                            item.pph_pasal_21_masa_pajak_terakhir
                                           ) || 0),
                                         0
                                       )
@@ -1751,7 +1751,7 @@ const LihatKonsepPasal = ({ data }) => {
                                         (total, item) =>
                                           total +
                                           (parseFloat(
-                                            item.pph_pasal_21_terutang
+                                            item.pph_pasal_21_masa_pajak_terakhir
                                           ) || 0),
                                         0
                                       )

@@ -1746,7 +1746,7 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                                   </td>
                                   <td className="p-2 border-b">{item.kode_objek_pajak}</td>
                                   <td className="p-2 border-b">{item.dasar_pengenaan_pajak}</td>
-                                  <td className="p-2 border-b">{item.pph_pasal_21_terutang_bupot_ini}</td>
+                                  <td className="p-2 border-b">{item.pph_pasal_21_masa_pajak_terakhir}</td>
                                   <td className="p-2 border-b">{item.fasilitas_pajak}</td>
                                   <td className="p-2 border-b">{item.negara_akun}</td>
                                   <td className="p-2 border-b">{item.nitku}</td>
@@ -1878,7 +1878,7 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                                         (total, item) =>
                                           total +
                                           (parseFloat(
-                                            item.pph_pasal_21_terutang_bupot_ini
+                                            item.pph_pasal_21_masa_pajak_terakhir
                                           ) || 0),
                                         0
                                       )
@@ -1908,7 +1908,7 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                                         (total, item) =>
                                           total +
                                           (parseFloat(
-                                            item.pph_pasal_21_terutang_bupot_ini
+                                            item.pph_pasal_21_masa_pajak_terakhir
                                           ) || 0),
                                         0
                                       )
