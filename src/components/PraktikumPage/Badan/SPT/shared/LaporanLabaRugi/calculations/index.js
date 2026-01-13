@@ -7,6 +7,9 @@ import * as DanaPensiunCalculations from "./dana_pensiun/labaRugiSubtotal";
 import * as AsuransiCalculations from "./asuransi/labaRugiSubtotal";
 import * as PropertiCalculations from "./properti/labaRugiSubtotal";
 import * as BankSyariahCalculations from "./bank_syariah/labaRugiSubtotal";
+import * as InfrastrukturCalculations from "./infrastruktur/labaRugiSubtotal";
+import * as SekuritasCalculations from "./sekuritas/labaRugiSubtotal";
+import * as PembiayaanCalculations from "./pembiayaan/labaRugiSubtotal";
 
 // Export dengan namespace
 export const umum = UmumCalculations;
@@ -18,3 +21,6 @@ export const dana_pensiun = DanaPensiunCalculations;
 export const asuransi = AsuransiCalculations;
 export const properti = PropertiCalculations;
 export const bank_syariah = BankSyariahCalculations;
+export const infrastruktur = InfrastrukturCalculations;
+export const sekuritas = SekuritasCalculations;
+export const pembiayaan = PembiayaanCalculations;

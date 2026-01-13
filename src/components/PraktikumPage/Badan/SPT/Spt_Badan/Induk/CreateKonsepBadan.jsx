@@ -25,6 +25,9 @@ import {
   Lampiran1G,
   Lampiran1H,
   Lampiran1I,
+  Lampiran1J,
+  Lampiran1K,
+  Lampiran1L,
   Lampiran2,
   Lampiran3,
   Lampiran4,
@@ -153,6 +156,33 @@ const CreateKonsepBadan = () => {
       title: "L1-I",
       subtitle: "Lampiran 1I - BANK SYARIAH",
       component: "Lampiran_1I",
+      badge: "Tersedia",
+      order: 1, // Urutan pertama
+    });
+
+    allLampiran.push({
+      id: "lampiran-1J",
+      title: "L1-J",
+      subtitle: "Lampiran 1J - INFRASTRUKTUR",
+      component: "Lampiran_1J",
+      badge: "Tersedia",
+      order: 1, // Urutan pertama
+    });
+
+    allLampiran.push({
+      id: "lampiran-1K",
+      title: "L1-K",
+      subtitle: "Lampiran 1K - SEKURITAS",
+      component: "Lampiran_1K",
+      badge: "Tersedia",
+      order: 1, // Urutan pertama
+    });
+
+    allLampiran.push({
+      id: "lampiran-1L",
+      title: "L1-L",
+      subtitle: "Lampiran 1L - PEMBIAYAAN",
+      component: "Lampiran_1L",
       badge: "Tersedia",
       order: 1, // Urutan pertama
     });
@@ -323,6 +353,12 @@ const CreateKonsepBadan = () => {
         return <Lampiran1H data={data} />;
       case "Lampiran_1I":
         return <Lampiran1I data={data} />;
+      case "Lampiran_1J":
+        return <Lampiran1J data={data} />;
+      case "Lampiran_1K":
+        return <Lampiran1K data={data} />;
+      case "Lampiran_1L":
+        return <Lampiran1L data={data} />;
       case "Lampiran_2":
         return <Lampiran2 data={data} />;
       case "Lampiran_3":
