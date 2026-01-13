@@ -1,5 +1,5 @@
-import { PERUSAHAAN_CONFIG, KODE_KOREKSI_OPTIONS } from "./perusahaanConfig";
-import { MASTER_AKUN_LAPORAN_LABA_RUGI, createLineRow } from "../akunList";
+import { PERUSAHAAN_CONFIG, KODE_KOREKSI_OPTIONS } from "../perusahaanConfig";
+import { MASTER_AKUN_LAPORAN_LABA_RUGI, createLineRow } from "../akunListLabaRugi";
 import { RowBuilder } from "./rowBuilders";
 
 // Mengabil seluruh export king dengan menggunakan import * as
@@ -12,7 +12,7 @@ export class LabaRugiFactory {
       throw new Error(`Konfigurasi untuk jenis perusahaan '${jenisPerusahaan}' tidak ditemukan`);
     }
 
-    const lineRows = this.generateLineRows(config.akunKonteks);
+    const lineRows = this.generateLineRows(config.akunKonteksLabaRugi);
     const pickByKode = this.createPickByKode(lineRows);
     const initialRows = RowBuilder.buildRows(jenisPerusahaan, bagian, pickByKode);
 
@@ -24,10 +24,10 @@ export class LabaRugiFactory {
     };
   }
 
-  static generateLineRows(akunKonteks) {
+  static generateLineRows(akunKonteksLabaRugi) {
     const lineRows = [];
 
-    Object.entries(akunKonteks).forEach(([kodeAkun, jenisAktif]) => {
+    Object.entries(akunKonteksLabaRugi).forEach(([kodeAkun, jenisAktif]) => {
       const kandidat = MASTER_AKUN_LAPORAN_LABA_RUGI.filter((a) => a.kodeAkun === kodeAkun);
 
       if (!kandidat.length) {

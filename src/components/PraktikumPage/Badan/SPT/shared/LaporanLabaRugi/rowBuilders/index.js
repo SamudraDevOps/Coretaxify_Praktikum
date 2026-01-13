@@ -1,4 +1,4 @@
-import { JENIS_PERUSAHAAN, BAGIAN_LAMPIRAN } from "../perusahaanConfig";
+import { JENIS_PERUSAHAAN, BAGIAN_LAMPIRAN } from "../../perusahaanConfig";
 
 export class RowBuilder {
   static buildRows(jenisPerusahaan, bagian, pickByKode) {
@@ -1212,6 +1212,310 @@ export class RowBuilder {
       ...pickByKode(["5422", "5421", "5499"]),
 
       ...pickByKode(["4700", "4800"]).map((row) => ({
+        ...row,
+        type: "label",
+        variant: "bold",
+        derived: true,
+      })),
+    ];
+  }
+
+  // INFRASTRUKTUR Bagian A
+  static buildInfrastrukturA(pickByKode) {
+    return [
+      ...pickByKode(["4001"]),
+
+      ...pickByKode(["4013"]).map((row) => ({
+        ...row,
+        level: 1,
+      })),
+
+      ...pickByKode(["4026"]),
+
+      ...pickByKode(["5020"]).map((row) => ({
+        ...row,
+        level: 1,
+      })),
+
+      ...pickByKode(["4300"]).map((row) => ({
+        ...row,
+        type: "label",
+        variant: "bold",
+        derived: true,
+      })),
+
+      ...pickByKode(["4199"]),
+
+      ...pickByKode(["5324", "5325"]).map((row) => ({
+        ...row,
+        level: 1,
+      })),
+
+      // Beban Usaha
+      {
+        id: "g-beban-usaha",
+        type: "header",
+        level: 0,
+        keterangan: "Beban Usaha",
+      },
+
+      ...pickByKode([
+        "5311",
+        "5312",
+        "5313",
+        "5314",
+        "5315",
+        "5316",
+        "5317",
+        "5318",
+        "5319",
+        "5320",
+        "5321",
+        "5322",
+        "5399",
+      ]).map((row) => ({
+        ...row,
+        level: 1,
+      })),
+
+      ...pickByKode(["5400"]).map((row) => ({
+        ...row,
+        type: "label",
+        variant: "bold",
+        level: 1,
+        derived: true,
+      })),
+
+      ...pickByKode(["4153", "4154", "4155", "4156"]),
+
+      // Pendapatan Non Usaha
+      {
+        id: "g-pendapatan-non-Usaha",
+        type: "header",
+        level: 0,
+        keterangan: "Pendapatan Non Usaha",
+      },
+
+      ...pickByKode(["4501", "4511", "4599"]),
+
+      ...pickByKode(["4600"]).map((row) => ({
+        ...row,
+        type: "label",
+        variant: "bold",
+        derived: true,
+      })),
+
+      // Beban Non Usaha
+      {
+        id: "g-beban-non-Usaha",
+        type: "header",
+        level: 0,
+        keterangan: "Beban Non Usaha",
+      },
+
+      ...pickByKode(["5405", "5409", "5421", "5499"]).map((row) => ({
+        ...row,
+        level: 1,
+      })),
+
+      ...pickByKode(["5500"]).map((row) => ({
+        ...row,
+        type: "label",
+        variant: "bold",
+        level: 1,
+        derived: true,
+      })),
+
+      ...pickByKode(["4800"]).map((row) => ({
+        ...row,
+        type: "label",
+        variant: "bold",
+        derived: true,
+      })),
+    ];
+  }
+
+  // SEKURITAS Bagian A
+  static buildSekuritasA(pickByKode) {
+    return [
+      // Pendapatan Usaha
+      {
+        id: "g-pendapatan-usaha",
+        type: "header",
+        level: 0,
+        keterangan: "Pendapatan Usaha",
+      },
+      ...pickByKode(["4081", "4082", "4083", "4026", "4091", "4199"]),
+
+      ...pickByKode(["4201"]).map((row) => ({
+        ...row,
+        type: "label",
+        variant: "bold",
+        derived: true,
+      })),
+
+      // Beban Usaha
+      {
+        id: "g-beban-usaha",
+        type: "header",
+        level: 0,
+        keterangan: "Beban Usaha",
+      },
+
+      ...pickByKode([
+        "5311",
+        "5312",
+        "5313",
+        "5314",
+        "5315",
+        "5316",
+        "5317",
+        "5318",
+        "5319",
+        "5320",
+        "5321",
+        "5322",
+        "5205",
+        "5399",
+      ]).map((row) => ({
+        ...row,
+        level: 1,
+      })),
+
+      ...pickByKode(["5400"]).map((row) => ({
+        ...row,
+        type: "label",
+        variant: "bold",
+        derived: true,
+      })),
+
+      // Pendapatan Diluar Usaha
+      {
+        id: "g-pendapatan-diluar-usaha",
+        type: "header",
+        level: 0,
+        keterangan: "Pendapatan Diluar Usaha",
+      },
+
+      ...pickByKode(["4511", "4503", "4501", "4599"]),
+
+      ...pickByKode(["4600"]).map((row) => ({
+        ...row,
+        type: "label",
+        variant: "bold",
+        derived: true,
+      })),
+
+      // Beban Diluar Usaha
+      {
+        id: "g-beban-diluar-usaha",
+        type: "header",
+        level: 0,
+        keterangan: "Beban Diluar Usaha",
+      },
+
+      ...pickByKode(["5405", "5421", "5409", "5499", "5500"]).map((row) => ({
+        ...row,
+        level: 1,
+      })),
+
+      ...pickByKode(["4800"]).map((row) => ({
+        ...row,
+        type: "label",
+        variant: "bold",
+        derived: true,
+      })),
+    ];
+  }
+
+  // PEMBIAYAAN Bagian A
+  static buildPembiayaanA(pickByKode) {
+    return [
+      // Pendapatan Usaha
+      {
+        id: "g-pendapatan-usaha",
+        type: "header",
+        level: 0,
+        keterangan: "Pendapatan Usaha",
+      },
+
+      ...pickByKode(["4061", "4062", "4063", "4064", "4065", "4066", "4199"]),
+
+      ...pickByKode(["4201"]).map((row) => ({
+        ...row,
+        type: "label",
+        variant: "bold",
+        derived: true,
+      })),
+
+      // Beban Usaha
+      {
+        id: "g-beban-usaha",
+        type: "header",
+        level: 0,
+        keterangan: "Beban Usaha",
+      },
+
+      ...pickByKode([
+        "5311",
+        "5312",
+        "5313",
+        "5314",
+        "5315",
+        "5316",
+        "5317",
+        "5318",
+        "5319",
+        "5320",
+        "5321",
+        "5322",
+        "5326",
+        "5327",
+        "5328",
+        "5399",
+      ]).map((row) => ({
+        ...row,
+        level: 1,
+      })),
+
+      ...pickByKode(["5400"]).map((row) => ({
+        ...row,
+        type: "label",
+        variant: "bold",
+        derived: true,
+      })),
+
+      // Pendapatan Diluar Usaha
+      {
+        id: "g-pendapatan-diluar-usaha",
+        type: "header",
+        level: 0,
+        keterangan: "Pendapatan di Luar Usaha",
+      },
+
+      ...pickByKode(["4026", "4161", "4501", "4599"]),
+
+      ...pickByKode(["4600"]).map((row) => ({
+        ...row,
+        type: "label",
+        variant: "bold",
+        derived: true,
+      })),
+
+      // Beban Diluar Usaha
+      {
+        id: "g-beban-diluar-usaha",
+        type: "header",
+        level: 0,
+        keterangan: "Beban di Luar Usaha",
+      },
+
+      ...pickByKode(["5405", "5409", "5412", "5499", "5500"]).map((row) => ({
+        ...row,
+        level: 1,
+      })),
+
+      ...pickByKode(["4800"]).map((row) => ({
         ...row,
         type: "label",
         variant: "bold",

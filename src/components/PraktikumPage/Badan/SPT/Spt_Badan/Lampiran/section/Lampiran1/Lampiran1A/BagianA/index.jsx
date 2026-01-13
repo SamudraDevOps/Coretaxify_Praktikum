@@ -1,4 +1,6 @@
-import UniversalBagianA from '../../UniversalBagianA'; 
+import UniversalLabaRugi from "@shared/LaporanLabaRugi/UniversalLabaRugi";
+import { JENIS_PERUSAHAAN } from "@shared/perusahaanConfig";
+
 export default function Lampiran1ABagianA() {
-  return <UniversalBagianA lampiran="Lampiran1A" />;
+  return <UniversalLabaRugi jenisPerusahaan={JENIS_PERUSAHAAN.UMUM} bagian="A" />;
 }

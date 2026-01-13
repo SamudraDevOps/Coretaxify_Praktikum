@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { toNumber } from "@utils/formatCurrency";
 import { getLampiran1FieldConfig } from "../lampiran1FieldConfig";
 import { LabaRugiFactory } from "./LabaRugiFactory";
-import LaporanLabaRugiTabel from "../../Spt_Badan/Lampiran/section/Lampiran1/shared/LaporanLabaRugiTabel";
+import LaporanLabaRugiTabel from "@badanSections/Lampiran1/shared/LaporanLabaRugiTabel";
 import GlobalModal from "../GlobalModal";
 
 export default function UniversalLabaRugi({ jenisPerusahaan, bagian = "A" }) {
