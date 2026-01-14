@@ -1,9 +1,7 @@
 import { PERUSAHAAN_CONFIG, KODE_KOREKSI_OPTIONS } from "../perusahaanConfig";
 import { MASTER_AKUN_LAPORAN_LABA_RUGI, createLineRow } from "../akunListLabaRugi";
 import { RowBuilder } from "./rowBuilders";
-
-// Mengabil seluruh export king dengan menggunakan import * as
-import * as calculations from "./calculations";
+import { labaRugi as calculations } from "../calculations";
 
 export class LabaRugiFactory {
   static createComponent(jenisPerusahaan, bagian = "A") {
@@ -66,6 +64,15 @@ export class LabaRugiFactory {
     return (kodes) => {
       return kodes.map((kode) => lineRows.find((r) => r.kodeAkun === kode)).filter(Boolean);
     };
+  }
+
+  static getSubtotalCalculations(jenisPerusahaan, bagian) {
+    // Ambil calculation sesuai jenis perusahaan
+    const calculationSource = calculations[jenisPerusahaan];
+    if (!calculationSource) throw new Error("Calculation source not found for Laba Rugi");
+
+    // Misal: calculationSource.calculate(rows, bagian)
+    return calculationSource;
   }
 
   static getSubtotalCalculations(jenisPerusahaan, bagian) {

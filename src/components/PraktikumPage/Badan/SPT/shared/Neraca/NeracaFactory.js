@@ -1,7 +1,7 @@
 import { PERUSAHAAN_CONFIG, BAGIAN_LAMPIRAN } from "../perusahaanConfig";
 import { MASTER_AKUN_NERACA, createLineRow } from "../akunListNeraca";
 import { RowBuilder } from "./rowBuilders";
-import * as calculations from "./calculations";
+import { neraca as calculations } from "../calculations";
 
 export class NeracaFactory {
   static createComponent(jenisPerusahaan, bagian = "B") {
@@ -17,7 +17,7 @@ export class NeracaFactory {
     return {
       initialRows,
       config,
-      bagian, 
+      bagian,
     };
   }
 
@@ -42,7 +42,9 @@ export class NeracaFactory {
 
       if (!cocok) {
         console.error(
-          `Tidak ditemukan akun untuk kode ${kodeAkun} dengan jenis perusahaan: ${jenisAktif.join(", ")}`
+          `Tidak ditemukan akun untuk kode ${kodeAkun} dengan jenis perusahaan: ${jenisAktif.join(
+            ", "
+          )}`
         );
         return;
       }
@@ -63,6 +65,15 @@ export class NeracaFactory {
     return (kodes) => {
       return kodes.map((kode) => lineRows.find((r) => r.kodeAkun === kode)).filter(Boolean);
     };
+  }
+
+  static getSubtotalCalculations(jenisPerusahaan, bagian) {
+    // Ambil calculation sesuai jenis perusahaan
+    const calculationSource = calculations[jenisPerusahaan];
+    if (!calculationSource) throw new Error("Calculation source not found for Neraca");
+
+    // Misal: calculationSource.calculate(rows, bagian)
+    return calculationSource;
   }
 
   static getSubtotalCalculations(jenisPerusahaan, bagian) {
