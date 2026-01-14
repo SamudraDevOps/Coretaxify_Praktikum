@@ -20,46 +20,166 @@ export class RowBuilder {
     return [
       // ASET LANCAR
       {
-        id: "h-aset-lancar",
+        id: "g-aset-lancar",
         type: "header",
-        level: 0,
         keterangan: "Aset Lancar",
         side: "left",
-        nilai: 0,
       },
-      ...pickByKode(["1101", "1122", "1499"]).map((row) => ({
+      ...pickByKode(["1101", "1122", "1123", "1124", "1125"]).map((row) => ({
         ...row,
-        side: "right",
+        side: "left",
       })),
 
-      // ASET TIDAK LANCAR
-      {
-        id: "h-aset-tidak-lancar",
-        type: "header",
-        level: 0,
-        kodeAkun: "",
-        keterangan: "Aset Tidak Lancar",
-        nilai: 0,
-      },
-      ...pickByKode(["1501"]).map((row) => ({
+      ...pickByKode(["1131"]).map((row) => ({
         ...row,
         side: "left",
         level: 2,
       })),
 
-      ...pickByKode(["1523"]).map((row) => ({
+      ...pickByKode(["1181", "1200", "1401", "1421", "1423", "1405", "1422", "1499"]).map(
+        (row) => ({
+          ...row,
+          side: "left",
+        })
+      ),
+
+      // ASET TIDAK LANCAR
+      {
+        id: "g-aset-tidak-lancar",
+        type: "header",
+        keterangan: "Aset Tidak Lancar",
+        side: "left",
+      },
+
+      ...pickByKode(["1501", "1520", "1523"]).map((row) => ({
         ...row,
-        type: "label",
-        variant: "bold",
         side: "left",
       })),
 
-      ...pickByKode(["1123"]).map((row) => ({
+      ...pickByKode(["1524"]).map((row) => ({
+        ...row,
+        side: "left",
+        level: 2,
+      })),
+      ...pickByKode(["1529"]).map((row) => ({
         ...row,
         side: "left",
       })),
+
+      ...pickByKode(["1530"]).map((row) => ({
+        ...row,
+        side: "left",
+        level: 2,
+      })),
+
+      ...pickByKode(["1531", "1533"]).map((row) => ({
+        ...row,
+        side: "left",
+      })),
+
+      ...pickByKode(["1534"]).map((row) => ({
+        ...row,
+        side: "left",
+        level: 2,
+      })),
+
+      ...pickByKode(["1551", "1599", "1600"]).map((row) => ({
+        ...row,
+        side: "left",
+      })),
+
+      ...pickByKode(["1601"]).map((row) => ({
+        ...row,
+        side: "left",
+        level: 2,
+      })),
+      ...pickByKode(["1611", "1651"]).map((row) => ({
+        ...row,
+        side: "left",
+      })),
+      ...pickByKode(["1658"]).map((row) => ({
+        ...row,
+        side: "left",
+        level: 2,
+      })),
+      ...pickByKode(["1698"]).map((row) => ({
+        ...row,
+        side: "left",
+      })),
+
+      ...pickByKode(["1700"]).map((row) => ({
+        ...row,
+        side: "left",
+        type: "label",
+        variant: "bold",
+      })),
+
+      // liabilitas Jangka pendek
+      {
+        id: "g-liabilitas-jangka-pendek",
+        type: "header",
+        keterangan: "Liabilitas Jangka Pendek",
+        side: "right",
+      },
+
+      ...pickByKode([
+        "2102",
+        "2103",
+        "2111",
+        "2186",
+        "2187",
+        "2191",
+        "2192",
+        "2195",
+        "2201",
+        "2202",
+        "2203",
+        "2228",
+      ]).map((row) => ({
+        ...row,
+        side: "right",
+      })),
+
+      // liabilitas Jangka Panjang
+      {
+        id: "g-liabilitas-jangka-panjang",
+        type: "header",
+        keterangan: "Liabilitas Jangka Panjang",
+        side: "right",
+      },
+
+      ...pickByKode(["2301", "2303", "2304", "2312", "2322", "2321", "2998"]).map((row) => ({
+        ...row,
+        side: "right",
+      })),
+
+      ...pickByKode(["2999"]).map((row) => ({
+        ...row,
+        side: "right",
+        type: "label",
+        variant: "bold",
+      })),
+
+      // EKUITAS
+      {
+        id: "g-ekuitas",
+        type: "header",
+        keterangan: "Ekuitas",
+        side: "right",
+      },
+
+      ...pickByKode(["3102", "3120", "3200", "3297", "3298"]).map((row) => ({
+        ...row,
+        side: "right",
+      })),
+
+      ...pickByKode(["3299", "3300"]).map((row) => ({
+        ...row,
+        side: "right",
+        type: "label",
+        variant: "bold",
+      })),
     ];
-    s;
   }
 
   // MANUFAKTUR (bisa sama dengan UMUM atau customize)

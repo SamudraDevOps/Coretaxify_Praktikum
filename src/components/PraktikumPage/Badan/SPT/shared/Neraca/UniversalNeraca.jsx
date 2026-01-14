@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from "react";
 import { NeracaFactory } from "./NeracaFactory";
 import NeracaTabel from "@badanSections/Lampiran1/shared/NeracaTabel";
+import GlobalFormField from "@shared/GlobalFormField";
 
 export default function UniversalNeraca({ jenisPerusahaan, bagian = "B" }) {
   if (!jenisPerusahaan) {
@@ -16,6 +17,9 @@ export default function UniversalNeraca({ jenisPerusahaan, bagian = "B" }) {
     const { initialRows, config } = NeracaFactory.createComponent(jenisPerusahaan, bagian);
 
     const [rows, setRows] = useState(initialRows || []);
+    const [formData, setFormData] = useState({
+      nilaiKomersial: 0,
+    });
 
     //  Apply calculations secara real-time
     const rowsWithCalculation = useMemo(() => {
@@ -58,6 +62,14 @@ export default function UniversalNeraca({ jenisPerusahaan, bagian = "B" }) {
       });
     };
 
+    const handleFieldChange = (key, value) => {
+      setFormData((prev) => ({
+        ...prev,
+        [key]: value,
+      }));
+      // Jika perlu, panggil applyCalculations di sini
+    };
+
     if (!rows || rows.length === 0) {
       return (
         <div style={{ padding: "20px", textAlign: "center", color: "#666" }}>
@@ -70,13 +82,16 @@ export default function UniversalNeraca({ jenisPerusahaan, bagian = "B" }) {
     }
 
     return (
-      <NeracaTabel
-        leftRows={leftRows}
-        rightRows={rightRows}
-        onValueChange={handleValueChange}
-        titleLeft="ASET"
-        titleRight="LIABILITAS & EKUITAS"
-      />
+      <div>
+        <GlobalFormField formData={formData} onFieldChange={handleFieldChange} />
+        <NeracaTabel
+          leftRows={leftRows}
+          rightRows={rightRows}
+          onValueChange={handleValueChange}
+          titleLeft="ASET"
+          titleRight="LIABILITAS & EKUITAS"
+        />
+      </div>
     );
   } catch (error) {
     console.error(" Error in UniversalNeraca:", error);

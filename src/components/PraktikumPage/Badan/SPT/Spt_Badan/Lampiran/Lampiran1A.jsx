@@ -4,11 +4,14 @@ import Header from "./Header";
 
 // import LaporanLabaRugi from "@sections/Lampiran1/Lampiran1D/BagianA";
 import LaporanLabaRugi from "@badanSections/Lampiran1/Lampiran1A/BagianA";
+import Neraca from "@badanSections/Lampiran1/Lampiran1A/BagianB";
+
 // import LaporanNeraca from "@sections/Lampiran3/Lampiran3A-1/BagianB";
 // import LaporanKeuangan from "@sections/Lampiran3/Lampiran3A-1/BagianC/LaporanKeuangan";
 
 const Lampiran1A = ({ data }) => {
   const [showBagianA, setShowBagianA] = useState(true);
+  const [showBagianB, setShowBagianB] = useState(true);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalInitialData, setModalInitialData] = useState(null);
@@ -68,6 +71,34 @@ const Lampiran1A = ({ data }) => {
           <div className="border rounded-md p-4 space-y-4">
             <div className="ml-4">
               <LaporanLabaRugi />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div
+          className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
+          onClick={() => setShowBagianB(!showBagianB)}
+        >
+          <h3 className="text-lg font-semibold">Neraca </h3>
+          <span
+            className={`transition-transform duration-500 ease-in-out ${
+              showBagianB ? "rotate-180" : "rotate-0"
+            }`}
+          >
+            <FaChevronDown />
+          </span>
+        </div>
+
+        <div
+          className={`overflow-hidden transition-all duration-700 ease-in-out ${
+            showBagianB ? " opacity-100" : "max-h-0 opacity-0"
+          }`}
+        >
+          <div className="border rounded-md p-4 space-y-4">
+            <div className="ml-4">
+              <Neraca />
             </div>
           </div>
         </div>
