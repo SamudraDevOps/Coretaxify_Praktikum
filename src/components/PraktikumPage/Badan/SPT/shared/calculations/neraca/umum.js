@@ -60,7 +60,7 @@ export function hitungSubtotal2999(rows) {
   if (!kode2999) return rows;
 
   const akunLiabilitas = [
-    "2202",
+    "2102",
     "2103",
     "2111",
     "2186",
