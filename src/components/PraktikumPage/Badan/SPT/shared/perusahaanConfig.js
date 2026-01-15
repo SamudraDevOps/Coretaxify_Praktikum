@@ -333,16 +333,97 @@ export const PERUSAHAAN_CONFIG = {
       4700: ["manufaktur"],
       4800: ["manufaktur"],
     },
+
+    akunKonteksNeraca: {
+      // Aset Lancar
+      1101: ["manufaktur"],
+      1122: ["manufaktur"],
+      1123: ["manufaktur"],
+      1124: ["manufaktur"],
+      1125: ["manufaktur"],
+      1131: ["manufaktur"],
+      1181: ["manufaktur"],
+      1200: ["manufaktur"],
+      1402: ["manufaktur"],
+      1403: ["manufaktur"],
+      1404: ["manufaktur"],
+      1405: ["manufaktur"],
+      1421: ["manufaktur"],
+      1422: ["manufaktur"],
+      1423: ["manufaktur"],
+      1499: ["manufaktur"],
+
+      // Aset Tidak Lancar
+
+      1501: ["manufaktur"],
+      1520: ["manufaktur"],
+      1523: ["manufaktur"],
+      1524: ["manufaktur"],
+      1525: ["manufaktur"],
+      1526: ["manufaktur"],
+      1527: ["manufaktur"],
+      1528: ["manufaktur"],
+      1529: ["manufaktur"],
+      1530: ["manufaktur"],
+      1533: ["manufaktur"],
+      1534: ["manufaktur"],
+      1551: ["manufaktur"],
+      1599: ["manufaktur"],
+      1600: ["manufaktur"],
+      1601: ["manufaktur"],
+      1611: ["manufaktur"],
+      1651: ["manufaktur"],
+      1658: ["manufaktur"],
+      1698: ["manufaktur"],
+      1700: ["manufaktur"],
+
+      // Liabilitas Jangka Pendek
+
+      2102: ["manufaktur"],
+      2103: ["manufaktur"],
+      2111: ["manufaktur"],
+      2186: ["manufaktur"],
+      2187: ["manufaktur"],
+      2191: ["manufaktur"],
+      2192: ["manufaktur"],
+      2195: ["manufaktur"],
+      2201: ["manufaktur"],
+      2202: ["manufaktur"],
+      2203: ["manufaktur"],
+      2228: ["manufaktur"],
+
+      // Liabilitas Jangka Panjang
+
+      2301: ["manufaktur"],
+      2303: ["manufaktur"],
+      2304: ["manufaktur"],
+      2312: ["manufaktur"],
+      2321: ["manufaktur"],
+      2322: ["manufaktur"],
+      2998: ["manufaktur"],
+      2999: ["manufaktur"],
+
+      // Ekuitas
+
+      3102: ["manufaktur"],
+      3120: ["manufaktur"],
+      3200: ["manufaktur"],
+      3297: ["manufaktur"],
+      3298: ["manufaktur"],
+      3299: ["manufaktur"],
+      3300: ["manufaktur"],
+    },
     subtotalCalculations: {
       [BAGIAN_LAMPIRAN.A]: [
         "hitungSubtotal4004",
         "hitungSubtotal4020",
-        "hitungSubtotal5020",
         "hitungSubtotal5030",
+        "hitungSubtotal5031",
         "hitungSubtotal5040",
         "hitungSubtotal5070",
         "hitungSubtotal5080",
         "hitungSubtotal5100",
+        "hitungSubtotal5020",
         "hitungSubtotal4300",
         "hitungSubtotal5400",
         "hitungSubtotal4500",
@@ -351,7 +432,12 @@ export const PERUSAHAAN_CONFIG = {
         "hitungTotal4700",
         "hitungTotal4800",
       ],
-      [BAGIAN_LAMPIRAN.B]: [],
+      [BAGIAN_LAMPIRAN.B]: [
+        "hitungSubtotal1700",
+        "hitungSubtotal2999",
+        "hitungSubtotal3299",
+        "hitungSubtotal3300",
+      ],
       [BAGIAN_LAMPIRAN.C]: [],
     },
     readOnlyFields: {
@@ -432,6 +518,82 @@ export const PERUSAHAAN_CONFIG = {
       4700: ["dagang"],
       4800: ["dagang"],
     },
+
+    akunKonteksNeraca: {
+      // Aset Lancar
+      1101: ["dagang"],
+      1200: ["dagang"],
+      1122: ["dagang"],
+      1123: ["dagang"],
+      1124: ["dagang"],
+      1125: ["dagang"],
+      1181: ["dagang"],
+      1131: ["dagang"],
+      1401: ["dagang"],
+      1423: ["dagang"],
+      1421: ["dagang"],
+      1422: ["dagang"],
+      1499: ["dagang"],
+      1500: ["dagang"],
+
+      // Aset Tidak Lancar
+
+      1501: ["dagang"],
+      1520: ["dagang"],
+      1523: ["dagang"],
+      1524: ["dagang"],
+      1529: ["dagang"],
+      1530: ["dagang"],
+      1533: ["dagang"],
+      1534: ["dagang"],
+      1551: ["dagang"],
+      1599: ["dagang"],
+      1600: ["dagang"],
+      1601: ["dagang"],
+      1611: ["dagang"],
+      1651: ["dagang"],
+      1658: ["dagang"],
+      1698: ["dagang"],
+      1699: ["dagang"],
+      1700: ["dagang"],
+
+      // Liabilitas Jangka Pendek
+
+      2102: ["dagang"],
+      2103: ["dagang"],
+      2111: ["dagang"],
+      2191: ["dagang"],
+      2186: ["dagang"],
+      2187: ["dagang"],
+      2192: ["dagang"],
+      2195: ["dagang"],
+      2201: ["dagang"],
+      2202: ["dagang"],
+      2203: ["dagang"],
+      2228: ["dagang"],
+      2229: ["dagang"],
+
+      // Liabilitas Jangka Panjang
+
+      2301: ["dagang"],
+      2303: ["dagang"],
+      2304: ["dagang"],
+      2312: ["dagang"],
+      2321: ["dagang"],
+      2322: ["dagang"],
+      2998: ["dagang"],
+      2999: ["dagang"],
+
+      // Ekuitas
+
+      3102: ["dagang"],
+      3120: ["dagang"],
+      3200: ["dagang"],
+      3297: ["dagang"],
+      3298: ["dagang"],
+      3299: ["dagang"],
+      3300: ["dagang"],
+    },
     subtotalCalculations: {
       [BAGIAN_LAMPIRAN.A]: [
         "hitungSubtotal4004",
@@ -445,7 +607,15 @@ export const PERUSAHAAN_CONFIG = {
         "hitungTotal4700",
         "hitungTotal4800",
       ],
-      [BAGIAN_LAMPIRAN.B]: [],
+      [BAGIAN_LAMPIRAN.B]: [
+        "hitungSubtotal1500",
+        "hitungSubtotal1699",
+        "hitungSubtotal1700",
+        "hitungSubtotal2229",
+        "hitungSubtotal2999",
+        "hitungSubtotal3299",
+        "hitungSubtotal3300",
+      ],
       [BAGIAN_LAMPIRAN.C]: [],
     },
     readOnlyFields: {

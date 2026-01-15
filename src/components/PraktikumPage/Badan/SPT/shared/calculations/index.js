@@ -14,8 +14,8 @@ import * as LabaRugiPembiayaan from "./labaRugi/pembiayaan";
 
 // NERACA
 import * as NeracaUmum from "./neraca/umum";
-// import * as NeracaManufaktur from "./neraca/manufaktur";
-// import * as NeracaDagang from "./neraca/dagang";
+import * as NeracaManufaktur from "./neraca/manufaktur";
+import * as NeracaDagang from "./neraca/dagang";
 // import * as NeracaJasa from "./neraca/jasa";
 // import * as NeracaBankKonvensional from "./neraca/bank_konvensional";
 // import * as NeracaDanaPensiun from "./neraca/dana_pensiun";
@@ -44,15 +44,15 @@ export const labaRugi = {
 
 export const neraca = {
   umum: NeracaUmum,
-//   manufaktur: NeracaManufaktur,
-//   dagang: NeracaDagang,
-//   jasa: NeracaJasa,
-//   bank_konvensional: NeracaBankKonvensional,
-//   dana_pensiun: NeracaDanaPensiun,
-//   asuransi: NeracaAsuransi,
-//   properti: NeracaProperti,
-//   bank_syariah: NeracaBankSyariah,
-//   infrastruktur: NeracaInfrastruktur,
-//   sekuritas: NeracaSekuritas,
-//   pembiayaan: NeracaPembiayaan,
+  manufaktur: NeracaManufaktur,
+  dagang: NeracaDagang,
+  //   jasa: NeracaJasa,
+  //   bank_konvensional: NeracaBankKonvensional,
+  //   dana_pensiun: NeracaDanaPensiun,
+  //   asuransi: NeracaAsuransi,
+  //   properti: NeracaProperti,
+  //   bank_syariah: NeracaBankSyariah,
+  //   infrastruktur: NeracaInfrastruktur,
+  //   sekuritas: NeracaSekuritas,
+  //   pembiayaan: NeracaPembiayaan,
 };
