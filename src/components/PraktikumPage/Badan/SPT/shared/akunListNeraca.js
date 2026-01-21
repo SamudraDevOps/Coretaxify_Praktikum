@@ -816,6 +816,11 @@ export const MASTER_AKUN_NERACA = [
     jenisPerusahaan: ["bank_syariah"],
   },
   {
+    kodeAkun: "1541",
+    namaAkun: "Investasi Pada Perusaaan Asosiasi",
+    jenisPerusahaan: ["dagang"],
+  },
+  {
     kodeAkun: "1542",
     namaAkun: "Investasi yang dicatat dengan menggunakan metode ekuitas",
     jenisPerusahaan: ["properti"],
@@ -1302,6 +1307,11 @@ export const MASTER_AKUN_NERACA = [
     kodeAkun: "2195",
     namaAkun: "Biaya yang Masih Harus Dibayar-Jangka Pendek",
     jenisPerusahaan: ["properti"],
+  },
+  {
+    kodeAkun: "2196",
+    namaAkun: "Beban Yang Masih Harus Dibayar",
+    jenisPerusahaan: ["dagang"],
   },
   {
     kodeAkun: "2201",
