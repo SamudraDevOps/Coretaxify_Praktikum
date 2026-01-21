@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import HeaderLampiran from "./HeaderLampiran";
-import LaporanLabaRugi from "@sections/Lampiran3/Lampiran3A-1/BagianA";
-import LaporanNeraca from "@sections/Lampiran3/Lampiran3A-1/BagianB";
-import LaporanKeuangan from "@sections/Lampiran3/Lampiran3A-1/BagianC/LaporanKeuangan";
+import LaporanLabaRugi from "@pribadiSections/Lampiran3/Lampiran3A-1/BagianA";
+import Neraca from "@pribadiSections/Lampiran3/Lampiran3A-1/BagianB";
+import LaporanKeuangan from "@pribadiSections/Lampiran3/Lampiran3A-1/BagianC/LaporanKeuangan";
 
 export default function Lampiran_3A1({ data }) {
   const [showBagianA, setShowBagianA] = useState(true);
@@ -40,7 +40,7 @@ export default function Lampiran_3A1({ data }) {
           className="border rounded-md p-4 mb-2 cursor-pointer flex justify-between items-center bg-gray-100 w-full"
           onClick={() => setShowBagianA(!showBagianA)}
         >
-          <h3 className="text-lg font-semibold">A.1. LAPORAN LABA RUGI</h3>   
+          <h3 className="text-lg font-semibold">A.1. LAPORAN LABA RUGI</h3>
           <span
             className={`transition-transform duration-500 ease-in-out ${
               showBagianA ? "rotate-180" : "rotate-0"
@@ -55,11 +55,11 @@ export default function Lampiran_3A1({ data }) {
           }`}
         >
           <div className="border rounded-md p-4 space-y-4">
-            <div className="ml-4 max-h-[750px] overflow-y-auto">
+            <div className="ml-4 ">
               <LaporanLabaRugi />
             </div>
           </div>
-      </div>
+        </div>
       </div>
 
       {/* Bagian B - Laporan Posisi Keuangan (Neraca) */}
@@ -79,15 +79,15 @@ export default function Lampiran_3A1({ data }) {
         </div>
         <div
           className={`overflow-hidden transition-all duration-500 ease-in-out ${
-            showBagianB ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
+            showBagianB ? " opacity-100" : "max-h-0 opacity-0"
           }`}
         >
           <div className="border rounded-md p-4 space-y-4">
-            <div className="ml-4 max-h-[750px] overflow-y-auto">
-              <LaporanNeraca />
+            <div className="ml-4 ">
+              <Neraca />
             </div>
           </div>
-      </div>
+        </div>
       </div>
 
       {/* Bagian C - Laporan Keuangan */}
@@ -112,15 +112,14 @@ export default function Lampiran_3A1({ data }) {
         >
           <div className="border rounded-md p-4 space-y-4">
             <div className="ml-4">
-              {/* tampilkan seluruh form + tabel di sini */}
               <LaporanKeuangan
                 formData={formLaporanKeuangan}
                 onFieldChange={handleLaporanKeuanganChange}
               />
             </div>
           </div>
+        </div>
       </div>
-       </div>
     </div>
   );
 }
