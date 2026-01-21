@@ -1,21 +1,21 @@
 // LABA RUGI
-import * as LabaRugiUmum from "./labaRugi/umum";
-import * as LabaRugiManufaktur from "./labaRugi/manufaktur";
-import * as LabaRugiDagang from "./labaRugi/dagang";
-import * as LabaRugiJasa from "./labaRugi/jasa";
-import * as LabaRugiBankKonvensional from "./labaRugi/bank_konvensional";
-import * as LabaRugiDanaPensiun from "./labaRugi/dana_pensiun";
-import * as LabaRugiAsuransi from "./labaRugi/asuransi";
-import * as LabaRugiProperti from "./labaRugi/properti";
-import * as LabaRugiBankSyariah from "./labaRugi/bank_syariah";
-import * as LabaRugiInfrastruktur from "./labaRugi/infrastruktur";
-import * as LabaRugiSekuritas from "./labaRugi/sekuritas";
-import * as LabaRugiPembiayaan from "./labaRugi/pembiayaan";
+import * as LabaRugiUmum from "./Badan/labaRugi/umum";
+import * as LabaRugiManufaktur from "./Badan/labaRugi/manufaktur";
+import * as LabaRugiDagang from "./Badan/labaRugi/dagang";
+import * as LabaRugiJasa from "./Badan/labaRugi/jasa";
+import * as LabaRugiBankKonvensional from "./Badan/labaRugi/bank_konvensional";
+import * as LabaRugiDanaPensiun from "./Badan/labaRugi/dana_pensiun";
+import * as LabaRugiAsuransi from "./Badan/labaRugi/asuransi";
+import * as LabaRugiProperti from "./Badan/labaRugi/properti";
+import * as LabaRugiBankSyariah from "./Badan/labaRugi/bank_syariah";
+import * as LabaRugiInfrastruktur from "./Badan/labaRugi/infrastruktur";
+import * as LabaRugiSekuritas from "./Badan/labaRugi/sekuritas";
+import * as LabaRugiPembiayaan from "./Badan/labaRugi/pembiayaan";
 
 // NERACA
-import * as NeracaUmum from "./neraca/umum";
-import * as NeracaManufaktur from "./neraca/manufaktur";
-import * as NeracaDagang from "./neraca/dagang";
+import * as NeracaUmum from "./Badan/neraca/umum";
+import * as NeracaManufaktur from "./Badan/neraca/manufaktur";
+import * as NeracaDagang from "./Badan/neraca/dagang";
 // import * as NeracaJasa from "./neraca/jasa";
 // import * as NeracaBankKonvensional from "./neraca/bank_konvensional";
 // import * as NeracaDanaPensiun from "./neraca/dana_pensiun";
