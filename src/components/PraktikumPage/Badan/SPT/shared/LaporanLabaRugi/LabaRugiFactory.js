@@ -1,10 +1,10 @@
 import { PERUSAHAAN_CONFIG, KODE_KOREKSI_OPTIONS } from "../perusahaanConfig";
 import { MASTER_AKUN_LAPORAN_LABA_RUGI, createLineRow } from "../akunListLabaRugi";
 import { RowBuilder } from "./rowBuilders";
-import { labaRugi as calculations } from "../calculations";
+import { calculations } from "../calculations";
 
 export class LabaRugiFactory {
-  static createComponent(jenisPerusahaan, bagian = "A") {
+  static createComponent(jenisPerusahaan, bagian = "A", kategoriEntitas = "badan") {
     const config = PERUSAHAAN_CONFIG[jenisPerusahaan];
     if (!config) {
       throw new Error(`Konfigurasi untuk jenis perusahaan '${jenisPerusahaan}' tidak ditemukan`);
@@ -12,12 +12,13 @@ export class LabaRugiFactory {
 
     const lineRows = this.generateLineRows(config.akunKonteksLabaRugi);
     const pickByKode = this.createPickByKode(lineRows);
-    const initialRows = RowBuilder.buildRows(jenisPerusahaan, bagian, pickByKode);
+    const initialRows = RowBuilder.buildRows(jenisPerusahaan, bagian, pickByKode, kategoriEntitas);
 
     return {
       initialRows,
       config,
       bagian,
+      kategoriEntitas,
       kodeKoreksiOptions: KODE_KOREKSI_OPTIONS,
     };
   }
@@ -66,35 +67,67 @@ export class LabaRugiFactory {
     };
   }
 
-  static getSubtotalCalculations(jenisPerusahaan, bagian) {
-    // Ambil calculation sesuai jenis perusahaan
-    const calculationSource = calculations[jenisPerusahaan];
-    if (!calculationSource) throw new Error("Calculation source not found for Laba Rugi");
+  // static getSubtotalCalculations(jenisPerusahaan, bagian, kategoriEntitas = "badan") {
+  //   // Ambil calculation sesuai jenis perusahaan
+  //   const calculationSource = calculations[jenisPerusahaan];
+  //   if (!calculationSource) throw new Error("Calculation source not found for Laba Rugi");
 
-    // Misal: calculationSource.calculate(rows, bagian)
-    return calculationSource;
-  }
+  //   // Misal: calculationSource.calculate(rows, bagian)
+  //   return calculationSource;
+  // }
 
-  static getSubtotalCalculations(jenisPerusahaan, bagian) {
+  static getSubtotalCalculations(jenisPerusahaan, bagian, kategoriEntitas = "badan") {
     const config = PERUSAHAAN_CONFIG[jenisPerusahaan];
     if (!config || !config.subtotalCalculations) {
       console.warn(`Config tidak ditemukan untuk ${jenisPerusahaan}`);
       return [];
     }
 
-    const calculationNames = config.subtotalCalculations[bagian] || [];
-    const calculationSource = calculations[jenisPerusahaan];
+    // AMBIL calculation names berdasarkan kategoriEntitas
+    const calculationsByKategori = config.subtotalCalculations[kategoriEntitas];
 
-    if (!calculationSource) {
-      console.error(`Calculation source tidak ditemukan untuk ${jenisPerusahaan}`);
+    console.log("[LabaRugiFactory] calculationsByKategori:", calculationsByKategori);
+    console.log("[LabaRugiFactory] bagian:", bagian);
+    console.log(
+      "[LabaRugiFactory] calculationsByKategori[bagian]:",
+      calculationsByKategori?.[bagian]
+    );
+
+    if (!calculationsByKategori) {
+      console.error(`[LabaRugiFactory] Tidak ada config untuk kategoriEntitas: ${kategoriEntitas}`);
       return [];
     }
+
+    const calculationNames = calculationsByKategori?.[bagian] || [];
+    console.log(
+      `[LabaRugiFactory] Using calculations for ${jenisPerusahaan} - ${kategoriEntitas} - Bagian ${bagian}:`,
+      calculationNames
+    );
+
+    const calculationSource =
+      kategoriEntitas === "orang_pribadi"
+        ? calculations.orang_pribadi?.labaRugi?.[jenisPerusahaan]
+        : calculations.badan?.labaRugi?.[jenisPerusahaan];
+
+    if (!calculationSource) {
+      console.error(
+        `[LabaRugiFactory] Calculation source tidak ditemukan untuk ${jenisPerusahaan} - ${kategoriEntitas}`
+      );
+      return [];
+    }
+
+    console.log(
+      `[LabaRugiFactory] Using calculations for ${jenisPerusahaan} - ${kategoriEntitas} - Bagian ${bagian}:`,
+      calculationNames
+    );
 
     return calculationNames
       .map((calcName) => {
         const calcFunction = calculationSource[calcName];
         if (!calcFunction) {
-          console.warn(`Function '${calcName}' tidak ditemukan untuk ${jenisPerusahaan}`);
+          console.warn(
+            `[LabaRugiFactory] Function '${calcName}' tidak ditemukan untuk ${jenisPerusahaan} - ${kategoriEntitas}`
+          );
         }
         return calcFunction;
       })

@@ -1,10 +1,10 @@
 import { PERUSAHAAN_CONFIG, BAGIAN_LAMPIRAN } from "../perusahaanConfig";
 import { MASTER_AKUN_NERACA, createLineRow } from "../akunListNeraca";
 import { RowBuilder } from "./rowBuilders";
-import { neraca as calculations } from "../calculations";
+import { calculations } from "../calculations";
 
 export class NeracaFactory {
-  static createComponent(jenisPerusahaan, bagian = "B") {
+  static createComponent(jenisPerusahaan, bagian = "B", kategoriEntitas = "badan") {
     const config = PERUSAHAAN_CONFIG[jenisPerusahaan];
     if (!config) {
       throw new Error(`Konfigurasi untuk ${jenisPerusahaan} tidak ditemukan`);
@@ -12,12 +12,13 @@ export class NeracaFactory {
 
     const lineRows = this.generateLineRows(config.akunKonteksNeraca);
     const pickByKode = this.createPickByKode(lineRows);
-    const initialRows = RowBuilder.buildRows(jenisPerusahaan, bagian, pickByKode);
+    const initialRows = RowBuilder.buildRows(jenisPerusahaan, bagian, pickByKode, kategoriEntitas);
 
     return {
       initialRows,
       config,
       bagian,
+      kategoriEntitas,
     };
   }
 
@@ -67,35 +68,59 @@ export class NeracaFactory {
     };
   }
 
-  static getSubtotalCalculations(jenisPerusahaan, bagian) {
-    // Ambil calculation sesuai jenis perusahaan
-    const calculationSource = calculations[jenisPerusahaan];
-    if (!calculationSource) throw new Error("Calculation source not found for Neraca");
+  // static getSubtotalCalculations(jenisPerusahaan, bagian, kategoriEntitas = "badan") {
+  //   // Ambil calculation sesuai jenis perusahaan
+  //   const calculationSource =
+  //     kategoriEntitas === "orang_pribadi"
+  //       ? calculations.orang_pribadi?.neraca?.[jenisPerusahaan]
+  //       : calculations.badan?.neraca?.[jenisPerusahaan];
+  //   if (!calculationSource) throw new Error("Calculation source not found for Neraca");
 
-    // Misal: calculationSource.calculate(rows, bagian)
-    return calculationSource;
-  }
+  //   // Misal: calculationSource.calculate(rows, bagian)
+  //   return calculationSource;
+  // }
 
-  static getSubtotalCalculations(jenisPerusahaan, bagian) {
+  static getSubtotalCalculations(jenisPerusahaan, bagian, kategoriEntitas = "badan") {
     const config = PERUSAHAAN_CONFIG[jenisPerusahaan];
     if (!config || !config.subtotalCalculations) {
-      console.warn(`Config tidak ditemukan untuk ${jenisPerusahaan}`);
+      console.warn(`[NeracaFactory] Config tidak ditemukan untuk ${jenisPerusahaan}`);
       return [];
     }
 
-    const calculationNames = config.subtotalCalculations[bagian] || [];
-    const calculationSource = calculations[jenisPerusahaan];
+    //  AMBIL calculation names berdasarkan kategoriEntitas
+    const calculationsByKategori = config.subtotalCalculations[kategoriEntitas];
+
+    if (!calculationsByKategori) {
+      console.error(`[NeracaFactory] Tidak ada config untuk kategoriEntitas: ${kategoriEntitas}`);
+      return [];
+    }
+
+    const calculationNames = calculationsByKategori[bagian] || [];
+
+    const calculationSource =
+      kategoriEntitas === "orang_pribadi"
+        ? calculations.orang_pribadi?.neraca?.[jenisPerusahaan]
+        : calculations.badan?.neraca?.[jenisPerusahaan];
 
     if (!calculationSource) {
-      console.error(`Calculation source tidak ditemukan untuk ${jenisPerusahaan}`);
+      console.error(
+        `[NeracaFactory] Calculation source tidak ditemukan untuk ${jenisPerusahaan} - ${kategoriEntitas}`
+      );
       return [];
     }
+
+    console.log(
+      `[NeracaFactory] Using calculations for ${jenisPerusahaan} - ${kategoriEntitas} - Bagian ${bagian}:`,
+      calculationNames
+    );
 
     return calculationNames
       .map((calcName) => {
         const calcFunction = calculationSource[calcName];
         if (!calcFunction) {
-          console.warn(`Function '${calcName}' tidak ditemukan`);
+          console.warn(
+            `[NeracaFactory] Function '${calcName}' tidak ditemukan untuk Neraca ${jenisPerusahaan} - ${kategoriEntitas}`
+          );
         }
         return calcFunction;
       })

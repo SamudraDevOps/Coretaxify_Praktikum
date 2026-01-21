@@ -2,10 +2,14 @@ import React, { useState } from "react";
 import { toNumber } from "@utils/formatCurrency";
 import { getLampiran1FieldConfig } from "../lampiran1FieldConfig";
 import { LabaRugiFactory } from "./LabaRugiFactory";
-import LaporanLabaRugiTabel from "@badanSections/Lampiran1/shared/LaporanLabaRugiTabel";
+import LaporanLabaRugiTabel from "./LaporanLabaRugiTabel";  
 import GlobalModal from "../GlobalModal";
 
-export default function UniversalLabaRugi({ jenisPerusahaan, bagian = "A" }) {
+export default function UniversalLabaRugi({
+  jenisPerusahaan,
+  bagian = "A",
+  kategoriEntitas = "badan",
+}) {
   if (!jenisPerusahaan) {
     return (
       <div style={{ padding: "20px", border: "2px solid orange", backgroundColor: "#fff3cd" }}>
@@ -18,7 +22,8 @@ export default function UniversalLabaRugi({ jenisPerusahaan, bagian = "A" }) {
   try {
     const { initialRows, config, kodeKoreksiOptions } = LabaRugiFactory.createComponent(
       jenisPerusahaan,
-      bagian
+      bagian,
+      kategoriEntitas
     );
 
     const [rows, setRows] = useState(initialRows || []);
@@ -72,7 +77,11 @@ export default function UniversalLabaRugi({ jenisPerusahaan, bagian = "A" }) {
 
       // Apply calculations based on company type
       try {
-        const calculations = LabaRugiFactory.getSubtotalCalculations(jenisPerusahaan, bagian);
+        const calculations = LabaRugiFactory.getSubtotalCalculations(
+          jenisPerusahaan,
+          bagian,
+          kategoriEntitas
+        );
         calculations.forEach((calc) => {
           if (typeof calc === "function") {
             calc(updatedRows);
@@ -98,7 +107,7 @@ export default function UniversalLabaRugi({ jenisPerusahaan, bagian = "A" }) {
       return (
         <div style={{ padding: "20px", textAlign: "center", color: "#666" }}>
           <p>
-            Tidak ada data untuk {jenisPerusahaan} - {bagian}
+            Tidak ada data untuk {jenisPerusahaan} - {bagian} ({kategoriEntitas})
           </p>
         </div>
       );

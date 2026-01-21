@@ -1,9 +1,13 @@
 import React, { useState, useMemo } from "react";
 import { NeracaFactory } from "./NeracaFactory";
-import NeracaTabel from "@badanSections/Lampiran1/shared/NeracaTabel";
+import NeracaTabel from "./NeracaTabel";
 import GlobalFormField from "@shared/GlobalFormField";
 
-export default function UniversalNeraca({ jenisPerusahaan, bagian = "B" }) {
+export default function UniversalNeraca({
+  jenisPerusahaan,
+  bagian = "B",
+  kategoriEntitas = "badan",
+}) {
   if (!jenisPerusahaan) {
     return (
       <div style={{ padding: "20px", border: "2px solid orange", backgroundColor: "#fff3cd" }}>
@@ -14,7 +18,11 @@ export default function UniversalNeraca({ jenisPerusahaan, bagian = "B" }) {
   }
 
   try {
-    const { initialRows, config } = NeracaFactory.createComponent(jenisPerusahaan, bagian);
+    const { initialRows, config } = NeracaFactory.createComponent(
+      jenisPerusahaan,
+      bagian,
+      kategoriEntitas
+    );
 
     const [rows, setRows] = useState(initialRows || []);
     const [formData, setFormData] = useState({
@@ -23,8 +31,8 @@ export default function UniversalNeraca({ jenisPerusahaan, bagian = "B" }) {
 
     //  Apply calculations secara real-time
     const rowsWithCalculation = useMemo(() => {
-      return applyCalculations(rows, jenisPerusahaan, bagian);
-    }, [rows, jenisPerusahaan, bagian]);
+      return applyCalculations(rows, jenisPerusahaan, bagian, kategoriEntitas);
+    }, [rows, jenisPerusahaan, bagian, kategoriEntitas]);
 
     //  Split rows berdasarkan property `side`
     const { leftRows, rightRows } = useMemo(() => {
@@ -45,7 +53,11 @@ export default function UniversalNeraca({ jenisPerusahaan, bagian = "B" }) {
 
         // Apply calculations setelah update
         try {
-          const calculations = NeracaFactory.getSubtotalCalculations(jenisPerusahaan, bagian);
+          const calculations = NeracaFactory.getSubtotalCalculations(
+            jenisPerusahaan,
+            bagian,
+            kategoriEntitas
+          );
           let calculatedRows = updatedRows;
 
           calculations.forEach((calc) => {
@@ -120,14 +132,20 @@ export default function UniversalNeraca({ jenisPerusahaan, bagian = "B" }) {
 }
 
 //  Helper function untuk apply calculations
-function applyCalculations(rows, jenisPerusahaan, bagian) {
+function applyCalculations(rows, jenisPerusahaan, bagian, kategoriEntitas = "badan") {
   if (!rows || rows.length === 0) return [];
 
   try {
-    const calculations = NeracaFactory.getSubtotalCalculations(jenisPerusahaan, bagian);
+    const calculations = NeracaFactory.getSubtotalCalculations(
+      jenisPerusahaan,
+      bagian,
+      kategoriEntitas
+    );
 
     if (!calculations || calculations.length === 0) {
-      console.warn(` No calculations found for ${jenisPerusahaan} - ${bagian}`);
+      console.warn(
+        ` No calculations found for ${jenisPerusahaan} - ${bagian} - ${kategoriEntitas}`
+      );
       return rows;
     }
 
