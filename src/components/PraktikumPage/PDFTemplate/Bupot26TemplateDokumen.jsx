@@ -1,16 +1,7 @@
 import React from "react";
 import { Document, Page, Text, View, Image, StyleSheet } from "@react-pdf/renderer";
-// import qrImage from "../../../assets/images/qr-web.png";
 import qrImage from "../../../assets/images/qr-web.png";
-import kopImageBP21 from "../../../assets/images/KOP/BP21.png";
-import kopImageBppu from "../../../assets/images/KOP/BPPU.png";
-
-
-const getKopImage = (tipeBupot) => {
-  if (tipeBupot === "BPPU") return kopImageBppu;
-  if (tipeBupot === "BP 21") return kopImageBP21;
-  return kopImageBP21;  // Default nya king
-};
+import kopImageBP26 from "../../../assets/images/KOP/BP26.png";
 
 const formatRupiah = (value) =>
   new Intl.NumberFormat("id-ID", {
@@ -80,7 +71,6 @@ const styles = StyleSheet.create({
   mt12: { marginTop: 12 },
   italic: { fontStyle: "italic", color: "#777" },
 
-
   metaRow: {
     flexDirection: "row",
     marginTop: 6,
@@ -115,12 +105,42 @@ const styles = StyleSheet.create({
     fontWeight: 700,
     fontSize: 10,
   },
+
+  //style B.8 - 9 
+    docRow: { flexDirection: "row", marginTop: 2, alignItems: "flex-start" },
+
+    docLeft: { width: 140 },     // kolom kiri (B.8/B.9)
+    docMid: { flex: 1.6 },       // kolom tengah
+    docRight: { flex: 1.4 },     // kolom kanan
+
+    docInline: { flexDirection: "row", alignItems: "flex-start" },
+    docLabel: { width: 92 },     // lebar label "Document's Type/Number/Date"
+    docColon: { width: 6, textAlign: "center" },
+    docValue: { flex: 1 },
 });
 
 // Komponen baris label : value
 const RowField = ({ label, value }) => (
   <View style={styles.fieldRow}>
     <Text style={styles.fieldLabel}>{label}</Text>
+    <Text style={styles.fieldColon}>:</Text>
+    <Text style={styles.fieldValue}>{value}</Text>
+  </View>
+);
+//komponen b 
+const InlineDocField = ({ label, value }) => (
+  <View style={styles.docInline}>
+    <Text style={styles.docLabel}>{label}</Text>
+    <Text style={styles.docColon}>:</Text>
+    <Text style={styles.docValue}>{value}</Text>
+  </View>
+);
+
+//komponen c
+const RowFieldC = ({ label, value }) => (
+  <View style={styles.fieldRow}>
+    {/* bikin label lebih panjang supaya ":" makin ke kanan */}
+    <Text style={[styles.fieldLabel, { width: 240 }]}>{label}</Text>
     <Text style={styles.fieldColon}>:</Text>
     <Text style={styles.fieldValue}>{value}</Text>
   </View>
@@ -134,35 +154,28 @@ const RowFieldNoColon = ({ label, value }) => (
   </View>
 );
 
-const HeaderFixed = ({ kopImageBP21 }) => (
+const HeaderFixed = ({ kopImageBP26 }) => (
   <View fixed style={styles.fixedTop}>
-    {kopImageBP21 ? <Image style={styles.kop} src={kopImageBP21} /> : null}
-    {/* <View style={styles.titleBlock}> */}
-    {/* <Text style={styles.title1}>KEMENTERIAN KEUANGAN REPUBLIK INDONESIA</Text> */}
-    {/* <Text style={styles.title2}>DIREKTORAT JENDERAL PAJAK</Text> */}
-    {/* <Text style={styles.title3}>BUKTI PEMOTONGAN PAJAK PENGHASILAN PASAL 21</Text> */}
-    {/* <Text style={styles.title3}>YANG TIDAK BERSIFAT FINAL & YANG BERSIFAT FINAL</Text> */}
-    {/* <Text style={styles.codeBadge}>BP21</Text> */}
-    {/* </View> */}
+    {kopImageBP26 ? <Image style={styles.kop} src={kopImageBP26} /> : null}
   </View>
 );
 
 const TableHeaderFixed = () => (
   <View fixed style={[styles.table, styles.mt6]}>
     <View style={styles.thead}>
-      <Text style={[styles.th, { flex: 1.4 }]}>KODE OBJEK PAJAK{"\n"}B.2</Text>
-      <Text style={[styles.th, { flex: 3 }]}>OBJEK PAJAK{"\n"}B.3</Text>
-      <Text style={[styles.th, { flex: 2 }, styles.right]}>PENGHASILAN BRUTO (Rp){"\n"}B.4</Text>
-      <Text style={[styles.th, { flex: 2 }, styles.center]}>PPH Dipotong {"\n"}B.5</Text>
-      <Text style={[styles.th, { flex: 1 }, styles.center]}>TARIF (%){"\n"}B.6</Text>
-      {/* <Text style={[styles.th, { flex: 1 }, styles.right, styles.lastCell]}>PPh DIPOTONG (Rp){"\n"}B.7</Text> */}
+      <Text style={[styles.th, { flex: 1.4 }]}>OBJECT CODE{"\n"}B.2</Text>
+      <Text style={[styles.th, { flex: 3 }]}>TAX OBJECT{"\n"}B.3</Text>
+      <Text style={[styles.th, { flex: 2 }, styles.right]}>GROSS INCOME (Rp){"\n"}B.4</Text>
+      <Text style={[styles.th, { flex: 1.5 }, styles.center]}>DEEMED NET INCOME RATE (%){"\n"}B.5</Text>
+      <Text style={[styles.th, { flex: 1.5 }, styles.center]}>TAX RATE (%){"\n"}B.6</Text>
+      <Text style={[styles.th, { flex: 2 }, styles.right]}>INCOME TAX (Rp){"\n"}B.7</Text>
     </View>
   </View>
 );
 
-const BP21PDFDokumen = ({ data = {}, kopImageBP21: kopImageProp, qrImage: qrImageProp }) => {
+const BP26PDFDokumen = ({ data = {}, kopImageBP26: kopImageProp, qrImage: qrImageProp }) => {
 
-  // const kopImg = kopImageProp || kopImageBP21;
+  const kopImg = kopImageProp || kopImageBP26;
   const qrImg = qrImageProp || qrImage;
 
   let bupotData = data?.bupot_resource;
@@ -176,11 +189,6 @@ const BP21PDFDokumen = ({ data = {}, kopImageBP21: kopImageProp, qrImage: qrImag
   if (!bupotData || Object.keys(bupotData).length === 0) {
     bupotData = data;
   }
-  const tipeBupot = bupotData.tipe_bupot;
-  const kopImg = kopImageProp || getKopImage(tipeBupot);
-
-  // console.log("BP21PDFDokumen data Testing :", data);
-  //  console.log("BP21PDF bupotData coba :", bupotData);
 
   const rincian = Array.isArray(bupotData.rincian) && bupotData.rincian.length
     ? bupotData.rincian
@@ -202,16 +210,16 @@ const BP21PDFDokumen = ({ data = {}, kopImageBP21: kopImageProp, qrImage: qrImag
     <Document>
       <Page size="A4" style={styles.page} wrap>
         {/* Header fixed */}
-        <HeaderFixed kopImageBP21={kopImg} />
+        <HeaderFixed kopImageBP26={kopImg} />
         <View style={styles.topSpacer} />
 
         {/* Grid metadata */}
         <View style={styles.metaRow}>
           {[
-            { label: "NOMOR BUKTI PEMOTONGAN", value: bupotData.nomor_pemotongan || "-" },
-            { label: "MASA PAJAK", value: formatMasaPajak(bupotData.masa_awal) },
-            { label: "SIFAT PEMOTONGAN", value: (bupotData.sifat_pajak_penghasilan || "TIDAK FINAL").toUpperCase() },
-            { label: "STATUS BUKTI PEMOTONGAN", value: (bupotData.status || "NORMAL").toUpperCase() },
+            { label: "NUMBER", value: bupotData.nomor_dokumen || "-" },
+            { label: "TAX PERIOD", value: formatMasaPajak(bupotData.masa_awal) },
+            { label: "INCOME TAX STATUS", value: (bupotData.sifat_pajak_penghasilan || "FINAL").toUpperCase() },
+            { label: "WITHHOLDING SLIP STATUS", value: (bupotData.status || "NORMAL").toUpperCase() },
           ].map((it, i, arr) => (
             <View
               key={i}
@@ -226,17 +234,36 @@ const BP21PDFDokumen = ({ data = {}, kopImageBP21: kopImageProp, qrImage: qrImag
         </View>
 
         {/* Section A */}
-        <Text style={styles.sectionTitle}>A. IDENTITAS PENERIMA PENGHASILAN</Text>
+        <Text style={styles.sectionTitle}>A. INCOME RECIPIENT</Text>
         <View>
-          <RowField label="A.1 NIK/NPWP" value={bupotData.npwp_akun || "-"} />
-          <RowField label="A.2 Nama" value={bupotData.nama_akun || "-"} />
-          <RowField label="A.3 NITKU" value={bupotData.nitku || "-"} />
+        <RowField label="A.1 TIN" value={bupotData.npwp_akun || "-"} />
+        <RowField label="A.2 Name" value={bupotData.nama_akun || "-"} />
+        <RowField label="A.3 Address" value={bupotData.alamat_utama_akun || "-"} />
+        <RowField label="A.4 Country" value={bupotData.negara_akun || "-"} />
+
+        <View style={{ flexDirection: "row" }}>
+            <View style={{ flex: 1, marginRight: 12 }}>
+            <RowField label="A.5 Date of Birth" value={bupotData.tanggal_lahir_akun || "-"} />
+            </View>
+            <View style={{ flex: 1 }}>
+            <RowField label="A.7 Birthcity" value={bupotData.tempat_lahir_akun || "-"} />
+            </View>
+        </View>
+
+        <View style={{ flexDirection: "row" }}>
+            <View style={{ flex: 1, marginRight: 12 }}>
+            <RowField label="A.6 Passport Number" value={bupotData.nomor_paspor_akun || "-"} />
+            </View>
+            <View style={{ flex: 1 }}>
+            <RowField label="A.8 KITAS/KITAB Number" value={bupotData.nomor_kitas_kita || "-"} />
+            </View>
+        </View>
         </View>
 
         {/* Section B */}
-        <Text style={styles.sectionTitle}>B. PENGHASILAN YANG DIPOTONG</Text>
+        <Text style={styles.sectionTitle}>B. INCOME TAX WITHHELD</Text>
         <View>
-          <RowField label="B.1 Jenis Fasilitas" value={bupotData.fasilitas_pajak || "Tanpa Fasilitas"} />
+          <RowField label="B.1 Tax Certificate" value={bupotData.fasilitas_pajak || "Tanpa Fasilitas"} />
         </View>
 
         {/* Table header fixed */}
@@ -251,40 +278,72 @@ const BP21PDFDokumen = ({ data = {}, kopImageBP21: kopImageProp, qrImage: qrImag
               <Text style={[styles.td, { flex: 2 }, styles.right]}>{formatRupiah(r.bruto)}</Text>
               <Text style={[styles.td, { flex: 2 }, styles.center]}>{formatRupiah(r.pph_dipotong) ?? 0}</Text>
               <Text style={[styles.td, { flex: 1 }, styles.center]}>{r.tarif_persen ?? 0}</Text>
-              {/* <Text style={[styles.td, { flex: 1 }, styles.right, styles.lastCell]}>{r.tes || "-"}</Text> */}
             </View>
           ))}
 
           {/* Subtotal */}
           <View style={[styles.tr, { backgroundColor: "#f2f2f2" }]} wrap={false}>
-            <Text style={[styles.td, { flex: 4.58, fontWeight: 700 }]}>JUMLAH</Text>
+            <Text style={[styles.td, { flex: 4.58, fontWeight: 700 }]}>TOTAL</Text>
             <Text style={[styles.td, { flex: 2 }, styles.right]}>{formatRupiah(totalBruto)}</Text>
             <Text style={[styles.td, { flex: 2 }, styles.center]}>{formatRupiah(totalPph)}</Text>
             <Text style={[styles.td, { flex: 1 }, styles.center]}>—</Text>
-            {/* <Text style={[styles.td, { flex: 1 }, styles.right, styles.lastCell]}>-</Text> */}
           </View>
         </View>
 
         {/* Dokumen Referensi */}
         <View style={styles.mt8}>
-          <RowFieldNoColon label="B.8 Dokumen Referensi" value="" />
-          <RowField label="Jenis Dokumen" value={bupotData.jenis_dokumen || " Bukti Pembayaran"} />
-          <RowField label="Tanggal Dokumen" value={formatDate(bupotData.tanggal_dokumen)} />
-          <RowField label="B.9 Nomor Dokumen" value={bupotData.nomor_dokumen || "-"} />
+        {/* B.8 */}
+        <View style={styles.docRow}>
+            <Text style={styles.docLeft}>B.8  Reference Document</Text>
+
+            <View style={styles.docMid}>
+            <InlineDocField
+                label="Document's Type"
+                value={bupotData.jenis_dokumen || "Bukti Pembayaran"}
+            />
+            </View>
+
+            <View style={styles.docRight}>
+            <InlineDocField
+                label="Document's Date"
+                value={formatDate(bupotData.tanggal_dokumen)}
+            />
+            </View>
         </View>
+
+        {/* B.9 */}
+        <View style={styles.docRow}>
+            <Text style={styles.docLeft}>B.9</Text>
+
+            <View style={styles.docMid}>
+            <InlineDocField
+                label="Document's Number"
+                value={bupotData.nomor_dokumen || "-"}
+            />
+            </View>
+
+            <View style={styles.docRight}>
+            <Text> </Text>
+            </View>
+        </View>
+        </View>
+
 
         {/* Section C */}
         <Text style={styles.sectionTitle}>C. IDENTITAS PEMOTONG PPh</Text>
         <View>
-          <RowField label="C.1 NPWP/NIK" value={bupotData.nitku_dokumen?.split(" - ")[0] || "-"} />
-          <RowField label="C.2 NITKU atau Nomor Identitas Subunit Organisasi" value={bupotData.nitku_dokumen || "-"} />
-          <RowField label="C.3 Nama Pemotong" value={bupotData.nitku_dokumen?.split(" - ")[1] || "-"} />
-          <RowField label="C.4 Tanggal" value={formatDate(bupotData.created_at)} />
-          <RowField label="C.5 Nama Penandatangan" value={bupotData.nitku_dokumen?.split(" - ")[1] || "-"} />
-          <RowField
-            label="C.6 Pernyataan"
+        <RowFieldC label="C.1 TIN" value={bupotData.nitku_dokumen?.split(" - ")[0] || "-"} />
+        <RowFieldC
+            label="C.2 Place of Business Activity / Subunit Organization Identification Number"
+            value={bupotData.nitku_dokumen || "-"}
+        />
+        <RowFieldC label="C.3 Withholding Agent Name" value={bupotData.nitku_dokumen?.split(" - ")[1] || "-"} />
+        <RowFieldC label="C.4 Date" value={formatDate(bupotData.tanggal_dokumen)} />
+        <RowFieldC label="C.5 Signer's Name" value={bupotData.nitku_dokumen?.split(" - ")[1] || "-"} />
+        <RowFieldC
+            label="C.6 Taxpayer Declaration"
             value="Dengan ini saya menyatakan bahwa Bukti Pemotongan ini telah saya isi dengan benar dan telah saya tandatangani secara elektronik."
-          />
+        />
         </View>
 
         {/* QR & footer note */}
@@ -293,23 +352,14 @@ const BP21PDFDokumen = ({ data = {}, kopImageBP21: kopImageProp, qrImage: qrImag
           <Text style={[styles.italic, { marginLeft: 8 }]}>Ditandatangani secara elektronik</Text>
         </View>
 
-        {/* Optional QR / Signature */}
-        <View
-          style={{ flexDirection: "row", alignItems: "center", marginTop: 10 }}
-        >
-          {/* <Image
-            style={{ width: "15%", height: "auto", marginBottom: 5 }}
-            src={qrImg}
-          /> */}
+        <View style={{ flexDirection: "row", alignItems: "center", marginTop: 10 }}>
           <Text style={styles.mt6}>
             Sesuai dengan ketentuan yang berlaku, Direktorat Jenderal Pajak mengatur bahwa Bukti Pemotongan ini dinyatakan sah dan tidak diperlukan tanda tangan basah.
           </Text>
-
         </View>
-
       </Page>
     </Document>
   );
 };
 
-export default BP21PDFDokumen;
+export default BP26PDFDokumen;

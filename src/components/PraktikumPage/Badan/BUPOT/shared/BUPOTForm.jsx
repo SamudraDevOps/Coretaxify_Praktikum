@@ -488,12 +488,12 @@ const BUPOTForm = ({
 
   const { id, akun, faktur } = useParams();
 
-  // set nitku_dokumen to current
+  // set nitku to current
   useEffect(() => {
     if (!isEditing) {
       updateFormData(
         "nitku_dokumen",
-        sidebar.npwp_akun + "000000 - " + sidebar.nama_akun
+        sidebar.npwp_akun + "000000 - " + sidebar.nama_akun,
       );
     }
   }, [formData.jenis_dokumen]);
@@ -986,12 +986,16 @@ const BUPOTForm = ({
                                 npwp_akun: selectedObject.npwp_akun,
                                 nama_akun: selectedObject.nama_akun,
                                 alamat_utama_akun: selectedObject.alamat_utama_akun,
-                                nitku:
-                                  selectedObject.npwp_akun +
-                                  "000000 - " +
-                                  selectedObject.nama_akun,
                               });
-
+                              
+                              Object.assign(updates, {
+                                tanggal_lahir_akun: selectedObject.tanggal_lahir_akun || "",
+                                tempat_lahir_akun: selectedObject.tempat_lahir_akun || "",
+                                negara_akun: selectedObject.negara_akun || "",
+                                nomor_paspor_akun: selectedObject.nomor_paspor_akun || "",
+                                nomor_kitas_kitap_akun: selectedObject.nomor_kitas_kitap_akun || "",
+                                  });
+                                    updateMultipleFields(updates);
                             }
                           } else {
                             updateFormData("npwp_akun", e.target.value);
@@ -1326,7 +1330,7 @@ const BUPOTForm = ({
                 )}
 
                 {/* NITKU */}
-                {(currentBupot === "BPPU" || currentBupot === "BP 21") && (
+                {(currentBupot === "BPPU" || currentBupot === "BP 21" ) && (
                   <div className="mt-4 flex justify-between gap-4">
                     <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                       NITKU/Nomor Identitas Sub Unit Organisasi
@@ -1338,7 +1342,7 @@ const BUPOTForm = ({
                       placeholder="Nama"
                       value={formData.nitku || ""}
                       onChange={(e) => {
-                        updateFormData("nitku", e.target.value);
+                        updateFormData("nitku ", e.target.value);
                       }}
                       readOnly={true}
                     />
@@ -2001,46 +2005,56 @@ const BUPOTForm = ({
                     </div>
                   )}
 
-                {/* NPWP */}
-                <div className="mt-4 flex justify-between gap-4">
-                  <label className="w-64 flex-none block text-sm font-medium text-gray-700">
-                    NPWP
-                    <span className="text-red-500">*</span>
-                  </label>
-                  <select
-                    className="w-64 flex-auto border p-2 rounded appearance-none"
-                    value={formData.npwp_akun || ""}
-                    onChange={(e) => {
-                      const selectedValue = e.target.value;
-
-                      const selectedObject = npwp.find(
-                        (obj) => obj.npwp_akun === selectedValue
-                      );
-
-                      if (selectedObject) {
-                        updateMultipleFields({
-                          npwp_akun: selectedObject.npwp_akun,
-                          nama_akun: selectedObject.nama_akun,
-                          alamat_utama_akun: selectedObject.alamat_utama_akun,
-                          nitku:
-                            selectedObject.npwp_akun +
+                  {/* NPWP */}
+                  <div className="mt-4 flex justify-between gap-4">
+                    <label className="w-64 flex-none block text-sm font-medium text-gray-700">
+                      NPWP
+                      <span className="text-red-500">*</span>
+                    </label>
+                    <select
+                      className="w-64 flex-auto border p-2 rounded appearance-none"
+                      value={formData.npwp_akun || ""}
+                      onChange={(e) => {
+                        const selectedValue = e.target.value;
+                        const selectedObject = npwp.find((obj) => obj.npwp_akun === selectedValue);
+                        
+                        if (selectedObject) {
+                          // Data dasar
+                          const updates = {
+                            npwp_akun: selectedObject.npwp_akun,
+                            nama_akun: selectedObject.nama_akun,
+                            alamat_utama_akun: selectedObject.alamat_utama_akun,
+                            nitku: sidebar.npwp_akun +
                             "000000 - " +
-                            selectedObject.nama_akun,
-                        });
-                      } else {
-                        updateFormData("npwp_akun", e.target.value);
-                      }
-                    }}
-                    disabled={loadingNpwp}
-                  >
-                    <option value="">Please Select</option>
-                    {npwp.map((obj) => (
-                      <option key={obj.id} value={obj.npwp_akun}>
-                        {obj.npwp_akun} - {obj.nama_akun}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+                             sidebar.nama_akun,
+                          };
+
+                          // ✅ ISI FIELD BP 26 SECARA OTOMATIS
+                          if (currentBupot === "BP 26") {
+                            Object.assign(updates, {
+                              nitku: selectedObject.npwp_akun + "000000 - " + selectedObject.nama_akun,
+                              tanggal_lahir_akun: selectedObject.tanggal_lahir_akun || "",
+                              tempat_lahir_akun: selectedObject.tempat_lahir_akun || "",
+                              negara_akun: selectedObject.negara_akun || "",
+                              nomor_paspor_akun: selectedObject.nomor_paspor_akun || "",
+                              nomor_kitas_kitap_akun: "123", // template sementara
+                            });
+                          }
+                          updateMultipleFields(updates);
+                        } else {
+                          updateFormData("npwp_akun", e.target.value);
+                        }
+                      }}
+                      disabled={loadingNpwp}
+                    >
+                      <option value="">Please Select</option>
+                      {npwp.map((obj) => (
+                        <option key={obj.id} value={obj.npwp_akun}>
+                          {obj.npwp_akun} - {obj.nama_akun}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
 
                 {/* Nama */}
                 <div className="mt-4 flex justify-between gap-4">
@@ -2061,7 +2075,7 @@ const BUPOTForm = ({
                 </div>
 
                 {/* Alamat */}
-                <div className="mt-4 flex justify-between gap-4">
+                {/* <div className="mt-4 flex justify-between gap-4">
                   <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                     Alamat
                     <span className="text-red-500">*</span>
@@ -2076,10 +2090,10 @@ const BUPOTForm = ({
                     }}
                     readOnly={true}
                   />
-                </div>
+                </div> */}
 
                 {/* Negara */}
-                <div className="mt-4 flex justify-between gap-4">
+                {/* <div className="mt-4 flex justify-between gap-4">
                   <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                     Negara
                     <span className="text-red-500">*</span>
@@ -2099,10 +2113,10 @@ const BUPOTForm = ({
                       </option>
                     ))}
                   </select>
-                </div>
+                </div> */}
 
                 {/* Tanggal Lahir */}
-                <div className="mt-4 flex justify-between gap-4">
+                {/* <div className="mt-4 flex justify-between gap-4">
                   <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                     Tanggal Lahir
                     <span className="text-red-500">*</span>
@@ -2116,9 +2130,10 @@ const BUPOTForm = ({
                       updateFormData("tanggal_lahir_akun", e.target.value);
                     }}
                   />
-                </div>
+                </div> */}
 
                 {/* Tempat Lahir */}
+                {/* {currentBupot !== "BP 26" && (
                 <div className="mt-4 flex justify-between gap-4">
                   <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                     Tempat Lahir
@@ -2134,9 +2149,10 @@ const BUPOTForm = ({
                     }
                   />
                 </div>
+                )} */}
 
                 {/* Nomor Paspor */}
-                <div className="mt-4 flex justify-between gap-4">
+                {/* <div className="mt-4 flex justify-between gap-4">
                   <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                     Nomor Paspor
                     <span className="text-red-500">*</span>
@@ -2150,10 +2166,10 @@ const BUPOTForm = ({
                       updateFormData("nomor_paspor_akun", e.target.value);
                     }}
                   />
-                </div>
+                </div> */}
 
                 {/* Nomor KITAS / KITAP */}
-                <div className="mt-4 flex justify-between gap-4">
+                {/* <div className="mt-4 flex justify-between gap-4">
                   <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                     Nomor KITAS / KITAP
                     <span className="text-red-500">*</span>
@@ -2167,7 +2183,7 @@ const BUPOTForm = ({
                       updateFormData("nomor_kitas_kitap_akun", e.target.value);
                     }}
                   />
-                </div>
+                </div> */}
 
                 {/* Nama Objek Pajak */}
                 <div className="mt-4 flex justify-between gap-4">
@@ -3645,7 +3661,7 @@ const BUPOTForm = ({
                     placeholder="NITKU Dokumen"
                     value={formData.nitku_dokumen || ""}
                     onChange={(e) => {
-                      updateFormData("nitku_dokumen", e.target.value);
+                      updateFormData("nitku_dokumen ", e.target.value);
                     }}
                     readOnly={true}
                   />

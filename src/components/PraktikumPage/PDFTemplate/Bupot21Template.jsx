@@ -234,7 +234,7 @@ const bupotData = data?.bupot_resource || data?.data || data || {};
 
           {/* Subtotal */}
           <View style={[styles.tr, { backgroundColor: "#f2f2f2" }]} wrap={false}>
-            <Text style={[styles.td, { flex: 4.7, fontWeight: 700 }]}>JUMLAH</Text>
+            <Text style={[styles.td, { flex: 4.58, fontWeight: 700 }]}>JUMLAH</Text>
             <Text style={[styles.td, { flex: 2 }, styles.right]}>{formatRupiah(totalBruto)}</Text>
             <Text style={[styles.td, { flex: 2 }, styles.center]}>{formatRupiah(totalPph)}</Text>
             <Text style={[styles.td, { flex: 1 }, styles.center]}>—</Text>
