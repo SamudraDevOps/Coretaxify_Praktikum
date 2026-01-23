@@ -4048,7 +4048,7 @@ const BUPOTForm = ({
         )}
 
         {/* Action buttons */}
-        <div className="flex justify-end mt-4">
+        <div className="flex justify-end m-4 pb-4">
           {isEditing && (
             <button
               className={monitoredUserId ? "hidden" : "bg-blue-500 text-white px-4 py-2 rounded-md mr-2"}
