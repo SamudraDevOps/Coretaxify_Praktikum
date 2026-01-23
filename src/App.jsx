@@ -166,6 +166,7 @@ import ReturFakturKeluaran from "./components/PraktikumPage/Badan/EFaktur/ReturF
 import ReturFakturMasukan from "./components/PraktikumPage/Badan/EFaktur/ReturFakturMasukan";
 import TambahReturFaktur from "./components/PraktikumPage/Badan/EFaktur/TambahReturFaktur";
 import Bupot21ViewPDFDokumen from "./components/PraktikumPage/Badan/BUPOT/Bupot21ViewPDFDokumen";
+import Bupot26ViewPDFDokumen from "./components/PraktikumPage/Badan/BUPOT/Bupot26ViewPDFDokumen";
 // Route Badan
 
 import ProtectedRoutes from "./components/Dashboard/Auth/ProtectedRoutes";
@@ -1327,6 +1328,20 @@ const Main = () => {
                 intent={""}
                 OrangPribadi={BupotA1ViewPDF}
                 Badan={BupotA1ViewPDF}
+                query={"notifikasi"}
+              ></RoleBasedRenderer>
+            </>
+          }
+        />
+        <Route
+          path="/praktikum/:id/sistem/:akun/dokumen-saya/pdf/:dokumen/bp26"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/notification`}
+                intent={""}
+                OrangPribadi={Bupot26ViewPDFDokumen}
+                Badan={Bupot26ViewPDFDokumen}
                 query={"notifikasi"}
               ></RoleBasedRenderer>
             </>

@@ -26,7 +26,7 @@ const DokumenSayaBadan = ({ data }) => {
         })
         // console.log("Dokumen List:", dokumenList);
         .filter((item) => item.bupotResource?.tipe_bupot === "BP 21" ||
-            item.bupotResource?.tipe_bupot === "BPPU" ||
+            item.bupotResource?.tipe_bupot === "BPPU" || item.bupotResource?.tipe_bupot === "BP 26" || 
             item.bupotResource?.tipe_bupot === "BP A1");
 
 
@@ -96,9 +96,12 @@ const DokumenSayaBadan = ({ data }) => {
                                                 className="bg-purple-900 hover:bg-purple-950 text-white font-bold py-2 px-4 rounded"
                                                 onClick={() => {
                                                     const isBPA1 = item.bupotResource?.tipe_bupot === "BP A1";
+                                                    const isBP26 = item.bupotResource?.tipe_bupot === "BP 26";
                                                     navigate(
                                                         isBPA1
                                                         ? `/praktikum/${id}/sistem/${akun}/dokumen-saya/pdf/${item.id}/bpa1`
+                                                        : isBP26
+                                                        ? `/praktikum/${id}/sistem/${akun}/dokumen-saya/pdf/${item.id}/bp26`
                                                         : `/praktikum/${id}/sistem/${akun}/dokumen-saya/pdf/${item.id}`
                                                     );
                                                     
