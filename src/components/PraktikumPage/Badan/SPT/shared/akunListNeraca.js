@@ -535,6 +535,11 @@ export const MASTER_AKUN_NERACA = [
     jenisPerusahaan: ["dana_pensiun", "asuransi"],
   },
   {
+    kodeAkun: "1281",
+    namaAkun: "Tanah di Indonesia",
+    jenisPerusahaan: ["dana_pensiun"],
+  },
+  {
     kodeAkun: "1282",
     namaAkun: "Bangunan di Indonesia",
     jenisPerusahaan: ["dana_pensiun"],
@@ -668,7 +673,7 @@ export const MASTER_AKUN_NERACA = [
   {
     kodeAkun: "1500",
     namaAkun: "Jumlah Aset Lancar",
-    jenisPerusahaan: ["dagang", "dana_pensiun", "properti", "infrastruktur"],
+    jenisPerusahaan: ["dagang", "properti", "infrastruktur"],
   },
   {
     kodeAkun: "1500",
@@ -1697,6 +1702,7 @@ export const MASTER_AKUN_NERACA = [
     kodeAkun: "3300",
     namaAkun: "Jumlah Liabilitas dan Ekuitas",
     jenisPerusahaan: [
+      "asuransi",
       "umum",
       "manufaktur",
       "dagang",
