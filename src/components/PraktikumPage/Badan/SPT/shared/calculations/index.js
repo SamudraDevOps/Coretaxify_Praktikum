@@ -1,4 +1,3 @@
-
 import * as BadanLabaRugiUmum from "./Badan/labaRugi/umum";
 import * as BadanLabaRugiManufaktur from "./Badan/labaRugi/manufaktur";
 import * as BadanLabaRugiDagang from "./Badan/labaRugi/dagang";
@@ -16,6 +15,10 @@ import * as BadanLabaRugiPembiayaan from "./Badan/labaRugi/pembiayaan";
 import * as BadanNeracaUmum from "./Badan/neraca/umum";
 import * as BadanNeracaManufaktur from "./Badan/neraca/manufaktur";
 import * as BadanNeracaDagang from "./Badan/neraca/dagang";
+import * as BadanNeracaJasa from "./Badan/neraca/jasa";
+import * as BadanBankKonvensional from "./Badan/neraca/bank_konvensional";
+import * as BadanDanaPensiun from "./Badan/neraca/dana_pensiun";
+import * as BadanAsuransi from "./Badan/neraca/asuransi";
 
 // ORANG PRIBADI - LABA RUGI
 // import * as OPLabaRugiUmum from "./OP/labaRugi/umum";
@@ -49,7 +52,10 @@ export const calculations = {
       umum: BadanNeracaUmum,
       manufaktur: BadanNeracaManufaktur,
       dagang: BadanNeracaDagang,
-      jasa: BadanNeracaUmum, // Jasa sama dengan umum
+      jasa: BadanNeracaJasa,
+      bank_konvensional: BadanBankKonvensional,
+      dana_pensiun: BadanDanaPensiun,
+      asuransi: BadanAsuransi,
     },
   },
   orang_pribadi: {

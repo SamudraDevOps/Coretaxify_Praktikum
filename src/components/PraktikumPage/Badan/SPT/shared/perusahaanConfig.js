@@ -762,6 +762,65 @@ export const PERUSAHAAN_CONFIG = {
       4700: ["jasa"],
       4800: ["jasa"],
     },
+    akunKonteksNeraca: {
+      // ASET LANCAR
+      1101: ["jasa"],
+      1122: ["jasa"],
+      1123: ["jasa"],
+      1124: ["jasa"],
+      1125: ["jasa"],
+      1131: ["jasa"],
+      1181: ["jasa"],
+      1200: ["jasa"],
+      1401: ["jasa"],
+      1421: ["jasa"],
+      1422: ["jasa"],
+      1423: ["jasa"],
+      1499: ["jasa"],
+      // ASET TIDAK LANCAR
+      1501: ["jasa"],
+      1521: ["jasa"],
+      1522: ["jasa"],
+      1551: ["jasa"],
+      1599: ["jasa"],
+      1600: ["jasa"],
+      1601: ["jasa"],
+      1611: ["jasa"],
+      1651: ["jasa"],
+      1658: ["jasa"],
+      1698: ["jasa"],
+      1700: ["jasa"],
+      // LIABILITAS JANGKA PENDEK
+      2102: ["jasa"],
+      2103: ["jasa"],
+      2111: ["jasa"],
+      2191: ["jasa"],
+      2186: ["jasa"],
+      2187: ["jasa"],
+      2192: ["jasa"],
+      2195: ["jasa"],
+      2201: ["jasa"],
+      2202: ["jasa"],
+      2203: ["jasa"],
+      2228: ["jasa"],
+      // LIABILITAS JANGKA PANJANG
+      2301: ["jasa"],
+      2303: ["jasa"],
+      2304: ["jasa"],
+      2312: ["jasa"],
+      2322: ["jasa"],
+      2321: ["jasa"],
+      2998: ["jasa"],
+      2999: ["jasa"],
+      // EKUITAS
+      3102: ["jasa"],
+      3120: ["jasa"],
+      3200: ["jasa"],
+      3297: ["jasa"],
+      3298: ["jasa"],
+      3299: ["jasa"],
+      3300: ["jasa"],
+    },
     subtotalCalculations: {
       badan: {
         [BAGIAN_LAMPIRAN.A]: [
@@ -773,7 +832,12 @@ export const PERUSAHAAN_CONFIG = {
           "hitungTotal4700",
           "hitungTotal4800",
         ],
-        [BAGIAN_LAMPIRAN.B]: [],
+        [BAGIAN_LAMPIRAN.B]: [
+          "hitungSubtotal1700",
+          "hitungSubtotal2999",
+          "hitungSubtotal3299",
+          "hitungSubtotal3300",
+        ],
         [BAGIAN_LAMPIRAN.C]: [],
       },
       orang_pribadi: {
@@ -860,6 +924,63 @@ export const PERUSAHAAN_CONFIG = {
       4700: ["bank_konvensional"],
       4800: ["bank_konvensional"],
     },
+    akunKonteksNeraca: {
+      // ASET
+      1101: ["bank_konvensional"],
+      1105: ["bank_konvensional"],
+      1106: ["bank_konvensional"],
+      1155: ["bank_konvensional"],
+      1152: ["bank_konvensional"],
+      1153: ["bank_konvensional"],
+      1154: ["bank_konvensional"],
+      1157: ["bank_konvensional"],
+      1156: ["bank_konvensional"],
+      1141: ["bank_konvensional"],
+      1271: ["bank_konvensional"],
+      1131: ["bank_konvensional"],
+      1600: ["bank_konvensional"],
+      1601: ["bank_konvensional"],
+      1521: ["bank_konvensional"],
+      1522: ["bank_konvensional"],
+      1535: ["bank_konvensional"],
+      1658: ["bank_konvensional"],
+      1561: ["bank_konvensional"],
+      1611: ["bank_konvensional"],
+      1421: ["bank_konvensional"],
+      1698: ["bank_konvensional"],
+      1700: ["bank_konvensional"],
+
+      // Liabilitas
+
+      2140: ["bank_konvensional"],
+      2141: ["bank_konvensional"],
+      2152: ["bank_konvensional"],
+      2160: ["bank_konvensional"],
+      2162: ["bank_konvensional"],
+      2163: ["bank_konvensional"],
+      2156: ["bank_konvensional"],
+      2155: ["bank_konvensional"],
+      2157: ["bank_konvensional"],
+      2191: ["bank_konvensional"],
+      2204: ["bank_konvensional"],
+      2211: ["bank_konvensional"],
+      2214: ["bank_konvensional"],
+      2321: ["bank_konvensional"],
+      2998: ["bank_konvensional"],
+      2221: ["bank_konvensional"],
+      2999: ["bank_konvensional"],
+
+      // EKUITAS
+
+      3102: ["bank_konvensional"],
+      3120: ["bank_konvensional"],
+      3200: ["bank_konvensional"],
+      3297: ["bank_konvensional"],
+      3298: ["bank_konvensional"],
+      3299: ["bank_konvensional"],
+      3300: ["bank_konvensional"],
+    },
+
     subtotalCalculations: {
       badan: {
         [BAGIAN_LAMPIRAN.A]: [
@@ -870,7 +991,12 @@ export const PERUSAHAAN_CONFIG = {
           "hitungSubtotal4700",
           "hitungSubtotal4800",
         ],
-        [BAGIAN_LAMPIRAN.B]: [],
+        [BAGIAN_LAMPIRAN.B]: [
+          "hitungSubtotal1700",
+          "hitungSubtotal2999",
+          "hitungSubtotal3299",
+          "hitungSubtotal3300",
+        ],
         [BAGIAN_LAMPIRAN.C]: [],
       },
       orang_pribadi: { [BAGIAN_LAMPIRAN.A]: [], [BAGIAN_LAMPIRAN.B]: [], [BAGIAN_LAMPIRAN.C]: [] },
@@ -951,6 +1077,74 @@ export const PERUSAHAAN_CONFIG = {
       4800: ["dana_pensiun"],
     },
 
+    akunKonteksNeraca: {
+      // ASET
+      1201: ["dana_pensiun"],
+      1202: ["dana_pensiun"],
+      1203: ["dana_pensiun"],
+      1204: ["dana_pensiun"],
+      1223: ["dana_pensiun"],
+      1225: ["dana_pensiun"],
+      1241: ["dana_pensiun"],
+      1242: ["dana_pensiun"],
+      1243: ["dana_pensiun"],
+      1244: ["dana_pensiun"],
+      1251: ["dana_pensiun"],
+      1252: ["dana_pensiun"],
+      1253: ["dana_pensiun"],
+      1254: ["dana_pensiun"],
+      1255: ["dana_pensiun"],
+      1256: ["dana_pensiun"],
+      1260: ["dana_pensiun"],
+      1272: ["dana_pensiun"],
+      1281: ["dana_pensiun"],
+      1282: ["dana_pensiun"],
+      1283: ["dana_pensiun"],
+      1290: ["dana_pensiun"],
+      1300: ["dana_pensiun"],
+      1301: ["dana_pensiun"],
+
+      // Aset Lancar Diluar Investasi
+
+      1101: ["dana_pensiun"],
+
+      // Piutang Iuran
+
+      1193: ["dana_pensiun"],
+      1194: ["dana_pensiun"],
+      1195: ["dana_pensiun"],
+      1111: ["dana_pensiun"],
+      1423: ["dana_pensiun"],
+      1421: ["dana_pensiun"],
+      1121: ["dana_pensiun"],
+      1122: ["dana_pensiun"],
+      1180: ["dana_pensiun"],
+      1500: ["dana_pensiun"],
+
+      // Aset Operasional
+      1521: ["dana_pensiun"],
+      1522: ["dana_pensiun"],
+      1679: ["dana_pensiun"],
+      1698: ["dana_pensiun"],
+      1700: ["dana_pensiun"],
+
+      // LIABILITAS
+
+      2181: ["dana_pensiun"],
+
+      // Liabilitas diluar Liabilitas Manfaat Pensiun
+
+      2183: ["dana_pensiun"],
+      2184: ["dana_pensiun"],
+      2185: ["dana_pensiun"],
+      2203: ["dana_pensiun"],
+      2195: ["dana_pensiun"],
+      2322: ["dana_pensiun"],
+      2998: ["dana_pensiun"],
+      2900: ["dana_pensiun"],
+      2999: ["dana_pensiun"],
+    },
+
     subtotalCalculations: {
       badan: {
         [BAGIAN_LAMPIRAN.A]: [
@@ -961,7 +1155,14 @@ export const PERUSAHAAN_CONFIG = {
           "hitungTotal4700",
           "hitungTotal4800",
         ],
-        [BAGIAN_LAMPIRAN.B]: [],
+        [BAGIAN_LAMPIRAN.B]: [
+          "hitungSubtotal1300",
+          "hitungSubtotal1500",
+          "hitungSubtotal1679",
+          "hitungSubtotal1700",
+          "hitungSubtotal2900",
+          "hitungSubtotal2999",
+        ],
         [BAGIAN_LAMPIRAN.C]: [],
       },
       orang_pribadi: { [BAGIAN_LAMPIRAN.A]: [], [BAGIAN_LAMPIRAN.B]: [], [BAGIAN_LAMPIRAN.C]: [] },
@@ -1030,6 +1231,78 @@ export const PERUSAHAAN_CONFIG = {
       4700: ["asuransi"],
       4800: ["asuransi"],
     },
+    akunKonteksNeraca: {
+      //  Aset || Investasi
+      1203: ["asuransi"],
+      1204: ["asuransi"],
+      1232: ["asuransi"],
+      1244: ["asuransi"],
+      1181: ["asuransi"],
+      1131: ["asuransi"],
+      1252: ["asuransi"],
+      1226: ["asuransi"],
+      1227: ["asuransi"],
+      1222: ["asuransi"],
+      1224: ["asuransi"],
+      1251: ["asuransi"],
+      1253: ["asuransi"],
+      1254: ["asuransi"],
+      1260: ["asuransi"],
+      1272: ["asuransi"],
+      1282: ["asuransi"],
+      1291: ["asuransi"],
+      1292: ["asuransi"],
+      1293: ["asuransi"],
+      1294: ["asuransi"],
+      1299: ["asuransi"],
+      1300: ["asuransi"],
+
+      // Non Investasi
+
+      1101: ["asuransi"],
+      1130: ["asuransi"],
+      1132: ["asuransi"],
+      1191: ["asuransi"],
+      1133: ["asuransi"],
+      1134: ["asuransi"],
+      1121: ["asuransi"],
+      1122: ["asuransi"],
+      1521: ["asuransi"],
+      1522: ["asuransi"],
+      1613: ["asuransi"],
+      1698: ["asuransi"],
+      1700: ["asuransi"],
+
+      // Liabilitas
+      2167: ["asuransi"],
+      2168: ["asuransi"],
+      2165: ["asuransi"],
+      2166: ["asuransi"],
+      2186: ["asuransi"],
+      2191: ["asuransi"],
+      2195: ["asuransi"],
+      2322: ["asuransi"],
+      2194: ["asuransi"],
+
+      // Cadangan Teknis
+
+      2171: ["asuransi"],
+      2172: ["asuransi"],
+      2173: ["asuransi"],
+      2174: ["asuransi"],
+      2361: ["asuransi"],
+      2998: ["asuransi"],
+      2999: ["asuransi"],
+
+      // Ekuitas
+      3102: ["asuransi"],
+      3120: ["asuransi"],
+      3200: ["asuransi"],
+      3297: ["asuransi"],
+      3298: ["asuransi"],
+      3299: ["asuransi"],
+      3300: ["asuransi"],
+    },
 
     subtotalCalculations: {
       badan: {
@@ -1042,7 +1315,13 @@ export const PERUSAHAAN_CONFIG = {
           "hitungTotal4700",
           "hitungTotal4800",
         ],
-        [BAGIAN_LAMPIRAN.B]: [],
+        [BAGIAN_LAMPIRAN.B]: [
+          "hitungSubtotal1300",
+          "hitungSubtotal1700",
+          "hitungSubtotal2999",
+          "hitungSubtotal3299",
+          "hitungSubtotal3300",
+        ],
         [BAGIAN_LAMPIRAN.C]: [],
       },
       orang_pribadi: { [BAGIAN_LAMPIRAN.A]: [], [BAGIAN_LAMPIRAN.B]: [], [BAGIAN_LAMPIRAN.C]: [] },
