@@ -21,8 +21,7 @@ import { RoutesApi } from "@/Routes";
 import Wulan from "../../../../assets/images/wulan.png";
 
 export default function MahasiswaKelas() {
-  const defaultProfile =
-    "https://ui-avatars.com/api/?name=User&background=random&size=128";
+  const defaultProfile = "https://ui-avatars.com/api/?name=User&background=random&size=128";
   const [isOpen, setIsOpen] = useState(false);
   const [url, setUrl] = useState(`${RoutesApi.url}api/student/groups`);
   const [isAddOpen, setIsAddOpen] = useState(false);
@@ -81,9 +80,7 @@ export default function MahasiswaKelas() {
     const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     let result = "";
     for (let i = 0; i < 5; i++) {
-      result += characters.charAt(
-        Math.floor(Math.random() * characters.length)
-      );
+      result += characters.charAt(Math.floor(Math.random() * characters.length));
     }
     return result;
   };
@@ -119,9 +116,7 @@ export default function MahasiswaKelas() {
       id: String(data.length + 1),
       namaPraktikum: formData.namaPraktikum,
       kodePraktikum: formData.kodePraktikum,
-      supportingFile: formData.supportingFile
-        ? formData.supportingFile.name
-        : "No file",
+      supportingFile: formData.supportingFile ? formData.supportingFile.name : "No file",
       deadline: formData.deadline,
     };
 
@@ -252,11 +247,9 @@ export default function MahasiswaKelas() {
       // queryClient.invalidateQueries({ queryKey: ["todos"] });
     },
     onError: (error) => {
-      Swal.fire("Gagal!", "Kode kelas salah atau tidak ada!", "error").then(
-        () => {
-          refetch();
-        }
-      );
+      Swal.fire("Gagal!", "Kode kelas salah atau tidak ada!", "error").then(() => {
+        refetch();
+      });
       console.log(error);
     },
   });
@@ -346,9 +339,7 @@ export default function MahasiswaKelas() {
               <div className="p-4">
                 <ul className="text-gray-700 text-sm space-y-2 h-10">
                   <li>
-                    <strong className="text-indigo-700">
-                      Kode Kelas : {item.class_code}
-                    </strong>
+                    <strong className="text-indigo-700">Kode Kelas : {item.class_code}</strong>
                     {/* <p className="text-gray-500 p-4">
                       Tanggal Mulai {item.start_period}
                     </p>
@@ -529,12 +520,46 @@ export default function MahasiswaKelas() {
         </div>
       </div> */}
       </div>
-      {isOpen && (
-        <EditPopupMahasiswa
-          onClose={() => setIsOpen(false)}
-          data={selectedData}
-        />
-      )}
+
+      <div className="">
+        <div className="pagination-info">
+          {`Showing ${indexOfFirstItem + 1} to ${Math.min(
+            indexOfLastItem,
+            data.data.length
+          )} of ${data.data.length} entries`}
+        </div>
+
+        <div className="pagination">
+          <button
+            className={`page-item`}
+            onClick={() => {
+              setUrl(data.links.prev);
+            }}
+            disabled={data.meta.current_page === 1}
+          >
+            &lt;
+          </button>
+          <button className="page-item">{data.meta.current_page}</button>
+          {/* {Array.from({ length: Math.ceil(data.length / itemsPerPage) }, (_, index) => (
+                            <button key={index + 1} className={`page-item ${currentPage === index + 1 ? "active" : ""}`} onClick={() => paginate(index + 1)}>
+                                {index + 1}
+                            </button>
+                        ))} */}
+          <button
+            className={`page-item ${
+              currentPage === Math.ceil(data.length / itemsPerPage) ? "disabled" : ""
+            }`}
+            onClick={() => {
+              console.log(data.links.next);
+              setUrl(data.links.next);
+            }}
+            disabled={data.links.next == null}
+          >
+            &gt;
+          </button>
+        </div>
+      </div>
+      {isOpen && <EditPopupMahasiswa onClose={() => setIsOpen(false)} data={selectedData} />}
       <AlertDialog
         open={isAddOpen}
         onOpenChange={setIsAddOpen}
