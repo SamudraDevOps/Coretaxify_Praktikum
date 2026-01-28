@@ -2330,8 +2330,8 @@ const BUPOTForm = ({
                 </div>
 
                 {/* Recipient Number only if fasilitas_pajak = skd */}
-                {currentBupot === "BPNR" &&
-                  currentBupot === "BP 26" &&
+                {(currentBupot === "BPNR" ||
+                  currentBupot === "BP 26") &&
                   formData.fasilitas_pajak === "surat_keterangan_domisili" && (
                     <div className="mt-4 flex justify-between gap-4">
                       <label className="w-64 flex-none block text-sm font-medium text-gray-700">
@@ -2375,6 +2375,11 @@ const BUPOTForm = ({
                             selectedObject.npwp_akun +
                             "000000 - " +
                             selectedObject.nama_akun,
+                          negara_akun: selectedObject.negara_akun,
+                          tanggal_lahir_akun: selectedObject.tanggal_lahir_akun,
+                          tempat_lahir_akun: selectedObject.tempat_lahir_akun,
+                          nomor_paspor_akun: selectedObject.nomor_paspor_akun,
+                          nomor_kitas_kitap_akun: selectedObject.nomor_kitas_kitap_akun,
                         });
                       } else {
                         updateFormData("npwp_akun", e.target.value);
@@ -2394,7 +2399,9 @@ const BUPOTForm = ({
                 {/* Nama */}
                 <div className="mt-4 flex justify-between gap-4">
                   <label className="w-64 flex-none block text-sm font-medium text-gray-700">
-                    Nama
+                    {currentBupot === "BPNR" ? (
+                      'Name'
+                    ) : 'Nama'}
                     <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -2410,7 +2417,7 @@ const BUPOTForm = ({
                 </div>
 
                 {/* Alamat */}
-                <div className="mt-4 flex justify-between gap-4">
+                {/* <div className="mt-4 flex justify-between gap-4">
                   <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                     Alamat
                     <span className="text-red-500">*</span>
@@ -2425,10 +2432,10 @@ const BUPOTForm = ({
                     }}
                     readOnly={true}
                   />
-                </div>
+                </div> */}
 
                 {/* Negara */}
-                <div className="mt-4 flex justify-between gap-4">
+                {/* <div className="mt-4 flex justify-between gap-4">
                   <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                     Negara
                     <span className="text-red-500">*</span>
@@ -2448,10 +2455,10 @@ const BUPOTForm = ({
                       </option>
                     ))}
                   </select>
-                </div>
+                </div> */}
 
                 {/* Tanggal Lahir */}
-                <div className="mt-4 flex justify-between gap-4">
+                {/* <div className="mt-4 flex justify-between gap-4">
                   <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                     Tanggal Lahir
                     <span className="text-red-500">*</span>
@@ -2465,10 +2472,10 @@ const BUPOTForm = ({
                       updateFormData("tanggal_lahir_akun", e.target.value);
                     }}
                   />
-                </div>
+                </div> */}
 
                 {/* Tempat Lahir */}
-                <div className="mt-4 flex justify-between gap-4">
+                {/* <div className="mt-4 flex justify-between gap-4">
                   <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                     Tempat Lahir
                     <span className="text-red-500">*</span>
@@ -2482,10 +2489,10 @@ const BUPOTForm = ({
                       updateFormData("tempat_lahir_akun", e.target.value)
                     }
                   />
-                </div>
+                </div> */}
 
                 {/* Nomor Paspor */}
-                <div className="mt-4 flex justify-between gap-4">
+                {/* <div className="mt-4 flex justify-between gap-4">
                   <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                     Nomor Paspor
                     <span className="text-red-500">*</span>
@@ -2499,10 +2506,10 @@ const BUPOTForm = ({
                       updateFormData("nomor_paspor_akun", e.target.value);
                     }}
                   />
-                </div>
+                </div> */}
 
                 {/* Nomor KITAS / KITAP */}
-                <div className="mt-4 flex justify-between gap-4">
+                {/* <div className="mt-4 flex justify-between gap-4">
                   <label className="w-64 flex-none block text-sm font-medium text-gray-700">
                     Nomor KITAS / KITAP
                     <span className="text-red-500">*</span>
@@ -2516,7 +2523,7 @@ const BUPOTForm = ({
                       updateFormData("nomor_kitas_kitap_akun", e.target.value);
                     }}
                   />
-                </div>
+                </div> */}
 
                 {/* Nama Objek Pajak */}
                 <div className="mt-4 flex justify-between gap-4">
@@ -2678,7 +2685,11 @@ const BUPOTForm = ({
                 {/* Tingkat Penghasilan Neto yang Dianggap (%) */}
                 <div className="mt-4 flex justify-between gap-4">
                   <label className="w-64 flex-none block text-sm font-medium text-gray-700">
-                    Tingkat Penghasilan Neto yang Dianggap (%)
+                    {currentBupot === "BPNR" ? (
+                      'Tingkat Penghasilan Neto yang Dianggap (%)'
+                    ) : (
+                      'DPP (%)'
+                    )}
                     <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -2699,7 +2710,11 @@ const BUPOTForm = ({
                 {/* Tax Rate (%) */}
                 <div className="mt-4 flex justify-between gap-4">
                   <label className="w-64 flex-none block text-sm font-medium text-gray-700">
-                    Tax Rate (%)
+                    {currentBupot === "BPNR" ? (
+                      'Tarif (%)(BPNR)*'
+                    ) : (
+                      'Tarif (%)*'
+                    )}
                     <span className="text-red-500">*</span>
                   </label>
                   <input
