@@ -335,7 +335,7 @@ const BP26PDF = ({ data = {}, kopImage: kopImageProp, qrImage: qrImageProp}) => 
         />
         <RowFieldC label="C.3 Withholding Agent Name" value={bupotData.nitku_dokumen?.split(" - ")[1] || "-"} />
         <RowFieldC label="C.4 Date" value={formatDate(bupotData.tanggal_dokumen)} />
-        <RowFieldC label="C.5 Signer's Name" value={bupotData.nitku_dokumen?.split(" - ")[1] || "-"} />
+        <RowFieldC label="C.5 Signer's Name" value={bupotData.nama_representatif || bupotData.nitku_dokumen?.split(" - ")[1] || "-"} />
         <RowFieldC
             label="C.6 Taxpayer Declaration"
             value="Dengan ini saya menyatakan bahwa Bukti Pemotongan ini telah saya isi dengan benar dan telah saya tandatangani secara elektronik."
