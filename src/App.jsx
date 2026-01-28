@@ -1348,6 +1348,20 @@ const Main = () => {
           }
         />
         <Route
+          path="/praktikum/:id/sistem/:akun/bupot/bp26/pdf/:bupot"
+          element={
+            <>
+              <RoleBasedRenderer
+                url={`${RoutesApi.apiUrl}student/assignments/:id/sistem/:akun/bupot/:bupot`}
+                intent={""}
+                OrangPribadi={Bupot26ViewPDFDokumen}
+                Badan={Bupot26ViewPDFDokumen}
+                query={"notifikasi"}
+              ></RoleBasedRenderer>
+            </>
+          }
+        />
+        <Route
           path="/pdf/faktur-keluaran"
           element={
             <>
