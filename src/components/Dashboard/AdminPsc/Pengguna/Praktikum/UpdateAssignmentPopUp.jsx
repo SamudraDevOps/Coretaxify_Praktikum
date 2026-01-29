@@ -1,5 +1,5 @@
 import React from "react";
-import "./assignmentPopup.css";
+import "./assignmentPopUp.css";
 import { RxCross1 } from "react-icons/rx";
 
 const UpdateAssignmentPopup = ({

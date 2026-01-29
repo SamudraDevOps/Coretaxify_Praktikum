@@ -25,8 +25,9 @@ import { useToast } from "@/hooks/use-toast";
 const EditKelas = () => {
   const [url, setUrl] = useState(RoutesApi.classAdmin);
   const [cookies, setCookie] = useCookies(["token"]);
+  const [search, setSearch] = useState("");
   const { toast } = useToast();
-  const { isLoading, isError, data, error } = useQuery({
+  const { isLoading, isError, data, error, refetch } = useQuery({
     queryKey: ["classes", url],
     queryFn: async () => {
       const { data } = await axios.get(url, {
@@ -35,6 +36,7 @@ const EditKelas = () => {
         },
         params: {
           intent: "api.get.group.all",
+          search: search,
         },
       });
       console.log(data.data);
@@ -243,7 +245,14 @@ const EditKelas = () => {
             id="search"
             className="search-input"
             placeholder="Cari Data Kelas 🔎"
+            onChange={(e) => setSearch(e.target.value)}
           />
+          <button
+            className="bg-blue-500 p-2 rounded-md text-white text-sm ml-2 hover:cursor-pointer hover:bg-blue-700"
+            onClick={() => refetch()}
+          >
+            Cari
+          </button>
         </div>
       </div>
       <div className="table-container">

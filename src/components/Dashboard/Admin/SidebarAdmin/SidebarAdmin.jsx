@@ -9,6 +9,7 @@ import {
   FaUserCircle,
   FaFileAlt,
   FaBuilding,
+  FaDatabase
 } from "react-icons/fa";
 import { GiPieChart } from "react-icons/gi";
 import Logo from "../../../../assets/images/7.png";
@@ -496,24 +497,71 @@ const SidebarAdmin = () => {
                     <li
                       className="dropdown-item"
                       onClick={() => {
-                        window.location.href = `/${cookies.role}/praktikum/kosong`;
+                        window.location.href = `/${cookies.role}/praktikum`;
                       }}
                     >
-                      Praktikum Kosong
-                    </li>
-                    <li
-                      className="dropdown-item"
-                      onClick={() => {
-                        window.location.href = `/${cookies.role}/praktikum/terisi`;
-                      }}
-                    >
-                      Praktikum Terisi
+                      Praktikum
                     </li>
                   </ul>
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
           </div>
+          {cookies.role == "admin" ? (
+            <Accordion type="single" collapsible className="pl-4">
+              <AccordionItem
+                value="item-1"
+                className="border-none hover:no-underline"
+              >
+                <AccordionTrigger className="w-full ">
+                  <div className="flex">
+                    <FaDatabase className="menu-icon" />
+                    <span className={`text-[16px] ${isOpen ? "" : "hidden "}`}>
+                      Master Data
+                    </span>
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent className={`${isOpen ? "" : "hidden"}`}>
+                  <ul className="">
+                    <li
+                      className="dropdown-item"
+                      onClick={() => {
+                        window.location.href = `/${cookies.role}/kap-kjs-master`;
+                      }}
+                    >
+                      KAP-KJS
+                    </li>
+                    <li
+                      className="dropdown-item"
+                      onClick={() => {
+                        window.location.href = `/${cookies.role}/satuan-master`;
+                      }}
+                    >
+                      Satuan Faktur
+                    </li>
+                    <li
+                      className="dropdown-item"
+                      onClick={() => {
+                        window.location.href = `/${cookies.role}/kode-transaksi-master`;
+                      }}
+                    >
+                      Kode Transaksi
+                    </li>
+                    <li
+                      className="dropdown-item"
+                      onClick={() => {
+                        window.location.href = `/${cookies.role}/bupot-objek-pajak-master`;
+                      }}
+                    >
+                      Objek Pajak Bupot
+                    </li>
+                  </ul>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          ) : (
+            ""
+          )}
         </ul>
       </div>
 

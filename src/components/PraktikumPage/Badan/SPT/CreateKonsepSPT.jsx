@@ -2740,7 +2740,7 @@ const CreateKonsepSPT = ({ data, sidebar }) => {
                   }
                 >
                   <h3 className="text-lg font-semibold">
-                    VII. Pemungutan PPN atau PPNmB oleh Pemungut PPN
+                    VII. Pemungutan PPN atau PPnBM oleh Pemungut PPN
                   </h3>
                   {setShowPemungutanPPNatauPPNdanPPNMBolehPemungutPPN ? (
                     <FaChevronUp />
@@ -2769,7 +2769,7 @@ const CreateKonsepSPT = ({ data, sidebar }) => {
                         {/* row 1 */}
                         <tr className="border-b">
                           <td className="p-2 whitespace-normal break-words text-sm">
-                            A. Jumlah PPN dan PPNmB yang dipungut
+                            A. Jumlah PPN dan PPnBM yang dipungut
                           </td>
                           <td className="p-2">
                             <input
@@ -2812,7 +2812,7 @@ const CreateKonsepSPT = ({ data, sidebar }) => {
                         {/* row 2 */}
                         <tr className="border-b">
                           <td className="p-2 whitespace-normal break-words text-sm">
-                            B. PPN dan PPNmB kurang atau (lebih) bayar pada SPT
+                            B. PPN dan PPnBM kurang atau (lebih) bayar pada SPT
                             yang dibetulkan sebelumnya
                           </td>
                           <td className="p-2">
@@ -2856,7 +2856,7 @@ const CreateKonsepSPT = ({ data, sidebar }) => {
                         {/* row 3 */}
                         <tr className="border-b">
                           <td className="p-2 whitespace-normal break-words text-sm">
-                            C. PPN dan PPNmB kurang atau (lebih) bayar karena
+                            C. PPN dan PPnBM kurang atau (lebih) bayar karena
                             pembetulan SPT (VII.A - VII.B)
                           </td>
                           <td className="p-2">
@@ -2904,7 +2904,7 @@ const CreateKonsepSPT = ({ data, sidebar }) => {
                           <td className="p-2 whitespace-normal break-words text-sm font-bold">
                             Setiap kelebihan pemungutan dari bagian ini akan
                             menjadi pengurang pada bagian III.D untuk PPN dan
-                            VI.B untuk PPNmB
+                            VI.B untuk PPnBM
                           </td>
                         </tr>
                       </tbody>
@@ -2949,7 +2949,7 @@ const CreateKonsepSPT = ({ data, sidebar }) => {
                         {/* row 1 */}
                         <tr className="border-b">
                           <td className="p-2 whitespace-normal break-words text-sm">
-                            A. Jumlah PPN dan PPNmB yang dipungut
+                            A. Jumlah PPN dan PPnBM yang dipungut
                           </td>
                           <td className="p-2">
                             <input
@@ -2992,7 +2992,7 @@ const CreateKonsepSPT = ({ data, sidebar }) => {
                         {/* row 2 */}
                         <tr className="border-b">
                           <td className="p-2 whitespace-normal break-words text-sm">
-                            B. PPN dan PPNmB kurang atau (lebih) bayar pada SPT
+                            B. PPN dan PPnBM kurang atau (lebih) bayar pada SPT
                             yang dibetulkan sebelumnya
                           </td>
                           <td className="p-2">
@@ -3036,7 +3036,7 @@ const CreateKonsepSPT = ({ data, sidebar }) => {
                         {/* row 3 */}
                         <tr className="border-b">
                           <td className="p-2 whitespace-normal break-words text-sm">
-                            C. PPN dan PPNmB kurang atau (lebih) bayar karena
+                            C. PPN dan PPnBM kurang atau (lebih) bayar karena
                             pembetulan SPT (VIII.A - VIII.B)
                           </td>
                           <td className="p-2">
@@ -3827,7 +3827,7 @@ const CreateKonsepSPT = ({ data, sidebar }) => {
                             >
                               Jumlah
                             </td>
-                            <td className="p-2 text-center">
+                            {/* <td className="p-2 text-center">
                               {/* {formatRupiahRP(
                                 sptOther?.data?.reduce(
                                   (sum, item) =>
@@ -3836,8 +3836,8 @@ const CreateKonsepSPT = ({ data, sidebar }) => {
                                       0),
                                   0
                                 )
-                              )} */}
-                            </td>
+                              )} *
+                            </td> */}
                             <td className="p-2 text-center">
                               {formatRupiahRP(
                                 sptOther?.data?.reduce(

@@ -22,6 +22,7 @@ import { joinExamMahasiswa } from "@/hooks/dashboard/useMahasiswa";
 import { getCookie } from "@/service";
 import { getCsrf } from "@/service/getCsrf";
 import { useOutletContext } from "react-router-dom";
+import { IntentEnum } from "@/enums/IntentEnum";
 
 export default function MahasiswaUjian() {
   const [isOpen, setIsOpen] = useState(false);
@@ -293,9 +294,9 @@ export default function MahasiswaUjian() {
                 <td>{item.assignment.name}</td>
                 <td>{item.assignment.assignment_code}</td>
                 <td>
-                  {item.supporting_file ? (
+                  {item.assignment.supporting_file ? (
                     <button
-                      onClick={() => handleDownload(item.id)}
+                      onClick={() => handleDownload(item.assignment.id)}
                       className="download-button"
                       disabled={downloadMutation.isPending}
                     >

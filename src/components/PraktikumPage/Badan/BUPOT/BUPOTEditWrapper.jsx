@@ -75,7 +75,7 @@ const formConfigs = {
   },
 };
 
-const BUPOTEditWrapper = () => {
+const BUPOTEditWrapper = (props) => {
   const { id, akun, type, bupotId } = useParams();
   // const navigate = useNavigate();
   const navigate = useNavigateWithParams();
@@ -202,6 +202,7 @@ const BUPOTEditWrapper = () => {
         initialData={existingData?.data || {}}
         isEditing={true}
         isLoading={isLoading}
+        sidebar={props.sidebar}
       />
     </>
   );

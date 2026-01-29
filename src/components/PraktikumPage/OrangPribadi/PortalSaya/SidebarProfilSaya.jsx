@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import { useUserType } from "../../../context/UserTypeContext";
+import { useUserType } from "../../../context/userTypeContext";
 import { useNavigateWithParams } from "@/hooks/useNavigateWithParams";
 
 const SidebarProfilSaya = ({ nama_akun, npwp_akun, akun }) => {
