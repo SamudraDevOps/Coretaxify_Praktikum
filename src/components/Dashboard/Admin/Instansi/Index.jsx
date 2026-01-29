@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import TambahInstansi from "./Create";
 import Swal from "sweetalert2";
 import { CookiesProvider, useCookies } from "react-cookie";
@@ -23,7 +23,6 @@ const Instansi = () => {
   const [namaEdit, setNamaEdit] = useState();
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
   const [currentPage, setCurrentPage] = useState(1);
-  const [search, setSearch] = useState("");
   const itemsPerPage = 20;
   const [cookies, setCookie] = useCookies([]);
   const [url, setUrl] = useState(RoutesApi.admin.universities.index().url);
@@ -39,7 +38,6 @@ const Instansi = () => {
         params: {
           page: currentPage,
           perPage: itemsPerPage,
-          search: search,
         },
       });
       return data;
@@ -183,20 +181,11 @@ const Instansi = () => {
         <h2>Data Instansi</h2>
       </div>
       <div className="search-add-container">
-        <div className="flex items-center">
-          <input
-            type="text"
-            className="search-input"
-            placeholder="Cari Data Instansi 🔎"
-            onChange={(e) => setSearch(e.target.value)}
-          />
-          <button
-            className="bg-blue-500 p-2 rounded-md text-white text-sm ml-2 hover:cursor-pointer hover:bg-blue-700"
-            onClick={() => handleDataRefresh()}
-          >
-            Cari
-          </button>
-      </div>
+        <input
+          type="text"
+          className="search-input"
+          placeholder="Cari Data Instansi 🔎"
+        />
         <button className="add-button" onClick={() => setIsOpen(true)}>
           + Tambah Data Instansi
         </button>

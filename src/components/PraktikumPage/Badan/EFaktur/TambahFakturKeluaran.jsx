@@ -83,8 +83,6 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
   const [cookies] = useCookies(["token"]);
 
   const RoutesApi = {
-    // kodeTransaksi: "https://api.coretaxify.com/api/kode-transaksi",
-    // satuan: "https://api.coretaxify.com/api/satuan",
     kodeTransaksi: "https://api.coretaxify.com/api/kode-transaksi",
     satuan: "https://api.coretaxify.com/api/satuan",
   };
@@ -128,7 +126,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
       const data = await axios.get(
         // RoutesApiReal.apiUrl + `student/assignments/${id}/sistem/${akun}`,
         RoutesApiReal.apiUrl +
-        `student/assignments/${id}/sistem/${akun}/getAkun`,
+          `student/assignments/${id}/sistem/${akun}/getAkun`,
         {
           headers: {
             Authorization: `Bearer ${cookies.token}`,
@@ -188,10 +186,10 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
         selectedInfo === "A"
           ? "X"
           : selectedInfo === "B"
-            ? "Y"
-            : selectedInfo === "C"
-              ? "Z"
-              : "",
+          ? "Y"
+          : selectedInfo === "C"
+          ? "Z"
+          : "",
       nomorPendukung: "", // reset ketika berubah
     }));
     // Atur nilai Cap Fasilitas secara otomatis
@@ -1721,27 +1719,27 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                           "9 - Penyerahan kepada Perwakilan Negara Asing dan Badan Internasional serta Pejabatnya",
                           "10 - BKP dan JKP tertentu",
                         ].includes(informasi_tambahan))) && (
-                        <div className="space-y-2">
-                          <label className="block text-sm font-medium">
-                            Nomor Pendukung
-                          </label>
-                          <input
-                            type="text"
-                            name="nomorPendukung"
-                            className="p-2 border rounded w-full"
-                            placeholder="Masukkan Nomor Pendukung"
-                            value={formData.nomorPendukung}
-                            onChange={(e) => {
-                              const value = e.target.value;
-                              setNomorPendukung(value);
-                              setFormData((prev) => ({
-                                ...prev,
-                                nomorPendukung: value,
-                              }));
-                            }}
-                          />
-                        </div>
-                      )}
+                      <div className="space-y-2">
+                        <label className="block text-sm font-medium">
+                          Nomor Pendukung
+                        </label>
+                        <input
+                          type="text"
+                          name="nomorPendukung"
+                          className="p-2 border rounded w-full"
+                          placeholder="Masukkan Nomor Pendukung"
+                          value={formData.nomorPendukung}
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            setNomorPendukung(value);
+                            setFormData((prev) => ({
+                              ...prev,
+                              nomorPendukung: value,
+                            }));
+                          }}
+                        />
+                      </div>
+                    )}
                   </>
                 )}
               </div>
@@ -1861,7 +1859,7 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                   name="akun_penerima_id"
                   value={
                     formData.akun_penerima_id?.id &&
-                      formData.akun_penerima_id?.is_akun_tambahan !== undefined
+                    formData.akun_penerima_id?.is_akun_tambahan !== undefined
                       ? `${formData.akun_penerima_id.id}_${formData.akun_penerima_id.is_akun_tambahan}`
                       : ""
                   }
@@ -1919,40 +1917,40 @@ const TambahFakturKeluaran = ({ data, sidebar }) => {
                       {/* Main Accounts */}
                       {npwp_faktur.data.filter((item) => !item.is_akun_tambahan)
                         .length > 0 && (
-                          <optgroup label="Main Accounts">
-                            {npwp_faktur.data
-                              .filter((item) => !item.is_akun_tambahan)
-                              .map((item, index) => (
-                                <option
-                                  key={`${item.id}_false_${index}`}
-                                  value={`${item.id}_false`}
-                                >
-                                  {item.npwp_akun || "NPWP tidak tersedia"} -{" "}
-                                  {item.nama_akun}
-                                  {item.tipe_akun ? ` (${item.tipe_akun})` : ""}
-                                </option>
-                              ))}
-                          </optgroup>
-                        )}
+                        <optgroup label="Main Accounts">
+                          {npwp_faktur.data
+                            .filter((item) => !item.is_akun_tambahan)
+                            .map((item, index) => (
+                              <option
+                                key={`${item.id}_false_${index}`}
+                                value={`${item.id}_false`}
+                              >
+                                {item.npwp_akun || "NPWP tidak tersedia"} -{" "}
+                                {item.nama_akun}
+                                {item.tipe_akun ? ` (${item.tipe_akun})` : ""}
+                              </option>
+                            ))}
+                        </optgroup>
+                      )}
 
                       {/* Additional Accounts */}
                       {npwp_faktur.data.filter((item) => item.is_akun_tambahan)
                         .length > 0 && (
-                          <optgroup label="Additional Accounts">
-                            {npwp_faktur.data
-                              .filter((item) => item.is_akun_tambahan)
-                              .map((item, index) => (
-                                <option
-                                  key={`${item.id}_true_${index}`}
-                                  value={`${item.id}_true`}
-                                >
-                                  {item.npwp_akun || "NPWP tidak tersedia"} -{" "}
-                                  {item.nama_akun}
-                                  {item.tipe_akun ? ` (${item.tipe_akun})` : ""}
-                                </option>
-                              ))}
-                          </optgroup>
-                        )}
+                        <optgroup label="Additional Accounts">
+                          {npwp_faktur.data
+                            .filter((item) => item.is_akun_tambahan)
+                            .map((item, index) => (
+                              <option
+                                key={`${item.id}_true_${index}`}
+                                value={`${item.id}_true`}
+                              >
+                                {item.npwp_akun || "NPWP tidak tersedia"} -{" "}
+                                {item.nama_akun}
+                                {item.tipe_akun ? ` (${item.tipe_akun})` : ""}
+                              </option>
+                            ))}
+                        </optgroup>
+                      )}
                     </>
                   )}
                 </select>

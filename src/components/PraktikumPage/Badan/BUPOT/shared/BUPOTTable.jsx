@@ -105,7 +105,7 @@ const BUPOTTable = ({
     if (type === "bppu") return `/praktikum/${id}/sistem/${akun}/bupot/bppu/pdf/${rowId}`;
     // if (type === "bpbpt") return `/praktikum/${id}/sistem/${akun}/bupot/bpbpt/pdf/${rowId}`;
     if (type === "bp21") return `/praktikum/${id}/sistem/${akun}/bupot/bp21/pdf/${rowId}`;
-    if (type === "bp26") return `/praktikum/${id}/sistem/${akun}/bupot/bp26/pdf/${rowId}`;
+
     return null;
   };
 

@@ -32,11 +32,6 @@ import { ClipLoader } from "react-spinners";
 const LihatKonsepUnifikasi = ({ data }) => {
   console.log(data);
   const { id, akun, idSpt } = useParams();
-  console.log({
-    "id ": id,
-    "akun ": akun,
-    "idSpt ": idSpt,
-  });
   const [searchParams, setSearchParams] = useSearchParams();
   const viewAsCompanyId = searchParams.get("viewAs");
   const userId = searchParams.get("user_id");
@@ -136,7 +131,6 @@ const LihatKonsepUnifikasi = ({ data }) => {
           },
           params: {
             jenis_spt_pph: activeTabContent,
-            ...(userId && { user_id: userId }),
           },
         }
       );

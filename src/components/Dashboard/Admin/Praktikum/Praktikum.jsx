@@ -8,7 +8,6 @@ import axios from "axios";
 import { RoutesApi } from "@/Routes";
 import ClipLoader from "react-spinners/ClipLoader";
 import { useNavigate } from "react-router-dom";
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 export default function Praktikum() {
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
@@ -16,7 +15,6 @@ export default function Praktikum() {
   const [selectedAssignment, setSelectedAssignment] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
-  const [search, setSearch] = useState("");
   const [cookies, setCookie] = useCookies(["user"]);
   const navigate = useNavigate();
   const [url, setUrl] = useState(RoutesApi.admin.assignments.index().url);
@@ -31,14 +29,16 @@ export default function Praktikum() {
         },
         params: {
           intent: IntentEnum.API_GET_ASSIGNMENT_ALL,
-          search: search,
         },
       });
-
-      console.log(data);
-      return data;
+      return data.data;
     },
   });
+  useEffect(() => {
+    if (data) {
+      console.log(data);
+    }
+  }, [data]);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -170,37 +170,6 @@ export default function Praktikum() {
     setData(sortedData);
   };
 
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
-
-  const getPageFromUrl = (url) => {
-    if (!url) return null;
-    const matches = url.match(/[?&]page=(\d+)/);
-    return matches ? parseInt(matches[1]) : null;
-  };
-
-  let totalPages = null;
-  let firstPage = null;
-  let lastPage = null;
-  let nextPage = null;
-  let prevPage = null;
-
-  if (!isLoading) {
-    // Get page numbers from links
-    totalPages = data.meta?.last_page;
-    firstPage = data.links?.first ? getPageFromUrl(data.links.first) : 1;
-    lastPage = data.links?.last ? getPageFromUrl(data.links.last) : totalPages;
-    nextPage = data.links?.next ? getPageFromUrl(data.links.next) : null;
-    prevPage = data.links?.prev ? getPageFromUrl(data.links.prev) : null;
-  }
-
-  const handlePageClick = (page) => {
-    if (page !== currentPage && page >= 1 && page <= totalPages) {
-      handlePageChange(page);
-    }
-  };
-
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   // const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
@@ -219,7 +188,7 @@ export default function Praktikum() {
   return (
     <div className="kontrak-container">
       <div className="header">
-        <h2>Data Praktikum</h2>
+        <h2>Data Praktiku</h2>
         {/* <p>{cookies.user ? cookies.user : "no user"}</p>
         {processedData.map((item) => (
           <li key={item.id} style={{ color: item.highlight ? "red" : "black" }}>
@@ -236,12 +205,6 @@ export default function Praktikum() {
             placeholder="Cari Praktikum   🔎"
             onChange={(e) => setSearch(e.target.value)}
           />
-          <button
-            className="bg-blue-500 p-2 rounded-md text-white text-sm ml-2 hover:cursor-pointer hover:bg-blue-700"
-            onClick={() => refetch()}
-          >
-            Cari
-          </button>
         </div>
       </div>
       <div className="table-container">
@@ -267,13 +230,13 @@ export default function Praktikum() {
           </thead>
           <tbody>
             {data &&
-              data.data.map((item, index) => (
+              data.map((item, index) => (
                 <tr>
                   <td>{index + 1}</td>
                   <td>{item.name}</td>
-                  <td>{item.group ? item.group.teacher : item.user.name}</td>
+                  <td>{item.group.teacher}</td>
                   <td>{item.instansi}</td>
-                  <td>{item.group ? item.group.status : "-"}</td>
+                  <td>{item.group.status}</td>
                   <td>
                     <button
                       className="action-button edit"
@@ -292,103 +255,21 @@ export default function Praktikum() {
               ))}
           </tbody>
         </table>
-        <div className="pagination-container flex-justify-between">
-          <div className="flex space-x-2">
-            <p className="text-sm text-gray-700">
-              Page {currentPage} of {totalPages}
-            </p>
-          </div>
-          <div className="flex space-x-2">
-            <button
-              onClick={() => handlePageChange(firstPage)}
-              disabled={!prevPage}
-              className={`px-3 py-1 rounded ${
-                !prevPage
-                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                  : "bg-blue-500 text-white hover:bg-blue-600"
-              }`}
-            >
-              First
-            </button>
-            <button
-              onClick={() => handlePageChange(prevPage || 1)}
-              disabled={!prevPage}
-              className={`px-3 py-1 rounded ${
-                !prevPage
-                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                  : "bg-blue-500 text-white hover:bg-blue-600"
-              }`}
-            >
-              <FaChevronLeft className="h-4 w-4" />
-            </button>
+        <div className="">
+          {/* <div className="pagination-info">
+            {`Showing ${indexOfFirstItem + 1} to ${Math.min(
+              indexOfLastItem,
+              data.length
+            )} of ${data.length} entries`}
+          </div> */}
 
-            {/* Show page numbers */}
-            <div className="flex space-x-1">
-              {Array.from({ length: totalPages }, (_, i) => i + 1)
-                .filter((pageNum) => {
-                  // Show first, last, and pages around current
-                  return (
-                    pageNum === 1 ||
-                    pageNum === totalPages ||
-                    (pageNum >= currentPage - 1 && pageNum <= currentPage + 1)
-                  );
-                })
-                .map((pageNum, index, array) => {
-                  // Add ellipsis if needed
-                  const showEllipsisBefore =
-                    index > 0 && array[index - 1] !== pageNum - 1;
-                  const showEllipsisAfter =
-                    index < array.length - 1 &&
-                    array[index + 1] !== pageNum + 1;
-
-                  return (
-                    <React.Fragment key={pageNum}>
-                      {showEllipsisBefore && (
-                        <span className="px-3 py-1 bg-gray-100 rounded">
-                          ...
-                        </span>
-                      )}
-                      <button
-                        onClick={() => handlePageClick(pageNum)}
-                        className={`px-3 py-1 rounded ${
-                          currentPage === pageNum
-                            ? "bg-blue-600 text-white"
-                            : "bg-gray-200 hover:bg-gray-300"
-                        }`}
-                      >
-                        {pageNum}
-                      </button>
-                      {showEllipsisAfter && (
-                        <span className="px-3 py-1 bg-gray-100 rounded">
-                          ...
-                        </span>
-                      )}
-                    </React.Fragment>
-                  );
-                })}
-            </div>
-
+          <div className="pagination">
             <button
-              onClick={() => handlePageChange(nextPage || totalPages)}
-              disabled={!nextPage}
-              className={`px-3 py-1 rounded ${
-                !nextPage
-                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                  : "bg-blue-500 text-white hover:bg-blue-600"
-              }`}
+              className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
+              onClick={() => paginate(currentPage - 1)}
+              disabled={currentPage === 1}
             >
-              <FaChevronRight className="h-4 w-4" />
-            </button>
-            <button
-              onClick={() => handlePageChange(lastPage)}
-              disabled={!nextPage}
-              className={`px-3 py-1 rounded ${
-                !nextPage
-                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                  : "bg-blue-500 text-white hover:bg-blue-600"
-              }`}
-            >
-              Last
+              &lt;
             </button>
           </div>
         </div>

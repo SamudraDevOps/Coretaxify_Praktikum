@@ -11,7 +11,6 @@ import { AlertCircle } from "lucide-react";
 import { IntentEnum } from "@/enums/IntentEnum";
 import { useParams, useNavigate } from "react-router-dom";
 import { FaDownload, FaEdit, FaTrash } from "react-icons/fa";
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 const UjianDosenMember = () => {
   const { examId } = useParams();
@@ -19,7 +18,6 @@ const UjianDosenMember = () => {
   const [selectedMember, setSelectedMember] = useState(null);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 20;
   const [cookies] = useCookies(["token"]);
   const currentUrl = window.location.href.split("?")[0];
   const [url, setUrl] = useState(
@@ -47,7 +45,7 @@ const UjianDosenMember = () => {
 
   // Fetch members data
   const { isLoading, isError, data, error, refetch } = useQuery({
-    queryKey: ["exam_members", url, currentPage],
+    queryKey: ["exam_members", url],
     queryFn: async () => {
       const { data } = await axios.get(url, {
         headers: {
@@ -57,7 +55,6 @@ const UjianDosenMember = () => {
         params: {
           intent: IntentEnum.API_GET_ASSIGNMENT_MEMBERS_WITH_SISTEM_SCORES,
           page: currentPage,
-          search: search,
         },
       });
       return data;
@@ -192,43 +189,6 @@ const UjianDosenMember = () => {
     navigate("/dosen/ujian");
   };
 
-  const handleDataRefresh = () => {
-    refetch();
-  };
-
-  // Handle page change
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
-
-  // Pagination
-  const getPageFromUrl = (url) => {
-    if (!url) return null;
-    const matches = url.match(/[?&]page=(\d+)/);
-    return matches ? parseInt(matches[1]) : null;
-  };
-
-  let totalPages = null;
-  let firstPage = null;
-  let lastPage = null;
-  let nextPage = null;
-  let prevPage = null;
-
-  if (!isLoading) {
-    // Get page numbers from links
-    totalPages = data.meta?.last_page;
-    firstPage = data.links?.first ? getPageFromUrl(data.links.first) : 1;
-    lastPage = data.links?.last ? getPageFromUrl(data.links.last) : totalPages;
-    nextPage = data.links?.next ? getPageFromUrl(data.links.next) : null;
-    prevPage = data.links?.prev ? getPageFromUrl(data.links.prev) : null;
-  }
-
-  const handlePageClick = (page) => {
-    if (page !== currentPage && page >= 1 && page <= totalPages) {
-      handlePageChange(page);
-    }
-  };
-
   // Loading state
   if (isLoading) {
     return (
@@ -261,6 +221,31 @@ const UjianDosenMember = () => {
     );
   }
 
+  // Filter data based on search
+  const filteredData =
+    data?.data?.filter(
+      (item) =>
+        item.user.name?.toLowerCase().includes(search.toLowerCase()) ||
+        item.user.email?.toLowerCase().includes(search.toLowerCase())
+    ) || [];
+
+  // Apply sorting if sortConfig is set
+  const sortedMembers = [...filteredData];
+  if (sortConfig.key) {
+    sortedMembers.sort((a, b) => {
+      if (a[sortConfig.key] < b[sortConfig.key]) {
+        return sortConfig.direction === "ascending" ? -1 : 1;
+      }
+      if (a[sortConfig.key] > b[sortConfig.key]) {
+        return sortConfig.direction === "ascending" ? 1 : -1;
+      }
+      return 0;
+    });
+  }
+
+  console.log("filtered data: ", filteredData);
+  console.log("sorted member: ", sortedMembers);
+
   return (
     <div className="member-container">
       <div className="header">
@@ -276,12 +261,6 @@ const UjianDosenMember = () => {
             value={search}
             onChange={handleSearchChange}
           />
-          <button
-            className="bg-blue-500 p-2 rounded-md text-white text-sm ml-2 hover:cursor-pointer hover:bg-blue-700"
-            onClick={() => handleDataRefresh()}
-          >
-            Cari
-          </button>
         </div>
         <div className="flex justify-between gap-4">
           <button
@@ -292,10 +271,7 @@ const UjianDosenMember = () => {
             <FaDownload className="download-icon" />
             {downloadMutation.isPending ? "Loading..." : "Export Nilai"}
           </button>
-          <button
-            className="rounded-md bg-[#7502B5] px-4 py-2 text-white"
-            onClick={handleBack}
-          >
+          <button className="rounded-md bg-[#7502B5] px-4 py-2 text-white" onClick={handleBack}>
             Kembali
           </button>
         </div>
@@ -329,10 +305,10 @@ const UjianDosenMember = () => {
             </tr>
           </thead>
           <tbody>
-            {data.data.length > 0 ? (
-              data.data.map((item, index) => (
+            {sortedMembers.length > 0 ? (
+              sortedMembers.map((item, index) => (
                 <tr key={item.id}>
-                  <td>{(currentPage - 1) * itemsPerPage + index + 1}</td>
+                  <td>{index + 1}</td>
                   <td>{item.user.name}</td>
                   <td>{item.user.email}</td>
                   <td>
@@ -391,103 +367,33 @@ const UjianDosenMember = () => {
             )}
           </tbody>
         </table>
-        <div className="pagination-container flex-justify-between">
-          <div className="flex space-x-2">
-            <p className="text-sm text-gray-700">
-              Page {currentPage} of {totalPages}
-            </p>
+        <div className="pagination-container">
+          <div className="pagination-info">
+            {data?.meta
+              ? `Showing ${data.meta.from} to ${data.meta.to} of ${data.meta.total} entries`
+              : "No data available"}
           </div>
-          <div className="flex space-x-2">
+          <div className="pagination">
             <button
-              onClick={() => handlePageChange(firstPage)}
-              disabled={!prevPage}
-              className={`px-3 py-1 rounded ${
-                !prevPage
-                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                  : "bg-blue-500 text-white hover:bg-blue-600"
-              }`}
+              className="page-item"
+              onClick={() => {
+                if (data?.links?.prev) setUrl(data.links.prev);
+              }}
+              disabled={!data?.links?.prev}
             >
-              First
+              &lt;
+            </button>
+            <button className="page-item active">
+              {data?.meta?.current_page || 1}
             </button>
             <button
-              onClick={() => handlePageChange(prevPage || 1)}
-              disabled={!prevPage}
-              className={`px-3 py-1 rounded ${
-                !prevPage
-                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                  : "bg-blue-500 text-white hover:bg-blue-600"
-              }`}
+              className="page-item"
+              onClick={() => {
+                if (data?.links?.next) setUrl(data.links.next);
+              }}
+              disabled={!data?.links?.next}
             >
-              <FaChevronLeft className="h-4 w-4" />
-            </button>
-
-            {/* Show page numbers */}
-            <div className="flex space-x-1">
-              {Array.from({ length: totalPages }, (_, i) => i + 1)
-                .filter((pageNum) => {
-                  // Show first, last, and pages around current
-                  return (
-                    pageNum === 1 ||
-                    pageNum === totalPages ||
-                    (pageNum >= currentPage - 1 && pageNum <= currentPage + 1)
-                  );
-                })
-                .map((pageNum, index, array) => {
-                  // Add ellipsis if needed
-                  const showEllipsisBefore =
-                    index > 0 && array[index - 1] !== pageNum - 1;
-                  const showEllipsisAfter =
-                    index < array.length - 1 &&
-                    array[index + 1] !== pageNum + 1;
-
-                  return (
-                    <React.Fragment key={pageNum}>
-                      {showEllipsisBefore && (
-                        <span className="px-3 py-1 bg-gray-100 rounded">
-                          ...
-                        </span>
-                      )}
-                      <button
-                        onClick={() => handlePageClick(pageNum)}
-                        className={`px-3 py-1 rounded ${
-                          currentPage === pageNum
-                            ? "bg-blue-600 text-white"
-                            : "bg-gray-200 hover:bg-gray-300"
-                        }`}
-                      >
-                        {pageNum}
-                      </button>
-                      {showEllipsisAfter && (
-                        <span className="px-3 py-1 bg-gray-100 rounded">
-                          ...
-                        </span>
-                      )}
-                    </React.Fragment>
-                  );
-                })}
-            </div>
-
-            <button
-              onClick={() => handlePageChange(nextPage || totalPages)}
-              disabled={!nextPage}
-              className={`px-3 py-1 rounded ${
-                !nextPage
-                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                  : "bg-blue-500 text-white hover:bg-blue-600"
-              }`}
-            >
-              <FaChevronRight className="h-4 w-4" />
-            </button>
-            <button
-              onClick={() => handlePageChange(lastPage)}
-              disabled={!nextPage}
-              className={`px-3 py-1 rounded ${
-                !nextPage
-                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                  : "bg-blue-500 text-white hover:bg-blue-600"
-              }`}
-            >
-              Last
+              &gt;
             </button>
           </div>
         </div>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { useUserType } from '../../../context/userTypeContext';
+import { useUserType } from '../../../context/UserTypeContext';
 
 const BupotBulananPegawaiTetap = () => {
     const { userType } = useUserType();

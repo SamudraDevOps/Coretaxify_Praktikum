@@ -42,7 +42,6 @@ const Header = () => {
 
   const token = getCookieToken();
   const [cookies, setCookie, removeCookie] = useCookies(["token", "assignment_user_id"]);
-  const [cookieReady, setCookieReady] = useState(false);
   const [isCompanyDropdownOpen, setIsCompanyDropdownOpen] = useState(false);
   const [assignmentUser, setAssignmentUser] = useState(null);
   const [countdown, setCountdown] = useState(0);
@@ -63,12 +62,6 @@ const Header = () => {
   const buttonRefs = useRef([]);
   const dropdownRefs = useRef([]);
   const userId = searchParams.get("user_id");
-
-  useEffect(() => {
-    if (cookies.token || cookies.assignment_user_id) {
-      setCookieReady(true);
-    }
-  }, [cookies.token, cookies.assignment_user_id]);
 
   const triggerLogoutAlert = (message) => {
     Swal.fire({
@@ -110,13 +103,8 @@ const Header = () => {
 
       setAssignmentUser(data.data);
     } catch (error) {
-      if (error.response.status === 401 || error.response.status === 403) {
-        triggerLogoutAlert("Sesi anda telah berakhir atau tidak valid");
-      } else {
-        console.warn("Server error, keeping session alive: ", error.response.status);
-      }
-      // console.error("Error fetching assignment user:", error);
-      // triggerLogoutAlert("Terjadi kesalahan. Anda akan keluar.");
+      console.error("Error fetching assignment user:", error);
+      triggerLogoutAlert("Terjadi kesalahan. Anda akan keluar.");
     } finally {
       setLoading(false);
     }
@@ -124,14 +112,13 @@ const Header = () => {
 
   useEffect(() => {
     if (userId) return;
-    if (!cookieReady) return;
 
     fetchAssignmentUser(); // Fetch pertama kali
 
     const intervalId = setInterval(fetchAssignmentUser, 30000); // Refresh setiap 30 detik
 
     return () => clearInterval(intervalId);
-  }, [userId, cookieReady, fetchAssignmentUser]);
+  }, [userId, fetchAssignmentUser]);
 
   useEffect(() => {
     if (!assignmentUser?.remaining_time) return;
@@ -738,11 +725,7 @@ const Header = () => {
               {
                 label: "Portal Saya",
                 submenu: [
-                  {
-                    label: "Dokumen Saya",
-                    links: `/praktikum/${id}/sistem/${akun}/dokumen-saya`,
-                  },
-                  
+                  "Dokumen Saya",
                   {
                     label: "Notifikasi Saya",
                     links: `/praktikum/${id}/sistem/${akun}/notifikasi`,

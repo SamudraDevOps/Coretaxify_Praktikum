@@ -32,34 +32,6 @@ const PajakKeluaran = ({
   const companyDropdownRef = useRef(null);
   const token = getCookieToken();
 
-  const formatRupiah = (number) => {
-    // If data is null, undefined, or empty string, change it to 0
-    if (number === null || number === undefined || number === "") {
-      number = 0;
-    }
-
-    // Convert to string first to handle both string and number inputs
-    let stringValue = String(number);
-
-    // Normalize "0.00" to "0"
-    if (stringValue === "0.00") stringValue = "0";
-
-    // Remove any non-numeric characters except decimal point and negative sign
-    const cleanedValue = stringValue.replace(/[^0-9.-]/g, "");
-
-    // Convert to number
-    const numericValue = parseFloat(cleanedValue);
-
-    // Check if conversion was successful, if not return "0"
-    if (isNaN(numericValue)) return "0";
-
-    return new Intl.NumberFormat("id-ID", {
-      style: "decimal",
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0, // This ensures no decimal places are shown
-    }).format(numericValue);
-  };  
-
   const handleClickOutside = (event) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
       setIsDropdownOpen(false);
@@ -271,8 +243,8 @@ const PajakKeluaran = ({
             <thead className="bg-gray-200">
               <tr>
                 <th className="px-6 py-2 border">No</th>
-                {/* <th className="px-8 py-2 border">Checklist</th> */}
-                {/* <th className="px-4 py-2 border">Aksi</th> */}
+                <th className="px-8 py-2 border">Checklist</th>
+                <th className="px-4 py-2 border">Aksi</th>
                 <th className="px-4 py-2 border">NPWP Pembeli</th>
                 <th className="px-4 py-2 border">Nama Pembeli</th>
                 <th className="px-4 py-2 border">Kode Transaksi</th>
@@ -280,84 +252,26 @@ const PajakKeluaran = ({
                 <th className="px-4 py-2 border">Tanggal Faktur Pajak</th>
                 <th className="px-4 py-2 border">Masa Pajak</th>
                 <th className="px-4 py-2 border">Tahun</th>
-                <th className="px-4 py-2 border">Status</th>
-                <th className="px-4 py-2 border">ESignStatus</th>
-                <th className="px-4 py-2 border">Harga Jual / Pengganti / DPP</th>
+                <th className="px-4 py-2 border">Masa Pajak Pengkreditan</th>
+                <th className="px-4 py-2 border">Tahun Pajak Pengkreditan</th>
+                <th className="px-4 py-2 border">Status Faktur</th>
+                <th className="px-4 py-2 border">Harga Jual/Pengganti/DPP</th>
                 <th className="px-4 py-2 border">DPP Nilai Lain / DPP</th>
                 <th className="px-4 py-2 border">PPN</th>
                 <th className="px-4 py-2 border">PPnBM</th>
-                <th className="px-4 py-2 border">Penandatanganan</th>
-                <th className="px-4 py-2 border">Referensi</th>
+                <th className="px-4 py-2 border">Perekam (Pengirim faktur)</th>
+                <th className="px-4 py-2 border">Nomor SP2D</th>
+                <th className="px-4 py-2 border">Valid</th>
+                <th className="px-4 py-2 border">Dilaporkan</th>
                 <th className="px-4 py-2 border">Dilaporkan Oleh Penjual</th>
-                <th className="px-4 py-2 border">Dilaporkan Oleh Pemungut PPN</th>
               </tr>
             </thead>
             <tbody className="text-gray-600">
-              {data && data.length > 0 ? (
-                data.map((item, index) => (
-                  <tr key={index}>
-                    <td className="px-6 py-2 border">{index + 1}</td>
-                    <td className="px-4 py-2 border">
-                      {item.akun_penerima_id.npwp_akun || "-"}
-                    </td>
-                    <td className="px-4 py-2 border">
-                      {item.akun_penerima_id.nama_akun || "-"}
-                    </td>
-                    <td className="px-4 py-2 border">
-                      {item.kode_transaksi || "-"}
-                    </td>
-                    <td className="px-4 py-2 border">
-                      {item.nomor_faktur_pajak || "-"}
-                    </td>
-                    <td className="px-4 py-2 border">
-                      {item.tanggal_faktur_pajak || "-"}
-                    </td>
-                    <td className="px-4 py-2 border">
-                      {item.masa_pajak || "-"}
-                    </td>
-                    <td className="px-4 py-2 border">{item.tahun || "-"}</td>
-                    <td className="px-4 py-2 border">{item.status || "-"}</td>
-                    <td className="px-4 py-2 border">
-                      {item.esign_status || "-"}
-                    </td>
-                    <td className="px-4 py-2 border">
-                      {formatRupiah(item.dpp) || "-"}
-                    </td>
-
-                                    {/* <td className="px-4 py-2 border">{item.dpp || "-"}</td> */}
-                    <td className="px-4 py-2 border">
-                      {formatRupiah(item.dpp_lain) || "-"}
-                    </td>
-                    <td className="px-4 py-2 border">
-                      {formatRupiah(item.ppn) || "-"}
-                    </td>
-                    <td className="px-4 py-2 border">
-                      {formatRupiah(item.ppnbm || "-")}
-                    </td>
-                    {/* <td className="px-4 py-2 border">
-                      {item.ppnbm_nilai || "-"}
-                    </td> */}
-                    <td className="px-4 py-2 border">
-                      {item.penandatangan || "-"}
-                    </td>
-                    <td className="px-4 py-2 border">
-                      {item.referensi || "-"}
-                    </td>
-                    <td className="px-4 py-2 border">
-                      {item.dilaporkan_penjual == 1 ? "Ya" : "Tidak"}
-                    </td>
-                    <td className="px-4 py-2 border">
-                      {item.dilaporkan_pemungut == 1 ? "Ya" : "Tidak"}
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="22" className="text-center p-4 border">
-                    Belum ada data
-                  </td>
-                </tr>
-              )}
+              <tr>
+                <td colSpan="22" className="text-center p-4 border">
+                  Belum ada data
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>

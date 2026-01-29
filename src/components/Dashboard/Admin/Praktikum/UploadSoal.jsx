@@ -21,31 +21,24 @@ import axios from "axios";
 import { RoutesApi } from "@/Routes";
 import { ClipLoader } from "react-spinners";
 import { RxCross1 } from "react-icons/rx";
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 export default function UploadSoal() {
   const [isOpen, setIsOpen] = useState(false);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
   const [selectedData, setSelectedData] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 20;
+  const itemsPerPage = 10;
   const [cookies, setCookie] = useCookies(["user"]);
   const [url, setUrl] = useState(RoutesApi.tasksAdmin);
-  const [search, setSearch] = useState("");
 
   const { isLoading, isError, data, error, refetch } = useQuery({
-    queryKey: ["kelas_dosen", url, currentPage],
+    queryKey: ["kelas_dosen", url],
     queryFn: async () => {
       const { data } = await axios.get(url, {
         headers: {
           Authorization: `Bearer ${cookies.token}`,
           Accept: "application/json",
         },
-        params: {
-          search: search,
-          page: currentPage,
-          perPage: itemsPerPage,
-        }
       });
       console.log(data);
       return data;
@@ -296,37 +289,9 @@ export default function UploadSoal() {
     setIsOpen(true);
   };
 
-  // Pagination
-  const getPageFromUrl = (url) => {
-    if (!url) return null;
-    const matches = url.match(/[?&]page=(\d+)/);
-    return matches ? parseInt(matches[1]) : null;
-  };
-
-  let totalPages = null;
-  let firstPage = null;
-  let lastPage = null;
-  let nextPage = null;
-  let prevPage = null;
-
-  if (!isLoading) {
-    // Get page numbers from links
-    totalPages = data.meta?.last_page;
-    firstPage = data.links?.first ? getPageFromUrl(data.links.first) : 1;
-    lastPage = data.links?.last ? getPageFromUrl(data.links.last) : totalPages;
-    nextPage = data.links?.next ? getPageFromUrl(data.links.next) : null;
-    prevPage = data.links?.prev ? getPageFromUrl(data.links.prev) : null;
-  }
-
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
-
-  const handlePageClick = (page) => {
-    if (page !== currentPage && page >= 1 && page <= totalPages) {
-      handlePageChange(page);
-    }
-  };
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  // const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -350,6 +315,7 @@ export default function UploadSoal() {
     console.log(e.target.files);
     setFile(URL.createObjectURL(e.target.files[0]));
   }
+  const [search, setSearch] = useState("");
 
   // const processedData = data.map((item) => ({
   //   ...item,
@@ -388,12 +354,6 @@ export default function UploadSoal() {
             placeholder="Cari Soal   🔎"
             onChange={(e) => setSearch(e.target.value)}
           />
-          <button
-            className="bg-blue-500 p-2 rounded-md text-white text-sm ml-2 hover:cursor-pointer hover:bg-blue-700"
-            onClick={() => refetch()}
-          >
-            Cari
-          </button>
         </div>
         <AlertDialog>
           <AlertDialogTrigger>
@@ -491,7 +451,7 @@ export default function UploadSoal() {
           <tbody>
             {data.data.map((item, index) => (
               <tr key={index}>
-                <td>{(currentPage - 1) * itemsPerPage + index + 1}</td>
+                <td>{indexOfFirstItem + index + 1}</td>
                 <td>{item.name}</td>
                 <td>
                   <a
@@ -606,103 +566,43 @@ export default function UploadSoal() {
             ))}
           </tbody>
         </table>
-        <div className="pagination-container flex-justify-between">
-          <div className="flex space-x-2">
-            <p className="text-sm text-gray-700">
-              Page {currentPage} of {totalPages}
-            </p>
-          </div>
-          <div className="flex space-x-2">
-            <button
-              onClick={() => handlePageChange(firstPage)}
-              disabled={!prevPage}
-              className={`px-3 py-1 rounded ${
-                !prevPage
-                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                  : "bg-blue-500 text-white hover:bg-blue-600"
-              }`}
-            >
-              First
-            </button>
-            <button
-              onClick={() => handlePageChange(prevPage || 1)}
-              disabled={!prevPage}
-              className={`px-3 py-1 rounded ${
-                !prevPage
-                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                  : "bg-blue-500 text-white hover:bg-blue-600"
-              }`}
-            >
-              <FaChevronLeft className="h-4 w-4" />
-            </button>
+        <div className="pagination-container">
+          {/* <div className="pagination-info">
+            {`Showing ${indexOfFirstItem + 1} to ${Math.min(
+              indexOfLastItem,
+              data.length
+            )} of ${data.length} entries`}
+          </div> */}
 
-            {/* Show page numbers */}
-            <div className="flex space-x-1">
-              {Array.from({ length: totalPages }, (_, i) => i + 1)
-                .filter((pageNum) => {
-                  // Show first, last, and pages around current
-                  return (
-                    pageNum === 1 ||
-                    pageNum === totalPages ||
-                    (pageNum >= currentPage - 1 && pageNum <= currentPage + 1)
-                  );
-                })
-                .map((pageNum, index, array) => {
-                  // Add ellipsis if needed
-                  const showEllipsisBefore =
-                    index > 0 && array[index - 1] !== pageNum - 1;
-                  const showEllipsisAfter =
-                    index < array.length - 1 &&
-                    array[index + 1] !== pageNum + 1;
-
-                  return (
-                    <React.Fragment key={pageNum}>
-                      {showEllipsisBefore && (
-                        <span className="px-3 py-1 bg-gray-100 rounded">
-                          ...
-                        </span>
-                      )}
-                      <button
-                        onClick={() => handlePageClick(pageNum)}
-                        className={`px-3 py-1 rounded ${
-                          currentPage === pageNum
-                            ? "bg-blue-600 text-white"
-                            : "bg-gray-200 hover:bg-gray-300"
-                        }`}
-                      >
-                        {pageNum}
-                      </button>
-                      {showEllipsisAfter && (
-                        <span className="px-3 py-1 bg-gray-100 rounded">
-                          ...
-                        </span>
-                      )}
-                    </React.Fragment>
-                  );
-                })}
-            </div>
-
+          <div className="pagination">
             <button
-              onClick={() => handlePageChange(nextPage || totalPages)}
-              disabled={!nextPage}
-              className={`px-3 py-1 rounded ${
-                !nextPage
-                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                  : "bg-blue-500 text-white hover:bg-blue-600"
-              }`}
+              className={`page-item`}
+              onClick={() => {
+                setUrl(data.links.prev);
+              }}
+              disabled={data.meta.current_page === 1}
             >
-              <FaChevronRight className="h-4 w-4" />
+              &lt;
             </button>
+            <button className="page-item">{data.meta.current_page}</button>
+            {/* {Array.from({ length: Math.ceil(data.length / itemsPerPage) }, (_, index) => (
+                            <button key={index + 1} className={`page-item ${currentPage === index + 1 ? "active" : ""}`} onClick={() => paginate(index + 1)}>
+                                {index + 1}
+                            </button>
+                        ))} */}
             <button
-              onClick={() => handlePageChange(lastPage)}
-              disabled={!nextPage}
-              className={`px-3 py-1 rounded ${
-                !nextPage
-                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                  : "bg-blue-500 text-white hover:bg-blue-600"
+              className={`page-item ${
+                currentPage === Math.ceil(data.length / itemsPerPage)
+                  ? "disabled"
+                  : ""
               }`}
+              onClick={() => {
+                console.log(data.links.next);
+                setUrl(data.links.next);
+              }}
+              disabled={data.links.next == null}
             >
-              Last
+              &gt;
             </button>
           </div>
         </div>

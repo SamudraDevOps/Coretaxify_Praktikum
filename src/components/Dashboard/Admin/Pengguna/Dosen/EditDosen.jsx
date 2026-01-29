@@ -17,8 +17,6 @@ import IntentEnum from "@/constant/intent";
 const EditDosen = () => {
   // Paksa semua URL jadi https (biar aman dari mixed content)
   const toHTTPS = (u) => (u ? u.replace(/^http:\/\//i, "https://") : u);
-  // Paksa semua URL jadi https (biar aman dari mixed content)
-  const toHTTPS = (u) => (u ? u.replace(/^http:\/\//i, "https://") : u);
   const [isOpen, setIsOpen] = useState(false);
   const [id, setId] = useState(0);
   const [url, setUrl] = useState(toHTTPS(RoutesApi.getDosenAdmin.url));
@@ -26,7 +24,6 @@ const EditDosen = () => {
   const [tambahPopupOpen, setTambahPopupOpen] = useState(false);
   const [selectedDosen, setSelectedDosen] = useState(null);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
-  const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [cookies, setCookie] = useCookies(["user"]);
   const [invalidLecturers, setInvalidLecturers] = useState(null);
@@ -41,7 +38,6 @@ const EditDosen = () => {
         },
         params: {
           intent: RoutesApi.getDosenAdmin.intent,
-          search: search,
         },
       });
       console.log(data.data);
@@ -366,14 +362,7 @@ const EditDosen = () => {
               type="text"
               className="search-input"
               placeholder="Cari Data Dosen 🔎"
-              onChange={(e) => setSearch(e.target.value)}
             />
-          <button
-            className="bg-blue-500 p-2 rounded-md text-white text-sm ml-2 hover:cursor-pointer hover:bg-blue-700"
-            onClick={() => refetch()}
-          >
-            Cari
-          </button>
           </div>
           {/* <button
             className="add-button mr-3"

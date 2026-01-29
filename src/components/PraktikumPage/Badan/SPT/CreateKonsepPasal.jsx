@@ -36,20 +36,18 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
   console.log(data);
   const [cookies] = useCookies(["token"]);
   const { id, akun, idSpt } = useParams();
-  const [posted, setPosted] = useState(false);
-  const [isPosting, setIsPosting] = useState(false);
-  const [form, setForm] = useState({
-    cl_bp1_2: 0,
-    cl_bp1_3: 0,
-    cl_bp1_5: 0,
-    cl_bp1_4: 0,
-    cl_bp1_6: 0,
-    cl_bp2_2: 0,
-    cl_bp2_3: 0,
-    cl_bp2_5: 0,
-    cl_bp2_4: 0,
-    cl_bp2_6: 0,
-  });
+  // const [form, setForm] = useState({
+  //   cl_bp1_2: "",
+  //   cl_bp1_3: "",
+  //   cl_bp1_5: "",
+  //   cl_bp1_4: "0.00", // calculated
+  //   cl_bp1_6: "0.00", // calculated
+  //   cl_bp2_2: "",
+  //   cl_bp2_3: "",
+  //   cl_bp2_5: "",
+  //   cl_bp2_4: "0.00", // calculated
+  //   cl_bp2_6: "0.00",
+  // });
   const formatRupiah = (number) => {
     if (typeof number !== "number" && typeof number !== "string") return "";
 
@@ -71,62 +69,18 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
     }).format(numericValue);
   };
 
-  const fakePost = () => {
-    setIsPosting(true);
-
-    setTimeout(() => {
-      try {
-        setPosted(true);
-
-        setForm({
-          cl_bp1_2: formatRupiah(data.detail_spt.cl_bp1_2) || 0,
-          cl_bp1_3: formatRupiah(data.detail_spt.cl_bp1_3) || 0,
-          cl_bp1_5: formatRupiah(data.detail_spt.cl_bp1_5) || 0,
-          cl_bp1_4: formatRupiah(data.detail_spt.cl_bp1_4) || 0, // calculated
-          cl_bp1_6: formatRupiah(data.detail_spt.cl_bp1_6) || 0, // calculated
-          cl_bp2_2: formatRupiah(data.detail_spt.cl_bp2_2) || 0,
-          cl_bp2_3: formatRupiah(data.detail_spt.cl_bp2_3) || 0,
-          cl_bp2_5: formatRupiah(data.detail_spt.cl_bp2_5) || 0,
-          cl_bp2_4: formatRupiah(data.detail_spt.cl_bp2_4) || 0, // calculated
-          cl_bp2_6: formatRupiah(data.detail_spt.cl_bp2_6) || 0,
-        });
-
-        Swal.fire({
-          title: "Berhasil!",
-          text: "Konsep SPT berhasil dihitung.",
-          icon: "success",
-          timer: 2000,
-          showConfirmButton: false,
-          timerProgressBar: true,
-        });
-
-      } catch (error) {
-        console.error("Error saving data:", error);
-
-        Swal.fire(
-          "Gagal!",
-          "Terjadi kesalahan saat menyimpan data.",
-          "error"
-        );
-      } finally {
-        setIsPosting(false);
-      }
-
-    }, 2000);
-  }
-
-  // const [form, setForm] = useState({
-  //   cl_bp1_2: formatRupiah(data.detail_spt.cl_bp1_2) || 0,
-  //   cl_bp1_3: formatRupiah(data.detail_spt.cl_bp1_3) || 0,
-  //   cl_bp1_5: formatRupiah(data.detail_spt.cl_bp1_5) || 0,
-  //   cl_bp1_4: formatRupiah(data.detail_spt.cl_bp1_4) || 0, // calculated
-  //   cl_bp1_6: formatRupiah(data.detail_spt.cl_bp1_6) || 0, // calculated
-  //   cl_bp2_2: formatRupiah(data.detail_spt.cl_bp2_2) || 0,
-  //   cl_bp2_3: formatRupiah(data.detail_spt.cl_bp2_3) || 0,
-  //   cl_bp2_5: formatRupiah(data.detail_spt.cl_bp2_5) || 0,
-  //   cl_bp2_4: formatRupiah(data.detail_spt.cl_bp2_4) || 0, // calculated
-  //   cl_bp2_6: formatRupiah(data.detail_spt.cl_bp2_6) || 0,
-  // });
+  const [form, setForm] = useState({
+    cl_bp1_2: formatRupiah(data.detail_spt.cl_bp1_2) || 0,
+    cl_bp1_3: formatRupiah(data.detail_spt.cl_bp1_3) || 0,
+    cl_bp1_5: formatRupiah(data.detail_spt.cl_bp1_5) || 0,
+    cl_bp1_4: formatRupiah(data.detail_spt.cl_bp1_4) || 0, // calculated
+    cl_bp1_6: formatRupiah(data.detail_spt.cl_bp1_6) || 0, // calculated
+    cl_bp2_2: formatRupiah(data.detail_spt.cl_bp2_2) || 0,
+    cl_bp2_3: formatRupiah(data.detail_spt.cl_bp2_3) || 0,
+    cl_bp2_5: formatRupiah(data.detail_spt.cl_bp2_5) || 0,
+    cl_bp2_4: formatRupiah(data.detail_spt.cl_bp2_4) || 0, // calculated
+    cl_bp2_6: formatRupiah(data.detail_spt.cl_bp2_6) || 0,
+  });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -479,10 +433,10 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
       Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan data.", "error");
     },
   });
-  const activeTabContent = activeTab !== "induk" ? activeTab : null;
+  // const activeTabContent = activeTab !== "induk" ? activeTab : null;
 
-  // const activeTabContent =
-  //   activeTab !== "l-ib" ? activeTab : null;
+  const activeTabContent =
+    activeTab !== "l-ib" && activeTab !== "l-ii" ? activeTab : null;
 
   const handleTabChange = (value) => {
     // Prevent any default behavior if this is called from an event
@@ -510,7 +464,6 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
   } = useQuery({
     queryKey: [activeTabContent],
     queryFn: async () => {
-      console.log("activeTabContent: ", activeTabContent);
       const accountId = viewAsCompanyId ? viewAsCompanyId : akun;
       const data = await axios.get(
         RoutesApi.apiUrl +
@@ -527,7 +480,7 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
       console.log("other data : ", data.data);
       return data.data;
     },
-    enabled: posted === true && activeTabContent !== null && activeTabContent !== undefined,
+    enabled: activeTabContent !== null && activeTabContent !== undefined,
     // Add these options to prevent unnecessary refetches
     staleTime: 5 * 60 * 1000, // 5 minutes
     cacheTime: 10 * 60 * 1000, // 10 minutes
@@ -547,8 +500,8 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
             <TabsList className="flex justify-start gap-2 text-blue-700 text-lg">
               <TabsTrigger value="induk">Induk</TabsTrigger>
               <TabsTrigger value="L1">L-I</TabsTrigger>
-              <TabsTrigger value="L1B">L-IB</TabsTrigger>
-              <TabsTrigger value="L2">L-II</TabsTrigger>
+              <TabsTrigger value="l-ib">L-IB</TabsTrigger>
+              <TabsTrigger value="l-ii">L-II</TabsTrigger>
               <TabsTrigger value="L3">L-III</TabsTrigger>
             </TabsList>
             <TabsContent value="induk">
@@ -596,55 +549,6 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                           <option value="normal">{data.status}</option>
                         </select>
                       </div>
-                    </div>
-
-                    <div className="mt-4 flex items-center gap-4">
-                      {/* <button
-                        onClick={() => calculateSpt.mutate()}
-                        className="bg-yellow-500 text-white px-4 py-2 rounded-md shadow-sm hover:bg-yellow-600 transition"
-                      >
-                        Posting SPT
-                      </button> */}
-                      <button
-                        onClick={fakePost}
-                        disabled={isPosting || posted}
-                        className={`flex items-center justify-center gap-2 px-4 py-2 rounded-md shadow-sm transition ${isPosting || posted
-                          ? "bg-yellow-300 text-white cursor-not-allowed"
-                          : "bg-yellow-500 hover:bg-yellow-600 text-white"
-                          }`}
-                      >
-                        {isPosting ? (
-                          <>
-                            <svg
-                              className="animate-spin h-4 w-4 text-white"
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                            >
-                              <circle
-                                className="opacity-25"
-                                cx="12"
-                                cy="12"
-                                r="10"
-                                stroke="currentColor"
-                                strokeWidth="4"
-                              ></circle>
-                              <path
-                                className="opacity-75"
-                                fill="currentColor"
-                                d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-                              ></path>
-                            </svg>
-                            Memposting...
-                          </>
-                        ) : (
-                          "Posting SPT"
-                        )}
-                      </button>
-                      <p className="text-sm text-red-500">
-                        {/* WAJIB DI CLICK{" "} */}
-                        <strong>WAJIB DI CLICK *</strong>
-                      </p>
                     </div>
                   </div>
                 )}
@@ -750,11 +654,10 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm bg-yellow-100"
                               name="cl_bp1_1"
-                              defaultValue={posted ? 
-                                formatRupiah(
-                                  data.detail_spt.cl_bp1_1
-                                ) : '0'}
-                              disabled  
+                              defaultValue={formatRupiah(
+                                data.detail_spt.cl_bp1_1
+                              )}
+                              disabled
                             />
                           </td>
                         </tr>
@@ -839,10 +742,9 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm bg-yellow-100"
                               name="cl_bp1_5"
-                              defaultValue={posted ? 
-                                formatRupiah(
-                                  data.detail_spt.cl_bp1_5
-                                ) : '0'}
+                              defaultValue={formatRupiah(
+                                data.detail_spt.cl_bp1_5
+                              )}
                               onChange={handleChange}
                               readOnly
                             />
@@ -902,10 +804,9 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                             <input
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              defaultValue={posted ? 
-                                formatRupiah(
-                                  data.detail_spt.cl_bp1_7
-                                ) : '0'}
+                              defaultValue={formatRupiah(
+                                data.detail_spt.cl_bp1_7
+                              )}
                               disabled
                             />
                           </td>
@@ -956,10 +857,9 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                               name="cl_bp2_1"
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm bg-yellow-100"
-                              defaultValue={posted ?
-                                formatRupiah(
-                                  data.detail_spt.cl_bp2_1
-                                ) : '0'}
+                              defaultValue={formatRupiah(
+                                data.detail_spt.cl_bp2_1
+                              )}
                               disabled
                             />
                           </td>
@@ -1045,10 +945,7 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                               name="cl_bp2_5"
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm"
-                              value={posted ? 
-                                formatRupiah(
-                                  data.detail_spt.cl_bp2_5
-                                ) : '0'}
+                              value={formatRupiah(data.detail_spt.cl_bp2_5)}
                               disabled
                             />
                           </td>
@@ -1107,10 +1004,9 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                             <input
                               type="text"
                               className="w-full p-1 border rounded-md text-right text-sm bg-gray-100"
-                              defaultValue={posted ? 
-                                formatRupiah(
-                                  data.detail_spt.cl_bp2_7
-                                ) : '0'}
+                              defaultValue={formatRupiah(
+                                data.detail_spt.cl_bp2_7
+                              )}
                               disabled
                             />
                           </td>
@@ -1403,7 +1299,7 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                             <input
                               type="text"
                               readOnly
-                              value={data.npwp}
+                              value="2002909301990"
                               className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
                             />
                           </div>
@@ -1414,7 +1310,7 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                             <input
                               type="text"
                               readOnly
-                              value={data.masa_bulan + " - " + data.masa_tahun}
+                              value="2025"
                               className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
                             />
                           </div>
@@ -1447,7 +1343,7 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                             </tr>
                           </thead>
                           <tbody className="text-gray-600 text-center">
-                            {sptOther?.data && sptOther?.data.length > 0 ? (
+                            {sptOther?.data ? (
                               sptOther.data.map((item, index) => (
                                 <tr key={item.id}>
                                   <td className="p-2 border-b text-center">
@@ -1485,18 +1381,16 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                                 </tr>
                               ))
                             ) : (
-                              <>
-                                <tr>
-                                  <td className="p-2 border-b text-center">-</td>
-                                  <td className="p-2 border-b">-</td>
-                                  <td className="p-2 border-b">-</td>
-                                  <td className="p-2 border-b">-</td>
-                                  <td className="p-2 border-b">-</td>
-                                  <td className="p-2 border-b">-</td>
-                                  <td className="p-2 border-b">-</td>
-                                  <td className="p-2 border-b">-</td>
-                                </tr>
-                              </>
+                              <tr>
+                                <td className="p-2 border-b text-center">-</td>
+                                <td className="p-2 border-b">-</td>
+                                <td className="p-2 border-b">-</td>
+                                <td className="p-2 border-b">-</td>
+                                <td className="p-2 border-b">-</td>
+                                <td className="p-2 border-b">-</td>
+                                <td className="p-2 border-b">-</td>
+                                <td className="p-2 border-b">-</td>
+                              </tr>
                             )}
                           </tbody>
 
@@ -1631,7 +1525,7 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                     </div>
                   </div>
                 </TabsContent>
-                <TabsContent value="L1B">
+                <TabsContent value="l-ib">
                   <div className="flex justify-between items-center mb-6">
                     <h2 className="text-black mt-4">
                       DAFTAR PEMOTONGAN PAJAK PENGHASILAN PASAL 21 BAGI PEGAWAI
@@ -1660,7 +1554,7 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                             <input
                               type="text"
                               readOnly
-                              value={data.npwp}
+                              value="2002909301990"
                               className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
                             />
                           </div>
@@ -1671,7 +1565,7 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                             <input
                               type="text"
                               readOnly
-                              value={data.masa_tahun}
+                              value="2025"
                               className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
                             />
                           </div>
@@ -1726,69 +1620,39 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                             </tr>
                           </thead>
                           <tbody className="text-gray-600 text-center">
-                            {sptOther?.data && sptOther?.data.length > 0 ? (
-                              sptOther.data
-                              .filter(
-                                (item) => item.tipe_bupot === "BP A1"
-                              )
-                              .map((item, index) => (
-                                <tr>
-                                  <td className="p-2 border-b text-center"></td>
-                                  <td className="p-2 border-b">{item.npwp_akun}</td>
-                                  <td className="p-2 border-b">{item.nama_akun}</td>
-                                  <td className="p-2 border-b">{item.nomor_pemotongan}</td>
-                                  <td className="p-2 border-b">
-                                    {item.masa_akhir
-                                      ? new Date(
-                                        item.masa_awal
-                                      ).toLocaleDateString("id-ID")
-                                      : "-"}
-                                  </td>
-                                  <td className="p-2 border-b">{item.kode_objek_pajak}</td>
-                                  <td className="p-2 border-b">{item.dasar_pengenaan_pajak}</td>
-                                  <td className="p-2 border-b">{item.pph_pasal_21_masa_pajak_terakhir}</td>
-                                  <td className="p-2 border-b">{item.fasilitas_pajak}</td>
-                                  <td className="p-2 border-b">{item.negara_akun}</td>
-                                  <td className="p-2 border-b">{item.nitku}</td>
-                                  <td className="p-2 border-b">{item.kap}</td>
-                                  <td className="p-2 border-b">{item.status}</td>
-                                </tr>    
-                              ))
-                            ) : (
-                              <tr>
-                                <td className="p-2 border-b text-center"></td>
-                                <td className="p-2 border-b"></td>
-                                <td className="p-2 border-b">-</td>
-                                <td className="p-2 border-b">-</td>
-                                <td className="p-2 border-b">-</td>
-                                <td className="p-2 border-b">-</td>
-                                <td className="p-2 border-b">-</td>
-                                <td className="p-2 border-b">-</td>
-                                <td className="p-2 border-b">-</td>
-                                <td className="p-2 border-b">-</td>
-                                <td className="p-2 border-b">-</td>
-                                <td className="p-2 border-b">-</td>
-                                <td className="p-2 border-b">-</td>
-                              </tr>
-                            )}
+                            <tr>
+                              <td className="p-2 border-b text-center"></td>
+                              <td className="p-2 border-b"></td>
+                              <td className="p-2 border-b">-</td>
+                              <td className="p-2 border-b">-</td>
+                              <td className="p-2 border-b">-</td>
+                              <td className="p-2 border-b">-</td>
+                              <td className="p-2 border-b">-</td>
+                              <td className="p-2 border-b">-</td>
+                              <td className="p-2 border-b">-</td>
+                              <td className="p-2 border-b">-</td>
+                              <td className="p-2 border-b">-</td>
+                              <td className="p-2 border-b">-</td>
+                              <td className="p-2 border-b">-</td>
+                            </tr>
                           </tbody>
                           {/* <tfoot className="text-gray-800 font-semibold bg-gray-100">
-                              <tr>
-                                  <td className="p-2 text-right min-w-[150px]" colSpan={11}>Jumlah Pendapatan Kotor dan Pajak Penghasilan Yang Ditanggung Oleh Pemerintah</td>
-                                  <td className="p-2 text-center">0</td>
-                                  <td className="p-2"></td>
-                              </tr>
-                              <tr>
-                                  <td className="p-2 text-right min-w-[150px]" colSpan={11}>Jumlah Pendapatan Kotor dan Pajak Penghasilan Yang Dipotong</td>
-                                  <td className="p-2 text-center">0</td>
-                                  <td className="p-2"></td>
-                              </tr>
-                              <tr>
-                                  <td className="p-2 text-right min-w-[150px]" colSpan={11}>Jumlah Total Pendapatan Kotor Dan Pajak Penghasilan Yang Ditanggung Oleh Pemerintah <br /> serta Pajak penghasilan Yang Dipotong</td>
-                                  <td className="p-2 text-center">0</td>
-                                  <td className="p-2"></td>
-                              </tr>
-                          </tfoot> */}
+                                                <tr>
+                                                    <td className="p-2 text-right min-w-[150px]" colSpan={11}>Jumlah Pendapatan Kotor dan Pajak Penghasilan Yang Ditanggung Oleh Pemerintah</td>
+                                                    <td className="p-2 text-center">0</td>
+                                                    <td className="p-2"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td className="p-2 text-right min-w-[150px]" colSpan={11}>Jumlah Pendapatan Kotor dan Pajak Penghasilan Yang Dipotong</td>
+                                                    <td className="p-2 text-center">0</td>
+                                                    <td className="p-2"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td className="p-2 text-right min-w-[150px]" colSpan={11}>Jumlah Total Pendapatan Kotor Dan Pajak Penghasilan Yang Ditanggung Oleh Pemerintah <br /> serta Pajak penghasilan Yang Dipotong</td>
+                                                    <td className="p-2 text-center">0</td>
+                                                    <td className="p-2"></td>
+                                                </tr>
+                                            </tfoot> */}
                         </table>
                       </div>
                     </div>
@@ -1865,26 +1729,7 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                                 Jumlah Pendapatan Kotor dan Pajak Penghasilan
                                 Yang Ditanggung Oleh Pemerintah
                               </td>
-                              <td className="p-2 text-center">
-                                {sptOther?.data
-                                  ? formatRupiah(
-                                    sptOther.data
-                                      .filter(
-                                        (item) =>
-                                          item.fasilitas_pajak ===
-                                          "pph_ditanggung_pemerintah"
-                                      )
-                                      .reduce(
-                                        (total, item) =>
-                                          total +
-                                          (parseFloat(
-                                            item.pph_pasal_21_masa_pajak_terakhir
-                                          ) || 0),
-                                        0
-                                      )
-                                  )
-                                  : "0"}
-                              </td>
+                              <td className="p-2 text-center">0</td>
                               <td className="p-2"></td>
                             </tr>
                             <tr>
@@ -1895,26 +1740,7 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                                 Jumlah Pendapatan Kotor dan Pajak Penghasilan
                                 Yang Dipotong
                               </td>
-                              <td className="p-2 text-center">
-                                {sptOther?.data
-                                  ? formatRupiah(
-                                    sptOther.data
-                                      .filter(
-                                        (item) =>
-                                          item.fasilitas_pajak !==
-                                          "pph_ditanggung_pemerintah"
-                                      )
-                                      .reduce(
-                                        (total, item) =>
-                                          total +
-                                          (parseFloat(
-                                            item.pph_pasal_21_masa_pajak_terakhir
-                                          ) || 0),
-                                        0
-                                      )
-                                  )
-                                  : "0"}
-                              </td>
+                              <td className="p-2 text-center">0</td>
                               <td className="p-2"></td>
                             </tr>
                             <tr>
@@ -1926,26 +1752,7 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                                 Penghasilan Yang Ditanggung Oleh Pemerintah{" "}
                                 <br /> serta Pajak penghasilan Yang Dipotong
                               </td>
-                              <td className="p-2 text-center">
-                                {sptOther?.data
-                                  ? formatRupiah(
-                                    sptOther.data
-                                      .filter(
-                                        (item) =>
-                                          item.fasilitas_pajak ===
-                                          "pph_ditanggung_pemerintah"
-                                      )
-                                      .reduce(
-                                        (total, item) =>
-                                          total +
-                                          (parseFloat(
-                                            item.dasar_pengenaan_pajak
-                                          ) || 0),
-                                        0
-                                      )
-                                  )
-                                  : "0"}
-                              </td>
+                              <td className="p-2 text-center">0</td>
                               <td className="p-2"></td>
                             </tr>
                           </tfoot>
@@ -1954,7 +1761,7 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                     </div>
                   </div>
                 </TabsContent>
-                <TabsContent value="L2">
+                <TabsContent value="l-ii">
                   <div className="flex justify-between items-center mb-6">
                     <h2 className="text-black mt-4">
                       DAFTAR PEMOTONGAN SATU TAHUN PAJAK ATAU BAGIAN TAHUN PAJAK
@@ -1983,7 +1790,7 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                             <input
                               type="text"
                               readOnly
-                              value={data.npwp}
+                              value="2002909301990"
                               className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
                             />
                           </div>
@@ -1994,7 +1801,7 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                             <input
                               type="text"
                               readOnly
-                              value={data.masa_bulan + " - " + data.masa_tahun}
+                              value="2025"
                               className="w-full p-2 border rounded-md bg-gray-100 text-gray-600"
                             />
                           </div>
@@ -2032,106 +1839,38 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                                 Pajak Penghasilan (Rp)
                               </th>
                               <th className="p-2 border-b min-w-[150px]">
-                                Masa Perolehan
-                              </th>
-                              {/* <th className="p-2 border-b min-w-[150px]">
                                 Fasilitas Perpajakan
-                              </th> */}
+                              </th>
                               <th className="p-2 border-b min-w-[150px]">
                                 Negara
                               </th>
                               <th className="p-2 border-b min-w-[150px]">
                                 ID Tempat Kegiatan Usaha
                               </th>
-                              {/* <th className="p-2 border-b min-w-[150px]">
+                              <th className="p-2 border-b min-w-[150px]">
                                 KAP-KJS
-                              </th> */}
+                              </th>
                               <th className="p-2 border-b min-w-[150px]">
                                 Status
                               </th>
                             </tr>
                           </thead>
                           <tbody className="text-gray-600 text-center">
-                            {sptOther?.data && sptOther?.data.length > 0 && sptOther.data.filter((item) => item.tipe_bupot === "BP A1").length > 0 ? (
-                              sptOther.data.filter(
-                                (item) => item.tipe_bupot === "BP A1"
-                              ).map((item, index) => (
-                                <>
-                                  <tr key={item.id}>
-                                    <td className="p-2 border-b text-center">
-                                      {index + 1}
-                                    </td>
-                                    <td className="p-2 border-b">
-                                      {item.npwp_akun || "-"}
-                                    </td>
-                                    <td className="p-2 border-b">
-                                      {item.nama_akun || "-"}
-                                    </td>
-                                    <td className="p-2 border-b">
-                                      {item.nomor_pemotongan || "-"}
-                                    </td>
-                                    <td className="p-2 border-b">
-                                      {item.masa_akhir 
-                                        ? new Date(
-                                          item.masa_akhir
-                                        ).toLocaleDateString("id-ID") 
-                                        : "-"}
-                                    </td>
-                                    <td className="p-2 border-b">
-                                      {item.kode_objek_pajak || "-"}
-                                    </td>
-                                    <td className="p-2 border-b">
-                                      {item.dasar_pengenaan_pajak || "-"}
-                                    </td>
-                                    <td className="p-2 border-b">
-                                      {item.pph_pasal_21_penghasilan_kena_pajak || "-"}
-                                    </td>
-                                    <td className="p-2 border-b">
-                                      {item.masa_awal && item.masa_akhir
-                                        ? new Date(
-                                          item.masa_awal
-                                        ).toLocaleDateString("id-ID") + " - " + new Date(
-                                          item.masa_akhir
-                                        ).toLocaleDateString("id-ID")
-                                        : "-"}
-                                    </td>
-                                    {/* <td className="p-2 border-b">
-                                      {item.fasilitas_pajak || "-"}
-                                    </td> */}
-                                    <td className="p-2 border-b">
-                                      {item.negara_akun || "-"}
-                                    </td>
-                                    <td className="p-2 border-b">
-                                      {item.nitku || "-"}
-                                    </td>
-                                    {/* <td className="p-2 border-b">
-                                      {item.kap || "-"}
-                                    </td> */}
-                                    <td className="p-2 border-b">
-                                      {item.status || "-"}
-                                    </td>
-                                  </tr>
-                                </>
-                              ))
-                            ) : (
-                              <>
-                                <tr>
-                                  <td className="p-2 border-b text-center"></td>
-                                  <td className="p-2 border-b"></td>
-                                  <td className="p-2 border-b">-</td>
-                                  <td className="p-2 border-b">-</td>
-                                  <td className="p-2 border-b">-</td>
-                                  <td className="p-2 border-b">-</td>
-                                  <td className="p-2 border-b">-</td>
-                                  <td className="p-2 border-b">-</td>
-                                  <td className="p-2 border-b">-</td>
-                                  <td className="p-2 border-b">-</td>
-                                  <td className="p-2 border-b">-</td>
-                                  <td className="p-2 border-b">-</td>
-                                  <td className="p-2 border-b">-</td>
-                                </tr>
-                              </>
-                            )}
+                            <tr>
+                              <td className="p-2 border-b text-center"></td>
+                              <td className="p-2 border-b"></td>
+                              <td className="p-2 border-b">-</td>
+                              <td className="p-2 border-b">-</td>
+                              <td className="p-2 border-b">-</td>
+                              <td className="p-2 border-b">-</td>
+                              <td className="p-2 border-b">-</td>
+                              <td className="p-2 border-b">-</td>
+                              <td className="p-2 border-b">-</td>
+                              <td className="p-2 border-b">-</td>
+                              <td className="p-2 border-b">-</td>
+                              <td className="p-2 border-b">-</td>
+                              <td className="p-2 border-b">-</td>
+                            </tr>
                           </tbody>
                           {/* <tfoot className="text-gray-800 font-semibold bg-gray-100">
                                                 <tr>
@@ -2184,106 +1923,38 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                                 Pajak Penghasilan (Rp)
                               </th>
                               <th className="p-2 border-b min-w-[150px]">
-                                Masa Perolehan
-                              </th>
-                              {/* <th className="p-2 border-b min-w-[150px]">
                                 Fasilitas Perpajakan
-                              </th> */}
+                              </th>
                               <th className="p-2 border-b min-w-[150px]">
                                 Negara
                               </th>
                               <th className="p-2 border-b min-w-[150px]">
                                 ID Tempat Kegiatan Usaha
                               </th>
-                              {/* <th className="p-2 border-b min-w-[150px]">
+                              <th className="p-2 border-b min-w-[150px]">
                                 KAP-KJS
-                              </th> */}
+                              </th>
                               <th className="p-2 border-b min-w-[150px]">
                                 Status
                               </th>
                             </tr>
                           </thead>
                           <tbody className="text-gray-600 text-center">
-                            {sptOther?.data && sptOther?.data.length > 0 && sptOther.data.filter((item) => item.kodeObjekPajak === "BP A2").length > 0 ? (
-                              sptOther.data.filter(
-                                (item) => item.tipe_bupot === "BP A2"
-                              ).map((item, index) => (
-                                <>
-                                  <tr key={item.id}>
-                                    <td className="p-2 border-b text-center">
-                                      {index + 1}
-                                    </td>
-                                    <td className="p-2 border-b">
-                                      {item.npwp_akun || "-"}
-                                    </td>
-                                    <td className="p-2 border-b">
-                                      {item.nama_akun || "-"}
-                                    </td>
-                                    <td className="p-2 border-b">
-                                      {item.nomor_pemotongan || "-"}
-                                    </td>
-                                    <td className="p-2 border-b">
-                                      {item.masa_akhir 
-                                        ? new Date(
-                                          item.masa_akhir
-                                        ).toLocaleDateString("id-ID") 
-                                        : "-"}
-                                    </td>
-                                    <td className="p-2 border-b">
-                                      {item.kode_objek_pajak || "-"}
-                                    </td>
-                                    <td className="p-2 border-b">
-                                      {item.dasar_pengenaan_pajak || "-"}
-                                    </td>
-                                    <td className="p-2 border-b">
-                                      {item.pph_pasal_21_penghasilan_kena_pajak || "-"}
-                                    </td>
-                                    <td className="p-2 border-b">
-                                      {item.masa_awal && item.masa_akhir
-                                        ? new Date(
-                                          item.masa_awal
-                                        ).toLocaleDateString("id-ID") + " - " + new Date(
-                                          item.masa_akhir
-                                        ).toLocaleDateString("id-ID")
-                                        : "-"}
-                                    </td>
-                                    {/* <td className="p-2 border-b">
-                                      {item.fasilitas_pajak || "-"}
-                                    </td> */}
-                                    <td className="p-2 border-b">
-                                      {item.negara_akun || "-"}
-                                    </td>
-                                    <td className="p-2 border-b">
-                                      {item.nitku || "-"}
-                                    </td>
-                                    {/* <td className="p-2 border-b">
-                                      {item.kap || "-"}
-                                    </td> */}
-                                    <td className="p-2 border-b">
-                                      {item.status || "-"}
-                                    </td>
-                                  </tr>
-                                </>
-                              ))
-                            ) : (
-                              <>
-                                <tr>
-                                  <td className="p-2 border-b text-center"></td>
-                                  <td className="p-2 border-b"></td>
-                                  <td className="p-2 border-b">-</td>
-                                  <td className="p-2 border-b">-</td>
-                                  <td className="p-2 border-b">-</td>
-                                  <td className="p-2 border-b">-</td>
-                                  <td className="p-2 border-b">-</td>
-                                  <td className="p-2 border-b">-</td>
-                                  <td className="p-2 border-b">-</td>
-                                  <td className="p-2 border-b">-</td>
-                                  <td className="p-2 border-b">-</td>
-                                  <td className="p-2 border-b">-</td>
-                                  <td className="p-2 border-b">-</td>
-                                </tr>
-                              </>
-                            )}
+                            <tr>
+                              <td className="p-2 border-b text-center"></td>
+                              <td className="p-2 border-b"></td>
+                              <td className="p-2 border-b">-</td>
+                              <td className="p-2 border-b">-</td>
+                              <td className="p-2 border-b">-</td>
+                              <td className="p-2 border-b">-</td>
+                              <td className="p-2 border-b">-</td>
+                              <td className="p-2 border-b">-</td>
+                              <td className="p-2 border-b">-</td>
+                              <td className="p-2 border-b">-</td>
+                              <td className="p-2 border-b">-</td>
+                              <td className="p-2 border-b">-</td>
+                              <td className="p-2 border-b">-</td>
+                            </tr>
                           </tbody>
                           <tfoot className="text-gray-800 font-semibold bg-gray-100">
                             <tr>
@@ -2293,25 +1964,7 @@ const CreateKonsepPasal = ({ data, sidebar }) => {
                               >
                                 Total
                               </td>
-                              <td className="p-2 text-center">
-                                {sptOther?.data
-                                  ? formatRupiah(
-                                    sptOther.data
-                                      .filter(
-                                        (item) => item.fasilitas_pajak !== "pph_ditanggung_pemerintah"
-                                      )
-                                      .reduce(
-                                        (total, item) =>
-                                          total +
-                                          (parseFloat(
-                                            item.pph_pasal_21_penghasilan_kena_pajak
-                                          ) || 0),
-                                        0
-                                      )
-                                  )
-                                  : "0"
-                                }
-                              </td>
+                              <td className="p-2 text-center">0</td>
                               <td className="p-2"></td>
                             </tr>
                           </tfoot>

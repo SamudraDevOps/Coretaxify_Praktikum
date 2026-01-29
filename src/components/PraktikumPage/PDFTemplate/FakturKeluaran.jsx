@@ -288,20 +288,10 @@ const FakturPajakKeluaranPdf = ({ data }) => (
             </Text>
             <Text style={{ ...styles.cellLast, flex: 1, textAlign: "right" }}>
               Rp{" "}
-              {/* {data.detail_transaksi
+              {data.detail_transaksi
                 ?.reduce((sum, item) => sum + parseFloat(item.dpp), 0)
                 .toLocaleString("id-ID", { minimumFractionDigits: 2 }) ||
-                "0,00"} */}
-              {data.detail_transaksi
-                ?.reduce((sum, item) => {
-                  // Pastikan data angka dalam bentuk number
-                  const dpp = parseFloat(item.dpp) || 0;
-                  const dppLain = parseFloat(item.dpp_lain) || 0;
-
-                  // Jika dpp_lain > 0, pakai itu, kalau tidak pakai dpp
-                  return sum + (dppLain > 0 ? dppLain : dpp);
-                }, 0)
-                .toLocaleString("id-ID", { minimumFractionDigits: 2 }) || "0,00"}
+                "0,00"}
             </Text>
           </View>
 

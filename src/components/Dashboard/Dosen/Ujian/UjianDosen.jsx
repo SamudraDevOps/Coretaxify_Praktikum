@@ -11,7 +11,7 @@ import { format } from "date-fns";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { IoReload } from "react-icons/io5";
-import { FaRegCopy, FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { FaRegCopy } from "react-icons/fa";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -36,7 +36,6 @@ export default function UjianDosen() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { user } = useOutletContext();
-  const [search, setSearch] = useState("");
 
   const [selectedData, setSelectedData] = useState({
     name: "",
@@ -49,7 +48,7 @@ export default function UjianDosen() {
   });
 
   const { isLoading, isError, data, error, refetch } = useQuery({
-    queryKey: ["ujian_data", currentPage],
+    queryKey: ["ujian_data"],
     queryFn: async () => {
       const { data } = await axios.get(url, {
         headers: {
@@ -61,9 +60,6 @@ export default function UjianDosen() {
             tipe: "exam",
             user_id: user.data.id,
           },
-          page: currentPage,
-          perPage: itemsPerPage,
-          search: search,
         },
       });
       return data;
@@ -396,42 +392,12 @@ export default function UjianDosen() {
     setIsOpen(true);
   };
 
-  const handleDataRefresh = () => {
-    refetch();
-  };
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
 
-  // Handle page change
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  // Pagination
-  const getPageFromUrl = (url) => {
-    if (!url) return null;
-    const matches = url.match(/[?&]page=(\d+)/);
-    return matches ? parseInt(matches[1]) : null;
-  };
-
-  let totalPages = null;
-  let firstPage = null;
-  let lastPage = null;
-  let nextPage = null;
-  let prevPage = null;
-
-  if (!isLoading) {
-    // Get page numbers from links
-    totalPages = data.meta?.last_page;
-    firstPage = data.links?.first ? getPageFromUrl(data.links.first) : 1;
-    lastPage = data.links?.last ? getPageFromUrl(data.links.last) : totalPages;
-    nextPage = data.links?.next ? getPageFromUrl(data.links.next) : null;
-    prevPage = data.links?.prev ? getPageFromUrl(data.links.prev) : null;
-  }
-
-  const handlePageClick = (page) => {
-    if (page !== currentPage && page >= 1 && page <= totalPages) {
-      handlePageChange(page);
-    }
-  };
+  const [search, setSearch] = useState("");
 
   if (isLoading) {
     return (
@@ -463,23 +429,23 @@ export default function UjianDosen() {
     );
   }
 
-  // const filteredData =
-  //   data?.data?.filter((item) =>
-  //     item.name?.toLowerCase().includes(search.toLowerCase())
-  //   ) || [];
+  const filteredData =
+    data?.data?.filter((item) =>
+      item.name?.toLowerCase().includes(search.toLowerCase())
+    ) || [];
 
-  // const sortedExams = [...filteredData];
-  // if (sortConfig.key) {
-  //   sortedExams.sort((a, b) => {
-  //     if (a[sortConfig.key] < b[sortConfig.key]) {
-  //       return sortConfig.direction === "ascending" ? -1 : 1;
-  //     }
-  //     if (a[sortConfig.key] > b[sortConfig.key]) {
-  //       return sortConfig.direction === "ascending" ? 1 : -1;
-  //     }
-  //     return 0;
-  //   });
-  // }
+  const sortedExams = [...filteredData];
+  if (sortConfig.key) {
+    sortedExams.sort((a, b) => {
+      if (a[sortConfig.key] < b[sortConfig.key]) {
+        return sortConfig.direction === "ascending" ? -1 : 1;
+      }
+      if (a[sortConfig.key] > b[sortConfig.key]) {
+        return sortConfig.direction === "ascending" ? 1 : -1;
+      }
+      return 0;
+    });
+  }
 
   return (
     <div className="kontrak-container">
@@ -495,12 +461,6 @@ export default function UjianDosen() {
             placeholder="Cari Ujian                       🔎"
             onChange={(e) => setSearch(e.target.value)}
           />
-          <button
-            className="bg-blue-500 p-2 rounded-md text-white text-sm ml-2 hover:cursor-pointer hover:bg-blue-700"
-            onClick={() => handleDataRefresh()}
-          >
-            Cari
-          </button>
         </div>
         <button
           className="bg-blue-800 p-2 rounded-md text-white hover:bg-blue-900"
@@ -543,8 +503,8 @@ export default function UjianDosen() {
             </tr>
           </thead>
           <tbody>
-            {data.data.length > 0 ? (
-              data.data.map((item, index) => (
+            {sortedExams.length > 0 ? (
+              sortedExams.map((item, index) => (
                 <tr key={item.id}>
                   <td>{index + 1}</td>
                   <td>{item.name}</td>
@@ -616,103 +576,48 @@ export default function UjianDosen() {
             )}
           </tbody>
         </table>
-        <div className="pagination-container flex-justify-between">
-          <div className="flex space-x-2">
-            <p className="text-sm text-gray-700">
-              Page {currentPage} of {totalPages}
-            </p>
+        <div className="pagination-container sticky">
+          <div className="pagination-info">
+            {`Showing ${indexOfFirstItem + 1} to ${Math.min(
+              indexOfLastItem,
+              filteredData.length
+            )} of ${filteredData.length} entries`}
           </div>
-          <div className="flex space-x-2">
-            <button
-              onClick={() => handlePageChange(firstPage)}
-              disabled={!prevPage}
-              className={`px-3 py-1 rounded ${
-                !prevPage
-                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                  : "bg-blue-500 text-white hover:bg-blue-600"
-              }`}
-            >
-              First
-            </button>
-            <button
-              onClick={() => handlePageChange(prevPage || 1)}
-              disabled={!prevPage}
-              className={`px-3 py-1 rounded ${
-                !prevPage
-                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                  : "bg-blue-500 text-white hover:bg-blue-600"
-              }`}
-            >
-              <FaChevronLeft className="h-4 w-4" />
-            </button>
 
-            {/* Show page numbers */}
-            <div className="flex space-x-1">
-              {Array.from({ length: totalPages }, (_, i) => i + 1)
-                .filter((pageNum) => {
-                  // Show first, last, and pages around current
-                  return (
-                    pageNum === 1 ||
-                    pageNum === totalPages ||
-                    (pageNum >= currentPage - 1 && pageNum <= currentPage + 1)
-                  );
-                })
-                .map((pageNum, index, array) => {
-                  // Add ellipsis if needed
-                  const showEllipsisBefore =
-                    index > 0 && array[index - 1] !== pageNum - 1;
-                  const showEllipsisAfter =
-                    index < array.length - 1 &&
-                    array[index + 1] !== pageNum + 1;
-
-                  return (
-                    <React.Fragment key={pageNum}>
-                      {showEllipsisBefore && (
-                        <span className="px-3 py-1 bg-gray-100 rounded">
-                          ...
-                        </span>
-                      )}
-                      <button
-                        onClick={() => handlePageClick(pageNum)}
-                        className={`px-3 py-1 rounded ${
-                          currentPage === pageNum
-                            ? "bg-blue-600 text-white"
-                            : "bg-gray-200 hover:bg-gray-300"
-                        }`}
-                      >
-                        {pageNum}
-                      </button>
-                      {showEllipsisAfter && (
-                        <span className="px-3 py-1 bg-gray-100 rounded">
-                          ...
-                        </span>
-                      )}
-                    </React.Fragment>
-                  );
-                })}
-            </div>
-
+          <div className="pagination ">
             <button
-              onClick={() => handlePageChange(nextPage || totalPages)}
-              disabled={!nextPage}
-              className={`px-3 py-1 rounded ${
-                !nextPage
-                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                  : "bg-blue-500 text-white hover:bg-blue-600"
-              }`}
+              className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
+              onClick={() => paginate(currentPage - 1)}
+              disabled={currentPage === 1}
             >
-              <FaChevronRight className="h-4 w-4" />
+              &lt;
             </button>
+            {Array.from(
+              { length: Math.ceil(filteredData.length / itemsPerPage) },
+              (_, index) => (
+                <button
+                  key={index + 1}
+                  className={`page-item ${
+                    currentPage === index + 1 ? "active" : ""
+                  }`}
+                  onClick={() => paginate(index + 1)}
+                >
+                  {index + 1}
+                </button>
+              )
+            )}
             <button
-              onClick={() => handlePageChange(lastPage)}
-              disabled={!nextPage}
-              className={`px-3 py-1 rounded ${
-                !nextPage
-                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                  : "bg-blue-500 text-white hover:bg-blue-600"
+              className={`page-item ${
+                currentPage === Math.ceil(filteredData.length / itemsPerPage)
+                  ? "disabled"
+                  : ""
               }`}
+              onClick={() => paginate(currentPage + 1)}
+              disabled={
+                currentPage === Math.ceil(filteredData.length / itemsPerPage)
+              }
             >
-              Last
+              &gt;
             </button>
           </div>
         </div>

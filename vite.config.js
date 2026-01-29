@@ -16,6 +16,6 @@ export default defineConfig({
     ],
   },
   build: {
-    sourcemap: false, // Enable source maps for production
+    sourcemap: true, // Enable source maps for production
   },
 });

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./editKelas.css";
 import EditPopupKelas from "./EditPopupKelas";
-import CreateGroupPopup from "./CreateGroupPopUp"; // Import the new component
+import CreateGroupPopup from "./CreateGroupPopup"; // Import the new component
 import Swal from "sweetalert2";
 import { useCookies } from "react-cookie";
 import axios from "axios";

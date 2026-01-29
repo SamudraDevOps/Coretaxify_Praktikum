@@ -911,15 +911,15 @@ const TambahFakturKeluaran = ({ sidebar }) => {
                         Pemotongan Harga
                       </th>
                       <th className="border border-gray-300 px-4 py-2">
-                        Tarif PPN
+                        Tarif PPn
                       </th>
-                      <th className="border border-gray-300 px-4 py-2">PPN</th>
+                      <th className="border border-gray-300 px-4 py-2">PPn</th>
                       <th className="border border-gray-300 px-4 py-2">DPP</th>
                       <th className="border border-gray-300 px-4 py-2">
                         DPP Nilai Lain / DPP
                       </th>
                       <th className="border border-gray-300 px-4 py-2">
-                        PPnBM
+                        PPnMB
                       </th>
                       <th className="border border-gray-300 px-4 py-2">
                         Tarif PPnBM
