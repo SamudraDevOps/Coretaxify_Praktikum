@@ -1,74 +1,36 @@
 import { toNumber } from "@utils/formatCurrency";
 
-export function hitungSubtotal1300(rows) {
-  if (!Array.isArray(rows)) return rows;
-
-  const kode1300 = rows.find((r) => r.kodeAkun == "1300");
-  if (!kode1300) return rows;
-  const akunTambah = [
-    "1203",
-    "1204",
-    "1232",
-    "1244",
-    "1181",
-    "1252",
-    "1226",
-    "1227",
-    "1222",
-    "1224",
-    "1251",
-    "1253",
-    "1254",
-    "1260",
-    "1272",
-    "1282",
-    "1291",
-    "1292",
-    "1293",
-    "1294",
-    "1299",
-  ];
-
-  const akunKurang = ["1131"];
-
-  let totalAsetTidakLancar = 0;
-
-  akunTambah.forEach((kode) => {
-    const row = rows.find((r) => r.kodeAkun == kode);
-    totalAsetTidakLancar += toNumber(row?.nilaiKomersial);
-  });
-
-  akunKurang.forEach((kode) => {
-    const row = rows.find((r) => r.kodeAkun == kode);
-    totalAsetTidakLancar -= toNumber(row?.nilaiKomersial);
-  });
-
-  kode1300.nilaiKomersial = totalAsetTidakLancar;
-
-  return rows;
-}
-
 export function hitungSubtotal1700(rows) {
   if (!Array.isArray(rows)) return rows;
 
   const kode1700 = rows.find((r) => r.kodeAkun == "1700");
   if (!kode1700) return rows;
+
   const akunTambah = [
-    "1300",
     "1101",
-    "1130",
-    "1132",
-    "1191",
-    "1133",
-    "1134",
-    "1121",
-    "1122",
+    "1105",
+    "1106",
+    "1155",
+    "1152",
+    "1160",
+    "1142",
+    "1143",
+    "1149",
+    "1561",
+    "1271",
+    "1600",
+    "1631",
+    "1633",
+    "1634",
     "1521",
-    "1613",
+    "1535",
+    "1401",
+    "1611",
+    "1421",
     "1698",
   ];
 
-  const akunKurang = ["1522"];
+  const akunKurang = ["1131", "1601", "1522", "1658"];
 
   let totalAsetTidakLancar = 0;
 
@@ -83,7 +45,6 @@ export function hitungSubtotal1700(rows) {
   });
 
   kode1700.nilaiKomersial = totalAsetTidakLancar;
-
   return rows;
 }
 
@@ -94,21 +55,19 @@ export function hitungSubtotal2999(rows) {
   if (!kode2999) return rows;
 
   const akunLiabilitas = [
-    "2167",
-    "2168",
-    "2165",
-    "2166",
-    "2186",
-    "2191",
-    "2195",
-    "2322",
-    "2194",
-    "2171",
-    "2172",
-    "2173",
-    "2174",
-    "2361",
+    "2141",
+    "2142",
+    "2162",
+    "2161",
+    "2156",
+    "2204",
+    "2205",
+    "2211",
+    "2214",
+    "2314",
+    "2321",
     "2998",
+    "2221",
   ];
 
   let total = 0;

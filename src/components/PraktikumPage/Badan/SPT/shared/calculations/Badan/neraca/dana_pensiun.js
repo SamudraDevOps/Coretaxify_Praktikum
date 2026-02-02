@@ -24,6 +24,7 @@ export function hitungSubtotal1300(rows) {
     "1256",
     "1260",
     "1272",
+    "1281",
     "1282",
     "1283",
   ];

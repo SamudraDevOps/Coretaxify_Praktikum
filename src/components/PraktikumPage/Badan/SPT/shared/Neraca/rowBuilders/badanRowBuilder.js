@@ -774,7 +774,7 @@ export class BadanRowBuilder {
       ...pickByKode([
         "2140",
         "2141",
-        "2151",
+        "2152",
         "2160",
         "2162",
         "2163",
@@ -845,6 +845,7 @@ export class BadanRowBuilder {
         "1225",
         "1241",
         "1242",
+        "1243",
         "1244",
         "1251",
         "1252",
@@ -1002,7 +1003,7 @@ export class BadanRowBuilder {
         keterangan: "Investasi ",
         side: "left",
       },
-      ...pickByKode(["1203", "1204", "1223", "1244", , "1181"]).map((row) => ({
+      ...pickByKode(["1203", "1204", "1232", "1244", , "1181"]).map((row) => ({
         ...row,
         side: "left",
       })),
@@ -1014,7 +1015,7 @@ export class BadanRowBuilder {
       })),
 
       ...pickByKode([
-        "1251",
+        "1252",
         "1226",
         "1227",
         "1222",
@@ -1083,20 +1084,6 @@ export class BadanRowBuilder {
         side: "right",
       },
 
-      ...pickByKode(["2181"]).map((row) => ({
-        ...row,
-        side: "right",
-      })),
-
-      //  Liabilitas
-
-      {
-        id: "g-liabilitas",
-        type: "header",
-        keterangan: "Liabilitas",
-        side: "right",
-      },
-
       ...pickByKode(["2167", "2168", "2165", "2166", "2186", "2191", "2195", "2322", "2194"]).map(
         (row) => ({
           ...row,
@@ -1119,6 +1106,481 @@ export class BadanRowBuilder {
       })),
 
       ...pickByKode(["2999"]).map((row) => ({
+        ...row,
+        side: "right",
+        type: "label",
+        variant: "bold",
+      })),
+
+      // EKUITAS
+      {
+        id: "g-ekuitas",
+        type: "header",
+        keterangan: "Ekuitas",
+        side: "right",
+      },
+
+      ...pickByKode(["3102", "3120", "3200", "3297", "3298"]).map((row) => ({
+        ...row,
+        side: "right",
+      })),
+
+      ...pickByKode(["3299", "3300"]).map((row) => ({
+        ...row,
+        side: "right",
+        type: "label",
+        variant: "bold",
+      })),
+    ];
+  }
+  static buildPropertiB(pickByKode) {
+    return [
+      // ASET LANCAR
+      {
+        id: "g-aset",
+        type: "header",
+        keterangan: "Aset ",
+        side: "left",
+      },
+      {
+        id: "g-aset-lancar",
+        type: "header",
+        keterangan: "Aset Lancar",
+        side: "left",
+      },
+      ...pickByKode(["1101", "1211", "1212", "1213", , "1181"]).map((row) => ({
+        ...row,
+        side: "left",
+      })),
+
+      ...pickByKode(["1131"]).map((row) => ({
+        ...row,
+        side: "left",
+        level: 2,
+      })),
+
+      ...pickByKode(["1214", "1180", "1401", "1421", "1422", "1423", "1499"]).map((row) => ({
+        ...row,
+        side: "left",
+      })),
+
+      ...pickByKode(["1500"]).map((row) => ({
+        ...row,
+        side: "left",
+        type: "label",
+        variant: "bold",
+      })),
+
+      // ASET TIDAK LANCAR
+      {
+        id: "g-aset-tidak-lancar",
+        type: "header",
+        keterangan: "Aset Tidak Lancar",
+        side: "left",
+      },
+
+      ...pickByKode(["1519", "1542", "1551", "1573", "1574", "1611", "1583", "1621", "1521"]).map(
+        (row) => ({
+          ...row,
+          side: "left",
+        })
+      ),
+
+      ...pickByKode(["1522"]).map((row) => ({
+        ...row,
+        side: "left",
+        level: 2,
+      })),
+
+      ...pickByKode(["1533"]).map((row) => ({
+        ...row,
+        side: "left",
+      })),
+      ...pickByKode(["1534"]).map((row) => ({
+        ...row,
+        side: "left",
+        level: 2,
+      })),
+      ...pickByKode(["1612"]).map((row) => ({
+        ...row,
+        side: "left",
+      })),
+      ...pickByKode(["1658"]).map((row) => ({
+        ...row,
+        side: "left",
+        level: 2,
+      })),
+
+      ...pickByKode(["1699", "1700"]).map((row) => ({
+        ...row,
+        side: "left",
+        type: "label",
+        variant: "bold",
+      })),
+
+      // liabilitas
+      {
+        id: "g-liabilitas",
+        type: "header",
+        keterangan: "Liabilitas",
+        side: "right",
+      },
+
+      //  Liabilitas Jangka Pendek
+
+      {
+        id: "g-liabilitas-jangka-pendek",
+        type: "header",
+        keterangan: "Liabilitas Jangka Pendek",
+        side: "right",
+      },
+
+      ...pickByKode([
+        "2201",
+        "2121",
+        "2194",
+        "2203",
+        "2192",
+        "2195",
+        "2191",
+        "2186",
+        "2187",
+        "2151",
+        "2228",
+      ]).map((row) => ({
+        ...row,
+        side: "right",
+      })),
+
+      ...pickByKode(["2229"]).map((row) => ({
+        ...row,
+        side: "right",
+        type: "label",
+        variant: "bold",
+      })),
+
+      // LIABILITAS JANGKA PANJANG
+
+      {
+        id: "g-liabilitas-jangka-panjang",
+        type: "header",
+        keterangan: "Liabilitas Jangka Panjang",
+        side: "right",
+      },
+
+      ...pickByKode(["2321", "2312", "2322", "2301", "2302", "2306", "2341", "2342", "2998"]).map(
+        (row) => ({
+          ...row,
+          side: "right",
+        })
+      ),
+
+      ...pickByKode(["2900", "2999"]).map((row) => ({
+        ...row,
+        side: "right",
+        type: "label",
+        variant: "bold",
+      })),
+
+      // EKUITAS
+      {
+        id: "g-ekuitas",
+        type: "header",
+        keterangan: "Ekuitas",
+        side: "right",
+      },
+
+      ...pickByKode(["3102", "3120", "3200", "3297", "3298"]).map((row) => ({
+        ...row,
+        side: "right",
+      })),
+
+      ...pickByKode(["3299", "3300"]).map((row) => ({
+        ...row,
+        side: "right",
+        type: "label",
+        variant: "bold",
+      })),
+    ];
+  }
+
+  static buildBank_syariahB(pickByKode) {
+    return [
+      // ASET LANCAR
+      {
+        id: "g-aset",
+        type: "header",
+        keterangan: "Aset ",
+        side: "left",
+      },
+      ...pickByKode([
+        "1101",
+        "1105",
+        "1106",
+        "1155",
+        "1152",
+        "1160",
+        "1142",
+        "1143",
+        "1149",
+        "1561",
+        "1271",
+      ]).map((row) => ({
+        ...row,
+        side: "left",
+      })),
+
+      ...pickByKode(["1131"]).map((row) => ({
+        ...row,
+        side: "left",
+        level: 2,
+      })),
+
+      ...pickByKode(["1600"]).map((row) => ({
+        ...row,
+        side: "left",
+      })),
+
+      ...pickByKode(["1601"]).map((row) => ({
+        ...row,
+        side: "left",
+        level: 2,
+      })),
+
+      ...pickByKode(["1631", "1633", "1634", "1521"]).map((row) => ({
+        ...row,
+        side: "left",
+      })),
+      ...pickByKode(["1522"]).map((row) => ({
+        ...row,
+        side: "left",
+        level: 2,
+      })),
+      ...pickByKode(["1535"]).map((row) => ({
+        ...row,
+        side: "left",
+      })),
+      ...pickByKode(["1658"]).map((row) => ({
+        ...row,
+        side: "left",
+        level: 2,
+      })),
+
+      ...pickByKode(["1401", "1611", "1421", "1698"]).map((row) => ({
+        ...row,
+        side: "left",
+      })),
+
+      ...pickByKode(["1700"]).map((row) => ({
+        ...row,
+        side: "left",
+        type: "label",
+        variant: "bold",
+      })),
+
+      // liabilitas
+      {
+        id: "g-liabilitas",
+        type: "header",
+        keterangan: "Liabilitas",
+        side: "right",
+      },
+
+      ...pickByKode([
+        "2141",
+        "2142",
+        "2162",
+        "2161",
+        "2156",
+        "2204",
+        "2205",
+        "2211",
+        "2214",
+        "2314",
+        "2998",
+        "2221",
+      ]).map((row) => ({
+        ...row,
+        side: "right",
+      })),
+
+      ...pickByKode(["2999"]).map((row) => ({
+        ...row,
+        side: "right",
+        type: "label",
+        variant: "bold",
+      })),
+
+      // EKUITAS
+      {
+        id: "g-ekuitas",
+        type: "header",
+        keterangan: "Ekuitas",
+        side: "right",
+      },
+
+      ...pickByKode(["3102", "3120", "3200", "3297", "3298"]).map((row) => ({
+        ...row,
+        side: "right",
+      })),
+
+      ...pickByKode(["3299", "3300"]).map((row) => ({
+        ...row,
+        side: "right",
+        type: "label",
+        variant: "bold",
+      })),
+    ];
+  }
+  static buildInfrastrukturB(pickByKode) {
+    return [
+      // ASET
+      {
+        id: "g-aset",
+        type: "header",
+        keterangan: "Aset ",
+        side: "left",
+      },
+
+      // ASET LANCAR
+      {
+        id: "g-aset-lancar",
+        type: "header",
+        keterangan: "Aset Lancar",
+        side: "left",
+      },
+      ...pickByKode(["1101", "1211", "1212", "1213", "1180", "1181"]).map((row) => ({
+        ...row,
+        side: "left",
+      })),
+
+      ...pickByKode(["1131"]).map((row) => ({
+        ...row,
+        side: "left",
+        level: 2,
+      })),
+
+      ...pickByKode(["1401", "1421", "1422", "1423", "1499"]).map((row) => ({
+        ...row,
+        side: "left",
+      })),
+
+      ...pickByKode(["1500"]).map((row) => ({
+        ...row,
+        side: "left",
+        type: "label",
+        variant: "bold",
+      })),
+
+      // Aset Tidak Lancar
+
+      {
+        id: "g-aset-tidak-lancar",
+        type: "header",
+        keterangan: "Aset Tidak Lancar",
+        side: "left",
+      },
+      ...pickByKode(["1518", "1519", "1551", "1571", "1573", "1574", "1611", "1621", "1521"]).map(
+        (row) => ({
+          ...row,
+          side: "left",
+        })
+      ),
+
+      ...pickByKode(["1522"]).map((row) => ({
+        ...row,
+        side: "left",
+        level: 2,
+      })),
+
+      ...pickByKode(["1655"]).map((row) => ({
+        ...row,
+        side: "left",
+      })),
+
+      ...pickByKode(["1658"]).map((row) => ({
+        ...row,
+        side: "left",
+        level: 2,
+      })),
+
+      ...pickByKode(["1698"]).map((row) => ({
+        ...row,
+        side: "left",
+      })),
+
+      ...pickByKode(["1699", "1700"]).map((row) => ({
+        ...row,
+        side: "left",
+        type: "label",
+        variant: "bold",
+      })),
+
+      // liabilitas
+      {
+        id: "g-liabilitas",
+        type: "header",
+        keterangan: "Liabilitas",
+        side: "right",
+      },
+
+      {
+        id: "g-liabilitas-jangka-pendek",
+        type: "header",
+        keterangan: "Liabilitas Jangka Pendek",
+        side: "right",
+      },
+
+      ...pickByKode([
+        "2201",
+        "2121",
+        "2194",
+        "2203",
+        "2191",
+        "2186",
+        "2187",
+        "2193",
+        "2202",
+        "2228",
+      ]).map((row) => ({
+        ...row,
+        side: "right",
+      })),
+
+      ...pickByKode(["2229"]).map((row) => ({
+        ...row,
+        side: "right",
+        type: "label",
+        variant: "bold",
+      })),
+
+      // LIABILITAS JANGKA PANJANG
+
+      {
+        id: "g-liabilitas-jangka-panjang",
+        type: "header",
+        keterangan: "Liabilitas Jangka Panjang",
+        side: "right",
+      },
+
+      ...pickByKode([
+        "2321",
+        "2344",
+        "2345",
+        "2312",
+        "2322",
+        "2301",
+        "2302",
+        "2306",
+        "2311",
+        "2313",
+        "2998",
+      ]).map((row) => ({
+        ...row,
+        side: "right",
+      })),
+
+      ...pickByKode(["2900", "2999"]).map((row) => ({
         ...row,
         side: "right",
         type: "label",

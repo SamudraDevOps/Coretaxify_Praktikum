@@ -19,6 +19,9 @@ import * as BadanNeracaJasa from "./Badan/neraca/jasa";
 import * as BadanBankKonvensional from "./Badan/neraca/bank_konvensional";
 import * as BadanDanaPensiun from "./Badan/neraca/dana_pensiun";
 import * as BadanAsuransi from "./Badan/neraca/asuransi";
+import * as BadanProperti from "./Badan/neraca/properti";
+import * as BankSyariah from "./Badan/neraca/bank_syariah";
+import * as BadanInfrastruktur from "./Badan/neraca/infrastruktur";
 
 // ORANG PRIBADI - LABA RUGI
 // import * as OPLabaRugiUmum from "./OP/labaRugi/umum";
@@ -56,6 +59,9 @@ export const calculations = {
       bank_konvensional: BadanBankKonvensional,
       dana_pensiun: BadanDanaPensiun,
       asuransi: BadanAsuransi,
+      properti: BadanProperti,
+      bank_syariah: BankSyariah,
+      infrastruktur: BadanInfrastruktur,
     },
   },
   orang_pribadi: {

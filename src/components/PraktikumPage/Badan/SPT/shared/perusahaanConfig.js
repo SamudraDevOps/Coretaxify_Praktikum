@@ -1399,6 +1399,81 @@ export const PERUSAHAAN_CONFIG = {
       4700: ["properti"],
       4800: ["properti"],
     },
+    akunKonteksNeraca: {
+      // ASET LANCAR
+      1101: ["properti"],
+      1211: ["properti"],
+      1212: ["properti"],
+      1213: ["properti"],
+      1181: ["properti"],
+      1131: ["properti"],
+      1214: ["properti"],
+      1180: ["properti"],
+      1401: ["properti"],
+      1421: ["properti"],
+      1422: ["properti"],
+      1423: ["properti"],
+      1499: ["properti"],
+      1500: ["properti"],
+
+      // ASET TIDAK LANCAR
+
+      1519: ["properti"],
+      1542: ["properti"],
+      1551: ["properti"],
+      1573: ["properti"],
+      1574: ["properti"],
+      1611: ["properti"],
+      1583: ["properti"],
+      1621: ["properti"],
+      1521: ["properti"],
+      1522: ["properti"],
+      1533: ["properti"],
+      1534: ["properti"],
+      1612: ["properti"],
+      1658: ["properti"],
+      1699: ["properti"],
+      1700: ["properti"],
+
+      // LIABILITAS JANGKA PENDEK
+
+      2201: ["properti"],
+      2121: ["properti"],
+      2194: ["properti"],
+      2203: ["properti"],
+      2192: ["properti"],
+      2195: ["properti"],
+      2191: ["properti"],
+      2186: ["properti"],
+      2187: ["properti"],
+      2151: ["properti"],
+      2228: ["properti"],
+      2229: ["properti"],
+
+      // LIABILITAS JANGKA PANJANG
+
+      2321: ["properti"],
+      2312: ["properti"],
+      2322: ["properti"],
+      2301: ["properti"],
+      2302: ["properti"],
+      2306: ["properti"],
+      2341: ["properti"],
+      2342: ["properti"],
+      2998: ["properti"],
+      2900: ["properti"],
+      2999: ["properti"],
+
+      // EKUITAS
+
+      3102: ["properti"],
+      3120: ["properti"],
+      3200: ["properti"],
+      3297: ["properti"],
+      3298: ["properti"],
+      3299: ["properti"],
+      3300: ["properti"],
+    },
 
     subtotalCalculations: {
       badan: {
@@ -1411,7 +1486,16 @@ export const PERUSAHAAN_CONFIG = {
           "hitungTotal4700",
           "hitungTotal4800",
         ],
-        [BAGIAN_LAMPIRAN.B]: [],
+        [BAGIAN_LAMPIRAN.B]: [
+          "hitungSubtotal1500",
+          "hitungSubtotal1699",
+          "hitungSubtotal1700",
+          "hitungSubtotal2229",
+          "hitungSubtotal2900",
+          "hitungSubtotal2999",
+          "hitungSubtotal3299",
+          "hitungSubtotal3300",
+        ],
         [BAGIAN_LAMPIRAN.C]: [],
       },
       orang_pribadi: { [BAGIAN_LAMPIRAN.A]: [], [BAGIAN_LAMPIRAN.B]: [], [BAGIAN_LAMPIRAN.C]: [] },
@@ -1513,6 +1597,61 @@ export const PERUSAHAAN_CONFIG = {
       4800: ["bank_syariah"],
     },
 
+    akunKonteksNeraca: {
+      // ASET
+      1101: ["bank_syariah"],
+      1105: ["bank_syariah"],
+      1106: ["bank_syariah"],
+      1155: ["bank_syariah"],
+      1152: ["bank_syariah"],
+      1160: ["bank_syariah"],
+      1142: ["bank_syariah"],
+      1143: ["bank_syariah"],
+      1149: ["bank_syariah"],
+      1561: ["bank_syariah"],
+      1271: ["bank_syariah"],
+      1131: ["bank_syariah"],
+      1600: ["bank_syariah"],
+      1601: ["bank_syariah"],
+      1631: ["bank_syariah"],
+      1633: ["bank_syariah"],
+      1634: ["bank_syariah"],
+      1521: ["bank_syariah"],
+      1522: ["bank_syariah"],
+      1535: ["bank_syariah"],
+      1658: ["bank_syariah"],
+      1401: ["bank_syariah"],
+      1611: ["bank_syariah"],
+      1421: ["bank_syariah"],
+      1698: ["bank_syariah"],
+      1700: ["bank_syariah"],
+
+      // LIABILITAS
+      2141: ["bank_syariah"],
+      2142: ["bank_syariah"],
+      2162: ["bank_syariah"],
+      2161: ["bank_syariah"],
+      2156: ["bank_syariah"],
+      2204: ["bank_syariah"],
+      2205: ["bank_syariah"],
+      2211: ["bank_syariah"],
+      2214: ["bank_syariah"],
+      2314: ["bank_syariah"],
+      2998: ["bank_syariah"],
+      2221: ["bank_syariah"],
+      2999: ["bank_syariah"],
+
+      // EKUITAS
+
+      3102: ["bank_syariah"],
+      3120: ["bank_syariah"],
+      3200: ["bank_syariah"],
+      3297: ["bank_syariah"],
+      3298: ["bank_syariah"],
+      3299: ["bank_syariah"],
+      3300: ["bank_syariah"],
+    },
+
     subtotalCalculations: {
       badan: {
         [BAGIAN_LAMPIRAN.A]: [
@@ -1528,7 +1667,12 @@ export const PERUSAHAAN_CONFIG = {
           "hitungSubtotal4700",
           "hitungSubtotal4800",
         ],
-        [BAGIAN_LAMPIRAN.B]: [],
+        [BAGIAN_LAMPIRAN.B]: [
+          "hitungSubtotal1700",
+          "hitungSubtotal2999",
+          "hitungSubtotal3299",
+          "hitungSubtotal3300",
+        ],
         [BAGIAN_LAMPIRAN.C]: [],
       },
       orang_pribadi: { [BAGIAN_LAMPIRAN.A]: [], [BAGIAN_LAMPIRAN.B]: [], [BAGIAN_LAMPIRAN.C]: [] },
@@ -1605,6 +1749,84 @@ export const PERUSAHAAN_CONFIG = {
       4800: ["infrastruktur"],
     },
 
+    akunKonteksNeraca: {
+      // ASET
+      // ASET LANCAR
+
+      1101: ["infrastruktur"],
+      1211: ["infrastruktur"],
+      1212: ["infrastruktur"],
+      1213: ["infrastruktur"],
+      1180: ["infrastruktur"],
+      1181: ["infrastruktur"],
+      1131: ["infrastruktur"],
+      1401: ["infrastruktur"],
+      1421: ["infrastruktur"],
+      1422: ["infrastruktur"],
+      1423: ["infrastruktur"],
+      1499: ["infrastruktur"],
+      1500: ["infrastruktur"],
+
+      // ASET TIDAK LANCAR
+
+      1518: ["infrastruktur"],
+      1519: ["infrastruktur"],
+      1551: ["infrastruktur"],
+      1571: ["infrastruktur"],
+      1573: ["infrastruktur"],
+      1574: ["infrastruktur"],
+      1611: ["infrastruktur"],
+      1621: ["infrastruktur"],
+      1521: ["infrastruktur"],
+      1522: ["infrastruktur"],
+      1655: ["infrastruktur"],
+      1658: ["infrastruktur"],
+      1698: ["infrastruktur"],
+      1699: ["infrastruktur"],
+      1700: ["infrastruktur"],
+
+      // LIABILITAS
+      // LIABILITAS JANGKA PENDEK
+
+      2201: ["infrastruktur"],
+      2121: ["infrastruktur"],
+      2194: ["infrastruktur"],
+      2203: ["infrastruktur"],
+      2191: ["infrastruktur"],
+      2186: ["infrastruktur"],
+      2187: ["infrastruktur"],
+      2193: ["infrastruktur"],
+      2202: ["infrastruktur"],
+      2228: ["infrastruktur"],
+      2229: ["infrastruktur"],
+
+      // LIABILITAS JANGKA PANJANG
+
+      2321: ["infrastruktur"],
+      2344: ["infrastruktur"],
+      2345: ["infrastruktur"],
+      2312: ["infrastruktur"],
+      2322: ["infrastruktur"],
+      2301: ["infrastruktur"],
+      2302: ["infrastruktur"],
+      2306: ["infrastruktur"],
+      2311: ["infrastruktur"],
+      2313: ["infrastruktur"],
+      2998: ["infrastruktur"],
+      2900: ["infrastruktur"],
+      2999: ["infrastruktur"],
+
+      // EKUITAS
+
+      3102: ["infrastruktur"],
+      3120: ["infrastruktur"],
+      3200: ["infrastruktur"],
+      3297: ["infrastruktur"],
+      3298: ["infrastruktur"],
+      3299: ["infrastruktur"],
+      3300: ["infrastruktur"],
+    },
+
     subtotalCalculations: {
       badan: {
         [BAGIAN_LAMPIRAN.A]: [
@@ -1614,7 +1836,16 @@ export const PERUSAHAAN_CONFIG = {
           "hitungTotal5500",
           "hitungTotal4800",
         ],
-        [BAGIAN_LAMPIRAN.B]: [],
+        [BAGIAN_LAMPIRAN.B]: [
+          "hitungSubtotal1500",
+          "hitungSubtotal1699",
+          "hitungSubtotal1700",
+          "hitungSubtotal2229",
+          "hitungSubtotal2900",
+          "hitungSubtotal2999",
+          "hitungSubtotal3299",
+          "hitungSubtotal3300",
+        ],
         [BAGIAN_LAMPIRAN.C]: [],
       },
       orang_pribadi: { [BAGIAN_LAMPIRAN.A]: [], [BAGIAN_LAMPIRAN.B]: [], [BAGIAN_LAMPIRAN.C]: [] },
