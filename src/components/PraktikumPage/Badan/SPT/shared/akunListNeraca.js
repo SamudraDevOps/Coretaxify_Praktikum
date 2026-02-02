@@ -1477,6 +1477,12 @@ export const MASTER_AKUN_NERACA = [
   },
 
   {
+    kodeAkun: "2314",
+    namaAkun: "Liabilitas Pajak Tangguhan",
+    jenisPerusahaan: ["bank_syariah"],
+  },
+
+  {
     kodeAkun: "2321",
     namaAkun: "Liabilitas Pajak Tangguhan",
     jenisPerusahaan: [
