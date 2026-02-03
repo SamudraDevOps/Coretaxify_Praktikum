@@ -16,12 +16,14 @@ import * as BadanNeracaUmum from "./Badan/neraca/umum";
 import * as BadanNeracaManufaktur from "./Badan/neraca/manufaktur";
 import * as BadanNeracaDagang from "./Badan/neraca/dagang";
 import * as BadanNeracaJasa from "./Badan/neraca/jasa";
-import * as BadanBankKonvensional from "./Badan/neraca/bank_konvensional";
-import * as BadanDanaPensiun from "./Badan/neraca/dana_pensiun";
-import * as BadanAsuransi from "./Badan/neraca/asuransi";
-import * as BadanProperti from "./Badan/neraca/properti";
-import * as BankSyariah from "./Badan/neraca/bank_syariah";
-import * as BadanInfrastruktur from "./Badan/neraca/infrastruktur";
+import * as BadanNeracaBankKonvensional from "./Badan/neraca/bank_konvensional";
+import * as BadanNeracaDanaPensiun from "./Badan/neraca/dana_pensiun";
+import * as BadanNeracaAsuransi from "./Badan/neraca/asuransi";
+import * as BadanNeracaProperti from "./Badan/neraca/properti";
+import * as BadanNeracaBankSyariah from "./Badan/neraca/bank_syariah";
+import * as BadanNeracaInfrastruktur from "./Badan/neraca/infrastruktur";
+import * as BadanNeracaSekuritas from "./Badan/neraca/sekuritas";
+import * as BadanNeracaPembiayaan from "./Badan/neraca/pembiayaan";
 
 // ORANG PRIBADI - LABA RUGI
 // import * as OPLabaRugiUmum from "./OP/labaRugi/umum";
@@ -56,12 +58,14 @@ export const calculations = {
       manufaktur: BadanNeracaManufaktur,
       dagang: BadanNeracaDagang,
       jasa: BadanNeracaJasa,
-      bank_konvensional: BadanBankKonvensional,
-      dana_pensiun: BadanDanaPensiun,
-      asuransi: BadanAsuransi,
-      properti: BadanProperti,
-      bank_syariah: BankSyariah,
-      infrastruktur: BadanInfrastruktur,
+      bank_konvensional: BadanNeracaBankKonvensional,
+      dana_pensiun: BadanNeracaDanaPensiun,
+      asuransi: BadanNeracaAsuransi,
+      properti: BadanNeracaProperti,
+      bank_syariah: BadanNeracaBankSyariah,
+      infrastruktur: BadanNeracaInfrastruktur,
+      sekuritas: BadanNeracaSekuritas,
+      pembiayaan: BadanNeracaPembiayaan,
     },
   },
   orang_pribadi: {

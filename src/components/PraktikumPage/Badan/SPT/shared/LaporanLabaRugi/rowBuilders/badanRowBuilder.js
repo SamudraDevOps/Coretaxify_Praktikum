@@ -117,6 +117,7 @@ export class BadanRowBuilder {
         ...row,
         type: "label",
         variant: "bold",
+        derived: true,
       })),
 
       // Beban Non Usaha
@@ -1414,9 +1415,17 @@ export class BadanRowBuilder {
         keterangan: "Beban Diluar Usaha",
       },
 
-      ...pickByKode(["5405", "5421", "5409", "5499", "5500"]).map((row) => ({
+      ...pickByKode(["5405", "5421", "5409", "5499"]).map((row) => ({
         ...row,
         level: 1,
+      })),
+
+      ...pickByKode(["5500"]).map((row) => ({
+        ...row,
+        type: "label",
+        variant: "bold",
+        level: 1,
+        derived: true,
       })),
 
       ...pickByKode(["4800"]).map((row) => ({
@@ -1510,9 +1519,17 @@ export class BadanRowBuilder {
         keterangan: "Beban di Luar Usaha",
       },
 
-      ...pickByKode(["5405", "5409", "5412", "5499", "5500"]).map((row) => ({
+      ...pickByKode(["5405", "5409", "5412", "5499"]).map((row) => ({
         ...row,
         level: 1,
+      })),
+
+      ...pickByKode(["5500"]).map((row) => ({
+        ...row,
+        type: "label",
+        variant: "bold",
+        level: 1,
+        derived: true,
       })),
 
       ...pickByKode(["4800"]).map((row) => ({

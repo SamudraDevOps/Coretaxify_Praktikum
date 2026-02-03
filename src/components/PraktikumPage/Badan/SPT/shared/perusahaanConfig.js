@@ -1919,6 +1919,66 @@ export const PERUSAHAAN_CONFIG = {
       4800: ["sekuritas"],
     },
 
+    akunKonteksNeraca: {
+      // ASET
+
+      1101: ["sekuritas"],
+      1159: ["sekuritas"],
+      1261: ["sekuritas"],
+      1171: ["sekuritas"],
+      1172: ["sekuritas"],
+      1173: ["sekuritas"],
+      1175: ["sekuritas"],
+      1176: ["sekuritas"],
+      1180: ["sekuritas"],
+      1158: ["sekuritas"],
+      1154: ["sekuritas"],
+      1421: ["sekuritas"],
+      1423: ["sekuritas"],
+      1241: ["sekuritas"],
+      1181: ["sekuritas"],
+      1131: ["sekuritas"],
+      1521: ["sekuritas"],
+      1522: ["sekuritas"],
+      1551: ["sekuritas"],
+      1621: ["sekuritas"],
+      1611: ["sekuritas"],
+      1651: ["sekuritas"],
+      1698: ["sekuritas"],
+      1700: ["sekuritas"],
+
+      // LIABILITAS
+      2122: ["sekuritas"],
+      2123: ["sekuritas"],
+      2126: ["sekuritas"],
+      2131: ["sekuritas"],
+      2132: ["sekuritas"],
+      2133: ["sekuritas"],
+      2135: ["sekuritas"],
+      2134: ["sekuritas"],
+      2191: ["sekuritas"],
+      2186: ["sekuritas"],
+      2195: ["sekuritas"],
+      2202: ["sekuritas"],
+      2124: ["sekuritas"],
+      2322: ["sekuritas"],
+      2323: ["sekuritas"],
+      2361: ["sekuritas"],
+      2321: ["sekuritas"],
+      2998: ["sekuritas"],
+      2999: ["sekuritas"],
+
+      // EKUITAS
+
+      3102: ["sekuritas"],
+      3120: ["sekuritas"],
+      3200: ["sekuritas"],
+      3297: ["sekuritas"],
+      3298: ["sekuritas"],
+      3299: ["sekuritas"],
+      3300: ["sekuritas"],
+    },
+
     subtotalCalculations: {
       badan: {
         [BAGIAN_LAMPIRAN.A]: [
@@ -1928,7 +1988,12 @@ export const PERUSAHAAN_CONFIG = {
           "hitungTotal5500",
           "hitungTotal4800",
         ],
-        [BAGIAN_LAMPIRAN.B]: [],
+        [BAGIAN_LAMPIRAN.B]: [
+          "hitungSubtotal1700",
+          "hitungSubtotal2999",
+          "hitungSubtotal3299",
+          "hitungSubtotal3300",
+        ],
         [BAGIAN_LAMPIRAN.C]: [],
       },
       orang_pribadi: { [BAGIAN_LAMPIRAN.A]: [], [BAGIAN_LAMPIRAN.B]: [], [BAGIAN_LAMPIRAN.C]: [] },
@@ -2006,6 +2071,79 @@ export const PERUSAHAAN_CONFIG = {
       4800: ["pembiayaan"],
     },
 
+    akunKonteksNeraca: {
+      // KAS DAN SETARA KAS
+
+      1102: ["pembiayaan"],
+      1103: ["pembiayaan"],
+      1104: ["pembiayaan"],
+      1141: ["pembiayaan"],
+      1151: ["pembiayaan"],
+
+      //PIUTANG PEMBIAYAAN NETO
+
+      1161: ["pembiayaan"],
+      1162: ["pembiayaan"],
+      1163: ["pembiayaan"],
+      1164: ["pembiayaan"],
+      1165: ["pembiayaan"],
+      1166: ["pembiayaan"],
+      1180: ["pembiayaan"],
+      1423: ["pembiayaan"],
+      1181: ["pembiayaan"],
+      1658: ["pembiayaan"],
+
+      // PERNYERTAAN MODAL
+
+      1555: ["pembiayaan"],
+      1556: ["pembiayaan"],
+      1590: ["pembiayaan"],
+      1533: ["pembiayaan"],
+      1534: ["pembiayaan"],
+      1521: ["pembiayaan"],
+      1522: ["pembiayaan"],
+      1511: ["pembiayaan"],
+      1651: ["pembiayaan"],
+      1611: ["pembiayaan"],
+      1698: ["pembiayaan"],
+      1700: ["pembiayaan"],
+
+      // LIABILITAS
+      // LIABILITAS JANGKA PENDEK
+
+      2201: ["pembiayaan"],
+      2228: ["pembiayaan"],
+      2164: ["pembiayaan"],
+      2191: ["pembiayaan"],
+      2311: ["pembiayaan"],
+      2312: ["pembiayaan"],
+
+      // PINJAMAN
+
+      2312: ["pembiayaan"],
+      2213: ["pembiayaan"],
+      2204: ["pembiayaan"],
+      2321: ["pembiayaan"],
+
+      // PINJAMAN SUBORDINASI
+
+      2362: ["pembiayaan"],
+      2363: ["pembiayaan"],
+      2322: ["pembiayaan"],
+      2988: ["pembiayaan"],
+      2999: ["pembiayaan"],
+
+      // EKUITAS
+      3102: ["pembiayaan"],
+      3110: ["pembiayaan"],
+      3120: ["pembiayaan"],
+      3200: ["pembiayaan"],
+      3297: ["pembiayaan"],
+      3298: ["pembiayaan"],
+      3299: ["pembiayaan"],
+      3300: ["pembiayaan"],
+    },
+
     subtotalCalculations: {
       badan: {
         [BAGIAN_LAMPIRAN.A]: [
@@ -2014,8 +2152,13 @@ export const PERUSAHAAN_CONFIG = {
           "hitungTotal4600",
           "hitungTotal5500",
           "hitungTotal4800",
+      ],
+        [BAGIAN_LAMPIRAN.B]: [
+          "hitungSubtotal1700",
+          "hitungSubtotal2999",
+          "hitungSubtotal3299",
+          "hitungSubtotal3300",
         ],
-        [BAGIAN_LAMPIRAN.B]: [],
         [BAGIAN_LAMPIRAN.C]: [],
       },
       orang_pribadi: { [BAGIAN_LAMPIRAN.A]: [], [BAGIAN_LAMPIRAN.B]: [], [BAGIAN_LAMPIRAN.C]: [] },
