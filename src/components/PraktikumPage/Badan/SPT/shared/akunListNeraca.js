@@ -1569,6 +1569,8 @@ export const MASTER_AKUN_NERACA = [
     namaAkun: "Jumlah liabilitas jangka panjang",
     jenisPerusahaan: ["properti", "infrastruktur"],
   },
+
+  { kodeAkun: "2988", namaAkun: "Lianilitas Lainnya", jenisPerusahaan: ["pembiayaan"] },
   {
     kodeAkun: "2998",
     namaAkun: "Liabilitas Jangka Panjang Lainnya",
@@ -1618,6 +1620,12 @@ export const MASTER_AKUN_NERACA = [
       "sekuritas",
       "pembiayaan",
     ],
+  },
+
+  {
+    kodeAkun: "3110",
+    namaAkun: "Simpnanan Pokok Dan Simpanan Wajib",
+    jenisPerusahaan: ["pembiayaan"],
   },
   {
     kodeAkun: "3120",
