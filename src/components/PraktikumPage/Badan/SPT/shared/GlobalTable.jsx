@@ -8,7 +8,8 @@ function cn(...cls) {
 const headerPrimary = "bg-purple-700 text-slate-900";
 const headerPrimaryDark = "bg-purple-800 text-slate-900";
 const headerCellBase = "px-3 py-2 text-[12px] font-semibold border border-slate-200";
-const bodyCellBase = "px-3 py-[10px] text-[13px] border border-slate-200 text-slate-700 align-top";
+const bodyCellBase =
+  "px-3 py-0 h-[44px] text-[13px] border border-slate-200 text-slate-700 align-middle";
 
 export default function GlobalTable({
   columns,
@@ -26,12 +27,21 @@ export default function GlobalTable({
   rowClassName,
 }) {
   const leafColumns = React.useMemo(() => {
+    const collectLeaves = (items) => {
+      if (!Array.isArray(items) || !items.length) return [];
+      const out = [];
+      items.forEach((it) => {
+        if (Array.isArray(it.children) && it.children.length) {
+          out.push(...collectLeaves(it.children));
+        } else {
+          out.push(it);
+        }
+      });
+      return out;
+    };
+
     if (columnGroups && columnGroups.length) {
-      // Kalau group punya children → pakai children
-      // Kalau tidak punya children → treat dia sendiri sebagai column
-      return columnGroups.flatMap((g) =>
-        Array.isArray(g.children) && g.children.length ? g.children : [g]
-      );
+      return collectLeaves(columnGroups);
     }
     return columns ?? [];
   }, [columns, columnGroups]);
@@ -83,6 +93,13 @@ export default function GlobalTable({
           <thead className={cn(stickyHeader && "sticky top-0 z-10")}>
             {columnGroups && columnGroups.length ? (
               (() => {
+                // Cek apakah ada nested children (3 level)
+                const hasNestedChildren = columnGroups.some(
+                  (g) =>
+                    Array.isArray(g.children) &&
+                    g.children.some((c) => Array.isArray(c.children) && c.children.length)
+                );
+
                 const hasChildGroup = columnGroups.some(
                   (g) => Array.isArray(g.children) && g.children.length
                 );
@@ -109,7 +126,126 @@ export default function GlobalTable({
                   );
                 }
 
-                // Ada paling tidak satu group dengan children ⇒ 2 baris header
+                //  3 LEVEL HEADER
+                if (hasNestedChildren) {
+                  return (
+                    <>
+                      {/* Baris 1: Group utama */}
+                      <tr className={cn(headerPrimary)}>
+                        {columnGroups.map((g, i) => {
+                          const hasChildren = Array.isArray(g.children) && g.children.length;
+
+                          if (hasChildren) {
+                            // Hitung total colspan untuk group ini
+                            const totalCols = g.children.reduce((sum, child) => {
+                              if (Array.isArray(child.children) && child.children.length) {
+                                return sum + child.children.length;
+                              }
+                              return sum + 1;
+                            }, 0);
+
+                            return (
+                              <th
+                                key={`g-${i}`}
+                                className={cn(headerCellBase, "text-center", g.className)}
+                                colSpan={totalCols}
+                              >
+                                {g.title}
+                              </th>
+                            );
+                          }
+
+                          // Group tanpa children → span 3 baris
+                          return (
+                            <th
+                              key={`g-${i}`}
+                              className={cn(
+                                headerCellBase,
+                                "text-center",
+                                g.className,
+                                g.align === "center" && "text-center",
+                                g.align === "right" && "text-right"
+                              )}
+                              rowSpan={3}
+                              style={{ width: g.width ?? "auto" }}
+                            >
+                              {g.title}
+                            </th>
+                          );
+                        })}
+                      </tr>
+
+                      {/* Baris 2: Sub-group (tahun) */}
+                      <tr className={headerPrimary}>
+                        {columnGroups.map((g) =>
+                          Array.isArray(g.children) && g.children.length
+                            ? g.children.map((c, idx) => {
+                                const hasSubChildren =
+                                  Array.isArray(c.children) && c.children.length;
+
+                                if (hasSubChildren) {
+                                  return (
+                                    <th
+                                      key={`c-${c.key}-${idx}`}
+                                      className={cn(headerCellBase, "text-center", c.className)}
+                                      colSpan={c.children.length}
+                                    >
+                                      {c.title}
+                                    </th>
+                                  );
+                                }
+
+                                // Child tanpa sub-children → span 2 baris
+                                return (
+                                  <th
+                                    key={`c-${c.key}-${idx}`}
+                                    className={cn(
+                                      headerCellBase,
+                                      c.className,
+                                      c.align === "center" && "text-center",
+                                      c.align === "right" && "text-right"
+                                    )}
+                                    rowSpan={2}
+                                    style={{ width: c.width ?? "auto" }}
+                                  >
+                                    {c.title}
+                                  </th>
+                                );
+                              })
+                            : null
+                        )}
+                      </tr>
+
+                      {/* Baris 3: Detail (NILAI) */}
+                      <tr className={headerPrimary}>
+                        {columnGroups.map((g) =>
+                          Array.isArray(g.children) && g.children.length
+                            ? g.children.map((c) =>
+                                Array.isArray(c.children) && c.children.length
+                                  ? c.children.map((sc, scIdx) => (
+                                      <th
+                                        key={`sc-${sc.key}-${scIdx}`}
+                                        className={cn(
+                                          headerCellBase,
+                                          sc.className,
+                                          sc.align === "center" && "text-center",
+                                          sc.align === "right" && "text-right"
+                                        )}
+                                        style={{ width: sc.width ?? "auto" }}
+                                      >
+                                        {sc.title}
+                                      </th>
+                                    ))
+                                  : null
+                              )
+                            : null
+                        )}
+                      </tr>
+                    </>
+                  );
+                }
+
+                //  2 LEVEL HEADER
                 return (
                   <>
                     {/* Baris 1: judul group (rowSpan / colSpan) */}

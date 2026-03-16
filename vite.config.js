@@ -22,10 +22,23 @@ export default defineConfig({
         __dirname,
         "./src/components/PraktikumPage/Badan/SPT/Spt_Pribadi/Lampiran/components"
       ),
+
+      "@badanSections": path.resolve(
+        __dirname,
+        "./src/components/PraktikumPage/Badan/SPT/Spt_Badan/Lampiran/section"
+      ),
+      "@badanLampiran": path.resolve(
+        __dirname,
+        "./src/components/PraktikumPage/Badan/SPT/Spt_Badan/Lampiran/components"
+      ),
     },
   },
 
   server: {
+    // host: "0.0.0.0", 
+    // port: 5173,
+    strictPort: true,
+
     allowedHosts: [".ngrok-free.app", ".loca.lt"],
   },
   build: {

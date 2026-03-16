@@ -14,7 +14,35 @@ import {
   PertanyaanI,
   PertanyaanJ,
 } from "./section";
-import { Header, LampiranL1B, LampiranL1C, Lampiran2, Lampiran3, Lampiran4 } from "../Lampiran";
+import {
+  Header,
+  Lampiran1A,
+  Lampiran1B,
+  Lampiran1C,
+  Lampiran1D,
+  Lampiran1E,
+  Lampiran1F,
+  Lampiran1G,
+  Lampiran1H,
+  Lampiran1I,
+  Lampiran1J,
+  Lampiran1K,
+  Lampiran1L,
+  Lampiran2,
+  Lampiran3,
+  Lampiran4,
+  Lampiran5,
+  Lampiran9,
+  Lampiran10A,
+  Lampiran10B,
+  Lampiran10C,
+  Lampiran10D,
+  Lampiran11A,
+  Lampiran11B,
+  Lampiran11C,
+  Lampiran13A,
+  Lampiran14,
+} from "../Lampiran";
 
 const CreateKonsepBadan = () => {
   const [showHeaderInduk, setShowHeaderInduk] = useState(true);
@@ -54,21 +82,111 @@ const CreateKonsepBadan = () => {
     const allLampiran = [];
 
     allLampiran.push({
+      id: "lampiran-1A",
+      title: "L1-A",
+      subtitle: "Lampiran 1A - UMUM",
+      component: "Lampiran_1A",
+      badge: "Tersedia",
+      order: 1,
+    });
+    allLampiran.push({
       id: "lampiran-1B",
-      title: "L-1B",
-      subtitle: "Lampiran I - Penghasilan dari Pekerjaan",
+      title: "L1-B",
+      subtitle: "Lampiran 1B - MANUFAKTUR",
       component: "Lampiran_1B",
       badge: "Tersedia",
       order: 1, // Urutan pertama
     });
+
     allLampiran.push({
       id: "lampiran-1C",
-      title: "L-1C",
-      subtitle: "Lampiran I - Penghasilan dari Usaha dan/atau Pekerjaan Bebas",
+      title: "L1-C",
+      subtitle: "Lampiran 1C - DAGANG",
       component: "Lampiran_1C",
       badge: "Tersedia",
-      order: 2, // Urutan kedua
+      order: 1, // Urutan pertama
     });
+
+    allLampiran.push({
+      id: "lampiran-1D",
+      title: "L1-D",
+      subtitle: "Lampiran 1D - JASA",
+      component: "Lampiran_1D",
+      badge: "Tersedia",
+      order: 1, // Urutan pertama
+    });
+    allLampiran.push({
+      id: "lampiran-1E",
+      title: "L1-E",
+      subtitle: "Lampiran 1E - BANK KONVENSIONAL",
+      component: "Lampiran_1E",
+      badge: "Tersedia",
+      order: 1, // Urutan pertama
+    });
+
+    allLampiran.push({
+      id: "lampiran-1F",
+      title: "L1-F",
+      subtitle: "Lampiran 1F - DANA PENSIUN",
+      component: "Lampiran_1F",
+      badge: "Tersedia",
+      order: 1, // Urutan pertama
+    });
+
+    allLampiran.push({
+      id: "lampiran-1G",
+      title: "L1-G",
+      subtitle: "Lampiran 1G - ASURANSI",
+      component: "Lampiran_1G",
+      badge: "Tersedia",
+      order: 1, // Urutan pertama
+    });
+
+    allLampiran.push({
+      id: "lampiran-1H",
+      title: "L1-H",
+      subtitle: "Lampiran 1H - PROPERTI",
+      component: "Lampiran_1H",
+      badge: "Tersedia",
+      order: 1, // Urutan pertama
+    });
+
+    allLampiran.push({
+      id: "lampiran-1I",
+      title: "L1-I",
+      subtitle: "Lampiran 1I - BANK SYARIAH",
+      component: "Lampiran_1I",
+      badge: "Tersedia",
+      order: 1, // Urutan pertama
+    });
+
+    allLampiran.push({
+      id: "lampiran-1J",
+      title: "L1-J",
+      subtitle: "Lampiran 1J - INFRASTRUKTUR",
+      component: "Lampiran_1J",
+      badge: "Tersedia",
+      order: 1, // Urutan pertama
+    });
+
+    allLampiran.push({
+      id: "lampiran-1K",
+      title: "L1-K",
+      subtitle: "Lampiran 1K - SEKURITAS",
+      component: "Lampiran_1K",
+      badge: "Tersedia",
+      order: 1, // Urutan pertama
+    });
+
+    allLampiran.push({
+      id: "lampiran-1L",
+      title: "L1-L",
+      subtitle: "Lampiran 1L - PEMBIAYAAN",
+      component: "Lampiran_1L",
+      badge: "Tersedia",
+      order: 1, // Urutan pertama
+    });
+
     allLampiran.push({
       id: "lampiran-2",
       title: "L2",
@@ -88,12 +206,113 @@ const CreateKonsepBadan = () => {
     allLampiran.push({
       id: "lampiran-4",
       title: "L4",
-      subtitle: "Lampiran IV - Kredit Pajak",
+      subtitle:
+        "Lampiran IV - Penghasilan yang Dikenalakn Pajak Final dan Daftar Penghasilan yang Bukan Objek Pajak",
       component: "Lampiran_4",
       badge: "Tersedia",
       order: 5, // Urutan kelima
     });
 
+    allLampiran.push({
+      id: "lampiran-5",
+      title: "L5",
+      subtitle: "Lampiran v -Rekapitulasi Peredaran Bruto",
+      component: "Lampiran_5",
+      badge: "Tersedia",
+      order: 6,
+    });
+
+    allLampiran.push({
+      id: "lampiran-9",
+      title: "L9",
+      subtitle: "Lampiran IX - Harta Berwujud",
+      component: "Lampiran_9",
+      badge: "Tersedia",
+      order: 7,
+    });
+
+    allLampiran.push({
+      id: "lampiran-10A",
+      title: "L10-A",
+      subtitle: "Lampiran 10A - Daftar Transaksi yang Dipengaruhi Hubungan Istimewa",
+      component: "Lampiran_10A",
+      badge: "Tersedia",
+      order: 8,
+    });
+    allLampiran.push({
+      id: "lampiran-10B",
+      title: "L10-B",
+      subtitle: "Lampiran 10B - Pernyataan Terkait Transaksi yang Dipengaruhi Hubungan Istimewa",
+      component: "Lampiran_10B",
+      badge: "Tersedia",
+      order: 9,
+    });
+
+    allLampiran.push({
+      id: "lampiran-10C",
+      title: "L10-C",
+      subtitle:
+        "Lampiran 10C - PERNYATAAN TRANSAKSI DENGAN PIHAK YANG MERUPAKAN PENDUDUK TAX HAVEN COUNTRY",
+      component: "Lampiran_10C",
+      badge: "Tersedia",
+      order: 10,
+    });
+
+    allLampiran.push({
+      id: "lampiran-10D",
+      title: "L10-D",
+      subtitle: "Lampiran 10D - IKHTISAR DOKUMEN INDUK DAN DOKUMEN LOKAL",
+      component: "Lampiran_10D",
+      badge: "Tersedia",
+      order: 11,
+    });
+
+    allLampiran.push({
+      id: "lampiran-11A",
+      title: "L11-A",
+      subtitle: "Lampiran 11A - RINCIAN BIAYA TERTENTU",
+      component: "Lampiran_11A",
+      badge: "Tersedia",
+      order: 12,
+    });
+
+    allLampiran.push({
+      id: "lampiran-11B",
+      title: "L11-B",
+      subtitle:
+        "Lampiran 11B - PENGHITUNGAN BIAYA PINJAMAN YANG DAPAT DIBEBANKAN UNTUK KEPERLUAN PENGHITUNGAN PAJAK PENGHASILAN",
+      component: "Lampiran_11B",
+      badge: "Tersedia",
+      order: 13,
+    });
+
+    allLampiran.push({
+      id: "lampiran-11C",
+      title: "L11-C",
+      subtitle: "Lampiran 11C - LAPORAN UTANG SWASTA LUAR NEGERI",
+      component: "Lampiran_11C",
+      badge: "Tersedia",
+      order: 13,
+    });
+
+    allLampiran.push({
+      id: "lampiran-13A",
+      title: "L13-A",
+      subtitle: "Lampiran 13A - FASILITAS PERPAJAKAN DALAM RANGKA PENANAMAN MODAL",
+      component: "Lampiran_13A",
+      badge: "Tersedia",
+      order: 13,
+    });
+
+    allLampiran.push({
+      id: "lampiran-14",
+      title: "L14",
+      subtitle:
+        "Lampiran 14 - PENGGUNAAN SISA LEBIH UNTUK PEMBANGUNAN DAN PENGADAAN SARANA DAN PRASARANA",
+      component: "Lampiran_14",
+      badge: "Tersedia",
+      order: 14,
+    });
     // if (answersState.r1a === true) {
     //   allLampiran.push({
     //     id: "lampiran-1",
@@ -116,16 +335,59 @@ const CreateKonsepBadan = () => {
   // STEP 8: Function untuk render content lampiran (Import lampiran ditampilkan di atas)
   const renderLampiranContent = (componentName, data) => {
     switch (componentName) {
+      case "Lampiran_1A":
+        return <Lampiran1A data={data} />;
       case "Lampiran_1B":
-        return <LampiranL1B data={data} />;
+        return <Lampiran1B data={data} />;
       case "Lampiran_1C":
-        return <LampiranL1C data={data} />;
+        return <Lampiran1C data={data} />;
+      case "Lampiran_1D":
+        return <Lampiran1D data={data} />;
+      case "Lampiran_1E":
+        return <Lampiran1E data={data} />;
+      case "Lampiran_1F":
+        return <Lampiran1F data={data} />;
+      case "Lampiran_1G":
+        return <Lampiran1G data={data} />;
+      case "Lampiran_1H":
+        return <Lampiran1H data={data} />;
+      case "Lampiran_1I":
+        return <Lampiran1I data={data} />;
+      case "Lampiran_1J":
+        return <Lampiran1J data={data} />;
+      case "Lampiran_1K":
+        return <Lampiran1K data={data} />;
+      case "Lampiran_1L":
+        return <Lampiran1L data={data} />;
       case "Lampiran_2":
         return <Lampiran2 data={data} />;
       case "Lampiran_3":
         return <Lampiran3 data={data} />;
       case "Lampiran_4":
         return <Lampiran4 data={data} />;
+      case "Lampiran_5":
+        return <Lampiran5 data={data} />;
+      case "Lampiran_9":
+        return <Lampiran9 data={data} />;
+      case "Lampiran_10A":
+        return <Lampiran10A data={data} />;
+      case "Lampiran_10B":
+        return <Lampiran10B data={data} />;
+      case "Lampiran_10C":
+        return <Lampiran10C data={data} />;
+      case "Lampiran_10D":
+        return <Lampiran10D data={data} />;
+      case "Lampiran_11A":
+        return <Lampiran11A data={data} />;
+      case "Lampiran_11B":
+        return <Lampiran11B data={data} />;
+      case "Lampiran_11C":
+        return <Lampiran11C data={data} />;
+      case "Lampiran_13A":
+        return <Lampiran13A data={data} />;
+      case "Lampiran_14":
+        return <Lampiran14 data={data} />;
+
       default:
         return (
           <div className="text-center py-8">

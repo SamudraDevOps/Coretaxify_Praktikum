@@ -7,37 +7,38 @@ export const formatRupiah = (number) => {
   }).format(number || 0);
 };
 
-// FIXED: Format angka dengan titik setiap 3 digit (tanpa mata uang)
+// Format angka dengan titik setiap 3 digit (tanpa mata uang)
 export const formatNumber = (number) => {
   if (number === null || number === undefined || number === "") return "";
 
-  // FIXED: Handle 0 specifically
-  if (number === 0) return "0";
+  const n = Number(number);
+  if (isNaN(n)) return "";
 
-  // Empty string → empty string (show placeholder)
-  if (number === "") {
-    return "";
-  }
+  const isNegative = n < 0;
+  const abs = Math.abs(n);
 
-  return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  const formatted = abs.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+  return isNegative ? `-${formatted}` : formatted;
 };
 
-// FIXED: Parse string yang diformat kembali ke angka
+// Parse string yang diformat kembali ke angka
 export const parseFormattedNumber = (formattedString) => {
   if (formattedString === null || formattedString === undefined || formattedString === "")
     return null;
 
-  // Hapus semua karakter non-digit
+  // Deteksi minus di depan
+  const isNegative = formattedString.trim().startsWith("-");
   const numbersOnly = formattedString.replace(/\D/g, "");
 
-  // FIXED: Handle empty string dan "0" dengan benar
   if (numbersOnly === "") return null;
 
   const parsed = parseInt(numbersOnly, 10);
-  return isNaN(parsed) ? null : parsed;
+  if (isNaN(parsed)) return null;
+  return isNegative ? -parsed : parsed;
 };
 
-// IMPROVED: Custom hook untuk handle input number dengan format
+// Custom hook untuk handle input number dengan format
 export const useFormattedNumberInput = (value, onChange) => {
   const handleChange = (e) => {
     const raw = e.target.value;
@@ -56,4 +57,14 @@ export const useFormattedNumberInput = (value, onChange) => {
     displayValue: value === "" || value === null || value === undefined ? "" : formatNumber(value),
     handleChange,
   };
+};
+
+// Helper function untuk memastikan nilai selalu angka
+export const toNumber = (val) => {
+  if (val === null || val === undefined || val === "") return 0;
+  // Jika sudah angka, return langsung
+  if (typeof val === "number") return val;
+  // Jika string, parse dulu dengan parseFormattedNumber
+  const parsed = parseFormattedNumber(val);
+  return parsed === null ? 0 : parsed;
 };

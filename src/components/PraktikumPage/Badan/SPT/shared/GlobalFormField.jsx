@@ -374,14 +374,44 @@ export default function GlobalFormField({
         return fieldWrapper(
           <input
             type="text"
-            value={formatNumber(value)}
+            inputMode="decimal"
+            value={
+              value === null || value === undefined || value === 0
+                ? ""
+                : value === "" || value === "-"
+                ? value
+                : typeof value === "string"
+                ? value
+                : formatNumber(value)
+            }
             onChange={(e) => {
-              const numericValue = parseFormattedNumber(e.target.value);
-              updateField(key, numericValue);
+              if (isReadOnly) return;
+
+              let raw = e.target.value.replace(/\./g, "");
+
+              // izinkan kosong dan "-" saja
+              if (raw === "" || raw === "-") {
+                updateField(key, raw);
+                return;
+              }
+
+              // hanya angka & minus
+              if (/^-?\d*$/.test(raw)) {
+                updateField(key, raw);
+              }
+            }}
+            onBlur={() => {
+              // normalisasi data tanpa mempengaruhi tampilan
+              if (value === "" || value === "-") {
+                updateField(key, 0);
+                return;
+              }
+
+              const num = Number(value);
+              updateField(key, isNaN(num) ? 0 : num);
             }}
             placeholder={placeholder}
             readOnly={isReadOnly}
-            inputMode="numeric"
             className={baseInputClass}
           />
         );

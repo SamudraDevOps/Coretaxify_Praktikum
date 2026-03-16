@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import { X } from "lucide-react";
 import { formatNumber, parseFormattedNumber } from "@utils/formatCurrency";
 import { defaultYearPickerProps, yearToDate, dateToYear } from "@utils/datePickerUtils";
 import DatePicker from "react-datepicker";
 import Select from "react-select";
+import RegionSelector from "./RegionSelector";
 function cn(...cls) {
   return cls.filter(Boolean).join(" ");
 }
@@ -232,6 +233,7 @@ const GlobalModal = ({
   isOpen = false,
   onClose,
   onSave,
+  beforeSave,
   title = "",
   size = "lg",
 
@@ -248,6 +250,9 @@ const GlobalModal = ({
   onFieldChange,
   validation = {},
   children,
+  closeOnEsc = true,
+  closeOnBackdrop = true,
+  isFixed = true,
 }) => {
   const [formData, setFormData] = useState({});
   const [errors, setErrors] = useState({});
@@ -258,6 +263,7 @@ const GlobalModal = ({
     currencies: [],
     loading: false,
   });
+  const prevBodyOverflowRef = useRef(null);
 
   // Initialize form data
   useEffect(() => {
@@ -266,6 +272,100 @@ const GlobalModal = ({
       setErrors({});
     }
   }, [isOpen, data]);
+
+  // Hanya block body scroll jika modal fixed (mode lama) & terbuka
+  useEffect(() => {
+    if (!isFixed) return; // kalau modal non-fixed jangan ubah body overflow
+
+    // inisialisasi counter jika belum ada
+    if (typeof window !== "undefined" && typeof window.__modalOpenCount === "undefined") {
+      window.__modalOpenCount = 0;
+    }
+
+    if (isOpen) {
+      // kalau ini modal pertama yang buka, simpan overflow sebelumnya
+      if (window.__modalOpenCount === 0) {
+        prevBodyOverflowRef.current = document.body.style.overflow;
+        document.body.style.overflow = "hidden";
+      }
+      window.__modalOpenCount = (window.__modalOpenCount || 0) + 1;
+    } else {
+      // menutup modal: turunkan counter dan restore jika tidak ada modal lagi
+      if ((window.__modalOpenCount || 0) > 0) {
+        window.__modalOpenCount = Math.max(0, window.__modalOpenCount - 1);
+      }
+      if ((window.__modalOpenCount || 0) === 0) {
+        document.body.style.overflow = prevBodyOverflowRef.current || "";
+        prevBodyOverflowRef.current = null;
+      }
+    }
+
+    // cleanup saat unmount komponen (mis. route change)
+    return () => {
+      if (!isFixed) return;
+      if ((window.__modalOpenCount || 0) > 0) {
+        window.__modalOpenCount = Math.max(0, window.__modalOpenCount - 1);
+      }
+      if ((window.__modalOpenCount || 0) === 0) {
+        document.body.style.overflow = prevBodyOverflowRef.current || "";
+        prevBodyOverflowRef.current = null;
+      }
+    };
+  }, [isOpen, isFixed]);
+
+  // ESC handler (selalu aktif, terlepas fixed/non-fixed)
+  useEffect(() => {
+    if (!isOpen || !closeOnEsc) return;
+    const onKey = (e) => {
+      if (e.key === "Escape") {
+        onClose && onClose();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [isOpen, closeOnEsc, onClose]);
+
+  // Enter handler untuk save
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const onKey = (e) => {
+      // Cek jika user sedang mengetik di textarea, jangan trigger save
+      if (e.target.tagName === "TEXTAREA") return;
+
+      // Cek jika user sedang mengetik di select search, jangan trigger save
+      if (e.target.closest(".select__input")) return;
+
+      if (e.key === "Enter" && !e.shiftKey && !e.ctrlKey && !e.altKey && !e.metaKey) {
+        e.preventDefault();
+        handleSave();
+      }
+    };
+
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [isOpen, formData]); // dependency formData agar selalu dapat data terbaru
+
+  // prevent body scroll saat modal terbuka
+  useEffect(() => {
+    if (isOpen) {
+      const prev = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = prev;
+      };
+    }
+    return;
+  }, [isOpen]);
+
+  useEffect(() => {
+    function handleKey(e) {
+      if (e.key === "Escape") onClose();
+    }
+
+    if (isOpen) window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, [isOpen, onClose]);
 
   //  HELPER FUNCTION UNTUK CURRENCY LABEL
   const currencyLabel = (currencies) => {
@@ -372,6 +472,8 @@ const GlobalModal = ({
       return newData;
     });
 
+    // console.log("UPDATED:", key, value);
+
     // Clear error untuk field ini
     if (errors[key]) {
       setErrors((prev) => ({ ...prev, [key]: null }));
@@ -430,18 +532,52 @@ const GlobalModal = ({
 
   // Handle save
   const handleSave = () => {
-    if (validateForm()) {
-      onSave(formData);
+    if (beforeSave) {
+      const result = beforeSave(formData);
+
+      if (typeof result === "string") {
+        alert(result);
+        return;
+      }
+      if (result === false) {
+        return;
+      }
     }
+
+    if (!validateForm()) return;
+
+    // Konversi semua field currency ke number sebelum save
+    const cleanedData = { ...formData };
+    visibleFields.forEach((field) => {
+      if (field.type === "currency" && typeof cleanedData[field.key] === "string") {
+        const parsed = parseFormattedNumber(cleanedData[field.key]);
+        cleanedData[field.key] = parsed !== null ? parsed : 0;
+      }
+    });
+
+    onSave(cleanedData);
   };
+
+  // const handleSave = () => {
+  //   if (validateForm()) {
+  //     onSave(formData);
+  //   }
+  // };
 
   //  RENDER FIELD - HORIZONTAL LAYOUT
   const renderField = (field) => {
     const { key, type, title, placeholder, className, rows = 3, format, parse } = field;
-    const isReadOnly = readOnlyFields.includes(key) || field.readOnly;
+    const isReadOnly =
+      readOnlyFields.includes(key) ||
+      (typeof field.readOnly === "function" ? field.readOnly(formData) : field.readOnly);
     const hasError = errors[key];
 
-    const value = type === "currency" || type === "number" ? formData[key] : formData[key] || "";
+    const value = (() => {
+      if (type === "currency" || type === "number") {
+        return formData[key] !== undefined ? formData[key] : "";
+      }
+      return formData[key] || "";
+    })();
 
     const baseInputClass = cn(
       "flex-1 p-2 border rounded-md text-sm transition-colors",
@@ -523,18 +659,64 @@ const GlobalModal = ({
           />
         );
 
+      // case "currency":
+      //   return fieldWrapper(
+      //     <input
+      //       type="text"
+      //       value={formatNumber(value)}
+      //       onChange={(e) => {
+      //         if (isReadOnly) return;
+      //         const numericValue = parseFormattedNumber(e.target.value);
+      //         updateField(key, numericValue);
+      //       }}
+      //       placeholder={placeholder}
+      //       readOnly={isReadOnly}
+      //       inputMode="numeric"
+      //       className={baseInputClass}
+      //     />
+      //   );
       case "currency":
         return fieldWrapper(
           <input
             type="text"
-            value={formatNumber(value)}
+            inputMode="decimal"
+            value={
+              value === 0 || value === "" || value === null || value === undefined
+                ? ""
+                : value === "-"
+                ? "-"
+                : typeof value === "string"
+                ? formatNumber(value)
+                : formatNumber(value)
+            }
             onChange={(e) => {
-              const numericValue = parseFormattedNumber(e.target.value);
-              updateField(key, numericValue);
+              if (isReadOnly) return;
+
+              let raw = e.target.value.replace(/\./g, "");
+
+              // izinkan kosong dan "-" saja
+              if (raw === "" || raw === "-") {
+                updateField(key, raw);
+                return;
+              }
+
+              // hanya angka & minus
+              if (/^-?\d*$/.test(raw)) {
+                updateField(key, raw);
+              }
+            }}
+            onBlur={() => {
+              // normalisasi data tanpa mempengaruhi tampilan :)
+              if (value === "" || value === "-") {
+                updateField(key, 0);
+                return;
+              }
+
+              const num = Number(value);
+              updateField(key, isNaN(num) ? 0 : num);
             }}
             placeholder={placeholder}
             readOnly={isReadOnly}
-            inputMode="numeric"
             className={baseInputClass}
           />
         );
@@ -654,6 +836,26 @@ const GlobalModal = ({
             </div>
           </div>
         );
+      case "select-wilayah":
+        return (
+          <div key={field.key} className="space-y-1">
+            {/* RegionSelector sudah punya label sendiri, jadi kita wrapper saja */}
+            <RegionSelector
+              value={formData[field.key] || {}}
+              onChange={(selected) => {
+                updateField(field.key, {
+                  province: selected.province,
+                  regency: selected.regency,
+                  district: selected.district,
+                  village: selected.village,
+                });
+              }}
+              disabled={isReadOnly}
+            />
+
+            {hasError && <p className="text-red-500 text-xs mt-1 ml-52">{hasError}</p>}
+          </div>
+        );
 
       case "text":
       case "date":
@@ -684,26 +886,53 @@ const GlobalModal = ({
     full: "max-w-full mx-4",
   };
 
+  // Wrapper props berbeda bila modal fixed atau non-fixed
+  const wrapperProps = isFixed
+    ? {
+        className: "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4",
+        role: "dialog",
+        "aria-modal": "true",
+        onMouseDown: (e) => {
+          if (!closeOnBackdrop) return;
+          if (e.target === e.currentTarget) onClose && onClose();
+        },
+      }
+    : {
+        className: "relative w-full", // non-fixed: letakkan relatif di alur dokumen
+        role: "dialog",
+        "aria-modal": "true",
+        onMouseDown: (e) => {
+          if (!closeOnBackdrop) return;
+          // untuk non-fixed, backdrop mungkin tidak ada; kita cek target sama dengan currentTarget
+          if (e.target === e.currentTarget) onClose && onClose();
+        },
+      };
+
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className={cn("bg-white rounded-lg shadow-xl w-full", sizeClasses[size])}>
-        {/* Header */}
+    <div {...wrapperProps}>
+      <div
+        className={cn("bg-white rounded-lg shadow-xl w-full", sizeClasses[size])}
+        onMouseDown={(e) => e.stopPropagation()}
+        style={{ maxHeight: "80vh", display: "flex", flexDirection: "column" }}
+      >
+        {/* Header (tetap) */}
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
           <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
           <button
             onClick={onClose}
             className="p-1 hover:bg-gray-100 rounded-full transition-colors"
+            aria-label="Tutup"
           >
             <X size={20} className="text-gray-500" />
           </button>
         </div>
 
-        {/* Body */}
-        <div className="p-6 overflow-y-auto max-h-96">
+        {/* Body: sekarang flex-1 sehingga mengambil sisa tinggi dan dapat discroll */}
+        <div className="p-6 overflow-auto flex-1">
           {children || <div className="space-y-3">{visibleFields.map(renderField)}</div>}
         </div>
 
-        {/* Footer */}
+        {/* Footer: tetap berada di dalam modal */}
         {showFooter && (
           <div className="flex items-center justify-end gap-3 p-6 border-t border-gray-200">
             <button

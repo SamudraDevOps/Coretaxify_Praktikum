@@ -1,13 +1,13 @@
-import React, { useState } from "react";
-import KompensasiKerugian from "./KompensasiKerugian";
-import ModalA from "@lampiran/Lampiran5/BagianA/form/ModalA";
-import { buildSchema } from "@lampiran/Lampiran5/BagianA/form/schemas";
-import { updateTotalRow, toNum } from "@lampiran/Lampiran5/BagianA/form/helper";
 
-//  ROWS PATEN: isi lengkap sesuai yang dipingin bang pusing pala aing
-const ROWS = [
-  // GROUP PENJUALAN
-  // { id: "g-penjualan", type: "header", level: 0, keterangan: "Penjualan" },
+import React, { useState, useMemo, useEffect } from "react";
+import KompensasiKerugian from "./KompensasiKerugian";
+import GlobalModal from "@shared/GlobalModal";
+
+// Helper untuk convert value ke number
+const toNum = (v) => (v === "" || v == null ? 0 : Number(v));
+
+// INITIAL ROWS
+const INITIAL_ROWS = [
   {
     id: "2016",
     tahunPajak: "2016",
@@ -44,7 +44,6 @@ const ROWS = [
     2025: 0,
     2026: 0,
   },
-
   {
     id: "2019",
     tahunPajak: "2019",
@@ -69,7 +68,6 @@ const ROWS = [
     2025: 0,
     2026: 0,
   },
-
   {
     id: "2021",
     tahunPajak: "2021",
@@ -82,7 +80,6 @@ const ROWS = [
     2025: 0,
     2026: 0,
   },
-
   {
     id: "2022",
     tahunPajak: "2022",
@@ -95,7 +92,6 @@ const ROWS = [
     2025: 0,
     2026: 0,
   },
-
   {
     id: "2023",
     tahunPajak: "2023",
@@ -108,7 +104,6 @@ const ROWS = [
     2025: 0,
     2026: 0,
   },
-
   {
     id: "2024",
     tahunPajak: "2024",
@@ -121,7 +116,6 @@ const ROWS = [
     2025: 0,
     2026: 0,
   },
-
   {
     id: "2025",
     tahunPajak: "2025",
@@ -134,84 +128,194 @@ const ROWS = [
     2025: 0,
     2026: 0,
   },
-
-  // Total (Grand Total)
   {
     id: "total-pajak",
-    // tahunPajak: "Jumlah Total",
+    tahunPajak: "JUMLAH TOTAL",
     type: "total",
     level: 0,
-    keterangan: "JUMLAH TOTAL",
+    labaRugi: 0,
+    2021: 0,
+    2022: 0,
+    2023: 0,
+    2024: 0,
+    2025: 0,
+    2026: 0,
   },
 ];
 
 export default function BagianA({ onTotalChange }) {
-  // const [rows, setRows] = useState(() => updateTotalRow(ROWS));
-  const [rows, setRows] = useState(ROWS);
-  const [open, setOpen] = useState(false);
-  const [schema, setSchema] = useState([]);
-  const [selected, setSelected] = useState(null);
+  const [rows, setRows] = useState(INITIAL_ROWS);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedRow, setSelectedRow] = useState(null);
 
-  const openModal = (row) => {
-    const isReadOnlyRow = row.type !== "line";
-    const dyn = isReadOnlyRow
-      ? [
-          { name: "tahunPajak", readOnly: true },
-          { name: "labaRugi", readOnly: true },
-          { name: "2021", readOnly: true },
-          { name: "2022", readOnly: true },
-          { name: "2023", readOnly: true },
-          { name: "2024", readOnly: true },
-          { name: "2025", readOnly: true },
-          { name: "2026", readOnly: true },
-        ]
-      : [{ name: "tahunPajak", readOnly: true }];
+  // Auto-calculate total row
+  const rowsWithCalculation = useMemo(() => {
+    return rows.map((row) => {
+      if (row.type === "total") {
+        const lineRows = rows.filter((r) => r.type === "line");
 
-    setSchema(buildSchema(row, dyn));
-    setSelected(row);
-    setOpen(true);
-  };
+        // Calculate labaRugi total
+        const labaRugiTotal = lineRows.reduce((sum, r) => sum + toNum(r.labaRugi), 0);
 
-  const closeModal = () => {
-    setOpen(false);
-    setSelected(null);
-  };
+        // Calculate totals untuk setiap tahun
+        const yearTotals = {};
+        [2021, 2022, 2023, 2024, 2025, 2026].forEach((year) => {
+          yearTotals[year] = lineRows.reduce((sum, r) => sum + toNum(r[year]), 0);
+        });
 
-  const onSubmit = (values) => {
-    console.log("onSubmit data :", values);
-
-    setRows((prev) => {
-      const updated = prev.map((r) => (r.id === selected.id ? { ...r, ...values } : r));
-      const result = updateTotalRow(updated);
-      // console.log("updated rows:", result);
-
-      // Kirim total 2025 ke parent
-      const totalRow = result.find((r) => r.type === "total");
-      if (onTotalChange && totalRow) {
-        onTotalChange(totalRow["2025"] || 0);
+        return {
+          ...row,
+          labaRugi: labaRugiTotal,
+          ...yearTotals,
+        };
       }
-
-      return result;
+      return row;
     });
+  }, [rows]);
+
+  // useEffect untuk kirim total ke parent (BUKAN di useMemo!)
+  useEffect(() => {
+    if (onTotalChange) {
+      const totalRow = rowsWithCalculation.find((r) => r.type === "total");
+      if (totalRow) {
+        onTotalChange(totalRow[2025] || 0);
+      }
+    }
+  }, [rowsWithCalculation, onTotalChange]);
+
+  // Open modal edit
+  const openEditModal = (row) => {
+    setSelectedRow(row);
+    setShowModal(true);
+  };
+
+  // Close modal
+  const closeModal = () => {
+    setShowModal(false);
+    setSelectedRow(null);
+  };
+
+  // Auto-calculate handler (real-time di modal)
+  const handleFieldChange = (key, value) => {
+    setSelectedRow((prev) => ({
+      ...prev,
+      [key]: value,
+    }));
+  };
+
+  // Save & recalculate
+  const handleSave = (values) => {
+    // Update row yang diedit
+    setRows((prev) => prev.map((r) => (r.id === selectedRow.id ? { ...r, ...values } : r)));
     closeModal();
   };
-  // rows yang dikirim ke tabel sudah terupdate baris totalnya
-  // const tableRows = updateTotalRow(rows);
+
+  // Build field config berdasarkan row type
+  const getFieldConfig = () => {
+    if (!selectedRow) return { baseFields: [], customChildren: [] };
+
+    const isReadOnlyRow = selectedRow.type !== "line";
+
+    return {
+      baseFields: [],
+      customChildren: [
+        {
+          key: "tahunPajak",
+          type: "text",
+          title: "Tahun Pajak/Bagian Tahun Pajak",
+          placeholder: "Tahun Pajak",
+          required: true,
+          readOnly: true,
+          className: "bg-gray-100 text-gray-600",
+        },
+        {
+          key: "labaRugi",
+          type: "currency",
+          title: "Laba/Rugi Penghasilan Fiskal",
+          placeholder: "0",
+          required: false,
+          readOnly: isReadOnlyRow,
+          className: isReadOnlyRow ? "bg-gray-100 text-gray-600" : "",
+        },
+        // {
+        //   key: "group-kompensasi",
+        //   type: "group-label",
+        //   title: "Kompensasi Kerugian Fiskal",
+        // },
+        {
+          key: "2021",
+          type: "currency",
+          title: "Tahun 2021",
+          placeholder: "0",
+          required: false,
+          readOnly: isReadOnlyRow,
+          className: isReadOnlyRow ? "bg-gray-100 text-gray-600" : "",
+        },
+        {
+          key: "2022",
+          type: "currency",
+          title: "Tahun 2022",
+          placeholder: "0",
+          required: false,
+          readOnly: isReadOnlyRow,
+          className: isReadOnlyRow ? "bg-gray-100 text-gray-600" : "",
+        },
+        {
+          key: "2023",
+          type: "currency",
+          title: "Tahun 2023",
+          placeholder: "0",
+          required: false,
+          readOnly: isReadOnlyRow,
+          className: isReadOnlyRow ? "bg-gray-100 text-gray-600" : "",
+        },
+        {
+          key: "2024",
+          type: "currency",
+          title: "Tahun 2024",
+          placeholder: "0",
+          required: false,
+          readOnly: isReadOnlyRow,
+          className: isReadOnlyRow ? "bg-gray-100 text-gray-600" : "",
+        },
+        {
+          key: "2025",
+          type: "currency",
+          title: "Tahun 2025",
+          placeholder: "0",
+          required: false,
+          readOnly: isReadOnlyRow,
+          className: isReadOnlyRow ? "bg-gray-100 text-gray-600" : "",
+        },
+        {
+          key: "2026",
+          type: "currency",
+          title: "Tahun 2026",
+          placeholder: "0",
+          required: false,
+          readOnly: isReadOnlyRow,
+          className: isReadOnlyRow ? "bg-gray-100 text-gray-600" : "",
+        },
+      ],
+    };
+  };
+
+  const fieldConfig = getFieldConfig();
 
   return (
     <>
-      <KompensasiKerugian rows={rows} openModal={openModal} />
-      <ModalA
-        open={open}
+      <KompensasiKerugian rows={rowsWithCalculation} openEditModal={openEditModal} />
+
+      <GlobalModal
+        isOpen={showModal}
         onClose={closeModal}
-        title={
-          selected
-            ? "Perhitungan Konpensasi Kerugian Fiskal"
-            : "Perhitungan Konpensasi Kerugian Fiskal"
-        }
-        schema={schema}
-        initialData={selected || {}}
-        onSubmit={onSubmit}
+        onSave={handleSave}
+        title="Perhitungan Kompensasi Kerugian Fiskal"
+        baseFields={fieldConfig.baseFields}
+        customChildren={fieldConfig.customChildren}
+        data={selectedRow || {}}
+        size="2xl"
+        onFieldChange={handleFieldChange}
       />
     </>
   );

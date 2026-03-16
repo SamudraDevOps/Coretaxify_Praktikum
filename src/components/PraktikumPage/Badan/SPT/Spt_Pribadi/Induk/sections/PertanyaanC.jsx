@@ -3,7 +3,6 @@ import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import Select from "react-select";
 import { parseFormattedNumber, formatRupiah } from "@utils/formatCurrency";
 
-
 const PertanyaanC = ({ onAnswerChange, answersState }) => {
   const [showPerhitunganPajakTerutang, setShowPerhitunganPajakTerutang] = useState(false);
 
@@ -18,26 +17,26 @@ const PertanyaanC = ({ onAnswerChange, answersState }) => {
     { value: "TK/2", label: "TK/2" },
     { value: "TK/3", label: "TK/3" },
   ];
-  
+
   useEffect(() => {
     if (answersState) {
     }
   }, [answersState]);
 
   const [amounts, setAmounts] = useState({
-      r2: 0,
-      r3: 0,
-      r4: 0,
-      r5: 0,
-      r6: 0,
-      r7: 0,
-      r8: 0,
-    });
+    r2: 0,
+    r3: 0,
+    r4: 0,
+    r5: 0,
+    r6: 0,
+    r7: 0,
+    r8: 0,
+  });
 
-    const[radios, setRadios] = useState({
-      r3: null,
-      r8: null,
-    })
+  const [radios, setRadios] = useState({
+    r3: null,
+    r8: null,
+  });
 
   const handleAmountChange = (field) => (e) => {
     const raw = e.target.value;
@@ -70,7 +69,7 @@ const PertanyaanC = ({ onAnswerChange, answersState }) => {
 
   const DEFAULT_NULL_TEXT = "Pilih salah satu Ya/Tidak";
 
-    const HELPER_CONFIG = {
+  const HELPER_CONFIG = {
     r3: {
       yes: "Ya, Isi Lampiran 5 Bagian A dan/Atau Bagian B",
       no: "Tidak. Silahkan Melanjutkan ke pertanyaan berikutnya.",
@@ -81,7 +80,7 @@ const PertanyaanC = ({ onAnswerChange, answersState }) => {
     },
   };
 
-    const getHelperMessage = (field, value) => {
+  const getHelperMessage = (field, value) => {
     const cfg = HELPER_CONFIG[field];
     if (!cfg) return "";
 
@@ -102,10 +101,6 @@ const PertanyaanC = ({ onAnswerChange, answersState }) => {
     return DEFAULT_NULL_TEXT;
   };
 
-
-
-
- 
   return (
     <>
       {/* Perhitungan Pajak Terutang */}
@@ -123,8 +118,10 @@ const PertanyaanC = ({ onAnswerChange, answersState }) => {
         </span>
       </div>
       <div
-        className={`overflow-hidden transition-all duration-500 ease-in-out ${
-          showPerhitunganPajakTerutang ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
+        className={` transition-all duration-500 ease-in-out ${
+          showPerhitunganPajakTerutang
+            ? "opacity-100 overflow-visible"
+            : "max-h-0 opacity-0 overflow-hidden"
         }`}
       >
         <div className="border rounded-md p-4 mb-4">
@@ -148,7 +145,7 @@ const PertanyaanC = ({ onAnswerChange, answersState }) => {
                   className="w-full text-center p-2 border rounded-md bg-gray-200 text-sm"
                 />
               </div>
-            </div> 
+            </div>
 
             {/* 3 */}
             <div className="grid grid-cols-12 gap-3 items-center px-3 py-2">
@@ -218,7 +215,7 @@ const PertanyaanC = ({ onAnswerChange, answersState }) => {
                 />
               </div>
             </div>
-            
+
             {/* 5 */}
             <div className="grid grid-cols-12 gap-3 items-center px-3 py-2">
               <div className="col-span-12 md:col-span-5 flex gap-3 items-center">
@@ -228,7 +225,7 @@ const PertanyaanC = ({ onAnswerChange, answersState }) => {
                 </span>
               </div>
               <div className="col-span-12 md:col-span-2">
-              <Select
+                <Select
                   value={r5Options.find((option) => option.value === radios.r5) || null}
                   onChange={(selectedOption) =>
                     handleSelectChange("r5", selectedOption?.value || "")
@@ -332,7 +329,9 @@ const PertanyaanC = ({ onAnswerChange, answersState }) => {
             <div className="grid grid-cols-12 gap-3 items-center px-3 py-2">
               <div className="col-span-12 md:col-span-5 flex gap-3 items-center">
                 <span className="pt-1 text-gray-700 font-medium min-w-[3.5rem]">9</span>
-                <span className="text-gray-800 text-base font-medium">Pph Terutang setelah Pengurangan PPh Terutang</span>
+                <span className="text-gray-800 text-base font-medium">
+                  Pph Terutang setelah Pengurangan PPh Terutang
+                </span>
               </div>
               <div className="col-span-12 md:col-span-5"></div>
               <div className="col-span-12 md:col-span-2">
@@ -344,7 +343,7 @@ const PertanyaanC = ({ onAnswerChange, answersState }) => {
                   className="w-full text-center p-2 border rounded-md bg-gray-200 text-sm"
                 />
               </div>
-            </div>        
+            </div>
           </div>
         </div>
       </div>
