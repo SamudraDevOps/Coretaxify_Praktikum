@@ -31,11 +31,20 @@ export default defineConfig({
         __dirname,
         "./src/components/PraktikumPage/Badan/SPT/Spt_Badan/Lampiran/components"
       ),
+
+      "@pribadiSections": path.resolve(
+        __dirname,
+        "./src/components/PraktikumPage/Badan/SPT/Spt_Pribadi/Lampiran/sections"
+      ),
+      "@pribadiLampiran": path.resolve(
+        __dirname,
+        "./src/components/PraktikumPage/Badan/SPT/Spt_Pribadi/Lampiran/components"
+      ),
     },
   },
 
   server: {
-    // host: "0.0.0.0", 
+    // host: "0.0.0.0",
     // port: 5173,
     strictPort: true,
 

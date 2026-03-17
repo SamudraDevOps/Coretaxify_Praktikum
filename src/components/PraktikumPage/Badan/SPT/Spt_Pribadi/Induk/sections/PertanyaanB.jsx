@@ -89,11 +89,11 @@ const PertanyaanB = ({ onAnswerChange, answersState }) => {
       no: "Tidak, Lanjutkan pertanyaan 1.b.1",
     },
     r1b1: {
-      yes: "Ya, silahkan mengisi jumlah pajak yang dapat diangsur/ditunda",
+      yes: "Ya, lanjut ke pertanyaan selanjutnya",
       no: "Tidak, Lanjutkan pertanyaan 1.c",
     },
     r1b2: {
-      1: "Anda memilih WP OP dengan peredaran bruto tertentu yang dikenakan PPh final. Silakan isi Lampiran 3B.",
+      1: "Anda memilih WP OP dengan peredaran bruto tertentu yang dikenakan PPh final. Silakan isi Lampiran 3B bagian A.",
       2: "Anda termasuk WP OPPT. Silakan isi Lampiran 3B Bagian B.",
       3: "Anda tidak termasuk kategori ini. Lanjutkan ke pertanyaan berikutnya 1.b.4.",
     },
